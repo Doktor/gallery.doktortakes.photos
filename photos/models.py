@@ -36,6 +36,9 @@ CROP = (
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
 
 
+# Helper functions
+
+
 def format_file_size(b):
     """Returns a human-readable string representation of a number of bytes."""
     for unit in ('B', 'KB', 'MB', 'GB'):
@@ -49,6 +52,9 @@ def get_modified_time_utc(filename):
     """Returns the modification time (UTC) of a file."""
     ts = os.path.getmtime(filename)
     return fromtimestamp(ts, pytz.UTC)
+
+
+# Album
 
 
 def get_cover_folder(album, original_name):
@@ -140,11 +146,11 @@ class Album(models.Model):
     def clean(self):
         if self.end is not None and self.end < self.start:
             raise ValidationError("End date should be after start date")
-        super(Album, self).clean()
+        super().clean()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Album, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         get_latest_by = 'start'
@@ -358,6 +364,9 @@ def create_album_thumbnail(album, size=(800, 600)):
     return data
 
 
+# Photo
+
+
 def get_photo_path(photo, filename, ext=None):
     if ext is None:
         _, ext = os.path.splitext(filename)
@@ -397,8 +406,7 @@ class Photo(models.Model):
     md5 = models.CharField(max_length=32, editable=False, unique=True)
 
     thumbnail = models.ImageField(
-        upload_to=get_photo_thumbnail_path, editable=False,
-        help_text="Automatically generated thumbnail")
+        upload_to=get_photo_thumbnail_path, editable=False)
     crop = models.CharField(
         max_length=1, default='C', choices=CROP,
         help_text="The side of the photo to crop the thumbnail to")
@@ -410,12 +418,8 @@ class Photo(models.Model):
     height = models.PositiveIntegerField(default=0, editable=False)
     file_size = models.CharField(max_length=50, editable=False)
 
-    taken = models.DateTimeField(
-        editable=False,
-        help_text="When this photo was taken")
-    edited = models.DateTimeField(
-        editable=False,
-        help_text="When this photo was edited")
+    taken = models.DateTimeField(editable=False)
+    edited = models.DateTimeField(editable=False)
 
     exif = JSONField(editable=False, blank=True)
 
