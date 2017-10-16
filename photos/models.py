@@ -54,7 +54,7 @@ def get_modified_time_utc(filename):
 def get_cover_folder(album, original_name):
     """Returns the upload path for an album cover thumbnail."""
     _, ext = os.path.splitext(original_name)
-    return ".cover/{name}.{ext}".format(
+    return "albums/{name}.{ext}".format(
         name=album.get_path(divider='_'), ext=ext.lstrip('.'))
 
 
