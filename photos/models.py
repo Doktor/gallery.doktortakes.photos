@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.db import models
-from django.db.models.signals import pre_save, pre_delete
+from django.db.models.signals import pre_save, pre_delete, post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -15,6 +15,7 @@ import exifread
 import hashlib
 import os
 import PIL.Image
+import uuid
 from datetime import datetime
 from io import BytesIO
 from pytz import timezone
@@ -343,7 +344,10 @@ def get_photo_path(photo, filename, ext=None):
         _, ext = os.path.splitext(filename)
         ext = ext.lstrip('.')
 
-    return f"{photo.album.get_path()}/{photo.md5}.{ext}"
+    if photo.pk is not None:
+        return f"{photo.album.get_path()}/{photo.md5}.{ext}"
+    else:
+        return f"{photo.album.get_path()}/{uuid.uuid4()}.{ext}"
 
 
 def get_photo_image_path(photo, filename):
@@ -454,6 +458,49 @@ class Photo(models.Model):
         get_latest_by = 'taken'
         ordering = ['taken']
         unique_together = ('album', 'taken')
+
+
+@receiver(post_save, sender=Photo,
+          dispatch_uid='photos.models.rename_photo_files')
+def rename_photo_files(sender, instance, created, *args, **kwargs):
+    """Renames image files after a photo is created or updated."""
+    photo = instance
+
+    # Existing object, new image
+    if hasattr(photo, '_update'):
+        assert not created
+        del photo._update
+
+        # We only have to rename the image: the old thumbnail is deleted in
+        # the pre-save receiver, which frees up the filename for the new file
+        image = photo.image
+        current_path = image.path
+        image.name = get_photo_image_path(photo, image.name)
+
+        os.remove(image.path)
+        os.rename(current_path, image.path)
+
+        photo._rename = True
+        photo.save()
+        return
+
+    if not created:
+        return
+
+    # Rename the image file
+    image = photo.image
+    old_path = image.path
+    image.name = get_photo_image_path(photo, image.name)
+    os.rename(old_path, image.path)
+
+    # Rename the thumbnail file
+    thumbnail = photo.thumbnail
+    old_path = thumbnail.path
+    thumbnail.name = get_photo_thumbnail_path(photo, thumbnail.name)
+    os.rename(old_path, thumbnail.path)
+
+    photo._rename = True
+    photo.save()
 
 
 # noinspection PyUnusedLocal
