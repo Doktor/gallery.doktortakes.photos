@@ -9,16 +9,20 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from photos import settings
-from photos.utils import format_filesize, get_modified_time
+from photos.fields import JSONField
+from photos.utils import format_filesize
 
+import datetime
 import exifread
 import hashlib
 import os
 import PIL.Image
+import pytz
 import uuid
-from datetime import datetime
 from io import BytesIO
-from pytz import timezone
+
+fromtimestamp = datetime.datetime.fromtimestamp
+strptime = datetime.datetime.strptime
 
 BLOCK_SIZE = 1 * 1024 * 1024  # 1 MB
 
@@ -30,7 +34,13 @@ CROP = (
     ('L', 'Left'),
 )
 
-EST = timezone('US/Eastern')
+DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
+
+
+def get_modified_time_utc(filename):
+    """Returns the modification time (UTC) of a file."""
+    ts = os.path.getmtime(filename)
+    return fromtimestamp(ts, pytz.UTC)
 
 
 def get_cover_folder(album, original_name):
@@ -397,6 +407,8 @@ class Photo(models.Model):
         editable=False,
         help_text="When this photo was edited")
 
+    exif = JSONField(editable=False, blank=True)
+
     @property
     def dimensions(self):
         """Returns the dimensions of the photo as a string in the format
@@ -421,38 +433,46 @@ class Photo(models.Model):
         return f"Photo {self.md5}"
 
     def save(self, *args, **kwargs):
+        if self.pk:
+            super().save(*args, **kwargs)
+            return
+
         self.image.open()
 
-        # New photo
-        if not self.pk:
-            self.md5 = generate_md5_hash(self.image.name)
+        # MD5 hash
+        self.md5 = generate_md5_hash(self.image.name)
 
-            try:
-                Photo.objects.get(md5=self.md5)
-            except Photo.DoesNotExist:
-                pass
-            else:
-                raise ValidationError(f"Duplicate file detected: {self.md5}")
+        try:
+            Photo.objects.get(md5=self.md5)
+        except Photo.DoesNotExist:
+            pass
+        else:
+            raise ValidationError(f"Duplicate file detected: {self.md5}")
 
-            tags = exifread.process_file(self.image)
+        # EXIF data
+        exif = exifread.process_file(self.image)
+        exif.pop('JPEGThumbnail', None)  # Discard the embedded thumbnail
 
-            taken = tags["EXIF DateTimeDigitized"].printable
-            if not taken:
-                self.taken = get_modified_time(self.image.name)
-            else:
-                self.taken = EST.localize(
-                    datetime.strptime(taken, "%Y:%m:%d %H:%M:%S"))
+        self.exif = {k: v.printable for k, v in exif.items()}
 
-            edited = tags["Image DateTime"].printable
-            if not edited:
-                self.edited = get_modified_time(self.image.name)
-            else:
-                self.edited = EST.localize(
-                    datetime.strptime(edited, "%Y:%m:%d %H:%M:%S"))
+        # Timestamps
+        modified = get_modified_time_utc(self.image.name)
+
+        taken = self.exif.get('EXIF DateTimeDigitized', None)
+        if taken is not None:
+            self.taken = strptime(taken, DATE_FORMAT)
+        else:
+            self.taken = modified
+
+        edited = self.exif.get('Image DateTime', None)
+        if edited is not None:
+            self.edited = strptime(edited, DATE_FORMAT)
+        else:
+            self.taken = modified
 
         self.image.close()
 
-        super(Photo, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         get_latest_by = 'taken'

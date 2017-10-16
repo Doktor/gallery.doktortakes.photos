@@ -16,12 +16,6 @@ def format_filesize(b):
     return "%.2f %s" % (b, 'TB')
 
 
-def get_modified_time(filename):
-    """Returns the modification time of a file."""
-    t = os.path.getmtime(filename)
-    return DT.fromtimestamp(t)
-
-
 # noinspection PyBroadException
 def f_stop(f):
     """Returns the decimal equivalent of a fractional F-stop string."""
