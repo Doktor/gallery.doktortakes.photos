@@ -19,6 +19,7 @@ import PIL.Image
 import pytz
 import uuid
 from io import BytesIO
+from libxmp import XMPFiles as XMP, consts as XMPConstants
 
 fromtimestamp = datetime.datetime.fromtimestamp
 strptime = datetime.datetime.strptime
@@ -423,6 +424,8 @@ class Photo(models.Model):
 
     exif = JSONField(editable=False, blank=True)
 
+    rating = models.PositiveSmallIntegerField(default=0)
+
     @property
     def dimensions(self):
         """Returns the dimensions of the photo as a string in the format
@@ -440,6 +443,12 @@ class Photo(models.Model):
 
     def __str__(self):
         return f"Photo {self.md5}"
+
+    def clean(self):
+        if self.rating > 5:
+            raise ValidationError("Rating must be between 0 and 5")
+
+        super().clean()
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -465,6 +474,15 @@ class Photo(models.Model):
         exif = exifread.process_file(self.image, details=False)
 
         self.exif = {k: v.printable for k, v in exif.items()}
+
+        # XMP data
+        xmp = XMP(file_path=self.image.name).get_xmp()
+        rating = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Rating')
+
+        try:
+            self.rating = int(rating)
+        except ValueError:
+            self.rating = 0
 
         # Timestamps
         modified = get_modified_time_utc(self.image.name)

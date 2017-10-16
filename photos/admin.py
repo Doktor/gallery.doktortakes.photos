@@ -42,10 +42,10 @@ class AlbumAdmin(admin.ModelAdmin):
 class PhotoAdmin(admin.ModelAdmin):
     fields = (
         'image', 'preview', 'md5', 'width', 'height',
-        'file_size', 'crop', 'taken', 'edited'
+        'file_size', 'crop', 'taken', 'edited', 'rating'
     )
     list_display = ('__str__', 'album_name', 'width', 'height',
-                    'file_size', 'taken', 'edited')
+                    'file_size', 'taken', 'edited', 'rating')
     ordering = ('-taken',)
     readonly_fields = ('preview', 'md5', 'width', 'height',
                        'file_size', 'taken', 'edited')
