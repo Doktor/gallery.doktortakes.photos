@@ -10,7 +10,6 @@ from django.utils.text import slugify
 
 from photos import settings
 from photos.fields import JSONField
-from photos.utils import format_filesize
 
 import datetime
 import exifread
@@ -35,6 +34,15 @@ CROP = (
 )
 
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
+
+
+def format_file_size(b):
+    """Returns a human-readable string representation of a number of bytes."""
+    for unit in ('B', 'KB', 'MB', 'GB'):
+        if abs(b) < 1024.0:
+            return "%3.2f %s" % (b, unit)
+        b /= 1024.0
+    return "%.2f %s" % (b, 'TB')
 
 
 def get_modified_time_utc(filename):
@@ -400,6 +408,7 @@ class Photo(models.Model):
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
+    file_size = models.CharField(max_length=50, editable=False)
 
     taken = models.DateTimeField(
         editable=False,
@@ -421,11 +430,6 @@ class Photo(models.Model):
         """Returns the filename of the photo file."""
         return os.path.basename(self.image.name)
 
-    @property
-    def filesize(self):
-        """Returns the filesize of the photo as a human-readable string."""
-        return format_filesize(self.image.size)
-
     def get_absolute_url(self):
         """Returns the URL for this photo."""
         return reverse('photo', args=[self.album.get_path(), self.md5])
@@ -439,6 +443,9 @@ class Photo(models.Model):
             return
 
         self.image.open()
+
+        # File size
+        self.file_size = format_file_size(self.image.size)
 
         # MD5 hash
         self.md5 = generate_md5_hash(self.image.name)

@@ -6,16 +6,6 @@ import os
 from datetime import datetime as DT
 
 
-def format_filesize(b):
-    """Returns a human-readable string representation of a filesize, given
-    the filesize in bytes."""
-    for unit in ['B', 'KB', 'MB', 'GB']:
-        if abs(b) < 1024.0:
-            return "%3.2f %s" % (b, unit)
-        b /= 1024.0
-    return "%.2f %s" % (b, 'TB')
-
-
 # noinspection PyBroadException
 def f_stop(f):
     """Returns the decimal equivalent of a fractional F-stop string."""
@@ -56,7 +46,7 @@ def get_photo_info(photo):
 
         ("Width", photo.width),
         ("Height", photo.height),
-        ("File size", photo.filesize),
+        ("File size", photo.file_size),
         ("File name", photo.filename),
         ("MD5 hash", photo.md5),
 
