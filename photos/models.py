@@ -495,6 +495,32 @@ class Photo(models.Model):
         unique_together = ('album', 'taken')
 
 
+@receiver(pre_save, sender=Photo,
+          dispatch_uid='photos.models.update_photo_thumbnail')
+def update_photo_thumbnail(sender, instance, *args, **kwargs):
+    """Updates the thumbnail for a photo."""
+    photo = instance
+
+    # Don't regenerate thumbnails when renaming files
+    if hasattr(photo, '_rename'):
+        return
+
+    try:
+        previous = Photo.objects.get(pk=photo.pk)
+    except Photo.DoesNotExist:
+        tb = create_photo_thumbnail(photo)
+    else:
+        if previous.image != photo.image:
+            tb = create_photo_thumbnail(photo)
+        else:
+            return
+
+    if photo.thumbnail:
+        photo.thumbnail.delete(save=False)
+
+    photo.thumbnail.save(photo.filename, File(tb), save=False)
+
+
 @receiver(post_save, sender=Photo,
           dispatch_uid='photos.models.rename_photo_files')
 def rename_photo_files(sender, instance, created, *args, **kwargs):
@@ -536,35 +562,6 @@ def rename_photo_files(sender, instance, created, *args, **kwargs):
 
     photo._rename = True
     photo.save()
-
-
-# noinspection PyUnusedLocal
-@receiver(pre_save, sender=Photo)
-def update_thumbnail(sender, instance, *args, **kwargs):
-    """Updates the thumbnail for a photo."""
-    photo = instance
-
-    # Thumbnails shouldn't be regenerated when renaming files
-    if hasattr(photo, '_rename'):
-        return
-
-    try:
-        previous = Photo.objects.get(pk=photo.pk)
-    # New photo
-    except Photo.DoesNotExist:
-        tb = create_photo_thumbnail(photo)
-    else:
-        # Updated file
-        if previous.image != photo.image:
-            tb = create_photo_thumbnail(photo)
-        else:
-            return
-
-    # Delete the existing thumbnail, if it exists
-    if photo.thumbnail:
-        photo.thumbnail.delete(save=False)
-
-    photo.thumbnail.save(photo.filename, File(tb), save=False)
 
 
 def create_photo_thumbnail(photo, size=(400, 400)):
