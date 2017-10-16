@@ -64,7 +64,7 @@ def get_photo_info(photo):
         ("Height", photo.height),
         ("File size", photo.filesize),
         ("File name", photo.filename),
-        ("Image #", photo.number),
+        ("MD5 hash", photo.md5),
 
         ("Taken",
          "{datetime} ({relative} ago)".format(

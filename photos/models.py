@@ -338,17 +338,20 @@ def create_album_thumbnail(album, size=(800, 600)):
     return data
 
 
-def get_photo_folder(photo, original_name):
-    """Returns the upload path for a new/changed photo file."""
-    return "{album}/{filename}".format(
-        album=photo.album.get_path(), filename=original_name)
+def get_photo_path(photo, filename, ext=None):
+    if ext is None:
+        _, ext = os.path.splitext(filename)
+        ext = ext.lstrip('.')
+
+    return f"{photo.album.get_path()}/{photo.md5}.{ext}"
 
 
-def get_photo_thumb_folder(photo, original_name):
-    """Returns the upload path for the thumb of a new/changed photo file."""
-    root, ext = os.path.splitext(original_name)
-    return ".thumb/{album}/{root}_t.{ext}".format(
-        album=photo.album.get_path(), root=root, ext=ext.lstrip('.'))
+def get_photo_image_path(photo, filename):
+    return f"photos/{get_photo_path(photo, filename)}"
+
+
+def get_photo_thumbnail_path(photo, filename):
+    return f"thumbs/{get_photo_path(photo, filename, ext='jpg')}"
 
 
 def generate_md5_hash(filename):
@@ -366,12 +369,12 @@ def generate_md5_hash(filename):
 
 class Photo(models.Model):
     image = models.ImageField(
-        upload_to=get_photo_folder,
+        upload_to=get_photo_image_path,
         width_field='width', height_field='height')
     md5 = models.CharField(max_length=32, editable=False, unique=True)
 
     thumbnail = models.ImageField(
-        upload_to=get_photo_thumb_folder, editable=False,
+        upload_to=get_photo_thumbnail_path, editable=False,
         help_text="Automatically generated thumbnail")
     crop = models.CharField(
         max_length=1, default='C', choices=CROP,
@@ -379,10 +382,6 @@ class Photo(models.Model):
 
     album = models.ForeignKey(
         'Album', on_delete=models.CASCADE, related_name='photos')
-
-    number = models.PositiveIntegerField(
-        editable=False,
-        help_text="The sequence number of the photo")
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
@@ -412,10 +411,10 @@ class Photo(models.Model):
 
     def get_absolute_url(self):
         """Returns the URL for this photo."""
-        return reverse('photo', args=[self.album.get_path(), self.number])
+        return reverse('photo', args=[self.album.get_path(), self.md5])
 
     def __str__(self):
-        return "Photo {}".format(str(self.number))
+        return f"Photo {self.md5}"
 
     def save(self, *args, **kwargs):
         self.image.open()
@@ -430,8 +429,6 @@ class Photo(models.Model):
                 pass
             else:
                 raise ValidationError(f"Duplicate file detected: {self.md5}")
-
-            self.number = int(os.path.splitext(self.filename)[0])
 
             tags = exifread.process_file(self.image)
 
@@ -455,8 +452,8 @@ class Photo(models.Model):
 
     class Meta:
         get_latest_by = 'taken'
-        ordering = ['number']
-        unique_together = ("album", "number")
+        ordering = ['taken']
+        unique_together = ('album', 'taken')
 
 
 # noinspection PyUnusedLocal

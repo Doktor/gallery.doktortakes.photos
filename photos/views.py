@@ -50,11 +50,11 @@ def get_album_by_path(path):
     return a
 
 
-def get_photo(path, number):
+def get_photo(path, md5):
     """Returns the Photo in the album with the given path, and with the
-    given number."""
+    given MD5 hash."""
     a = get_album_by_path(path)
-    p = get_object_or_404(Photo, number=number, album=a)
+    p = get_object_or_404(Photo, md5=md5, album=a)
     return p
 
 
@@ -210,12 +210,12 @@ def edit_album(request, path):
             return redirect('edit_album', path=a.get_path())
 
 
-def photo(request, path, number):
+def photo(request, path, md5):
     """Renders photo pages."""
 
     # Get a photo
     # This is handled by the PhotoSwipe library, and incorrect photo
-    # numbers will not result in a 404 error
+    # hashes will not result in a 404 error
     if request.method == 'GET':
         return album(request, path)
 
@@ -224,11 +224,11 @@ def photo(request, path, number):
         if not request.user.is_authenticated():
             return JsonResponse({'success': False})
         try:
-            if not (path and number):
+            if not (path and md5):
                 raise ValueError('Photo incorrectly specified')
 
             a = get_album_by_path(path)
-            p = Photo.objects.get(album=a, number=number)
+            p = Photo.objects.get(album=a, md5=md5)
 
             p.thumbnail.delete(save=False)
             p.image.delete(save=False)
@@ -250,9 +250,9 @@ def photo(request, path, number):
             return JsonResponse({'success': success})
 
 
-def photo_info(request, path, number):
+def photo_info(request, path, md5):
     """Retrieves EXIF data and other information for a photo."""
-    p = get_photo(path, number)
+    p = get_photo(path, md5)
     try:
         info = get_photo_info(p)
         return JsonResponse({'error': False, 'info': info})
@@ -260,9 +260,9 @@ def photo_info(request, path, number):
         return JsonResponse({'error': True})
 
 
-def photo_download(request, path, number):
+def photo_download(request, path, md5):
     """Starts a download for a photo."""
-    p = get_photo(path, number)
+    p = get_photo(path, md5)
 
     p.image.open()
 

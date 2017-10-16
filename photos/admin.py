@@ -41,13 +41,13 @@ class AlbumAdmin(admin.ModelAdmin):
 
 class PhotoAdmin(admin.ModelAdmin):
     fields = (
-        'image', 'preview', 'number', 'width', 'height',
+        'image', 'preview', 'md5', 'width', 'height',
         'filesize', 'crop', 'taken', 'edited'
     )
     list_display = ('__str__', 'album_name', 'width', 'height',
                     'filesize', 'taken', 'edited')
     ordering = ('-taken',)
-    readonly_fields = ('preview', 'number', 'width', 'height',
+    readonly_fields = ('preview', 'md5', 'width', 'height',
                        'filesize', 'taken', 'edited')
 
     def preview(self, photo):
