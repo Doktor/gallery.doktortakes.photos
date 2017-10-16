@@ -457,11 +457,13 @@ class Photo(models.Model):
 
         self.image.open()
 
+        filename = os.path.join(settings.MEDIA_ROOT, self.image.name)
+
         # File size
         self.file_size = format_file_size(self.image.size)
 
         # MD5 hash
-        self.md5 = generate_md5_hash(self.image.name)
+        self.md5 = generate_md5_hash(filename)
 
         try:
             Photo.objects.get(md5=self.md5)
@@ -476,7 +478,7 @@ class Photo(models.Model):
         self.exif = {k: v.printable for k, v in exif.items()}
 
         # XMP data
-        xmp = XMP(file_path=self.image.name).get_xmp()
+        xmp = XMP(file_path=filename).get_xmp()
         rating = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Rating')
 
         try:
@@ -485,7 +487,7 @@ class Photo(models.Model):
             self.rating = 0
 
         # Timestamps
-        modified = get_modified_time_utc(self.image.name)
+        modified = get_modified_time_utc(filename)
 
         if self.album is not None:
             tz_name = self.album.timezone
