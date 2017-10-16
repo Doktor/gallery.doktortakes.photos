@@ -462,8 +462,7 @@ class Photo(models.Model):
             raise ValidationError(f"Duplicate file detected: {self.md5}")
 
         # EXIF data
-        exif = exifread.process_file(self.image)
-        exif.pop('JPEGThumbnail', None)  # Discard the embedded thumbnail
+        exif = exifread.process_file(self.image, details=False)
 
         self.exif = {k: v.printable for k, v in exif.items()}
 
