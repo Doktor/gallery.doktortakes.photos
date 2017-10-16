@@ -144,17 +144,6 @@ def all_photos(request):
     return render(request, "all_photos.html", context)
 
 
-def album_redirect(request, path):
-    """Redirects users to the new album URL, if they entered the site
-    via a deprecated URL."""
-    messages.warning(
-        request,
-        "You've entered this site using a deprecated link. If you found this "
-        "link through a website/service other than Twitter or Telegram, "
-        "please ask someone to update it!")
-    return redirect('album', path=path)
-
-
 @require_http_methods(['GET'])
 def album(request, path):
     """Renders album pages."""
