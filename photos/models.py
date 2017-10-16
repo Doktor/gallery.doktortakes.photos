@@ -210,12 +210,12 @@ def update_cover(sender, instance, *args, **kwargs):
         if not album.cover:
             return
         else:
-            thumb = create_cover_thumbnail(album)
+            thumb = create_album_thumbnail(album)
     else:
         if ((album.cover and not album.thumbnail) or
                 (previous.cover != album.cover) or
                 (previous.crop != album.crop)):
-            thumb = create_cover_thumbnail(album)
+            thumb = create_album_thumbnail(album)
         else:
             return
 
@@ -239,16 +239,23 @@ def delete_album(sender, instance, *args, **kwargs):
         photo.image.delete(save=False)
 
 
-def create_cover_thumbnail(album):
-    """Creates a cover for the given album. The default size is 800x600."""
-
+def create_album_thumbnail(album, size=(800, 600)):
+    """Creates a cover for the given album."""
     album.cover.image.open()
 
     image = PIL.Image.open(album.cover.image)
     crop = album.crop
 
-    w = image.width
-    h = image.height
+    if image.format != 'JPEG':
+        image = image.convert('RGB')
+
+    # Upscale small images
+    if image.size < size:
+        w, h = image.size
+        ratio = max(size[0] / w, size[1] / h)
+        image = image.resize((w * ratio, h * ratio), PIL.Image.BICUBIC)
+
+    w, h = image.size
 
     mid_w = w * 1 / 2
     mid_h = h * 1 / 2
@@ -312,25 +319,20 @@ def create_cover_thumbnail(album):
         y1 = mid_h - new_h * 1 / 2
         y2 = mid_h + new_h * 1 / 2
 
-    bounds = (int(i) for i in (x1, y1, x2, y2))
+    bounds = map(int, (x1, y1, x2, y2))
     image = image.crop(bounds)
-
-    cover_size = (800, 600)
-
-    # Downsizes the image
-    image.thumbnail(cover_size, PIL.Image.ANTIALIAS)
+    image.thumbnail(size, PIL.Image.ANTIALIAS)
 
     # Fixes rounding errors
-    fix = (0, 0, cover_size[0], cover_size[1])
-    image = image.crop(fix)
+    bounds = (0, 0, size[0], size[1])
+    image = image.crop(bounds)
 
-    # Save the cover to a new binary stream
-    im = BytesIO()
-    image.save(im, "JPEG", quality=85)
+    data = BytesIO()
+    image.save(data, "JPEG", quality=75, optimize=True)
 
     album.cover.image.close()
 
-    return im
+    return data
 
 
 def get_photo_folder(photo, original_name):
@@ -444,11 +446,11 @@ def update_thumbnail(sender, instance, *args, **kwargs):
         previous = Photo.objects.get(pk=photo.pk)
     # New photo
     except Photo.DoesNotExist:
-        tb = create_thumbnail(photo)
+        tb = create_photo_thumbnail(photo)
     else:
         # Updated file
         if previous.image != photo.image:
-            tb = create_thumbnail(photo)
+            tb = create_photo_thumbnail(photo)
         else:
             return
 
@@ -459,16 +461,23 @@ def update_thumbnail(sender, instance, *args, **kwargs):
     photo.thumbnail.save(photo.filename, File(tb), save=False)
 
 
-def create_thumbnail(photo):
-    """Creates a thumbnail of the given photo. The default size is 300x300."""
-
+def create_photo_thumbnail(photo, size=(400, 400)):
+    """Creates a thumbnail of the given photo."""
     photo.image.open()
 
     image = PIL.Image.open(photo.image)
     crop = photo.crop
 
-    w = image.width
-    h = image.height
+    if image.format != 'JPEG':
+        image = image.convert('RGB')
+
+    # Upscale small images
+    if image.size < size:
+        w, h = image.size
+        ratio = max(size[0] / w, size[1] / h)
+        image = image.resize((w * ratio, h * ratio), PIL.Image.BICUBIC)
+
+    w, h = image.size
 
     if w > h:
         y1 = 0
@@ -500,15 +509,13 @@ def create_thumbnail(photo):
         y1 = 0
         y2 = h
 
-    bounds = (int(i) for i in (x1, y1, x2, y2))
-
+    bounds = map(int, (x1, y1, x2, y2))
     image = image.crop(bounds)
-    image.thumbnail((300, 300), PIL.Image.ANTIALIAS)
+    image.thumbnail(size)
 
-    # Save the thumbnail to a new binary stream
-    im = BytesIO()
-    image.save(im, "JPEG", quality=85)
+    data = BytesIO()
+    image.save(data, 'JPEG', quality=75, optimize=True)
 
     photo.image.close()
 
-    return im
+    return data
