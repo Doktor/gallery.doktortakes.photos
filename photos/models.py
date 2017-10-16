@@ -12,11 +12,14 @@ from photos import settings
 from photos.utils import format_filesize, get_modified_time
 
 import exifread
+import hashlib
 import os
 import PIL.Image
 from datetime import datetime
 from io import BytesIO
 from pytz import timezone
+
+BLOCK_SIZE = 1 * 1024 * 1024  # 1 MB
 
 CROP = (
     ('C', 'Center'),
@@ -348,10 +351,25 @@ def get_photo_thumb_folder(photo, original_name):
         album=photo.album.get_path(), root=root, ext=ext.lstrip('.'))
 
 
+def generate_md5_hash(filename):
+    h = hashlib.md5()
+
+    with open(filename, 'rb') as f:
+        buf = f.read(BLOCK_SIZE)
+
+        while len(buf) > 0:
+            h.update(buf)
+            buf = f.read(BLOCK_SIZE)
+
+    return h.hexdigest()
+
+
 class Photo(models.Model):
     image = models.ImageField(
         upload_to=get_photo_folder,
         width_field='width', height_field='height')
+    md5 = models.CharField(max_length=32, editable=False, unique=True)
+
     thumbnail = models.ImageField(
         upload_to=get_photo_thumb_folder, editable=False,
         help_text="Automatically generated thumbnail")
@@ -404,6 +422,15 @@ class Photo(models.Model):
 
         # New photo
         if not self.pk:
+            self.md5 = generate_md5_hash(self.image.name)
+
+            try:
+                Photo.objects.get(md5=self.md5)
+            except Photo.DoesNotExist:
+                pass
+            else:
+                raise ValidationError(f"Duplicate file detected: {self.md5}")
+
             self.number = int(os.path.splitext(self.filename)[0])
 
             tags = exifread.process_file(self.image)
