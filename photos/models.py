@@ -58,6 +58,7 @@ class Album(models.Model):
     location = models.CharField(
         max_length=128, blank=True,
         help_text="Where the photos in this album were taken")
+    timezone = models.CharField(max_length=100, default='US/Eastern')
     description = models.CharField(
         max_length=1000, blank=True,
         help_text="A brief description of this album")
@@ -458,15 +459,22 @@ class Photo(models.Model):
         # Timestamps
         modified = get_modified_time_utc(self.image.name)
 
+        if self.album is not None:
+            tz_name = self.album.timezone
+        else:
+            tz_name = 'US/Eastern'
+
+        tz = pytz.timezone(tz_name)
+
         taken = self.exif.get('EXIF DateTimeDigitized', None)
         if taken is not None:
-            self.taken = strptime(taken, DATE_FORMAT)
+            self.taken = strptime(taken, DATE_FORMAT).replace(tzinfo=tz)
         else:
             self.taken = modified
 
         edited = self.exif.get('Image DateTime', None)
         if edited is not None:
-            self.edited = strptime(edited, DATE_FORMAT)
+            self.edited = strptime(edited, DATE_FORMAT).replace(tzinfo=tz)
         else:
             self.taken = modified
 
