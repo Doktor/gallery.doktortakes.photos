@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<li>
+  {% if edit %}
+  <a href="{{ album.get_edit_url }}">
+  {% else %}
+  <a href="{{ album.get_absolute_url }}">
+  {% endif %}
+    <div class="album-row clearfix">
+      <div class="cover">
+        {% if album.cover %}
+          <img src="{{ album.thumbnail.url }}">
+        {% else %}
+          <div class="no-cover">
+            <img src="{% static "cover-placeholder.png" %}" title="{{ album.name }}">
+            <div class="note">No cover</div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="details">
+        <h3>{{ album.name }}</h3>
+        <ul>
+          <li>{{ album.start|date:"Y-m-d" }}{% if album.end %} &mdash;
+            {{ album.end|date:"Y-m-d" }}{% endif %}</li>
+          <li>{{ album.photos.count }}
+            photo{{ album.photos.count|pluralize }}{% if album.children.exists %}
+              ({{ album.count }} total){% endif %}</li>
+          <li>{% if album.location %}{{ album.location }}{% else %}
+            <span class="note">No location</span>{% endif %}</li>
+        </ul>
+        <div class="note">{{ album.description|striptags|default:"No description" }}</div>
+      </div>
+    </div>
+  </a>
+
+  {% if album.children.exists %}
+    <ul class="list">
+      {% for a in album.children.all %}
+        {% with album=a template="_album_row_card.html" %}
+          {% include template %}
+        {% endwith %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</li>

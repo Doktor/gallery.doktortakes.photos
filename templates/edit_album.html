@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Editing {{ album.name }} - {{ block.super }}{% endblock %}
+
+{% block meta %}
+  <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static "dropzone/dropzone.css" %}">
+  <style>
+    body {
+      max-width: 1100px;
+      margin-bottom: 3rem;
+    }
+    section {
+      margin: 2rem 0;
+    }
+    #edit-album {
+      padding-right: 1rem;
+    }
+    #cover {
+      padding-left: 1rem;
+    }
+    #cover .full-size {
+      font-size: 1rem;
+      text-align: right;
+      float: right;
+    }
+    #cover .no-cover {
+      border: 1px solid rgb(220, 220, 220);
+      padding: 8px;
+      text-align: center;
+    }
+    #cover img {
+      width: 100%;
+    }
+    #cover, #edit-album {
+      width: 50%;
+      float: left;
+    }
+    #delete-album {
+      width: 50%;
+    }
+    #actions-select a {
+      cursor: pointer;
+    }
+    #actions-select, #actions-delete {
+      width: 50%;
+      float: left;
+    }
+    #actions-delete button {
+      margin-left: 0.3rem;
+    }
+    #actions-delete {
+      text-align: right;
+      float: right;
+    }
+    #delete-album form input {
+      width: 80%;
+      float: left;
+    }
+    #delete-album form button {
+      width: 20%;
+      float: left;
+    }
+  </style>
+{% endblock %}
+
+{% block classes %}small left{% endblock %}
+
+{% block content %}
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><a href="{% url 'edit' %}">Edit</a></li>
+        {% for p in parents %}
+          <li><a href="{{ p.get_edit_url }}">{{ p.name }}</a></li>
+        {% endfor %}
+        <li><a href="{{ album.get_edit_url }}">{{ album.name }}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <h1>Edit album</h1>
+    <h2>{{ album.name }}</h2>
+    <a href="{{ album.get_absolute_url }}" target="_blank">View on site</a>
+  </header>
+
+  {% if messages %}
+    <section id="messages">
+      {% for m in messages %}
+        <div class="message {{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  <section class="main-container clearfix">
+    <div id="edit-album">
+      <form method="post" action="{{ album.get_edit_url }}">
+        {% csrf_token %}
+
+        {% for field in form %}
+          <div class="row">
+            {{ field.errors }}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <div class="field-wrapper">{{ field }}</div>
+          </div>
+        {% endfor %}
+        <input type="submit" value="Save">
+      </form>
+    </div>
+
+    <div id="cover">
+      {% if album.cover %}
+        {% with link=album.thumbnail.url %}
+          <a href="{{ link }}" target="_blank" title="Full size">
+            <img src="{{ link }}">
+          </a>
+        {% endwith %}
+        <span class="full-size"><a href="{{ album.cover.image.url }}">Original full size</a>
+        </span>
+      {% else %}
+        <div class="no-cover">
+          <span class="note">This album does not have a cover.</span>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section>
+    <h2>Add photos</h2>
+
+    <div id="upload">
+      <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'upload' album.get_path %}">
+        {% csrf_token %}
+        <div class="fallback">
+          <input type="file" name="files" multiple>
+          <input type="submit" value="Upload">
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <h2>Delete photos</h2>
+
+    {% if album.photos.count %}
+      {% with count=album.photos.count %}
+        <h3 id="total">{{ count }} photo{{ count|pluralize }} in album</h3>
+        <h3 id="counter">0 selected</h3>
+      {% endwith %}
+
+      <div id="actions" class="clearfix">
+        <div id="actions-select">
+          <a onclick="select_all();">Select all</a><br>
+          <a onclick="select_none();">Select none</a>
+        </div>
+        <div id="actions-delete">
+          <span class="warning">Deletion cannot be undone!</span>
+          <button id="delete-photos" type="button">Delete</button>
+        </div>
+      </div>
+
+      <div id="photos">
+        <!-- TODO: Overlay a check mark on selected photos -->
+        {% for p in album.photos.all %}
+          <div class="wrapper">
+            <div class="photo" data-number="{{ p.number }}">
+              <img src="{{ p.thumbnail.url }}">
+              <div class="number">{{ p.number }}</div>
+              <div class="overlay"></div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>This album does not contain any images.</p>
+    {% endif %}
+  </section>
+
+  <section id="delete-album">
+    <h2>Delete album</h2>
+    <p class="warning">This deletes the album and all photos contained within
+      it. Deletion cannot be undone!</p>
+    <p>To confirm deletion, enter the name of the album.</p>
+    <form class="clearfix" method="post" action="{{ album.get_delete_url }}">
+      {% csrf_token %}
+      <input title="Name" name="name" type="text">
+      <button type="submit">Delete</button>
+    </form>
+  </section>
+
+  <footer>
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static "dropzone/dropzone.js" %}"></script>
+  <script>
+    Dropzone.autoDiscover = false;
+    var dropzone = new Dropzone("#dropzone", {
+      paramName: 'files'
+    });
+  </script>
+  <script>
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  </script>
+  <script>
+    function delete_photo(number, element) {
+      var request = new XMLHttpRequest();
+
+      request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+          var response = JSON.parse(request.responseText);
+
+          if (response.success) {
+            element.parentNode.remove();
+            update_total();
+            update_counter();
+          }
+        }
+      };
+
+      var url = "{% url 'album' album.get_path %}" + number;
+      request.open("DELETE", url, true);
+      request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+      request.send();
+    }
+
+    Element.prototype.remove = function () {
+      this.parentElement.removeChild(this);
+    };
+
+    var selected = [];
+    var photos = document.getElementsByClassName('photo');
+
+    var deleteButton = document.getElementById('delete-photos');
+    deleteButton.addEventListener('click', function () {
+      for (var i = 0; i < selected.length; i++) {
+        var number = selected[i].getAttribute('data-number');
+        delete_photo(number, selected[i]);
+      }
+    });
+
+    function update_total() {
+      var total = document.getElementById('total');
+      var photos = document.getElementsByClassName('photo');
+      var count = photos.length;
+
+      if (count === 1) {
+        total.textContent = count + ' photo in album';
+      } else {
+        total.textContent = count + ' photos in album';
+      }
+    }
+
+    function update_counter() {
+      var counter = document.getElementById('counter');
+      var selected = document.getElementsByClassName('selected');
+      var count = selected.length;
+
+      if (count === 1) {
+        counter.textContent = count + ' photo selected';
+      } else {
+        counter.textContent = count + ' photos selected';
+      }
+    }
+
+    function select_all() {
+      for (var i = 0; i < photos.length; i++) {
+        photos[i].classList.add('selected');
+        selected.push(photos[i]);
+      }
+      update_counter();
+    }
+
+    function select_none() {
+      for (var i = 0; i < photos.length; i++) {
+        photos[i].classList.remove('selected');
+      }
+      selected = [];
+      update_counter();
+    }
+
+    for (var i = 0; i < photos.length; i++) {
+      var el = photos[i];
+
+      el.addEventListener('click', function () {
+        // Not selected
+        if (!this.classList.contains('selected')) {
+          this.classList.add('selected');
+          selected.push(this);
+        } else {
+          // Selected
+          this.classList.remove('selected');
+          var index = selected.indexOf(this);
+          if (index > -1) {
+            selected.splice(index, 1);
+          }
+        }
+        update_counter();
+      });
+    }
+  </script>
+{% endblock %}

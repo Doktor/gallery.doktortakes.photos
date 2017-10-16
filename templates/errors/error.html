@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ name }} - {{ block.super }}{% endblock %}
+
+{% block meta %}
+  <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block style %}
+  <style>
+    body {
+      text-align: center;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <section>
+    <h1>{{ name }}</h1>
+    {% block message %}<p>Something broke!</p>{% endblock %}
+    <a href="{% url 'index' %}">Return to index</a>
+  </section>
+{% endblock %}

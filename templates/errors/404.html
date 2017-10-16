@@ -1,0 +1,5 @@
+{% extends "errors/error.html" %}
+
+{% block message %}
+  <p>The URL <code>{{ request.path }}</code> was not found.</p>
+{% endblock %}

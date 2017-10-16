@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}About - {{ block.super }}{% endblock %}
+{% block meta %}
+  {% include "_ogp_common.html" %}
+
+  <meta property="og:type" content="profile">
+  <meta property="profile:first_name" content="Doktor">
+  <meta property="profile:username" content="Doktor">
+  <meta property="og:url" content="{{ BASE_URL }}{% url 'about' %}">
+{% endblock %}
+
+{% block classes %}small left{% endblock %}
+
+{% block content %}
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+    <h1>About</h1>
+
+    <p>I'm Doktor! I'm a photographer and college student living in Boston, MA. In my free time, I photograph big animals.</p>
+
+    <p>Contact info and other useful links can be found on my other
+      <a href="https://doktorthehusky.com">website</a>.</p>
+
+    <h2>Photos</h2>
+
+    <figure class="icon">
+      <img src="{% static 'icons/camera.jpg' %}" title="Me!">
+      <figcaption>&#x1F3A8; Art by
+        <a href="https://twitter.com/dragonessdrei">Drei</a>
+      </figcaption>
+    </figure>
+
+    <p>You can find my photos on this website, and on
+      <a href="https://twitter.com/DoktorTheHusky">Twitter</a> and
+      <a href="https://www.flickr.com/photos/doktorthehusky/albums">Flickr</a>!
+      Flickr serves as a mirror for this website. Additionally, I keep track of my work on <a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a>, which I update frequently.</p>
+
+    <p>Here's a short list of my equipment:</p>
+    <ul>
+      <li>&#x1F4F7; Canon EOS 80D</li>
+      <li>&#x1F50E; EF-S 18-55mm f/3.5-5.6</li>
+      <li>&#x1F50D; EF 50mm f/1.8</li>
+      <li>&#x1F50E; EF-S 55-250mm f/4-5.6</li>
+      <li>&#x1F4A1; YongNuo YN-560 IV</li>
+      <li>&#x1F4A1; Altura Photo AP-C1001</li>
+    </ul>
+
+    <h2>Commissions</h2>
+
+    <p>I take photoshoot commissions! <a href="{% url 'commissions' %}">Read here</a> for more information.</p>
+
+    <h2>Site</h2>
+
+    <p>The backend of this site is written in Python 3 with
+      <a href="https://www.djangoproject.com/">Django</a>. The
+      photo gallery runs on <a href="http://photoswipe.com/">PhotoSwipe</a>,
+      written by <a href="http://dimsemenov.com/">Dmitry Semenov</a>.</p>
+
+    <p>If you notice anything that's broken or working improperly, please
+      let me know! This includes broken links, improperly displayed photos, etc.
+      General feedback is also appreciated.</p>
+  </section>
+
+  <footer>
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}

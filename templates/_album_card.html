@@ -1,0 +1,21 @@
+{% load staticfiles %}
+<div class="wrapper">
+  {% with link=album.get_absolute_url %}
+    <div class="album">
+      <a href="{{ link }}">
+        {% if album.thumbnail %}
+          <img src="{{ album.thumbnail.url }}" title="{{ album.name }}">
+        {% else %}
+          <div class="no-cover">
+            <img src="{% static "cover-placeholder.png" %}" title="{{ album.name }}">
+            <div class="note">No cover for this album</div>
+          </div>
+        {% endif %}
+
+        <div class="title">
+          <h3>{{ album.name }}</h3>
+        </div>
+      </a>
+    </div>
+  {% endwith %}
+</div>

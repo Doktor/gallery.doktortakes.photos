@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Edit albums - {{ block.super }}{% endblock %}
+
+{% block meta %}
+  <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block content %}
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><a href="{% url 'edit' %}">Edit</a></li>
+      </ul>
+    </nav>
+
+    <h1>Edit content</h1>
+  </header>
+
+  {% if messages %}
+    <section id="messages">
+      {% for m in messages %}
+        <div class="message {{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  <h2><a href="{% url 'new_album' %}">Add new album</a></h2>
+
+  <h2>Edit existing album</h2>
+  <section class="album-list">
+    <ul>
+      {% for album in albums %}
+        {% include "_album_row_card.html" with edit=True %}
+      {% endfor %}
+    </ul>
+  </section>
+
+  <footer>
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}

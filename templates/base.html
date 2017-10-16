@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  {% load staticfiles %}
+
+  <title>{% block title %}{{ TITLE }}{% endblock %}</title>
+  <meta name="author" content="{{ NAME }}">
+  <meta name="description" content="{% block description %}{{ DESCRIPTION }}{% endblock %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block meta %}{% endblock %}
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,700" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'main.css' %}">
+  <link rel="stylesheet" href="{% static 'photos.css' %}">
+  <link rel="shortcut icon" href="{% static 'favicon.png' %}">
+
+  {% block style %}{% endblock %}
+</head>
+
+<body class="{% block classes %}{% endblock %}">
+{% block content %}{% endblock %}
+{% block scripts %}{% endblock %}
+</body>
+</html>

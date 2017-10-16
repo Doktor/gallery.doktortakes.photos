@@ -1,0 +1,28 @@
+# IDE files
+.idea/
+
+# Secret keys
+keys/
+
+# Database
+photos.db
+
+# Media files
+media/
+*.psd
+
+# macOS metadata
+.DS_Store
+
+# Compiled files
+__pycache__
+*.css
+*.css.map
+
+# Libraries
+static/dropzone/
+static/photoswipe/
+static/simplePagination.*
+
+# Migrations (until a stable version is released)
+photos/migrations/

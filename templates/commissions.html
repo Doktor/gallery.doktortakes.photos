@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Commissions - {{ block.super }}{% endblock %}
+
+{% block meta %}
+  {% include "_ogp_common.html" %}
+
+  <meta property="og:type" content="profile">
+  <meta property="profile:first_name" content="Doktor">
+  <meta property="profile:username" content="Doktor">
+  <meta property="og:url" content="{{ BASE_URL }}{% url 'commissions' %}">
+{% endblock %}
+
+{% block classes %}small left{% endblock %}
+
+{% block content %}
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><a href="{% url 'commissions' %}">Commissions</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+  <h1>Commissions</h1>
+  <p>I offer photoshoot commissions!</p>
+
+  <h2>Pricing</h2>
+
+  <figure class="icon large">
+    <a href="{% static 'commissions/sabotage.jpg' %}">
+      <img src="{% static 'commissions/sabotage.jpg' %}"></a>
+    <figcaption><a href="https://twitter.com/sabotagelynx">Sabotage</a> at Furpocalypse 2016</figcaption>
+  </figure>
+
+  <p><strong>$40</strong> per 30-minute timeslot, maximum 2 slots per commissioner.
+    <br>Post-processing is included for free.
+    <br>Tips are appreciated!
+    <br>Prices are subject to change.</p>
+
+  <p>Payment is accepted by cash or PayPal, any time before the photoshoot.
+  </p>
+
+  <h2>Content</h2>
+
+  <p>We'll discuss the content of the photoshoot before it happens. If you have a theme in mind, we can work with that; we can also discuss specific poses and ideas.</p>
+
+  <h3>Examples</h3>
+  <ul>
+    <li>Show off a fursuit</li>
+    <li>Scenery, nature, landscapes: if the convention center is near those</li>
+    <li>Action: dance, martial arts, etc.</li>
+    <li>Holiday themed</li>
+    <li>Bedroom photos</li>
+  </ul>
+
+  <h2>The shoot</h2>
+
+  <p>You should have a friend to accompany you as a handler, and to carry your belongings, particularly badges.</p>
+
+  <p>Times are flexible: we may end early or late, depending on how many ideas we have.</p>
+
+  <h2>Photos</h2>
+
+  <figure class="icon large">
+    <a href="{% static 'commissions/sabotage-2.jpg' %}">
+      <img src="{% static 'commissions/sabotage-2.jpg' %}"></a>
+    <figcaption>Lynxy!</figcaption>
+  </figure>
+
+  <p>Photos will be delivered 2&ndash;8 weeks after the photoshoot. I'll notify you in advance if I expect it to take longer. You'll receive two sets of JPG files:</p>
+
+  <ul>
+    <li>2400x1600 with watermark, to post and share on the Internet
+    </li>
+    <li>3600x2400 without watermark, for personal use</li>
+  </ul>
+
+  <p>The files are free for you to use in any non-commercial settings. You
+    can post and share them, make prints for yourself, etc., but you cannot
+    sell them in any form without a prior agreement with me.</p>
+
+  <p>If you need the photos in different dimensions or ratios, please ask!</p>
+  <p>I will not sell or otherwise release my RAW files.</p>
+
+  <h2>Availability</h2>
+
+  <p>I offer 3-5 photoshoots per convention! You can see my availability on <a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a>.</p>
+
+  <h2>Scheduling</h2>
+
+  <p>If you're interested, get in touch! <a href="https://twitter.com/DoktorTheHusky">Twitter messages</a> or <a href="mailto:doktor@doktorthehusky.com">emails</a> are preferred.</p>
+  </section>
+
+  <footer>
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}

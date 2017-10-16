@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed:300,700');
+// utilities
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $value: $value / $number;
+    }
+  }
+
+  @return $value;
+}
+@mixin clearfix() {
+  &::after {
+    content: ' ';
+    display: table;
+    clear: both;
+  }
+}
+// important colors
+$blue: rgb(0, 120, 255);
+$dark-gray: rgb(20, 20, 20);
+$off-white: rgb(220, 220, 220);
+// top-level elements
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  font-size: 1.4rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $off-white;
+  width: 80%;
+  max-width: 1100px;
+  margin: 2rem auto;
+  background-color: $dark-gray;
+}
+// headers
+@mixin headers($scale) {
+  h1 { font-size: pow($scale, 4) * 1rem; }
+  h2 { font-size: pow($scale, 3) * 1rem; }
+  h3 { font-size: pow($scale, 2) * 1rem; }
+  h4 { font-size: pow($scale, 1) * 1rem; }
+  h5 { font-size: pow($scale, 0) * 1rem; }
+  h6 { font-size: pow($scale, -1) * 1rem; }
+}
+@media (max-width: 900px) {
+  @include headers(1.33);
+}
+@media (min-width: 901px) {
+  @include headers(1.4);
+}
+h1, h2, h3, h4, h5, h6 {
+  margin: 0.5rem 0;
+  font-family: "Roboto Condensed", sans-serif;
+}
+header {
+  margin-bottom: 1rem;
+}
+footer {
+  margin-top: 2rem;
+  color: gray;
+  clear: both;
+}
+header, footer {
+  text-align: center;
+}
+// other elements
+a {
+  color: $blue;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+code {
+  color: $blue;
+  background-color: $off-white;
+  border: 1px solid $dark-gray;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+code, pre {
+  font-family: Consolas, monospace;
+}
+figure {
+  margin: 0;
+}
+figcaption {
+  color: gray;
+  text-align: center;
+}
+hr {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid gray;
+  height: 1px;
+}
+img {
+  display: block;
+}
+nav, pre, section {
+  margin: 1rem 0;
+}
+@media (max-width: 600px) {
+  nav {
+    text-align: center;
+  }
+}
+// useful classes
+ul.breadcrumbs {
+  list-style: none;
+  clear: both;
+  margin: 0;
+  padding: 0;
+
+  @include clearfix();
+
+  li {
+    margin: 0;
+    float: left;
+
+    &:not(:last-child):after {
+      color: $off-white;
+      content: "/";
+      margin: 0 0.75rem;
+      position: relative;
+    }
+  }
+}
+.clearfix {
+  width: 100%;
+  @include clearfix();
+}
+.copyright {
+  font-style: italic;
+}
+.hidden {
+  display: none;
+}
