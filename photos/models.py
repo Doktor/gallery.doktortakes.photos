@@ -151,23 +151,24 @@ class Album(models.Model):
         unique_together = ('name', 'parent')
 
 
-@receiver(pre_save, sender=Album, dispatch_uid="models.album.name")
-def update_name(sender, instance, *args, **kwargs):
+@receiver(pre_save, sender=Album,
+          dispatch_uid="photos.models.update_album_name")
+def update_album_name(sender, instance, *args, **kwargs):
     album = instance
 
-    # Prevents infinite loop
+    # Prevents an infinite loop
     if hasattr(album, '_rename'):
         return
 
     try:
-        previous = Album.objects.get(pk=album.pk)
+        old = Album.objects.get(pk=album.pk)
     except Album.DoesNotExist:
         return
     else:
-        if previous.name == album.name:
+        if old.name == album.name:
             return
 
-    old_path = previous.get_path()
+    old_path = old.get_path()
     new_path = album.get_path()
 
     # Rename the media folder
@@ -181,9 +182,9 @@ def update_name(sender, instance, *args, **kwargs):
 
     # Rename the thumbnails folder
     old_thumb = os.path.join(
-        settings.MEDIA_ROOT, settings.THUMBNAIL_DIR, old_path)
+        settings.MEDIA_ROOT, settings.THUMBNAIL_FOLDER, old_path)
     new_thumb = os.path.join(
-        settings.MEDIA_ROOT, settings.THUMBNAIL_DIR, new_path)
+        settings.MEDIA_ROOT, settings.THUMBNAIL_FOLDER, new_path)
 
     try:
         os.rename(old_thumb, new_thumb)
@@ -195,7 +196,7 @@ def update_name(sender, instance, *args, **kwargs):
         photo.image.name = os.path.join(
             new_path, os.path.basename(photo.image.name))
         photo.thumbnail.name = os.path.join(
-            settings.THUMBNAIL_DIR, new_path,
+            settings.THUMBNAIL_FOLDER, new_path,
             os.path.basename(photo.thumbnail.name))
 
         try:
@@ -217,39 +218,38 @@ def update_name(sender, instance, *args, **kwargs):
             del album._rename
 
 
-# noinspection PyUnusedLocal
-@receiver(pre_save, sender=Album, dispatch_uid="models.album.cover")
-def update_cover(sender, instance, *args, **kwargs):
+@receiver(pre_save, sender=Album,
+          dispatch_uid="photos.models.update_album_cover")
+def update_album_cover(sender, instance, *args, **kwargs):
     """Updates the cover thumbnail for an album."""
     album = instance
 
-    # Album thumbnail shouldn't be regenerated when renaming files
+    # Don't regenerate thumbnails when renaming files
     if hasattr(album, '_rename'):
         return
 
     try:
-        previous = Album.objects.get(pk=album.pk)
+        old = Album.objects.get(pk=album.pk)
     except Album.DoesNotExist:
         if not album.cover:
             return
         else:
             thumb = create_album_thumbnail(album)
     else:
-        if ((album.cover and not album.thumbnail) or
-                (previous.cover != album.cover) or
-                (previous.crop != album.crop)):
+        if (album.cover and not album.thumbnail) or \
+                (old.cover != album.cover) or \
+                (old.crop != album.crop):
             thumb = create_album_thumbnail(album)
         else:
             return
 
-    # Delete the existing thumbnail, if it exists
     if album.thumbnail:
         album.thumbnail.delete(save=False)
 
     album.thumbnail.save(album.cover.filename, File(thumb), save=False)
 
 
-@receiver(pre_delete, sender=Album, dispatch_uid="models.album.delete")
+@receiver(pre_delete, sender=Album, dispatch_uid="photos.models.delete_album")
 def delete_album(sender, instance, *args, **kwargs):
     """Deletes related files when an album is deleted."""
     album = instance
@@ -258,8 +258,8 @@ def delete_album(sender, instance, *args, **kwargs):
         album.thumbnail.delete(save=False)
 
     for photo in album.photos.all():
-        photo.thumbnail.delete(save=False)
         photo.image.delete(save=False)
+        photo.thumbnail.delete(save=False)
 
 
 def create_album_thumbnail(album, size=(800, 600)):
