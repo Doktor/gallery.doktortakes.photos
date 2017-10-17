@@ -9,6 +9,12 @@
 // colors
 $borderColor: rgb(200, 200, 200);
 // general
+*::selection {
+  background-color: rgb(0, 120, 255);
+}
+*::-moz-selection {
+  background-color: rgb(0, 120, 255);
+}
 body {
   width: 85%;
   text-align: center;
