@@ -10,34 +10,24 @@
   <meta property="og:url" content="{{ BASE_URL }}{% url 'index' %}">
 {% endblock %}
 
-{% block style %}
-  <style>
-    h2 {
-      font-weight: 300;
-    }
-  </style>
-{% endblock %}
-
 {% block content %}
   <header>
     <div class="center">
       <h1>Doktor Takes Photos</h1>
-      <h2>&#x1F4F7; BARK BARK &#x1F4F8;</h2>
-      <p id="tagline">Photography by a blue dog.</p>
 
-      <div id="links">
-        <a href="{% url 'about' %}">About</a>
-        <a href="{% url 'directory' %}">Directory</a>
-        <a href="{% url 'commissions' %}">Commissions</a>
-      </div>
+      <ul class="links">
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'directory' %}">Photos</a></li>
+        <li><a href="{% url 'commissions' %}">Commissions</a></li>
+        <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a></li>
+        <li><a href="https://twitter.com/DoktorTheHusky">Twitter</a></li>
+      </ul>
 
       {% if request.user.is_authenticated %}
-        <div>
-          <a href="{% url 'edit' %}">Edit</a>
-        </div>
-        <div>
-          <a href="{% url 'logout' %}">Log out</a>
-        </div>
+      <ul class="links">
+        <li><a href="{% url 'edit' %}">Edit</a></li>
+        <li><a href="{% url 'logout' %}">Log out</a></li>
+      </ul>
       {% endif %}
     </div>
   </header>
@@ -50,7 +40,28 @@
     </section>
   {% endif %}
 
+  {% if featured %}
+    <section id="featured">
+      <div class="container">
+        {% for photo in featured %}
+        <div class="item">
+          <a href="{% url 'photo' photo.get_path photo.md5 %}">
+            <img src="{{ photo.image.url }}">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if more_photos %}
+    <section class="view-more">
+      <p><a href="">View more featured photos</a></p>
+    </section>
+    {% endif %}
+  {% endif %}
+
   <hr>
+
   {% if albums %}
     <section id="albums">
       {% for a in albums %}
@@ -58,9 +69,10 @@
       {% endfor %}
     </section>
 
-    {% if more %}
-      <p>Find more photos in the
-        <a href="{% url 'directory' %}">directory!</a></p>
+    {% if more_albums %}
+    <section class="view-more">
+      <p><a href="{% url 'directory' %}">View more albums</a></p>
+    </section>
     {% endif %}
   {% else %}
     <p>No albums found.</p>
@@ -71,4 +83,9 @@
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="{% static 'index.js' %}"></script>
 {% endblock %}

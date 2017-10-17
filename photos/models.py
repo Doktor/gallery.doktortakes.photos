@@ -441,6 +441,11 @@ class Photo(models.Model):
         """Returns the URL for this photo."""
         return reverse('photo', args=[self.album.get_path(), self.md5])
 
+    def get_path(self):
+        if self.album:
+            return self.album.get_path()
+        return ''  # TODO
+
     def __str__(self):
         return f"Photo {self.md5}"
 

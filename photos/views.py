@@ -10,9 +10,10 @@ from django.views.decorators.http import require_http_methods
 
 from photos.forms import AlbumForm, SortForm
 from photos.models import Album, Photo
-from photos.settings import ALBUMS_ON_INDEX
+from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS
 
 import mimetypes
+import random
 
 from photos.utils import get_photo_info
 
@@ -88,10 +89,15 @@ def debug500(request):
 def index(request):
     """Renders the index page."""
     albums = Album.objects.filter(parent__isnull=True).order_by('-start')
+    featured = Photo.objects.filter(rating__gte=4).order_by('-taken')
+
     context = {
-        'albums': albums[:ALBUMS_ON_INDEX],
-        'more': len(albums) > ALBUMS_ON_INDEX,
+        'albums': albums[:INDEX_ALBUMS],
+        'more_albums': len(albums) > INDEX_ALBUMS,
+        'featured': featured[:INDEX_FEATURED_PHOTOS],
+        'more_photos': len(featured) > INDEX_FEATURED_PHOTOS,
     }
+
     return render(request, 'index.html', context)
 
 

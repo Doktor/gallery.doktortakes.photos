@@ -15,10 +15,11 @@ $borderColor: rgb(200, 200, 200);
 *::-moz-selection {
   background-color: rgb(0, 120, 255);
 }
+
 body {
-  width: 85%;
+  width: 90%;
   text-align: center;
-  max-width: 1920px;
+  max-width: 90%;
 
   &.left {
     text-align: left;
@@ -27,8 +28,15 @@ body {
     max-width: 1200px;
   }
 }
+
 header {
   @include clearfix();
+
+  h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+    font-variant: small-caps;
+  }
 
   .center {
     width: 100%;
@@ -42,24 +50,32 @@ header {
     }
   }
 
-  #links {
-    @include clearfix();
-    margin: 0.5rem auto;
+  .links {
+    font-size: 1.8rem;
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-variant: small-caps;
 
-    a {
+    li {
       display: block;
-      width: 100%;
-      font-size: 1.4rem;
     }
 
-    @media (min-width: 901px) {
-      margin: 1.5rem auto;
+    a {
+      color: rgb(160, 160, 160);
 
-      a {
-        float: left;
-        width: 33%;
-        font-size: 1.8rem;
+      &:hover {
+        color: rgb(220, 220, 220);
       }
+    }
+
+    a, a:hover {
+      text-decoration: none;
+      transition: color 0.2s;
     }
   }
 
@@ -69,6 +85,42 @@ header {
     margin: 1rem;
   }
 }
+
+#featured {
+  $spacing: 10px;
+
+  //@include clearfix();
+
+  width: 100%;
+  margin: 2rem 0 0 0;
+
+  // TODO: This doesn't fix the width because Masonry uses absolute positioning
+  .container {
+    width: 100%;
+    margin: 0 -$spacing;
+  }
+
+  .item {
+    width: (100% / 3);
+    padding: $spacing;
+
+    img {
+      display: block;
+      width: 100%;
+      border: 1px solid rgb(220, 220, 220);
+      filter: brightness(1.0);
+    }
+
+    &:hover img {
+      filter: brightness(0.8);
+    }
+
+    img, &:hover img {
+      transition: filter 0.2s ease-in-out;
+    }
+  }
+}
+
 .construction {
   margin: 0.5rem 0;
   font-style: italic;
@@ -199,24 +251,25 @@ $photoWidth: 300px;
   }
 }
 // albums!
-$albumSpacing: 1rem;
-$albumWidth: 500px;
 #albums {
+  $spacing: 10px;
+  $width: 500px;
+
   @include clearfix();
-  margin-left: -$albumSpacing;
-  margin-right: -$albumSpacing;
+
+  //margin: 0 -$spacing;
 
   .wrapper {
-    padding: $albumSpacing;
+    padding: $spacing;
 
-    @media (max-width: $albumWidth) {
+    @media (max-width: $width) {
       width: 100%;
     }
-    @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
+    @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
       float: left;
       width: (100% / 2);
     }
-    @media (min-width: $albumWidth * 3 + 1) {
+    @media (min-width: $width * 3 + 1) {
       float: left;
       width: (100% / 3);
     }
@@ -225,10 +278,6 @@ $albumWidth: 500px;
   .album {
     position: relative;
     border: 1px solid $borderColor;
-
-    &:hover {
-      box-shadow: 0 0 1em white;
-    }
 
     a {
       color: white;
@@ -251,6 +300,15 @@ $albumWidth: 500px;
 
     img {
       width: 100%;
+      filter: brightness(1.0);
+    }
+
+    &:hover img {
+      filter: brightness(0.8);
+    }
+
+    img, &:hover img {
+      transition: filter 0.2s ease-in-out;
     }
 
     .no-cover .note {
