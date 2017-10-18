@@ -6,7 +6,7 @@ def metadata(request):
         'TITLE': "Doktor Takes Photos",
         'NAME': "Doktor",
         'TWITTER': "@DoktorTheHusky",
-        'DESCRIPTION': "Photography by a blue dog.",
-        'BASE_URL': "https://photos.doktorthehusky.com",
-        'LAST_UPDATE': datetime.datetime(2016, 10, 10),
+        'DESCRIPTION': "Photos by Doktor",
+        'BASE_URL': "https://doktortakes.photos",
+        'LAST_UPDATE': datetime.datetime(2017, 10, 18),
     }
