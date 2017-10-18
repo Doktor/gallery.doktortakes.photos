@@ -37,7 +37,13 @@
     </nav>
   </header>
 
-  <section id="photo">
+  <div id="navigation"
+       data-url-previous="{% url 'previous_photo' %}"
+       data-url-next="{% url 'next_photo' %}"></div>
+
+  <section id="photo"
+           data-path="{{ photo.get_path }}"
+           data-md5="{{ photo.md5 }}">
     <img src="{{ photo.image.url }}">
   </section>
 
@@ -47,3 +53,6 @@
   </footer>
 {% endblock %}
 
+{% block scripts %}
+<script src="{% static 'photo.js' %}"></script>
+{% endblock %}

@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 
-from photos import views
+from photos import api, views
 
 handler404 = 'photos.views.handler404'
 handler500 = 'photos.views.handler500'
@@ -31,8 +31,15 @@ album_patterns = [
         views.photo_download, name='download'),
 ]
 
+api_patterns = [
+    url(r'^photo/previous/', api.previous_photo, name='previous_photo'),
+    url(r'^photo/next/', api.next_photo, name='next_photo')
+]
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+
+    url(r'^api/', include(api_patterns)),
 
     url(r'^about/$', TemplateView.as_view(template_name='about.html'),
         name='about'),
