@@ -101,11 +101,11 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def directory(request):
-    """Renders the album directory."""
+def photos_list(request):
+    """Renders the list of albums."""
     albums = Album.objects.filter(parent__isnull=True).order_by('-start')
     context = {'albums': albums}
-    return render(request, 'directory.html', context)
+    return render(request, 'photos.html', context)
 
 
 def all_photos(request):

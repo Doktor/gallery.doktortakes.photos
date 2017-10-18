@@ -10,7 +10,7 @@ handler404 = 'photos.views.handler404'
 handler500 = 'photos.views.handler500'
 
 album_patterns = [
-    url(r'^$', views.directory, name='directory'),
+    url(r'^$', views.photos_list, name='photos'),
     url(r'^all/$', views.all_photos, name='all'),
 
     url(r'^(?P<path>[a-z0-9-/]+)/edit/$',
@@ -56,7 +56,7 @@ urlpatterns = [
     url(r'^edit/$', views.edit_content, name='edit'),
     url(r'^new/$', views.new_album, name='new_album'),
 
-    url(r'^albums/', include(album_patterns)),
+    url(r'^photos/', include(album_patterns)),
 
     url(r'^404/$', views.debug404),
     url(r'^500/$', views.debug500),

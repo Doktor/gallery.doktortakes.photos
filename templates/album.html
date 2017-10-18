@@ -62,7 +62,7 @@
     <nav>
       <ul class="breadcrumbs">
         <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
-        <li><a href="{% url 'directory' %}">Albums</a></li>
+        <li><a href="{% url 'photos' %}">Photos</a></li>
         {% for album in path %}
           <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
         {% endfor %}
