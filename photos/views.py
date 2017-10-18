@@ -25,14 +25,14 @@ def get_albums_from_path(path):
     if len(path) == 1:
         return [get_object_or_404(Album, slug=path[0], parent=None)]
 
-    names = list()
-    previous = None
+    albums = list()
+    parent = None
     for item in path:
-        a = get_object_or_404(Album, slug=item, parent=previous)
-        names.append(a)
-        previous = a
+        a = get_object_or_404(Album, slug=item, parent=parent)
+        albums.append(a)
+        parent = a
 
-    return names
+    return albums
 
 
 def get_album_by_path(path):
@@ -207,11 +207,19 @@ def edit_album(request, path):
 def photo(request, path, md5):
     """Renders photo pages."""
 
-    # Get a photo
-    # This is handled by the PhotoSwipe library, and incorrect photo
-    # hashes will not result in a 404 error
     if request.method == 'GET':
-        return album(request, path)
+        albums = get_albums_from_path(path)
+        a = albums[-1]
+        p = Photo.objects.get(album=a, md5=md5)
+
+        context = {
+            'album': a,
+            'photo': p,
+            'path': albums,
+            'short_md5': p.md5[:7]
+        }
+
+        return render(request, 'photo.html', context)
 
     # Delete a photo
     elif request.method == 'DELETE':

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ short_md5 }} | {{ photo.album.name }} | {{ block.super }}{% endblock %}
+
+{% block style %}
+<style>
+  img {
+    width: 100%;
+  }
+  .breadcrumbs li {
+    line-height: 2.4rem;
+  }
+  header {
+    text-align: left;
+  }
+  h1.logo {
+    float: left;
+    text-align: left;
+    font-size: 2.4rem;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
+        <li><a href="{% url 'directory' %}">Albums</a></li>
+        {% for album in path %}
+          <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </header>
+
+  <section id="photo">
+    <img src="{{ photo.image.url }}">
+  </section>
+
+  <footer>
+    {% include "_reuse.html" %}
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}
+
