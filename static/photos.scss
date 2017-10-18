@@ -86,6 +86,19 @@ header {
   }
 }
 
+
+h1.logo {
+  float: left;
+  text-align: left;
+  font-size: 2.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbs li {
+  line-height: 2.4rem;
+}
+
 #featured {
   $spacing: 10px;
 
@@ -315,68 +328,6 @@ $photoWidth: 300px;
       position: absolute;
       top: 45%;
       width: 100%;
-    }
-  }
-}
-// exif infobox
-.infobox {
-  background-color: rgb(20, 20, 20);
-  display: none;
-  height: 60%;
-  width: 90%;
-  max-width: 500px;
-  overflow: auto;
-  position: fixed;
-  margin-left: auto;
-  margin-right: auto;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  padding: 2rem;
-  z-index: 10000;
-  border: 1px solid $borderColor;
-  box-shadow: 0 0 1.5rem white;
-
-  table {
-    border-collapse: collapse;
-  }
-  tr {
-    &:first-child td {
-      border-top: none;
-    }
-    &:last-child td {
-      border-bottom: none;
-    }
-  }
-  td {
-    padding: 5px 0;
-    border: 1px solid rgb(80, 80, 80);
-    vertical-align: top;
-
-    &:first-child {
-      text-align: left;
-      font-weight: 700;
-      width: 35%;
-      border-left: none;
-      padding-right: 10px;
-    }
-    &:last-child {
-      text-align: right;
-      border-right: none;
-      padding-left: 10px;
-    }
-  }
-
-  .close {
-    display: block;
-    position: absolute;
-    top: 5px;
-    right: 9px;
-    cursor: pointer;
-    color: white;
-
-    &:hover {
-      text-decoration: none;
     }
   }
 }

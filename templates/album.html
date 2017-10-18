@@ -34,9 +34,6 @@
 {% endblock %}
 
 {% block style %}
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="{% static 'photoswipe/photoswipe.css' %}">
-  <link rel="stylesheet" href="{% static 'photoswipe/default-skin.css' %}">
   <link rel="stylesheet" href="{% static 'simplePagination.css' %}">
   <style>
   .pagination {
@@ -64,7 +61,7 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
         <li><a href="{% url 'directory' %}">Albums</a></li>
         {% for album in path %}
           <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
@@ -127,37 +124,16 @@
         {% for p in album.photos.all %}
           <div class="wrapper">
             <div class="photo">
-              <a href="{{ p.image.url }}"
-                 data-index="{{ forloop.counter0 }}"
-                 data-number="{{ p.number }}"
-                 data-width="{{ p.width }}"
-                 data-height="{{ p.height }}">
-                  <img class="loading"
-                       data-src="{{ p.thumbnail.url }}"
-                       src="{% static 'ring.svg' %}">
+              <a href="{% url 'photo' album.get_path p.md5 %}">
+                <img class="loading"
+                     data-src="{{ p.thumbnail.url }}"
+                     src="{% static 'ring.svg' %}">
               </a>
             </div>
           </div>
         {% endfor %}
       </section>
       <div class="pagination"></div>
-
-      {% include "_photoswipe.html" %}
-
-      <div id="details" class="infobox pswp__infobox">
-        <a class="close" onclick="hide('details');">Close
-          <span class="fa fa-times"></span></a>
-
-        <h3>EXIF</h3>
-        <div id="exif-container">
-          <span id="spinner" class="fa fa-spinner fa-spin"></span>
-          <table id="info">
-            <tbody id="exif">
-            </tbody>
-          </table>
-        </div>
-      </div>
-
     {% else %}
       <p>This album does not contain any images.</p>
     {% endif %}
@@ -173,9 +149,6 @@
 {% block scripts %}
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   <script src="{% static 'simplePagination.js' %}"></script>
-
-  <script src="{% static 'photoswipe/photoswipe.js' %}"></script>
-  <script src="{% static 'photoswipe/photoswipe-ui-default.js' %}"></script>
   <script>
     var ITEMS_PER_PAGE = 30;
 
@@ -233,280 +206,6 @@
       });
     } else {
       showCurrentPage();
-    }
-  </script>
-  <script>
-    // retrieves details for an image and adds them to the infobox
-    function _details() {
-      show('details');
-      show('spinner');
-
-      var request = new XMLHttpRequest();
-
-      request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200) {
-          var response = JSON.parse(request.responseText);
-
-          hide('spinner');
-          show('info');
-
-          // TODO
-          if (response.error) {
-            var m = document.getElementById('metadata');
-            var error = document.createElement('div');
-            error.id = 'load-error';
-            error.textContent = "An error occurred while loading the metadata for this photo.";
-            m.appendChild(error);
-          }
-
-          var fragment = document.createDocumentFragment();
-          var info = response.info;
-
-          for (var i = 0; i < info.length; i++) {
-            var row = document.createElement('tr');
-
-            // 1st item: label
-            var label = document.createElement('td');
-            label.textContent = info[i][0];
-
-            // 2nd item: data
-            var data = document.createElement('td');
-            data.textContent = info[i][1];
-
-            row.appendChild(label);
-            row.appendChild(data);
-            fragment.appendChild(row);
-          }
-
-          var exif = document.getElementById('exif');
-          exif.appendChild(fragment);
-        }
-      };
-
-      var info_url = window.location.href + '/info';
-      request.open("GET", info_url, true);
-      request.send();
-    }
-  </script>
-  <script>
-    // Reset EXIF information when navigating to another image
-    var _resetDetails = function () {
-      var exif = document.getElementById('exif');
-
-      // Clear data
-      if (exif.childElementCount > 1) {
-        while (exif.hasChildNodes()) {
-          exif.removeChild(exif.lastChild);
-        }
-      }
-
-      show('spinner');
-    };
-
-    // triggered when navigating to another image with the infobox open
-    var _updateDetailsIfVisible = function () {
-      var details = document.getElementById('details');
-      if (details.style.display === 'block') {
-        hide('spinner');
-        _details();
-      }
-    };
-
-    // updates the location of the <a> element with the specified id
-    var _updateLink = function (id, url) {
-      var e = document.getElementById(id);
-      e.href = url;
-    };
-  </script>
-  <script>
-    function init(galleryId) {
-
-      var galleryEl = document.getElementById(galleryId);
-
-      // get gallery items from gallery container
-      var parseThumbnailElements = function (el) {
-        var wrappers = el.childNodes,
-            items = [],
-            itemEl,
-            linkEl,
-            item;
-
-        for (var i = 0; i < wrappers.length; i++) {
-          // element nodes only
-          if (wrappers[i].nodeType !== 1) {
-            continue;
-          }
-
-          itemEl = wrappers[i].children[0]; // each <figure> element
-
-          if (itemEl.nodeType !== 1) {
-            continue;
-          }
-          linkEl = itemEl.children[0];
-
-          // create item
-          item = {
-            src: linkEl.getAttribute('href'),
-            w: linkEl.getAttribute('data-width'),
-            h: linkEl.getAttribute('data-height'),
-            pid: linkEl.getAttribute('data-number'),
-            // title: linkEl.getAttribute('data-title'),
-            // caption: linkEl.getAttribute('data-caption'),
-            // save link to element for getThumbBoundsFn
-            el: itemEl
-          };
-          items.push(item);
-        }
-
-        return items;
-      };
-
-      // find nearest parent element
-      var closest = function closest(el, fn) {
-        return el && ( fn(el) ? el : closest(el.parentNode, fn) );
-      };
-
-      // triggers when user clicks on (or close to) a thumbnail
-      var onThumbnailsClick = function (e) {
-        e = e || window.event;
-        e.preventDefault ? e.preventDefault() : e.returnValue = false;
-
-        var eTarget = e.target || e.srcElement;
-
-        // find root element of slide
-        var clickedListItem = closest(eTarget, function (el) {
-          return (el.tagName && el.tagName.toUpperCase() === 'DIV');
-        });
-
-        if (!clickedListItem) {
-          return;
-        }
-
-        var linkEl = clickedListItem.children[0];
-        var index = linkEl.getAttribute('data-index');
-
-        openGallery(index, galleryEl);
-      };
-
-      // parse picture index and gallery index from URL
-      var parsePhotoNumber = function () {
-        var location = window.location.href;
-        var number = location.split('{{ album.slug }}/')[1];
-
-        if (number === "") {
-          return false;
-        }
-        if (isNaN(number)) {
-          return false;
-        }
-
-        return parseInt(number);
-      };
-
-      var openGallery = function (index, galleryEl, disableAnimation, fromURL) {
-        var pswpEl = document.getElementsByClassName('pswp')[0],
-            gallery,
-            options,
-            items;
-
-        items = parseThumbnailElements(galleryEl);
-
-        options = {
-          // press ESC to close the gallery window
-          escKey: true,
-          // press the left and right arrow keys to navigate the gallery
-          arrowKeys: true,
-          // preload 2 images before and 4 images after the current image
-          preload: [2, 4],
-          // enables history states
-          history: true,
-          showHideOpacity: true,
-          closeOnScroll: false,
-
-          getThumbBoundsFn: function (index) {
-            var thumbnail = items[index].el.getElementsByTagName('img')[0],
-                pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
-                rect = thumbnail.getBoundingClientRect();
-
-            return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
-          }
-        };
-
-        // gallery opened from URL
-        if (fromURL) {
-          // parse real index when custom PIDs are used
-          // http://photoswipe.com/documentation/faq.html#custom-pid-in-url
-          for (var i = 0; i < items.length; i++) {
-            if (items[i].pid == index) {
-              options.index = i;
-              break;
-            }
-          }
-        } else {
-          options.index = parseInt(index, 10);
-        }
-
-        // exit if index not found
-        if (isNaN(options.index)) {
-          return;
-        }
-        if (disableAnimation) {
-          options.showAnimationDuration = 0;
-        }
-
-        // Pass data to PhotoSwipe and initialize it
-        gallery = new PhotoSwipe(pswpEl, PhotoSwipeUI_Default, items, options);
-
-        // sets the locations of the links for the first gallery item
-        gallery.listen('afterInit', function () {
-          _updateLink('new-tab', gallery.currItem.src);
-          _updateLink('download', window.location.href + '/download');
-        });
-
-        gallery.init();
-
-        gallery.listen('beforeChange', function () {
-          _resetDetails();
-        });
-
-        gallery.listen('afterChange', function () {
-          _updateLink('new-tab', gallery.currItem.src);
-        })
-
-        // functions that rely on the photo number
-        gallery.listen('afterURLChange', function () {
-          console.log("changed:" + gallery.currItem.pid);
-          _updateDetailsIfVisible();
-          _updateLink('download', window.location.href + '/download')
-        });
-
-        gallery.listen('destroy', function () {
-          var details = document.getElementById('details');
-          details.style.display = 'none';
-        });
-      };
-
-      // Parse URL and open gallery
-      var number = parsePhotoNumber();
-      if (number) {
-        openGallery(number, galleryEl, false, true);
-      }
-
-      // bind onclick event to gallery container
-      galleryEl.addEventListener('click', onThumbnailsClick);
-    }
-
-    init('photos');
-  </script>
-
-  <script>
-    function show(id) {
-      var e = document.getElementById(id);
-      e.style.display = 'block';
-    }
-    function hide(id) {
-      var e = document.getElementById(id);
-      e.style.display = 'none';
     }
   </script>
 {% endblock %}
