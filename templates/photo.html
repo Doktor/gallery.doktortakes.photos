@@ -1,38 +1,121 @@
 {% extends "base.html" %}
+
 {% load staticfiles %}
+{% load tz %}
 
 {% block title %}{{ short_md5 }} | {{ photo.album.name }} | {{ block.super }}{% endblock %}
 
 {% block style %}
 <style>
-  img {
-    max-height: 80vh;
-    margin: auto;
+  body {
+    margin: 0;
+    width: 100%;
+    max-width: none;
   }
 </style>
+<link rel="stylesheet" href="{% static 'photo.css' %}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
 {% block content %}
-  <header>
-    <nav>
-      <ul class="breadcrumbs">
-        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
-        <li><a href="{% url 'photos' %}">Photos</a></li>
-        {% for album in path %}
-          <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
-        {% endfor %}
-      </ul>
-    </nav>
-  </header>
-
   <div id="navigation"
        data-url-previous="{% url 'previous_photo' %}"
-       data-url-next="{% url 'next_photo' %}"></div>
+       data-url-next="{% url 'next_photo' %}">
+    <div id="left"></div>
+    <div id="right"></div>
+  </div>
 
   <section id="photo"
            data-path="{{ photo.get_path }}"
            data-md5="{{ photo.md5 }}">
     <img src="{{ photo.image.url }}">
+  </section>
+
+  <section id="other">
+    <div class="data">
+      <div class="metadata">
+        <h2>Metadata</h2>
+
+        <div>
+          <span><i class="fa fa-calendar"></i></span>
+          <span>{{ photo.taken|timezone:photo.album.timezone|date:"l, Y-m-d, g:i:s A" }}</span>
+        </div>
+
+        <div>
+          <span><i class="fa fa-photo"></i></span>
+          <span>{{ photo.width }} &times; {{ photo.height }}</span>
+        </div>
+
+        <div>
+          <span><i class="fa fa-check-square-o"></i></span>
+          <span class="md5">{{ photo.md5 }}</span>
+        </div>
+
+        <div>
+          <span><i class="fa fa-external-link"></i></span>
+          <a href="{{ photo.image.url }}">Open in new tab</a>
+        </div>
+
+        <div>
+          <span><i class="fa fa-download"></i></span>
+          <a href="{% url 'download' photo.get_path photo.md5 %}">Download</a>
+        </div>
+      </div>
+
+      <div class="exif">
+        <h2>EXIF</h2>
+
+        <div class="camera">
+          <div><img src="{% static 'exif/camera.svg' %}"><img src="{% static 'exif/lens.svg' %}"></div>
+          <div>{{ exif.camera }}</div>
+          <div>{{ exif.lens_make }} {{ exif.lens_model }}</div>
+        </div>
+
+        <div class="exposure">
+          <div>
+            <div><img src="{% static 'exif/shutter-speed.svg' %}"></div>
+            <div>{{ exif.shutter_speed }}s</div>
+          </div>
+
+          <div>
+            <div><img src="{% static 'exif/aperture.svg' %}"></div>
+            <div>f/{{ exif.aperture }}</div>
+          </div>
+
+          <div>
+            <div><img src="{% static 'exif/iso_speed.svg' %}"></div>
+            <div>ISO {{ exif.iso_speed }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navigation">
+      <h2>Navigation</h2>
+
+      <div>
+        <span><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> Browse photos in this album with the left/right arrow keys</span>
+      </div>
+
+      <br>
+
+      <div>
+        <span><i class="fa fa-book"></i></span>
+        {% for album in path %}
+        <a href="{{ album.get_absolute_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
+        {% endfor %}
+      </div>
+
+      <div>
+         <span><i class="fa fa-list"></i></span>
+         <a href="{% url 'photos' %}">(return to photo listing)</a>
+      </div>
+
+      <div>
+        <span><i class="fa fa-home"></i></span>
+        <a href="{% url 'index' %}">(return to index)</a>
+      </div>
+    </nav>
   </section>
 
   <footer>

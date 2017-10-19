@@ -1,0 +1,90 @@
+@mixin clearfix() {
+  &::after {
+    content: ' ';
+    display: table;
+    clear: both;
+  }
+}
+
+// Photo
+#photo {
+  width: 100%;
+  margin: 0;
+}
+#photo img {
+  height: 100vh;
+  margin: 0 auto;
+}
+
+// Metadata container, footer
+#other, footer {
+  margin: 0 auto;
+  width: 90%;
+}
+#other {
+  margin-top: 2rem;
+
+  .fa {
+    color: rgb(220, 220, 220);
+    display: inline-block;
+    text-align: center;
+    width: 1.8rem;
+  }
+}
+
+.data {
+  @include clearfix();
+
+  margin-bottom: 2rem;
+
+  > div {
+    width: 50%;
+    float: left;
+  }
+}
+
+.md5 {
+  font-family: monospace;
+}
+
+.metadata {
+  text-align: left;
+  font-size: 1.6rem;
+}
+
+.exif {
+  .camera, .exposure {
+    clear: both;
+  }
+
+  .camera {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(220, 220, 220);
+
+    > div {
+      width: 100%;
+    }
+  }
+
+  .exposure {
+    > div {
+      float: left;
+      width: 33.33333333%;
+    }
+
+    > div:not(:last-child) {
+      border-right: 1px solid rgb(220, 220, 220);
+    }
+  }
+
+  img {
+    height: 3rem;
+    margin: 0 auto;
+    display: inline-block;
+  }
+}
+
+.navigation, .navigation h2 {
+  text-align: left;
+}
