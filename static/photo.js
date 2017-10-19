@@ -3,12 +3,39 @@ const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
 
-const urls = document.getElementById('navigation');
+// API paths
+const api = document.getElementById('api');
 
-const previous_url = urls.dataset.urlPrevious;
-const next_url = urls.dataset.urlNext;
-const first_url = urls.dataset.urlFirst;
-const last_url = urls.dataset.urlLast;
+const API_PREVIOUS = api.dataset.urlPrevious;
+const API_NEXT = api.dataset.urlNext;
+const API_FIRST = api.dataset.urlFirst;
+const API_LAST = api.dataset.urlLast;
+
+// Photo container
+const photo = document.getElementById('photo');
+
+// Photo metadata elements
+let $ = document.getElementById.bind(document);
+
+const metadata = {
+  taken: $('md-taken'),
+  width: $('md-width'),
+  height: $('md-height'),
+  md5: $('md-md5'),
+};
+
+const links = {
+  new_tab: $('md-new-tab'),
+  download: $('md-download'),
+};
+
+const exif = {
+  camera: $('exif-camera'),
+  lens: $('exif-lens'),
+  shutter_speed: $('exif-shutter-speed'),
+  aperture: $('exif-aperture'),
+  iso_speed: $('exif-iso-speed'),
+};
 
 function navigate(url) {
   let request = new XMLHttpRequest();
@@ -20,11 +47,24 @@ function navigate(url) {
 
     let response = JSON.parse(request.responseText);
 
-    let photo = document.getElementById('photo');
+    // Image element
     let image = photo.children[0];
 
-    photo.dataset.md5 = response.md5;
-    image.src = response.image;
+    photo.dataset.md5 = response.metadata.md5;
+    image.src = response.image_url;
+
+    Object.keys(metadata).forEach(function(key) {
+      metadata[key].innerText = response.metadata[key];
+    });
+
+    Object.keys(links).forEach(function(key) {
+      links[key].children[0].href = response.metadata[key];
+    });
+
+    Object.keys(exif).forEach(function(key) {
+      exif[key].innerText = response.exif[key];
+    });
+
     window.history.pushState('', '', response.url);
   };
 
@@ -51,12 +91,12 @@ document.onkeydown = function(e) {
 
   switch (e.keyCode) {
     case KEY_LEFT:
-      return navigate(previous_url + query);
+      return navigate(API_PREVIOUS + query);
     case KEY_RIGHT:
-      return navigate(next_url + query);
+      return navigate(API_NEXT + query);
     case KEY_UP:
-      return navigate(first_url + query);
+      return navigate(API_FIRST + query);
     case KEY_DOWN:
-      return navigate(last_url + query);
+      return navigate(API_LAST + query);
   }
 };

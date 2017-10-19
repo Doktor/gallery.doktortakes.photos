@@ -217,6 +217,18 @@ def f_stop(f):
             return f[0]
 
 
+def get_exif(p):
+    e = p.exif
+    return {
+        'camera': e['Image Model'],
+        'lens': f"{e.get('EXIF LensMake', e['Image Make'])} "
+                f"{e['EXIF LensModel']}",
+        'shutter_speed': f"{e['EXIF ExposureTime']}s",
+        'aperture': f"f/{f_stop(e['EXIF FNumber'])}",
+        'iso_speed': f"ISO {e['EXIF ISOSpeedRatings']}",
+    }
+
+
 def photo(request, path, md5):
     """Renders photo pages."""
 
@@ -225,17 +237,7 @@ def photo(request, path, md5):
         a = albums[-1]
         p = Photo.objects.get(album=a, md5=md5)
 
-        exif = p.exif
-        exif = {
-            'camera': exif['Image Model'],
-            'lens_make': exif.get('EXIF LensMake', exif['Image Make']),
-            'lens_model': exif['EXIF LensModel'],
-
-            'shutter_speed': exif['EXIF ExposureTime'],
-            'aperture': f_stop(exif['EXIF FNumber']),
-            'iso_speed': exif['EXIF ISOSpeedRatings'],
-            'focal_length': exif['EXIF FocalLength'],
-        }
+        exif = get_exif(p)
 
         context = {
             'album': a,
