@@ -50,8 +50,12 @@ function navigate(url) {
   let request = new XMLHttpRequest();
 
   request.onreadystatechange = function() {
-    if (!(request.readyState === 4 && request.status === 200)) {
+    if (request.readyState !== 4) {
       return;
+    }
+
+    if (request.status !== 200) {
+      return console.log(request.responseText);
     }
 
     let response = JSON.parse(request.responseText);
