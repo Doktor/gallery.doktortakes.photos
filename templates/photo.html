@@ -19,10 +19,11 @@
 
 {% block content %}
   <div id="api"
-       data-url-previous="{% url 'previous_photo' %}"
-       data-url-next="{% url 'next_photo' %}"
-       data-url-first="{% url 'first_photo' %}"
-       data-url-last="{% url 'last_photo' %}">
+       data-api-get="{% url 'get_photo' %}"
+       data-api-previous="{% url 'previous_photo' %}"
+       data-api-next="{% url 'next_photo' %}"
+       data-api-first="{% url 'first_photo' %}"
+       data-api-last="{% url 'last_photo' %}">
     <div id="left"></div>
     <div id="right"></div>
   </div>
@@ -30,7 +31,7 @@
   <section id="photo"
            data-path="{{ photo.get_path }}"
            data-md5="{{ photo.md5 }}">
-    <img src="{{ photo.image.url }}">
+    <img src="">
   </section>
 
   <section id="other">
@@ -40,29 +41,29 @@
 
         <div>
           <span><i class="fa fa-calendar"></i></span>
-          <span id="md-taken">{{ photo.taken|timezone:photo.album.timezone|date:"l, Y-m-d, g:i:s A" }}</span>
+          <span id="md-taken"></span>
         </div>
 
         <div>
           <span><i class="fa fa-photo"></i></span>
           <span>
-            <span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span>
+            <span id="md-width"></span> &times; <span id="md-height"></span>
           </span>
         </div>
 
         <div>
           <span><i class="fa fa-check-square-o"></i></span>
-          <span id="md-md5">{{ photo.md5 }}</span>
+          <span id="md-md5"></span>
         </div>
 
         <div>
           <span><i class="fa fa-external-link"></i></span>
-          <span id="md-new-tab"><a href="{{ photo.image.url }}">Open in new tab</a></span>
+          <span id="md-new-tab"><a href="">Open in new tab</a></span>
         </div>
 
         <div>
           <span><i class="fa fa-download"></i></span>
-          <span id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></span>
+          <span id="md-download"><a href="">Download</a></span>
         </div>
       </div>
 
@@ -71,24 +72,24 @@
 
         <div class="camera">
           <div><img src="{% static 'exif/camera.svg' %}"><img src="{% static 'exif/lens.svg' %}"></div>
-          <div id="exif-camera">{{ exif.camera }}</div>
-          <div id="exif-lens">{{ exif.lens }}</div>
+          <div id="exif-camera"></div>
+          <div id="exif-lens"></div>
         </div>
 
         <div class="exposure">
           <div>
             <div><img src="{% static 'exif/shutter-speed.svg' %}"></div>
-            <div id="exif-shutter-speed">{{ exif.shutter_speed }}</div>
+            <div id="exif-shutter-speed"></div>
           </div>
 
           <div>
             <div><img src="{% static 'exif/aperture.svg' %}"></div>
-            <div id="exif-aperture">{{ exif.aperture }}</div>
+            <div id="exif-aperture"></div>
           </div>
 
           <div>
             <div><img src="{% static 'exif/iso_speed.svg' %}"></div>
-            <div id="exif-iso-speed">{{ exif.iso_speed }}</div>
+            <div id="exif-iso-speed"></div>
           </div>
         </div>
       </div>

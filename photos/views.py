@@ -204,31 +204,6 @@ def edit_album(request, path):
             return redirect('edit_album', path=a.get_path())
 
 
-def f_stop(f):
-    """Returns the decimal equivalent of a fractional F-stop string."""
-    try:
-        f = f.split('/')
-    except AttributeError:
-        return None
-    else:
-        if len(f) == 2:
-            return int(f[0]) / int(f[1])
-        else:
-            return f[0]
-
-
-def get_exif(p):
-    e = p.exif
-    return {
-        'camera': e['Image Model'],
-        'lens': f"{e.get('EXIF LensMake', e['Image Make'])} "
-                f"{e['EXIF LensModel']}",
-        'shutter_speed': f"{e['EXIF ExposureTime']}s",
-        'aperture': f"f/{f_stop(e['EXIF FNumber'])}",
-        'iso_speed': f"ISO {e['EXIF ISOSpeedRatings']}",
-    }
-
-
 def photo(request, path, md5):
     """Renders photo pages."""
 
@@ -237,14 +212,11 @@ def photo(request, path, md5):
         a = albums[-1]
         p = Photo.objects.get(album=a, md5=md5)
 
-        exif = get_exif(p)
-
         context = {
             'album': a,
             'photo': p,
             'path': albums,
             'short_md5': p.md5[:7],
-            'exif': exif,
         }
 
         return render(request, 'photo.html', context)

@@ -3,9 +3,33 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET
 
 from photos.models import Photo
-from photos.views import get_album_by_path, get_exif
+from photos.views import get_album_by_path
 
 from pytz import timezone
+
+
+def f_stop(f):
+    try:
+        f = f.split('/')
+    except AttributeError:
+        return None
+    else:
+        if len(f) == 2:
+            return int(f[0]) / int(f[1])
+        else:
+            return f[0]
+
+
+def get_exif(p):
+    e = p.exif
+    return {
+        'camera': e['Image Model'],
+        'lens': f"{e.get('EXIF LensMake', e['Image Make'])} "
+                f"{e['EXIF LensModel']}",
+        'shutter_speed': f"{e['EXIF ExposureTime']}s",
+        'aperture': f"f/{f_stop(e['EXIF FNumber'])}",
+        'iso_speed': f"ISO {e['EXIF ISOSpeedRatings']}",
+    }
 
 
 def generate_response(photo):
@@ -27,7 +51,7 @@ def generate_response(photo):
     })
 
 
-def navigate(request, method):
+def get_photo_from_request(request):
     params = request.GET
 
     try:
@@ -42,8 +66,20 @@ def navigate(request, method):
     except Photo.DoesNotExist:
         return JsonResponse({'error': "photo does not exist"}, status=404)
 
+    return photo
+
+
+@require_GET
+def get_photo(request):
+    photo = get_photo_from_request(request)
+    return generate_response(photo)
+
+
+def navigate(request, method):
+    photo = get_photo_from_request(request)
+
     try:
-        nav = getattr(photo, method)(album=album)
+        nav = getattr(photo, method)(album=photo.album)
     except Photo.DoesNotExist:
         return JsonResponse({'error': "no more photos"}, status=404)
 

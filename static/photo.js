@@ -7,10 +7,11 @@ const KEY_DOWN = 40;
 // API paths
 const api = document.getElementById('api');
 
-const API_PREVIOUS = api.dataset.urlPrevious;
-const API_NEXT = api.dataset.urlNext;
-const API_FIRST = api.dataset.urlFirst;
-const API_LAST = api.dataset.urlLast;
+const API_GET = api.dataset.apiGet;
+const API_PREVIOUS = api.dataset.apiPrevious;
+const API_NEXT = api.dataset.apiNext;
+const API_FIRST = api.dataset.apiFirst;
+const API_LAST = api.dataset.apiLast;
 
 // Shortcut key mapping
 const KEY_MAPPING = {
@@ -46,7 +47,7 @@ const exif = {
   iso_speed: $('exif-iso-speed'),
 };
 
-function navigate(url) {
+function load_photo(url) {
   let request = new XMLHttpRequest();
 
   request.onreadystatechange = function() {
@@ -95,8 +96,6 @@ function query_string(params) {
 }
 
 document.onkeydown = function(e) {
-  let photo = document.getElementById('photo');
-
   let query = query_string({
     'path': photo.dataset.path,
     'md5': photo.dataset.md5,
@@ -112,6 +111,15 @@ document.onkeydown = function(e) {
       e.preventDefault();
 
       let base = KEY_MAPPING[key.toString()];
-      return navigate(base + query);
+      return load_photo(base + query);
   }
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+  let query = query_string({
+    'path': photo.dataset.path,
+    'md5': photo.dataset.md5,
+  });
+
+  return load_photo(API_GET + query);
+});
