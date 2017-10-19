@@ -43,7 +43,7 @@ def navigate(request, method):
         return JsonResponse({'error': "photo does not exist"}, status=404)
 
     try:
-        nav = getattr(photo, method)()
+        nav = getattr(photo, method)(album=album)
     except Photo.DoesNotExist:
         return JsonResponse({'error': "no more photos"}, status=404)
 
