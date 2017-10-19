@@ -1,10 +1,14 @@
 const KEY_LEFT = 37;
+const KEY_UP = 38;
 const KEY_RIGHT = 39;
+const KEY_DOWN = 40;
 
 const urls = document.getElementById('navigation');
 
 const previous_url = urls.dataset.urlPrevious;
 const next_url = urls.dataset.urlNext;
+const first_url = urls.dataset.urlFirst;
+const last_url = urls.dataset.urlLast;
 
 function navigate(url) {
   let request = new XMLHttpRequest();
@@ -50,5 +54,9 @@ document.onkeydown = function(e) {
       return navigate(previous_url + query);
     case KEY_RIGHT:
       return navigate(next_url + query);
+    case KEY_UP:
+      return navigate(first_url + query);
+    case KEY_DOWN:
+      return navigate(last_url + query);
   }
 };

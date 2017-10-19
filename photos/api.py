@@ -40,3 +40,36 @@ def previous_photo(request):
 @require_GET
 def next_photo(request):
     return navigate(request, 'get_next_by_taken')
+
+
+def navigate_end(request, method):
+    params = request.GET
+
+    try:
+        path = params.get('path')
+    except KeyError:
+        return JsonResponse({'error': "invalid parameters"}, status=400)
+
+    album = get_album_by_path(path)
+    photos = Photo.objects.filter(album=album).order_by('taken')
+
+    if not photos:
+        return JsonResponse({'error': "no photos in this album"}, status=404)
+
+    photo = getattr(photos, method)()
+
+    return JsonResponse({
+        'md5': photo.md5,
+        'image': photo.image.url,
+        'url': photo.get_absolute_url()
+    })
+
+
+@require_GET
+def first_photo(request):
+    return navigate_end(request, 'first')
+
+
+@require_GET
+def last_photo(request):
+    return navigate_end(request, 'last')

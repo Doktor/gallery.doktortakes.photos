@@ -20,7 +20,9 @@
 {% block content %}
   <div id="navigation"
        data-url-previous="{% url 'previous_photo' %}"
-       data-url-next="{% url 'next_photo' %}">
+       data-url-next="{% url 'next_photo' %}"
+       data-url-first="{% url 'first_photo' %}"
+       data-url-last="{% url 'last_photo' %}">
     <div id="left"></div>
     <div id="right"></div>
   </div>
@@ -94,7 +96,11 @@
       <h2>Navigation</h2>
 
       <div>
-        <span><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> Browse photos in this album with the left/right arrow keys</span>
+        <span><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> Browse photos with the left/right arrow keys</span>
+      </div>
+
+      <div>
+        <span><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> Skip to the first/last photo with the up/down arrow keys</span>
       </div>
 
       <br>
