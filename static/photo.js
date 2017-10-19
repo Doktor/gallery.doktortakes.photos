@@ -1,3 +1,4 @@
+// Arrow keys
 const KEY_LEFT = 37;
 const KEY_UP = 38;
 const KEY_RIGHT = 39;
@@ -10,6 +11,14 @@ const API_PREVIOUS = api.dataset.urlPrevious;
 const API_NEXT = api.dataset.urlNext;
 const API_FIRST = api.dataset.urlFirst;
 const API_LAST = api.dataset.urlLast;
+
+// Shortcut key mapping
+const KEY_MAPPING = {
+  [KEY_LEFT]: API_PREVIOUS,
+  [KEY_RIGHT]: API_NEXT,
+  [KEY_UP]: API_FIRST,
+  [KEY_DOWN]: API_LAST,
+};
 
 // Photo container
 const photo = document.getElementById('photo');
@@ -89,14 +98,16 @@ document.onkeydown = function(e) {
     'md5': photo.dataset.md5,
   });
 
-  switch (e.keyCode) {
+  let key = e.keyCode;
+
+  switch (key) {
     case KEY_LEFT:
-      return navigate(API_PREVIOUS + query);
     case KEY_RIGHT:
-      return navigate(API_NEXT + query);
     case KEY_UP:
-      return navigate(API_FIRST + query);
     case KEY_DOWN:
-      return navigate(API_LAST + query);
+      e.preventDefault();
+
+      let base = KEY_MAPPING[key.toString()];
+      return navigate(base + query);
   }
 };
