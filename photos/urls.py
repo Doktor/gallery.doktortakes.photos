@@ -44,6 +44,10 @@ urlpatterns = [
     url(r'^about/$', TemplateView.as_view(template_name='about.html'),
         name='about'),
 
+    url(r'^copyright/$',
+        TemplateView.as_view(template_name='copyright.html'),
+        name='copyright'),
+
     url(r'^commissions/$',
         TemplateView.as_view(template_name='commissions.html'),
         name='commissions'),

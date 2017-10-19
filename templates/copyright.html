@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Copyright notices - {{ block.super }}{% endblock %}
+
+{% block meta %}
+  {% include "_ogp_common.html" %}
+
+  <meta property="og:type" content="profile">
+  <meta property="profile:first_name" content="Doktor">
+  <meta property="profile:username" content="Doktor">
+  <meta property="og:url" content="{{ BASE_URL }}{% url 'copyright' %}">
+{% endblock %}
+
+{% block classes %}small left{% endblock %}
+
+{% block content %}
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><a href="{% url 'about' %}">Copyright</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+    <h1>Copyright notices</h1>
+
+    <h2>Website</h2>
+
+    <p>The <a href="https://github.com/Doktor/doktortakes.photos">source code</a> for this website is available under the <a href="https://github.com/Doktor/doktortakes.photos/blob/master/LICENSE">MIT License</a>.</p>
+
+    <h2>Photos</h2>
+
+    <p>The photos I publish on this website are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>, unless otherwise speciifed on the album or photo page.</p>
+  </section>
+
+  <footer>
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}
