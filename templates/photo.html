@@ -40,29 +40,29 @@
         <h2>Metadata</h2>
 
         <div>
-          <span><i class="fa fa-calendar"></i></span>
+          <span title="Date taken"><i class="fa fa-calendar"></i></span>
           <span id="md-taken"></span>
         </div>
 
         <div>
-          <span><i class="fa fa-photo"></i></span>
+          <span title="Dimensions"><i class="fa fa-photo"></i></span>
           <span>
             <span id="md-width"></span> &times; <span id="md-height"></span>
           </span>
         </div>
 
         <div>
-          <span><i class="fa fa-check-square-o"></i></span>
+          <span title="MD5 checksum"><i class="fa fa-check-square-o"></i></span>
           <span id="md-md5"></span>
         </div>
 
         <div>
-          <span><i class="fa fa-external-link"></i></span>
+          <span title="Open in new tab"><i class="fa fa-external-link"></i></span>
           <span id="md-new-tab"><a href="">Open in new tab</a></span>
         </div>
 
         <div>
-          <span><i class="fa fa-download"></i></span>
+          <span title="Download"><i class="fa fa-download"></i></span>
           <span id="md-download"><a href="">Download</a></span>
         </div>
       </div>
@@ -71,24 +71,24 @@
         <h2>EXIF</h2>
 
         <div class="camera">
-          <div><img src="{% static 'exif/camera.svg' %}"><img src="{% static 'exif/lens.svg' %}"></div>
+          <div><img src="{% static 'exif/camera.svg' %}" title="Camera"><img src="{% static 'exif/lens.svg' %}" title="Lens"></div>
           <div id="exif-camera"></div>
           <div id="exif-lens"></div>
         </div>
 
         <div class="exposure">
           <div>
-            <div><img src="{% static 'exif/shutter-speed.svg' %}"></div>
+            <div><img src="{% static 'exif/shutter-speed.svg' %}" title="Shutter speed"></div>
             <div id="exif-shutter-speed"></div>
           </div>
 
           <div>
-            <div><img src="{% static 'exif/aperture.svg' %}"></div>
+            <div><img src="{% static 'exif/aperture.svg' %}" title="Aperture"></div>
             <div id="exif-aperture"></div>
           </div>
 
           <div>
-            <div><img src="{% static 'exif/iso_speed.svg' %}"></div>
+            <div><img src="{% static 'exif/iso_speed.svg' %}" title="ISO speed"></div>
             <div id="exif-iso-speed"></div>
           </div>
         </div>
@@ -109,19 +109,19 @@
       <br>
 
       <div>
-        <span><i class="fa fa-book"></i></span>
+        <span title="Album"><i class="fa fa-book"></i></span>
         {% for album in path %}
         <a href="{{ album.get_absolute_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
         {% endfor %}
       </div>
 
       <div>
-         <span><i class="fa fa-list"></i></span>
-         <a href="{% url 'photos' %}">(return to photo listing)</a>
+         <span title="List of photos"><i class="fa fa-list"></i></span>
+         <a href="{% url 'photos' %}">(return to list of photos)</a>
       </div>
 
       <div>
-        <span><i class="fa fa-home"></i></span>
+        <span title="Index"><i class="fa fa-home"></i></span>
         <a href="{% url 'index' %}">(return to index)</a>
       </div>
     </nav>
