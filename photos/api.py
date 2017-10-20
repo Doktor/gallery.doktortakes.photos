@@ -133,7 +133,15 @@ def navigate(request, method):
     try:
         nav = getattr(photo, method)(album=photo.album)
     except Photo.DoesNotExist:
-        return JsonResponse({'error': "no more photos"}, status=404)
+        photos = Photo.objects.filter(album=photo.album)
+
+        # At the oldest photo: return the newest
+        if method == 'get_previous_by_taken':
+            nav = photos.order_by('-taken')[0]
+
+        # At the newest photo: return the oldest
+        elif method == 'get_next_by_taken':
+            nav = photos.order_by('taken')[0]
 
     return photo_to_response(nav)
 
