@@ -17,58 +17,97 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
         <li><a href="{% url 'about' %}">About</a></li>
       </ul>
     </nav>
   </header>
 
   <section>
-    <h1>About</h1>
+    <h1>About me</h1>
 
-    <p>I'm Doktor! I'm a photographer and college student living in Boston, MA. In my free time, I photograph big animals.</p>
+    <p>I'm Doktor! I'm a photographer living in Boston, Massachusetts. In my free time, I photograph big animals.</p>
 
-    <p>Contact info and other useful links can be found on my other
-      <a href="https://doktorthehusky.com">website</a>.</p>
+    <p>Contact info and other links can be found on my other <a href="https://doktorthehusky.com">website</a>.
+      <br>You can find my photos on this website and on <a href="https://twitter.com/DoktorTheHusky">Twitter</a>.
+      <br>I keep track of my work on my <a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a> board, which I update frequently.</p>
 
-    <h2>Photos</h2>
+    <h2>Photography</h2>
 
     <figure class="icon">
       <img src="{% static 'icons/camera.jpg' %}" title="Me!">
-      <figcaption>&#x1F3A8; Art by
+      <figcaption>🎨 Art by
         <a href="https://twitter.com/dragonessdrei">Drei</a>
       </figcaption>
     </figure>
 
-    <p>You can find my photos on this website, and on
-      <a href="https://twitter.com/DoktorTheHusky">Twitter</a> and
-      <a href="https://www.flickr.com/photos/doktorthehusky/albums">Flickr</a>!
-      Flickr serves as a mirror for this website. Additionally, I keep track of my work on <a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a>, which I update frequently.</p>
+    <p>I started taking photos in September 2015, my senior year of high school. Throughout the year, I took event photos for the Yearbook Club. In January 2016, I attended my first convention, Anthro New England 2016, where I volunteered in the Photo Room. As the saying goes, the rest is history.</p>
 
-    <p>Here's a short list of my equipment:</p>
-    <ul>
-      <li>&#x1F4F7; Canon EOS 80D</li>
-      <li>&#x1F50E; EF-S 18-55mm f/3.5-5.6</li>
-      <li>&#x1F50D; EF 50mm f/1.8</li>
-      <li>&#x1F50E; EF-S 55-250mm f/4-5.6</li>
-      <li>&#x1F4A1; YongNuo YN-560 IV</li>
-      <li>&#x1F4A1; Altura Photo AP-C1001</li>
-    </ul>
+    <p>I'm self-taught &mdash; I've never had any formal training in photography. There's a list of resources I refer to at the bottom of this page. The most important thing you can do is take lots of photos!</p>
+
+    <p>I started with my parents' Canon EOS 550D. I currently shoot with a Canon EOS 80D, bought in June 2016. I plan to upgrade to a Canon EOS 5D Mark IV in October 2017. The full list of equipment that I used is below.</p>
+
+    <p>I'm the head photographer for <a href="http://www.anthronewengland.com/">Anthro New England</a>, a furry convention held annually in Massachusetts. I photograph a few main-stage events, organize and run the Photo Room, and take the Fursuit Group Photo. I first volunteered in the Photo Room in 2016, and joined the staff to establish the Photography Department in 2017.</p>
 
     <h2>Commissions</h2>
 
-    <p>I take photoshoot commissions! <a href="{% url 'commissions' %}">Read here</a> for more information.</p>
+    <p>I take photoshoot commissions! <a href="{% url 'commissions' %}">See here</a> for more information.</p>
 
-    <h2>Site</h2>
+    <h2>Equipment</h2>
 
-    <p>The backend of this site is written in Python 3 with
-      <a href="https://www.djangoproject.com/">Django</a>. The
-      photo gallery runs on <a href="http://photoswipe.com/">PhotoSwipe</a>,
-      written by <a href="http://dimsemenov.com/">Dmitry Semenov</a>.</p>
+    <p>If you have questions about any of these items, I'm happy to answer. These are the full product names and models.</p>
 
-    <p>If you notice anything that's broken or working improperly, please
-      let me know! This includes broken links, improperly displayed photos, etc.
-      General feedback is also appreciated.</p>
+    <h3>Current</h3>
+    <ul>
+      <li>📷 Canon EOS 80D</li>
+      <li>🔍 Canon EF-S 18-55mm f/3.5-5.6 IS STM</li>
+      <li>🔍 Canon EF-S 55-250mm f/4-5.6 IS STM</li>
+      <li>🔎 Canon EF 50mm f/1.8 STM</li>
+      <li>💡 Yongnuo YN-560 III</li>
+      <li>📡 Yongnuo YN-560-TX</li>
+      <li>💡 Altura Photo AP-C1001</li>
+      <li>🌆 ZOMEi Z818C Tripod</li>
+    </ul>
+
+    <h3>Previously borrowed/rented</h3>
+    <ul>
+      <li>📷 Canon EOS 5D Mark III</li>
+      <li>🔍 Canon EF-S 17-55mm f/2.8 IS USM</li>
+      <li>🔎 Canon EF 24mm f/1.4L USM</li>
+      <li>🔎 Canon EF 24mm f/1.4L II USM</li>
+      <li>🔎 Canon EF 35mm f/1.4L II USM</li>
+      <li>🔎 Canon EF 85mm f/1.8 USM</li>
+      <li>🔎 Canon EF 70-200mm f/2.8L IS II USM</li>
+    </ul>
+
+    <h3>Past</h3>
+    <ul>
+      <li>📷 Canon EOS 550D</li>
+      <li>🔍 Canon EF-S 18-55mm f/3.5-5.6 IS</li>
+      <li>💡 YongNuo YN-560 IV (dead)</li>
+    </ul>
+
+    <h2>Resources</h2>
+
+    <ul>
+      <li>Subreddits
+        <ul>
+          <li><a href="https://www.reddit.com/r/photography/">/r/photography</a></li>
+          <li><a href="https://www.reddit.com/r/Lightroom/">/r/Lightroom</a></li>
+        </ul>
+      </li>
+      <li><a href="https://photo.stackexchange.com/">Photography Stack Exchange</a></li>
+      <li><a href="https://strobist.blogspot.com/">Strobist</a> for off-camera lighting tutorials</li>
+      <li><a href="https://en.wikipedia.org/wiki/Canon_EOS_80D">Wikipedia</a> for concise camera descriptions</li>
+      <li><a href="https://www.lensrentals.com/">LensRentals</a> for equipment rentals</li>
+      <li><a href="https://www.bhphotovideo.com/">B&H</a> for equipment purchases</li>
+    </ul>
+
+    <h2>Website</h2>
+
+    <p>The source code of this website is available at this <a href="https://github.com/Doktor/doktortakes.photos">GitHub repository</a>.</p>
+
+    <p>Copyright notices for everything are available <a href="{% url 'copyright' %}">here</a>.</p>
   </section>
 
   <footer>
