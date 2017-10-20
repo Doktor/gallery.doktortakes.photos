@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% load staticfiles %}
-{% load tz %}
 
 {% block title %}{{ short_md5 }} | {{ photo.album.name }} | {{ block.super }}{% endblock %}
 
@@ -15,12 +14,6 @@
 </style>
 <link rel="stylesheet" href="{% static 'photo.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -31,8 +24,6 @@
        data-api-first="{% url 'first_photo' %}"
        data-api-last="{% url 'last_photo' %}"
        data-api-get-album-photos="{% url 'get_album_photos' %}">
-    <div id="left"></div>
-    <div id="right"></div>
   </div>
 
   <section id="photo"
@@ -54,7 +45,7 @@
         <div>
           <span title="Sequence number"><i class="fa fa-list-ol"></i></span>
           <span>
-            <span id="md-index"></span> / <span id="md-count">{{ photo.album.photos.all.count }}</span>
+            <span id="md-index"></span> / <span id="md-count">{{ album.photos.all.count }}</span>
           </span>
         </div>
 
@@ -119,7 +110,7 @@
 
       <h3>Keyboard shortcuts</h3>
       <div>
-        <span><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> Browse photos</span>
+        <span><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> View previous/next photo</span>
       </div>
 
       <div>
@@ -157,5 +148,11 @@
 {% endblock %}
 
 {% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.js"></script>
+
 <script src="{% static 'photo.js' %}"></script>
 {% endblock %}
