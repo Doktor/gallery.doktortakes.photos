@@ -30,7 +30,8 @@ const KEY_MAPPING = {
 
 // Photo container
 const photo = document.getElementById('photo');
-const image = photo.children[0];
+const link = photo.children[0];
+const image = link.children[0];
 
 
 // Photo metadata elements
@@ -96,6 +97,7 @@ function load_photo(url) {
     photo.dataset.width = response.metadata.width;
     photo.dataset.height = response.metadata.height;
 
+    link.href = response.image_url;
     image.src = response.image_url;
 
     Object.keys(metadata).forEach(function(key) {
