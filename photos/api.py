@@ -22,10 +22,18 @@ def f_stop(f):
 
 def get_exif(p):
     e = p.exif
+
+    model = e['EXIF LensModel']
+
+    if 'EF-S' in model:
+        model = model.replace('EF-S', 'EF-S ')
+    elif 'EF' in model:
+        model = model.replace('EF', 'EF ')
+
     return {
         'camera': e['Image Model'],
         'lens': f"{e.get('EXIF LensMake', e['Image Make'])} "
-                f"{e['EXIF LensModel']}",
+                f"{model}",
         'shutter_speed': f"{e['EXIF ExposureTime']}s",
         'aperture': f"f/{f_stop(e['EXIF FNumber'])}",
         'iso_speed': f"ISO {e['EXIF ISOSpeedRatings']}",
