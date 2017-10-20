@@ -1,4 +1,9 @@
 import datetime
+import shlex
+from subprocess import check_output
+
+timestamp = check_output(shlex.split("git log -1 --pretty=format:%ct"))
+updated = datetime.datetime.utcfromtimestamp(int(timestamp))
 
 
 def metadata(request):
@@ -8,5 +13,5 @@ def metadata(request):
         'TWITTER': "@DoktorTheHusky",
         'DESCRIPTION': "Photos by Doktor",
         'BASE_URL': "https://doktortakes.photos",
-        'LAST_UPDATE': datetime.datetime(2017, 10, 18),
+        'LAST_UPDATE': updated,
     }
