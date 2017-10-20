@@ -78,7 +78,7 @@ function get_photo_query_string() {
 
 
 // Updates the primary photo
-function load_photo(url) {
+function load_photo(url, history = true) {
   let request = new XMLHttpRequest();
 
   request.onreadystatechange = function() {
@@ -113,7 +113,9 @@ function load_photo(url) {
       exif[key].innerText = response.exif[key];
     });
 
-    window.history.pushState('', '', response.url);
+    if (history) {
+      window.history.pushState('', '', response.url);
+    }
   };
 
   request.open('GET', url, true);
@@ -251,7 +253,7 @@ rightArrow.addEventListener('click', function() {
 // Load the primary photo
 document.addEventListener('DOMContentLoaded', function() {
   let query = get_photo_query_string();
-  load_photo(API_GET + query);
+  load_photo(API_GET + query, false);
 });
 
 
