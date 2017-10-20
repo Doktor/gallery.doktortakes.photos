@@ -1,8 +1,12 @@
+let $;
+
+
 // Arrow keys
 const KEY_LEFT = 37;
 const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
+
 
 // API paths
 const api = document.getElementById('api');
@@ -12,6 +16,8 @@ const API_PREVIOUS = api.dataset.apiPrevious;
 const API_NEXT = api.dataset.apiNext;
 const API_FIRST = api.dataset.apiFirst;
 const API_LAST = api.dataset.apiLast;
+const API_GET_ALBUM_PHOTOS = api.dataset.apiGetAlbumPhotos;
+
 
 // Shortcut key mapping
 const KEY_MAPPING = {
@@ -21,11 +27,14 @@ const KEY_MAPPING = {
   [KEY_DOWN]: API_LAST,
 };
 
+
 // Photo container
 const photo = document.getElementById('photo');
+const image = photo.children[0];
+
 
 // Photo metadata elements
-let $ = document.getElementById.bind(document);
+$ = document.getElementById.bind(document);
 
 const metadata = {
   taken: $('md-taken'),
@@ -47,6 +56,26 @@ const exif = {
   iso_speed: $('exif-iso-speed'),
 };
 
+
+// Generates query strings
+function query_string(params) {
+  let escape = encodeURIComponent;
+  let query = Object.keys(params)
+    .map(k => escape(k) + '=' + escape(params[k]))
+    .join('&');
+
+  return '?' + query;
+}
+
+function get_photo_query_string() {
+  return query_string({
+    'path': photo.dataset.path,
+    'md5': photo.dataset.md5,
+  });
+}
+
+
+// Updates the primary photo
 function load_photo(url) {
   let request = new XMLHttpRequest();
 
@@ -61,10 +90,12 @@ function load_photo(url) {
 
     let response = JSON.parse(request.responseText);
 
-    // Image element
-    let image = photo.children[0];
+    photo.dataset.index = response.index;
 
     photo.dataset.md5 = response.metadata.md5;
+    photo.dataset.width = response.metadata.width;
+    photo.dataset.height = response.metadata.height;
+
     image.src = response.image_url;
 
     Object.keys(metadata).forEach(function(key) {
@@ -86,16 +117,9 @@ function load_photo(url) {
   request.send();
 }
 
-function query_string(params) {
-  let escape = encodeURIComponent;
-  let query = Object.keys(params)
-    .map(k => escape(k) + '=' + escape(params[k]))
-    .join('&');
 
-  return '?' + query;
-}
-
-document.onkeydown = function(e) {
+// Navigation
+document.addEventListener('keydown', function(e) {
   let query = query_string({
     'path': photo.dataset.path,
     'md5': photo.dataset.md5,
@@ -113,13 +137,123 @@ document.onkeydown = function(e) {
       let base = KEY_MAPPING[key.toString()];
       return load_photo(base + query);
   }
-};
+});
 
-document.addEventListener('DOMContentLoaded', function() {
-  let query = query_string({
-    'path': photo.dataset.path,
-    'md5': photo.dataset.md5,
+
+// PhotoSwipe container
+const photoswipe = document.getElementsByClassName('pswp')[0];
+
+// Album items
+const items = [];
+
+// Loads photos from the API
+function load_photos(url) {
+  let request = new XMLHttpRequest();
+
+  request.onreadystatechange = function() {
+    if (request.readyState !== 4) {
+      return;
+    }
+
+    if (request.status !== 200) {
+      return console.log(request.responseText);
+    }
+
+    let response = JSON.parse(request.responseText);
+
+    // Generate gallery items
+    response.photos.forEach(function (item) {
+      items.push({
+        'src': item.image_url,
+        'w': item.metadata.width,
+        'h': item.metadata.height,
+      })
+    });
+
+    load_photoswipe();
+  };
+
+  request.open('GET', url, true);
+  request.send();
+}
+
+// Loads the PhotoSwipe object
+function load_photoswipe() {
+  link.addEventListener('click', function(event) {
+    event.preventDefault();
+
+    let options = {
+      history: false,
+
+      captionEl: false,
+      shareEl: false,
+
+      escKey: true,
+      arrowKeys: true,
+
+      index: parseInt(photo.dataset.index, 10),
+
+      showHideOpacity: true,
+      closeOnScroll: false,
+
+      showAnimationDuration: 500,
+
+      getThumbBoundsFn: function() {
+        let item = image;
+        let y = window.pageYOffset || document.documentElement.scrollTop;
+        let rect = item.getBoundingClientRect();
+
+        return {x: rect.left, y: rect.top + y, w: rect.width};
+      },
+    };
+
+    const gallery = new PhotoSwipe(
+      photoswipe, PhotoSwipeUI_Default, items, options);
+
+    gallery.init();
+
+    document.addEventListener('keydown', function(e) {
+      let key = e.keyCode;
+
+      switch (key) {
+        case KEY_UP:
+          e.preventDefault();
+          return gallery.goTo(0);
+
+        case KEY_DOWN:
+          e.preventDefault();
+          return gallery.goTo(gallery.items.length - 1);
+      }
+    });
   });
+}
 
-  return load_photo(API_GET + query);
+// Navigation arrows
+$ = document.getElementsByClassName.bind(document);
+
+const leftArrow = $('pswp__button--arrow--left')[0];
+const rightArrow = $('pswp__button--arrow--right')[0];
+
+leftArrow.addEventListener('click', function() {
+  let query = get_photo_query_string();
+  load_photo(API_PREVIOUS + query);
+});
+
+rightArrow.addEventListener('click', function() {
+  let query = get_photo_query_string();
+  load_photo(API_NEXT + query);
+});
+
+
+// Load the primary photo
+document.addEventListener('DOMContentLoaded', function() {
+  let query = get_photo_query_string();
+  load_photo(API_GET + query);
+});
+
+
+// Load the rest of the album
+document.addEventListener('DOMContentLoaded', function() {
+  let query = query_string({'path': photo.dataset.path});
+  load_photos(API_GET_ALBUM_PHOTOS + query);
 });

@@ -37,6 +37,8 @@ api_patterns = [
     url(r'^photo/next/$', api.next_photo, name='next_photo'),
     url(r'^photo/first/$', api.first_photo, name='first_photo'),
     url(r'^photo/last/$', api.last_photo, name='last_photo'),
+
+    url(r'^photos/', api.get_album_photos, name='get_album_photos'),
 ]
 
 urlpatterns = [

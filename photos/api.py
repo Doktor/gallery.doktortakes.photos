@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
-from photos.models import Photo
+from photos.models import Album, Photo
 from photos.views import get_album_by_path
 
 from pytz import timezone
@@ -32,10 +32,23 @@ def get_exif(p):
     }
 
 
-def generate_response(photo):
+def generate_photo_dict(photo, index=None):
     taken = photo.taken.astimezone(timezone(photo.album.timezone))
 
-    return JsonResponse({
+    if index is not None:
+        pass
+    else:
+        photos = photo.album.photos.all().order_by('taken')
+
+        for i, item in enumerate(photos):
+            if item.md5 == photo.md5:
+                index = i
+                break
+        else:
+            raise RuntimeError
+
+    return {
+        'index': index,
         'image_url': photo.image.url,
         'url': photo.get_absolute_url(),
         'metadata': {
@@ -44,11 +57,15 @@ def generate_response(photo):
             'height': photo.height,
             'md5': photo.md5,
             'new_tab': photo.image.url,
-            'download': reverse('download',
-                                args=[photo.get_path(), photo.md5]),
+            'download': reverse(
+                'download', args=[photo.get_path(), photo.md5]),
         },
         'exif': get_exif(photo)
-    })
+    }
+
+
+def photo_to_response(photo):
+    return JsonResponse(generate_photo_dict(photo))
 
 
 def get_photo_from_request(request):
@@ -69,10 +86,37 @@ def get_photo_from_request(request):
     return photo
 
 
+def get_album_from_request(request):
+    params = request.GET
+
+    try:
+        path = params.get('path')
+    except KeyError:
+        return JsonResponse({'error': "invalid parameters"}, status=400)
+
+    try:
+        album = get_album_by_path(path)
+    except Album.DoesNotExist:
+        return JsonResponse({'error': "album does not exist"}, status=404)
+
+    return album
+
+
+@require_GET
+def get_album_photos(request):
+    album = get_album_from_request(request)
+    photos = []
+
+    for index, photo in enumerate(album.photos.all().order_by('taken')):
+        photos.append(generate_photo_dict(photo, index))
+
+    return JsonResponse({'photos': photos})
+
+
 @require_GET
 def get_photo(request):
     photo = get_photo_from_request(request)
-    return generate_response(photo)
+    return photo_to_response(photo)
 
 
 def navigate(request, method):
@@ -83,7 +127,7 @@ def navigate(request, method):
     except Photo.DoesNotExist:
         return JsonResponse({'error': "no more photos"}, status=404)
 
-    return generate_response(nav)
+    return photo_to_response(nav)
 
 
 @require_GET
@@ -112,7 +156,7 @@ def navigate_end(request, method):
 
     photo = getattr(photos, method)()
 
-    return generate_response(photo)
+    return photo_to_response(photo)
 
 
 @require_GET
