@@ -56,10 +56,10 @@ def generate_photo_dict(photo, index=None):
             raise RuntimeError
 
     return {
-        'index': index,
         'image_url': photo.image.url,
         'url': photo.get_absolute_url(),
         'metadata': {
+            'index': index,
             'taken': taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
             'width': photo.width,
             'height': photo.height,

@@ -38,6 +38,7 @@ const image = link.children[0];
 $ = document.getElementById.bind(document);
 
 const metadata = {
+  index: $('md-index'),
   taken: $('md-taken'),
   width: $('md-width'),
   height: $('md-height'),
@@ -91,11 +92,9 @@ function load_photo(url) {
 
     let response = JSON.parse(request.responseText);
 
-    photo.dataset.index = response.index;
-
-    photo.dataset.md5 = response.metadata.md5;
-    photo.dataset.width = response.metadata.width;
-    photo.dataset.height = response.metadata.height;
+    ['index', 'md5', 'width', 'height'].forEach(function(key) {
+      photo.dataset[key] = response.metadata[key];
+    });
 
     link.href = response.image_url;
     image.src = response.image_url;
@@ -103,6 +102,8 @@ function load_photo(url) {
     Object.keys(metadata).forEach(function(key) {
       metadata[key].innerText = response.metadata[key];
     });
+
+    metadata.index.innerText = parseInt(response.metadata.index, 10) + 1;
 
     Object.keys(links).forEach(function(key) {
       links[key].children[0].href = response.metadata[key];
