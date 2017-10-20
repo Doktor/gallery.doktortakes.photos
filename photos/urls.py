@@ -53,9 +53,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='copyright.html'),
         name='copyright'),
 
-    url(r'^commissions/$',
-        TemplateView.as_view(template_name='commissions.html'),
-        name='commissions'),
+    url(r'^commissions/$', views.commissions, name='commissions'),
 
     url(r'login/$',
         views.site_login, name='login'),
