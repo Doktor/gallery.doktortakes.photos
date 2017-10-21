@@ -10,11 +10,12 @@
 #photo {
   width: 100%;
   margin: 0;
-}
-#photo img {
-  max-height: 100vh;
-  max-width: 100%;
-  margin: 0 auto;
+
+  img {
+    max-height: 100vh;
+    max-width: 100%;
+    margin: 0 auto;
+  }
 }
 
 // Metadata container, footer
@@ -22,6 +23,7 @@
   margin: 0 auto;
   width: 90%;
 }
+
 #other {
   margin-top: 2rem;
 
@@ -31,12 +33,18 @@
     text-align: center;
     width: 1.8rem;
   }
+
+  > div {
+    margin-bottom: 2rem;
+  }
+}
+
+.metadata, .keyboard, .links {
+  text-align: left;
 }
 
 .data {
   @include clearfix();
-
-  margin-bottom: 2rem;
 
   > div {
     width: 50%;
@@ -44,13 +52,12 @@
   }
 }
 
-#md-md5 {
-  font-family: monospace;
-}
-
 .metadata {
-  text-align: left;
   font-size: 1.6rem;
+
+  #md-md5 {
+    font-family: monospace;
+  }
 }
 
 .exif {
@@ -86,6 +93,22 @@
   }
 }
 
-.navigation, .navigation h2 {
-  text-align: left;
+kbd {
+  background-color: rgb(60, 60, 60);
+  border: 2px solid rgb(100, 100, 100);
+  border-radius:  3px;
+  padding: 3px 6px;
+  font-family: "Roboto Condensed", sans-serif;
+  font-weight: 700;
+  color: rgb(220, 220, 220);
+}
+
+#keyboard {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin: 0.5rem 0;
+  }
 }

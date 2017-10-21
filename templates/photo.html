@@ -112,21 +112,19 @@
       </div>
     </div>
 
-    <nav class="navigation">
-      <h2>Navigation</h2>
+    <div class="keyboard">
+      <h2>Keyboard shortcuts</h2>
+      <ul id="keyboard">
+        <li><kbd>Left</kbd> <kbd>Right</kbd> View previous/next photo</li>
+        <li><kbd>Up</kbd> <kbd>Down</kbd> Skip to first/last photo</li>
+        <li><kbd>D</kbd> Download this photo</li>
+        <li><kbd>H</kbd> Return home</li>
+        <li><kbd>L</kbd> Return to album list</li>
+      </ul>
+    </div>
 
-      <h3>Keyboard shortcuts</h3>
-      <div>
-        <span><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i> View previous/next photo</span>
-      </div>
-
-      <div>
-        <span><i class="fa fa-arrow-up"></i> <i class="fa fa-arrow-down"></i> Skip to the first/last photo</span>
-      </div>
-
-      <br>
-
-      <h3>Links</h3>
+    <div class="links">
+      <h2>Links</h2>
       <div>
         <span title="Album"><i class="fa fa-book"></i></span>
         {% for album in path %}
@@ -136,14 +134,14 @@
 
       <div>
          <span title="List of photos"><i class="fa fa-list"></i></span>
-         <a href="{% url 'photos' %}">(return to list of photos)</a>
+         <a href="{% url 'photos' %}">Return to album list</a>
       </div>
 
       <div>
         <span title="Index"><i class="fa fa-home"></i></span>
-        <a href="{% url 'index' %}">(return to index)</a>
+        <a href="{% url 'index' %}">Return home</a>
       </div>
-    </nav>
+    </div>
   </section>
 
   {% include "_photoswipe.html" %}
