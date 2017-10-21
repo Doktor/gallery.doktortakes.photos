@@ -8,6 +8,7 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
+from photos.context_processors import metadata as m
 from photos.forms import AlbumForm, SortForm
 from photos.models import Album, Photo
 from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, TAGLINES
@@ -16,6 +17,8 @@ import mimetypes
 import random
 
 from photos.utils import get_photo_info
+
+metadata = m(None)
 
 
 def get_albums_from_path(path):
@@ -155,10 +158,12 @@ def all_photos(request):
 def album(request, path):
     """Renders album pages."""
     a = get_album_by_path(path)
+    title = f"{a.name} | {metadata['TITLE']}"
 
     context = {
         'path': get_albums_from_path(path),
-        'album': a
+        'album': a,
+        'page_title': title,
     }
     return render(request, 'album.html', context)
 
@@ -209,15 +214,18 @@ def photo(request, path, md5):
     """Renders photo pages."""
 
     if request.method == 'GET':
-        albums = get_albums_from_path(path)
-        a = albums[-1]
+        path = get_albums_from_path(path)
+        a = path[-1]
         p = Photo.objects.get(album=a, md5=md5)
+        short_md5 = p.md5[:7]
+        title = f"{short_md5} | {p.album.name} | {metadata['TITLE']}"
 
         context = {
+            'path': path,
             'album': a,
             'photo': p,
-            'path': albums,
-            'short_md5': p.md5[:7],
+            'short_md5': short_md5,
+            'page_title': title,
         }
 
         return render(request, 'photo.html', context)

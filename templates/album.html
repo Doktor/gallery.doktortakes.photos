@@ -1,36 +1,34 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block title %}{{ album.name }} - {{ block.super }}{% endblock %}
-{% block description %}{{ album.description }}{% endblock %}
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block meta %}
-  <meta property="og:title" content="{{ album.name }}">
-  <meta property="og:description" content="{{ DESCRIPTION }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ DESCRIPTION }}">
+<meta property="og:site_name" content="{{ TITLE }}">
+<meta property="og:url" content="{{ BASE_URL }}{{ album.get_absolute_url }}">
+<meta property="og:updated_time" content="{{ album.start|date:"c" }}">
 
-  <meta property="og:type" content="article">
-  <meta property="article:published_time" content="{{ album.start|date:"c" }}">
-  <meta property="article:modified_time" content="{{ album.start|date:"c" }}">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="{{ album.start|date:"c" }}">
+<meta property="article:modified_time" content="{{ album.start|date:"c" }}">
 
-  {% if album.cover %}
-    <meta property="og:image" content="{{ BASE_URL }}{{ album.thumbnail.url }}">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="{{ album.thumbnail.width }}">
-    <meta property="og:image:height" content="{{ album.thumbnail.height }}">
-  {% endif %}
+{% if album.cover %}
+<meta property="og:image" content="{{ BASE_URL }}{{ album.cover.image.url }}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="{{ album.cover.width }}">
+<meta property="og:image:height" content="{{ album.cover.height }}">
+{% endif %}
 
-  <meta property="og:site_name" content="{{ TITLE }}">
-  <meta property="og:url" content="{{ BASE_URL }}{{ album.get_absolute_url }}">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="{{ TWITTER }}">
-  <meta name="twitter:creator" content="{{ TWITTER }}">
-  <meta name="twitter:title" content="{{ album.name }}">
-  <meta name="twitter:description" content="{{ DESCRIPTION }}">
-  {% if album.cover %}
-    <meta name="twitter:image"
-          content="{{ BASE_URL }}{{ album.thumbnail.url }}">
-  {% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="{{ TWITTER }}">
+<meta name="twitter:creator" content="{{ TWITTER }}">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ DESCRIPTION }}">
+{% if album.cover %}
+<meta name="twitter:image" content="{{ BASE_URL }}{{ album.cover.image.url }}">
+{% endif %}
 {% endblock %}
 
 {% block style %}

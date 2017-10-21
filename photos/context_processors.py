@@ -6,12 +6,12 @@ timestamp = check_output(shlex.split("git log -1 --pretty=format:%ct"))
 updated = datetime.datetime.utcfromtimestamp(int(timestamp))
 
 
-def metadata(request):
+def metadata(_):
     return {
         'TITLE': "Doktor Takes Photos",
         'NAME': "Doktor",
         'TWITTER': "@DoktorTheHusky",
-        'DESCRIPTION': "Photos by Doktor",
+        'DESCRIPTION': "Portraits and event photography by Doktor",
         'BASE_URL': "https://doktortakes.photos",
         'LAST_UPDATE': updated,
     }
