@@ -129,3 +129,6 @@ THUMBNAIL_FOLDER = 'thumbs'
 
 INDEX_ALBUMS = 12
 INDEX_FEATURED_PHOTOS = 30
+
+with open(os.path.join(BASE_DIR, 'data/taglines.txt')) as f:
+    TAGLINES = f.read().strip().split('\n')

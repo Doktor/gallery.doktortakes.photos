@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 
 from photos.forms import AlbumForm, SortForm
 from photos.models import Album, Photo
-from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS
+from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, TAGLINES
 
 import mimetypes
 import random
@@ -92,6 +92,7 @@ def index(request):
     featured = Photo.objects.filter(rating__gte=4).order_by('-taken')
 
     context = {
+        'tagline': random.choice(TAGLINES),
         'featured': featured[:INDEX_FEATURED_PHOTOS],
         'more_photos': len(featured) > INDEX_FEATURED_PHOTOS,
         'albums': albums[:INDEX_ALBUMS],

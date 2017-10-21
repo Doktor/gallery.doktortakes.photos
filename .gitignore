@@ -26,3 +26,6 @@ static/simplePagination.*
 
 # Migrations (until a stable version is released)
 photos/migrations/
+
+# Other data
+data/taglines.txt
