@@ -25,8 +25,6 @@ album_patterns = [
     url(r'^(?P<path>[a-z0-9-/]+)/(?P<md5>[a-f0-9]{32})$',
         views.photo, name='photo'),
 
-    url(r'^(?P<path>[a-z0-9-/]+)/(?P<md5>[a-f0-9]{32})/info$',
-        views.photo_info, name='info'),
     url(r'^(?P<path>[a-z0-9-/]+)/(?P<md5>[a-f0-9]{32})/download$',
         views.photo_download, name='download'),
 ]

@@ -16,8 +16,6 @@ from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, TAGLINES
 import mimetypes
 import random
 
-from photos.utils import get_photo_info
-
 metadata = m(None)
 
 
@@ -263,16 +261,6 @@ def photo(request, path, md5):
 
         finally:
             return JsonResponse({'success': success})
-
-
-def photo_info(request, path, md5):
-    """Retrieves EXIF data and other information for a photo."""
-    p = get_photo(path, md5)
-    try:
-        info = get_photo_info(p)
-        return JsonResponse({'error': False, 'info': info})
-    except KeyError:
-        return JsonResponse({'error': True})
 
 
 def photo_download(request, path, md5):
