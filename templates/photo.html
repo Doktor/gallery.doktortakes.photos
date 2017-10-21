@@ -50,6 +50,7 @@
   </div>
 
   <section id="photo"
+           data-album-url="{{ album.get_absolute_url }}"
            data-path="{{ photo.get_path }}"
            data-md5="{{ photo.md5 }}"
            data-index=""
@@ -140,6 +141,7 @@
       <ul id="keyboard">
         <li><kbd>Left</kbd> <kbd>Right</kbd> View previous/next photo</li>
         <li><kbd>Up</kbd> <kbd>Down</kbd> Skip to first/last photo</li>
+        <li><kbd>A</kbd> Return to album</li>
         <li><kbd>D</kbd> Download this photo</li>
         <li><kbd>H</kbd> Return home</li>
         <li><kbd>L</kbd> Return to album list</li>
