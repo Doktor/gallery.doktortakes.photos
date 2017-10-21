@@ -1,5 +1,7 @@
 let $ = document.getElementById.bind(document);
 
+const KEY_ENTER = 13;
+
 const form = $('search');
 const submit = $('submit');
 
@@ -131,23 +133,72 @@ function create_photo(p) {
 
 // Pagination
 
-function create_page_el(text, extra = null) {
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function add_page_dots(container) {
+  let el = document.createElement('span');
+  el.innerText = '...';
+  el.classList.add('page');
+
+  el.addEventListener('click', function(event) {
+    let dots = event.target;
+
+    let input = document.createElement('input');
+    input.classList.add('skip');
+
+    input.addEventListener('blur', function() {
+      input.parentElement.replaceChild(dots, input);
+    });
+
+    input.addEventListener('keyup', function(event) {
+      if (event.keyCode === KEY_ENTER) {
+        if (isNumber(input.value)) {
+          change_page(parseInt(input.value));
+        }
+      }
+    });
+
+    dots.parentElement.replaceChild(input, dots);
+    input.focus();
+  });
+
+  container.appendChild(el);
+}
+
+
+function add_page_button(page, container) {
+  let el = document.createElement('span');
+  el.innerText = page.toString();
+  el.classList.add('page');
+  el.dataset.page = page.toString().toLowerCase();
+
+  el.addEventListener('click', click_page);
+
+  if (page === parseInt(pageEl.dataset.page)) {
+    el.classList.add('selected');
+  }
+
+  container.appendChild(el);
+}
+
+
+function create_page_nav(text) {
   let el = document.createElement('span');
   el.innerText = text;
   el.classList.add('page');
   el.dataset.page = text.toLowerCase();
 
-  if (extra !== null) {
-    el.classList.add(extra);
-  }
+  el.addEventListener('click', navigate_page);
 
   return el;
 }
 
 
-function add_pages(pages) {
+function add_pages(last) {
   let pagination = document.getElementsByClassName('pagination');
-  let results = pages !== 0;
+  let results = last !== 0;
 
   for (let container of pagination) {
     if (results) {
@@ -161,35 +212,72 @@ function add_pages(pages) {
 
   let current = parseInt(pageEl.dataset.page);
 
-  for (let container of pagination) {
-    container.clearChildren();
+  for (let c of pagination) {
+    c.clearChildren();
 
-    // Page number buttons
-    for (let page = 1; page <= pages; page++) {
-      let el = create_page_el(page.toString());
+    if (last >= 10) {
+      add_page_button(1, c);
 
-      if (current === page) {
-        el.classList.add('selected');
+      // 1 ... 3 4 [5] 6 7 ... 20
+      // 1 ... 14 15 [16] 17 18 ... 20
+      if (current >= 5 && current <= last - 4) {
+        add_page_dots(c);
+
+        for (let page = current - 2; page <= current + 2; page++) {
+          add_page_button(page, c);
+        }
+
+        add_page_dots(c);
       }
 
-      el.addEventListener('click', change_page);
+      // 1 ... 15 16 [17] 18 19 20
+      // 1 ... 16 17 [18] 19 20
+      else if (current > last - 4) {
+        add_page_dots(c);
 
-      container.appendChild(el);
+        for (let page = current - 2; page < last; page++) {
+          add_page_button(page, c);
+        }
+      }
+
+      // 1 2 [3] 4 5 ... 20
+      // 1 2 3 [4] 5 6 ... 20
+      else if (current <= 4) {
+        for (let page = 2; page <= current + 2; page++) {
+          add_page_button(page, c);
+        }
+
+        add_page_dots(c);
+      }
+
+      add_page_button(last, c);
+    }
+
+    else {
+      for (let page = 1; page <= last; page++) {
+        add_page_button(page, c);
+      }
     }
 
     // Previous and next buttons
-    if (pages >= 2) {
-      let prev = create_page_el('Prev', 'previous');
-      prev.addEventListener('click', navigate_page);
+    if (last >= 2) {
+      let prev = create_page_nav('Prev');
+      c.insertBefore(prev, c.firstChild);
 
-      container.insertBefore(prev, container.firstChild);
-
-      let next = create_page_el('Next', 'next');
-      next.addEventListener('click', navigate_page);
-
-      container.appendChild(next);
+      let next = create_page_nav('Next');
+      c.appendChild(next);
     }
   }
+}
+
+
+function change_page(page) {
+  if (page === pageEl.dataset.page) {
+    return;
+  }
+
+  pageEl.dataset.page = page;
+  update_results();
 }
 
 
@@ -202,30 +290,17 @@ function navigate_page(event) {
   switch (el.dataset.page) {
     case 'previous':
       if (current === 1) { return; }
-
-      pageEl.dataset.page = current - 1;
-      break;
+      return change_page(current - 1);
     case 'next':
       if (current === pages) { return; }
-
-      pageEl.dataset.page = current + 1;
-      break;
+      return change_page(current + 1);
   }
-
-  update_results();
 }
 
 
-function change_page(event) {
+function click_page(event) {
   let el = event.target;
-
-  if (el.dataset.page === pageEl.dataset.page) {
-    return;
-  }
-
-  pageEl.dataset.page = el.dataset.page;
-
-  update_results();
+  change_page(el.dataset.page);
 }
 
 

@@ -136,4 +136,4 @@ with open(os.path.join(BASE_DIR, 'data/taglines.txt')) as f:
 
 # Albums
 
-ITEMS_PER_PAGE = 10
+ITEMS_PER_PAGE = 30
