@@ -118,7 +118,13 @@ function load_photo(url, history = true) {
     });
 
     if (history) {
-      window.history.pushState('', '', response.url);
+      let shortMD5 = response.metadata.md5.slice(0, 7);
+
+      window.history.pushState('', shortMD5, response.url);
+
+      let title = document.title.split(' | ');
+      title[0] = shortMD5;
+      document.title = title.join(' | ');
     }
   };
 
