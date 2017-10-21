@@ -92,10 +92,10 @@ def index(request):
     featured = Photo.objects.filter(rating__gte=4).order_by('-taken')
 
     context = {
-        'albums': albums[:INDEX_ALBUMS],
-        'more_albums': len(albums) > INDEX_ALBUMS,
         'featured': featured[:INDEX_FEATURED_PHOTOS],
         'more_photos': len(featured) > INDEX_FEATURED_PHOTOS,
+        'albums': albums[:INDEX_ALBUMS],
+        'more_albums': len(albums) > INDEX_ALBUMS,
     }
 
     return render(request, 'index.html', context)

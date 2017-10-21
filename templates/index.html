@@ -5,9 +5,10 @@
   {% include "_ogp_common.html" %}
 
   <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ BASE_URL }}{% url 'index' %}">
+  <meta property="article:author" content="{{ NAME }}">
   <meta property="article:published_time" content="{{ LAST_UPDATE|date:"c" }}">
   <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
-  <meta property="og:url" content="{{ BASE_URL }}{% url 'index' %}">
 {% endblock %}
 
 {% block content %}
@@ -33,11 +34,11 @@
   </header>
 
   {% if messages %}
-    <section id="messages">
-      {% for m in messages %}
-        <div class="message {{ m.tags }}">{{ m }}</div>
-      {% endfor %}
-    </section>
+  <section id="messages">
+    {% for m in messages %}
+      <div class="message {{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  </section>
   {% endif %}
 
   {% if featured %}
@@ -54,9 +55,9 @@
     </section>
 
     {% if more_photos %}
-    <section class="view-more">
-      <p><a href="">View more featured photos</a></p>
-    </section>
+    <div>
+      <a href="">View more featured photos</a>
+    </div>
     {% endif %}
   {% endif %}
 
@@ -70,15 +71,16 @@
     </section>
 
     {% if more_albums %}
-    <section class="view-more">
-      <p><a href="{% url 'photos' %}">View more albums</a></p>
-    </section>
+    <div>
+      <a href="{% url 'photos' %}">View more albums</a><
+    </div>
     {% endif %}
   {% else %}
     <p>No albums found.</p>
   {% endif %}
 
   <hr>
+
   <footer>
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}

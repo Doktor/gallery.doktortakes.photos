@@ -6,6 +6,22 @@
     clear: both;
   }
 }
+
+@mixin fade() {
+  img {
+    filter: brightness(1.0);
+  }
+
+  &:hover img {
+    filter: brightness(0.8);
+  }
+
+  img, &:hover img {
+    transition: filter 0.2s ease-in-out;
+  }
+}
+
+
 // colors
 $borderColor: rgb(200, 200, 200);
 // general
@@ -33,20 +49,17 @@ header {
   @include clearfix();
 
   h1 {
-    font-size: 4.5rem;
+    font-size: 4.2rem;
     font-weight: 700;
     font-variant: small-caps;
   }
 
   .center {
+    margin: 0 auto;
     width: 100%;
-    float: left;
-  }
 
-  @media (min-width: 601px) {
-    .center {
+    @media (min-width: 601px) {
       width: 60%;
-      margin-left: 20%;
     }
   }
 
@@ -102,12 +115,9 @@ h1.logo {
 #featured {
   $spacing: 10px;
 
-  //@include clearfix();
-
   width: 100%;
   margin: 2rem 0 0 0;
 
-  // TODO: This doesn't fix the width because Masonry uses absolute positioning
   .container {
     width: 100%;
     margin: 0 -$spacing;
@@ -118,19 +128,16 @@ h1.logo {
     padding: $spacing;
 
     img {
-      display: block;
       width: 100%;
       border: 1px solid rgb(220, 220, 220);
-      filter: brightness(1.0);
     }
 
-    &:hover img {
-      filter: brightness(0.8);
-    }
+    @include fade();
+  }
 
-    img, &:hover img {
-      transition: filter 0.2s ease-in-out;
-    }
+  + div {
+    margin-top: $spacing;
+    margin-bottom: $spacing * 2;
   }
 }
 
@@ -266,11 +273,11 @@ $photoWidth: 300px;
 // albums!
 #albums {
   $spacing: 10px;
-  $width: 500px;
+  $width: 400px;
 
   @include clearfix();
 
-  //margin: 0 -$spacing;
+  // margin: 0 -$spacing;
 
   .wrapper {
     padding: $spacing;
@@ -292,18 +299,13 @@ $photoWidth: 300px;
     position: relative;
     border: 1px solid $borderColor;
 
-    a {
-      color: white;
+    @include fade();
+
+    img {
+      width: 100%;
     }
 
-    h3 {
-      font-weight: 300;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
+    // Title container
     .title {
       position: absolute;
       bottom: 0;
@@ -311,17 +313,15 @@ $photoWidth: 300px;
       width: 100%;
     }
 
-    img {
-      width: 100%;
-      filter: brightness(1.0);
-    }
+    // Title
+    h3 {
+      font-weight: 300;
+      font-size: 1.5rem;
+      color: white;
 
-    &:hover img {
-      filter: brightness(0.8);
-    }
-
-    img, &:hover img {
-      transition: filter 0.2s ease-in-out;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .no-cover .note {
@@ -331,6 +331,7 @@ $photoWidth: 300px;
     }
   }
 }
+
 // messages
 #messages {
   width: 100%;
