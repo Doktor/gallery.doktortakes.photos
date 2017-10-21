@@ -132,3 +132,8 @@ INDEX_FEATURED_PHOTOS = 30
 
 with open(os.path.join(BASE_DIR, 'data/taglines.txt')) as f:
     TAGLINES = f.read().strip().split('\n')
+
+
+# Albums
+
+ITEMS_PER_PAGE = 10

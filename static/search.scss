@@ -1,0 +1,89 @@
+#search {
+  width: 50%;
+  text-align: left;
+
+  div > label:first-child {
+    display: inline-block;
+    width: 130px;
+  }
+
+  input[type='text'], input[type='number'] {
+    width: 250px;
+    padding: 2px 4px;
+    font-size: 1.2rem;
+  }
+
+  input[type='radio'], input[type='checkbox'] {
+    width: auto;
+    height: 2rem;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  fieldset + fieldset {
+    padding-top: 1rem;
+    border-top: 1px solid rgb(220, 220, 220);
+  }
+
+  fieldset > div {
+    margin: 0.4rem 0;
+  }
+
+  fieldset > label {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  input.short {
+    width: 100px;
+  }
+
+  label, select, input {
+    float: none;
+  }
+
+  div > span {
+    margin-right: 0.6rem;
+  }
+}
+
+h2 {
+  text-align: left;
+  margin: 2rem 0;
+}
+
+.pagination {
+  text-align: left;
+
+  &.above {
+    margin: 2rem 0 1rem 0;
+  }
+
+  &.below {
+    margin: 1rem 0 2rem 0;
+  }
+
+  .page {
+    margin-right: 6px;
+    padding: 4px 8px;
+    background-color: rgb(40, 40, 40);
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 2px;
+    cursor: pointer;
+
+    &.selected, &:hover {
+      background-color: rgb(100, 100, 100);
+    }
+
+    &, &:hover {
+      transition: background-color 0.25s;
+    }
+  }
+}

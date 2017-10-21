@@ -1,8 +1,10 @@
+from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
 from photos.models import Album, Photo
+from photos.settings import ITEMS_PER_PAGE
 from photos.views import get_album_by_path
 
 from pytz import timezone
@@ -57,6 +59,7 @@ def generate_photo_dict(photo, index=None):
 
     return {
         'image_url': photo.image.url,
+        'thumbnail_url': photo.thumbnail.url,
         'url': photo.get_absolute_url(),
         'metadata': {
             'index': index,
@@ -183,3 +186,71 @@ def first_photo(request):
 @require_GET
 def last_photo(request):
     return navigate_end(request, 'last')
+
+
+def search_photos(request):
+    params = request.GET
+
+    query = Q()
+
+    name = params.get('name', '')
+    if name:
+        query = query & Q(album__name__icontains=name)
+
+    location = params.get('location', '')
+    if location:
+        query = query & Q(album__location__icontains=location)
+
+    width = params.get('width', '')
+    if width:
+        query = query & Q(width=int(width))
+
+    height = params.get('height', '')
+    if height:
+        query = query & Q(height=int(height))
+
+    rating = params.getlist('rating')
+    if rating:
+        subquery = Q()
+
+        for value in rating:
+            try:
+                value = int(value)
+            except ValueError:
+                continue
+
+            subquery = subquery | Q(rating=value)
+
+        query = query & subquery
+
+    order = params.get('order')
+
+    if order not in ('taken', 'edited', 'uploaded'):
+        order = 'taken'
+    elif order == 'uploaded':
+        order = 'pk'
+
+    if params.get('direction') == 'new':
+        order = f"-{order}"
+
+    photos = Photo.objects.filter(query).order_by(order)
+
+    count = photos.count()
+
+    try:
+        page = int(params.get('page'))
+    except (ValueError, KeyError):
+        page = 1
+
+    start = ITEMS_PER_PAGE * (page - 1)
+    end = start + ITEMS_PER_PAGE
+
+    photos = photos[start:end]
+
+    dicts = [generate_photo_dict(photo) for photo in photos]
+    response = {
+        'photos': dicts,
+        'count': count,
+    }
+
+    return JsonResponse(response)

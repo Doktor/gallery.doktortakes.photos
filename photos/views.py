@@ -2,16 +2,16 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files import File
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
 from photos.context_processors import metadata as m
-from photos.forms import AlbumForm, SortForm
+from photos.forms import AlbumForm
 from photos.models import Album, Photo
-from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, TAGLINES
+from photos.settings import (
+    INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
 import mimetypes
 import random
@@ -110,46 +110,11 @@ def photos_list(request):
     return render(request, 'photos.html', context)
 
 
-def all_photos(request):
-    """Renders the 'all photos' page."""
-    photos = Photo.objects.all()
-
-    sort = request.GET.get('sort', '')
-    order = request.GET.get('order', '')
-
-    if sort == 'taken' and order == 'asc':
-        photos = photos.order_by('-taken')
-    elif sort == 'taken' and order == 'dsc':
-        photos = photos.order_by('taken')
-    elif sort == 'edited' and order == 'asc':
-        photos = photos.order_by('-edited')
-    elif sort == 'edited' and order == 'dsc':
-        photos = photos.order_by('edited')
-    else:
-        photos = photos.order_by('-taken')
-
-    paginator = Paginator(photos, 50)
-
-    page = request.GET.get('page')
-    try:
-        photos = paginator.page(page)
-    except PageNotAnInteger:
-        # jump to first page
-        page = 1
-        photos = paginator.page(page)
-    except EmptyPage:
-        # jump to last page
-        page = paginator.num_pages
-        photos = paginator.page(page)
-
+def search_photos(request):
     context = {
-        'photos': photos,
-        'page': page,
-        'sort': sort,
-        'order': order,
-        'form': SortForm(),
+        'items_per_page': ITEMS_PER_PAGE
     }
-    return render(request, "all_photos.html", context)
+    return render(request, "search.html", context)
 
 
 @require_http_methods(['GET'])

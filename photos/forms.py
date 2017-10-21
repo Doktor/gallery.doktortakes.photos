@@ -15,11 +15,3 @@ class AlbumForm(forms.ModelForm):
         model = Album
         fields = ['name', 'location', 'description', 'start', 'end',
                   'cover', 'crop', 'parent']
-
-
-class SortForm(forms.Form):
-    SORT = (('taken', "Taken"), ('edited', "Edited"))
-    ORDER = (('asc', "Newest first"), ('dsc', "Oldest first"))
-
-    sort = forms.ChoiceField(choices=SORT, widget=forms.RadioSelect)
-    order = forms.ChoiceField(choices=ORDER, widget=forms.RadioSelect)

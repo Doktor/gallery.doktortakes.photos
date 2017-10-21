@@ -11,7 +11,7 @@ handler500 = 'photos.views.handler500'
 
 album_patterns = [
     url(r'^$', views.photos_list, name='photos'),
-    url(r'^all/$', views.all_photos, name='all'),
+    url(r'^search/$', views.search_photos, name='search'),
 
     url(r'^(?P<path>[a-z0-9-/]+)/edit/$',
         views.edit_album, name='edit_album'),
@@ -37,6 +37,8 @@ api_patterns = [
     url(r'^photo/last/$', api.last_photo, name='last_photo'),
 
     url(r'^photos/', api.get_album_photos, name='get_album_photos'),
+
+    url(r'^search/$', api.search_photos, name='search_photos'),
 ]
 
 urlpatterns = [
