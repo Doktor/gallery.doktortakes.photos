@@ -214,9 +214,12 @@ def photo(request, path, md5):
     """Renders photo pages."""
 
     if request.method == 'GET':
+        from photos.api import get_exif
+
         path = get_albums_from_path(path)
         a = path[-1]
         p = Photo.objects.get(album=a, md5=md5)
+        exif = get_exif(p)
         short_md5 = p.md5[:7]
         title = f"{short_md5} | {p.album.name} | {metadata['TITLE']}"
 
@@ -224,6 +227,7 @@ def photo(request, path, md5):
             'path': path,
             'album': a,
             'photo': p,
+            'exif': exif,
             'short_md5': short_md5,
             'page_title': title,
         }
