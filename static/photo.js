@@ -1,11 +1,15 @@
 let $;
 
 
-// Arrow keys
+// Key codes
 const KEY_LEFT = 37;
 const KEY_UP = 38;
 const KEY_RIGHT = 39;
 const KEY_DOWN = 40;
+
+const KEY_D = 68;
+const KEY_H = 72;
+const KEY_L = 76;
 
 
 // API paths
@@ -261,4 +265,22 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
   let query = query_string({'path': photo.dataset.path});
   load_photos(API_GET_ALBUM_PHOTOS + query);
+});
+
+
+document.addEventListener('keydown', function(event) {
+  let key = event.keyCode;
+
+  switch (key) {
+    case KEY_D:
+      window.location.href = links.download.children[0].href;
+      break;
+    case KEY_H:
+      window.location.href = '/';
+      break;
+    case KEY_L:
+      window.location.href = '/photos/';
+      break;
+
+  }
 });
