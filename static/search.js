@@ -322,7 +322,9 @@ function click_page(event) {
 submit.addEventListener('click', update_results);
 
 document.addEventListener('DOMContentLoaded', function() {
-  update_results(API_SEARCH + window.location.search);
+  if (window.location.search !== '') {
+    update_results(API_SEARCH + window.location.search);
+  }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
