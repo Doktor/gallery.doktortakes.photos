@@ -212,6 +212,10 @@ $photoWidth: 300px;
     padding: $photoSpacing;
     float: left;
 
+    &.empty {
+      padding: 0;
+    }
+
     @media (max-width: $photoWidth * 1) {
       float: none;
       width: 100%;

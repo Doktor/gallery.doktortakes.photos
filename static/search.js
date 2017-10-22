@@ -88,12 +88,20 @@ function update_results() {
 
     let response = JSON.parse(request.responseText);
 
-    photos.clearChildren();
+    let fragment = document.createDocumentFragment();
 
-    response.photos.forEach(function(photo) {
-      let el = create_photo(photo);
-      photos.appendChild(el);
-    });
+    for (let i = 0; i < response.photos.length; i++) {
+      let el = create_photo(response.photos[i]);
+      fragment.appendChild(el);
+    }
+
+    for (let i = response.photos.length; i < ITEMS_PER_PAGE; i++) {
+      let el = create_empty_wrapper();
+      fragment.appendChild(el);
+    }
+
+    photos.innerHTML = '';
+    photos.appendChild(fragment);
 
     countEl.innerText = response.count;
 
@@ -106,7 +114,6 @@ function update_results() {
   request.open('GET', url, true);
   request.send();
 }
-
 
 function create_photo(p) {
   let wrapper = document.createElement('div');
@@ -128,6 +135,14 @@ function create_photo(p) {
   link.appendChild(image);
 
   return wrapper;
+}
+
+function create_empty_wrapper() {
+  let el = document.createElement('div');
+  el.classList.add('wrapper');
+  el.classList.add('empty');
+
+  return el;
 }
 
 
@@ -308,4 +323,15 @@ submit.addEventListener('click', update_results);
 
 document.addEventListener('DOMContentLoaded', function() {
   update_results(API_SEARCH + window.location.search);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  let fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < ITEMS_PER_PAGE; i++) {
+    let el = create_empty_wrapper();
+    fragment.appendChild(el);
+  }
+
+  photos.appendChild(fragment);
 });
