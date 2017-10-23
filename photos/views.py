@@ -18,6 +18,8 @@ import random
 
 metadata = m(None)
 
+FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
+
 
 def get_albums_from_path(path):
     """Returns a list of Albums extracted from the given path."""
@@ -94,6 +96,7 @@ def index(request):
 
     context = {
         'tagline': random.choice(TAGLINES),
+        'featured_url': reverse('search') + FEATURED_QUERY,
         'featured': featured[:INDEX_FEATURED_PHOTOS],
         'more_photos': len(featured) > INDEX_FEATURED_PHOTOS,
         'albums': albums[:INDEX_ALBUMS],
