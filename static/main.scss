@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed:300,700');
+
 // utilities
 @function pow($number, $exponent) {
   $value: 1;
@@ -15,6 +16,7 @@
 
   @return $value;
 }
+
 @mixin clearfix() {
   &::after {
     content: ' ';
@@ -22,18 +24,22 @@
     clear: both;
   }
 }
+
 // important colors
 $blue: rgb(0, 120, 255);
 $dark-gray: rgb(20, 20, 20);
 $off-white: rgb(220, 220, 220);
+
 // top-level elements
 html {
   box-sizing: border-box;
   font-size: 100%;
 }
-*, *:before, *:after {
+
+*, *::before, *::after {
   box-sizing: inherit;
 }
+
 body {
   font-size: 1.4rem;
   font-family: "Roboto", sans-serif;
@@ -72,6 +78,7 @@ body {
     line-height: pow($scale, -1) * 1rem;
   }
 }
+
 @media (max-width: 900px) {
   @include headings(1.33);
 }
@@ -95,6 +102,7 @@ footer {
 header, footer {
   text-align: center;
 }
+
 // other elements
 a {
   color: $blue;
@@ -104,6 +112,7 @@ a {
     text-decoration: underline;
   }
 }
+
 code {
   color: $blue;
   background-color: $off-white;
@@ -111,16 +120,20 @@ code {
   border-radius: 5px;
   padding: 2px 5px;
 }
+
 code, pre {
   font-family: Consolas, monospace;
 }
+
 figure {
   margin: 0;
 }
+
 figcaption {
   color: gray;
   text-align: center;
 }
+
 hr {
   display: block;
   margin: 0;
@@ -129,17 +142,21 @@ hr {
   border-top: 1px solid gray;
   height: 1px;
 }
+
 img {
   display: block;
 }
+
 nav, pre, section {
   margin: 1rem 0;
 }
+
 @media (max-width: 600px) {
   nav {
     text-align: center;
   }
 }
+
 // useful classes
 ul.breadcrumbs {
   list-style: none;
@@ -161,13 +178,16 @@ ul.breadcrumbs {
     }
   }
 }
+
 .clearfix {
   width: 100%;
   @include clearfix();
 }
+
 .copyright {
   font-style: italic;
 }
+
 .hidden {
   display: none;
 }

@@ -24,6 +24,7 @@
 
 // colors
 $borderColor: rgb(200, 200, 200);
+
 // general
 *::selection {
   background-color: rgb(0, 120, 255);
@@ -47,12 +48,6 @@ body {
 
 header {
   @include clearfix();
-
-  h1 {
-    font-size: 4.2rem;
-    font-weight: 700;
-    font-variant: small-caps;
-  }
 
   .center {
     margin: 0 auto;
@@ -100,16 +95,28 @@ header {
   }
 }
 
-h1.logo {
-  float: left;
-  text-align: left;
+.logo {
   font-size: 2.4rem;
   line-height: 2.4rem;
+  text-align: center;
+  font-variant: small-caps;
+  font-weight: 700;
+
   margin: 0;
   padding: 0;
+
+  nav & {
+    float: left;
+    text-align: left;
+ }
+
+  &.large {
+    font-size: 4.2rem;
+    line-height: 4.2rem;
+  }
 }
 
-.breadcrumbs li {
+nav .breadcrumbs li {
   line-height: 2.4rem;
 }
 
@@ -142,19 +149,15 @@ h1.logo {
   }
 }
 
-.construction {
-  margin: 0.5rem 0;
-  font-style: italic;
-  font-size: 22pt;
-  font-weight: 700;
-}
 .note {
   color: rgb(150, 150, 150);
   font-style: italic;
 }
+
 .warning {
   font-weight: 700;
 }
+
 // about
 .icon {
   width: 100%;
@@ -190,39 +193,39 @@ h1.logo {
   margin-bottom: 0.5rem;
 }
 
-// photos
-$photoSpacing: 0.4rem;
-$photoWidth: 300px;
 #photos {
+  $spacing: 0.4rem;
+  $width: 300px;
+
   @include clearfix();
-  margin-left: -$photoSpacing;
-  margin-right: -$photoSpacing;
+
+  margin: 1rem (-$spacing);
 
   .wrapper {
-    padding: $photoSpacing;
+    padding: $spacing;
     float: left;
 
     &.empty {
       padding: 0;
     }
 
-    @media (max-width: $photoWidth * 1) {
+    @media (max-width: $width * 1) {
       float: none;
       width: 100%;
     }
-    @media (min-width: $photoWidth * 1 + 1) and (max-width: $photoWidth * 2) {
+    @media (min-width: $width * 1 + 1) and (max-width: $width * 2) {
       width: (100% / 2);
     }
-    @media (min-width: $photoWidth * 2 + 1) and (max-width: $photoWidth * 3) {
+    @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
       width: (100% / 3);
     }
-    @media (min-width: $photoWidth * 3 + 1) and (max-width: $photoWidth * 4) {
+    @media (min-width: $width * 3 + 1) and (max-width: $width * 4) {
       width: (100% / 4);
     }
-    @media (min-width: $photoWidth * 4 + 1) and (max-width: $photoWidth * 5) {
+    @media (min-width: $width * 4 + 1) and (max-width: $width * 5) {
       width: (100% / 5);
     }
-    @media (min-width: $photoWidth * 5 + 1) {
+    @media (min-width: $width * 5 + 1) {
       width: (100% / 6);
     }
   }
@@ -235,6 +238,8 @@ $photoWidth: 300px;
       width: 100%;
       border: 1px solid $borderColor;
     }
+
+    @include fade();
 
     .number {
       $width: 30%;
@@ -255,24 +260,24 @@ $photoWidth: 300px;
       height: 100%;
       width: 100%;
     }
+
     &.selected .overlay {
       display: block;
     }
 
-    &:hover,
     &.selected img {
       box-shadow: 0 0 0.5rem white;
     }
   }
 }
-// albums!
+
 #albums {
   $spacing: 10px;
   $width: 400px;
 
-  @include clearfix();
+  margin: 1rem (-$spacing);
 
-  // margin: 0 -$spacing;
+  @include clearfix();
 
   .wrapper {
     padding: $spacing;
@@ -327,6 +332,11 @@ $photoWidth: 300px;
   }
 }
 
+.no-margin-fix {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 // messages
 #messages {
   width: 100%;
@@ -338,7 +348,6 @@ $photoWidth: 300px;
   border: 2px solid;
   font-weight: 400;
 
-  // TODO: choose message colors
   &.success {
     $base: #00CB8A;
     color: white;
@@ -358,17 +367,14 @@ $photoWidth: 300px;
     border-color: darken($base, 20%);
   }
 }
+
 // forms
 form {
   .row {
     width: 100%;
     margin-bottom: 0.4rem;
 
-    &:after {
-      content: ' ';
-      display: table;
-      clear: both;
-    }
+    @include clearfix();
   }
 
   label {
@@ -376,6 +382,7 @@ form {
     float: left;
     vertical-align: middle;
   }
+
   .field-wrapper {
     padding-left: 0.5rem;
     width: 70%;
@@ -386,11 +393,13 @@ form {
     padding: 2px 5px;
     width: 100%;
   }
+
   input[type="submit"] {
     margin-top: 2rem;
     border-radius: 2px;
   }
 }
+
 .album-list {
   text-align: center;
 
@@ -433,9 +442,7 @@ form {
     }
 
     &, &:hover {
-      transition-property: background-color;
-      transition-duration: 0.3s;
-      transition-timing-function: ease-in-out;
+      transition: background-color 0.3s ease-in-out;
     }
   }
 

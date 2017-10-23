@@ -14,7 +14,7 @@
 {% block content %}
   <header>
     <div class="center">
-      <h1>Doktor Takes Photos</h1>
+      <h1 class="logo large">Doktor Takes Photos</h1>
 
       <div id="tagline">"{{ tagline }}"</div>
 
@@ -66,7 +66,7 @@
   <hr>
 
   {% if albums %}
-    <section id="albums">
+    <section id="albums" class="no-margin-fix">
       {% for a in albums %}
         {% include "_album_card.html" with album=a %}
       {% endfor %}
