@@ -32,8 +32,8 @@
 {% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'simplePagination.css' %}">
-<link rel="stylesheet" href="{% static 'album.css' %}">
+<link rel="stylesheet" href="{% static 'lib/simplePagination.css' %}">
+<link rel="stylesheet" href="{% static 'styles/album.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -105,7 +105,7 @@
             <a href="{% url 'photo' album.get_path p.md5 %}">
               <img class="loading"
                    data-src="{{ p.thumbnail.url }}"
-                   src="{% static 'ring.svg' %}">
+                   src="{% static 'images/loading.svg' %}">
             </a>
           </div>
         </div>
@@ -126,6 +126,6 @@
 
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="{% static 'simplePagination.js' %}"></script>
-<script src="{% static 'album.js' %}"></script>
+<script src="{% static 'lib/simplePagination.js' %}"></script>
+<script src="{% static 'scripts/album.js' %}"></script>
 {% endblock %}

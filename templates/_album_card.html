@@ -7,7 +7,7 @@
           <img src="{{ album.cover.image.url }}" title="{{ album.name }}">
         {% else %}
           <div class="no-cover">
-            <img src="{% static "cover-placeholder.png" %}" title="{{ album.name }}">
+            <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
             <div class="note">No cover for this album</div>
           </div>
         {% endif %}

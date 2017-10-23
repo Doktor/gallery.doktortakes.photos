@@ -36,7 +36,7 @@
     max-width: none;
   }
 </style>
-<link rel="stylesheet" href="{% static 'photo.css' %}">
+<link rel="stylesheet" href="{% static 'styles/photo.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
@@ -113,24 +113,24 @@
         <h2>EXIF</h2>
 
         <div class="camera">
-          <div><img src="{% static 'exif/camera.svg' %}" title="Camera"><img src="{% static 'exif/lens.svg' %}" title="Lens"></div>
+          <div><img src="{% static 'images/exif/camera.svg' %}" title="Camera"><img src="{% static 'images/exif/lens.svg' %}" title="Lens"></div>
           <div id="exif-camera">{{ exif.camera }}</div>
           <div id="exif-lens">{{ exif.lens }}</div>
         </div>
 
         <div class="exposure">
           <div>
-            <div><img src="{% static 'exif/shutter-speed.svg' %}" title="Shutter speed"></div>
+            <div><img src="{% static 'images/exif/shutter-speed.svg' %}" title="Shutter speed"></div>
             <div id="exif-shutter-speed">{{ exif.shutter_speed }}</div>
           </div>
 
           <div>
-            <div><img src="{% static 'exif/aperture.svg' %}" title="Aperture"></div>
+            <div><img src="{% static 'images/exif/aperture.svg' %}" title="Aperture"></div>
             <div id="exif-aperture">{{ exif.aperture }}</div>
           </div>
 
           <div>
-            <div><img src="{% static 'exif/iso_speed.svg' %}" title="ISO speed"></div>
+            <div><img src="{% static 'images/exif/iso_speed.svg' %}" title="ISO speed"></div>
             <div id="exif-iso-speed">{{ exif.iso_speed }}</div>
           </div>
         </div>
@@ -185,5 +185,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.js"></script>
 
-<script src="{% static 'photo.js' %}"></script>
+<script src="{% static 'scripts/photo.js' %}"></script>
 {% endblock %}

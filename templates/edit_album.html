@@ -8,8 +8,8 @@
 {% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static "dropzone/dropzone.css" %}">
-<link rel="stylesheet" href="{% static "edit-album.css" %}">
+<link rel="stylesheet" href="{% static "lib/dropzone/dropzone.css" %}">
+<link rel="stylesheet" href="{% static "styles/edit-album.css" %}">
 {% endblock %}
 
 {% block classes %}small left{% endblock %}
@@ -148,12 +148,12 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static "dropzone/dropzone.js" %}"></script>
+<script src="{% static "lib/dropzone/dropzone.js" %}"></script>
 <script>
   Dropzone.autoDiscover = false;
   var dropzone = new Dropzone("#dropzone", {
     paramName: 'files'
   });
 </script>
-<script src="{% static 'edit-album.js' %}"></script>
+<script src="{% static 'scripts/edit-album.js' %}"></script>
 {% endblock %}

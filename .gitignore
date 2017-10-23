@@ -20,9 +20,7 @@ __pycache__
 *.css.map
 
 # Libraries
-static/dropzone/
-static/photoswipe/
-static/simplePagination.*
+static/lib/
 
 # Migrations (until a stable version is released)
 photos/migrations/

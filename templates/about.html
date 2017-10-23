@@ -3,7 +3,7 @@
 
 {% block title %}About | {{ block.super }}{% endblock %}
 {% block meta %}
-  {% include "_ogp_common.html" %}
+  {% include "_open_graph_common.html" %}
   <meta property="og:type" content="profile">
   <meta property="profile:first_name" content="Doktor">
   <meta property="profile:username" content="Doktor">
@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'about.css' %}">
+<link rel="stylesheet" href="{% static 'styles/about.css' %}">
 {% endblock %}
 
 {% block classes %}small left{% endblock %}
@@ -38,7 +38,7 @@
     <h2>Photography</h2>
 
     <figure class="icon">
-      <img src="{% static 'icons/camera.jpg' %}" title="Me!">
+      <img src="{% static '/images/camera.jpg' %}" title="Me!">
       <figcaption>🎨 Art by
         <a href="https://twitter.com/dragonessdrei">Drei</a>
       </figcaption>

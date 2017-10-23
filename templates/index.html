@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block meta %}
-  {% include "_ogp_common.html" %}
+  {% include "_open_graph_common.html" %}
 
   <meta property="og:type" content="article">
   <meta property="og:url" content="{{ BASE_URL }}{% url 'index' %}">
@@ -91,5 +91,5 @@
 
 {% block scripts %}
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="{% static 'index.js' %}"></script>
+<script src="{% static 'scripts/index.js' %}"></script>
 {% endblock %}
