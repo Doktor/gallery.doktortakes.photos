@@ -28,16 +28,16 @@ album_patterns = [
 ]
 
 api_patterns = [
-    url(r'^photo/$', api.get_photo, name='get_photo'),
+    url(r'^photo/$', api.PhotoView.as_view(), name='api_photo'),
+
     url(r'^photo/previous/$', api.previous_photo, name='previous_photo'),
     url(r'^photo/next/$', api.next_photo, name='next_photo'),
     url(r'^photo/first/$', api.first_photo, name='first_photo'),
     url(r'^photo/last/$', api.last_photo, name='last_photo'),
 
-    url(r'^photo/delete/$', api.delete_photo, name='delete_photo'),
-    url(r'^album/delete/$', api.delete_album, name='delete_album'),
+    url(r'^album/$', api.AlbumView.as_view(), name='api_album'),
 
-    url(r'^photos/', api.get_album_photos, name='get_album_photos'),
+    url(r'^album/photos/', api.get_album_photos, name='get_album_photos'),
 
     url(r'^search/$', api.search_photos, name='search_photos'),
 ]

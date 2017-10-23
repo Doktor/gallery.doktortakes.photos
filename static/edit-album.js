@@ -4,6 +4,25 @@ Element.prototype.remove = function () {
   this.parentElement.removeChild(this);
 };
 
+function getCookie(name) {
+  let value = null;
+
+  if (document.cookie && document.cookie !== '') {
+    let cookies = document.cookie.split(';');
+
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        value = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+
+  return value;
+}
+
 function query_string(params) {
   let escape = encodeURIComponent;
   let query = Object.keys(params)
@@ -97,7 +116,9 @@ function delete_photo(wrapper) {
       update_total();
       update_count();
 
-      flash("Deleted photo successfully.");
+      flash(response.message);
+    } else {
+      flash(response.error);
     }
   };
 
@@ -107,7 +128,8 @@ function delete_photo(wrapper) {
   };
   let url = API_DELETE_PHOTO + query_string(params);
 
-  request.open("GET", url, true);
+  request.open("DELETE", url, true);
+  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
   request.send();
 }
 
@@ -122,13 +144,13 @@ function delete_album() {
     let response = JSON.parse(request.responseText);
 
     if (response.success) {
-      flash("Deleted album successfully. Redirecting in 3 seconds...");
+      flash(response.message);
 
       setTimeout(function() {
         window.location.href = API_EDIT_LIST;
       }, 3000);
     } else {
-      alert(response.error);
+      flash(response.error);
     }
   };
 
@@ -138,7 +160,8 @@ function delete_album() {
   };
   let url = API_DELETE_ALBUM + query_string(params);
 
-  request.open("GET", url, true);
+  request.open("DELETE", url, true);
+  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
   request.send();
 }
 

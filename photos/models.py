@@ -137,10 +137,6 @@ class Album(models.Model):
         """Returns the URL for editing this album."""
         return reverse('edit_album', args=[self.get_path()])
 
-    def get_delete_url(self):
-        """Returns the URL for deleting this album."""
-        return reverse('delete_album', args=[self.get_path()])
-
     def __str__(self):
         return self.name
 

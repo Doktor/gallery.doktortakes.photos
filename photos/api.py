@@ -1,7 +1,8 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
+from django.views import View
 from django.views.decorators.http import require_GET
 
 from photos.models import Album, Photo
@@ -9,6 +10,17 @@ from photos.settings import ITEMS_PER_PAGE
 from photos.views import get_album_by_path
 
 from pytz import timezone
+
+
+class APIError(Exception):
+    def __init__(self, message, status=400):
+        super().__init__(message)
+
+        self.message = message
+        self.status = status
+
+    def to_response(self):
+        return JsonResponse({'error': self.message}, status=self.status)
 
 
 def f_stop(f):
@@ -87,13 +99,13 @@ def get_photo_from_request(request):
         path = params.get('path')
         md5 = params.get('md5')
     except KeyError:
-        return JsonResponse({'error': "invalid parameters"}, status=400)
+        raise APIError("Missing parameters: 'path' and 'md5' are required.")
 
     try:
         album = get_album_by_path(path)
         photo = Photo.objects.get(album=album, md5=md5)
     except Photo.DoesNotExist:
-        return JsonResponse({'error': "photo does not exist"}, status=404)
+        raise APIError("Photo does not exist.", status=404)
 
     return photo
 
@@ -104,12 +116,12 @@ def get_album_from_request(request):
     try:
         path = params.get('path')
     except KeyError:
-        return JsonResponse({'error': "invalid parameters"}, status=400)
+        raise APIError("Missing parameters: 'path' is required.")
 
     try:
         album = get_album_by_path(path)
     except Album.DoesNotExist:
-        return JsonResponse({'error': "album does not exist"}, status=404)
+        raise APIError("Album does not exist.", status=404)
 
     return album
 
@@ -125,52 +137,57 @@ def get_album_photos(request):
     return JsonResponse({'photos': photos})
 
 
-@require_GET
-def get_photo(request):
-    photo = get_photo_from_request(request)
-    return photo_to_response(photo)
+class PhotoView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        try:
+            photo = get_photo_from_request(request)
+        except APIError as e:
+            return e.to_response()
+
+        return photo_to_response(photo)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            photo = get_photo_from_request(request)
+        except APIError as e:
+            return e.to_response()
+
+        try:
+            photo.thumbnail.delete(save=False)
+            photo.image.delete(save=False)
+            photo.delete()
+
+            return JsonResponse({
+                'success': True,
+                'message': "Photo deleted successfully.",
+            })
+
+        except (IOError, OSError):
+            return JsonResponse({
+                'success': False,
+                'error': "An unknown error occurred when deleting image files."
+            })
 
 
-# TODO: combine this with get_photo and use DELETE requests
-@login_required
-@require_GET
-def delete_photo(request):
-    photo = get_photo_from_request(request)
+class AlbumView(LoginRequiredMixin, View):
+    def delete(self, request, *args, **kwargs):
+        try:
+            album = get_album_from_request(request)
+        except APIError as e:
+            return e.to_response()
 
-    if isinstance(photo, JsonResponse):
-        return photo
+        if request.GET.get('name') != album.name:
+            return JsonResponse({
+                'success': False,
+                'error': "Incorrect album name.",
+            })
 
-    try:
-        photo.thumbnail.delete(save=False)
-        photo.image.delete(save=False)
-        photo.delete()
+        album.delete()
 
-        success = True
-
-    except (IOError, OSError):
-        success = False
-
-    finally:
-        return JsonResponse({'success': success})
-
-
-@login_required
-@require_GET
-def delete_album(request):
-    album = get_album_from_request(request)
-
-    if isinstance(album, JsonResponse):
-        return album
-
-    name = request.GET.get('name')
-    if name != album.name:
         return JsonResponse({
-            'success': False,
-            'error': "incorrect album name",
+            'success': True,
+            'message': "Album deleted successfully. Redirecting...",
         })
-
-    album.delete()
-    return JsonResponse({'success': True})
 
 
 def navigate(request, method):
