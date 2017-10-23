@@ -96,9 +96,11 @@ header {
   }
 }
 
+$logo: 2.4rem;
+
 .logo {
-  font-size: 2.4rem;
-  line-height: 2.4rem;
+  font-size: $logo;
+  line-height: 1;
   text-align: center;
   font-variant: small-caps;
   font-weight: 700;
@@ -113,12 +115,12 @@ header {
 
   &.large {
     font-size: 4.2rem;
-    line-height: 4.2rem;
+    margin: 2.5rem 0 2rem 0;
   }
 }
 
 nav .breadcrumbs li {
-  line-height: 2.4rem;
+  line-height: $logo;
 }
 
 #featured {
@@ -287,7 +289,9 @@ nav .breadcrumbs li {
     // Title
     h3 {
       font-weight: 300;
+      line-height: 1;
       font-size: 1.5rem;
+      margin: 0.9rem;
       color: white;
 
       &:hover {

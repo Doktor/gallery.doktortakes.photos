@@ -16,12 +16,11 @@
         <li><a href="{% url 'search' %}">Search</a></li>
       </ul>
     </nav>
-  <h1>Search</h1>
   </header>
 
   <section>
     <form id="search">
-      <h2>Filters</h2>
+      <h2>Search</h2>
 
       <fieldset id="sort">
         <label>Sorting</label>
@@ -114,7 +113,7 @@
 
   <hr>
 
-  <h2><span id="count">0</span> results</h2>
+  <h2 id="count-container"><span id="count">0</span> results</h2>
 
   <div id="api" data-api-search="{% url 'search_photos' %}"></div>
   <div id="page" data-page="1" data-pages="1" data-items-per-page="{{ items_per_page }}"></div>

@@ -24,14 +24,12 @@
   </header>
 
   <section>
-    <h2>Photos</h2>
-
-    <h3>Special pages</h3>
+    <h2>Special pages</h2>
     <ul>
-      <li><a href="{% url 'search' %}">View all photos</a></li>
+      <li><a href="{% url 'search' %}">Search all photos</a></li>
     </ul>
 
-    <h3>Current albums</h3>
+    <h2>Photos</h2>
     {% if albums %}
     <section class="album-list">
       <ul>
