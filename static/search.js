@@ -44,8 +44,11 @@ function parse_form() {
 
   // Parse form data
   for (let pair of data.entries()) {
-    let key = pair[0];
-    let value = pair[1];
+    let key = pair[0], value = pair[1];
+
+    if (value === '') {
+      continue;
+    }
 
     if (key in params) {
       if (Array.isArray(params[key])) {
