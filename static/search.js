@@ -319,10 +319,69 @@ function click_page(event) {
 }
 
 
+String.prototype.format = function() {
+  "use strict";
+  let str = this.toString();
+  if (arguments.length) {
+    let t = typeof arguments[0];
+    let key;
+    let args = ("string" === t || "number" === t) ?
+        Array.prototype.slice.call(arguments) : arguments[0];
+
+    for (key in args) {
+      str = str.replace(new RegExp("\\{" + key + "\\}", "gi"), args[key]);
+    }
+  }
+
+  return str;
+};
+
+
+function populate_form(query) {
+  query = query.substring(1, query.length);
+
+  let items = query.split('&');
+
+  for (let pair of items) {
+    pair = pair.split('=');
+    let key = pair[0], value = pair[1];
+
+    let selector = 'input[name="{0}"]'.format(key);
+
+    let inputs = document.querySelectorAll(selector);
+    let n = inputs.length;
+
+    // Invalid name
+    if (n === 0) { }
+
+    else if (n === 1) {
+      let el = inputs[0];
+
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        // This can't happen with the default form
+      } else {
+        el.value = value;
+      }
+    }
+
+    // Checkbox inputs only
+    else {
+      for (let el of inputs) {
+        if (el.value === value) {
+          el.checked = true;
+          break;
+        }
+      }
+    }
+  }
+}
+
+
 submit.addEventListener('click', update_results);
 
 document.addEventListener('DOMContentLoaded', function() {
   if (window.location.search !== '') {
+    populate_form(window.location.search);
     update_results(API_SEARCH + window.location.search);
   }
 });
