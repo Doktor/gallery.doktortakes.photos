@@ -20,39 +20,40 @@
       <ul class="breadcrumbs">
         <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
         <li><a href="{% url 'edit' %}">Edit</a></li>
-        {% for p in parents %}
-          <li><a href="{{ p.get_edit_url }}">{{ p.name }}</a></li>
+        {% for item in parents %}
+          <li><a href="{{ item.get_edit_url }}">{{ item.name }}</a></li>
         {% endfor %}
         <li><a href="{{ album.get_edit_url }}">{{ album.name }}</a>
         </li>
       </ul>
     </nav>
 
-    <h1>Edit album</h1>
     <h2>{{ album.name }}</h2>
     <a href="{{ album.get_absolute_url }}" target="_blank">View on site</a>
   </header>
 
   {% if messages %}
-    <section id="messages">
-      {% for m in messages %}
-        <div class="message {{ m.tags }}">{{ m }}</div>
-      {% endfor %}
-    </section>
+  <section id="messages">
+    {% for m in messages %}
+      <div class="message {{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  </section>
   {% endif %}
 
-  <section class="main-container clearfix">
-    <div id="edit-album">
+  <section class="clearfix">
+    <h2>Edit details</h2>
+    <div id="edit">
       <form method="post" action="{{ album.get_edit_url }}">
         {% csrf_token %}
 
         {% for field in form %}
-          <div class="row">
-            {{ field.errors }}
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            <div class="field-wrapper">{{ field }}</div>
-          </div>
+        <div class="row">
+          {{ field.errors }}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          <div class="field-wrapper">{{ field }}</div>
+        </div>
         {% endfor %}
+
         <input type="submit" value="Save">
       </form>
     </div>
@@ -64,7 +65,7 @@
             <img src="{{ link }}">
           </a>
         {% endwith %}
-        <span class="full-size"><a href="{{ album.cover.image.url }}">Original full size</a>
+        <span class="full-size"><a href="{{ album.cover.image.url }}">Original image</a>
         </span>
       {% else %}
         <div class="no-cover">
@@ -75,7 +76,7 @@
   </section>
 
   <section>
-    <h2>Add photos</h2>
+    <h2>Upload photos</h2>
 
     <div id="upload">
       <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'upload' album.get_path %}">
@@ -88,52 +89,54 @@
     </div>
   </section>
 
+  <div id="api"
+       data-album-path="{{ album.get_path }}"
+       data-api-edit-list="{% url 'edit' %}"
+       data-api-delete-photo="{% url 'delete_photo' %}"
+       data-api-delete-album="{% url 'delete_album' %}"></div>
+
   <section>
     <h2>Delete photos</h2>
+    <p class="warning">Delete photos from this album. Deletion cannot be undone!</p>
+    <p>To delete photos, select them and press <strong>Delete</strong>.</p>
 
-    {% if album.photos.count %}
-      {% with count=album.photos.count %}
-        <h3 id="total">{{ count }} photo{{ count|pluralize }} in album</h3>
-        <h3 id="counter">0 selected</h3>
-      {% endwith %}
+    {% if count %}
+    <div>
+      <span id="total-count">{{ count }}</span> photo{{ count|pluralize }} in album,
+      <span id="selected-count">0</span> photos selected
+    </div>
 
-      <div id="actions" class="clearfix">
-        <div id="actions-select">
-          <a onclick="select_all();">Select all</a><br>
-          <a onclick="select_none();">Select none</a>
-        </div>
-        <div id="actions-delete">
-          <span class="warning">Deletion cannot be undone!</span>
-          <button id="delete-photos" type="button">Delete</button>
+    <div id="actions" class="clearfix">
+      <div class="select">
+        <span><a id="select-all">Select all</a> / <a id="select-none">Select none</a></span>
+      </div>
+      <div class="delete">
+        <span class="warning">Deletion cannot be undone!</span>
+        <button id="delete-photos" type="button">Delete</button>
+      </div>
+    </div>
+
+    <div id="photos">
+      {% for p in photos %}
+      <div class="wrapper" data-md5="{{ p.md5 }}">
+        <div class="photo">
+          <img src="{{ p.thumbnail.url }}">
         </div>
       </div>
-
-      <div id="photos">
-        <!-- TODO: Overlay a check mark on selected photos -->
-        {% for p in album.photos.all %}
-          <div class="wrapper">
-            <div class="photo" data-number="{{ p.number }}">
-              <img src="{{ p.thumbnail.url }}">
-              <div class="number">{{ p.number }}</div>
-              <div class="overlay"></div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
+      {% endfor %}
+    </div>
     {% else %}
-      <p>This album does not contain any images.</p>
+    <p>This album does not contain any photos.</p>
     {% endif %}
   </section>
 
   <section id="delete-album">
     <h2>Delete album</h2>
-    <p class="warning">This deletes the album and all photos contained within
-      it. Deletion cannot be undone!</p>
-    <p>To confirm deletion, enter the name of the album.</p>
-    <form class="clearfix" method="post" action="{{ album.get_delete_url }}">
-      {% csrf_token %}
-      <input title="Name" name="name" type="text">
-      <button type="submit">Delete</button>
+    <p class="warning">Delete this album and every album and photo contained within it. Deletion cannot be undone!</p>
+    <p>To confirm deletion, enter the name of the album, case-sensitive.</p>
+    <form class="clearfix">
+      <input id="delete-album-name" title="Name" name="name" type="text">
+      <button id="delete-album-submit" type="button">Delete</button>
     </form>
   </section>
 

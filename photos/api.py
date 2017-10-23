@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
@@ -128,6 +129,48 @@ def get_album_photos(request):
 def get_photo(request):
     photo = get_photo_from_request(request)
     return photo_to_response(photo)
+
+
+# TODO: combine this with get_photo and use DELETE requests
+@login_required
+@require_GET
+def delete_photo(request):
+    photo = get_photo_from_request(request)
+
+    if isinstance(photo, JsonResponse):
+        return photo
+
+    try:
+        photo.thumbnail.delete(save=False)
+        photo.image.delete(save=False)
+        photo.delete()
+
+        success = True
+
+    except (IOError, OSError):
+        success = False
+
+    finally:
+        return JsonResponse({'success': success})
+
+
+@login_required
+@require_GET
+def delete_album(request):
+    album = get_album_from_request(request)
+
+    if isinstance(album, JsonResponse):
+        return album
+
+    name = request.GET.get('name')
+    if name != album.name:
+        return JsonResponse({
+            'success': False,
+            'error': "incorrect album name",
+        })
+
+    album.delete()
+    return JsonResponse({'success': True})
 
 
 def navigate(request, method):

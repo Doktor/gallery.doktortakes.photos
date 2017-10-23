@@ -136,22 +136,6 @@ def album(request, path):
     return render(request, 'album.html', context)
 
 
-@require_http_methods(['POST'])
-@login_required
-def delete_album(request, path):
-    """Deletes an album."""
-    a = get_album_by_path(path)
-
-    name = request.POST.get('name')
-    if name != a.name:
-        messages.error(request, "Incorrect name specified.")
-        return redirect('edit_album', path=a.get_path())
-
-    a.delete()
-    messages.success(request, "Album \"%s\" deleted successfully." % name)
-    return redirect('edit')
-
-
 @login_required
 def edit_album(request, path):
     """Renders the edit album page."""
@@ -162,6 +146,8 @@ def edit_album(request, path):
 
         context = {
             'album': a,
+            'photos': a.photos.all(),
+            'count': a.photos.count(),
             'parents': get_albums_from_path(path)[:-1],
             'form': form,
         }
@@ -201,36 +187,6 @@ def photo(request, path, md5):
         }
 
         return render(request, 'photo.html', context)
-
-    # Delete a photo
-    elif request.method == 'DELETE':
-        if not request.user.is_authenticated():
-            return JsonResponse({'success': False})
-        try:
-            if not (path and md5):
-                raise ValueError('Photo incorrectly specified')
-
-            a = get_album_by_path(path)
-            p = Photo.objects.get(album=a, md5=md5)
-
-            p.thumbnail.delete(save=False)
-            p.image.delete(save=False)
-            p.delete()
-
-            success = True
-
-        except (IOError, OSError) as e:
-            # TODO send email
-            success = False
-
-        except ValueError:
-            success = False
-
-        except Photo.DoesNotExist:
-            success = False
-
-        finally:
-            return JsonResponse({'success': success})
 
 
 def photo_download(request, path, md5):

@@ -201,6 +201,12 @@ nav .breadcrumbs li {
     @media (min-width: $width * 5 + 1) {
       width: (100% / 6);
     }
+
+    @include fade();
+
+    &.selected img {
+      filter: brightness(0.3);
+    }
   }
 
   .photo {
@@ -210,36 +216,6 @@ nav .breadcrumbs li {
       display: block;
       width: 100%;
       border: 1px solid $borderColor;
-    }
-
-    @include fade();
-
-    .number {
-      $width: 30%;
-      font-size: 11pt;
-      text-align: center;
-      position: absolute;
-      bottom: 1px;
-      background-color: rgba(20, 20, 20, 0.8);
-      width: $width;
-      left: (100% - $width) / 2;
-    }
-
-    .overlay {
-      display: none;
-      position: absolute;
-      bottom: 0;
-      background-color: rgba(255, 255, 255, 0.35);
-      height: 100%;
-      width: 100%;
-    }
-
-    &.selected .overlay {
-      display: block;
-    }
-
-    &.selected img {
-      box-shadow: 0 0 0.5rem white;
     }
   }
 }

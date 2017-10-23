@@ -2,54 +2,73 @@ body {
   max-width: 1100px;
   margin-bottom: 3rem;
 }
+
 section {
   margin: 2rem 0;
 }
-#edit-album {
+
+h2 {
+  margin: 0.5rem 0;
+}
+
+#edit, #cover {
+  width: 50%;
+  float: left;
+}
+#edit {
   padding-right: 1rem;
 }
 #cover {
   padding-left: 1rem;
+
+  .full-size {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    text-align: right;
+    float: right;
+  }
+
+  .no-cover {
+    border: 1px solid rgb(220, 220, 220);
+    padding: 8px;
+    text-align: center;
+  }
+
+  img {
+    width: 100%;
+  }
 }
-#cover .full-size {
-  font-size: 1rem;
-  text-align: right;
-  float: right;
-}
-#cover .no-cover {
-  border: 1px solid rgb(220, 220, 220);
-  padding: 8px;
-  text-align: center;
-}
-#cover img {
-  width: 100%;
-}
-#cover, #edit-album {
+
+#actions div {
   width: 50%;
   float: left;
+
+  a {
+    cursor: pointer;
+  }
+
+  &.delete {
+    text-align: right;
+    float: right;
+  }
+
+  &.delete button {
+    margin-left: 0.3rem;
+  }
 }
+
 #delete-album {
   width: 50%;
-}
-#actions-select a {
-  cursor: pointer;
-}
-#actions-select, #actions-delete {
-  width: 50%;
-  float: left;
-}
-#actions-delete button {
-  margin-left: 0.3rem;
-}
-#actions-delete {
-  text-align: right;
-  float: right;
-}
-#delete-album form input {
-  width: 80%;
-  float: left;
-}
-#delete-album form button {
-  width: 20%;
-  float: left;
+
+  input, button {
+    height: 3rem;
+    float: left;
+  }
+  input {
+    padding: 4px 8px;
+    width: 80%;
+  }
+  button {
+    width: 20%;
+  }
 }

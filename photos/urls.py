@@ -15,8 +15,6 @@ album_patterns = [
 
     url(r'^(?P<path>[a-z0-9-/]+)/edit/$',
         views.edit_album, name='edit_album'),
-    url(r'^(?P<path>[a-z0-9-/]+)/delete/$',
-        views.delete_album, name='delete_album'),
     url(r'^(?P<path>[a-z0-9-/]+)/upload/$',
         views.upload_photo, name='upload'),
 
@@ -35,6 +33,9 @@ api_patterns = [
     url(r'^photo/next/$', api.next_photo, name='next_photo'),
     url(r'^photo/first/$', api.first_photo, name='first_photo'),
     url(r'^photo/last/$', api.last_photo, name='last_photo'),
+
+    url(r'^photo/delete/$', api.delete_photo, name='delete_photo'),
+    url(r'^album/delete/$', api.delete_album, name='delete_album'),
 
     url(r'^photos/', api.get_album_photos, name='get_album_photos'),
 
