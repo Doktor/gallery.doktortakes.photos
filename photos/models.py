@@ -521,7 +521,6 @@ class Photo(models.Model):
     class Meta:
         get_latest_by = 'taken'
         ordering = ['taken']
-        unique_together = ('album', 'taken')
 
 
 @receiver(pre_save, sender=Photo,
