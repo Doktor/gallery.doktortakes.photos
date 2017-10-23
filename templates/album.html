@@ -32,30 +32,11 @@
 {% endblock %}
 
 {% block style %}
-  <link rel="stylesheet" href="{% static 'simplePagination.css' %}">
-  <style>
-  .pagination {
-    margin: 1rem 0;
-  }
-  .text {
-    max-width: 1000px;
-    margin: 0 auto;
-    font-size: 14pt;
-    color: gainsboro;
-  }
-  .text ul {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-  }
-  .text img {
-    margin: auto;
-  }
-  </style>
+<link rel="stylesheet" href="{% static 'simplePagination.css' %}">
+<link rel="stylesheet" href="{% static 'album.css' %}">
 {% endblock %}
 
 {% block content %}
-  <!-- album -->
   <header>
     <nav>
       <ul class="breadcrumbs">
@@ -67,40 +48,39 @@
       </ul>
     </nav>
 
-    <div id="info">
-      <h1>{{ album.name }}</h1>
+    <section id="album">
+      <h1 class="title">{{ album.name }}</h1>
 
       {% if album.location %}
-        <h2>{{ album.location }}</h2>
+      <h2 class="location">{{ album.location }}</h2>
       {% endif %}
 
       <time>{{ album.get_full_date }}</time>
 
       {% if album.description %}
-        <p>{{ album.description|safe }}</p>
+      <p class="description">{{ album.description|safe }}</p>
       {% endif %}
 
       {% if album.text %}
-        <div class="text">{{ album.text|safe }}</div>
+      <div class="text">{{ album.text|safe }}</div>
       {% endif %}
-    </div>
+    </section>
 
     {% if messages %}
-      <section id="messages">
-        {% for m in messages %}
-          <div class="message {{ m.tags }}">{{ m }}</div>
-        {% endfor %}
-      </section>
+    <section id="messages">
+      {% for m in messages %}
+        <div class="message {{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </section>
     {% endif %}
 
     {% if request.user.is_authenticated %}
-      <div>
-        <a href="{{ album.get_edit_url }}">Edit this album</a>
-      </div>
+    <div>
+      <a href="{{ album.get_edit_url }}">Edit this album</a>
+    </div>
     {% endif %}
   </header>
 
-  <!-- subalbums -->
   {% if album.children.count %}
     <hr>
     <section id="albums">
@@ -110,9 +90,10 @@
     </section>
   {% endif %}
 
-  <!-- photos -->
   {% with count=album.photos.count %}
     <hr>
+
+    <div id="about" data-count="{{ count }}" data-items-per-page="{{ items_per_page }}"></div>
 
     {% if count %}
       <h3 id="count">{{ count }} photo{{ count|pluralize }}</h3>
@@ -145,65 +126,7 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-  <script src="{% static 'simplePagination.js' %}"></script>
-  <script>
-    var ITEMS_PER_PAGE = 30;
-
-    function showPage(page) {
-      var start = ITEMS_PER_PAGE * (page - 1);
-      var end = (ITEMS_PER_PAGE * page) - 1;
-
-      var photos = document.getElementsByClassName('photo');
-      for (var i = 0; i < photos.length; i++) {
-        var photo = photos[i].childNodes[1].childNodes[1];
-        var wrapper = photos[i].parentNode;
-
-        if (i >= start && i <= end) {
-          if (!photo.classList.contains('loaded')) {
-            photo.src = photo.getAttribute('data-src');
-            photo.classList.remove('loading');
-            photo.classList.add('loaded');
-          }
-          wrapper.style.display = 'block';
-        } else {
-          wrapper.style.display = 'none';
-        }
-      }
-    }
-
-    function showCurrentPage() {
-      var page;
-      var match = window.location.hash.match(/#page-(\d)/);
-      if (match) {
-        page = parseInt(match[1], 10);
-      } else {
-        page = 1;
-      }
-
-      showPage(page);
-      $(function() {
-        $('.pagination').pagination('selectPage', page);
-      });
-    }
-
-    var count = {{ album.photos.count }};
-    if (count >= ITEMS_PER_PAGE) {
-      $(function() {
-        $('.pagination').pagination({
-          items: count,
-          itemsOnPage: ITEMS_PER_PAGE,
-          cssStyle: 'dark-theme',
-          onInit: function() {
-            showCurrentPage();
-          },
-          onPageClick: function(page, event) {
-            showPage(page);
-          }
-        });
-      });
-    } else {
-      showCurrentPage();
-    }
-  </script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="{% static 'simplePagination.js' %}"></script>
+<script src="{% static 'album.js' %}"></script>
 {% endblock %}

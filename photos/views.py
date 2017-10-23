@@ -127,6 +127,7 @@ def album(request, path):
         'path': get_albums_from_path(path),
         'album': a,
         'page_title': title,
+        'items_per_page': ITEMS_PER_PAGE,
     }
     return render(request, 'album.html', context)
 

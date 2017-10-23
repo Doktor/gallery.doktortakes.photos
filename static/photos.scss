@@ -185,21 +185,11 @@ h1.logo {
     box-shadow: 0 0 0.5em white;
   }
 }
-// main album info
 #count {
   text-align: left;
   margin-bottom: 0.5rem;
 }
-#info {
-  time {
-    font-family: "Roboto Condensed", sans-serif;
-    line-height: 1;
-    color: rgb(150, 150, 150);
-    display: block;
-    margin: 1rem auto;
-    font-size: 1.8rem;
-  }
-}
+
 // photos
 $photoSpacing: 0.4rem;
 $photoWidth: 300px;

@@ -1,0 +1,55 @@
+#album {
+  .title {
+    margin: 2rem 0;
+  }
+
+  .location {
+    margin: 2rem 0;
+  }
+
+  time {
+    font-family: "Roboto Condensed", sans-serif;
+    color: rgb(150, 150, 150);
+    display: block;
+    margin: 1.5rem 0;
+
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+  }
+
+  .description {
+    margin: 1.5rem 0;
+  }
+}
+
+#albums {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#count {
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  margin: 2rem 0;
+}
+
+.pagination {
+  margin: 1rem 0;
+}
+
+.text {
+  max-width: 1000px;
+  margin: 0 auto;
+  font-size: 14pt;
+  color: gainsboro;
+
+  ul {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  img {
+    margin: auto;
+  }
+}
