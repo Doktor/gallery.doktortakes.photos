@@ -421,6 +421,7 @@ class Photo(models.Model):
 
     taken = models.DateTimeField(editable=False)
     edited = models.DateTimeField(editable=False)
+    uploaded = models.DateTimeField(auto_now_add=True, editable=False)
 
     exif = JSONField(editable=False, blank=True)
 

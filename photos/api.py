@@ -227,8 +227,6 @@ def search_photos(request):
 
     if order not in ('taken', 'edited', 'uploaded'):
         order = 'taken'
-    elif order == 'uploaded':
-        order = 'pk'
 
     if params.get('direction') == 'new':
         order = f"-{order}"
