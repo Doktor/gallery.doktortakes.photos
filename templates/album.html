@@ -90,35 +90,34 @@
     </section>
   {% endif %}
 
-  {% with count=album.photos.count %}
-    <hr>
+  <hr>
 
-    <div id="about" data-count="{{ count }}" data-items-per-page="{{ items_per_page }}"></div>
+  <div id="about" data-count="{{ count }}" data-items-per-page="{{ items_per_page }}"></div>
 
-    {% if count %}
-      <h3 id="count">{{ count }} photo{{ count|pluralize }}</h3>
+  {% if count %}
+    <h3 id="count">{{ count }} photo{{ count|pluralize }}</h3>
 
-      <div class="pagination"></div>
-      <section id="photos">
-        {% for p in album.photos.all %}
-          <div class="wrapper">
-            <div class="photo">
-              <a href="{% url 'photo' album.get_path p.md5 %}">
-                <img class="loading"
-                     data-src="{{ p.thumbnail.url }}"
-                     src="{% static 'ring.svg' %}">
-              </a>
-            </div>
+    <div class="pagination"></div>
+    <section id="photos">
+      {% for p in album.photos.all %}
+        <div class="wrapper">
+          <div class="photo">
+            <a href="{% url 'photo' album.get_path p.md5 %}">
+              <img class="loading"
+                   data-src="{{ p.thumbnail.url }}"
+                   src="{% static 'ring.svg' %}">
+            </a>
           </div>
-        {% endfor %}
-      </section>
-      <div class="pagination"></div>
-    {% else %}
-      <p>This album does not contain any images.</p>
-    {% endif %}
-  {% endwith %}
+        </div>
+      {% endfor %}
+    </section>
+    <div class="pagination"></div>
+  {% else %}
+    <p>This album does not contain any images.</p>
+  {% endif %}
 
   <hr>
+
   <footer>
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
