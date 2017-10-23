@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block title %}Editing {{ album.name }} - {{ block.super }}{% endblock %}
+{% block title %}Editing {{ album.name }} | {{ block.super }}{% endblock %}
 
 {% block meta %}
   <meta name="robots" content="noindex, nofollow">
@@ -74,7 +74,7 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
         <li><a href="{% url 'edit' %}">Edit</a></li>
         {% for p in parents %}
           <li><a href="{{ p.get_edit_url }}">{{ p.name }}</a></li>

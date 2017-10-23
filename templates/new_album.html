@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}New Album - {{ block.super }}{% endblock %}
+{% block title %}New album | {{ block.super }}{% endblock %}
 
 {% block meta %}
   <meta name="robots" content="noindex, nofollow">
@@ -32,7 +32,7 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li><a href="{% url 'index' %}">Index</a></li>
+        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
         <li><a href="{% url 'edit' %}">Edit</a></li>
         <li><a href="{% url 'edit' %}">New</a></li>
       </ul>
