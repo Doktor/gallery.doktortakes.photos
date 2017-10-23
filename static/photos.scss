@@ -159,36 +159,6 @@ nav .breadcrumbs li {
   font-weight: 700;
 }
 
-// about
-.icon {
-  width: 100%;
-  margin: 1rem 0;
-  padding: 1rem;
-  border: 1px solid $borderColor;
-
-  @media (min-width: 601px) {
-    margin-left: 1rem;
-    width: 35%;
-    float: right;
-  }
-
-  &.large {
-    @media (min-width: 601px) {
-      margin-left: 1rem;
-      width: 45%;
-      float: right;
-    }
-  }
-
-  img {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
-
-  &:hover {
-    box-shadow: 0 0 0.5em white;
-  }
-}
 #count {
   text-align: left;
   margin-bottom: 0.5rem;

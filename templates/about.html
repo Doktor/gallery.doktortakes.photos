@@ -10,6 +10,10 @@
   <meta property="og:url" content="{{ BASE_URL }}{% url 'about' %}">
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'about.css' %}">
+{% endblock %}
+
 {% block classes %}small left{% endblock %}
 
 {% block content %}
