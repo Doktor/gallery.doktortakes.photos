@@ -13,6 +13,8 @@ function query_string(params) {
   return '?' + query;
 }
 
+const flashContainer = $('flash');
+
 const selected = [];
 const photos = $('photos');
 
@@ -24,6 +26,54 @@ const api = $('api');
 const API_EDIT_LIST = api.dataset.apiEditList;
 const API_DELETE_PHOTO = api.dataset.apiDeletePhoto;
 const API_DELETE_ALBUM = api.dataset.apiDeleteAlbum;
+
+const prefix = ' (';
+const suffix = ')';
+
+
+function flash(message) {
+  for (let i = 0; i < flashContainer.children.length; i++) {
+    let item = flashContainer.children[i];
+
+    if (item.children[0].innerText === message) {
+      let raw = item.children[1].innerText;
+      let count = raw.substring(prefix.length, raw.length - 1);
+
+      if (count === '') {
+        count = 2;
+      } else {
+        count = parseInt(count) + 1;
+      }
+
+      item.children[1].innerText = prefix + count.toString() + suffix;
+      return;
+    }
+  }
+
+  let flashEl = document.createElement('div');
+  flashEl.classList.add('flash');
+
+  let text = document.createElement('span');
+  text.innerText = message;
+  flashEl.appendChild(text);
+
+  let repeat = document.createElement('span');
+  flashEl.appendChild(repeat);
+
+  flashEl.addEventListener('click', function() {
+    flashEl.classList.remove('visible');
+
+    setTimeout(function() {
+      flashEl.parentNode.removeChild(flashEl);
+    }, 300);
+  });
+
+  flashContainer.appendChild(flashEl);
+
+  setTimeout(function() {
+    flashEl.classList.add('visible');
+  }, 100);
+}
 
 
 function delete_photos() {
@@ -46,6 +96,8 @@ function delete_photo(wrapper) {
       wrapper.remove();
       update_total();
       update_count();
+
+      flash("Deleted photo successfully.");
     }
   };
 
@@ -70,7 +122,11 @@ function delete_album() {
     let response = JSON.parse(request.responseText);
 
     if (response.success) {
-      window.location.href = API_EDIT_LIST;
+      flash("Deleted album successfully. Redirecting in 3 seconds...");
+
+      setTimeout(function() {
+        window.location.href = API_EDIT_LIST;
+      }, 3000);
     } else {
       alert(response.error);
     }
