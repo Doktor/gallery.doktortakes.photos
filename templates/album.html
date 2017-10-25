@@ -104,7 +104,7 @@
           <div class="photo">
             <a href="{% url 'photo' album.get_path p.md5 %}">
               <img class="loading"
-                   data-src="{{ p.thumbnail.url }}"
+                   data-src="{{ p.square_thumbnail.url }}"
                    src="{% static 'images/loading.svg' %}">
             </a>
           </div>

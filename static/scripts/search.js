@@ -133,7 +133,7 @@ function create_photo(p) {
   photo.appendChild(link);
 
   let image = document.createElement('img');
-  image.src = p.thumbnail_url;
+  image.src = p.square_thumbnail_url;
 
   link.appendChild(image);
 

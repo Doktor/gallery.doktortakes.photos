@@ -73,6 +73,7 @@ def generate_photo_dict(photo, index=None):
     return {
         'image_url': photo.image.url,
         'thumbnail_url': photo.thumbnail.url,
+        'square_thumbnail_url': photo.square_thumbnail.url,
         'url': photo.get_absolute_url(),
         'metadata': {
             'index': index,

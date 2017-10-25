@@ -383,6 +383,10 @@ def get_photo_thumbnail_path(photo, filename):
     return f"thumbs/{get_photo_path(photo, filename, ext='jpg')}"
 
 
+def get_photo_square_thumbnail_path(photo, filename):
+    return f"squares/{get_photo_path(photo, filename, ext='jpg')}"
+
+
 def generate_md5_hash(filename):
     h = hashlib.md5()
 
@@ -404,6 +408,8 @@ class Photo(models.Model):
 
     thumbnail = models.ImageField(
         upload_to=get_photo_thumbnail_path, editable=False)
+    square_thumbnail = models.ImageField(
+        upload_to=get_photo_square_thumbnail_path, editable=False)
     crop = models.CharField(
         max_length=1, default='C', choices=CROP,
         help_text="The side of the photo to crop the thumbnail to")
@@ -520,9 +526,9 @@ class Photo(models.Model):
 
 
 @receiver(pre_save, sender=Photo,
-          dispatch_uid='photos.models.update_photo_thumbnail')
-def update_photo_thumbnail(sender, instance, *args, **kwargs):
-    """Updates the thumbnail for a photo."""
+          dispatch_uid='photos.models.update_thumbnails')
+def update_photo_thumbnails(sender, instance, *args, **kwargs):
+    """Updates the thumbnails for a photo."""
     photo = instance
 
     # Don't regenerate thumbnails when renaming files
@@ -533,16 +539,22 @@ def update_photo_thumbnail(sender, instance, *args, **kwargs):
         previous = Photo.objects.get(pk=photo.pk)
     except Photo.DoesNotExist:
         tb = create_photo_thumbnail(photo)
+        sq = create_photo_square_thumbnail(photo)
     else:
         if previous.image != photo.image:
             tb = create_photo_thumbnail(photo)
+            sq = create_photo_square_thumbnail(photo)
         else:
             return
 
     if photo.thumbnail:
         photo.thumbnail.delete(save=False)
 
+    if photo.square_thumbnail:
+        photo.square_thumbnail.delete(save=False)
+
     photo.thumbnail.save(photo.filename, File(tb), save=False)
+    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
 
 
 @receiver(post_save, sender=Photo,
@@ -579,17 +591,58 @@ def rename_photo_files(sender, instance, created, *args, **kwargs):
     os.rename(old_path, image.path)
 
     # Rename the thumbnail file
-    thumbnail = photo.thumbnail
-    old_path = thumbnail.path
-    thumbnail.name = get_photo_thumbnail_path(photo, thumbnail.name)
-    os.rename(old_path, thumbnail.path)
+    tb = photo.thumbnail
+    old_path = tb.path
+    tb.name = get_photo_thumbnail_path(photo, tb.name)
+    os.rename(old_path, tb.path)
+
+    # Rename the square thumbnail file
+    sq = photo.square_thumbnail
+    old_path = sq.path
+    sq.name = get_photo_square_thumbnail_path(photo, sq.name)
+    os.rename(old_path, sq.path)
 
     photo._rename = True
     photo.save()
 
 
-def create_photo_thumbnail(photo, size=(400, 400)):
+def create_photo_thumbnail(photo):
     """Creates a thumbnail of the given photo."""
+    long, short = (2400 / 2, 1600 / 2)
+
+    photo.image.open()
+
+    image = PIL.Image.open(photo.image)
+
+    if image.format != 'JPEG':
+        image = image.convert('RGB')
+
+    w, h = image.size
+
+    if w >= h:
+        size = (long, short)
+
+    elif w < h:
+        size = (short, long)
+
+    # Upscale small images
+    if image.size < size:
+        w, h = image.size
+        ratio = max(size[0] / w, size[1] / h)
+        image = image.resize((w * ratio, h * ratio), PIL.Image.BICUBIC)
+
+    image.thumbnail(size)
+
+    data = BytesIO()
+    image.save(data, 'JPEG', quality=80, optimize=True)
+
+    photo.image.close()
+
+    return data
+
+
+def create_photo_square_thumbnail(photo, size=(400, 400)):
+    """Creates a square thumbnail of the given photo."""
     photo.image.open()
 
     image = PIL.Image.open(photo.image)

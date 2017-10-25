@@ -49,7 +49,7 @@
         {% for photo in featured %}
         <div class="item">
           <a href="{% url 'photo' photo.get_path photo.md5 %}">
-            <img src="{{ photo.image.url }}">
+            <img src="{{ photo.thumbnail.url }}">
           </a>
         </div>
         {% endfor %}
