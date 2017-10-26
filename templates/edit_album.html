@@ -109,11 +109,12 @@
   </section>
 
   <section>
-    <h2>Delete photos</h2>
+    <h2>Photos</h2>
+    {% if count or album.children.count %}
+    <h3>Delete photos</h3>
     <p class="warning">Delete photos from this album. Deletion cannot be undone!</p>
     <p>To delete photos, select them and press <strong>Delete</strong>.</p>
 
-    {% if count %}
     <div>
       <span id="total-count">{{ count }}</span> photo{{ count|pluralize }} in album,
       <span id="selected-count">0</span> photos selected
@@ -132,7 +133,12 @@
     <div>
       <button id="change-cover">Set cover</button>
     </div>
+    {% else %}
+    <p>This album does not contain any photos.</p>
+    {% endif %}
 
+    {% if count %}
+    <h2>Photos in this album</h2>
     <div id="photos">
       {% for p in photos %}
       <div class="wrapper" data-md5="{{ p.md5 }}">
@@ -142,9 +148,26 @@
       </div>
       {% endfor %}
     </div>
-    {% else %}
-    <p>This album does not contain any photos.</p>
     {% endif %}
+
+    {% if album.children.count %}
+    <h2>Photos in subalbums</h2>
+
+    {% for a in album.get_all_subalbums %}
+      {% if a.photos.count %}
+        <h3><a href="{{ a.get_edit_url }}">{{ a.name }}</a></h3>
+        <div class="children">
+        {% for p in a.photos.all %}
+          <div class="wrapper" data-md5="{{ p.md5 }}">
+            <div class="photo">
+              <img src="{{ p.square_thumbnail.url }}">
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
   </section>
 
   <section id="delete-album">

@@ -374,30 +374,40 @@ function deselect(el) {
   }
 }
 
+function toggle() {
+  !this.classList.contains('selected') ? select(this) : deselect(this);
+  update_count();
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
-  if (photos === null) {
-    return;
-  }
+  if (photos !== null) {
+    for (let photo of photos.children) {
+      photo.addEventListener('click', toggle);
+    }
 
-  for (let photo of photos.children) {
-    photo.addEventListener('click', function() {
-      !this.classList.contains('selected') ? select(this) : deselect(this);
+    $('select-all').addEventListener('click', function() {
+      Array.from(photos.children).forEach(select);
+      update_count();
+    });
+
+    $('select-none').addEventListener('click', function() {
+      Array.from(photos.children).forEach(deselect);
       update_count();
     });
   }
 
-  $('delete-photos').addEventListener('click', delete_photos);
+  let subalbums = document.getElementsByClassName('children');
 
-  $('select-all').addEventListener('click', function() {
-    Array.from(photos.children).forEach(select);
-    update_count();
-  });
+  for (let container of subalbums) {
+    for (let photo of container.children) {
+      photo.addEventListener('click', toggle);
+    }
+  }
 
-  $('select-none').addEventListener('click', function() {
-    Array.from(photos.children).forEach(deselect);
-    update_count();
-  });
+  if (!(photos === null && subalbums.length === 0)) {
+    $('delete-photos').addEventListener('click', delete_photos);
+  }
 });
 
 $('delete-album-submit').addEventListener('click', delete_album);

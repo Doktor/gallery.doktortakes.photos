@@ -5,7 +5,7 @@ from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET
 
 from photos.context_processors import metadata as m
 from photos.forms import AlbumForm
@@ -136,21 +136,20 @@ def album(request, path):
     return render(request, 'album.html', context)
 
 
+@require_GET
 @login_required
 def edit_album(request, path):
     """Renders the edit album page."""
+    a = get_album_by_path(path)
 
-    if request.method == 'GET':
-        a = get_album_by_path(path)
+    context = {
+        'album': a,
+        'photos': a.photos.all(),
+        'count': a.photos.count(),
+        'parents': get_albums_from_path(path)[:-1],
+    }
 
-        context = {
-            'album': a,
-            'photos': a.photos.all(),
-            'count': a.photos.count(),
-            'parents': get_albums_from_path(path)[:-1],
-        }
-
-        return render(request, "edit_album.html", context)
+    return render(request, "edit_album.html", context)
 
 
 def photo(request, path, md5):

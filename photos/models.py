@@ -90,6 +90,28 @@ class Album(models.Model):
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
 
+    def get_all_subalbums(self, include_self=False):
+        albums = []
+
+        if include_self:
+            albums.append(self)
+
+        for album in self.children.all():
+            albums += album.get_all_subalbums(include_self=True)
+
+        return albums
+
+    def get_all_subphotos(self, include_self=False):
+        photos = []
+
+        if include_self:
+            photos += list(Photo.objects.filter(album=self))
+
+        for album in self.children.all():
+            photos += album.get_all_subphotos(include_self=True)
+
+        return photos
+
     def get_full_date(self):
         """Returns this album's date, including its end date if specified,
         as a string."""
