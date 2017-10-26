@@ -113,6 +113,10 @@ class AlbumView(LoginRequiredMixin, View):
             setattr(album, key, data.get(key))
 
         for key in ('start', 'end'):
+            if key == 'end' and not data.get(key, ''):
+                album.end = None
+                continue
+
             try:
                 date = datetime.strptime(data.get(key), "%Y-%m-%d").date()
             except ValueError:
