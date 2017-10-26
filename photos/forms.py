@@ -14,4 +14,4 @@ class AlbumForm(forms.ModelForm):
     class Meta:
         model = Album
         fields = ['name', 'location', 'description', 'start', 'end',
-                  'cover', 'crop', 'parent']
+                  'cover', 'parent']

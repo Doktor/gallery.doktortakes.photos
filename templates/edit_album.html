@@ -62,13 +62,9 @@
 
     <div id="cover">
       {% if album.cover %}
-        {% with link=album.thumbnail.url %}
-          <a href="{{ link }}" target="_blank" title="Full size">
-            <img src="{{ link }}">
-          </a>
-        {% endwith %}
-        <span class="full-size"><a href="{{ album.cover.image.url }}">Original image</a>
-        </span>
+        <a href="{{ album.cover.image.url }}" target="_blank" title="Full size">
+          <img src="{{ album.cover.thumbnail.url }}">
+        </a>
       {% else %}
         <div class="no-cover">
           <span class="note">This album does not have a cover.</span>

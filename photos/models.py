@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.signals import pre_save, pre_delete, post_save
 from django.dispatch import receiver
@@ -58,13 +57,6 @@ def get_modified_time_utc(filename):
 # Album
 
 
-def get_cover_folder(album, original_name):
-    """Returns the upload path for an album cover thumbnail."""
-    _, ext = os.path.splitext(original_name)
-    return "albums/{name}.{ext}".format(
-        name=album.get_path(divider='_'), ext=ext.lstrip('.'))
-
-
 class Album(models.Model):
     """A collection of photos and albums."""
 
@@ -85,11 +77,6 @@ class Album(models.Model):
         'Photo', models.SET_NULL,
         related_name='cover_for', blank=True, null=True,
         help_text="The cover photo for this album")
-    thumbnail = models.ImageField(
-        upload_to=get_cover_folder, blank=True, null=True)
-    crop = models.CharField(
-        max_length=1, default='C', choices=CROP,
-        help_text="The side of the photo to crop the cover thumbnail to")
 
     parent = models.ForeignKey(
         'self', models.SET_NULL,
@@ -208,157 +195,15 @@ def update_album_name(sender, instance, *args, **kwargs):
         finally:
             del photo._rename
 
-    if album.thumbnail:
-        try:
-            album._rename = True
-
-            album.thumbnail.open()
-            thumb = ContentFile(album.thumbnail.read())
-            album.thumbnail.close()
-
-            album.thumbnail.save(album.cover.filename, thumb, save=False)
-        finally:
-            del album._rename
-
-
-@receiver(pre_save, sender=Album,
-          dispatch_uid="photos.models.update_album_cover")
-def update_album_cover(sender, instance, *args, **kwargs):
-    """Updates the cover thumbnail for an album."""
-    album = instance
-
-    # Don't regenerate thumbnails when renaming files
-    if hasattr(album, '_rename'):
-        return
-
-    try:
-        old = Album.objects.get(pk=album.pk)
-    except Album.DoesNotExist:
-        if not album.cover:
-            return
-        else:
-            thumb = create_album_thumbnail(album)
-    else:
-        if (album.cover and not album.thumbnail) or \
-                (old.cover != album.cover) or \
-                (old.crop != album.crop):
-            thumb = create_album_thumbnail(album)
-        else:
-            return
-
-    if album.thumbnail:
-        album.thumbnail.delete(save=False)
-
-    album.thumbnail.save(album.cover.filename, File(thumb), save=False)
-
 
 @receiver(pre_delete, sender=Album, dispatch_uid="photos.models.delete_album")
 def delete_album(sender, instance, *args, **kwargs):
     """Deletes related files when an album is deleted."""
     album = instance
 
-    if album.thumbnail:
-        album.thumbnail.delete(save=False)
-
     for photo in album.photos.all():
         photo.image.delete(save=False)
         photo.thumbnail.delete(save=False)
-
-
-def create_album_thumbnail(album, size=(800, 600)):
-    """Creates a cover for the given album."""
-    album.cover.image.open()
-
-    image = PIL.Image.open(album.cover.image)
-    crop = album.crop
-
-    if image.format != 'JPEG':
-        image = image.convert('RGB')
-
-    # Upscale small images
-    if image.size < size:
-        w, h = image.size
-        ratio = max(size[0] / w, size[1] / h)
-        image = image.resize((w * ratio, h * ratio), PIL.Image.BICUBIC)
-
-    w, h = image.size
-
-    mid_w = w * 1 / 2
-    mid_h = h * 1 / 2
-
-    new_w = h * 4 / 3
-    new_h = w * 3 / 4
-
-    if w > h:
-        if w >= new_w:
-            y1 = 0
-            y2 = h
-            if crop in ['C', 'U', 'D']:
-                x1 = mid_w - new_w * 1 / 2
-                x2 = mid_w + new_w * 1 / 2
-            elif crop == 'L':
-                x1 = 0
-                x2 = new_w
-            elif crop == 'R':
-                x1 = w - new_w
-                x2 = w
-        else:
-            x1 = 0
-            x2 = w
-            if crop in ['C', 'L', 'R']:
-                y1 = mid_h - new_h * 1 / 2
-                y2 = mid_h + new_h * 1 / 2
-            elif crop == 'U':
-                y1 = 0
-                y2 = new_h
-            elif crop == 'D':
-                y1 = h - new_h
-                y2 = h
-    elif w < h:
-        if h >= new_h:
-            x1 = 0
-            x2 = w
-            if crop in ['C', 'L', 'R']:
-                y1 = mid_h - new_h * 1 / 2
-                y2 = mid_h + new_h * 1 / 2
-            elif crop == 'U':
-                y1 = 0
-                y2 = new_h
-            elif crop == 'D':
-                y1 = h - new_h
-                y2 = h
-        else:
-            y1 = 0
-            y2 = h
-            if crop in ['C', 'U', 'D']:
-                x1 = mid_w - new_w * 1 / 2
-                x2 = mid_w + new_w * 1 / 2
-            elif crop == 'L':
-                x1 = 0
-                x2 = new_w
-            elif crop == 'R':
-                x1 = w - new_w
-                x2 = w
-    elif w == h:
-        x1 = 0
-        x2 = w
-        y1 = mid_h - new_h * 1 / 2
-        y2 = mid_h + new_h * 1 / 2
-
-    bounds = map(int, (x1, y1, x2, y2))
-    image = image.crop(bounds)
-    image.thumbnail(size, PIL.Image.ANTIALIAS)
-
-    # Fixes rounding errors
-    bounds = (0, 0, size[0], size[1])
-    image = image.crop(bounds)
-
-    data = BytesIO()
-    image.save(data, "JPEG", quality=75, optimize=True)
-
-    album.cover.image.close()
-
-    return data
 
 
 # Photo

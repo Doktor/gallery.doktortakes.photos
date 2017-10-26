@@ -20,21 +20,21 @@ class AlbumAdmin(admin.ModelAdmin):
                        'start', 'end', 'parent'),
         }),
         ('Cover photo', {
-            'fields': ('cover', 'thumbnail', 'crop', 'preview')
+            'fields': ('cover', 'preview')
         }),
     )
     list_display = ('name', 'location', 'start', 'end',
                     'description', 'get_path')
     ordering = ('-start',)
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('thumbnail', 'preview')
+    readonly_fields = ('preview',)
     search_fields = ('name', 'location', 'description')
 
     def preview(self, album):
         """Creates a HTML element to preview the cover photo."""
         if album.cover:
             return format_html('<a href="{}"><img height="300" src="{}"></a>',
-                               album.cover.image.url, album.thumbnail.url)
+                               album.cover.image.url, album.cover.thumbnail.url)
 
     preview.short_description = 'Preview'
 

@@ -4,7 +4,7 @@
     <div class="album">
       <a href="{{ link }}">
         {% if album.cover %}
-          <img src="{{ album.cover.image.url }}" title="{{ album.name }}">
+          <img src="{{ album.cover.thumbnail.url }}" title="{{ album.name }}">
         {% else %}
           <div class="no-cover">
             <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">

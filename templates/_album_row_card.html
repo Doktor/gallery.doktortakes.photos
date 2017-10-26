@@ -8,7 +8,7 @@
     <div class="album-row clearfix">
       <div class="cover">
         {% if album.cover %}
-          <img src="{{ album.thumbnail.url }}">
+          <img src="{{ album.cover.thumbnail.url }}">
         {% else %}
           <div class="no-cover">
             <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
