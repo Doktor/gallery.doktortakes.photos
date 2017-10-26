@@ -5,22 +5,13 @@ from django.urls import reverse
 from django.views import View
 from django.views.decorators.http import require_GET
 
-from photos.models import Album, Photo
+from photos.models import Photo
 from photos.settings import ITEMS_PER_PAGE
 from photos.views import get_album_by_path
 
 from pytz import timezone
 
-
-class APIError(Exception):
-    def __init__(self, message, status=400):
-        super().__init__(message)
-
-        self.message = message
-        self.status = status
-
-    def to_response(self):
-        return JsonResponse({'error': self.message}, status=self.status)
+from .utils import APIError, get_photo_from_request
 
 
 def f_stop(f):
@@ -93,51 +84,6 @@ def photo_to_response(photo):
     return JsonResponse(generate_photo_dict(photo))
 
 
-def get_photo_from_request(request):
-    params = request.GET
-
-    try:
-        path = params.get('path')
-        md5 = params.get('md5')
-    except KeyError:
-        raise APIError("Missing parameters: 'path' and 'md5' are required.")
-
-    try:
-        album = get_album_by_path(path)
-        photo = Photo.objects.get(album=album, md5=md5)
-    except Photo.DoesNotExist:
-        raise APIError("Photo does not exist.", status=404)
-
-    return photo
-
-
-def get_album_from_request(request):
-    params = request.GET
-
-    try:
-        path = params.get('path')
-    except KeyError:
-        raise APIError("Missing parameters: 'path' is required.")
-
-    try:
-        album = get_album_by_path(path)
-    except Album.DoesNotExist:
-        raise APIError("Album does not exist.", status=404)
-
-    return album
-
-
-@require_GET
-def get_album_photos(request):
-    album = get_album_from_request(request)
-    photos = []
-
-    for index, photo in enumerate(album.photos.all().order_by('taken')):
-        photos.append(generate_photo_dict(photo, index))
-
-    return JsonResponse({'photos': photos})
-
-
 class PhotoView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         try:
@@ -168,27 +114,6 @@ class PhotoView(LoginRequiredMixin, View):
                 'success': False,
                 'error': "An unknown error occurred when deleting image files."
             })
-
-
-class AlbumView(LoginRequiredMixin, View):
-    def delete(self, request, *args, **kwargs):
-        try:
-            album = get_album_from_request(request)
-        except APIError as e:
-            return e.to_response()
-
-        if request.GET.get('name') != album.name:
-            return JsonResponse({
-                'success': False,
-                'error': "Incorrect album name.",
-            })
-
-        album.delete()
-
-        return JsonResponse({
-            'success': True,
-            'message': "Album deleted successfully. Redirecting...",
-        })
 
 
 def navigate(request, method):
