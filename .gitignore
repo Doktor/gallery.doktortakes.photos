@@ -27,3 +27,6 @@ photos/migrations/
 
 # Other data
 data/taglines.txt
+
+# Backups
+*.bak
