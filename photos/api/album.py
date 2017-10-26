@@ -9,6 +9,7 @@ from datetime import datetime
 from json import JSONDecodeError
 
 from photos.context_processors import metadata
+from photos.models import Photo
 
 from .photo import generate_photo_dict
 from .utils import APIError, get_album_from_request
@@ -32,6 +33,12 @@ def generate_album_dict(album, method='GET'):
         'end': end,
     }
 
+    if album.cover:
+        response['cover'] = {
+            'url': album.cover.image.url,
+            'thumbnail_url': album.cover.thumbnail.url,
+        }
+
     if method == 'PUT':
         response.update({
             'edit_url': album.get_edit_url(),
@@ -44,6 +51,19 @@ def generate_album_dict(album, method='GET'):
 class AlbumView(LoginRequiredMixin, View):
     required = (('name', 'album name'), ('start', 'start date'))
 
+    def _get_data(self, request):
+        content_type = request.META.get('CONTENT_TYPE', '')
+
+        if not content_type.startswith('application/json'):
+            raise APIError("Invalid content type.")
+
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except JSONDecodeError:
+            raise APIError("Invalid JSON data.")
+
+        return data
+
     def get(self, request, *args, **kwargs):
         try:
             album = get_album_from_request(request)
@@ -52,18 +72,34 @@ class AlbumView(LoginRequiredMixin, View):
 
         return JsonResponse(generate_album_dict(album))
 
+    def patch(self, request, *args, **kwargs):
+        try:
+            data = self._get_data(request)
+            album = get_album_from_request(request)
+        except APIError as e:
+            return e.to_response()
+
+        md5 = data.get('md5')
+
+        if not md5:
+            return JsonResponse({})
+
+        try:
+            photo = Photo.objects.get(md5=md5)
+        except Photo.DoesNotExist:
+            return JsonResponse({'error': "Photo does not exist."}, status=400)
+
+        album.cover = photo
+        album.save()
+
+        response = generate_album_dict(album, method='PUT')
+        response['message'] = "Album cover changed successfully."
+
+        return JsonResponse(response)
+
     def put(self, request, *args, **kwargs):
-        content_type = request.META.get('CONTENT_TYPE', '')
-
-        if not content_type.startswith('application/json'):
-            return JsonResponse({'error': "Invalid content type."}, status=400)
-
         try:
-            data = json.loads(request.body.decode('utf-8'))
-        except JSONDecodeError:
-            return JsonResponse({'error': "Invalid JSON data."}, status=400)
-
-        try:
+            data = self._get_data(request)
             album = get_album_from_request(request)
         except APIError as e:
             return e.to_response()

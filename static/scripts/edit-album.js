@@ -49,9 +49,17 @@ String.prototype.format = function() {
   return str;
 };
 
+Node.prototype.clearChildren = function() {
+  while (this.firstChild) {
+    this.removeChild(this.firstChild);
+  }
+};
+
 const flashContainer = $('flash');
 
 const form = $('form');
+
+const cover = $('cover');
 
 const selected = [];
 const photos = $('photos');
@@ -215,6 +223,60 @@ function populate_edit_form() {
 document.addEventListener('DOMContentLoaded', function() {
   populate_edit_form();
 });
+
+
+function change_cover() {
+  if (selected.length !== 1) {
+    return;
+  }
+
+  let request = new XMLHttpRequest();
+
+  request.onreadystatechange = function() {
+    if (request.readyState !== 4) {
+      return;
+    }
+
+    let response = JSON.parse(request.responseText);
+
+    if (request.status !== 200) {
+      flash(response.error);
+    } else {
+      flash(response.message);
+
+      let fragment = document.createDocumentFragment();
+
+      let a = document.createElement('a');
+      a.href = response.cover.url;
+      a.target = '_blank';
+      a.title = 'Full size';
+
+      let img = document.createElement('img');
+      img.src = response.cover.thumbnail_url;
+
+      a.appendChild(img);
+      fragment.appendChild(a);
+
+      cover.clearChildren();
+      cover.appendChild(fragment);
+    }
+  };
+
+  let params = { 'path': api.dataset.albumPath };
+  let url = API_ALBUM + query_string(params);
+
+  let data = {
+    md5: selected[0].dataset.md5
+  };
+
+  request.open("PATCH", url, true);
+  request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+  request.send(JSON.stringify(data));
+}
+
+
+$('change-cover').addEventListener('click', change_cover);
 
 
 function delete_photos() {
