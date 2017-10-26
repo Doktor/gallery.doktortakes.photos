@@ -63,9 +63,13 @@ class Album(models.Model):
 
     name = models.CharField(max_length=256)
     slug = models.SlugField(max_length=256)
+
+    place = models.CharField(
+        max_length=128, blank=True,
+        help_text="The specific venue, building, or place")
     location = models.CharField(
         max_length=128, blank=True,
-        help_text="Where the photos in this album were taken")
+        help_text="The city, state, and country")
     timezone = models.CharField(max_length=100, default='US/Eastern')
     description = models.CharField(
         max_length=1000, blank=True,
@@ -123,6 +127,16 @@ class Album(models.Model):
                 start=formatter.format(date=self.start),
                 end=formatter.format(date=self.end))
         return mark_safe(date)
+
+    def get_full_location(self):
+        if self.place and self.location:
+            return f"{self.place}, {self.location}"
+        elif self.place:
+            return self.place
+        elif self.location:
+            return self.location
+
+        return ''
 
     def get_path(self, previous='', divider='/'):
         """Returns the path to this album."""

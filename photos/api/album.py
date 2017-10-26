@@ -109,7 +109,7 @@ class AlbumView(LoginRequiredMixin, View):
                 return JsonResponse(
                     {'error': f"The {name} can't be empty."}, status=400)
 
-        for key in ('name', 'location', 'description'):
+        for key in ('name', 'place', 'location', 'description'):
             setattr(album, key, data.get(key))
 
         for key in ('start', 'end'):
