@@ -7,8 +7,9 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
-from photos import settings
 from photos.fields import JSONField
+from photos.settings import (
+    MEDIA_ROOT, PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER)
 
 import datetime
 import exifread
@@ -155,39 +156,47 @@ def update_album_name(sender, instance, *args, **kwargs):
     except Album.DoesNotExist:
         return
     else:
-        if old.name == album.name:
+        # Capitalization changes don't affect paths
+        if old.name.lower() == album.name.lower():
+            return
+
+        # Punctuation changes don't affect paths
+        if old.slug == album.slug:
             return
 
     old_path = old.get_path()
     new_path = album.get_path()
 
-    # Rename the media folder
-    old_media = os.path.join(settings.MEDIA_ROOT, old_path)
-    new_media = os.path.join(settings.MEDIA_ROOT, new_path)
+    # Move the media folders
+    folders = [PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER]
 
-    try:
-        os.rename(old_media, new_media)
-    except FileNotFoundError as e:
-        raise e
+    for folder in folders:
+        base = os.path.join(MEDIA_ROOT, folder)
+        old_dir = os.path.join(base, old_path)
+        new_dir = os.path.join(base, new_path)
 
-    # Rename the thumbnails folder
-    old_thumb = os.path.join(
-        settings.MEDIA_ROOT, settings.THUMBNAIL_FOLDER, old_path)
-    new_thumb = os.path.join(
-        settings.MEDIA_ROOT, settings.THUMBNAIL_FOLDER, new_path)
+        try:
+            os.rename(old_dir, new_dir)
+        except FileNotFoundError as e:
+            if album.photos.count() != 0:
+                raise e
 
-    try:
-        os.rename(old_thumb, new_thumb)
-    except FileNotFoundError as e:
-        raise e
-
-    # Update the paths of all the photos in the album
+    # Update photo file paths
     for photo in Photo.objects.filter(album=album):
         photo.image.name = os.path.join(
-            new_path, os.path.basename(photo.image.name))
+            PHOTOS_FOLDER,
+            new_path,
+            os.path.basename(photo.image.name))
+
         photo.thumbnail.name = os.path.join(
-            settings.THUMBNAIL_FOLDER, new_path,
+            THUMBNAILS_FOLDER,
+            new_path,
             os.path.basename(photo.thumbnail.name))
+
+        photo.square_thumbnail.name = os.path.join(
+            SQUARES_FOLDER,
+            new_path,
+            os.path.basename(photo.square_thumbnail.name))
 
         try:
             photo._rename = True
@@ -221,15 +230,15 @@ def get_photo_path(photo, filename, ext=None):
 
 
 def get_photo_image_path(photo, filename):
-    return f"photos/{get_photo_path(photo, filename)}"
+    return f"{PHOTOS_FOLDER}/{get_photo_path(photo, filename)}"
 
 
 def get_photo_thumbnail_path(photo, filename):
-    return f"thumbs/{get_photo_path(photo, filename, ext='jpg')}"
+    return f"{THUMBNAILS_FOLDER}/{get_photo_path(photo, filename, ext='jpg')}"
 
 
 def get_photo_square_thumbnail_path(photo, filename):
-    return f"squares/{get_photo_path(photo, filename, ext='jpg')}"
+    return f"{SQUARES_FOLDER}/{get_photo_path(photo, filename, ext='jpg')}"
 
 
 def generate_md5_hash(filename):
@@ -310,7 +319,7 @@ class Photo(models.Model):
 
         self.image.open()
 
-        filename = os.path.join(settings.MEDIA_ROOT, self.image.name)
+        filename = os.path.join(MEDIA_ROOT, self.image.name)
 
         # File size
         self.file_size = format_file_size(self.image.size)

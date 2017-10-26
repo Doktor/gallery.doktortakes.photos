@@ -119,10 +119,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-
-# Thumbnails
-
-THUMBNAIL_FOLDER = 'thumbs'
+PHOTOS_FOLDER = 'photos'
+THUMBNAILS_FOLDER = 'thumbs'
+SQUARES_FOLDER = 'squares'
 
 
 # Index page
