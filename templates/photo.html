@@ -82,7 +82,12 @@
         <div>
           <span title="Location and timezone"><i class="fa fa-map-marker"></i></span>
           <span>
-            <span id="md-location">{{ album.location }}</span> (<span id="md-timezone">{{ album.timezone }}</span>)
+            {% if album.location %}
+            <span id="md-location">{{ album.location }}</span>
+            {% else %}
+            <span class="note" id="md-location">No location specified</span>
+            {% endif %}
+            (<span id="md-timezone">{{ album.timezone }}</span>)
           </span>
         </div>
 
