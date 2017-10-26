@@ -418,9 +418,12 @@ def update_photo_thumbnails(sender, instance, *args, **kwargs):
         tb = create_photo_thumbnail(photo)
         sq = create_photo_square_thumbnail(photo)
     else:
-        if previous.image != photo.image:
+        if previous.image != photo.image or hasattr(photo, '_resave'):
             tb = create_photo_thumbnail(photo)
             sq = create_photo_square_thumbnail(photo)
+
+            if hasattr(photo, '_resave'):
+                del photo._resave
         else:
             return
 
