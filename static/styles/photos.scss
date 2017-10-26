@@ -145,11 +145,11 @@ nav .breadcrumbs li {
 
     @include fade();
   }
+}
 
-  + div {
-    margin-top: $spacing;
-    margin-bottom: $spacing * 2;
-  }
+.view-more {
+  margin-top: 10px;
+  margin-bottom: 10px * 2;
 }
 
 .note {
