@@ -192,24 +192,28 @@ function deselect(el) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (photos === null) {
+    return;
+  }
+
   for (let photo of photos.children) {
     photo.addEventListener('click', function() {
       !this.classList.contains('selected') ? select(this) : deselect(this);
       update_count();
     });
   }
-});
 
-$('delete-photos').addEventListener('click', delete_photos);
+  $('delete-photos').addEventListener('click', delete_photos);
 
-$('select-all').addEventListener('click', function() {
-  Array.from(photos.children).forEach(select);
-  update_count();
-});
+  $('select-all').addEventListener('click', function() {
+    Array.from(photos.children).forEach(select);
+    update_count();
+  });
 
-$('select-none').addEventListener('click', function() {
-  Array.from(photos.children).forEach(deselect);
-  update_count();
+  $('select-none').addEventListener('click', function() {
+    Array.from(photos.children).forEach(deselect);
+    update_count();
+  });
 });
 
 $('delete-album-submit').addEventListener('click', delete_album);
