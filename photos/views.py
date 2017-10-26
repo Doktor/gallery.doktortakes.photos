@@ -142,26 +142,15 @@ def edit_album(request, path):
 
     if request.method == 'GET':
         a = get_album_by_path(path)
-        form = AlbumForm(instance=a)
 
         context = {
             'album': a,
             'photos': a.photos.all(),
             'count': a.photos.count(),
             'parents': get_albums_from_path(path)[:-1],
-            'form': form,
         }
 
         return render(request, "edit_album.html", context)
-
-    elif request.method == 'POST':
-        a = get_album_by_path(path)
-
-        form = AlbumForm(request.POST, instance=a)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Album updated successfully.")
-            return redirect('edit_album', path=a.get_path())
 
 
 def photo(request, path, md5):

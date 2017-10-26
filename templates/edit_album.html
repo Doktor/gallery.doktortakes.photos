@@ -23,13 +23,13 @@
         {% for item in parents %}
           <li><a href="{{ item.get_edit_url }}">{{ item.name }}</a></li>
         {% endfor %}
-        <li><a href="{{ album.get_edit_url }}">{{ album.name }}</a>
+        <li><a id="album-edit-link" href="{{ album.get_edit_url }}">{{ album.name }}</a>
         </li>
       </ul>
     </nav>
 
-    <h2>{{ album.name }}</h2>
-    <a href="{{ album.get_absolute_url }}" target="_blank">View on site</a>
+    <h2 id="album-name">{{ album.name }}</h2>
+    <a id="album-link" href="{{ album.get_absolute_url }}" target="_blank">View on site</a>
   </header>
 
   {% if messages %}
@@ -42,21 +42,42 @@
 
   <div id="flash"></div>
 
+  <div id="api"
+       data-album-path="{{ album.get_path }}"
+       data-api-album="{% url 'api_album' %}"
+       data-api-edit-list="{% url 'edit' %}"
+       data-api-delete-photo="{% url 'api_photo' %}"></div>
+
   <section class="clearfix">
     <h2>Edit details</h2>
-    <div id="edit">
-      <form method="post" action="{{ album.get_edit_url }}">
-        {% csrf_token %}
-
-        {% for field in form %}
+    <div id="edit-form-container">
+      <form id="form">
         <div class="row">
-          {{ field.errors }}
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          <div class="field-wrapper">{{ field }}</div>
+          <label for="f-name">Name</label>
+          <input name="name" maxlength="256" id="f-name" type="text" required>
         </div>
-        {% endfor %}
 
-        <input type="submit" value="Save">
+        <div class="row">
+          <label for="f-location">Location</label>
+          <input name="location" maxlength="128" id="f-location" type="text">
+        </div>
+
+        <div class="row">
+          <label for="f-description">Description</label>
+          <input name="description" maxlength="1000" id="f-description" type="text">
+        </div>
+
+        <div class="row">
+          <label for="f-start">Start</label>
+          <input name="start" id="f-start" type="text" required>
+        </div>
+
+        <div class="row">
+          <label for="f-end">End</label>
+          <input name="end" id="f-end" type="text">
+        </div>
+
+        <button id="edit-album-submit" type="button">Save</button>
       </form>
     </div>
 
@@ -86,12 +107,6 @@
       </form>
     </div>
   </section>
-
-  <div id="api"
-       data-album-path="{{ album.get_path }}"
-       data-api-edit-list="{% url 'edit' %}"
-       data-api-delete-photo="{% url 'api_photo' %}"
-       data-api-delete-album="{% url 'api_album' %}"></div>
 
   <section>
     <h2>Delete photos</h2>

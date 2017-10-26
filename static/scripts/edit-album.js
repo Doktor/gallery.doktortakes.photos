@@ -32,7 +32,26 @@ function query_string(params) {
   return '?' + query;
 }
 
+String.prototype.format = function() {
+  "use strict";
+  let str = this.toString();
+  if (arguments.length) {
+    let t = typeof arguments[0];
+    let key;
+    let args = ("string" === t || "number" === t) ?
+        Array.prototype.slice.call(arguments) : arguments[0];
+
+    for (key in args) {
+      str = str.replace(new RegExp("\\{" + key + "\\}", "gi"), args[key]);
+    }
+  }
+
+  return str;
+};
+
 const flashContainer = $('flash');
+
+const form = $('form');
 
 const selected = [];
 const photos = $('photos');
@@ -42,9 +61,9 @@ const selectedCount = $('selected-count');
 
 const api = $('api');
 
+const API_ALBUM = api.dataset.apiAlbum;
 const API_EDIT_LIST = api.dataset.apiEditList;
 const API_DELETE_PHOTO = api.dataset.apiDeletePhoto;
-const API_DELETE_ALBUM = api.dataset.apiDeleteAlbum;
 
 const prefix = ' (';
 const suffix = ')';
@@ -93,6 +112,109 @@ function flash(message) {
     flashEl.classList.add('visible');
   }, 100);
 }
+
+
+function parse_form() {
+  let data = new FormData(form);
+  let params = {};
+
+  // Parse form data
+  for (let pair of data.entries()) {
+    let key = pair[0], value = pair[1];
+
+    if (key in params) {
+      if (Array.isArray(params[key])) {
+        params[key].push(value);
+      } else{
+        params[key] = [params[key], value]
+      }
+    } else {
+      params[key] = value;
+    }
+  }
+
+  return params;
+}
+
+
+function update_album() {
+  let data = parse_form();
+
+  let request = new XMLHttpRequest();
+
+  request.onreadystatechange = function() {
+    if (request.readyState !== 4) {
+      return;
+    }
+
+    let response = JSON.parse(request.responseText);
+
+    if (request.status !== 200) {
+      flash(response.error);
+    } else {
+      flash(response.message);
+
+      api.dataset.albumPath = response.path;
+
+      let name = response.name;
+
+      let edit = $('album-edit-link');
+      edit.href = response.edit_url;
+      edit.innerText = name;
+
+      $('album-name').innerText = name;
+      $('album-link').href = response.url;
+
+      window.history.replaceState('', response.title, response.edit_url);
+    }
+  };
+
+  let params = { 'path': api.dataset.albumPath };
+  let url = API_ALBUM + query_string(params);
+
+  request.open("PUT", url, true);
+  request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+  request.send(JSON.stringify(data));
+}
+
+$('edit-album-submit').addEventListener('click', update_album);
+
+
+function populate_edit_form() {
+  let request = new XMLHttpRequest();
+
+  request.onreadystatechange = function() {
+    if (request.readyState !== 4 || request.status !== 200) {
+      return;
+    }
+
+    let response = JSON.parse(request.responseText);
+
+    for (let [key, value] of Object.entries(response)) {
+      let selector = 'input[name="{0}"]'.format(key);
+
+      let inputs = form.querySelectorAll(selector);
+      let n = inputs.length;
+
+      if (n === 1) {
+        let el = inputs[0];
+        el.value = value;
+      }
+    }
+  };
+
+  let params = { 'path': api.dataset.albumPath };
+  let url = API_ALBUM + query_string(params);
+
+  request.open("GET", url, true);
+  request.send();
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  populate_edit_form();
+});
 
 
 function delete_photos() {
@@ -158,7 +280,7 @@ function delete_album() {
     'name': $('delete-album-name').value,
     'path': api.dataset.albumPath,
   };
-  let url = API_DELETE_ALBUM + query_string(params);
+  let url = API_ALBUM + query_string(params);
 
   request.open("DELETE", url, true);
   request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));

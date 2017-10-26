@@ -130,7 +130,8 @@ class Album(models.Model):
 
     def clean(self):
         if self.end is not None and self.end < self.start:
-            raise ValidationError("End date should be after start date")
+            raise ValidationError(
+                "The end date should be later than the start date.")
         super().clean()
 
     def save(self, *args, **kwargs):

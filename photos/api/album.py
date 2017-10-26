@@ -1,13 +1,102 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.http import require_GET
 
+import json
+from datetime import datetime
+from json import JSONDecodeError
+
+from photos.context_processors import metadata
+
 from .photo import generate_photo_dict
 from .utils import APIError, get_album_from_request
 
+m = metadata(None)
+
+
+def generate_album_dict(album, method='GET'):
+    if album.end:
+        end = album.end.strftime("%Y-%m-%d")
+    else:
+        end = None
+
+    response = {
+        'url': album.get_absolute_url(),
+        'path': album.get_path(),
+        'name': album.name,
+        'location': album.location,
+        'description': album.description,
+        'start': album.start.strftime("%Y-%m-%d"),
+        'end': end,
+    }
+
+    if method == 'PUT':
+        response.update({
+            'edit_url': album.get_edit_url(),
+            'title': f"Editing {album.name} | {m.get('TITLE')}"
+        })
+
+    return response
+
 
 class AlbumView(LoginRequiredMixin, View):
+    required = (('name', 'album name'), ('start', 'start date'))
+
+    def get(self, request, *args, **kwargs):
+        try:
+            album = get_album_from_request(request)
+        except APIError as e:
+            return e.to_response()
+
+        return JsonResponse(generate_album_dict(album))
+
+    def put(self, request, *args, **kwargs):
+        content_type = request.META.get('CONTENT_TYPE', '')
+
+        if not content_type.startswith('application/json'):
+            return JsonResponse({'error': "Invalid content type."}, status=400)
+
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except JSONDecodeError:
+            return JsonResponse({'error': "Invalid JSON data."}, status=400)
+
+        try:
+            album = get_album_from_request(request)
+        except APIError as e:
+            return e.to_response()
+
+        for key, name in self.required:
+            if not data.get(key, ''):
+                return JsonResponse(
+                    {'error': f"The {name} can't be empty."}, status=400)
+
+        for key in ('name', 'location', 'description'):
+            setattr(album, key, data.get(key))
+
+        for key in ('start', 'end'):
+            try:
+                date = datetime.strptime(data.get(key), "%Y-%m-%d").date()
+            except ValueError:
+                return JsonResponse(
+                    {'error': "Invalid date format."}, status=400)
+
+            setattr(album, key, date)
+
+        try:
+            album.clean()
+        except ValidationError as e:
+            return JsonResponse({'error': e.message}, status=400)
+
+        album.save()
+
+        response = generate_album_dict(album, method='PUT')
+        response['message'] = "Album updated successfully."
+
+        return JsonResponse(response)
+
     def delete(self, request, *args, **kwargs):
         try:
             album = get_album_from_request(request)

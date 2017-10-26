@@ -1,3 +1,11 @@
+@mixin clearfix() {
+  &::after {
+    content: ' ';
+    display: table;
+    clear: both;
+  }
+}
+
 body {
   max-width: 1100px;
   margin-bottom: 3rem;
@@ -11,13 +19,36 @@ h2 {
   margin: 0.5rem 0;
 }
 
-#edit, #cover {
+#edit-form-container, #cover {
   width: 50%;
   float: left;
 }
-#edit {
+
+#edit-form-container {
   padding-right: 1rem;
+
+  .row {
+    width: 100%;
+    margin-bottom: 0.4rem;
+
+    @include clearfix();
+  }
+
+  label, input {
+    float: left;
+  }
+
+  label {
+    width: 25%;
+    vertical-align: middle;
+  }
+
+  input:not([type="file"]), select {
+    padding: 2px 5px;
+    width: 75%;
+  }
 }
+
 #cover {
   padding-left: 1rem;
 
