@@ -2,9 +2,10 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 
 from photos import api, views
+from photos.settings import COMMISSIONS_URL
 
 handler404 = 'photos.views.handler404'
 handler500 = 'photos.views.handler500'
@@ -54,7 +55,9 @@ urlpatterns = [
         TemplateView.as_view(template_name='copyright.html'),
         name='copyright'),
 
-    url(r'^commissions/$', views.commissions, name='commissions'),
+    url(r'^commissions/$',
+        RedirectView.as_view(url=COMMISSIONS_URL, permanent=False),
+        name='commissions'),
 
     url(r'login/$',
         views.site_login, name='login'),
@@ -64,7 +67,7 @@ urlpatterns = [
     url(r'^edit/$', views.edit_content, name='edit'),
     url(r'^new/$', views.new_album, name='new_album'),
 
-    url(r'^photos/', include(album_patterns)),
+    url(r'^albums/', include(album_patterns)),
 
     url(r'^404/$', views.debug404),
     url(r'^500/$', views.debug500),

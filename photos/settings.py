@@ -129,10 +129,17 @@ SQUARES_FOLDER = 'squares'
 INDEX_ALBUMS = 12
 INDEX_FEATURED_PHOTOS = 30
 
-with open(os.path.join(BASE_DIR, 'data/taglines.txt')) as f:
+with open(os.path.join(BASE_DIR, 'data/taglines.txt'), encoding='utf8') as f:
     TAGLINES = f.read().strip().split('\n')
 
 
 # Albums
 
 ITEMS_PER_PAGE = 30
+
+
+# Other
+
+COMMISSIONS_URL = (
+    "https://docs.google.com/document/d/"
+    "1iWG2WM-nicocfP_vT6-VF8KO-EPla8-AARo5x7rZXIs/")

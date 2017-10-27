@@ -261,9 +261,3 @@ def site_logout(request):
     logout(request)
     messages.success(request, "Logged out successfully.")
     return redirect(reverse('index'))
-
-
-def commissions(request):
-    return redirect(
-        "https://docs.google.com/document/d/"
-        "1iWG2WM-nicocfP_vT6-VF8KO-EPla8-AARo5x7rZXIs/", permanent=False)
