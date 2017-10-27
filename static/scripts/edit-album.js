@@ -363,6 +363,8 @@ function update_count() {
 function select(el) {
   el.classList.add('selected');
   selected.push(el);
+
+  update_count();
 }
 
 function deselect(el) {
@@ -372,10 +374,13 @@ function deselect(el) {
   if (index !== -1) {
     selected.splice(index, 1);
   }
+
+  update_count();
 }
 
-function toggle() {
-  !this.classList.contains('selected') ? select(this) : deselect(this);
+function invert(el) {
+  !el.classList.contains('selected') ? select(el) : deselect(el);
+
   update_count();
 }
 
@@ -383,17 +388,19 @@ function toggle() {
 document.addEventListener('DOMContentLoaded', function() {
   if (photos !== null) {
     for (let photo of photos.children) {
-      photo.addEventListener('click', toggle);
+      photo.addEventListener('click', () => invert(photo));
     }
 
     $('select-all').addEventListener('click', function() {
       Array.from(photos.children).forEach(select);
-      update_count();
     });
 
     $('select-none').addEventListener('click', function() {
       Array.from(photos.children).forEach(deselect);
-      update_count();
+    });
+
+    $('select-invert').addEventListener('click', function() {
+      Array.from(photos.children).forEach(invert);
     });
   }
 
@@ -401,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   for (let container of subalbums) {
     for (let photo of container.children) {
-      photo.addEventListener('click', toggle);
+      photo.addEventListener('click', () => invert(photo));
     }
   }
 
