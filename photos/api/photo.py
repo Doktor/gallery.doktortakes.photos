@@ -1,7 +1,8 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_GET
 
@@ -84,7 +85,7 @@ def photo_to_response(photo):
     return JsonResponse(generate_photo_dict(photo))
 
 
-class PhotoView(LoginRequiredMixin, View):
+class PhotoView(View):
     def get(self, request, *args, **kwargs):
         try:
             photo = get_photo_from_request(request)
@@ -93,6 +94,7 @@ class PhotoView(LoginRequiredMixin, View):
 
         return photo_to_response(photo)
 
+    @method_decorator(login_required)
     def delete(self, request, *args, **kwargs):
         try:
             photo = get_photo_from_request(request)
