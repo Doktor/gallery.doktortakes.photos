@@ -51,7 +51,7 @@
     <section id="album">
       <h1 class="title">{{ album.name }}</h1>
 
-      {% if album.place or album.location %}
+      {% if album.get_place or album.get_location %}
       <h2 class="location">{{ album.get_full_location }}</h2>
       {% endif %}
 

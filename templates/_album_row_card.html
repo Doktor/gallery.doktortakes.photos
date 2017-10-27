@@ -25,7 +25,7 @@
           <li>{{ album.photos.count }}
             photo{{ album.photos.count|pluralize }}{% if album.children.exists %}
               ({{ album.count }} total){% endif %}</li>
-          <li>{% if album.location %}{{ album.location }}{% else %}
+          <li>{% if album.get_location %}{{ album.get_location }}{% else %}
             <span class="note">No location</span>{% endif %}</li>
         </ul>
         <div class="note">{{ album.description|striptags|default:"No description" }}</div>

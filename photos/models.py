@@ -129,14 +129,29 @@ class Album(models.Model):
         return mark_safe(date)
 
     def get_full_location(self):
-        if self.place and self.location:
-            return f"{self.place}, {self.location}"
-        elif self.place:
-            return self.place
-        elif self.location:
+        place = self.get_place()
+        location = self.get_location()
+
+        if place and location:
+            return f"{place}, {location}"
+        elif place:
+            return place
+        elif location:
+            return location
+        else:
+            return ''
+
+    def get_location(self):
+        if self.location or not self.parent:
             return self.location
 
-        return ''
+        return self.parent.get_location()
+
+    def get_place(self):
+        if self.place or not self.parent:
+            return self.place
+
+        return self.parent.get_place()
 
     def get_path(self, previous='', divider='/'):
         """Returns the path to this album."""
