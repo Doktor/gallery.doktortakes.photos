@@ -116,27 +116,24 @@
   <section>
     <h2>Photos</h2>
     {% if count or album.children.count %}
-    <h3>Delete photos</h3>
-    <p class="warning">Delete photos from this album. Deletion cannot be undone!</p>
-    <p>To delete photos, select them and press <strong>Delete</strong>.</p>
-
-    <div>
+    <div id="counts">
       <span id="total-count">{{ count }}</span> photo{{ count|pluralize }} in album,
       <span id="selected-count">0</span> photos selected
     </div>
 
-    <div id="actions" class="clearfix">
-      <div class="select">
-        <span><a id="select-all">Select all</a> / <a id="select-none">Select none</a></span>
-      </div>
-      <div class="delete">
-        <span class="warning">Deletion cannot be undone!</span>
-        <button id="delete-photos" type="button">Delete</button>
-      </div>
+    <div id="select">
+      <button id="select-all" type="button">Select all</button>
+      <button id="select-none" type="button">Select none</button>
     </div>
 
-    <div>
-      <button id="change-cover">Set cover</button>
+    <div id="actions" class="clearfix">
+      <span>
+        <button id="change-cover">Set cover</button>
+      </span>
+
+      <span id="danger-zone">
+        <button id="delete-photos" type="button">Delete</button>
+      </span>
     </div>
     {% else %}
     <p>This album does not contain any photos.</p>

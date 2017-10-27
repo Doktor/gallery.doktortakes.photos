@@ -70,21 +70,19 @@ h2 {
   }
 }
 
-#actions div {
-  width: 50%;
-  float: left;
+#counts,
+#select,
+#actions {
+  margin-bottom: 0.5rem;
+}
 
-  a {
-    cursor: pointer;
+#actions {
+  span:first-child {
+    float: left;
   }
 
-  &.delete {
-    text-align: right;
+  #danger-zone {
     float: right;
-  }
-
-  &.delete button {
-    margin-left: 0.3rem;
   }
 }
 
