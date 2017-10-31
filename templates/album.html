@@ -32,7 +32,6 @@
 {% endblock %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'lib/simplePagination.css' %}">
 <link rel="stylesheet" href="{% static 'styles/album.css' %}">
 {% endblock %}
 
@@ -92,7 +91,10 @@
 
   <hr>
 
-  <div id="about" data-count="{{ count }}" data-items-per-page="{{ items_per_page }}"></div>
+  <div id="api"
+       data-count="{{ count }}"
+       data-items-per-page="{{ items_per_page }}"
+       data-page="1"></div>
 
   {% if count %}
     <h3 id="count">{{ count }} photo{{ count|pluralize }}</h3>
@@ -103,7 +105,7 @@
         <div class="wrapper">
           <div class="photo">
             <a href="{% url 'photo' album.get_path p.md5 %}">
-              <img class="loading"
+              <img class="not-loaded"
                    data-src="{{ p.square_thumbnail.url }}"
                    src="{% static 'images/loading.svg' %}">
             </a>
@@ -125,7 +127,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="{% static 'lib/simplePagination.js' %}"></script>
 <script src="{% static 'scripts/album.js' %}"></script>
 {% endblock %}
