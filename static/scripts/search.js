@@ -29,12 +29,6 @@ function query_string(params) {
   return '?' + query;
 }
 
-Node.prototype.clearChildren = function() {
-  while (this.firstChild) {
-    this.removeChild(this.firstChild);
-  }
-};
-
 
 // Update results
 
@@ -151,10 +145,6 @@ function create_empty_wrapper() {
 
 // Pagination
 
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
 function add_page_dots(container) {
   let el = document.createElement('span');
   el.innerText = '...';
@@ -172,7 +162,7 @@ function add_page_dots(container) {
 
     input.addEventListener('keyup', function(event) {
       if (event.keyCode === KEY_ENTER) {
-        if (isNumber(input.value)) {
+        if (is_number(input.value)) {
           change_page(parseInt(input.value));
         }
       }

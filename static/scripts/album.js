@@ -8,29 +8,6 @@ const ITEMS_PER_PAGE = parseInt(api.dataset.itemsPerPage);
 
 const KEY_ENTER = 13;
 
-Node.prototype.clearChildren = function() {
-  while (this.firstChild) {
-    this.removeChild(this.firstChild);
-  }
-};
-
-String.prototype.format = function() {
-  "use strict";
-  let str = this.toString();
-  if (arguments.length) {
-    let t = typeof arguments[0];
-    let key;
-    let args = ("string" === t || "number" === t) ?
-        Array.prototype.slice.call(arguments) : arguments[0];
-
-    for (key in args) {
-      str = str.replace(new RegExp("\\{" + key + "\\}", "gi"), args[key]);
-    }
-  }
-
-  return str;
-};
-
 
 function show_page(page) {
   let start = ITEMS_PER_PAGE * (page - 1);
@@ -66,10 +43,6 @@ function show_page(page) {
 }
 
 // Pagination
-
-function is_number(n) {
-  return n.match(/^[0-9]+/) !== null;
-}
 
 function add_page_dots(container) {
   let el = document.createElement('span');
