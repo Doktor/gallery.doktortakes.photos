@@ -19,12 +19,12 @@
 }
 
 // Metadata container, footer
-#other, footer {
+#data, footer {
   margin: 0 auto;
   width: 90%;
 }
 
-#other {
+#data {
   margin-top: 2rem;
 
   .fa {
@@ -34,8 +34,29 @@
     width: 1.8rem;
   }
 
-  > div {
+  > div > div {
     margin-bottom: 2rem;
+    width: 100%;
+  }
+
+  @media (min-width: 901px) {
+    > div {
+      @include clearfix();
+
+      > div {
+        width: 50%;
+        float: left;
+
+        $spacing: 1rem;
+
+        &:first-child {
+          padding-right: $spacing / 2;
+        }
+        &:last-child {
+          padding-left: $spacing / 2;
+        }
+      }
+    }
   }
 }
 
@@ -43,20 +64,12 @@
   text-align: left;
 }
 
-.data {
-  @include clearfix();
-
-  > div {
-    width: 50%;
-    float: left;
-  }
-}
-
 .metadata {
   font-size: 1.6rem;
 
   #md-md5 {
     font-family: monospace;
+    word-break: break-all;
   }
 }
 
@@ -84,6 +97,8 @@
     > div:not(:last-child) {
       border-right: 1px solid rgb(220, 220, 220);
     }
+
+    @include clearfix();
   }
 
   img {

@@ -12,27 +12,25 @@
 {% endblock %}
 
 {% block content %}
-  <header>
-    <div class="center">
-      <h1 class="logo large">Doktor Takes Photos</h1>
+  <header class="flex">
+    <h1 class="logo large">Doktor Takes Photos</h1>
 
-      <div id="tagline">"{{ tagline }}"</div>
+    <div id="tagline">"{{ tagline }}"</div>
 
-      <ul class="links">
-        <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'photos' %}">Photos</a></li>
-        <li><a href="{% url 'commissions' %}">Commissions</a></li>
-        <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a></li>
-        <li><a href="https://twitter.com/DoktorTheHusky">Twitter</a></li>
-      </ul>
+    <ul class="links">
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'photos' %}">Photos</a></li>
+      <li><a href="{% url 'commissions' %}">Commissions</a></li>
+      <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a></li>
+      <li><a href="https://twitter.com/DoktorTheHusky">Twitter</a></li>
+    </ul>
 
-      {% if request.user.is_authenticated %}
-      <ul class="links">
-        <li><a href="{% url 'edit' %}">Edit</a></li>
-        <li><a href="{% url 'logout' %}">Log out</a></li>
-      </ul>
-      {% endif %}
-    </div>
+    {% if request.user.is_authenticated %}
+    <ul class="links">
+      <li><a href="{% url 'edit' %}">Edit</a></li>
+      <li><a href="{% url 'logout' %}">Log out</a></li>
+    </ul>
+    {% endif %}
   </header>
 
   {% if messages %}
@@ -64,6 +62,7 @@
   {% if featured %}
     <section id="featured">
       <div class="container">
+        <div class="grid-sizer"></div>
         {% for photo in featured %}
         <div class="item">
           <a href="{% url 'photo' photo.get_path photo.md5 %}">

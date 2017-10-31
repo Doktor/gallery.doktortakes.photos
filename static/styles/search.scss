@@ -1,6 +1,10 @@
 #search {
-  width: 50%;
+  width: 100%;
   text-align: left;
+
+  @media (min-width: 901px) {
+    width: 50%;
+  }
 
   div > label:first-child {
     display: inline-block;

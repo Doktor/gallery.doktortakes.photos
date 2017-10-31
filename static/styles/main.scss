@@ -161,6 +161,8 @@ p {
 
 // useful classes
 ul.breadcrumbs {
+  $spacing: 0.75rem;
+
   list-style: none;
   clear: both;
   margin: 0;
@@ -169,14 +171,33 @@ ul.breadcrumbs {
   @include clearfix();
 
   li {
-    margin: 0;
+    line-height: 1;
+    margin: 0 0 $spacing 0;
     float: left;
+    text-align: left;
+    width: 100%;
 
-    &:not(:last-child):after {
-      color: $off-white;
+    &:not(:first-child):before {
       content: "/";
-      margin: 0 0.75rem;
       position: relative;
+      margin-right: $spacing;
+    }
+
+    @media (min-width: 601px) {
+      width: auto;
+
+      &:not(:first-child):before {
+        content: "";
+        margin: 0;
+        visibility: hidden;
+      }
+
+      &:not(:last-child):after {
+        color: $off-white;
+        content: "/";
+        margin: 0 $spacing;
+        position: relative;
+      }
     }
   }
 }

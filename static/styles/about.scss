@@ -1,24 +1,18 @@
 h2, h3 {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .icon {
   width: 100%;
   padding: 1rem;
   border: 1px solid rgb(220, 220, 220);
+  margin-top: 1rem;
 
   @media (min-width: 601px) {
+    margin-top: 0;
     margin-left: 1rem;
     width: 35%;
     float: right;
-  }
-
-  &.large {
-    @media (min-width: 601px) {
-      margin-left: 1rem;
-      width: 45%;
-      float: right;
-    }
   }
 
   img {

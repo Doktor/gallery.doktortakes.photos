@@ -62,8 +62,8 @@
     </a>
   </section>
 
-  <section id="other">
-    <div class="data">
+  <section id="data">
+    <div>
       <div class="metadata">
         <h2>Metadata</h2>
 
@@ -113,7 +113,6 @@
           <span id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></span>
         </div>
       </div>
-
       <div class="exif">
         <h2>EXIF</h2>
 
@@ -141,36 +140,36 @@
         </div>
       </div>
     </div>
-
-    <div class="keyboard">
-      <h2>Keyboard shortcuts</h2>
-      <ul id="keyboard">
-        <li><kbd>Left</kbd> <kbd>Right</kbd> View previous/next photo</li>
-        <li><kbd>Up</kbd> <kbd>Down</kbd> Skip to first/last photo</li>
-        <li><kbd>A</kbd> Return to album</li>
-        <li><kbd>D</kbd> Download this photo</li>
-        <li><kbd>H</kbd> Return home</li>
-        <li><kbd>L</kbd> Return to album list</li>
-      </ul>
-    </div>
-
-    <div class="links">
-      <h2>Links</h2>
-      <div>
-        <span title="Album"><i class="fa fa-book"></i></span>
-        {% for album in path %}
-        <a href="{{ album.get_absolute_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
-        {% endfor %}
+    <div>
+      <div class="keyboard">
+        <h2>Keyboard shortcuts</h2>
+        <ul id="keyboard">
+          <li><kbd>Left</kbd> <kbd>Right</kbd> View previous/next photo</li>
+          <li><kbd>Up</kbd> <kbd>Down</kbd> Skip to first/last photo</li>
+          <li><kbd>A</kbd> Return to album</li>
+          <li><kbd>D</kbd> Download this photo</li>
+          <li><kbd>H</kbd> Return home</li>
+          <li><kbd>L</kbd> Return to album list</li>
+        </ul>
       </div>
+      <div class="links">
+        <h2>Links</h2>
+        <div>
+          <span title="Album"><i class="fa fa-book"></i></span>
+          {% for album in path %}
+          <a href="{{ album.get_absolute_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
+          {% endfor %}
+        </div>
 
-      <div>
-         <span title="List of photos"><i class="fa fa-list"></i></span>
-         <a href="{% url 'photos' %}">Return to album list</a>
-      </div>
+        <div>
+           <span title="List of photos"><i class="fa fa-list"></i></span>
+           <a href="{% url 'photos' %}">Return to album list</a>
+        </div>
 
-      <div>
-        <span title="Index"><i class="fa fa-home"></i></span>
-        <a href="{% url 'index' %}">Return home</a>
+        <div>
+          <span title="Index"><i class="fa fa-home"></i></span>
+          <a href="{% url 'index' %}">Return home</a>
+        </div>
       </div>
     </div>
   </section>
