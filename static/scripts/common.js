@@ -46,5 +46,5 @@ function getCookie(name) {
 }
 
 function is_number(n) {
-  return n.match(/^[0-9]+/) !== null;
+  return n.match(/^[0-9]+$/) !== null;
 }

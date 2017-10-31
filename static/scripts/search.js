@@ -221,7 +221,7 @@ function add_pages(last) {
   let current = parseInt(pageEl.dataset.page);
 
   for (let c of pagination) {
-    c.clearChildren();
+    c.innerHTML = '';
 
     if (last >= 10) {
       add_page_button(1, c);
@@ -296,7 +296,7 @@ function navigate_page(event) {
   let pages = parseInt(pageEl.dataset.pages);
 
   switch (el.dataset.page) {
-    case 'previous':
+    case 'prev':
       if (current === 1) { return; }
       return change_page(current - 1);
     case 'next':

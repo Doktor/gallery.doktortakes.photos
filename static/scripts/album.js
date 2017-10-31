@@ -115,6 +115,8 @@ function create_page_nav(text) {
 
 
 function add_pages(last) {
+  if (last === 1) { return; }
+
   let pagination = document.getElementsByClassName('pagination');
   let results = COUNT !== 0;
 
