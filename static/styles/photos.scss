@@ -284,9 +284,15 @@ $logo: 2.4rem;
     h3 {
       font-weight: 300;
       line-height: 1;
-      font-size: 1.5rem;
-      margin: 0.9rem;
       color: white;
+
+      font-size: 1.35rem;
+      margin: 0.8rem;
+
+      @media (min-width: 1501px) {
+        font-size: 1.45rem;
+        margin: 1rem;
+      }
 
       &:hover {
         text-decoration: underline;
