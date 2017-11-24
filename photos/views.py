@@ -110,7 +110,19 @@ def album_list(request):
     """Renders the list of albums."""
     albums = Album.objects.filter(parent__isnull=True).order_by('-start')
     context = {'albums': albums}
-    return render(request, 'albums.html', context)
+
+    view = request.GET.get('view', '')
+
+    if view == 'simple':
+        template = 'albums_simple.html'
+    elif view == 'cards':
+        template = 'albums_cards.html'
+    elif view == 'details':
+        template = 'albums_detailed_cards.html'
+    else:
+        template = 'albums_cards.html'
+
+    return render(request, template, context)
 
 
 def search_photos(request):

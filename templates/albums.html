@@ -24,6 +24,14 @@
   </header>
 
   <section>
+    <h2>Views</h2>
+    <p>View the list of albums in different formats.</p>
+    <ul>
+      <li><a href="{% url 'albums' %}?view=cards">Cards</a> &mdash; default</li>
+      <li><a href="{% url 'albums' %}?view=details">Detailed cards</a> &mdash; locations, dates, other metadata</li>
+      <li><a href="{% url 'albums' %}?view=simple">Simple</a> &mdash; text only</li>
+    </ul>
+
     <h2>Special pages</h2>
     <ul>
       <li><a href="{% url 'search' %}">Search all photos</a></li>
@@ -31,13 +39,8 @@
 
     <h2>Photos</h2>
     {% if albums %}
-    <section class="album-list">
-      <ul>
-        {% for album in albums %}
-          {% include "_album_row_card.html" with edit=False %}
-        {% endfor %}
-      </ul>
-    </section>
+      {% block album_list %}
+      {% endblock %}
     {% endif %}
   </section>
 

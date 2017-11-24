@@ -1,0 +1,9 @@
+{% extends "albums.html" %}
+
+{% block album_list %}
+<section id="albums">
+{% for album in albums %}
+  {% include "_album_card.html" with edit=False %}
+{% endfor %}
+</section>
+{% endblock %}

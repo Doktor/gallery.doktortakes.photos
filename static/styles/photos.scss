@@ -243,6 +243,7 @@ $logo: 2.4rem;
   $width: 400px;
 
   margin: 1rem (-$spacing);
+  text-align: center;
 
   @include clearfix();
 
@@ -375,9 +376,18 @@ form {
   }
 }
 
-.album-list {
-  text-align: center;
+#album-list-simple {
+  a {
+    color: rgb(0, 120, 255);
+  }
 
+  ul ul {
+    padding: 0;
+    margin: 0 0 0 2rem;
+  }
+}
+
+#album-list-detailed {
   a {
     color: rgb(220, 220, 220);
     text-decoration: none;
@@ -398,7 +408,7 @@ form {
     }
   }
 
-  .album-row {
+  .row {
     @media (min-width: 901px) {
       display: flex;
       justify-content: center;
@@ -430,6 +440,7 @@ form {
     }
 
     .no-cover .note {
+      text-align: center;
       width: 100%;
       position: absolute;
       top: 45%;

@@ -5,7 +5,7 @@
   {% else %}
   <a href="{{ album.get_absolute_url }}">
   {% endif %}
-    <div class="album-row clearfix">
+    <div class="row clearfix">
       <div class="cover">
         {% if album.cover %}
           <img src="{{ album.cover.thumbnail.url }}">
@@ -36,7 +36,7 @@
   {% if album.children.exists %}
     <ul class="list">
       {% for a in album.children.all %}
-        {% with album=a template="_album_row_card.html" %}
+        {% with album=a template="_album_detailed_card.html" %}
           {% include template %}
         {% endwith %}
       {% endfor %}

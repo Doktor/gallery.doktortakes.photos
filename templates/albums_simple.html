@@ -1,0 +1,11 @@
+{% extends "albums.html" %}
+
+{% block album_list %}
+<section id="album-list-simple">
+  <ul>
+    {% for album in albums %}
+      {% include "_album_simple.html" %}
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
