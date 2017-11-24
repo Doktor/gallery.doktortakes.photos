@@ -289,7 +289,7 @@ document.addEventListener('keydown', function(event) {
       window.location.href = '/';
       break;
     case KEY_L:
-      window.location.href = '/photos/';
+      window.location.href = '/albums/';
       break;
   }
 });

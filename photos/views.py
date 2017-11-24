@@ -106,11 +106,11 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def photos_list(request):
+def album_list(request):
     """Renders the list of albums."""
     albums = Album.objects.filter(parent__isnull=True).order_by('-start')
     context = {'albums': albums}
-    return render(request, 'photos.html', context)
+    return render(request, 'albums.html', context)
 
 
 def search_photos(request):

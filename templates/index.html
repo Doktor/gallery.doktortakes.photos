@@ -19,7 +19,7 @@
 
     <ul class="links">
       <li><a href="{% url 'about' %}">About</a></li>
-      <li><a href="{% url 'photos' %}">Photos</a></li>
+      <li><a href="{% url 'albums' %}">Photos</a></li>
       <li><a href="{% url 'commissions' %}">Commissions</a></li>
       <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a></li>
       <li><a href="https://twitter.com/DoktorTheHusky">Twitter</a></li>
@@ -50,7 +50,7 @@
 
     {% if more_albums %}
     <div class="view-more">
-      <a href="{% url 'photos' %}">View more albums</a>
+      <a href="{% url 'albums' %}">View more albums</a>
     </div>
     {% endif %}
   {% else %}

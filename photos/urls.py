@@ -11,7 +11,7 @@ handler404 = 'photos.views.handler404'
 handler500 = 'photos.views.handler500'
 
 album_patterns = [
-    url(r'^$', views.photos_list, name='photos'),
+    url(r'^$', views.album_list, name='albums'),
     url(r'^search/$', views.search_photos, name='search'),
 
     url(r'^(?P<path>[a-z0-9-/]+)/edit/$',
