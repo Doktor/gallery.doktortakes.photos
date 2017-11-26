@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.views.generic import TemplateView, RedirectView
 
 from photos import api, views
-from photos.settings import COMMISSIONS_URL
 
 handler404 = 'photos.views.handler404'
 handler500 = 'photos.views.handler500'
@@ -54,10 +53,6 @@ urlpatterns = [
     url(r'^copyright/$',
         TemplateView.as_view(template_name='copyright.html'),
         name='copyright'),
-
-    url(r'^commissions/$',
-        RedirectView.as_view(url=COMMISSIONS_URL, permanent=False),
-        name='commissions'),
 
     url(r'login/$',
         views.site_login, name='login'),

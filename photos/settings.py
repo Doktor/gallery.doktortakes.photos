@@ -136,10 +136,3 @@ with open(os.path.join(BASE_DIR, 'data/taglines.txt'), encoding='utf8') as f:
 # Albums
 
 ITEMS_PER_PAGE = 30
-
-
-# Other
-
-COMMISSIONS_URL = (
-    "https://docs.google.com/document/d/"
-    "1iWG2WM-nicocfP_vT6-VF8KO-EPla8-AARo5x7rZXIs/")
