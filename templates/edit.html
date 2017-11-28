@@ -29,12 +29,10 @@
   <h2><a href="{% url 'new_album' %}">Add new album</a></h2>
 
   <h2>Edit existing album</h2>
-  <section class="album-list">
-    <ul>
-      {% for album in albums %}
-        {% include "_album_detailed_card.html" with edit=True %}
-      {% endfor %}
-    </ul>
+  <section id="albums">
+    {% for album in albums %}
+      {% include "_album_card.html" with edit=True %}
+    {% endfor %}
   </section>
 
   <footer>

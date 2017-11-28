@@ -1,21 +1,23 @@
 {% load staticfiles %}
 <div class="wrapper">
-  {% with link=album.get_absolute_url %}
-    <div class="album">
-      <a href="{{ link }}">
-        {% if album.cover %}
-          <img src="{{ album.cover.thumbnail.url }}" title="{{ album.name }}">
-        {% else %}
-          <div class="no-cover">
-            <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
-            <div class="note">No cover for this album</div>
-          </div>
-        {% endif %}
-
-        <div class="title">
-          <h3>{{ album.name }}</h3>
+  <div class="album">
+    {% if edit %}
+    <a href="{{ album.get_edit_url }}">
+    {% else %}
+    <a href="{{ album.get_absolute_url }}">
+    {% endif %}
+      {% if album.cover %}
+        <img src="{{ album.cover.thumbnail.url }}" title="{{ album.name }}">
+      {% else %}
+        <div class="no-cover">
+          <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
+          <div class="note">No cover for this album</div>
         </div>
-      </a>
-    </div>
-  {% endwith %}
+      {% endif %}
+
+      <div class="title">
+        <h3>{{ album.name }}</h3>
+      </div>
+    </a>
+  </div>
 </div>
