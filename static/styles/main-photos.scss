@@ -46,37 +46,17 @@ body {
   }
 }
 
+$spacing: 1.75rem;
+
 header {
   @include clearfix();
 
-  &.flex {
-    display: flex;
-    flex-direction: column;
-  }
+  margin: 1rem 0;
 
-  .links {
+  .navlinks {
     font-size: 1.8rem;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
     font-variant: small-caps;
-    flex-wrap: wrap;
-
-    li {
-      display: block;
-      margin: 0 15px;
-    }
-
-    @media (min-width: 1201px) {
-      flex-wrap: nowrap;
-
-      li {
-        margin: 0 30px;
-      }
-    }
 
     a {
       color: rgb(160, 160, 160);
@@ -113,20 +93,59 @@ $logo: 2.4rem;
   margin: 0;
   padding: 0;
 
-  nav & {
-    float: left;
-    text-align: left;
- }
-
   &.large {
     font-size: 4.2rem;
     margin: 1rem 0;
   }
 }
 
+.navlinks {
+  $border: rgb(100, 100, 100);
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  li {
+    margin: 0 ($spacing / 2);
+    line-height: $logo;
+
+    &.divider {
+      color: $border;
+      margin: 0;
+
+      @media (min-width: 901px) {
+         margin: 0 ($spacing / 2);
+
+         &::before {
+          content: "|";
+        }
+      }
+    }
+  }
+}
+
 @media (min-width: 601px) {
   nav .breadcrumbs li {
     line-height: $logo;
+  }
+}
+
+.navbar {
+  $border: rgb(100, 100, 100);
+
+  @include clearfix();
+
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid $border;
+  margin-top: -0.5rem;
+
+  a {
+    color: rgb(220, 220, 220);
   }
 }
 

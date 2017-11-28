@@ -7,17 +7,6 @@
 {% endblock %}
 
 {% block content %}
-  <header>
-    <nav>
-      <ul class="breadcrumbs">
-        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
-        <li><a href="{% url 'edit' %}">Edit</a></li>
-      </ul>
-    </nav>
-
-    <h1>Edit content</h1>
-  </header>
-
   {% if messages %}
     <section id="messages">
       {% for m in messages %}

@@ -21,6 +21,26 @@
 </head>
 
 <body class="{% block classes %}{% endblock %}">
+{% block nav %}
+<nav class="navbar">
+  <ul class="navlinks">
+    <li class="logo-li"><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'albums' %}">Photos</a></li>
+    <li><a href="{% url 'copyright' %}">Reuse</a></li>
+    <li class="divider"></li>
+    <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a></li>
+    <li><a href="https://twitter.com/DoktorTheHusky">Twitter</a></li>
+
+    {% if request.user.is_authenticated %}
+    <li class="divider"></li>
+    <li><a href="{% url 'edit' %}">Edit</a></li>
+    <li><a href="{% url 'logout' %}">Log out</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}
 {% block content %}{% endblock %}
 {% block scripts %}{% endblock %}
 <script src="{% static 'scripts/common.js' %}"></script>

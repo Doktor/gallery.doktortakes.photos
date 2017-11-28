@@ -11,13 +11,15 @@
   <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
 {% endblock %}
 
+{% block nav %}{% endblock %}
+
 {% block content %}
-  <header class="flex">
+  <header>
     <h1 class="logo large">Doktor Takes Photos</h1>
 
     <div id="tagline">"{{ tagline }}"</div>
 
-    <ul class="links">
+    <ul class="navlinks">
       <li><a href="{% url 'about' %}">About</a></li>
       <li><a href="{% url 'albums' %}">Photos</a></li>
       <li><a href="{% url 'copyright' %}">Reuse</a></li>
@@ -26,7 +28,7 @@
     </ul>
 
     {% if request.user.is_authenticated %}
-    <ul class="links">
+    <ul class="navlinks">
       <li><a href="{% url 'edit' %}">Edit</a></li>
       <li><a href="{% url 'logout' %}">Log out</a></li>
     </ul>

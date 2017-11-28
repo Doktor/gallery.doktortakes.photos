@@ -35,15 +35,6 @@
 {% block classes %}small{% endblock %}
 
 {% block content %}
-  <header>
-    <nav id="path">
-      <ul class="breadcrumbs">
-        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
-        <li><a href="{% url 'login' %}">Log in</a></li>
-      </ul>
-    </nav>
-  </header>
-
   {% if messages %}
     <section id="messages">
       {% for m in messages %}
