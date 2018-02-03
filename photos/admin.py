@@ -19,6 +19,9 @@ class AlbumAdmin(admin.ModelAdmin):
             'fields': ('name', 'slug', 'location', 'description',
                        'start', 'end', 'parent'),
         }),
+        ('Visibility', {
+            'fields': ('hidden', 'password')
+        }),
         ('Cover photo', {
             'fields': ('cover', 'preview')
         }),

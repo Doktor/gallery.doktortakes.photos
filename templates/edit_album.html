@@ -29,7 +29,7 @@
     </nav>
 
     <h2 id="album-name">{{ album.name }}</h2>
-    <a id="album-link" href="{{ album.get_absolute_url }}" target="_blank">View on site</a>
+    <a id="album-link" href="{{ album.get_hidden_url }}" target="_blank">View on site</a>
   </header>
 
   {% if messages %}

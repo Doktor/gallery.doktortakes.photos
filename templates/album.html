@@ -29,6 +29,10 @@
 {% if album.cover %}
 <meta name="twitter:image" content="{{ BASE_URL }}{{ album.cover.image.url }}">
 {% endif %}
+
+{% if album.hidden %}
+<meta name="robots" content="noindex,nofollow">
+{% endif %}
 {% endblock %}
 
 {% block style %}

@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files import File
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_GET
@@ -89,9 +90,15 @@ def debug500(request):
     return handler500(request)
 
 
+QUERY_ADMIN = Q(parent__isnull=True)
+QUERY = Q(parent__isnull=True, hidden=False)
+
+
 def index(request):
     """Renders the index page."""
-    albums = Album.objects.filter(parent__isnull=True).order_by('-start')
+    query = QUERY_ADMIN if request.user.is_superuser else QUERY
+
+    albums = Album.objects.filter(query).order_by('-start')
     featured = Photo.objects.filter(rating__gte=4).order_by('-taken')
 
     context = {
@@ -108,7 +115,9 @@ def index(request):
 
 def album_list(request):
     """Renders the list of albums."""
-    albums = Album.objects.filter(parent__isnull=True).order_by('-start')
+    query = QUERY_ADMIN if request.user.is_superuser else QUERY
+
+    albums = Album.objects.filter(query).order_by('-start')
     context = {'albums': albums}
 
     view = request.GET.get('view', '')
@@ -136,6 +145,17 @@ def search_photos(request):
 def album(request, path):
     """Renders album pages."""
     a = get_album_by_path(path)
+
+    if a.password:
+        password = request.GET.get('password', '')
+
+        if password != a.password:
+            if request.user.is_superuser:
+                base = reverse('album', kwargs={'path': path})
+                return redirect(base + f"?password={a.password}")
+
+            raise Http404
+
     title = f"{a.name} | {metadata['TITLE']}"
 
     context = {

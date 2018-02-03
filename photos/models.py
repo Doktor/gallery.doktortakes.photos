@@ -88,6 +88,9 @@ class Album(models.Model):
         related_name='children', blank=True, null=True,
         help_text="The album that contains this album")
 
+    hidden = models.BooleanField(default=False)
+    password = models.CharField(max_length=128, blank=True, null=True)
+
     @property
     def count(self):
         """Returns the number of photos in this album and all child albums."""
@@ -175,6 +178,10 @@ class Album(models.Model):
     def get_edit_url(self):
         """Returns the URL for editing this album."""
         return reverse('edit_album', args=[self.get_path()])
+
+    def get_hidden_url(self):
+        url = self.get_absolute_url()
+        return url + f"?password={self.password}" if self.password else url
 
     def __str__(self):
         return self.name

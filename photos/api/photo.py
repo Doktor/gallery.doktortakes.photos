@@ -179,7 +179,7 @@ def last_photo(request):
 def search_photos(request):
     params = request.GET
 
-    query = Q()
+    query = Q(album__hidden=False)
 
     name = params.get('name', '')
     if name:

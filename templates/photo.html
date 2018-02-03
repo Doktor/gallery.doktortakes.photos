@@ -26,6 +26,10 @@
 <meta name="twitter:title" content="{{ page_title }}">
 <meta name="twitter:description" content="{{ DESCRIPTION }}">
 <meta name="twitter:image" content="{{ BASE_URL }}{{ photo.image.url }}">
+
+{% if album.hidden %}
+<meta name="robots" content="noindex,nofollow">
+{% endif %}
 {% endblock %}
 
 {% block style %}
@@ -159,7 +163,7 @@
         <div>
           <span title="Album"><i class="fa fa-book"></i></span>
           {% for album in path %}
-          <a href="{{ album.get_absolute_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
+          <a href="{{ album.get_hidden_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
           {% endfor %}
         </div>
 
