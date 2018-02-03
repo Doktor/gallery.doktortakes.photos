@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block meta %}
+  {% include "_open_graph_common.html" %}
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ BASE_URL }}{% url 'featured' %}">
+  <meta property="article:author" content="{{ NAME }}">
+  <meta property="article:published_time" content="{{ LAST_UPDATE|date:"c" }}">
+  <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
+{% endblock %}
+
+{% block content %}
+  {% if messages %}
+  <section id="messages">
+    {% for m in messages %}
+      <div class="message {{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% if featured %}
+    <h2>Featured photos</h2>
+
+    <section id="featured">
+      <div class="container">
+        <div class="grid-sizer"></div>
+        {% for photo in featured %}
+        <div class="item">
+          <a href="{% url 'photo' photo.get_path photo.md5 %}">
+            <img src="{{ photo.thumbnail.url }}">
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if more_photos %}
+    <div class="view-more">
+      <a href="{{ featured_url }}">View more featured photos</a>
+    </div>
+    {% endif %}
+  {% else %}
+    <div>No featured photos.</div>
+  {% endif %}
+
+  <hr>
+
+  <footer>
+    {% include "_reuse.html" %}
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="{% static 'scripts/featured.js' %}"></script>
+{% endblock %}

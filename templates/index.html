@@ -21,6 +21,7 @@
 
     <ul class="navlinks">
       <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'featured' %}">Featured</a></li>
       <li><a href="{% url 'albums' %}">Photos</a></li>
       <li><a href="{% url 'copyright' %}">Reuse</a></li>
       <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos">Trello</a></li>
@@ -61,36 +62,8 @@
 
   <hr>
 
-  {% if featured %}
-    <section id="featured">
-      <div class="container">
-        <div class="grid-sizer"></div>
-        {% for photo in featured %}
-        <div class="item">
-          <a href="{% url 'photo' photo.get_path photo.md5 %}">
-            <img src="{{ photo.thumbnail.url }}">
-          </a>
-        </div>
-        {% endfor %}
-      </div>
-    </section>
-
-    {% if more_photos %}
-    <div class="view-more">
-      <a href="{{ featured_url }}">View more featured photos</a>
-    </div>
-    {% endif %}
-  {% endif %}
-
-  <hr>
-
   <footer>
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="{% static 'scripts/index.js' %}"></script>
 {% endblock %}

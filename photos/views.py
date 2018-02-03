@@ -99,18 +99,28 @@ def index(request):
     query = QUERY_ADMIN if request.user.is_superuser else QUERY
 
     albums = Album.objects.filter(query).order_by('-start')
-    featured = Photo.objects.filter(rating__gte=4).order_by('-taken')
 
     context = {
         'tagline': random.choice(TAGLINES),
-        'featured_url': reverse('search') + FEATURED_QUERY,
-        'featured': featured[:INDEX_FEATURED_PHOTOS],
-        'more_photos': len(featured) > INDEX_FEATURED_PHOTOS,
         'albums': albums[:INDEX_ALBUMS],
         'more_albums': len(albums) > INDEX_ALBUMS,
     }
 
     return render(request, 'index.html', context)
+
+
+def featured(request):
+    """Renders the featured photos page."""
+    q = Q(album__hidden=False, rating__gte=4)
+    photos = Photo.objects.filter(q).order_by('-taken')
+
+    context = {
+        'featured_url': reverse('search') + FEATURED_QUERY,
+        'featured': photos[:INDEX_FEATURED_PHOTOS],
+        'more_photos': len(photos) > INDEX_FEATURED_PHOTOS,
+    }
+
+    return render(request, 'featured.html', context)
 
 
 def album_list(request):

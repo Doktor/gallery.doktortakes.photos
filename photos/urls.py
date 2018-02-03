@@ -64,6 +64,8 @@ urlpatterns = [
 
     url(r'^albums/', include(album_patterns)),
 
+    url(r'^featured/', views.featured, name='featured'),
+
     url(r'^404/$', views.debug404),
     url(r'^500/$', views.debug500),
 ]
