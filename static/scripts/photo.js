@@ -1,18 +1,5 @@
 let $;
 
-
-// Key codes
-const KEY_LEFT = 37;
-const KEY_UP = 38;
-const KEY_RIGHT = 39;
-const KEY_DOWN = 40;
-
-const KEY_A = 65;
-const KEY_D = 68;
-const KEY_H = 72;
-const KEY_L = 76;
-
-
 // API paths
 const api = document.getElementById('api');
 

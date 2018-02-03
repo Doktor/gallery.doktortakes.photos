@@ -222,3 +222,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   show_page(current);
 });
+
+
+document.addEventListener('keydown', function(event) {
+  let key = event.keyCode;
+
+  switch (key) {
+    case KEY_H:
+      window.location.href = '/';
+      break;
+    case KEY_L:
+      window.location.href = '/albums/';
+      break;
+  }
+});
