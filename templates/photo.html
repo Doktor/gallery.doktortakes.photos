@@ -53,7 +53,7 @@
        data-api-next="{% url 'next_photo' %}"
        data-api-first="{% url 'first_photo' %}"
        data-api-last="{% url 'last_photo' %}"
-       data-api-get-album-photos="{% url 'get_album_photos' %}">
+       data-api-get-album-photos="{% url 'get_album_photos' %}{{ album.get_password_query }}">
   </div>
 
   <section id="photo"

@@ -162,6 +162,12 @@ def get_album_photos(request):
     album = get_album_from_request(request)
     photos = []
 
+    if album.password and album.password != request.GET.get('password', ''):
+        return JsonResponse({
+            'success': False,
+            'message': "Album does not exist."
+        })
+
     for index, photo in enumerate(album.photos.all().order_by('taken')):
         photos.append(generate_photo_dict(photo, index))
 

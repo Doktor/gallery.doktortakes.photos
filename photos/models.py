@@ -180,8 +180,10 @@ class Album(models.Model):
         return reverse('edit_album', args=[self.get_path()])
 
     def get_hidden_url(self):
-        url = self.get_absolute_url()
-        return url + f"?password={self.password}" if self.password else url
+        return self.get_absolute_url() + self.get_password_query()
+
+    def get_password_query(self):
+        return f"?password={self.password}" if self.password else ''
 
     def __str__(self):
         return self.name
