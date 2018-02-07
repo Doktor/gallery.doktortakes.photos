@@ -15,11 +15,12 @@ from pytz import timezone
 from .utils import APIError, get_photo_from_request
 
 
-def f_stop(f):
+def format_f_stop(f):
+    """Takes an f-stop as a fractional string and converts it to a number."""
     try:
         f = f.split('/')
     except AttributeError:
-        return None
+        return 0
     else:
         if len(f) == 2:
             return int(f[0]) / int(f[1])
@@ -30,19 +31,26 @@ def f_stop(f):
 def get_exif(p):
     e = p.exif
 
-    model = e['EXIF LensModel']
+    model = e.get('EXIF LensModel', '')
 
-    if 'EF-S' in model:
-        model = model.replace('EF-S', 'EF-S ')
+    if model:
+        make = e.get('EXIF LensMake', e['Image Make'])
+        lens = f"{make} {model}"
+    else:
+        lens = 'Lens unknown'
+
+    if 'EF-S' in lens:
+        lens = lens.replace('EF-S', 'EF-S ')
     elif 'EF' in model:
-        model = model.replace('EF', 'EF ')
+        lens = lens.replace('EF', 'EF ')
+
+    f = e.get('EXIF FNumber', None)
 
     return {
         'camera': e['Image Model'],
-        'lens': f"{e.get('EXIF LensMake', e['Image Make'])} "
-                f"{model}",
+        'lens': lens,
         'shutter_speed': f"{e['EXIF ExposureTime']}s",
-        'aperture': f"f/{f_stop(e['EXIF FNumber'])}",
+        'aperture': f"f/{format_f_stop(f)}",
         'iso_speed': f"ISO {e['EXIF ISOSpeedRatings']}",
     }
 
