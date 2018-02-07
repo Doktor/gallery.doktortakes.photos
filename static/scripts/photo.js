@@ -144,7 +144,7 @@ document.addEventListener('keydown', function(e) {
 
 
 // PhotoSwipe container
-const photoswipe = document.getElementsByClassName('pswp')[0];
+const photoswipe = document.getElementById('pswp');
 
 // Album items
 const items = [];
@@ -214,6 +214,50 @@ function load_photoswipe() {
       photoswipe, PhotoSwipeUI_Default, items, options);
 
     gallery.init();
+
+    // Sync Photoswipe touch navigation with metadata
+
+    // This is somewhat unwieldy. Photoswipe defines a minimum swipe distance,
+    // 30 px, to navigate to the next/previous photo. However, it doesn't
+    // always work. Instead of relying on swipe distance, we wait for PS to
+    // trigger the 'afterChange' event, and check the swipe direction.
+
+    // https://github.com/dimsemenov/PhotoSwipe/blob/40a50b5aa6ccbe5b710911a0c7b0976eed1d168c/src/js/gestures.js#L7
+
+    let startX = 0;
+    let startY = 0;
+    let endX = 0;
+    let endY = 0;
+
+    photoswipe.addEventListener('touchstart', function(event) {
+      event = event.changedTouches[0];
+
+      startX = event.screenX;
+      startY = event.screenY;
+    });
+
+    photoswipe.addEventListener('touchend', function(event) {
+      event = event.changedTouches[0];
+
+      endX = event.screenX;
+      endY = event.screenY;
+    });
+
+    gallery.listen('afterChange', function() {
+      let query = query_string({
+        'path': photo.dataset.path,
+        'md5': photo.dataset.md5,
+      });
+
+      // Swipe right
+      if (startX < endX) {
+        return load_photo(API_PREVIOUS + query);
+      }
+      // Swipe left
+      if (startX > endX) {
+        return load_photo(API_NEXT + query);
+      }
+    });
 
     document.addEventListener('keydown', function(e) {
       let key = e.keyCode;
