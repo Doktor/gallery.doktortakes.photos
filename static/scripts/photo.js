@@ -215,10 +215,10 @@ function load_photoswipe() {
 
     gallery.init();
 
-    // Sync Photoswipe touch navigation with metadata
+    // Sync Photoswipe mouse and touch navigation with metadata
 
-    // This is somewhat unwieldy. Photoswipe defines a minimum swipe distance,
-    // 30 px, to navigate to the next/previous photo. However, it doesn't
+    // This is somewhat unwieldy. Photoswipe defines a minimum swipe/drag
+    // distance to navigate to the next/previous photo. However, it doesn't
     // always work. Instead of relying on swipe distance, we wait for PS to
     // trigger the 'afterChange' event, and check the swipe direction.
 
@@ -229,18 +229,26 @@ function load_photoswipe() {
     let endX = 0;
     let endY = 0;
 
-    photoswipe.addEventListener('touchstart', function(event) {
-      event = event.changedTouches[0];
+    ['mousedown', 'touchstart'].map(function(e) {
+      photoswipe.addEventListener(e, function(event) {
+        if (e === 'touchstart') {
+          event = event.changedTouches[0];
+        }
 
-      startX = event.screenX;
-      startY = event.screenY;
+        startX = event.screenX;
+        startY = event.screenY;
+      });
     });
 
-    photoswipe.addEventListener('touchend', function(event) {
-      event = event.changedTouches[0];
+    ['mouseup', 'touchend'].map(function(e) {
+      photoswipe.addEventListener(e, function(event) {
+        if (e === 'touchend') {
+          event = event.changedTouches[0];
+        }
 
-      endX = event.screenX;
-      endY = event.screenY;
+        endX = event.screenX;
+        endY = event.screenY;
+      });
     });
 
     gallery.listen('afterChange', function() {
