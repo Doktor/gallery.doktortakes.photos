@@ -122,7 +122,7 @@ function load_photo(url, history = true) {
 
 
 // Navigation
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keyup', function(e) {
   let query = query_string({
     'path': photo.dataset.path,
     'md5': photo.dataset.md5,
@@ -267,7 +267,7 @@ function load_photoswipe() {
       }
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keyup', function(e) {
       let key = e.keyCode;
 
       switch (key) {
