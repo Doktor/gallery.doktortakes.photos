@@ -14,6 +14,7 @@ from photos.models import Album, Photo
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
+import datetime
 import mimetypes
 import random
 
@@ -121,6 +122,19 @@ def featured(request):
     }
 
     return render(request, 'featured.html', context)
+
+
+def wall(request):
+    q = Q(album__hidden=False) & Q(album__password=None)
+
+    # Only show photos taken within the last 12 months
+    today = datetime.date.today()
+    q = q & Q(taken__year__gte=today.year - 1, taken__month__gte=today.month)
+
+    photos = Photo.objects.filter(q).order_by('?')[:120]
+    context = {'photos': photos}
+
+    return render(request, 'wall.html', context)
 
 
 def album_list(request):

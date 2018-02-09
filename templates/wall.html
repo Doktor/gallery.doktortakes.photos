@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block style %}
+<style>
+.photo {
+  float: left;
+  width: 10%;
+  filter: brightness(1.0);
+}
+.photo:hover {
+  filter: brightness(0.6);
+}
+.photo, .photo:hover {
+  transition: filter 0.2s ease-in-out;
+}
+.photo img {
+  width: 100%;
+}
+body {
+  margin: 0;
+  width: 100%;
+  max-width: none;
+}
+#wall {
+  margin: 0;
+  width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<section id="wall">
+  {% for photo in photos %}
+    <div class="photo">
+      <a href="{% url 'photo' photo.get_path photo.md5 %}">
+        <img src="{{ photo.square_thumbnail.url }}">
+      </a>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}
+
+{% block scripts %}{% endblock %}
