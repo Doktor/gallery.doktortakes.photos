@@ -24,6 +24,7 @@
       text-decoration: none;
     }
   </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
 {% block classes %}small{% endblock %}
@@ -32,9 +33,8 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
-        <li><a href="{% url 'edit' %}">Edit</a></li>
-        <li><a href="{% url 'edit' %}">New</a></li>
+        <li class="bc-icon" title="Breadcrumbs"><i class="fa fa-book"></i> <a href="{% url 'edit' %}">Edit</a></li>
+        <li><a href="{% url 'new_album' %}">New</a></li>
       </ul>
     </nav>
 
