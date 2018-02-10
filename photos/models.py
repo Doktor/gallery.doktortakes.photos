@@ -319,7 +319,8 @@ class Photo(models.Model):
     image = models.ImageField(
         upload_to=get_photo_image_path,
         width_field='width', height_field='height')
-    md5 = models.CharField(max_length=32, editable=False, unique=True)
+    md5 = models.CharField(
+        max_length=32, editable=False, unique=True, verbose_name="MD5")
 
     thumbnail = models.ImageField(
         upload_to=get_photo_thumbnail_path, editable=False)

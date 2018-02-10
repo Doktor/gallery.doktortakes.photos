@@ -42,17 +42,7 @@ def get_albums_from_path(path):
 
 def get_album_by_path(path):
     """Returns the Album corresponding to the given path."""
-    path = path.split('/')
-
-    if len(path) == 1:
-        return get_object_or_404(Album, slug=path[0], parent=None)
-
-    previous = None
-    for item in path:
-        a = get_object_or_404(Album, slug=item, parent=previous)
-        previous = a
-
-    return a
+    return get_albums_from_path(path)[-1]
 
 
 def get_photo(path, md5):
