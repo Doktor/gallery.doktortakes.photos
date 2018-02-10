@@ -7,23 +7,6 @@
 {% endblock %}
 
 {% block style %}
-<style>
-  body {
-    max-width: 1100px;
-  }
-  button a {
-    cursor: default;
-  }
-  button a,
-  button a:focus,
-  button a:active {
-    color: black;
-  }
-  button a,
-  button a:hover {
-    text-decoration: none;
-  }
-</style>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
@@ -50,38 +33,40 @@
 {% endif %}
 
 <section class="clearfix">
-  <div>
-    {% if form.errors %}
-    <section class="errors">
-      {% for field in form %}
-        {% for error in field.errors %}
-          <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-          </div>
-        {% endfor %}
-      {% endfor %}
-      {% for error in form.non_field_errors %}
+  {% if form.errors %}
+  <section class="errors">
+    {% for field in form %}
+      {% for error in field.errors %}
         <div class="alert alert-danger">
           <strong>{{ error|escape }}</strong>
         </div>
       {% endfor %}
-    </section>
-    {% endif %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+      <div class="alert alert-danger">
+        <strong>{{ error|escape }}</strong>
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
 
-    <form method="post" action="{% url 'new_album' %}" enctype="multipart/form-data">
-      {% csrf_token %}
+  <form id="new-album" method="post" action="{% url 'new_album' %}" enctype="multipart/form-data">
+    {% csrf_token %}
 
-      {% for field in form %}
-        <div class="row">
-          {{ field.errors }}
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          <div class="field-wrapper">{{ field }}</div>
-        </div>
-      {% endfor %}
-      <button type="submit">Save</button>
-      <button type="button"><a href="{% url 'edit' %}">Cancel</a></button>
-    </form>
-  </div>
+    <fieldset>
+    {% for field in form %}
+      <div class="row">
+        {{ field.errors }}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+{#        {{ field }}#}
+                <div class="field-wrapper">{{ field }}</div>
+      </div>
+    {% endfor %}
+    </fieldset>
+
+    <button type="submit">Save</button>
+    <a href="{% url 'edit' %}"><button type="button">Cancel</button></a>
+  </form>
 </section>
 
 {% endblock %}

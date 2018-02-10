@@ -2,69 +2,47 @@
 {% load staticfiles %}
 
 {% block title %}Login | {{ block.super }}{% endblock %}
-{% block meta %}
-  <meta name="robots" content="noindex, nofollow">
-{% endblock %}
 
-{% block style %}
-  <style>
-    .form-wrapper {
-      width: 100%;
-      margin-left: 25%;
-    }
-    #login {
-      width: 50%;
-    }
-    #login label {
-      text-align: left;
-      width: 100%;
-    }
-    #login input {
-      text-align: left;
-      width: 100%;
-    }
-  .field {
-    margin: 1rem 0;
-  }
-  .field.submit {
-    margin-top: 2rem;
-  }
-  </style>
+{% block meta %}
+<meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
 {% block classes %}small{% endblock %}
 
 {% block content %}
-  {% if messages %}
+  <header>
+    {% if messages %}
     <section id="messages">
       {% for m in messages %}
         <div class="message {{ m.tags }}">{{ m }}</div>
       {% endfor %}
     </section>
-  {% endif %}
+    {% endif %}
+
+    <h2>Log in</h2>
+  </header>
 
   <section>
-    <h1>Log in</h1>
+    <form id="login" method="post" action="{% url 'login' %}">
+      {% csrf_token %}
 
-    <div class="form-wrapper">
-      <form id="login" method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-
-        <div class="field">
+      <fieldset>
+        <div class="row">
           <label for="username">Username</label>
-          <input id="username" name="username" type="text" required>
+          <div class="field-wrapper">
+            <input id="username" name="username" type="text" required>
+          </div>
         </div>
 
-        <div class="field">
+        <div class="row">
           <label for="password">Password</label>
-          <input id="password" name="password" type="password" required>
+          <div class="field-wrapper">
+            <input id="password" name="password" type="password" required>
+          </div>
         </div>
+      </fieldset>
 
-        <div class="field submit">
-          <button type="submit">Log in</button>
-        </div>
-
-      </form>
-    </div>
+      <button type="submit">Log in</button>
+    </form>
   </section>
 {% endblock %}
