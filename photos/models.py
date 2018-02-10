@@ -1,3 +1,5 @@
+import warnings
+
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import models
@@ -208,6 +210,9 @@ class Album(models.Model):
 def update_album_name(sender, instance, *args, **kwargs):
     album = instance
 
+    if album.photos.count() == 0:
+        return
+
     # Prevents an infinite loop
     if hasattr(album, '_rename'):
         return
@@ -217,13 +222,10 @@ def update_album_name(sender, instance, *args, **kwargs):
     except Album.DoesNotExist:
         return
     else:
-        # Capitalization changes don't affect paths
-        if old.name.lower() == album.name.lower():
+        if old.get_path() == album.get_path():
             return
 
-        # Punctuation changes don't affect paths
-        if old.slug == album.slug:
-            return
+    fallback = False
 
     old_path = old.get_path()
     new_path = album.get_path()
@@ -233,13 +235,35 @@ def update_album_name(sender, instance, *args, **kwargs):
 
     for folder in folders:
         base = os.path.join(MEDIA_ROOT, folder)
+
         old_dir = os.path.join(base, old_path)
         new_dir = os.path.join(base, new_path)
 
         try:
             os.rename(old_dir, new_dir)
-        except FileNotFoundError as e:
-            if album.photos.count() != 0:
+        except FileNotFoundError:
+            fallback = True
+            warnings.warn(
+                f"Media folder '{old_dir}' not found, trying fallback method")
+
+    if fallback:
+        # Fallback method if the folders are named incorrectly
+        # This should be fixed now, but just in case...
+
+        # Find the path by checking the path of any photo in the album
+        photo = album.photos.all()[0]
+        path, _ = os.path.split(photo.image.name)
+        old_path = path.replace(PHOTOS_FOLDER + '/', '')
+
+        for folder in folders:
+            base = os.path.join(MEDIA_ROOT, folder)
+
+            old_dir = os.path.join(base, old_path)
+            new_dir = os.path.join(base, new_path)
+
+            try:
+                os.rename(old_dir, new_dir)
+            except FileNotFoundError as e:
                 raise e
 
     # Update photo file paths
