@@ -88,7 +88,8 @@ class PanoramaAdmin(admin.ModelAdmin):
             'fields': ('name', 'slug', 'location', 'description')
         }),
         ('Image', {
-            'fields': ('image', 'md5', 'width', 'height', 'file_size')
+            'fields': ('image', 'thumbnail',
+                       'md5', 'width', 'height', 'file_size')
         }),
         ('Dates', {
             'fields': ('timezone', 'taken', 'edited', 'uploaded')
@@ -98,7 +99,7 @@ class PanoramaAdmin(admin.ModelAdmin):
                     'width', 'height', 'file_size')
     ordering = ('-taken',)
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('md5', 'width', 'height', 'file_size',
+    readonly_fields = ('thumbnail', 'md5', 'width', 'height', 'file_size',
                        'taken', 'edited', 'uploaded')
 
 

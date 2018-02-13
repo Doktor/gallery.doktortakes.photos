@@ -124,6 +124,7 @@ THUMBNAILS_FOLDER = 'thumbs'
 SQUARES_FOLDER = 'squares'
 
 PANORAMAS_FOLDER = 'panoramas'
+PANORAMA_THUMBNAILS_FOLDER = 'panoramas/thumbs'
 
 # Index page
 

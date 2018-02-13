@@ -12,7 +12,7 @@ from django.utils.text import slugify
 from photos.fields import JSONField
 from photos.settings import (
     MEDIA_ROOT, PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER,
-    PANORAMAS_FOLDER)
+    PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER)
 
 import datetime
 import exifread
@@ -655,15 +655,22 @@ def create_photo_square_thumbnail(photo, size=(400, 400)):
 
 # Panoramas
 
-
 def get_panorama_path(pano, filename):
     _, ext = os.path.splitext(filename)
     ext = ext.lstrip('.')
 
     if pano.pk is not None:
-        return f"{PANORAMAS_FOLDER}/{pano.md5}.{ext}"
+        return f"{pano.md5}.{ext}"
     else:
-        return f"{PANORAMAS_FOLDER}/{uuid.uuid4()}.{ext}"
+        return f"{uuid.uuid4()}.{ext}"
+
+
+def get_panorama_image_path(pano, filename):
+    return f"{PANORAMAS_FOLDER}/{get_panorama_path(pano, filename)}"
+
+
+def get_panorama_thumbnail_path(pano, filename):
+    return f"{PANORAMA_THUMBNAILS_FOLDER}/{get_panorama_path(pano, filename)}"
 
 
 class Panorama(models.Model):
@@ -674,10 +681,13 @@ class Panorama(models.Model):
     description = models.TextField(blank=True)
 
     image = models.ImageField(
-        upload_to=get_panorama_path,
+        upload_to=get_panorama_image_path,
         width_field='width', height_field='height')
     md5 = models.CharField(
         max_length=32, editable=False, unique=True, verbose_name="MD5")
+
+    thumbnail = models.ImageField(
+        upload_to=get_panorama_thumbnail_path, editable=False, null=True)
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
@@ -730,6 +740,14 @@ def update_panorama(sender, instance, *args, **kwargs):
     # The post-save handler renames the file to match the new MD5 hash
     pano.image.save(pano.image.name, pano.image, save=False)
 
+    # Generate a thumbnail
+    tb = create_panorama_thumbnail(pano)
+
+    if pano.thumbnail:
+        pano.thumbnail.delete(save=False)
+
+    pano.thumbnail.save(pano.image.name, File(tb), save=False)
+
     pano.image.open()
 
     # File size
@@ -781,13 +799,38 @@ def rename_panorama_files(sender, instance, created, *args, **kwargs):
     if hasattr(pano, '_update'):
         del pano._update
 
-        old_path = pano.image.path
+        fields = ['image', 'thumbnail']
 
-        new_name = get_panorama_path(pano, pano.image.name)
-        new_path = os.path.join(MEDIA_ROOT, new_name)
+        for field in fields:
+            file = getattr(pano, field)
+            get_path = globals()[f"get_panorama_{field}_path"]
 
-        pano.image.name = new_name
-        os.rename(old_path, new_path)
+            old_path = file.path
+            new_name = get_path(pano, file.name)
+            new_path = os.path.join(MEDIA_ROOT, new_name)
 
+            file.name = new_name
+            os.rename(old_path, new_path)
+
+        # Done!
         pano._rename = True
         pano.save()
+
+
+def create_panorama_thumbnail(pano):
+    """Creates a thumbnail of the given photo."""
+    pano.image.open()
+
+    image = PIL.Image.open(pano.image)
+
+    if image.format != 'JPEG':
+        image = image.convert('RGB')
+
+    image.thumbnail((3000, 3000))
+
+    data = BytesIO()
+    image.save(data, 'JPEG', quality=80, optimize=True)
+
+    pano.image.close()
+
+    return data
