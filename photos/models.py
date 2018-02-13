@@ -405,6 +405,8 @@ class Photo(models.Model):
             super().save(*args, **kwargs)
             return
 
+        self.image.save(self.image.name, self.image, save=False)
+
         self.image.open()
 
         filename = os.path.join(MEDIA_ROOT, self.image.name)
@@ -456,7 +458,7 @@ class Photo(models.Model):
         if edited is not None:
             self.edited = strptime(edited, DATE_FORMAT).replace(tzinfo=tz)
         else:
-            self.taken = modified
+            self.edited = modified
 
         self.image.close()
 
