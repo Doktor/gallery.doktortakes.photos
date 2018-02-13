@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 
 from photos.fields import JSONField, JSONWidget
-from photos.models import Album, Photo
+from photos.models import Album, Photo, Panorama
 
 
 class AlbumForm(forms.ModelForm):
@@ -82,5 +82,26 @@ class PhotoAdmin(admin.ModelAdmin):
     album_name.short_description = 'Album name'
 
 
+class PanoramaAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Event', {
+            'fields': ('name', 'slug', 'location', 'description')
+        }),
+        ('Image', {
+            'fields': ('image', 'md5', 'width', 'height', 'file_size')
+        }),
+        ('Dates', {
+            'fields': ('timezone', 'taken', 'edited', 'uploaded')
+        }),
+    )
+    list_display = ('name', 'location', 'taken', 'md5',
+                    'width', 'height', 'file_size')
+    ordering = ('-taken',)
+    prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('md5', 'width', 'height', 'file_size',
+                       'taken', 'edited', 'uploaded')
+
+
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(Panorama, PanoramaAdmin)

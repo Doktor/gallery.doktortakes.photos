@@ -11,7 +11,8 @@ from django.utils.text import slugify
 
 from photos.fields import JSONField
 from photos.settings import (
-    MEDIA_ROOT, PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER)
+    MEDIA_ROOT, PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER,
+    PANORAMAS_FOLDER)
 
 import datetime
 import exifread
@@ -650,3 +651,143 @@ def create_photo_square_thumbnail(photo, size=(400, 400)):
     photo.image.close()
 
     return data
+
+
+# Panoramas
+
+
+def get_panorama_path(pano, filename):
+    _, ext = os.path.splitext(filename)
+    ext = ext.lstrip('.')
+
+    if pano.pk is not None:
+        return f"{PANORAMAS_FOLDER}/{pano.md5}.{ext}"
+    else:
+        return f"{PANORAMAS_FOLDER}/{uuid.uuid4()}.{ext}"
+
+
+class Panorama(models.Model):
+    name = models.CharField(max_length=250)
+    slug = models.SlugField(max_length=250)
+
+    location = models.CharField(max_length=500, blank=True)
+    description = models.TextField(blank=True)
+
+    image = models.ImageField(
+        upload_to=get_panorama_path,
+        width_field='width', height_field='height')
+    md5 = models.CharField(
+        max_length=32, editable=False, unique=True, verbose_name="MD5")
+
+    width = models.PositiveIntegerField(default=0, editable=False)
+    height = models.PositiveIntegerField(default=0, editable=False)
+    file_size = models.CharField(max_length=50, editable=False)
+
+    timezone = models.CharField(max_length=100, default='US/Eastern')
+    taken = models.DateTimeField(editable=False, null=True)
+    edited = models.DateTimeField(editable=False, null=True)
+    uploaded = models.DateTimeField(auto_now=True, editable=False)
+
+    exif = JSONField(editable=False, null=True, blank=True, verbose_name="EXIF")
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def dimensions(self):
+        """Returns the dimensions of the panorama as a string."""
+        return "{0}x{1}".format(self.width, self.height)
+
+    def get_absolute_url(self):
+        return reverse('panorama', kwargs={'slug': self.slug})
+
+
+@receiver(pre_save, sender=Panorama,
+          dispatch_uid='photos.models.update_panorama')
+def update_panorama(sender, instance, *args, **kwargs):
+    pano = instance
+
+    if hasattr(pano, '_rename'):
+        return
+
+    # Update fields if a new instance was created, or the image was changed
+    try:
+        previous = Panorama.objects.get(pk=pano.pk)
+    except Panorama.DoesNotExist:
+        pass
+    else:
+        if previous.image != pano.image:
+            # Delete the old image file
+            previous.image.delete(save=False)
+        else:
+            return
+
+    pano._update = True
+
+    pano.image.open()
+
+    # Save the new image file under a temporary name
+    # The post-save handler renames the file to match the new MD5 hash
+    pano.image.save(pano.image.name, pano.image, save=False)
+
+    pano.image.open()
+
+    # File size
+    pano.file_size = format_file_size(pano.image.size)
+
+    # MD5 hash
+    filename = os.path.join(MEDIA_ROOT, pano.image.name)
+    md5 = generate_md5_hash(filename)
+
+    try:
+        Panorama.objects.get(md5=md5)
+    except Panorama.DoesNotExist:
+        pano.md5 = md5
+    else:
+        raise ValidationError(f"Duplicate file detected: {md5}")
+
+    # EXIF data
+    exif = exifread.process_file(pano.image, details=False)
+
+    pano.exif = {k: v.printable for k, v in exif.items()}
+
+    # Timestamps
+    modified = get_modified_time_utc(filename)
+
+    tz_name = pano.timezone
+    tz = pytz.timezone(tz_name)
+
+    taken = pano.exif.get('EXIF DateTimeDigitized', None)
+    if taken is not None:
+        pano.taken = strptime(taken, DATE_FORMAT).replace(tzinfo=tz)
+    else:
+        pano.taken = modified
+
+    edited = pano.exif.get('Image DateTime', None)
+    if edited is not None:
+        pano.edited = strptime(edited, DATE_FORMAT).replace(tzinfo=tz)
+    else:
+        pano.edited = modified
+
+    pano.image.close()
+
+
+@receiver(post_save, sender=Panorama,
+          dispatch_uid='photos.models.rename_panorama_files')
+def rename_panorama_files(sender, instance, created, *args, **kwargs):
+    """Renames image files after a panorama is created or updated."""
+    pano = instance
+
+    if hasattr(pano, '_update'):
+        del pano._update
+
+        old_path = pano.image.path
+
+        new_name = get_panorama_path(pano, pano.image.name)
+        new_path = os.path.join(MEDIA_ROOT, new_name)
+
+        pano.image.name = new_name
+        os.rename(old_path, new_path)
+
+        pano._rename = True
+        pano.save()

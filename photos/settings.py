@@ -123,6 +123,7 @@ PHOTOS_FOLDER = 'photos'
 THUMBNAILS_FOLDER = 'thumbs'
 SQUARES_FOLDER = 'squares'
 
+PANORAMAS_FOLDER = 'panoramas'
 
 # Index page
 
