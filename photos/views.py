@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods, require_GET
 
 from photos.context_processors import metadata as m
 from photos.forms import AlbumForm
-from photos.models import Album, Photo
+from photos.models import Album, Panorama, Photo
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
@@ -180,6 +180,16 @@ def album(request, path):
         'items_per_page': ITEMS_PER_PAGE,
     }
     return render(request, 'album.html', context)
+
+
+def panorama_list(request):
+    p = Panorama.objects.all().order_by('-taken')
+    return render(request, "panoramas.html", {'panoramas': p})
+
+
+def panorama(request, slug):
+    p = get_object_or_404(Panorama, slug=slug)
+    return render(request, "panorama.html", {'p': p})
 
 
 @require_GET

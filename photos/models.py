@@ -703,10 +703,8 @@ class Panorama(models.Model):
     def __str__(self):
         return self.name
 
-    @property
-    def dimensions(self):
-        """Returns the dimensions of the panorama as a string."""
-        return "{0}x{1}".format(self.width, self.height)
+    def get_thumbnail_size(self):
+        return format_file_size(self.thumbnail.size)
 
     def get_absolute_url(self):
         return reverse('panorama', kwargs={'slug': self.slug})

@@ -42,6 +42,11 @@ api_patterns = [
     url(r'^search/$', api.search_photos, name='search_photos'),
 ]
 
+panorama_patterns = [
+    url(r'^$', views.panorama_list, name='panoramas'),
+    url(r'^(?P<slug>[a-z0-9-]+)$', views.panorama, name='panorama')
+]
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
 
@@ -63,6 +68,8 @@ urlpatterns = [
     url(r'^new/$', views.new_album, name='new_album'),
 
     url(r'^albums/', include(album_patterns)),
+
+    url(r'^panoramas/', include(panorama_patterns)),
 
     url(r'^featured/', views.featured, name='featured'),
     url(r'^wall/', views.wall, name='wall'),
