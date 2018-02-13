@@ -431,11 +431,11 @@ class Photo(models.Model):
 
         # XMP data
         xmp = XMP(file_path=filename).get_xmp()
-        rating = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Rating')
 
         try:
+            rating = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Rating')
             self.rating = int(rating)
-        except ValueError:
+        except (AttributeError, ValueError):
             self.rating = 0
 
         # Timestamps
