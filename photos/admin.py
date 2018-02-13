@@ -46,7 +46,7 @@ class PhotoAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Image', {
             'fields': ('image', 'preview',
-                       'md5', 'width', 'height', 'file_size')
+                       'md5', 'width', 'height', 'file_size', 'exif')
         }),
         ('Other', {
             'fields': ('crop', 'rating', 'album')
@@ -58,8 +58,8 @@ class PhotoAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'album_name', 'width', 'height',
                     'file_size', 'taken', 'edited', 'rating')
     ordering = ('-taken',)
-    readonly_fields = ('preview', 'md5', 'width', 'height',
-                       'file_size', 'taken', 'edited')
+    readonly_fields = ('preview', 'md5', 'width', 'height', 'file_size', 'exif',
+                       'taken', 'edited')
 
     def preview(self, photo):
         return format_html('<a href="{}"><img height="300" src="{}"></a>',
