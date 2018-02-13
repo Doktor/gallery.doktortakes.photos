@@ -80,6 +80,8 @@ class Album(models.Model):
     start = models.DateField()
     end = models.DateField(blank=True, null=True)
 
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
     cover = models.OneToOneField(
         'Photo', models.SET_NULL,
         related_name='cover_for', blank=True, null=True,
