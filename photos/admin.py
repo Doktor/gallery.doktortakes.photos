@@ -43,9 +43,17 @@ class AlbumAdmin(admin.ModelAdmin):
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    fields = (
-        'image', 'preview', 'md5', 'width', 'height',
-        'file_size', 'crop', 'taken', 'edited', 'rating'
+    fieldsets = (
+        ('Image', {
+            'fields': ('image', 'preview',
+                       'md5', 'width', 'height', 'file_size')
+        }),
+        ('Other', {
+            'fields': ('crop', 'rating', 'album')
+        }),
+        ('Dates', {
+            'fields': ('taken', 'edited')
+        }),
     )
     list_display = ('__str__', 'album_name', 'width', 'height',
                     'file_size', 'taken', 'edited', 'rating')
