@@ -367,7 +367,7 @@ class Photo(models.Model):
     edited = models.DateTimeField(editable=False)
     uploaded = models.DateTimeField(auto_now_add=True, editable=False)
 
-    exif = JSONField(editable=False, blank=True, verbose_name="EXIF")
+    exif = JSONField(blank=True, verbose_name="EXIF")
 
     rating = models.PositiveSmallIntegerField(default=0)
 

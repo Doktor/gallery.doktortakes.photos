@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
 
+from photos.fields import JSONField, JSONWidget
 from photos.models import Album, Photo
 
 
@@ -43,6 +44,9 @@ class AlbumAdmin(admin.ModelAdmin):
 
 
 class PhotoAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        JSONField: {'widget': JSONWidget},
+    }
     fieldsets = (
         ('Image', {
             'fields': ('image', 'preview',
@@ -58,8 +62,13 @@ class PhotoAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'album_name', 'width', 'height',
                     'file_size', 'taken', 'edited', 'rating')
     ordering = ('-taken',)
-    readonly_fields = ('preview', 'md5', 'width', 'height', 'file_size', 'exif',
+    readonly_fields = ('preview', 'md5', 'width', 'height', 'file_size',
                        'taken', 'edited')
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        form.base_fields['exif'].disabled = True
+        return form
 
     def preview(self, photo):
         return format_html('<a href="{}"><img height="300" src="{}"></a>',

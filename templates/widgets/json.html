@@ -1,0 +1,18 @@
+<a id="{{ name }}-toggle" style="color: #0078FF; cursor: pointer">Toggle pretty-print</a>
+<p id="{{ name }}-field" style="margin-left: 170px" data-json="false">{{ data }}</p>
+
+<script>
+let el = document.getElementById('{{ name }}-field');
+let text = el.innerHTML;
+let json = JSON.stringify(JSON.parse(text), null, 2);
+
+document.getElementById('{{ name }}-toggle').addEventListener('click', function() {
+  if (el.dataset.json === 'false') {
+    el.dataset.json = 'true';
+    el.innerText = json;
+  } else {
+    el.dataset.json = 'false';
+    el.innerText = text;
+  }
+});
+</script>

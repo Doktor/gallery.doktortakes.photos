@@ -1,10 +1,29 @@
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db import models
+from django.forms import widgets
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
+
 import json
 
-from django.db import models
-from django.core.serializers.json import DjangoJSONEncoder
+
+class JSONWidget(widgets.Textarea):
+    template_name = 'widgets/json.html'
+
+    def render(self, name, value, **kwargs):
+        context = {
+            'name': name,
+            'data': json.dumps(value),
+        }
+
+        print(context)
+
+        return mark_safe(render_to_string(self.template_name, context))
 
 
 class JSONField(models.TextField):
+    widget = JSONWidget
+
     def to_python(self, value):
         if value == "":
             return None
