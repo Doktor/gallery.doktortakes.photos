@@ -31,27 +31,45 @@ def format_f_stop(f):
 def get_exif(p):
     e = p.exif
 
-    model = e.get('EXIF LensModel', '')
+    camera = e.get('Image Model', 'Camera unknown')
 
-    if model:
+    try:
         make = e.get('EXIF LensMake', e['Image Make'])
-        lens = f"{make} {model}"
-    else:
+        model = e['EXIF LensModel']
+
+        lens = f'{make} {model}'
+    except KeyError:
         lens = 'Lens unknown'
 
     if 'EF-S' in lens:
         lens = lens.replace('EF-S', 'EF-S ')
-    elif 'EF' in model:
+    elif 'EF' in lens:
         lens = lens.replace('EF', 'EF ')
 
-    f = e.get('EXIF FNumber', None)
+    try:
+        shutter_speed = f"{e['EXIF ExposureTime']} s"
+    except KeyError:
+        shutter_speed = 'Unknown'
+
+    try:
+        f_stop = f"f/{format_f_stop(e['EXIF FNumber'])}"
+    except KeyError:
+        if camera != 'Camera unknown':
+            f_stop = 'f/0'
+        else:
+            f_stop = 'Unknown'
+
+    try:
+        iso_speed = f"ISO {e['EXIF ISOSpeedRatings']}"
+    except KeyError:
+        iso_speed = 'Unknown'
 
     return {
-        'camera': e['Image Model'],
+        'camera': camera,
         'lens': lens,
-        'shutter_speed': f"{e['EXIF ExposureTime']}s",
-        'aperture': f"f/{format_f_stop(f)}",
-        'iso_speed': f"ISO {e['EXIF ISOSpeedRatings']}",
+        'shutter_speed': shutter_speed,
+        'aperture': f_stop,
+        'iso_speed': iso_speed,
     }
 
 
