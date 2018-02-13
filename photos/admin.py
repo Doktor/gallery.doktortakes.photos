@@ -88,7 +88,7 @@ class PanoramaAdmin(admin.ModelAdmin):
             'fields': ('name', 'slug', 'location', 'description')
         }),
         ('Image', {
-            'fields': ('image', 'thumbnail',
+            'fields': ('image', 'thumbnail', 'preview',
                        'md5', 'width', 'height', 'file_size')
         }),
         ('Dates', {
@@ -99,8 +99,12 @@ class PanoramaAdmin(admin.ModelAdmin):
                     'width', 'height', 'file_size')
     ordering = ('-taken',)
     prepopulated_fields = {'slug': ('name',)}
-    readonly_fields = ('thumbnail', 'md5', 'width', 'height', 'file_size',
-                       'taken', 'edited', 'uploaded')
+    readonly_fields = ('thumbnail', 'preview', 'md5', 'width', 'height',
+                       'file_size', 'taken', 'edited', 'uploaded')
+
+    def preview(self, pano):
+        return format_html('<a href="{0}"><img width="1000" src="{0}"></a>',
+                           pano.thumbnail.url)
 
 
 admin.site.register(Album, AlbumAdmin)
