@@ -364,53 +364,65 @@ $logo: 2.4rem;
 }
 
 // forms
-form {
-  fieldset {
-    width: 100%;
-    display: table;
-    border: 0;
-    padding: 0;
+form .row {
+  $width: 20%;
 
-    // after border-spacing: 0 0 1 rem 0
-    margin: -0.5rem 0 0.5rem 0;
+  @include clearfix();
 
-    border-collapse: separate;
-    border-spacing: 0 0.5rem;
+  > label {
+    width: $width;
   }
 
-  .row {
-    display: table-row;
-  }
-
-  input, select {
-    width: 100%;
+  > .field-wrapper {
+    width: 100% - $width;
     float: right;
   }
 
-  label, .field-wrapper {
-    vertical-align: middle;
-  }
-
-  label {
-    display: table-cell;
-    text-align: right;
-    padding-right: 0.75rem;
-  }
-
-  .field-wrapper {
-    width: 100%;
-    display: table-cell;
-  }
-
-  input:not([type="file"]), select {
-    padding: 2px 5px;
-  }
-
-  select {
-    border: 0;
+  &:not(:last-child) {
+    margin-bottom: 0.5rem;
   }
 }
 
+fieldset {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  margin-bottom: 1rem;
+}
+
+legend {
+  margin-bottom: 0.5rem;
+}
+
+input:not([type="radio"]), select, textarea {
+  width: 100%;
+  border: 2px solid black;
+
+  &:active, &:focus {
+    border-color: rgb(0, 120, 255);
+  }
+}
+
+input:not([type="file"]), select, textarea {
+  padding: 4px 8px;
+}
+
+textarea {
+  display: block;
+  height: 7rem;
+}
+
+input[type="radio"] + label {
+  text-align: right;
+  margin: 0 0.5rem 0 0.15rem;
+}
+
+label, .field-wrapper {
+  vertical-align: middle;
+}
+
+
+//
 #login, #new-album {
   max-width: 600px;
   margin: 0 auto;
