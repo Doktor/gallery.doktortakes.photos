@@ -20,23 +20,19 @@
   </header>
 
   <section>
+    <div><a href="{{ p.image.url }}">Full size</a>, {{ p.width }} &times; {{ p.height }} px, {{ p.file_size }}</div>
+    <div><a href="{{ p.thumbnail.url }}">Thumbnail</a>, {{ p.thumbnail.width }} &times; {{ p.thumbnail.height }} px, {{ p.get_thumbnail_size }}</div>
+  </section>
+
+  <section>
     <img id="panorama"
       title="Preview image"
       src="{{ p.thumbnail.url }}"
       data-width="{{ p.width }}"
       data-height="{{ p.height }}">
-
-    <ul>
-      <li><a href="{{ p.image.url }}">Full size</a>, {{ p.width }} &times; {{ p.height }} px, {{ p.file_size }}</li>
-      {# <li><a href="{{ p.optimal.url }}">Optimal size</a>, {{ p.optimal.width }} &times; {{ p.optimal.height }} px, {{ p.get_optimal_file_size }}</li> #}
-      <li><a href="{{ p.thumbnail.url }}">Thumbnail</a>, {{ p.thumbnail.width }} &times; {{ p.thumbnail.height }} px, {{ p.get_thumbnail_size }}</li>
-    </ul>
-
-    {# <p>The optimal size image is sized so there's very little degradation in quality to the full size image. The full size image is usually not that great at 100% zoom.</p> #}
   </section>
 
   <footer>
-    {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
 {% endblock %}
