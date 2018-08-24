@@ -10,11 +10,8 @@ with open(os.path.join(BASE_DIR, 'keys', 'django.txt'), 'r') as f:
 
 DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    '104.131.116.97',
-    'doktortakes.photos',
-]
+with open(os.path.join(BASE_DIR, 'data', 'allowed_hosts.txt')) as f:
+    ALLOWED_HOSTS = f.read().strip().split('\n')
 
 
 # Application definition
