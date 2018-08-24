@@ -1,11 +1,13 @@
 # IDE files
 .idea/
 
-# Secret keys
+# Sensitive data
+data/
 keys/
 
 # Database
-photos.db
+*.db
+*.bak
 
 # Media files
 media/
@@ -15,7 +17,7 @@ media/
 .DS_Store
 
 # Compiled files
-__pycache__
+__pycache__/
 *.css
 *.css.map
 
@@ -24,9 +26,3 @@ static/lib/
 
 # Migrations (until a stable version is released)
 photos/migrations/
-
-# Other data
-data/taglines.txt
-
-# Backups
-*.bak
