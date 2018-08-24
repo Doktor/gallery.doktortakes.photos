@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from photos.fields import JSONField
-from photos.settings import (
+from core.settings import (
     MEDIA_ROOT, PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER,
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER)
 

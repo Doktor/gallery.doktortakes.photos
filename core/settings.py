@@ -39,7 +39,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'photos.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -52,13 +52,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'photos.context_processors.metadata',
+                'core.context_processors.metadata',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'photos.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database

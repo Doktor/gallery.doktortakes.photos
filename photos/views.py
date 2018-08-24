@@ -8,10 +8,10 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_GET
 
-from photos.context_processors import metadata as m
+from core.context_processors import metadata as m
 from photos.forms import AlbumForm
 from photos.models import Album, Panorama, Photo
-from photos.settings import (
+from core.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
 import datetime

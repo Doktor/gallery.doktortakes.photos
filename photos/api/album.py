@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 from json import JSONDecodeError
 
-from photos.context_processors import metadata
+from core.context_processors import metadata
 from photos.models import Photo
 
 from .photo import generate_photo_dict
