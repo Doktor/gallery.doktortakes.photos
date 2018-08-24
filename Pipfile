@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-xmp-toolkit = "*"
+pytz = "*"
+Django = "==1.11.6"
+ExifRead = "*"
+Pillow = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
