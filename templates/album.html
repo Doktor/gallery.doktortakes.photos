@@ -53,7 +53,11 @@
 
     <section id="album">
       <figure class="cover">
+        {% if album.cover %}
         <img src="{{ album.cover.image.url }}">
+        {% else %}
+        <img src="{% static 'images/cover-placeholder.png' %}">
+        {% endif %}
 
         <div class="title-container">
           <h2 class="title">{{ album.name }}</h2>

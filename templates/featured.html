@@ -21,7 +21,7 @@
   {% endif %}
 
   {% if featured %}
-    <h2>Featured photos</h2>
+    <h2>Featured</h2>
 
     <section id="featured">
       <div class="container">
@@ -37,9 +37,9 @@
     </section>
 
     {% if more_photos %}
-    <div class="view-more">
+    <h4 class="view-more">
       <a href="{{ featured_url }}">View more featured photos</a>
-    </div>
+    </h4>
     {% endif %}
   {% else %}
     <div>No featured photos.</div>
