@@ -39,7 +39,7 @@
     {% if request.user.is_authenticated %}
     <li class="divider"></li>
     <li><a href="{% url 'edit' %}">Edit</a></li>
-    <li><a href="{% url 'logout' %}">Log out</a></li>
+    <li><a href="{% url 'log_out' %}">Log out</a></li>
     {% endif %}
   </ul>
 </nav>

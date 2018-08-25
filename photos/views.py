@@ -1,7 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
@@ -286,34 +284,3 @@ def upload_photo(request, path):
         p.save()
 
     return JsonResponse({'success': True})
-
-
-def site_login(request):
-    """Log in to the site."""
-    next_url = request.GET.get('next', '/')
-
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-
-            messages.success(request, "Logged in successfully.")
-            return redirect(next_url)
-        else:
-            # TODO: next parameter is not preserved
-            messages.error(request, "Invalid username or password.")
-            return redirect(
-                "{url}?next={next}".format(url=reverse('login'), next=next_url))
-
-    return render(request, "login.html", dict())
-
-
-@login_required
-def site_logout(request):
-    """Log out of the site."""
-    logout(request)
-    messages.success(request, "Logged out successfully.")
-    return redirect(reverse('index'))

@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView, RedirectView
 
+from auth.urls import url_log_in, url_log_out
 from photos import api, views
 
 handler404 = 'photos.views.handler404'
@@ -48,6 +49,9 @@ panorama_patterns = [
 ]
 
 urlpatterns = [
+    url_log_in,
+    url_log_out,
+
     url(r'^$', views.index, name='index'),
 
     url(r'^api/', include(api_patterns)),
@@ -58,11 +62,6 @@ urlpatterns = [
     url(r'^copyright/$',
         TemplateView.as_view(template_name='copyright.html'),
         name='copyright'),
-
-    url(r'login/$',
-        views.site_login, name='login'),
-    url(r'logout/$',
-        views.site_logout, name='logout'),
 
     url(r'^edit/$', views.edit_content, name='edit'),
     url(r'^new/$', views.new_album, name='new_album'),
@@ -77,6 +76,7 @@ urlpatterns = [
     url(r'^404/$', views.debug404),
     url(r'^500/$', views.debug500),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += [url(r'^admin/', admin.site.urls)]

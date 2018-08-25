@@ -32,7 +32,7 @@
     {% if request.user.is_superuser %}
     <ul class="navlinks">
       <li><a href="{% url 'edit' %}">Edit</a></li>
-      <li><a href="{% url 'logout' %}">Log out</a></li>
+      <li><a href="{% url 'log_out' %}">Log out</a></li>
     </ul>
     {% endif %}
   </header>
