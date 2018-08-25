@@ -39,7 +39,7 @@ function show_page(page) {
   }
 
   api.dataset.page = page;
-  window.location.hash = 'page-' + page;
+  history.replaceState(undefined, undefined, '#page-' + page);
 }
 
 // Pagination
