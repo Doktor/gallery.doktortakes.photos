@@ -26,3 +26,6 @@ static/lib/
 
 # Migrations (until a stable version is released)
 photos/migrations/
+
+# Temporary files
+temp/

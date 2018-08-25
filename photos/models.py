@@ -1,7 +1,6 @@
-import warnings
-
 from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.core.files.storage import DefaultStorage
 from django.db import models
 from django.db.models.signals import pre_save, pre_delete, post_save
 from django.dispatch import receiver
@@ -12,7 +11,7 @@ from django.utils.text import slugify
 from photos.fields import JSONField
 from core.settings import (
     MEDIA_ROOT, PHOTOS_FOLDER, THUMBNAILS_FOLDER, SQUARES_FOLDER,
-    PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER)
+    PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER, BASE_DIR)
 
 import datetime
 import exifread
@@ -21,13 +20,14 @@ import os
 import PIL.Image
 import pytz
 import uuid
+import warnings
 from io import BytesIO
 from libxmp import XMPFiles as XMP, consts as XMPConstants
 
 fromtimestamp = datetime.datetime.fromtimestamp
 strptime = datetime.datetime.strptime
 
-BLOCK_SIZE = 1 * 1024 * 1024  # 1 MB
+CHUNK_SIZE = 64 * 1024  # 64 KB
 
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
 
@@ -44,10 +44,10 @@ def format_file_size(b):
     return "%.2f %s" % (b, 'TB')
 
 
-def get_modified_time_utc(filename):
+def get_modified_time_utc(file):
     """Returns the modification time (UTC) of a file."""
-    ts = os.path.getmtime(filename)
-    return fromtimestamp(ts, pytz.UTC)
+    storage = DefaultStorage()
+    return storage.get_modified_time(file.name)
 
 
 # Album
@@ -320,17 +320,13 @@ def get_photo_square_thumbnail_path(photo, filename):
     return f"{SQUARES_FOLDER}/{get_photo_path(photo, filename, ext='jpg')}"
 
 
-def generate_md5_hash(filename):
-    h = hashlib.md5()
+def generate_md5_hash(file):
+    hasher = hashlib.md5()
 
-    with open(filename, 'rb') as f:
-        buf = f.read(BLOCK_SIZE)
+    for chunk in file.chunks(chunk_size=CHUNK_SIZE):
+        hasher.update(chunk)
 
-        while len(buf) > 0:
-            h.update(buf)
-            buf = f.read(BLOCK_SIZE)
-
-    return h.hexdigest()
+    return hasher.hexdigest()
 
 
 class Photo(models.Model):
@@ -394,17 +390,14 @@ class Photo(models.Model):
             super().save(*args, **kwargs)
             return
 
-        self.image.save(self.image.name, self.image, save=False)
-
         self.image.open()
-
-        filename = os.path.join(MEDIA_ROOT, self.image.name)
+        self.image.save(self.image.name, self.image, save=False)
 
         # File size
         self.file_size = format_file_size(self.image.size)
 
         # MD5 hash
-        self.md5 = generate_md5_hash(filename)
+        self.md5 = generate_md5_hash(self.image)
 
         try:
             Photo.objects.get(md5=self.md5)
@@ -419,7 +412,30 @@ class Photo(models.Model):
         self.exif = {k: v.printable for k, v in exif.items()}
 
         # XMP data
-        xmp = XMP(file_path=filename).get_xmp()
+        # python-xmp-toolkit doesn't accept file objects, so we need a local
+        # copy of the file
+        try:
+            local = True
+
+            # If using local storage, this is simple
+            path = self.image.path
+        except NotImplementedError:
+            local = False
+
+            # If using remote storage, save a temporary copy to the local disk
+            _, ext = os.path.splitext(self.image.name)
+            filename = os.path.join('temp', f"{uuid.uuid4()}{ext}")
+
+            os.makedirs(os.path.join(BASE_DIR, 'temp'), exist_ok=True)
+
+            with open(os.path.join(BASE_DIR, filename), 'wb') as f:
+                for chunk in self.image.chunks(chunk_size=CHUNK_SIZE):
+                    f.write(chunk)
+
+            path = os.path.abspath(filename)
+
+        # Process the file
+        xmp = XMP(file_path=path).get_xmp()
 
         try:
             rating = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Rating')
@@ -427,8 +443,12 @@ class Photo(models.Model):
         except (AttributeError, ValueError):
             self.rating = 0
 
+        # If using remote storage, remove the temporary copy
+        if not local:
+            os.remove(path)
+
         # Timestamps
-        modified = get_modified_time_utc(filename)
+        modified = get_modified_time_utc(self.image)
 
         if self.album is not None:
             tz_name = self.album.timezone
@@ -676,8 +696,7 @@ def update_panorama(sender, instance, *args, **kwargs):
     pano.file_size = format_file_size(pano.image.size)
 
     # MD5 hash
-    filename = os.path.join(MEDIA_ROOT, pano.image.name)
-    md5 = generate_md5_hash(filename)
+    md5 = generate_md5_hash(pano.image)
 
     try:
         Panorama.objects.get(md5=md5)
@@ -692,7 +711,7 @@ def update_panorama(sender, instance, *args, **kwargs):
     pano.exif = {k: v.printable for k, v in exif.items()}
 
     # Timestamps
-    modified = get_modified_time_utc(filename)
+    modified = get_modified_time_utc(pano.image)
 
     tz_name = pano.timezone
     tz = pytz.timezone(tz_name)

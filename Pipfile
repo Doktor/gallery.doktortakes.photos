@@ -9,6 +9,7 @@ pytz = "*"
 Django = "==1.11.6"
 ExifRead = "*"
 Pillow = "*"
+django-storages = "*"
 
 [dev-packages]
 
