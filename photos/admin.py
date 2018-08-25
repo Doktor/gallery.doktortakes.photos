@@ -53,7 +53,7 @@ class PhotoAdmin(admin.ModelAdmin):
                        'md5', 'width', 'height', 'file_size', 'exif')
         }),
         ('Other', {
-            'fields': ('crop', 'rating', 'album')
+            'fields': ('rating', 'album')
         }),
         ('Dates', {
             'fields': ('taken', 'edited')

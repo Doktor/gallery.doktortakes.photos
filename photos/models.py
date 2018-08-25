@@ -29,14 +29,6 @@ strptime = datetime.datetime.strptime
 
 BLOCK_SIZE = 1 * 1024 * 1024  # 1 MB
 
-CROP = (
-    ('C', 'Center'),
-    ('U', 'Up'),
-    ('R', 'Right'),
-    ('D', 'Down'),
-    ('L', 'Left'),
-)
-
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
 
 
@@ -353,9 +345,6 @@ class Photo(models.Model):
         upload_to=get_photo_thumbnail_path, editable=False)
     square_thumbnail = models.ImageField(
         upload_to=get_photo_square_thumbnail_path, editable=False)
-    crop = models.CharField(
-        max_length=1, default='C', choices=CROP,
-        help_text="The side of the photo to crop the thumbnail to")
 
     album = models.ForeignKey(
         'Album', on_delete=models.CASCADE, related_name='photos')
@@ -596,7 +585,6 @@ def create_photo_square_thumbnail(photo, size=(400, 400)):
     photo.image.open()
 
     image = PIL.Image.open(photo.image)
-    crop = photo.crop
 
     if image.format != 'JPEG':
         image = image.convert('RGB')
@@ -612,29 +600,15 @@ def create_photo_square_thumbnail(photo, size=(400, 400)):
     w, h = image.size
 
     if w > h:
+        x1 = 0.5 * w - 0.5 * h
         y1 = 0
+        x2 = 0.5 * w + 0.5 * h
         y2 = h
-        if crop in ['C', 'U', 'D']:
-            x1 = 0.5 * w - 0.5 * h
-            x2 = 0.5 * w + 0.5 * h
-        elif crop == 'L':
-            x1 = 0
-            x2 = h
-        elif crop == 'R':
-            x1 = w - h
-            x2 = w
     elif w < h:
         x1 = 0
+        y1 = 0.5 * h - 0.5 * w
         x2 = w
-        if crop in ['C', 'L', 'R']:
-            y1 = 0.5 * h - 0.5 * w
-            y2 = 0.5 * h + 0.5 * w
-        elif crop == 'U':
-            y1 = 0
-            y2 = w
-        elif crop == 'D':
-            y1 = h - w
-            y2 = h
+        y2 = 0.5 * h + 0.5 * w
     elif w == h:
         x1 = 0
         x2 = w
