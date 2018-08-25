@@ -300,13 +300,12 @@ def delete_album(sender, instance, *args, **kwargs):
 
 def get_photo_path(photo, filename, ext=None):
     if ext is None:
-        _, ext = os.path.splitext(filename)
+        base, ext = os.path.splitext(filename)
         ext = ext.lstrip('.')
-
-    if photo.pk is not None:
-        return f"{photo.album.get_path()}/{photo.md5}.{ext}"
     else:
-        return f"{photo.album.get_path()}/{uuid.uuid4()}.{ext}"
+        base, _ = os.path.splitext(filename)
+
+    return f"{photo.album.get_path()}/{base}.{ext}"
 
 
 def get_photo_image_path(photo, filename):
@@ -382,7 +381,7 @@ class Photo(models.Model):
         return ''  # TODO
 
     def __str__(self):
-        return f"Photo {self.md5}"
+        return self.filename
 
     def clean(self):
         if self.rating > 5:
@@ -492,55 +491,6 @@ def update_photo_thumbnails(sender, instance, *args, **kwargs):
 
     photo.thumbnail.save(photo.filename, File(tb), save=False)
     photo.square_thumbnail.save(photo.filename, File(sq), save=False)
-
-
-@receiver(post_save, sender=Photo,
-          dispatch_uid='photos.models.rename_photo_files')
-def rename_photo_files(sender, instance, created, *args, **kwargs):
-    """Renames image files after a photo is created or updated."""
-    photo = instance
-
-    # Existing object, new image
-    if hasattr(photo, '_update'):
-        assert not created
-        del photo._update
-
-        # We only have to rename the image: the old thumbnail is deleted in
-        # the pre-save receiver, which frees up the filename for the new file
-        image = photo.image
-        current_path = image.path
-        image.name = get_photo_image_path(photo, image.name)
-
-        os.remove(image.path)
-        os.rename(current_path, image.path)
-
-        photo._rename = True
-        photo.save()
-        return
-
-    if not created:
-        return
-
-    # Rename the image file
-    image = photo.image
-    old_path = image.path
-    image.name = get_photo_image_path(photo, image.name)
-    os.rename(old_path, image.path)
-
-    # Rename the thumbnail file
-    tb = photo.thumbnail
-    old_path = tb.path
-    tb.name = get_photo_thumbnail_path(photo, tb.name)
-    os.rename(old_path, tb.path)
-
-    # Rename the square thumbnail file
-    sq = photo.square_thumbnail
-    old_path = sq.path
-    sq.name = get_photo_square_thumbnail_path(photo, sq.name)
-    os.rename(old_path, sq.path)
-
-    photo._rename = True
-    photo.save()
 
 
 def create_photo_thumbnail(photo):
