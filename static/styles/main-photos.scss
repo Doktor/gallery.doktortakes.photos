@@ -210,11 +210,6 @@ $logo: 2.4rem;
   font-weight: 700;
 }
 
-#count {
-  text-align: left;
-  margin-bottom: 0.5rem;
-}
-
 #photos,
 .children {
   $spacing: 0.4rem;
@@ -274,7 +269,7 @@ $logo: 2.4rem;
   $spacing: 10px;
   $width: 400px;
 
-  margin: 1rem (-$spacing);
+  margin: 0 (-$spacing) 1rem (-$spacing);
   text-align: center;
 
   @include clearfix();
@@ -339,6 +334,10 @@ $logo: 2.4rem;
       width: 100%;
     }
   }
+}
+
+.pagination {
+  margin: 1rem 0;
 }
 
 .no-margin-fix {
@@ -574,26 +573,74 @@ label, .field-wrapper {
   }
 }
 
-#album, #panorama {
-  .title {
-    line-height: 1.35;
-    margin: 1rem 0 0.5rem 0;
+.album-nav {
+  @include clearfix();
 
-    @media (min-width: 1201px) {
-      line-height: 1.5;
+  .breadcrumbs {
+    float: left;
+  }
+
+  .edit-link {
+    float: right;
+    font-family: "Lekton", monospace;
+    line-height: $logo;
+  }
+}
+
+.location, .date, .count {
+  text-align: left;
+  font-size: 1.8rem;
+  line-height: 1.8rem;
+  font-weight: 400;
+
+  text-transform: none;
+  color: gainsboro;
+}
+
+.location, .date {
+  line-height: 3rem;
+}
+
+.count {
+  margin: 1.5rem 0 1rem 0;
+}
+
+#album, #panorama {
+  margin-bottom: 0;
+
+  @include clearfix();
+
+  .cover {
+    width: 100%;
+    height: 30vh;
+    position: relative;
+    margin-bottom: 1rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 
-  .location {
-    margin: 0.5rem 0;
+  .title-container {
+    position: absolute;
+    bottom: 0;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+    padding: 0.5rem 1rem;
+    margin-bottom: 1.25rem;
+    margin-left: 1.25rem;
   }
 
-  time {
-    font-family: "Roboto Condensed", sans-serif;
-    color: rgb(150, 150, 150);
-    display: block;
-    margin: 0.5rem 0;
-    font-size: 1.8rem;
+  .title {
+    font-size: 3.2rem;
+    line-height: 3.2rem;
+
+    text-align: left;
+    text-transform: none;
+    text-shadow: 1px 1px 2px black;
   }
 
   .description {

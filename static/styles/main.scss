@@ -236,7 +236,7 @@ ul.breadcrumbs {
   text-align: left;
 
   &.above {
-    margin: 1rem 0;
+    margin: 1.5rem 0 1rem 0;
   }
 
   &.below {
@@ -244,13 +244,17 @@ ul.breadcrumbs {
   }
 
   .page, .skip {
+    display: inline-block;
     margin-right: 6px;
-    padding: 4px 8px;
+    padding: 6px 8px;
 
-    color: rgb(220, 220, 220);
+    color: gainsboro;
     background-color: rgb(40, 40, 40);
     border: 1px solid rgb(100, 100, 100);
     border-radius: 2px;
+
+    font-size: 1.2rem;
+    line-height: 1.2rem;
   }
 
   .page {

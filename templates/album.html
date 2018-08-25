@@ -35,12 +35,10 @@
 {% endif %}
 {% endblock %}
 
-{% block style %}
-<link rel="stylesheet" href="{% static 'styles/album.css' %}">
-{% endblock %}
-
 {% block content %}
+  <!-- Header -->
   <header>
+    <nav class="album-nav">
       <ul class="breadcrumbs">
         <li class="bc-icon" title="Breadcrumbs"><i class="fa fa-book"></i> Photos</li>
         {% for album in path %}
@@ -48,21 +46,34 @@
         {% endfor %}
       </ul>
 
+      {% if request.user.is_authenticated %}
+      <a class="edit-link" href="{{ album.get_edit_url }}">Edit this album</a>
+      {% endif %}
+    </nav>
+
     <section id="album">
-      <h2 class="title">{{ album.name }}</h2>
+      <figure class="cover">
+        <img src="{{ album.cover.image.url }}">
+
+        <div class="title-container">
+          <h2 class="title">{{ album.name }}</h2>
+        </div>
+      </figure>
 
       {% if album.get_place or album.get_location %}
-      <h3 class="location">{{ album.get_full_location }}</h3>
+      <h3 class="location">
+        <span title="Location"><i class="fa fa-fw fa-map-marker"></i></span>
+        {{ album.get_full_location }}
+      </h3>
       {% endif %}
 
-      <time>{{ album.get_full_date }}</time>
+      <h3 class="date">
+        <span title="Date"><i class="fa fa-fw fa-calendar"></i></span>
+        {{ album.get_full_date }}
+      </h3>
 
       {% if album.description %}
       <p class="description">{{ album.description|safe }}</p>
-      {% endif %}
-
-      {% if album.text %}
-      <div class="text">{{ album.text|safe }}</div>
       {% endif %}
     </section>
 
@@ -73,32 +84,36 @@
       {% endfor %}
     </section>
     {% endif %}
-
-    {% if request.user.is_authenticated %}
-    <div>
-      <a href="{{ album.get_edit_url }}">Edit this album</a>
-    </div>
-    {% endif %}
   </header>
 
-  {% if album.children.count %}
-    <hr>
+  <hr>
+
+  <!-- Albums -->
+  {% with a_count=album.children.count %}
+  {% if a_count %}
+    <h3 class="count">{{ a_count }} album{{ a_count|pluralize }}</h3>
+
     <section id="albums">
       {% for c in album.children.all %}
         {% include "_album_card.html" with album=c %}
       {% endfor %}
     </section>
   {% endif %}
+  {% endwith %}
 
+  {% if album.children.count and count %}
   <hr>
+  {% endif %}
 
+  <!-- Hidden data element -->
   <div id="api"
        data-count="{{ count }}"
        data-items-per-page="{{ items_per_page }}"
        data-page="1"></div>
 
+  <!-- Photos -->
   {% if count %}
-    <h3 id="count">{{ count }} photo{{ count|pluralize }}</h3>
+    <h3 class="count">{{ count }} photo{{ count|pluralize }}</h3>
 
     <div class="pagination"></div>
     <section id="photos">
@@ -118,10 +133,12 @@
   {% else %}
     {% if not album.children.count %}
     <p>This album does not contain any images.</p>
-    <hr>
     {% endif %}
   {% endif %}
 
+  <hr>
+
+  <!-- Footer -->
   <footer>
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
