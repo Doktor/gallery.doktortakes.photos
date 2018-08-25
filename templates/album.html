@@ -116,10 +116,11 @@
     </section>
     <div class="pagination"></div>
   {% else %}
+    {% if not album.children.count %}
     <p>This album does not contain any images.</p>
+    <hr>
+    {% endif %}
   {% endif %}
-
-  <hr>
 
   <footer>
     {% include "_reuse.html" %}
