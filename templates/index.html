@@ -17,7 +17,7 @@
   <header>
     <h1 class="logo large">Doktor Takes Photos</h1>
 
-    <div id="tagline">"{{ tagline }}"</div>
+    <h2 id="tagline">"{{ tagline }}"</h2>
 
     <ul class="navlinks">
       <li><a href="{% url 'about' %}">About</a></li>
@@ -53,9 +53,9 @@
     </section>
 
     {% if more_albums %}
-    <div class="view-more">
+    <h4 class="view-more">
       <a href="{% url 'albums' %}">View more albums</a>
-    </div>
+    </h4>
     {% endif %}
   {% else %}
     <p>No albums found.</p>
