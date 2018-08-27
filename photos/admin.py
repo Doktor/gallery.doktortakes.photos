@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from photos.fields import JSONField, JSONWidget
 from photos.models import Album, Photo, Panorama
@@ -40,8 +41,6 @@ class AlbumAdmin(admin.ModelAdmin):
             return format_html('<a href="{}"><img height="300" src="{}"></a>',
                                album.cover.image.url, album.cover.thumbnail.url)
 
-    preview.short_description = 'Preview'
-
 
 class PhotoAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -49,8 +48,11 @@ class PhotoAdmin(admin.ModelAdmin):
     }
     fieldsets = (
         ('Image', {
-            'fields': ('image', 'preview',
-                       'md5', 'width', 'height', 'file_size', 'exif')
+            'fields': ('original', 'exif')
+        }),
+        ('Display image', {
+            'fields': ('image', 'preview', 'watermark',
+                       'md5', 'dimensions', 'file_size')
         }),
         ('Other', {
             'fields': ('rating', 'album')
@@ -62,24 +64,26 @@ class PhotoAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'album_name', 'width', 'height',
                     'file_size', 'taken', 'edited', 'rating')
     ordering = ('-taken',)
-    readonly_fields = ('preview', 'md5', 'width', 'height', 'file_size',
-                       'taken', 'edited')
+    readonly_fields = (
+        'image', 'preview',
+        'md5', 'dimensions', 'file_size', 'taken', 'edited')
 
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
         form.base_fields['exif'].disabled = True
         return form
 
-    def preview(self, photo):
-        return format_html('<a href="{}"><img height="300" src="{}"></a>',
-                           photo.image.url, photo.thumbnail.url)
-
-    preview.short_description = 'Preview'
+    # Custom fields
 
     def album_name(self, photo):
         return photo.album.name
 
-    album_name.short_description = 'Album name'
+    def dimensions(self, photo):
+        return mark_safe(f"{photo.width} &times; {photo.height}")
+
+    def preview(self, photo):
+        return format_html('<a href="{}"><img height="300" src="{}"></a>',
+                           photo.original.url, photo.image.url)
 
 
 class PanoramaAdmin(admin.ModelAdmin):

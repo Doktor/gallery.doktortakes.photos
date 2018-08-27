@@ -280,7 +280,7 @@ def upload_photo(request, path):
     for file in files:
         p = Photo()
         p.album = get_album_by_path(path)
-        p.image = file
+        p.original = file
         p.save()
 
     return JsonResponse({'success': True})

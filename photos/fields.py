@@ -16,8 +16,6 @@ class JSONWidget(widgets.Textarea):
             'data': json.dumps(value),
         }
 
-        print(context)
-
         return mark_safe(render_to_string(self.template_name, context))
 
 
