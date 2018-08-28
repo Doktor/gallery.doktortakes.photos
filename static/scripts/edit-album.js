@@ -155,14 +155,21 @@ function populate_edit_form() {
     let response = JSON.parse(request.responseText);
 
     for (let [key, value] of Object.entries(response)) {
-      let selector = 'input[name="{0}"]'.format(key);
+      let selector = '.field[name="{0}"]'.format(key);
 
       let inputs = form.querySelectorAll(selector);
       let n = inputs.length;
 
-      if (n === 1) {
+      if (n === 0) {
+        // Do nothing
+      } else if (n === 1) {
         let el = inputs[0];
         el.value = value;
+      } else {
+        // Input type: radio, checkbox
+        selector = '{0}[value="{1}"]'.format(selector, value);
+        let el = form.querySelector(selector);
+        el.checked = true;
       }
     }
   };

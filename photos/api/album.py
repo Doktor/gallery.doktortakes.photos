@@ -27,10 +27,13 @@ def generate_album_dict(album, method='GET'):
         'url': album.get_absolute_url(),
         'path': album.get_path(),
         'name': album.name,
+        'place': album.place,
         'location': album.location,
         'description': album.description,
         'start': album.start.strftime("%Y-%m-%d"),
         'end': end,
+        'hidden': int(album.hidden),
+        'password': album.password,
     }
 
     if album.cover:
@@ -49,6 +52,7 @@ def generate_album_dict(album, method='GET'):
 
 
 class AlbumView(LoginRequiredMixin, View):
+    # Required fields: internal name, display name
     required = (('name', 'album name'), ('start', 'start date'))
 
     def _get_data(self, request):
@@ -109,8 +113,10 @@ class AlbumView(LoginRequiredMixin, View):
                 return JsonResponse(
                     {'error': f"The {name} can't be empty."}, status=400)
 
-        for key in ('name', 'place', 'location', 'description'):
+        for key in ('name', 'place', 'location', 'description', 'password'):
             setattr(album, key, data.get(key))
+
+        album.hidden = bool(int(data.get('hidden', 0)))
 
         for key in ('start', 'end'):
             if key == 'end' and not data.get(key, ''):
