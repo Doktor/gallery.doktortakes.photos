@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods, require_GET
 
 from core.context_processors import metadata as m
 from photos.forms import AlbumForm
-from photos.models import Album, Panorama, Photo
+from photos.models import Album, Panorama, Photo, Tag
 from core.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
@@ -178,6 +178,31 @@ def album(request, path):
         'items_per_page': ITEMS_PER_PAGE,
     }
     return render(request, 'album.html', context)
+
+
+@require_GET
+def tags(request):
+    context = {'tags': Tag.objects.all()}
+    return render(request, 'tags.html', context)
+
+
+@require_GET
+def tag(request, slug):
+    t = get_object_or_404(Tag, slug=slug)
+
+    albums = t.albums.all()
+    cover = random.choice(albums).cover if albums else None
+
+    title = f"Tag: #{t.slug} | {metadata['TITLE']}"
+
+    context = {
+        'tag': t,
+        'albums': albums,
+        'cover': cover,
+        'page_title': title,
+        'count': albums.count(),
+    }
+    return render(request, 'tag.html', context)
 
 
 def panorama_list(request):

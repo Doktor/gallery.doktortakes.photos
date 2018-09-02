@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block meta %}
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ DESCRIPTION }}">
+<meta property="og:site_name" content="{{ TITLE }}">
+<meta property="og:url" content="{{ BASE_URL }}{{ tag.get_absolute_url }}">
+
+<meta property="og:type" content="article">
+
+<meta name="twitter:card" content="photo">
+<meta name="twitter:site" content="{{ TWITTER }}">
+<meta name="twitter:creator" content="{{ TWITTER }}">
+<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:description" content="{{ DESCRIPTION }}">
+{% endblock %}
+
+{% block content %}
+  <!-- Header -->
+  <header>
+    <nav class="tag-nav">
+      <ul class="breadcrumbs">
+        <li class="bc-icon" title="Breadcrumbs"><i class="fa fa-book"></i> <a href="{% url 'tags' %}">Tags</a></li>
+        <li><a href="{{ tag.get_absolute_url }}">{{ tag.slug }}</a></li>
+      </ul>
+
+      {% if request.user.is_staff %}
+      <ul class="edit-links">
+        <li><a href="{% url 'admin:photos_tag_change' tag.pk %}">Admin</a></li>
+      </ul>
+      {% endif %}
+    </nav>
+
+    <section id="tag">
+      <figure class="cover">
+        {% if cover %}
+        <img src="{{ cover.image.url }}">
+        {% else %}
+        <img src="{% static 'images/cover-placeholder.png' %}">
+        {% endif %}
+
+        <div class="title-container">
+          <h2 class="title">#{{ tag.slug }}</h2>
+        </div>
+      </figure>
+
+      {% if tag.description %}
+      <h3 class="short-description">
+        <span title="Description"><i class="fa fa-fw fa-sticky-note"></i></span>
+        <span>{{ tag.description|safe }}</span>
+      </h3>
+      {% endif %}
+    </section>
+
+    {% if messages %}
+    <section id="messages">
+      {% for m in messages %}
+        <div class="message {{ m.tags }}">{{ m }}</div>
+      {% endfor %}
+    </section>
+    {% endif %}
+  </header>
+
+  <hr>
+
+  <!-- Albums -->
+  {% if count %}
+    <h3 class="count">{{ count }} album{{ count|pluralize }}</h3>
+
+    <section id="albums">
+      {% for album in albums %}
+        {% include "_album_card.html" %}
+      {% endfor %}
+    </section>
+  {% else %}
+    <p>No albums were found with this tag.</p>
+  {% endif %}
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    {% include "_reuse.html" %}
+    {% include "_copyright.html" %}
+  </footer>
+{% endblock %}

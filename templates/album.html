@@ -79,6 +79,15 @@
         {{ album.get_full_date }}
       </h3>
 
+      {% if album.tags.count %}
+      <h3 class="tags">
+        <span title="Tags"><i class="fa fa-fw fa-tags"></i></span>
+        {% for tag in album.tags.all %}
+        <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
+        {% endfor %}
+      </h3>
+      {% endif %}
+
       {% if album.description %}
       <p class="description">{{ album.description|safe }}</p>
       {% endif %}

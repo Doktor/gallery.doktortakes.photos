@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
 
 from auth.urls import url_log_in, url_log_out
 from photos import api, views
@@ -26,6 +26,11 @@ album_patterns = [
 
     url(r'^(?P<path>[a-z0-9-/]+)/(?P<md5>[a-f0-9]{32})/download$',
         views.photo_download, name='download'),
+]
+
+tag_patterns = [
+    url(r'^$', views.tags, name='tags'),
+    url(r'^(?P<slug>[a-z0-9-]+)$', views.tag, name='tag'),
 ]
 
 api_patterns = [
@@ -67,6 +72,8 @@ urlpatterns = [
     url(r'^new/$', views.new_album, name='new_album'),
 
     url(r'^albums/', include(album_patterns)),
+
+    url(r'^tags/', include(tag_patterns)),
 
     url(r'^panoramas/', include(panorama_patterns)),
 

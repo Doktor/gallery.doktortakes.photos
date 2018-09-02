@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.utils.text import slugify
 from django.views import View
 from django.views.decorators.http import require_GET
 
@@ -9,7 +10,7 @@ from datetime import datetime
 from json import JSONDecodeError
 
 from core.context_processors import metadata
-from photos.models import Photo
+from photos.models import Photo, Tag
 
 from .photo import generate_photo_dict
 from .utils import APIError, get_album_from_request
@@ -34,6 +35,7 @@ def generate_album_dict(album, method='GET'):
         'end': end,
         'hidden': int(album.hidden),
         'password': album.password,
+        'tags': ', '.join((tag.slug for tag in album.tags.all()))
     }
 
     if album.cover:
@@ -108,6 +110,8 @@ class AlbumView(LoginRequiredMixin, View):
         except APIError as e:
             return e.to_response()
 
+        # General
+
         for key, name in self.required:
             if not data.get(key, ''):
                 return JsonResponse(
@@ -117,6 +121,8 @@ class AlbumView(LoginRequiredMixin, View):
             setattr(album, key, data.get(key))
 
         album.hidden = bool(int(data.get('hidden', 0)))
+
+        # Dates
 
         for key in ('start', 'end'):
             if key == 'end' and not data.get(key, ''):
@@ -130,6 +136,27 @@ class AlbumView(LoginRequiredMixin, View):
                     {'error': "Invalid date format."}, status=400)
 
             setattr(album, key, date)
+
+        # Tags
+
+        album.tags.clear()
+        tags = data.get('tags', '')
+
+        if tags:
+            for slug in tags.split(','):
+                slug = slugify(slug.strip().lower())
+
+                if not slug:
+                    continue
+
+                try:
+                    tag = Tag.objects.get(slug=slug)
+                except Tag.DoesNotExist:
+                    tag = Tag.objects.create(slug=slug)
+
+                album.tags.add(tag)
+
+        # Save
 
         try:
             album.clean()

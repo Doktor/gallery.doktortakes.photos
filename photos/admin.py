@@ -4,7 +4,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from photos.fields import JSONField, JSONWidget
-from photos.models import Album, Photo, Panorama
+from photos.models import Album, Photo, Panorama, Tag
 
 
 class AlbumForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class AlbumAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Main', {
             'fields': ('name', 'slug', 'location', 'description',
-                       'start', 'end', 'parent'),
+                       'start', 'end', 'parent', 'tags'),
         }),
         ('Visibility', {
             'fields': ('hidden', 'password')
@@ -40,6 +40,10 @@ class AlbumAdmin(admin.ModelAdmin):
         if album.cover:
             return format_html('<a href="{}"><img height="300" src="{}"></a>',
                                album.cover.image.url, album.cover.thumbnail.url)
+
+
+class TagAdmin(admin.ModelAdmin):
+    pass
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -112,5 +116,6 @@ class PanoramaAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Album, AlbumAdmin)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Panorama, PanoramaAdmin)

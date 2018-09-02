@@ -572,7 +572,7 @@ label, .field-wrapper {
   }
 }
 
-.album-nav {
+.album-nav, .tag-nav {
   @include clearfix();
 
   .breadcrumbs {
@@ -611,7 +611,7 @@ ul.edit-links-center {
   }
 }
 
-.location, .date, .count {
+.location, .date, .tags, .short-description, .count {
   text-align: left;
   font-size: 1.8rem;
   line-height: 1.8rem;
@@ -621,7 +621,7 @@ ul.edit-links-center {
   color: gainsboro;
 }
 
-.location, .date {
+.location, .date, .tags, .short-description {
   line-height: 3rem;
 }
 
@@ -629,7 +629,7 @@ ul.edit-links-center {
   margin: 1.5rem 0 1rem 0;
 }
 
-#album, #panorama {
+#album, #panorama, #tag {
   margin-bottom: 0;
 
   @include clearfix();

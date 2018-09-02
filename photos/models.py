@@ -94,6 +94,8 @@ class Album(models.Model):
     hidden = models.BooleanField(default=False)
     password = models.CharField(max_length=128, blank=True, null=True)
 
+    tags = models.ManyToManyField('Tag', related_name='albums')
+
     @property
     def count(self):
         """Returns the number of photos in this album and all child albums."""
@@ -305,6 +307,22 @@ def delete_album(sender, instance, *args, **kwargs):
     for photo in album.photos.all():
         photo.image.delete(save=False)
         photo.thumbnail.delete(save=False)
+
+
+# Tag
+
+
+class Tag(models.Model):
+    slug = models.SlugField(max_length=100, unique=True)
+    display_name = models.CharField(max_length=100, blank=True)
+
+    description = models.TextField(blank=True)
+
+    def get_absolute_url(self):
+        return reverse('tag', kwargs={'slug': self.slug})
+
+    def __str__(self):
+        return f"Tag: #{self.slug}"
 
 
 # Photo
