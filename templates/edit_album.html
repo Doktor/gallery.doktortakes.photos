@@ -53,7 +53,7 @@
        data-api-delete-photo="{% url 'api_photo' %}"></div>
 
   <section class="clearfix">
-    <h2>Edit details</h2>
+    <h2>Album details</h2>
     <div id="edit-form-container">
       <form id="form">
         <fieldset>
@@ -114,7 +114,7 @@
           <div class="row">
             <label for="f-password">Password</label>
             <div class="field-wrapper">
-              <input name="password" id="f-password" type="text">
+              <input class="field" name="password" id="f-password" type="text">
             </div>
           </div>
         </fieldset>
@@ -151,7 +151,7 @@
   </section>
 
   <section>
-    <h2>Photos</h2>
+    <h2>Manage photos</h2>
     {% if count or album.children.count %}
     <div id="counts">
       <span id="total-count">{{ count }}</span> photo{{ count|pluralize }} in album,
@@ -178,7 +178,9 @@
     {% endif %}
 
     {% if count %}
+    {% if album.children.count %}
     <h2>Photos in this album</h2>
+    {% endif %}
     <div id="photos">
       {% for p in photos %}
       <div class="wrapper" data-md5="{{ p.md5 }}">

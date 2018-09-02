@@ -112,16 +112,16 @@
   <hr>
   {% endif %}
 
-  <!-- Hidden data element -->
-  <div id="api"
+  {% if count %}
+    <!-- Hidden data element -->
+    <div id="api"
        data-count="{{ count }}"
        data-items-per-page="{{ items_per_page }}"
        data-page="1"></div>
 
-  <!-- Photos -->
-  {% if count %}
     <h3 class="count">{{ count }} photo{{ count|pluralize }}</h3>
 
+    <!-- Photos -->
     <div class="pagination"></div>
     <section id="photos">
       {% for p in album.photos.all %}
@@ -153,5 +153,7 @@
 {% endblock %}
 
 {% block scripts %}
+{% if count %}
 <script src="{% static 'scripts/album.js' %}"></script>
+{% endif %}
 {% endblock %}

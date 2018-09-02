@@ -42,7 +42,7 @@
     </h4>
     {% endif %}
   {% else %}
-    <div>No featured photos.</div>
+    <p>No featured photos.</p>
   {% endif %}
 
   <hr>
@@ -54,6 +54,8 @@
 {% endblock %}
 
 {% block scripts %}
+{% if featured %}
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="{% static 'scripts/featured.js' %}"></script>
+{% endif %}
 {% endblock %}
