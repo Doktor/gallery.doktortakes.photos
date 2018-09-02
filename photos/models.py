@@ -430,6 +430,9 @@ class Photo(models.Model):
 
         self.original.save(self.original.name, self.original, save=False)
 
+        # MD5 hash
+        self.md5 = generate_md5_hash(self.original)
+
         try:
             Photo.objects.get(md5=self.md5)
         except Photo.DoesNotExist:
@@ -595,9 +598,6 @@ def update_display_image(sender, instance, created, *args, **kwargs):
 
         # File size
         photo.file_size = format_file_size(photo.image.size)
-
-        # MD5 hash
-        photo.md5 = generate_md5_hash(photo.image)
 
         photo.image.close()
         photo._display = True
