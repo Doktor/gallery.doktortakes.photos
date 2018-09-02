@@ -85,7 +85,7 @@ QUERY = Q(parent__isnull=True, hidden=False)
 
 def index(request):
     """Renders the index page."""
-    query = QUERY_ADMIN if request.user.is_superuser else QUERY
+    query = QUERY_ADMIN if request.user.is_staff else QUERY
 
     albums = Album.objects.filter(query).order_by('-start')
 
@@ -127,7 +127,7 @@ def wall(request):
 
 def album_list(request):
     """Renders the list of albums."""
-    query = QUERY_ADMIN if request.user.is_superuser else QUERY
+    query = QUERY_ADMIN if request.user.is_staff else QUERY
 
     albums = Album.objects.filter(query).order_by('-start')
     context = {'albums': albums}
@@ -162,7 +162,7 @@ def album(request, path):
         password = request.GET.get('password', '')
 
         if password != a.password:
-            if request.user.is_superuser:
+            if request.user.is_staff:
                 base = reverse('album', kwargs={'path': path})
                 return redirect(base + f"?password={a.password}")
 
