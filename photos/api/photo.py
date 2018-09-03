@@ -1,3 +1,6 @@
+import datetime
+
+import pytz
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
@@ -205,6 +208,8 @@ def last_photo(request):
 def search_photos(request):
     params = request.GET
 
+    # Filters
+
     query = Q(album__hidden=False)
 
     name = params.get('name', '')
@@ -237,6 +242,33 @@ def search_photos(request):
 
         query = query & subquery
 
+    start = params.get('start', '')
+    end = params.get('end', '')
+
+    try:
+        start = datetime.datetime.strptime(start, '%Y-%m-%d')
+        start = start.replace(tzinfo=pytz.utc)
+    except ValueError:
+        start = False
+
+    try:
+        end = datetime.datetime.strptime(end, '%Y-%m-%d')
+        end = end.replace(tzinfo=pytz.utc)
+    except ValueError:
+        end = False
+
+    if start and end:
+        query = query & Q(taken__gte=start, taken__lte=end)
+    elif start or end:
+        day = start or end
+        day_end = day.replace(hour=23, minute=59, second=59)
+
+        query = query & Q(taken__gte=day, taken__lte=day_end)
+    else:
+        pass
+
+    # Ordering
+
     order = params.get('order')
 
     if order not in ('taken', 'edited', 'uploaded'):
@@ -245,8 +277,9 @@ def search_photos(request):
     if params.get('direction') == 'new':
         order = f"-{order}"
 
-    photos = Photo.objects.filter(query).order_by(order)
+    # Query
 
+    photos = Photo.objects.filter(query).order_by(order)
     count = photos.count()
 
     try:
@@ -254,10 +287,14 @@ def search_photos(request):
     except (ValueError, KeyError):
         page = 1
 
-    start = ITEMS_PER_PAGE * (page - 1)
-    end = start + ITEMS_PER_PAGE
+    # Pagination
 
-    photos = photos[start:end]
+    first = ITEMS_PER_PAGE * (page - 1)
+    last = first + ITEMS_PER_PAGE
+
+    photos = photos[first:last]
+
+    # Generate the response
 
     dicts = [generate_photo_dict(photo) for photo in photos]
     response = {

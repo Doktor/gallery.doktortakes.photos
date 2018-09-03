@@ -47,7 +47,7 @@
       </fieldset>
 
       <fieldset>
-        <label>Other</label>
+        <label>Filters</label>
 
         <div>
           <label for="name">Album</label>
@@ -65,6 +65,16 @@
           <input id="width" name="width" title="Width" class="short" type="number">
           &times;
           <input id="height" name="height" title="Height" class="short" type="number">
+        </div>
+
+        <div>
+          <label>Date taken</label>
+
+          {% spaceless %}
+          <input id="start" name="start" title="Start" type="date">
+          to
+          <input id="end" name="end" title="End" type="date">
+          {% endspaceless %}
         </div>
 
         <div>
