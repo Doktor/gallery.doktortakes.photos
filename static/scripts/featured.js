@@ -1,4 +1,6 @@
 let el = document.querySelector('#featured .container');
-new Masonry(el, {
-  itemSelector: '.item',
+new imagesLoaded(el, function() {
+  new Masonry(el, {
+    itemSelector: '.item',
+  });
 });
