@@ -163,36 +163,33 @@ $logo: 2.4rem;
 }
 
 #featured {
-  $spacing: 10px;
+  $spacing: 0.6rem;
   $width: 400px;
 
-  width: 100%;
-  margin: 1rem 0 0 0;
+  @include clearfix();
 
-  .container {
-    width: 100%;
-  }
+  margin: 0 (-$spacing) 1rem (-$spacing);
 
-  .grid-sizer,
   .item {
-    width: 100%;
     padding: $spacing;
+    width: 100%;
 
     @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
-      float: left;
       width: (100% / 2);
     }
     @media (min-width: $width * 3 + 1) {
-      float: left;
       width: (100% / 3);
     }
 
+    @include fade();
+  }
+
+  .item {
     img {
+      display: block;
       width: 100%;
       border: 1px solid rgb(220, 220, 220);
     }
-
-    @include fade();
   }
 }
 
@@ -231,17 +228,11 @@ $logo: 2.4rem;
       float: none;
       width: 100%;
     }
-    @media (min-width: $width * 1 + 1) and (max-width: $width * 2) {
-      width: (100% / 2);
-    }
-    @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
-      width: (100% / 3);
-    }
-    @media (min-width: $width * 3 + 1) and (max-width: $width * 4) {
-      width: (100% / 4);
-    }
-    @media (min-width: $width * 4 + 1) and (max-width: $width * 5) {
-      width: (100% / 5);
+    @for $i from 1 to 4 {
+      @media (min-width: $width * ($i) + 1) and
+             (max-width: $width * ($i + 1) + 0) {
+        width: 100% / ($i + 1);
+      }
     }
     @media (min-width: $width * 5 + 1) {
       width: (100% / 6);
@@ -288,13 +279,13 @@ $logo: 2.4rem;
       float: left;
       width: (100% / 3);
     }
+
+    @include fade();
   }
 
   .album {
-    position: relative;
     border: 1px solid $borderColor;
-
-    @include fade();
+    position: relative;
 
     img {
       width: 100%;

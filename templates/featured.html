@@ -24,8 +24,8 @@
     <h2>Featured</h2>
 
     <section id="featured">
-      <div class="container">
-        <div class="grid-sizer"></div>
+    <div class="container">
+      <div class="grid-sizer"></div>
         {% for photo in featured %}
         <div class="item">
           <a href="{% url 'photo' photo.get_path photo.md5 %}">
