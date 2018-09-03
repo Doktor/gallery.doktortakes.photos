@@ -1,15 +1,5 @@
 let $ = document.getElementById.bind(document);
 
-function query_string(params) {
-  let escape = encodeURIComponent;
-  let query = Object.keys(params)
-    .map(key => escape(key) + '=' + escape(params[key]))
-    .join('&');
-
-  return '?' + query;
-}
-
-
 const flashContainer = $('flash');
 
 const form = $('form');
@@ -137,7 +127,7 @@ function update_album() {
 
   request.open("PUT", url, true);
   request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+  request.setRequestHeader("X-CSRFToken", get_cookie("csrftoken"));
   request.send(JSON.stringify(data));
 }
 
@@ -233,7 +223,7 @@ function change_cover() {
 
   request.open("PATCH", url, true);
   request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+  request.setRequestHeader("X-CSRFToken", get_cookie("csrftoken"));
   request.send(JSON.stringify(data));
 }
 
@@ -275,7 +265,7 @@ function delete_photo(wrapper) {
   let url = API_DELETE_PHOTO + query_string(params);
 
   request.open("DELETE", url, true);
-  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+  request.setRequestHeader("X-CSRFToken", get_cookie("csrftoken"));
   request.send();
 }
 
@@ -307,7 +297,7 @@ function delete_album() {
   let url = API_ALBUM + query_string(params);
 
   request.open("DELETE", url, true);
-  request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+  request.setRequestHeader("X-CSRFToken", get_cookie("csrftoken"));
   request.send();
 }
 

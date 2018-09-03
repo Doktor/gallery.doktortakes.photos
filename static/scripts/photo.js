@@ -51,16 +51,6 @@ const exif = {
 };
 
 
-// Generates query strings
-function query_string(params) {
-  let escape = encodeURIComponent;
-  let query = Object.keys(params)
-    .map(k => escape(k) + '=' + escape(params[k]))
-    .join('&');
-
-  return '?' + query;
-}
-
 function get_photo_query_string() {
   return query_string({
     'path': photo.dataset.path,
