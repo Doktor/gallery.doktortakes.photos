@@ -152,6 +152,8 @@ WATERMARK_IMAGES = {
     None: WHITE_2400,
 }
 
+APPLY_WATERMARKS = True
+
 
 # Media file locations
 

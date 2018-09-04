@@ -14,6 +14,7 @@ from core.settings import (
     THUMBNAILS_FOLDER, SQUARES_FOLDER,
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER,
     LANDSCAPE_SIZE, PORTRAIT_SIZE,
+    APPLY_WATERMARKS,
     WATERMARKS, BLACK, WHITE, WATERMARK_IMAGES, WATERMARK_OFFSET, DEFAULT_PATH)
 
 from photos.fields import JSONField
@@ -376,7 +377,7 @@ class Photo(models.Model):
     # Display image
 
     watermark = models.CharField(
-        max_length=1, choices=WATERMARKS, blank=True)
+        max_length=1, choices=WATERMARKS, default=WHITE, blank=True)
     image = models.ImageField(
         upload_to=get_photo_display_path, editable=False,
         width_field='width', height_field='height',
@@ -589,15 +590,16 @@ def update_display_image(sender, instance, created, *args, **kwargs):
             image = image.resize(resize, resample=PIL.Image.LANCZOS)
             width, height = image.size
 
-            # Apply the watermark
-            watermark = WATERMARK_IMAGES.get(photo.watermark)
-            offset = WATERMARK_OFFSET
+            if APPLY_WATERMARKS:
+                watermark = WATERMARK_IMAGES.get(photo.watermark)
+                offset = WATERMARK_OFFSET
 
-            x = width - watermark.size[0] - offset
-            y = height - watermark.size[1] - offset
-            coords = (x, y)
+                x = width - watermark.size[0] - offset
+                y = height - watermark.size[1] - offset
+                coords = (x, y)
 
-            image.paste(watermark, coords, mask=watermark.split()[3])
+                image.paste(watermark, coords, mask=watermark.split()[3])
+
             image.save(path, 'JPEG', quality=95, exif=exif)
 
             # Re-add XMP data
