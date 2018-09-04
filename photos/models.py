@@ -581,7 +581,11 @@ def update_display_image(sender, instance, created, *args, **kwargs):
 
             # Load the image
             image = PIL.Image.open(f)
-            exif = image.info['exif']
+
+            try:
+                exif = image.info['exif']
+            except KeyError:
+                exif = None
 
             # Resize the image
             width, height = image.size
@@ -604,12 +608,16 @@ def update_display_image(sender, instance, created, *args, **kwargs):
 
                 image.paste(watermark, coords, mask=watermark.split()[3])
 
-            image.save(path, 'JPEG', quality=95, exif=exif)
+            if exif is not None:
+                image.save(path, 'JPEG', quality=95, exif=exif)
+            else:
+                image.save(path, 'JPEG', quality=95)
 
             # Re-add XMP data
-            xmp_f = XMP(file_path=path, open_forupdate=True)
-            xmp_f.put_xmp(xmp)
-            xmp_f.close_file()
+            if xmp is not None:
+                xmp_f = XMP(file_path=path, open_forupdate=True)
+                xmp_f.put_xmp(xmp)
+                xmp_f.close_file()
 
         # Save it to the model
         with open(path, 'rb') as f:
