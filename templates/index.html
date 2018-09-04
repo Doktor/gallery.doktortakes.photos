@@ -17,7 +17,9 @@
   <header>
     <h1 class="logo large">Doktor Takes Photos</h1>
 
+    {% if tagline %}
     <h2 id="tagline">"{{ tagline }}"</h2>
+    {% endif %}
 
     <ul class="navlinks">
       <li><a href="{% url 'about' %}">About</a></li>

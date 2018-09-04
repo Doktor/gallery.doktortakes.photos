@@ -9,7 +9,7 @@ from django.views.decorators.http import require_http_methods, require_GET
 from core.context_processors import metadata as m
 from photos.forms import AlbumForm
 from photos.models import Album, Panorama, Photo, Tag
-from core.settings import (
+from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
 import datetime

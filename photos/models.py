@@ -8,14 +8,15 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
-from core.settings import (
-    BASE_DIR, MEDIA_ROOT,
-    ORIGINAL_IMAGES_FOLDER, DISPLAY_IMAGES_FOLDER,
-    THUMBNAILS_FOLDER, SQUARES_FOLDER,
+from django.conf import settings
+
+from photos.settings import (
+    MEDIA_FOLDERS, DEFAULT_PATH,
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER,
     LANDSCAPE_SIZE, PORTRAIT_SIZE,
-    APPLY_WATERMARKS,
-    WATERMARKS, BLACK, WHITE, WATERMARK_IMAGES, WATERMARK_OFFSET, DEFAULT_PATH)
+    WATERMARKS_ENABLED, WATERMARK_IMAGES, WATERMARK_OFFSET,
+    WATERMARK_COLOR_CHOICES,
+    WATERMARK_COLOR_NONE, WATERMARK_COLOR_WHITE, WATERMARK_COLOR_BLACK)
 
 from photos.fields import JSONField
 
@@ -235,11 +236,10 @@ def update_album_name(sender, instance, *args, **kwargs):
     new_path = album.get_path()
 
     # Move the media folders
-    folders = [ORIGINAL_IMAGES_FOLDER, DISPLAY_IMAGES_FOLDER,
-               THUMBNAILS_FOLDER, SQUARES_FOLDER]
+    folders = MEDIA_FOLDERS.values()
 
     for folder in folders:
-        base = os.path.join(MEDIA_ROOT, folder)
+        base = os.path.join(settings.MEDIA_ROOT, folder)
 
         old_dir = os.path.join(base, old_path)
         new_dir = os.path.join(base, new_path)
@@ -258,10 +258,10 @@ def update_album_name(sender, instance, *args, **kwargs):
         # Find the path by checking the path of any photo in the album
         photo = album.photos.all()[0]
         path, _ = os.path.split(photo.original.name)
-        old_path = path.replace(ORIGINAL_IMAGES_FOLDER + '/', '')
+        old_path = path.replace(MEDIA_FOLDERS['ORIGINAL'] + '/', '')
 
         for folder in folders:
-            base = os.path.join(MEDIA_ROOT, folder)
+            base = os.path.join(settings.MEDIA_ROOT, folder)
 
             old_dir = os.path.join(base, old_path)
             new_dir = os.path.join(base, new_path)
@@ -274,22 +274,22 @@ def update_album_name(sender, instance, *args, **kwargs):
     # Update photo file paths
     for photo in Photo.objects.filter(album=album):
         photo.original.name = os.path.join(
-            ORIGINAL_IMAGES_FOLDER,
+            MEDIA_FOLDERS['ORIGINAL'],
             new_path,
             os.path.basename(photo.original.name))
 
         photo.image.name = os.path.join(
-            DISPLAY_IMAGES_FOLDER,
+            MEDIA_FOLDERS['DISPLAY'],
             new_path,
             os.path.basename(photo.image.name))
 
         photo.thumbnail.name = os.path.join(
-            THUMBNAILS_FOLDER,
+            MEDIA_FOLDERS['THUMBNAIL'],
             new_path,
             os.path.basename(photo.thumbnail.name))
 
         photo.square_thumbnail.name = os.path.join(
-            SQUARES_FOLDER,
+            MEDIA_FOLDERS['SQUARE'],
             new_path,
             os.path.basename(photo.square_thumbnail.name))
 
@@ -340,19 +340,21 @@ def get_photo_path(photo, filename, ext=None):
 
 
 def get_photo_image_path(photo, filename):
-    return f"{ORIGINAL_IMAGES_FOLDER}/{get_photo_path(photo, filename)}"
+    return f"{MEDIA_FOLDERS['ORIGINAL']}/{get_photo_path(photo, filename)}"
 
 
 def get_photo_display_path(photo, filename):
-    return f"{DISPLAY_IMAGES_FOLDER}/{get_photo_path(photo, filename)}"
+    return f"{MEDIA_FOLDERS['DISPLAY']}/{get_photo_path(photo, filename)}"
 
 
 def get_photo_thumbnail_path(photo, filename):
-    return f"{THUMBNAILS_FOLDER}/{get_photo_path(photo, filename, ext='jpg')}"
+    return f"{MEDIA_FOLDERS['THUMBNAIL']}/" \
+           f"{get_photo_path(photo, filename, ext='jpg')}"
 
 
 def get_photo_square_thumbnail_path(photo, filename):
-    return f"{SQUARES_FOLDER}/{get_photo_path(photo, filename, ext='jpg')}"
+    return f"{MEDIA_FOLDERS['SQUARE']}/" \
+           f"{get_photo_path(photo, filename, ext='jpg')}"
 
 
 def generate_md5_hash(file):
@@ -377,7 +379,8 @@ class Photo(models.Model):
     # Display image
 
     watermark = models.CharField(
-        max_length=1, choices=WATERMARKS, default=WHITE, blank=True)
+        max_length=1, choices=WATERMARK_COLOR_CHOICES,
+        default=WATERMARK_COLOR_WHITE, blank=True)
     image = models.ImageField(
         upload_to=get_photo_display_path, editable=False,
         width_field='width', height_field='height',
@@ -478,9 +481,9 @@ class Photo(models.Model):
             _, ext = os.path.splitext(self.original.name)
             filename = os.path.join('temp', f"{uuid.uuid4()}{ext}")
 
-            os.makedirs(os.path.join(BASE_DIR, 'temp'), exist_ok=True)
+            os.makedirs(os.path.join(settings.BASE_DIR, 'temp'), exist_ok=True)
 
-            with open(os.path.join(BASE_DIR, filename), 'wb') as f:
+            with open(os.path.join(settings.BASE_DIR, filename), 'wb') as f:
                 for chunk in self.original.chunks(chunk_size=CHUNK_SIZE):
                     f.write(chunk)
 
@@ -498,9 +501,10 @@ class Photo(models.Model):
         try:
             label = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Label').lower()
         except AttributeError:
-            self.watermark = None
+            self.watermark = WATERMARK_COLOR_NONE
         else:
-            self.watermark = BLACK if label == 'green' else WHITE
+            self.watermark = (WATERMARK_COLOR_BLACK if label == 'green' else
+                              WATERMARK_COLOR_WHITE)
 
         # If using remote storage, remove the temporary copy
         if not local:
@@ -539,7 +543,7 @@ class Photo(models.Model):
 
 @contextmanager
 def temp_file():
-    os.makedirs(os.path.join(BASE_DIR, 'temp'), exist_ok=True)
+    os.makedirs(os.path.join(settings.BASE_DIR, 'temp'), exist_ok=True)
     filename = os.path.join('temp', str(uuid.uuid4()) + '.jpg')
     path = os.path.abspath(filename)
 
@@ -590,7 +594,7 @@ def update_display_image(sender, instance, created, *args, **kwargs):
             image = image.resize(resize, resample=PIL.Image.LANCZOS)
             width, height = image.size
 
-            if APPLY_WATERMARKS:
+            if WATERMARKS_ENABLED:
                 watermark = WATERMARK_IMAGES.get(photo.watermark)
                 offset = WATERMARK_OFFSET
 
@@ -890,7 +894,7 @@ def rename_panorama_files(sender, instance, created, *args, **kwargs):
 
             old_path = file.path
             new_name = get_path(pano, file.name)
-            new_path = os.path.join(MEDIA_ROOT, new_name)
+            new_path = os.path.join(settings.MEDIA_ROOT, new_name)
 
             file.name = new_name
             os.rename(old_path, new_path)

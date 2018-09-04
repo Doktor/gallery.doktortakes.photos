@@ -1,5 +1,4 @@
 import os
-import PIL.Image
 
 
 # General settings
@@ -121,65 +120,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
 
 
-# Display images & watermarks
-
-LONG, SHORT = 2400, 1600
-LANDSCAPE_SIZE = (LONG, SHORT)
-PORTRAIT_SIZE = (SHORT, LONG)
-
-WHITE = 'w'
-BLACK = 'b'
-
-WATERMARKS = (
-    (WHITE, 'White'),
-    (BLACK, 'Black'),
-)
-
-WATERMARKS_PATH = os.path.join(BASE_DIR, 'data', 'watermarks')
-WATERMARK_OFFSET = 30
-
-BLACK_PATH = os.path.join(WATERMARKS_PATH, 'black.png')
-BLACK_2400 = PIL.Image.open(BLACK_PATH, 'r').convert('RGBA')
-BLACK_2400.load()
-
-WHITE_PATH = os.path.join(WATERMARKS_PATH, 'white.png')
-WHITE_2400 = PIL.Image.open(WHITE_PATH, 'r').convert('RGBA')
-WHITE_2400.load()
-
-WATERMARK_IMAGES = {
-    BLACK: BLACK_2400,
-    WHITE: WHITE_2400,
-    None: WHITE_2400,
-}
-
-APPLY_WATERMARKS = True
-
-
 # Media file locations
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-ORIGINAL_IMAGES_FOLDER = 'photos'
-DISPLAY_IMAGES_FOLDER = 'display'
-THUMBNAILS_FOLDER = 'thumbs'
-SQUARES_FOLDER = 'squares'
-
-PANORAMAS_FOLDER = 'panoramas'
-PANORAMA_THUMBNAILS_FOLDER = 'panoramas/thumbs'
-
-DEFAULT_PATH = 'all'
-
-# Index page
-
-INDEX_ALBUMS = 12
-INDEX_FEATURED_PHOTOS = 30
-
-with open(os.path.join(BASE_DIR, 'data/taglines.txt'), encoding='utf8') as f:
-    TAGLINES = f.read().strip().split('\n')
-
-
-# Albums
-
-ITEMS_PER_PAGE = 30
-ITEMS_IN_FILMSTRIP = 11

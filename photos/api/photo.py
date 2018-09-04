@@ -10,7 +10,7 @@ from django.views import View
 from django.views.decorators.http import require_GET
 
 from photos.models import Photo
-from core.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
+from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
 from photos.views import get_album_by_path
 
 from pytz import timezone
