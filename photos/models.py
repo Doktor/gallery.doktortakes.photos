@@ -14,7 +14,7 @@ from core.settings import (
     THUMBNAILS_FOLDER, SQUARES_FOLDER,
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER,
     LANDSCAPE_SIZE, PORTRAIT_SIZE,
-    WATERMARKS, BLACK, WHITE, WATERMARK_IMAGES, WATERMARK_OFFSET)
+    WATERMARKS, BLACK, WHITE, WATERMARK_IMAGES, WATERMARK_OFFSET, DEFAULT_PATH)
 
 from photos.fields import JSONField
 
@@ -335,7 +335,7 @@ def get_photo_path(photo, filename, ext=None):
     else:
         base, _ = os.path.splitext(filename)
 
-    return f"{photo.album.get_path()}/{base}.{ext}"
+    return f"{photo.get_path()}/{base}.{ext}"
 
 
 def get_photo_image_path(photo, filename):
@@ -398,7 +398,8 @@ class Photo(models.Model):
     # Metadata
 
     album = models.ForeignKey(
-        'Album', on_delete=models.CASCADE, related_name='photos')
+        'Album', on_delete=models.CASCADE, related_name='photos',
+        blank=True, null=True)
 
     taken = models.DateTimeField(editable=False)
     edited = models.DateTimeField(editable=False)
@@ -426,9 +427,7 @@ class Photo(models.Model):
         return reverse('photo', args=[self.album.get_path(), self.md5])
 
     def get_path(self):
-        if self.album:
-            return self.album.get_path()
-        return ''  # TODO
+        return self.album.get_path() if self.album else DEFAULT_PATH
 
     def __str__(self):
         return self.filename
