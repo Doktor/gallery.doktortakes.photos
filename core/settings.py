@@ -179,3 +179,4 @@ with open(os.path.join(BASE_DIR, 'data/taglines.txt'), encoding='utf8') as f:
 # Albums
 
 ITEMS_PER_PAGE = 30
+ITEMS_IN_FILMSTRIP = 11

@@ -25,9 +25,10 @@ const photo = document.getElementById('photo');
 const link = photo.children[0];
 const image = link.children[0];
 
-
 // Photo metadata elements
 $ = document.getElementById.bind(document);
+
+const filmstrip = $('filmstrip');
 
 const metadata = {
   index: $('md-index'),
@@ -74,6 +75,7 @@ function load_photo(url, history = true) {
 
     let response = JSON.parse(request.responseText);
 
+    // Load metadata
     ['index', 'md5', 'width', 'height'].forEach(function(key) {
       photo.dataset[key] = response.metadata[key];
     });
@@ -85,15 +87,56 @@ function load_photo(url, history = true) {
       metadata[key].innerText = response.metadata[key];
     });
 
-    metadata.index.innerText = parseInt(response.metadata.index, 10) + 1;
+    metadata.index.innerText = parseInt(response.metadata.index) + 1;
 
+    // Load links
     Object.keys(links).forEach(function(key) {
       links[key].children[0].href = response.metadata[key];
     });
 
+    // Load EXIF
     Object.keys(exif).forEach(function(key) {
       exif[key].innerText = response.exif[key];
     });
+
+    // Load the filmstrip
+    filmstrip.innerHTML = '';
+    let items = document.createDocumentFragment();
+
+    response.filmstrip.forEach((item) => {
+      let div = document.createElement('div');
+      div.classList.add('item');
+
+      // Mark the current item as selected
+      if (item.md5 === photo.dataset.md5) {
+        div.classList.add('selected');
+      }
+
+      // Image
+      let image = document.createElement('img');
+      image.src = item.url;
+
+      image.addEventListener('click', () => {
+        let qs = query_string({
+          'path': photo.dataset.path,
+          'md5': item.md5,
+        });
+
+        load_photo(API_GET + qs);
+      });
+
+      // Index
+      let index = document.createElement('div');
+      index.classList.add('index');
+      index.innerText = parseInt(item.index) + 1;
+
+      // Add to fragment
+      div.appendChild(image);
+      div.appendChild(index);
+      items.appendChild(div);
+    });
+
+    filmstrip.append(items);
 
     if (history) {
       let shortMD5 = response.metadata.md5.slice(0, 7);

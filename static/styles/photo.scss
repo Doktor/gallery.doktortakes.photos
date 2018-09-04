@@ -6,7 +6,6 @@
   }
 }
 
-// Photo
 #photo {
   width: 100%;
   margin: 0;
@@ -18,7 +17,65 @@
   }
 }
 
-// Metadata container, footer
+#filmstrip {
+  $fadeTime: 0.2s;
+
+  & {
+    transform-origin: top;
+    transition-delay: 0.5s !important;
+  }
+
+  &:hover {
+    transform: scale(1.5);
+    transition-delay: 0s !important;
+  }
+
+  &, &:hover {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .item {
+    display: inline-block;
+    opacity: 0.35;
+
+    &:hover, &.selected {
+      opacity: 1;
+    }
+
+    &, &:hover {
+      transition: opacity $fadeTime ease-in-out;
+    }
+
+    .index {
+      font-size: 0.8rem;
+      font-family: "Lekton", monospace;
+      line-height: 1;
+
+      margin-top: 0.45rem;
+      opacity: 0;
+    }
+
+    &:hover .index {
+      transition: opacity $fadeTime ease-in-out;
+    }
+
+    &.selected .index, &:hover .index {
+      opacity: 1 !important;
+    }
+  }
+
+  img {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 4px;
+    border: 1px solid gainsboro;
+
+    clear: both;
+    cursor: pointer;
+  }
+}
+
 #data, footer {
   margin: 0 auto;
   width: 90%;

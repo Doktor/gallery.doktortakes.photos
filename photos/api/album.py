@@ -202,6 +202,6 @@ def get_album_photos(request):
         })
 
     for index, photo in enumerate(album.photos.all().order_by('taken')):
-        photos.append(generate_photo_dict(photo, index))
+        photos.append(generate_photo_dict(photo, index=index, filmstrip=False))
 
     return JsonResponse({'photos': photos})

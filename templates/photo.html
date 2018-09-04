@@ -46,6 +46,7 @@
 {% block nav %}{% endblock %}
 
 {% block content %}
+  <!-- API -->
   <div id="api"
        data-api-get="{% url 'api_photo' %}"
        data-api-previous="{% url 'previous_photo' %}"
@@ -55,6 +56,7 @@
        data-api-get-album-photos="{% url 'get_album_photos' %}{{ album.get_password_query }}">
   </div>
 
+  <!-- Photo -->
   <section id="photo"
            data-album-url="{{ album.get_hidden_url }}"
            data-path="{{ photo.get_path }}"
@@ -67,8 +69,13 @@
     </a>
   </section>
 
+  <!-- Filmstrip -->
+  <section id="filmstrip"></section>
+
   <section id="data">
+    <!-- Top half -->
     <div>
+      <!-- Metadata -->
       <div class="metadata">
         <h2>Metadata</h2>
 
@@ -118,6 +125,8 @@
           <span id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></span>
         </div>
       </div>
+
+      <!-- EXIF -->
       <div class="exif">
         <h2>EXIF</h2>
 
@@ -145,7 +154,11 @@
         </div>
       </div>
     </div>
+    <!-- End top half -->
+
+    <!-- Bottom half -->
     <div>
+      <!-- Keyboard shortcuts -->
       <div class="keyboard">
         <h2>Keyboard shortcuts</h2>
         <ul id="keys">
@@ -157,8 +170,10 @@
           <li><kbd>L</kbd> Return to album list</li>
         </ul>
       </div>
+
+      <!-- Navigation -->
       <div class="links">
-        <h2>Links</h2>
+        <h2>Navigation</h2>
         <div>
           <span title="Album"><i class="fa fa-book"></i></span>
           {% for album in path %}
@@ -177,6 +192,7 @@
         </div>
       </div>
     </div>
+    <!-- End bottom half -->
   </section>
 
   {% include "_photoswipe.html" %}

@@ -10,7 +10,7 @@ from django.views import View
 from django.views.decorators.http import require_GET
 
 from photos.models import Photo
-from core.settings import ITEMS_PER_PAGE
+from core.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
 from photos.views import get_album_by_path
 
 from pytz import timezone
@@ -76,22 +76,25 @@ def get_exif(p):
     }
 
 
-def generate_photo_dict(photo, index=None):
+def get_index(photo):
+    photos = photo.album.photos.all()
+
+    for i, item in enumerate(photos):
+        if item.md5 == photo.md5:
+            return i
+    else:
+        raise RuntimeError
+
+
+def generate_photo_dict(photo, index=None, filmstrip=True):
     taken = photo.taken.astimezone(timezone(photo.album.timezone))
 
     if index is not None:
         pass
     else:
-        photos = photo.album.photos.all().order_by('taken')
+        index = get_index(photo)
 
-        for i, item in enumerate(photos):
-            if item.md5 == photo.md5:
-                index = i
-                break
-        else:
-            raise RuntimeError
-
-    return {
+    response = {
         'image_url': photo.image.url,
         'thumbnail_url': photo.thumbnail.url,
         'square_thumbnail_url': photo.square_thumbnail.url,
@@ -106,8 +109,63 @@ def generate_photo_dict(photo, index=None):
             'download': reverse(
                 'download', args=[photo.get_path(), photo.md5]),
         },
-        'exif': get_exif(photo)
+        'exif': get_exif(photo),
     }
+
+    if filmstrip:
+        response['filmstrip'] = generate_filmstrip(photo)
+
+    return response
+
+
+def generate_filmstrip(photo):
+    count = ITEMS_IN_FILMSTRIP
+    half = count // 2
+
+    album = photo.album
+    all_photos = album.photos.all()
+
+    if all_photos.count() <= count:
+        photos = [*all_photos]
+    else:
+        # Queries
+        left_q = Q(taken__lt=photo.taken) & (~Q(pk=photo.pk))
+        middle_q1 = Q(taken=photo.taken, uploaded__lt=photo.uploaded)
+        middle_q2 = Q(taken=photo.taken, uploaded__gt=photo.uploaded)
+        right_q = Q(taken__gt=photo.taken) & (~Q(pk=photo.pk))
+
+        # Filter...
+        left = all_photos.filter(left_q).reverse()
+        middle_1 = all_photos.filter(middle_q1)
+        middle_2 = all_photos.filter(middle_q2)
+        right = all_photos.filter(right_q)
+
+        # Join the outside and middle queries
+        left = [*left, *middle_1]
+        right = [*middle_2, *right]
+        lc, rc = len(left), len(right)
+
+        if lc < half:
+            deficit = count - 1 - lc
+            photos = [*left, photo, *right[:deficit]]
+        elif rc < half:
+            deficit = count - 1 - rc
+            photos = [*left[:deficit], photo, *right]
+        else:
+            photos = [*left[:half], photo, *right[:half]]
+
+    photos = sorted(photos, key=lambda p: (p.taken, p.pk))
+
+    result = []
+
+    for photo in photos:
+        result.append({
+            'md5': photo.md5,
+            'url': photo.square_thumbnail.url,
+            'index': get_index(photo),
+        })
+
+    return result
 
 
 def photo_to_response(photo):
