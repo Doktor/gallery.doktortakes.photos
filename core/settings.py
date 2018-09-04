@@ -108,7 +108,11 @@ DATE_FORMAT = 'D, Y-m-d'
 DATETIME_FORMAT = 'D, Y-m-d H:i:s'
 
 SHORT_DATE_FORMAT = 'Y-m-d'
-SHORT_DATETIME_FORMAT = 'Y-m-d H:i'
+SHORT_DATETIME_FORMAT = 'Y-m-d H:i:s'
+
+from django.conf.locale.en import formats as en_formats
+
+en_formats.DATETIME_FORMAT = "Y-m-d H:i:s"
 
 
 # Static files

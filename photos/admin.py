@@ -66,7 +66,7 @@ class PhotoAdmin(admin.ModelAdmin):
         }),
     )
     list_display = ('__str__', 'album_name', 'width', 'height',
-                    'file_size', 'taken', 'edited', 'rating')
+                    'file_size', 'taken', 'uploaded', 'rating')
     ordering = ('-taken',)
     readonly_fields = (
         'image', 'preview',

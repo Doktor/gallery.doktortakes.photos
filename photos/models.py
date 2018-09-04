@@ -534,7 +534,7 @@ class Photo(models.Model):
 
     class Meta:
         get_latest_by = 'taken'
-        ordering = ('taken',)
+        ordering = ('taken', 'uploaded')
 
 
 @contextmanager
