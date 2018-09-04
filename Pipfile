@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 python-xmp-toolkit = "*"
 pytz = "*"
-Django = "==1.11.6"
+Django = ">=2.0"
 ExifRead = "*"
 Pillow = "*"
 django-storages = "*"

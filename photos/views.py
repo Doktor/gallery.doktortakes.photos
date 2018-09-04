@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods, require_GET
 
 from core.context_processors import metadata as m
@@ -256,7 +256,7 @@ def photo(request, path, md5):
         return render(request, 'photo.html', context)
 
 
-def photo_download(request, path, md5):
+def download(request, path, md5):
     """Starts a download for a photo."""
     p = get_photo(path, md5)
 
