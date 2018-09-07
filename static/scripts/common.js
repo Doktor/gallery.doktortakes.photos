@@ -68,8 +68,8 @@ function is_number(n) {
 }
 
 function get_page_number() {
-  let match = window.location.hash.match(/#page-(\d)/);
-  return (match === null) ? 1 : parseInt(match[1])
+  let match = window.location.hash.match(/#page-([1-9][0-9]*)/);
+  return (match === null) ? 1 : parseInt(match[1]);
 }
 
 // Key codes
