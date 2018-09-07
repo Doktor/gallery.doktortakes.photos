@@ -271,11 +271,10 @@ def download(request, path, md5):
 
 
 @login_required
-def edit_content(request):
-    """Renders the content editor."""
+def edit_albums(request):
     albums = Album.objects.filter(parent__isnull=True).order_by('-start')
     context = {'albums': albums, 'items_per_page': ITEMS_PER_PAGE}
-    return render(request, "edit.html", context)
+    return render(request, "edit_albums.html", context)
 
 
 @login_required

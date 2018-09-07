@@ -18,7 +18,7 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit' %}">Edit</a></li>
+        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit_albums' %}">Edit</a></li>
         {% for item in parents %}
         <li><a href="{{ item.get_edit_url }}">{{ item.name }}</a></li>
         {% endfor %}
@@ -49,7 +49,7 @@
   <div id="api"
        data-album-path="{{ album.get_path }}"
        data-api-album="{% url 'api_album' %}"
-       data-api-edit-list="{% url 'edit' %}"
+       data-api-edit-list="{% url 'edit_albums' %}"
        data-api-delete-photo="{% url 'api_photo' %}"></div>
 
   <section class="clearfix">
