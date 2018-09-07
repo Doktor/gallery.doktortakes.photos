@@ -274,7 +274,7 @@ def download(request, path, md5):
 def edit_content(request):
     """Renders the content editor."""
     albums = Album.objects.filter(parent__isnull=True).order_by('-start')
-    context = {'albums': albums}
+    context = {'albums': albums, 'items_per_page': ITEMS_PER_PAGE}
     return render(request, "edit.html", context)
 
 

@@ -1,30 +1,57 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}Edit albums | {{ block.super }}{% endblock %}
 
 {% block meta %}
-  <meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
 {% block content %}
   {% if messages %}
-    <section id="messages">
-      {% for m in messages %}
-        <div class="message {{ m.tags }}">{{ m }}</div>
-      {% endfor %}
-    </section>
+  <section id="messages">
+    {% for m in messages %}
+      <div class="message {{ m.tags }}">{{ m }}</div>
+    {% endfor %}
+  </section>
   {% endif %}
 
   <h2><a href="{% url 'new_album' %}">Add new album</a></h2>
 
+  {% if albums %}
   <h2>Edit existing album</h2>
+  <div id="api"
+       data-count="{{ albums.count }}"
+       data-items-per-page="{{ items_per_page }}"
+       data-page="1"></div>
+
+  <div id="album-search">
+    <input id="search" type="text" placeholder="Search by name..." data-previous="">
+  </div>
+
+  <div id="album-count">{{ albums.count }} album{{ albums.count|pluralize }}</div>
+
+  <div class="pagination above hidden"></div>
   <section id="albums">
     {% for album in albums %}
-      {% include "_album_card.html" with edit=True %}
+    {% include "_album_card_load_required.html" with edit=True %}
     {% endfor %}
   </section>
+  <div id="no-results" class="hidden">No albums found.</div>
+  <div class="pagination below hidden"></div>
+  {% else %}
+  <p>No albums available.</p>
+  {% endif %}
+
+  <hr>
 
   <footer>
     {% include "_copyright.html" %}
   </footer>
+{% endblock %}
+
+{% block scripts %}
+{% if albums %}
+<script src="{% static 'scripts/albums.js' %}"></script>
+{% endif %}
 {% endblock %}
