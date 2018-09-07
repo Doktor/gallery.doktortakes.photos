@@ -4,7 +4,7 @@ const api = $('api');
 const albums = $('albums');
 const input = $('search');
 
-const countEl = $('album-count');
+const countEl = document.querySelector('.count');
 const noResultsEl = $('no-results');
 
 const SEARCH_DELAY = 200;

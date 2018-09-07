@@ -31,7 +31,7 @@
 {% endif %}
 
 {% if album.hidden %}
-<meta name="robots" content="noindex,nofollow">
+<meta name="robots" content="noindex, nofollow">
 {% endif %}
 {% endblock %}
 
@@ -40,7 +40,7 @@
   <header>
     <nav class="album-nav">
       <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> Photos</li>
+        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'albums' %}">Photos</a></li>
         {% for album in path %}
         <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
         {% endfor %}
