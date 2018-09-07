@@ -130,7 +130,7 @@ def album_list(request):
     query = QUERY_ADMIN if request.user.is_staff else QUERY
 
     albums = Album.objects.filter(query).order_by('-start')
-    context = {'albums': albums}
+    context = {'albums': albums, 'items_per_page': ITEMS_PER_PAGE}
 
     view = request.GET.get('view', '')
 

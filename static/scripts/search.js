@@ -119,7 +119,7 @@ function get_search_query_string(page) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const pagination = new Pagination(ITEMS_PER_PAGE, 0, 0);
+  const pagination = new Pagination(photos, ITEMS_PER_PAGE, {load_required: true});
 
   function update_results(callback, query = '') {
     let url = API_SEARCH + (query || get_search_query_string(pagination.page));
@@ -165,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
     request.send();
   }
 
-  pagination.load_required = true;
   pagination.load_new_items = update_results;
 
   submit.addEventListener('click', () => { pagination.change_page(1) });

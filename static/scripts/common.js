@@ -88,18 +88,24 @@ const KEY_L = 76;
 
 // Pagination: elements
 
-let Pagination = function(items_per_page, pages, page) {
+let Pagination = function(
+    container_el, items_per_page,
+    {pages = 0, page = 0, save_history = true, load_required = false}) {
+  this.containerEl = container_el;
   this.items_per_page = items_per_page;
   this.pages = pages;
   this.page = page;
+  this.save_history = save_history;
+  this.load_required = load_required;
 
-  this.load_required = false;
-  this.load_new_items = function() {};
+  if (this.load_required) {
+    this.load_new_items = function() {};
+  }
 };
 
 Pagination.prototype.setup = function() {
   this.add_buttons(this.pages);
-  this.change_page(this.page, force = true);
+  this.change_page(this.page, true);
 };
 
 Pagination.prototype.add_dots_button = function(container) {
@@ -164,6 +170,11 @@ Pagination.prototype.create_text_button = function(text) {
   });
 
   return el;
+};
+
+Pagination.prototype.update_page_count = function(count) {
+  this.pages = Math.ceil(count / this.items_per_page);
+  this.change_page(this.pages === 0 ? 0 : 1, true, true);
 };
 
 Pagination.prototype.add_buttons = function() {
@@ -239,7 +250,7 @@ Pagination.prototype.add_buttons = function() {
 
 // Pagination: implementation
 
-Pagination.prototype.change_page = function(page, force = false) {
+Pagination.prototype.change_page = function(page, force = false, ignore_hidden = false) {
   if (page === this.page && !force) { return; }
 
   this.page = page;
@@ -250,7 +261,7 @@ Pagination.prototype.change_page = function(page, force = false) {
       this.select_page();
     });
   } else {
-    this.show_loaded_items();
+    this.show_loaded_items(ignore_hidden);
     this.add_buttons();
     this.select_page();
   }
@@ -269,17 +280,27 @@ Pagination.prototype.select_page = function() {
     item.classList.add('selected');
   }
 
-  if (!this.load_required) {
+  if (this.save_history) {
     let url = document.location.search + '#page-' + this.page;
     history.replaceState(undefined, undefined, url);
   }
 };
 
-Pagination.prototype.show_loaded_items = function() {
+Pagination.prototype.show_loaded_items = function(ignore_hidden = false) {
+  if (this.page === 0) {
+    for (let wrapper of this.containerEl.children) {
+      wrapper.classList.add('hidden');
+    }
+
+    return;
+  }
+
   let start = this.items_per_page * (this.page - 1);
   let end = start + this.items_per_page - 1;
 
-  Array.from(photos.children).forEach((wrapper, i) => {
+  Array.from(this.containerEl.children).forEach((wrapper, i) => {
+    if (ignore_hidden && wrapper.classList.contains('hidden')) { return; }
+
     let image = wrapper.querySelector('img');
 
     if (i >= start && i <= end) {

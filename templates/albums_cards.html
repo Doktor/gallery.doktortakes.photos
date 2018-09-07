@@ -2,8 +2,8 @@
 
 {% block album_list %}
 <section id="albums">
-{% for album in albums %}
-  {% include "_album_card.html" with edit=False %}
-{% endfor %}
+  {% for album in albums %}
+  {% include "_album_card_load_required.html" with edit=False %}
+  {% endfor %}
 </section>
 {% endblock %}
