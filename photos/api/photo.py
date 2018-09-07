@@ -1,6 +1,3 @@
-import datetime
-
-import pytz
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
@@ -13,7 +10,8 @@ from photos.models import Photo
 from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
 from photos.views import get_album_by_path
 
-from pytz import timezone
+import datetime
+import pytz
 
 from .utils import APIError, get_photo_from_request
 
@@ -87,7 +85,7 @@ def get_index(photo):
 
 
 def generate_photo_dict(photo, index=None, filmstrip=True):
-    taken = photo.taken.astimezone(timezone(photo.album.timezone))
+    taken = photo.taken.astimezone(pytz.timezone(photo.album.timezone))
 
     if index is not None:
         pass
@@ -263,45 +261,8 @@ def last_photo(request):
     return navigate_end(request, 'last')
 
 
-def search_photos(request):
-    params = request.GET
-
-    # Filters
-
-    query = Q(album__hidden=False)
-
-    name = params.get('name', '')
-    if name:
-        query = query & Q(album__name__icontains=name)
-
-    location = params.get('location', '')
-    if location:
-        query = query & Q(album__location__icontains=location)
-
-    width = params.get('width', '')
-    if width:
-        query = query & Q(width=int(width))
-
-    height = params.get('height', '')
-    if height:
-        query = query & Q(height=int(height))
-
-    rating = params.getlist('rating')
-    if rating:
-        subquery = Q()
-
-        for value in rating:
-            try:
-                value = int(value)
-            except ValueError:
-                continue
-
-            subquery = subquery | Q(rating=value)
-
-        query = query & subquery
-
-    start = params.get('start', '')
-    end = params.get('end', '')
+def date_query(start, end):
+    query = Q()
 
     try:
         start = datetime.datetime.strptime(start, '%Y-%m-%d')
@@ -316,14 +277,64 @@ def search_photos(request):
         end = False
 
     if start and end:
-        query = query & Q(taken__gte=start, taken__lte=end)
+        query &= Q(taken__gte=start, taken__lte=end)
     elif start or end:
         day = start or end
         day_end = day.replace(hour=23, minute=59, second=59)
 
-        query = query & Q(taken__gte=day, taken__lte=day_end)
+        query &= Q(taken__gte=day, taken__lte=day_end)
     else:
         pass
+
+    return query
+
+
+def search_photos(request):
+    params = request.GET
+    query = Q(album__hidden=False)
+
+    # Filtering: general
+
+    fields = (
+        ('name', 'album__name__icontains', None),
+        ('location', 'album__location__icontains', None),
+        ('width', 'width', int),
+        ('height', 'height', int),
+    )
+
+    for key, field, f in fields:
+        value = params.get(key, '')
+
+        if value:
+            if f is not None:
+                value = f(value)
+
+            query &= Q(**{field: value})
+
+    rating = params.getlist('rating')
+    if rating:
+        subquery = Q()
+
+        for value in rating:
+            try:
+                value = int(value)
+            except ValueError:
+                continue
+
+            subquery |= Q(rating=value)
+
+        query = query & subquery
+
+    # Filtering: dates
+
+    taken_start = params.get('taken-start', '')
+    taken_end = params.get('taken-end', '')
+
+    uploaded_start = params.get('uploaded-start', '')
+    uploaded_end = params.get('uploaded-end', '')
+
+    query &= date_query(taken_start, taken_end)
+    query &= date_query(uploaded_start, uploaded_end)
 
     # Ordering
 
@@ -335,7 +346,7 @@ def search_photos(request):
     if params.get('direction') == 'new':
         order = f"-{order}"
 
-    # Query
+    # Execute the query!
 
     photos = Photo.objects.filter(query).order_by(order)
     count = photos.count()

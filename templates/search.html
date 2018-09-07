@@ -68,12 +68,22 @@
         </div>
 
         <div>
-          <label>Date taken</label>
+          <label>Taken</label>
 
           {% spaceless %}
-          <input id="start" name="start" title="Start" type="date">
+          <input id="taken-start" name="taken-start" title="Start" type="date">
           to
-          <input id="end" name="end" title="End" type="date">
+          <input id="taken-end" name="taken-end" title="End" type="date">
+          {% endspaceless %}
+        </div>
+
+        <div>
+          <label>Uploaded</label>
+
+          {% spaceless %}
+          <input id="uploaded-start" name="uploaded-start" title="Start" type="date">
+          to
+          <input id="uploaded-end" name="uploaded-end" title="End" type="date">
           {% endspaceless %}
         </div>
 
