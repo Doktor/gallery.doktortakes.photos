@@ -18,7 +18,7 @@
   <header>
     <nav>
       <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fa fa-book"></i> <a href="{% url 'edit' %}">Edit</a></li>
+        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit' %}">Edit</a></li>
         {% for item in parents %}
         <li><a href="{{ item.get_edit_url }}">{{ item.name }}</a></li>
         {% endfor %}

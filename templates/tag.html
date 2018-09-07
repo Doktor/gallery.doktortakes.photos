@@ -23,7 +23,7 @@
   <header>
     <nav class="tag-nav">
       <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fa fa-book"></i> <a href="{% url 'tags' %}">Tags</a></li>
+        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-book"></i> <a href="{% url 'tags' %}">Tags</a></li>
         <li><a href="{{ tag.get_absolute_url }}">{{ tag.slug }}</a></li>
       </ul>
 
@@ -49,7 +49,7 @@
 
       {% if tag.description %}
       <h3 class="short-description">
-        <span title="Description"><i class="fa fa-fw fa-sticky-note"></i></span>
+        <span title="Description"><i class="fas fa-fw fa-sticky-note"></i></span>
         <span>{{ tag.description|safe }}</span>
       </h3>
       {% endif %}

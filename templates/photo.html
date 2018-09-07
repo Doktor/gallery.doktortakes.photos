@@ -80,19 +80,19 @@
         <h2>Metadata</h2>
 
         <div>
-          <span title="Sequence number"><i class="fa fa-list-ol"></i></span>
+          <span title="Sequence number"><i class="fas fa-fw fa-list-ol"></i></span>
           <span>
             <span id="md-index">?</span> / <span id="md-count">{{ album.photos.all.count }}</span>
           </span>
         </div>
 
         <div>
-          <span title="Date taken"><i class="fa fa-calendar"></i></span>
+          <span title="Date taken"><i class="fas fa-fw fa-calendar"></i></span>
           <span id="md-taken">{{ photo.taken|timezone:photo.album.timezone|date:"l, Y-m-d, g:i:s A" }}</span>
         </div>
 
         <div>
-          <span title="Location and timezone"><i class="fa fa-map-marker"></i></span>
+          <span title="Location and timezone"><i class="fas fa-fw fa-map-marker"></i></span>
           <span>
             {% if album.location %}
             <span id="md-location">{{ album.location }}</span>
@@ -104,24 +104,24 @@
         </div>
 
         <div>
-          <span title="Dimensions"><i class="fa fa-photo"></i></span>
+          <span title="Dimensions"><i class="fas fa-fw fa-camera"></i></span>
           <span>
             <span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span>
           </span>
         </div>
 
         <div>
-          <span title="MD5 checksum"><i class="fa fa-check-square-o"></i></span>
+          <span title="MD5 checksum"><i class="fas fa-fw fa-check-circle"></i></span>
           <span id="md-md5">{{ photo.md5 }}</span>
         </div>
 
         <div>
-          <span title="Open in new tab"><i class="fa fa-external-link"></i></span>
+          <span title="Open in new tab"><i class="fas fa-fw fa-external-link-alt"></i></span>
           <span id="md-new-tab"><a href="{{ photo.image.url }}">Open in new tab</a></span>
         </div>
 
         <div>
-          <span title="Download"><i class="fa fa-download"></i></span>
+          <span title="Download"><i class="fas fa-fw fa-download"></i></span>
           <span id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></span>
         </div>
       </div>
@@ -175,19 +175,19 @@
       <div class="links">
         <h2>Navigation</h2>
         <div>
-          <span title="Album"><i class="fa fa-book"></i></span>
+          <span title="Album"><i class="fas fa-fw fa-book"></i></span>
           {% for album in path %}
           <a href="{{ album.get_hidden_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
           {% endfor %}
         </div>
 
         <div>
-           <span title="List of photos"><i class="fa fa-list"></i></span>
+           <span title="List of photos"><i class="fas fa-fw fa-list"></i></span>
            <a href="{% url 'albums' %}">Return to album list</a>
         </div>
 
         <div>
-          <span title="Index"><i class="fa fa-home"></i></span>
+          <span title="Index"><i class="fas fa-fw fa-home"></i></span>
           <a href="{% url 'index' %}">Return home</a>
         </div>
       </div>
