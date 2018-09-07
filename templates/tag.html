@@ -48,7 +48,7 @@
       </figure>
 
       {% if tag.description %}
-      <h3 class="short-description">
+      <h3 class="info">
         <span title="Description"><i class="fas fa-fw fa-sticky-note"></i></span>
         <span>{{ tag.description|safe }}</span>
       </h3>
@@ -68,7 +68,7 @@
 
   <!-- Albums -->
   {% if count %}
-    <h3 class="count">{{ count }} album{{ count|pluralize }}</h3>
+    <div class="count">{{ count }} album{{ count|pluralize }}</div>
 
     <section id="albums">
       {% for album in albums %}

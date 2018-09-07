@@ -68,19 +68,19 @@
       </figure>
 
       {% if album.get_place or album.get_location %}
-      <h3 class="location">
+      <h3 class="info">
         <span title="Location"><i class="fas fa-fw fa-map-marker"></i></span>
         {{ album.get_full_location }}
       </h3>
       {% endif %}
 
-      <h3 class="date">
+      <h3 class="info">
         <span title="Date"><i class="fas fa-fw fa-calendar"></i></span>
         {{ album.get_full_date }}
       </h3>
 
       {% if album.tags.count %}
-      <h3 class="tags">
+      <h3 class="info">
         <span title="Tags"><i class="fas fa-fw fa-tags"></i></span>
         {% for tag in album.tags.all %}
         <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
@@ -107,7 +107,7 @@
   <!-- Albums -->
   {% with a_count=album.children.count %}
   {% if a_count %}
-    <h3 class="count">{{ a_count }} album{{ a_count|pluralize }}</h3>
+    <div class="count">{{ a_count }} album{{ a_count|pluralize }}</div>
 
     <section id="albums">
       {% for c in album.children.all %}
@@ -128,7 +128,7 @@
        data-items-per-page="{{ items_per_page }}"
        data-page="1"></div>
 
-    <h3 class="count">{{ count }} photo{{ count|pluralize }}</h3>
+    <div class="count">{{ count }} photo{{ count|pluralize }}</div>
 
     <!-- Photos -->
     <div class="pagination"></div>
