@@ -18,6 +18,12 @@
 }
 
 #filmstrip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#filmstrip-container {
   $fadeTime: 0.2s;
 
   & {

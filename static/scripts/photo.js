@@ -28,7 +28,7 @@ const image = link.children[0];
 // Photo metadata elements
 $ = document.getElementById.bind(document);
 
-const filmstrip = $('filmstrip');
+const filmstrip = $('filmstrip-container');
 
 const metadata = {
   index: $('md-index'),
