@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   pagination.load_new_items = update_results;
 
-  submit.addEventListener('click', () => { pagination.change_page(1) });
+  submit.addEventListener('click', () => { pagination.change_page(1); console.log(2); });
 
   if (window.location.search !== '') {
     populate_form(window.location.search);

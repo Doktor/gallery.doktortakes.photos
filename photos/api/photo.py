@@ -84,31 +84,33 @@ def get_index(photo):
         raise RuntimeError
 
 
-def generate_photo_dict(photo, index=None, filmstrip=True):
+def generate_photo_dict(photo, index=None, metadata=True, filmstrip=True):
     taken = photo.taken.astimezone(pytz.timezone(photo.album.timezone))
-
-    if index is not None:
-        pass
-    else:
-        index = get_index(photo)
 
     response = {
         'image_url': photo.image.url,
         'thumbnail_url': photo.thumbnail.url,
         'square_thumbnail_url': photo.square_thumbnail.url,
         'url': photo.get_absolute_url(),
-        'metadata': {
-            'index': index,
-            'taken': taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
-            'width': photo.width,
-            'height': photo.height,
-            'md5': photo.md5,
-            'new_tab': photo.image.url,
-            'download': reverse(
-                'download', args=[photo.get_path(), photo.md5]),
-        },
-        'exif': get_exif(photo),
     }
+
+    if metadata:
+        if index is None:
+            index = get_index(photo)
+
+        response.update({
+            'metadata': {
+                'index': index,
+                'taken': taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
+                'width': photo.width,
+                'height': photo.height,
+                'md5': photo.md5,
+                'new_tab': photo.image.url,
+                'download': reverse(
+                    'download', args=[photo.get_path(), photo.md5]),
+            },
+            'exif': get_exif(photo)
+        })
 
     if filmstrip:
         response['filmstrip'] = generate_filmstrip(photo)
@@ -349,7 +351,7 @@ def search_photos(request):
     # Execute the query!
 
     photos = Photo.objects.filter(query).order_by(order)
-    count = photos.count()
+    total = photos.count()
 
     try:
         page = int(params.get('page'))
@@ -365,10 +367,12 @@ def search_photos(request):
 
     # Generate the response
 
-    dicts = [generate_photo_dict(photo) for photo in photos]
+    data = [generate_photo_dict(photo, metadata=False, filmstrip=False)
+            for photo in photos]
+
     response = {
-        'photos': dicts,
-        'count': count,
+        'photos': data,
+        'count': total,
     }
 
     return JsonResponse(response)
