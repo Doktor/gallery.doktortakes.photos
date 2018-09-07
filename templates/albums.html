@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load staticfiles %}
 
 {% block title %}Photos | {{ block.super }}{% endblock %}
 {% block meta %}
@@ -34,22 +33,8 @@
 
     <h2>Photos</h2>
     {% if albums %}
-    <div id="api"
-         data-count="{{ albums.count }}"
-         data-items-per-page="{{ items_per_page }}"
-         data-page="1"></div>
-
-    <div id="album-search">
-      <input id="search" type="text" placeholder="Search by name..." data-previous="">
-    </div>
-
-    <div id="album-count">{{ albums.count }} album{{ albums.count|pluralize }}</div>
-
-    <div class="pagination above hidden"></div>
     {% block album_list %}
     {% endblock %}
-    <div id="no-results" class="hidden">No albums found.</div>
-    <div class="pagination below hidden"></div>
     {% else %}
     <p>No photos available.</p>
     {% endif %}
@@ -61,11 +46,5 @@
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-{% if albums %}
-<script src="{% static 'scripts/albums.js' %}"></script>
-{% endif %}
 {% endblock %}
 
