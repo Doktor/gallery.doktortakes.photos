@@ -190,7 +190,7 @@ class Album(models.Model):
         return self.get_absolute_url() + self.get_password_query()
 
     def get_password_query(self):
-        return f"?password={self.password}" if self.password else ''
+        return f"?password={self.password}&" if self.password else ''
 
     def __str__(self):
         return self.name

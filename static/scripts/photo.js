@@ -343,7 +343,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load the rest of the album
 document.addEventListener('DOMContentLoaded', function() {
   let query = query_string({'path': photo.dataset.path});
-  load_photos(API_GET_ALBUM_PHOTOS + query);
+
+  let base = API_GET_ALBUM_PHOTOS;
+
+  if (base.endsWith('&')) {
+    load_photos(base + query.substring(1))
+  } else{
+    load_photos(base + query)
+  }
 });
 
 
