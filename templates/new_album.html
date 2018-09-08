@@ -38,7 +38,7 @@
   <div id="api" data-api-album="{% url 'api_new_album' %}"></div>
 
   <div id="album-form-container" class="new">
-    {% include '_album_form.html' with tags=False %}
+    {% include '_album_form.html' with tags=False parent=False %}
   </div>
 {% endblock %}
 

@@ -50,6 +50,13 @@ $('album-form-save').addEventListener('click', () => {
 });
 
 
+$('set-parent').addEventListener('click', () => {
+  $('album-set-parent-modal').classList.toggle('hidden');
+
+  document.body.classList.toggle('modal-open');
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
   function onSuccess(response) {
     for (let [key, value] of Object.entries(response)) {
@@ -228,3 +235,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 $('album-delete-submit').addEventListener('click', delete_album);
+
+
+// Search & pagination
+
+const modal = $('album-set-parent-modal');
+
+const albumsEl = modal.querySelector('#albums');
+const countEl = modal.querySelector('.count');
+const searchEl = modal.querySelector('#search');
+const noResultsEl = modal.querySelector('#no-results');
+
+const SEARCH = modal.querySelector('#search-api');
+const COUNT = parseInt(SEARCH.dataset.count);
+const ITEMS_PER_PAGE = parseInt(SEARCH.dataset.itemsPerPage);
+
+document.addEventListener('DOMContentLoaded', function() {
+  let pages = Math.ceil(COUNT / ITEMS_PER_PAGE);
+
+  let pagination = new Pagination(albumsEl, ITEMS_PER_PAGE,
+    {pages: pages, page: 1, save_history: false});
+  pagination.setup();
+
+  let search = new Search(pagination, albumsEl, COUNT,
+    countEl, searchEl, noResultsEl);
+});

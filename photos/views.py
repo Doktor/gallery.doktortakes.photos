@@ -128,9 +128,11 @@ def wall(request):
 def album_list(request):
     """Renders the list of albums."""
     query = QUERY_ADMIN if request.user.is_staff else QUERY
-
     albums = Album.objects.filter(query).order_by('-start')
-    context = {'albums': albums, 'items_per_page': ITEMS_PER_PAGE}
+    context = {
+        'albums': albums,
+        'items_per_page': ITEMS_PER_PAGE,
+    }
 
     view = request.GET.get('view', '')
 
@@ -221,11 +223,16 @@ def edit_album(request, path):
     """Renders the edit album page."""
     a = get_album_by_path(path)
 
+    query = QUERY_ADMIN if request.user.is_staff else QUERY
+    albums = Album.objects.filter(query).order_by('-start')
+
     context = {
         'album': a,
         'photos': a.photos.all(),
-        'count': a.photos.count(),
         'parents': get_albums_from_path(path)[:-1],
+
+        'albums': albums,
+        'items_per_page': 6,
     }
 
     return render(request, "edit_album.html", context)

@@ -2,27 +2,7 @@
 {% load staticfiles %}
 
 {% block album_list %}
-<div id="api"
-     data-count="{{ albums.count }}"
-     data-items-per-page="{{ items_per_page }}"
-     data-page="1"></div>
-
-<div id="album-search">
-  <input id="search" type="text" placeholder="Search by name..." data-previous="">
-</div>
-
-<div class="count">{{ albums.count }} album{{ albums.count|pluralize }}</div>
-
-<div class="pagination above hidden"></div>
-
-  <section id="albums">
-  {% for album in albums %}
-  {% include "_album_card_load_required.html" with edit=False %}
-  {% endfor %}
-</section>
-
-<div id="no-results" class="hidden">No albums found.</div>
-<div class="pagination below hidden"></div>
+{% include '_album_search.html' with edit=False pagination_below=True %}
 {% endblock %}
 
 {% block scripts %}

@@ -3,7 +3,7 @@ let $ = document.getElementById.bind(document);
 const form = $('search');
 const submit = $('submit');
 
-const countEl = document.querySelector('.count');
+const countEl = document.querySelector('#count');
 const photos = $('photos');
 
 const api = $('api');

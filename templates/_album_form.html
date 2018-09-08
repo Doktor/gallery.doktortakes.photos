@@ -69,6 +69,19 @@
       </div>
     </div>
     {% endif %}
+
+    {% if parent %}
+    <div class="row">
+      <label for="f-parent">Parent</label>
+      <div class="field-wrapper">
+        <input class="field" name="parent" id="f-parent" type="text" disabled>
+      </div>
+    </div>
+
+    <div id="set-parent">
+      <a href="javascript: void(0)">Set parent album</a>
+    </div>
+    {% endif %}
   </fieldset>
 
   <a href="{% url 'edit_albums' %}">

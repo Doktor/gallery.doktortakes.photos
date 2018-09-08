@@ -57,7 +57,15 @@
     <h2>Album details</h2>
 
     <div id="album-form-container" class="edit">
-      {% include '_album_form.html' with tags=True %}
+      {% include '_album_form.html' with tags=True parent=True %}
+    </div>
+
+    <div id="album-set-parent-modal" class="hidden">
+      <div id="album-set-parent-container">
+        <h2>Set parent album</h2>
+
+        {% include '_album_search.html' with edit=True %}
+      </div>
     </div>
 
     <div id="cover">
@@ -92,7 +100,7 @@
   <section>
     <h2>Manage photos</h2>
     <div id="counts">
-      <span id="total-count">{{ count }}</span> photo{{ count|pluralize }} in album,
+      <span id="total-count">{{ photos.count }}</span> photo{{ photos.count|pluralize }} in album,
       <span id="selected-count">0</span> photos selected
     </div>
 
@@ -112,14 +120,17 @@
       </span>
     </div>
 
-    {% if count or album.children.count %}
+    <!-- No photos or subalbums -->
+    {% if not photos.count and not album.children.count %}
     <p>This album does not contain any photos.</p>
     {% endif %}
 
-    {% if count %}
-    {% if album.children.count %}
+    <!-- Distinguish between this album and its subalbums -->
+    {% if photos.count and album.children.count %}
     <h2>Photos in this album</h2>
     {% endif %}
+
+    <!-- Photos -->
     <div id="photos">
       {% for p in photos %}
       <div class="wrapper" data-md5="{{ p.md5 }}">
@@ -129,27 +140,32 @@
       </div>
       {% endfor %}
     </div>
-    {% endif %}
+    <!-- End photos -->
 
     {% if album.children.count %}
     <h2>Photos in subalbums</h2>
 
-    {% for a in album.get_all_subalbums %}
-    {% if a.photos.count %}
-    <h3><a href="{{ a.get_edit_url }}">{{ a.name }}</a></h3>
+    <!-- Subalbums -->
+    {% for sa in album.get_all_subalbums %}
+      <!-- Subalbum photos -->
+      {% if sa.photos.count %}
+      <h3><a href="{{ sa.get_edit_url }}">{{ sa.name }}</a></h3>
 
-    <div class="children">
-      {% for p in a.photos.all %}
-      <div class="wrapper" data-md5="{{ p.md5 }}">
-        <div class="photo">
-          <img src="{{ p.square_thumbnail.url }}">
+      <div class="children">
+        {% for p in sa.photos.all %}
+        <div class="wrapper" data-md5="{{ p.md5 }}">
+          <div class="photo">
+            <img src="{{ p.square_thumbnail.url }}">
+          </div>
         </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+      {% endif %}
+      <!-- End subalbum photos -->
     {% endfor %}
-  {% endif %}
+    <!-- End subalbums -->
+
+    {% endif %}
   </section>
 
   <!-- Delete album -->

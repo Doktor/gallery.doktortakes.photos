@@ -188,6 +188,7 @@ const KEY_D = 68;
 const KEY_H = 72;
 const KEY_L = 76;
 
+
 // Pagination: elements
 
 let Pagination = function(
@@ -415,5 +416,46 @@ Pagination.prototype.show_loaded_items = function(ignore_hidden = false) {
     } else {
       wrapper.classList.add('hidden');
     }
+  });
+};
+
+
+// Search
+
+const SEARCH_DELAY = 200;
+
+let Search = function(pagination, elements, count,
+                      countEl, searchEl, noResultsEl) {
+  this.pagination = pagination;
+  this.elements = elements;
+  this.count = count;
+  this.countEl = countEl;
+  this.searchEl = searchEl;
+  this.noResultsEl = noResultsEl;
+
+  let timeout;
+
+  this.searchEl.addEventListener('keyup', () => {
+    if (this.searchEl.value === this.searchEl.dataset.previous) { return; }
+
+    this.searchEl.dataset.previous = this.searchEl.value;
+
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      let term = this.searchEl.value.toLowerCase();
+
+      for (let item of this.elements.querySelectorAll('.wrapper')) {
+        let name = item.dataset.name;
+        item.classList.toggle('hidden', !name.includes(term));
+      }
+
+      let hidden = this.elements.querySelectorAll('.hidden').length;
+      let total = this.count - hidden;
+      let word = total === 1 ? 'album' : 'albums';
+
+      this.pagination.update_page_count(total);
+      this.countEl.innerText = "{0} {1}".format(total, word);
+      this.noResultsEl.classList.toggle('hidden', total !== 0)
+    }, SEARCH_DELAY);
   });
 };
