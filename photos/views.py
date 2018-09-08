@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -8,7 +9,7 @@ from django.views.decorators.http import require_http_methods, require_GET
 
 from core.context_processors import metadata as m
 from photos.forms import AlbumForm
-from photos.models import Album, Panorama, Photo, Tag
+from photos.models import Album, Panorama, Photo, Tag, generate_md5_hash
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
@@ -311,7 +312,18 @@ def upload_photo(request, path):
     for file in files:
         p = Photo()
         p.album = get_album_by_path(path)
-        p.original = file
+        p.original.save(file.name, file, save=False)
+
+        p.md5 = generate_md5_hash(p.original)
+
+        try:
+            Photo.objects.get(md5=p.md5)
+        except Photo.DoesNotExist:
+            pass
+        else:
+            p.original.delete()
+            raise ValidationError(f"Duplicate file: {p.md5}")
+
         p.save()
 
     return JsonResponse({'success': True})

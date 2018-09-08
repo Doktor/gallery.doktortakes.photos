@@ -15,8 +15,7 @@ from photos.settings import (
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER,
     LANDSCAPE_SIZE, PORTRAIT_SIZE,
     WATERMARKS_ENABLED, WATERMARK_IMAGES, WATERMARK_OFFSET,
-    WATERMARK_COLOR_CHOICES,
-    WATERMARK_COLOR_NONE, WATERMARK_COLOR_WHITE, WATERMARK_COLOR_BLACK)
+    COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK)
 
 from photos.fields import JSONField
 
@@ -60,6 +59,14 @@ def get_modified_time_utc(file):
 
 # Album
 
+SIZE_2400 = '2400'
+SIZE_3600 = '3600'
+
+SIZES = (
+    (SIZE_2400, '2400 x 1600'),
+    (SIZE_3600, '3600 x 2400'),
+)
+
 
 class Album(models.Model):
     """A collection of photos and albums."""
@@ -83,6 +90,9 @@ class Album(models.Model):
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
+    thumbnail_size = models.CharField(
+        max_length=4, choices=SIZES, default=SIZE_2400)
+
     cover = models.OneToOneField(
         'Photo', models.SET_NULL,
         related_name='cover_for', blank=True, null=True,
@@ -96,7 +106,7 @@ class Album(models.Model):
     hidden = models.BooleanField(default=False)
     password = models.CharField(max_length=128, blank=True, null=True)
 
-    tags = models.ManyToManyField('Tag', related_name='albums')
+    tags = models.ManyToManyField('Tag', related_name='albums', blank=True)
 
     @property
     def count(self):
@@ -329,7 +339,7 @@ class Tag(models.Model):
 # Photo
 
 
-def get_photo_path(photo, filename, ext=None):
+def get_path(photo, filename, ext=None):
     if ext is None:
         base, ext = os.path.splitext(filename)
         ext = ext.lstrip('.')
@@ -339,22 +349,22 @@ def get_photo_path(photo, filename, ext=None):
     return f"{photo.get_path()}/{base}.{ext}"
 
 
-def get_photo_image_path(photo, filename):
-    return f"{MEDIA_FOLDERS['ORIGINAL']}/{get_photo_path(photo, filename)}"
+def get_original_path(photo, filename):
+    return f"{MEDIA_FOLDERS['ORIGINAL']}/{get_path(photo, filename)}"
 
 
-def get_photo_display_path(photo, filename):
-    return f"{MEDIA_FOLDERS['DISPLAY']}/{get_photo_path(photo, filename)}"
+def get_display_path(photo, filename):
+    return f"{MEDIA_FOLDERS['DISPLAY']}/{get_path(photo, filename)}"
 
 
-def get_photo_thumbnail_path(photo, filename):
+def get_thumbnail_path(photo, filename):
     return f"{MEDIA_FOLDERS['THUMBNAIL']}/" \
-           f"{get_photo_path(photo, filename, ext='jpg')}"
+           f"{get_path(photo, filename, ext='jpg')}"
 
 
-def get_photo_square_thumbnail_path(photo, filename):
+def get_square_thumbnail_path(photo, filename):
     return f"{MEDIA_FOLDERS['SQUARE']}/" \
-           f"{get_photo_path(photo, filename, ext='jpg')}"
+           f"{get_path(photo, filename, ext='jpg')}"
 
 
 def generate_md5_hash(file):
@@ -370,7 +380,7 @@ class Photo(models.Model):
     # Original image
 
     original = models.ImageField(
-        upload_to=get_photo_image_path,
+        upload_to=get_original_path,
         verbose_name="Original image",
         help_text="Original image with no modifications")
     md5 = models.CharField(
@@ -379,10 +389,9 @@ class Photo(models.Model):
     # Display image
 
     watermark = models.CharField(
-        max_length=1, choices=WATERMARK_COLOR_CHOICES,
-        default=WATERMARK_COLOR_WHITE, blank=True)
+        max_length=1, choices=COLOR_CHOICES, default=COLOR_WHITE, blank=True)
     image = models.ImageField(
-        upload_to=get_photo_display_path, editable=False,
+        upload_to=get_display_path, editable=False,
         width_field='width', height_field='height',
         verbose_name="Display image",
         help_text="Smaller image with watermark applied")
@@ -395,9 +404,9 @@ class Photo(models.Model):
     # Thumbnails
 
     thumbnail = models.ImageField(
-        upload_to=get_photo_thumbnail_path, editable=False)
+        upload_to=get_thumbnail_path, editable=False)
     square_thumbnail = models.ImageField(
-        upload_to=get_photo_square_thumbnail_path, editable=False)
+        upload_to=get_square_thumbnail_path, editable=False)
 
     # Metadata
 
@@ -415,7 +424,6 @@ class Photo(models.Model):
 
     @property
     def filename(self):
-        """Returns the filename of the photo file."""
         return os.path.basename(self.original.name)
 
     @property
@@ -427,7 +435,6 @@ class Photo(models.Model):
         return self.original.height
 
     def get_absolute_url(self):
-        """Returns the URL for this photo."""
         return reverse('photo', args=[self.album.get_path(), self.md5])
 
     def get_path(self):
@@ -448,18 +455,6 @@ class Photo(models.Model):
             return
 
         self.original.open()
-
-        self.original.save(self.original.name, self.original, save=False)
-
-        # MD5 hash
-        self.md5 = generate_md5_hash(self.original)
-
-        try:
-            Photo.objects.get(md5=self.md5)
-        except Photo.DoesNotExist:
-            pass
-        else:
-            raise ValidationError(f"Duplicate file detected: {self.md5}")
 
         # EXIF data
         exif = exifread.process_file(self.original, details=False)
@@ -501,10 +496,10 @@ class Photo(models.Model):
         try:
             label = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Label').lower()
         except AttributeError:
-            self.watermark = WATERMARK_COLOR_NONE
+            self.watermark = COLOR_NONE
         else:
-            self.watermark = (WATERMARK_COLOR_BLACK if label == 'green' else
-                              WATERMARK_COLOR_WHITE)
+            self.watermark = (COLOR_BLACK if label == 'green' else
+                              COLOR_WHITE)
 
         # If using remote storage, remove the temporary copy
         if not local:
@@ -552,17 +547,40 @@ def temp_file():
     os.remove(path)
 
 
-@receiver(post_save, sender=Photo,
-          dispatch_uid='photos.models.update_display_image')
-def update_display_image(sender, instance, created, *args, **kwargs):
-    if not created:
-        return
-
+@receiver(pre_save, sender=Photo,
+          dispatch_uid='photos.models.update_sidecar_images')
+def update_sidecar_images(sender, instance, *args, **kwargs):
     photo = instance
 
-    if hasattr(photo, '_display'):
-        del photo._display
+    if hasattr(photo, '_rename'):
         return
+
+    if hasattr(photo, '_sidecar'):
+        del photo._sidecar
+        return
+
+    try:
+        Photo.objects.get(pk=photo.pk)
+    except Photo.DoesNotExist:
+        pass
+    else:
+        # Shell use only
+        if not hasattr(photo, '_resave'):
+            return
+        else:
+            del photo._resave
+
+    tb = create_thumbnail(photo)
+    sq = create_square_thumbnail(photo)
+
+    if photo.thumbnail:
+        photo.thumbnail.delete(save=False)
+
+    if photo.square_thumbnail:
+        photo.square_thumbnail.delete(save=False)
+
+    photo.thumbnail.save(photo.filename, File(tb), save=False)
+    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
 
     with temp_file() as path:
         # Make a copy of the file
@@ -574,101 +592,24 @@ def update_display_image(sender, instance, created, *args, **kwargs):
 
             photo.original.close()
 
-        # Resize and apply watermark
-        with open(path, 'rb') as f:
-            xmp_f = XMP(file_path=path)
-            xmp = xmp_f.get_xmp()
-
-            # Load the image
-            image = PIL.Image.open(f)
-
-            try:
-                exif = image.info['exif']
-            except KeyError:
-                exif = None
-
-            # Resize the image
-            width, height = image.size
-
-            if width > height:
-                resize = LANDSCAPE_SIZE
-            else:
-                resize = PORTRAIT_SIZE
-
-            image = image.resize(resize, resample=PIL.Image.LANCZOS)
-            width, height = image.size
-
-            if WATERMARKS_ENABLED:
-                watermark = WATERMARK_IMAGES.get(photo.watermark)
-                offset = WATERMARK_OFFSET
-
-                x = width - watermark.size[0] - offset
-                y = height - watermark.size[1] - offset
-                coords = (x, y)
-
-                image.paste(watermark, coords, mask=watermark.split()[3])
-
-            if exif is not None:
-                image.save(path, 'JPEG', quality=95, exif=exif)
-            else:
-                image.save(path, 'JPEG', quality=95)
-
-            # Re-add XMP data
-            if xmp is not None:
-                xmp_f = XMP(file_path=path, open_forupdate=True)
-                xmp_f.put_xmp(xmp)
-                xmp_f.close_file()
-
-        # Save it to the model
-        with open(path, 'rb') as f:
-            photo._display = True
-            photo.image.save(photo.filename, File(f), save=True)
-
-        # Update metadata
-        photo.image.open()
-
-        # File size
-        photo.file_size = format_file_size(photo.image.size)
-
-        photo.image.close()
-        photo._display = True
-        photo.save()
-
-
-@receiver(pre_save, sender=Photo,
-          dispatch_uid='photos.models.update_photo_thumbnails')
-def update_photo_thumbnails(sender, instance, *args, **kwargs):
-    """Updates the thumbnails for a photo."""
-    photo = instance
-
-    # Don't regenerate thumbnails when renaming files
-    if hasattr(photo, '_rename'):
-        return
-
-    try:
-        _ = Photo.objects.get(pk=photo.pk)
-    except Photo.DoesNotExist:
-        tb = create_photo_thumbnail(photo)
-        sq = create_photo_square_thumbnail(photo)
-    else:
-        if hasattr(photo, '_resave'):
-            tb = create_photo_thumbnail(photo)
-            sq = create_photo_square_thumbnail(photo)
-            del photo._resave
+        if photo.album.thumbnail_size == SIZE_3600:
+            long, short = 3600, 2400
         else:
-            return
+            long, short = 2400, 1600
 
-    if photo.thumbnail:
-        photo.thumbnail.delete(save=False)
+        im = create_display_image(path, (long, short), photo.watermark)
 
-    if photo.square_thumbnail:
-        photo.square_thumbnail.delete(save=False)
+    if photo.image:
+        photo.image.delete(save=False)
 
-    photo.thumbnail.save(photo.filename, File(tb), save=False)
-    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
+    photo.image.save(photo.filename, File(im), save=False)
+    photo.file_size = format_file_size(photo.image.size)
+
+    photo._sidecar = True
+    photo.save()
 
 
-def create_photo_thumbnail(photo):
+def create_thumbnail(photo):
     """Creates a thumbnail of the given photo."""
     photo.original.open()
 
@@ -704,7 +645,7 @@ def create_photo_thumbnail(photo):
     return data
 
 
-def create_photo_square_thumbnail(photo, size=(400, 400)):
+def create_square_thumbnail(photo, size=(400, 400)):
     """Creates a square thumbnail of the given photo."""
     photo.original.open()
 
@@ -749,6 +690,56 @@ def create_photo_square_thumbnail(photo, size=(400, 400)):
     photo.original.close()
 
     return data
+
+
+def create_display_image(path, size, wm_color):
+    with open(path, 'rb') as f:
+        image = PIL.Image.open(f)
+
+        # Preserve EXIF and XMP metadata
+        xmp_f = XMP(file_path=path)
+        xmp = xmp_f.get_xmp()
+
+        try:
+            exif = image.info['exif']
+        except KeyError:
+            exif = None
+
+        # Resize
+        width, height = image.size
+        long, short = size
+
+        resize = (long, short) if width >= height else (short, long)
+
+        image = image.resize(resize, resample=PIL.Image.LANCZOS)
+        width, height = image.size
+
+        # Add watermark
+        if WATERMARKS_ENABLED:
+            watermark = WATERMARK_IMAGES.get((long, wm_color))
+            offset = int(WATERMARK_OFFSET * (long / 2400))
+
+            x = width - watermark.size[0] - offset
+            y = height - watermark.size[1] - offset
+            coords = (x, y)
+
+            image.paste(watermark, coords, mask=watermark.split()[3])
+
+        # Re-add EXIF and XMP metadata
+        if exif is not None:
+            image.save(path, 'JPEG', quality=90, exif=exif)
+        else:
+            image.save(path, 'JPEG', quality=90)
+
+        if xmp is not None:
+            xmp_f = XMP(file_path=path, open_forupdate=True)
+            xmp_f.put_xmp(xmp)
+            xmp_f.close_file()
+
+    with open(path, 'rb') as f:
+        data = BytesIO()
+        data.write(f.read())
+        return data
 
 
 # Panoramas

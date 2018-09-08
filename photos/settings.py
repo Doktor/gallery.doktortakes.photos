@@ -49,35 +49,27 @@ PORTRAIT_SIZE = (SHORT, LONG)
 
 WATERMARKS_ENABLED = getattr(settings, 'WATERMARKS_ENABLED', True)
 
-WATERMARK_COLOR_NONE = ''
-WATERMARK_COLOR_WHITE = 'w'
-WATERMARK_COLOR_BLACK = 'b'
+COLOR_NONE = ''
+COLOR_WHITE = 'w'
+COLOR_BLACK = 'b'
+
+COLOR_CHOICES = (
+    (COLOR_NONE, 'None'),
+    (COLOR_WHITE, 'White'),
+    (COLOR_BLACK, 'Black'),
+)
 
 WATERMARKS_PATH = os.path.join(settings.BASE_DIR, 'data', 'watermarks')
 
-if WATERMARKS_ENABLED:
-    BLACK_PATH = os.path.join(WATERMARKS_PATH, 'black.png')
-    BLACK_2400 = PIL.Image.open(BLACK_PATH, 'r').convert('RGBA')
-    BLACK_2400.load()
+WATERMARK_IMAGES = {}
 
-    WHITE_PATH = os.path.join(WATERMARKS_PATH, 'white.png')
-    WHITE_2400 = PIL.Image.open(WHITE_PATH, 'r').convert('RGBA')
-    WHITE_2400.load()
-else:
-    BLACK_2400 = None
-    WHITE_2400 = None
+if WATERMARKS_ENABLED:
+    for size in (2400, 3600):
+        for color in ('black', 'white'):
+            path = os.path.join(WATERMARKS_PATH, str(size), color + '.png')
+
+            image = PIL.Image.open(path, 'r').convert('RGBA')
+            key = (size, color[0])
+            WATERMARK_IMAGES[key] = image
 
 WATERMARK_OFFSET = 30
-
-WATERMARK_COLOR_CHOICES = (
-    (WATERMARK_COLOR_NONE, 'None'),
-    (WATERMARK_COLOR_WHITE, 'White'),
-    (WATERMARK_COLOR_BLACK, 'Black'),
-)
-
-WATERMARK_IMAGES = {
-    WATERMARK_COLOR_WHITE: WHITE_2400,
-    WATERMARK_COLOR_BLACK: BLACK_2400,
-    WATERMARK_COLOR_NONE: WHITE_2400,
-}
-
