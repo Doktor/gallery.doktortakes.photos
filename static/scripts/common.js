@@ -94,6 +94,38 @@ function parse_form(formEl) {
   return params;
 }
 
+function send_request(method, url, onSuccess, onError,
+                      data = null, useCSRF = false) {
+  let request = new XMLHttpRequest();
+
+  request.onreadystatechange = function () {
+    if (request.readyState !== 4) {
+      return;
+    }
+
+    let response = JSON.parse(request.responseText);
+
+    if (request.status !== 200) {
+      onError(response);
+    } else {
+      onSuccess(response);
+    }
+  };
+
+  request.open(method, url, true);
+
+  if (useCSRF) {
+    request.setRequestHeader("X-CSRFToken", get_cookie("csrftoken"));
+  }
+
+  if (data !== null) {
+    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    request.send(JSON.stringify(data));
+  } else {
+    request.send();
+  }
+}
+
 
 // Notifications
 
