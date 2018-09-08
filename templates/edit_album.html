@@ -89,7 +89,7 @@
     <h2>Upload photos</h2>
 
     <div id="upload">
-      <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'upload' album.get_path %}">
+      <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'upload_photo' album.get_path %}">
         {% csrf_token %}
         <div class="fallback">
           <input type="file" name="files" multiple>

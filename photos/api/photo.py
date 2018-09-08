@@ -4,14 +4,13 @@ from django.http import JsonResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.http import require_GET
-
+from django.views.decorators.http import require_GET, require_POST
 
 import datetime
 import pytz
 
 from photos.api.utils import APIError, get_photo_from_request, api_wrapper
-from photos.models import Photo
+from photos.models import Photo, generate_md5_hash
 from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
 from photos.views import get_album_by_path, get_photo
 
@@ -266,6 +265,33 @@ def first_photo(request, path):
 @require_GET
 def last_photo(request, path):
     return navigate_end(path, 'last')
+
+
+@api_wrapper
+@login_required
+@require_POST
+def upload_photo(request, path):
+    files = request.FILES.getlist('files')
+
+    for file in files:
+        p = Photo()
+        p.album = get_album_by_path(path)
+
+        md5 = generate_md5_hash(file)
+
+        try:
+            Photo.objects.get(md5=md5)
+        except Photo.DoesNotExist:
+            pass
+        else:
+            raise APIError(f"Duplicate file: {md5}")
+
+        p.md5 = md5
+        p.original.save(file.name, file, save=False)
+
+        p.save()
+
+    return JsonResponse({'success': True})
 
 
 def date_query(start, end):

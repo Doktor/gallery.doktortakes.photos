@@ -299,31 +299,3 @@ def new_album(request):
 
     context = {'form': AlbumForm()}
     return render(request, "new_album.html", context)
-
-
-@login_required
-def upload_photo(request, path):
-    """Upload a photo to an album."""
-    if request.method != 'POST':
-        raise Http404()
-
-    files = request.FILES.getlist('files')
-
-    for file in files:
-        p = Photo()
-        p.album = get_album_by_path(path)
-        p.original.save(file.name, file, save=False)
-
-        p.md5 = generate_md5_hash(p.original)
-
-        try:
-            Photo.objects.get(md5=p.md5)
-        except Photo.DoesNotExist:
-            pass
-        else:
-            p.original.delete()
-            raise ValidationError(f"Duplicate file: {p.md5}")
-
-        p.save()
-
-    return JsonResponse({'success': True})

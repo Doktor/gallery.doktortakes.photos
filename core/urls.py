@@ -23,7 +23,6 @@ album_patterns = [
     path('search/', views.search_photos, name='search'),
 
     path('<path:path>/edit/', views.edit_album, name='edit_album'),
-    path('<path:path>/upload/', views.upload_photo, name='upload'),
 
     path('<path:path>/', views.album, name='album'),
     path('<path:path>/<md5:md5>', views.photo, name='photo'),
@@ -39,6 +38,7 @@ api_patterns = [
     path('search/', api.search_photos, name='search_photos'),
 
     path('<path:path>/photo/', api.PhotoView.as_view(), name='api_photo'),
+    path('<path:path>/upload/', api.upload_photo, name='upload_photo'),
 
     path('<path:path>/previous/', api.previous_photo, name='previous_photo'),
     path('<path:path>/next/', api.next_photo, name='next_photo'),
