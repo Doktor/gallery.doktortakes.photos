@@ -3,6 +3,7 @@ from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
 from django.db.models.signals import pre_save, pre_delete, post_save
+from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -10,14 +11,13 @@ from django.utils.text import slugify
 
 from django.conf import settings
 
+from photos.fields import JSONField
 from photos.settings import (
     MEDIA_FOLDERS, DEFAULT_PATH,
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER,
     LANDSCAPE_SIZE, PORTRAIT_SIZE,
     WATERMARKS_ENABLED, WATERMARK_IMAGES, WATERMARK_OFFSET,
     COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK)
-
-from photos.fields import JSONField
 
 import datetime
 import exifread
@@ -529,7 +529,17 @@ class Photo(models.Model):
 
         self.original.close()
 
-        super().save(*args, **kwargs)
+        try:
+            super().save(*args, **kwargs)
+        except IntegrityError as e:
+            if "UNIQUE constraint failed: photos_photo.md5" in str(e):
+                self.original.delete(save=False)
+                self.image.delete(save=False)
+                self.thumbnail.delete(save=False)
+                self.square_thumbnail.delete(save=False)
+
+                from photos.api.utils import APIError
+                raise APIError(f"Duplicate file: {self.md5}")
 
     class Meta:
         get_latest_by = 'taken'
