@@ -39,7 +39,8 @@ def generate_album_dict(album, method='GET'):
         'end': end,
         'hidden': int(album.hidden),
         'password': album.password,
-        'tags': ', '.join((tag.slug for tag in album.tags.all()))
+        'tags': ', '.join((tag.slug for tag in album.tags.all())),
+        'parent': album.parent.get_path() if album.parent is not None else ''
     }
 
     if album.cover is not None:
