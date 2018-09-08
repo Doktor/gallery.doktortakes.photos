@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="wrapper" data-name="{{ album.name.lower }}">
+<div class="wrapper" data-name="{{ album.name.lower }}" data-path="{{ album.get_path }}">
   <div class="album">
     {% if edit %}
     <a href="{{ album.get_edit_url }}">

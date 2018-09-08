@@ -89,9 +89,9 @@ class AlbumView(LoginRequiredMixin, APIView):
 
             setattr(album, key, date)
 
-        # Tags
-
         if album.pk:
+            # Tags
+
             album.tags.clear()
             tags = data.get('tags', '')
 
@@ -108,6 +108,20 @@ class AlbumView(LoginRequiredMixin, APIView):
                         tag = Tag.objects.create(slug=slug)
 
                     album.tags.add(tag)
+
+            # Parent
+
+            parent_path = data.get('parent', '')
+
+            if not parent_path:
+                album.parent = None
+            else:
+                parent = get_album_by_path(parent_path)
+
+                if parent == album:
+                    raise APIError("An album can't be its own parent.")
+
+                album.parent = parent
 
         # Clean
 

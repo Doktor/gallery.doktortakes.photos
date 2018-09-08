@@ -57,6 +57,20 @@ $('set-parent').addEventListener('click', () => {
 });
 
 
+$('album-set-parent-container').querySelectorAll('.wrapper').forEach((item) => {
+  item.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    $('f-parent').value = item.dataset.path;
+
+    $('album-set-parent-modal').classList.toggle('hidden');
+    document.body.classList.toggle('modal-open');
+
+    flash("Parent album set.")
+  })
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
   function onSuccess(response) {
     for (let [key, value] of Object.entries(response)) {
