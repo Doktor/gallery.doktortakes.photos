@@ -108,6 +108,15 @@ class Album(models.Model):
 
     tags = models.ManyToManyField('Tag', related_name='albums', blank=True)
 
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        if self.end is not None and self.end < self.start:
+            raise ValidationError(
+                "The end date should be later than the start date.")
+        super().clean()
+
     @property
     def count(self):
         """Returns the number of photos in this album and all child albums."""
@@ -137,8 +146,6 @@ class Album(models.Model):
         return photos
 
     def get_full_date(self):
-        """Returns this album's date, including its end date if specified,
-        as a string."""
         formatter = "{date:%A}, {date:%B} {date.day}, {date.year}"
         if not self.end or self.start == self.end:
             date = formatter.format(date=self.start)
@@ -174,7 +181,6 @@ class Album(models.Model):
         return self.parent.get_place()
 
     def get_path(self, previous='', divider='/'):
-        """Returns the path to this album."""
         if not self.parent:
             if not previous:
                 return self.slug
@@ -189,11 +195,9 @@ class Album(models.Model):
                 previous=self.slug + divider + previous, divider=divider)
 
     def get_absolute_url(self):
-        """Returns the URL for this album."""
         return reverse('album', args=[self.get_path()])
 
     def get_edit_url(self):
-        """Returns the URL for editing this album."""
         return reverse('edit_album', args=[self.get_path()])
 
     def get_hidden_url(self):
@@ -201,15 +205,6 @@ class Album(models.Model):
 
     def get_password_query(self):
         return f"?password={self.password}&" if self.password else ''
-
-    def __str__(self):
-        return self.name
-
-    def clean(self):
-        if self.end is not None and self.end < self.start:
-            raise ValidationError(
-                "The end date should be later than the start date.")
-        super().clean()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -422,24 +417,6 @@ class Photo(models.Model):
 
     rating = models.PositiveSmallIntegerField(default=0)
 
-    @property
-    def filename(self):
-        return os.path.basename(self.original.name)
-
-    @property
-    def original_width(self):
-        return self.original.width
-
-    @property
-    def original_height(self):
-        return self.original.height
-
-    def get_absolute_url(self):
-        return reverse('photo', args=[self.album.get_path(), self.md5])
-
-    def get_path(self):
-        return self.album.get_path() if self.album else DEFAULT_PATH
-
     def __str__(self):
         return self.filename
 
@@ -448,6 +425,16 @@ class Photo(models.Model):
             raise ValidationError("Rating must be between 0 and 5")
 
         super().clean()
+
+    @property
+    def filename(self):
+        return os.path.basename(self.original.name)
+
+    def get_absolute_url(self):
+        return reverse('photo', args=[self.album.get_path(), self.md5])
+
+    def get_path(self):
+        return self.album.get_path() if self.album else DEFAULT_PATH
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -532,7 +519,7 @@ class Photo(models.Model):
         try:
             super().save(*args, **kwargs)
         except IntegrityError as e:
-            if "UNIQUE constraint failed: photos_photo.md5" in str(e):
+            if str(e) == "UNIQUE constraint failed: photos_photo.md5":
                 self.original.delete(save=False)
                 self.image.delete(save=False)
                 self.thumbnail.delete(save=False)
@@ -802,11 +789,11 @@ class Panorama(models.Model):
     def __str__(self):
         return self.name
 
-    def get_thumbnail_size(self):
-        return format_file_size(self.thumbnail.size)
-
     def get_absolute_url(self):
         return reverse('panorama', kwargs={'slug': self.slug})
+
+    def get_thumbnail_size(self):
+        return format_file_size(self.thumbnail.size)
 
 
 @receiver(pre_save, sender=Panorama,
