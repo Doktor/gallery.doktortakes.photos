@@ -7,8 +7,8 @@ import PIL.Image
 # Media files
 
 MEDIA_FOLDERS = {
-    'ORIGINAL': 'photos',
-    'DISPLAY': 'display',
+    'ORIGINAL': 'original',
+    'DISPLAY': 'photos',
     'THUMBNAIL': 'thumbs',
     'SQUARE': 'squares',
 }
