@@ -43,10 +43,7 @@ $('album-form-save').addEventListener('click', () => {
     window.history.replaceState('', response.title, response.edit_url);
   }
 
-  let params = { 'path': api.dataset.albumPath };
-  let url = API_ALBUM + query_string(params);
-
-  send_request('PUT', url, onSuccess, onError, data, true);
+  send_request('PUT', API_ALBUM, onSuccess, onError, data, true);
 });
 
 

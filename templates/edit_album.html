@@ -50,7 +50,7 @@
        data-album-path="{{ album.get_path }}"
        data-api-album="{% url 'api_album' album.get_path %}"
        data-api-edit-list="{% url 'edit_albums' %}"
-       data-api-delete-photo="{% url 'api_photo' %}"></div>
+       data-api-delete-photo="{% url 'api_photo' album.get_path %}"></div>
 
   <!-- Album details -->
   <section class="clearfix">

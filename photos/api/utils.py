@@ -48,14 +48,13 @@ class APIView(View):
         return data
 
 
-def get_photo_from_request(request):
+def get_photo_from_request(request, path):
     params = request.GET
 
     try:
-        path = params.get('path')
         md5 = params.get('md5')
     except KeyError:
-        raise APIError("Missing parameters: 'path' and 'md5' are required.")
+        raise APIError("Missing parameters: 'md5' is required.")
 
     try:
         album = get_album_by_path(path)
@@ -64,19 +63,3 @@ def get_photo_from_request(request):
         raise APIError("Photo does not exist.", status=404)
 
     return photo
-
-
-def get_album_from_request(request):
-    params = request.GET
-
-    try:
-        path = params.get('path')
-    except KeyError:
-        raise APIError("Missing parameters: 'path' is required.")
-
-    try:
-        album = get_album_by_path(path)
-    except Album.DoesNotExist:
-        raise APIError("Album does not exist.", status=404)
-
-    return album

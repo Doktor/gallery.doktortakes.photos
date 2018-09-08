@@ -36,18 +36,18 @@ tag_patterns = [
 ]
 
 api_patterns = [
-    path('photo/', api.PhotoView.as_view(), name='api_photo'),
-
-    path('photo/previous/', api.previous_photo, name='previous_photo'),
-    path('photo/next/', api.next_photo, name='next_photo'),
-    path('photo/first/', api.first_photo, name='first_photo'),
-    path('photo/last/', api.last_photo, name='last_photo'),
-
-    path('album/<path:path>/photos/', api.get_album_photos, name='get_album_photos'),
-    path('album/<path:path>/', api.AlbumView.as_view(), name='api_album'),
-    path('album/', api.AlbumView.as_view(), name='api_new_album'),
-
     path('search/', api.search_photos, name='search_photos'),
+
+    path('<path:path>/photo/', api.PhotoView.as_view(), name='api_photo'),
+
+    path('<path:path>/previous/', api.previous_photo, name='previous_photo'),
+    path('<path:path>/next/', api.next_photo, name='next_photo'),
+    path('<path:path>/first/', api.first_photo, name='first_photo'),
+    path('<path:path>/last/', api.last_photo, name='last_photo'),
+
+    path('<path:path>/photos/', api.get_album_photos, name='get_album_photos'),
+    path('<path:path>/', api.AlbumView.as_view(), name='api_album'),
+    path('', api.AlbumView.as_view(), name='api_new_album'),
 ]
 
 panorama_patterns = [
@@ -61,8 +61,6 @@ urlpatterns = [
 
     path('', views.index, name='index'),
 
-    path('api/', include(api_patterns)),
-
     path('about/',
          TemplateView.as_view(template_name='about.html'),
          name='about'),
@@ -72,6 +70,7 @@ urlpatterns = [
          name='copyright'),
 
     path('albums/', include(album_patterns)),
+    path('api/albums/', include(api_patterns)),
     path('tags/', include(tag_patterns)),
 
     path('panoramas/', include(panorama_patterns)),

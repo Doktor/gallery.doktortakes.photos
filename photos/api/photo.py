@@ -6,14 +6,21 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_GET
 
-from photos.models import Photo
-from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
-from photos.views import get_album_by_path
 
 import datetime
 import pytz
 
-from .utils import APIError, get_photo_from_request
+from photos.api.utils import APIError, get_photo_from_request, api_wrapper
+from photos.models import Photo
+from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
+from photos.views import get_album_by_path, get_photo
+
+
+def get_photo_by_hash(path, md5):
+    try:
+        return get_photo(path, md5)
+    except Photo.DoesNotExist:
+        raise APIError("The specified photo doesn't exist.")
 
 
 def format_f_stop(f):
@@ -173,18 +180,18 @@ def photo_to_response(photo):
 
 
 class PhotoView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, path):
         try:
-            photo = get_photo_from_request(request)
+            photo = get_photo_from_request(request, path)
         except APIError as e:
             return e.to_response()
 
         return photo_to_response(photo)
 
     @method_decorator(login_required)
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request, path):
         try:
-            photo = get_photo_from_request(request)
+            photo = get_photo_from_request(request, path)
         except APIError as e:
             return e.to_response()
 
@@ -205,8 +212,9 @@ class PhotoView(View):
             })
 
 
-def navigate(request, method):
-    photo = get_photo_from_request(request)
+def navigate(request, path, method):
+    md5 = request.GET.get('md5', '')
+    photo = get_photo_by_hash(path, md5)
 
     try:
         nav = getattr(photo, method)(album=photo.album)
@@ -224,43 +232,40 @@ def navigate(request, method):
     return photo_to_response(nav)
 
 
+@api_wrapper
 @require_GET
-def previous_photo(request):
-    return navigate(request, 'get_previous_by_taken')
+def previous_photo(request, path):
+    return navigate(request, path, 'get_previous_by_taken')
 
 
+@api_wrapper
 @require_GET
-def next_photo(request):
-    return navigate(request, 'get_next_by_taken')
+def next_photo(request, path):
+    return navigate(request, path, 'get_next_by_taken')
 
 
-def navigate_end(request, method):
-    params = request.GET
-
-    try:
-        path = params.get('path')
-    except KeyError:
-        return JsonResponse({'error': "invalid parameters"}, status=400)
-
+def navigate_end(path, method):
     album = get_album_by_path(path)
     photos = Photo.objects.filter(album=album).order_by('taken')
 
     if not photos:
-        return JsonResponse({'error': "no photos in this album"}, status=404)
+        raise APIError("There are no photos in this album.")
 
     photo = getattr(photos, method)()
 
     return photo_to_response(photo)
 
 
+@api_wrapper
 @require_GET
-def first_photo(request):
-    return navigate_end(request, 'first')
+def first_photo(request, path):
+    return navigate_end(path, 'first')
 
 
+@api_wrapper
 @require_GET
-def last_photo(request):
-    return navigate_end(request, 'last')
+def last_photo(request, path):
+    return navigate_end(path, 'last')
 
 
 def date_query(start, end):

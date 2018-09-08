@@ -48,11 +48,11 @@
 {% block content %}
   <!-- API -->
   <div id="api"
-       data-api-get="{% url 'api_photo' %}"
-       data-api-previous="{% url 'previous_photo' %}"
-       data-api-next="{% url 'next_photo' %}"
-       data-api-first="{% url 'first_photo' %}"
-       data-api-last="{% url 'last_photo' %}"
+       data-api-get="{% url 'api_photo' album.get_path %}"
+       data-api-previous="{% url 'previous_photo' album.get_path %}"
+       data-api-next="{% url 'next_photo' album.get_path %}"
+       data-api-first="{% url 'first_photo' album.get_path %}"
+       data-api-last="{% url 'last_photo' album.get_path %}"
        data-api-get-album-photos="{% url 'get_album_photos' album.get_path %}{{ album.get_password_query }}">
   </div>
 

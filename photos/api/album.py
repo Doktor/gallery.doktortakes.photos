@@ -8,8 +8,7 @@ from datetime import datetime
 
 from core.context_processors import metadata
 from photos.api.photo import generate_photo_dict
-from photos.api.utils import (
-    APIError, APIView, get_album_from_request, api_wrapper)
+from photos.api.utils import APIError, APIView, api_wrapper
 from photos.models import Album, Photo, Tag
 from photos.views import get_album_by_path as get_album
 
@@ -134,11 +133,7 @@ class AlbumView(LoginRequiredMixin, APIView):
         return album
 
     def get(self, request, path):
-        try:
-            album = get_album_by_path(path)
-        except Http404:
-            album = get_album_from_request(request)
-
+        album = get_album_by_path(path)
         return JsonResponse(generate_album_dict(album))
 
     def post(self, request):

@@ -54,7 +54,6 @@ const exif = {
 
 function get_photo_query_string() {
   return query_string({
-    'path': photo.dataset.path,
     'md5': photo.dataset.md5,
   });
 }
@@ -118,7 +117,6 @@ function load_photo(url, history = true) {
 
       image.addEventListener('click', () => {
         let qs = query_string({
-          'path': photo.dataset.path,
           'md5': item.md5,
         });
 
@@ -156,22 +154,18 @@ function load_photo(url, history = true) {
 
 // Navigation
 document.addEventListener('keyup', function(e) {
-  let query = query_string({
-    'path': photo.dataset.path,
-    'md5': photo.dataset.md5,
-  });
-
   let key = e.keyCode;
+  let base = KEY_MAPPING[key.toString()];
 
   switch (key) {
     case KEY_LEFT:
     case KEY_RIGHT:
+      e.preventDefault();
+      return load_photo(base + query_string({'md5': photo.dataset.md5}));
     case KEY_UP:
     case KEY_DOWN:
       e.preventDefault();
-
-      let base = KEY_MAPPING[key.toString()];
-      return load_photo(base + query);
+      return load_photo(base);
   }
 });
 
@@ -286,7 +280,6 @@ function load_photoswipe() {
 
     gallery.listen('afterChange', function() {
       let query = query_string({
-        'path': photo.dataset.path,
         'md5': photo.dataset.md5,
       });
 
