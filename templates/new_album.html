@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}New album | {{ block.super }}{% endblock %}
 
@@ -6,63 +7,41 @@
 <meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static "styles/edit-album.css" %}">
+{% endblock %}
+
 {% block classes %}small{% endblock %}
 
 {% block content %}
-<header>
-  <nav>
-    <ul class="breadcrumbs">
-      <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit_albums' %}">Edit</a></li>
-      <li><a href="{% url 'new_album' %}">New</a></li>
-    </ul>
-  </nav>
+  <header>
+    <nav>
+      <ul class="breadcrumbs">
+        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit_albums' %}">Edit</a></li>
+        <li><a href="{% url 'new_album' %}">New</a></li>
+      </ul>
+    </nav>
 
-  <h2>Create new album</h2>
-</header>
+    <h2>Create new album</h2>
+  </header>
 
-{% if messages %}
-<section id="messages">
-  {% for m in messages %}
-    <div class="message {{ m.tags }}">{{ m }}</div>
-  {% endfor %}
-</section>
-{% endif %}
-
-<section class="clearfix">
-  {% if form.errors %}
-  <section class="errors">
-    {% for field in form %}
-      {% for error in field.errors %}
-        <div class="alert alert-danger">
-          <strong>{{ error|escape }}</strong>
-        </div>
-      {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-      <div class="alert alert-danger">
-        <strong>{{ error|escape }}</strong>
-      </div>
+  {% if messages %}
+  <section id="messages">
+    {% for m in messages %}
+      <div class="message {{ m.tags }}">{{ m }}</div>
     {% endfor %}
   </section>
   {% endif %}
 
-  <form id="new-album" method="post" action="{% url 'new_album' %}" enctype="multipart/form-data">
-    {% csrf_token %}
+  <div id="flash"></div>
 
-    <fieldset>
-    {% for field in form %}
-      <div class="row">
-        {{ field.errors }}
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-{#        {{ field }}#}
-                <div class="field-wrapper">{{ field }}</div>
-      </div>
-    {% endfor %}
-    </fieldset>
+  <div id="api" data-api-album="{% url 'api_new_album' %}"></div>
 
-    <button type="submit">Save</button>
-    <a href="{% url 'edit_albums' %}"><button type="button">Cancel</button></a>
-  </form>
-</section>
+  <div id="album-form-container" class="new">
+    {% include '_album_form.html' with tags=False %}
+  </div>
+{% endblock %}
 
+{% block scripts %}
+<script src="{% static 'scripts/new-album.js' %}"></script>
 {% endblock %}

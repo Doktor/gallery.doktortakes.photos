@@ -72,6 +72,76 @@ function get_page_number() {
   return (match === null) ? 1 : parseInt(match[1]);
 }
 
+function parse_form(formEl) {
+  let data = new FormData(formEl);
+  let params = {};
+
+  // Parse form data
+  for (let pair of data.entries()) {
+    let key = pair[0], value = pair[1];
+
+    if (key in params) {
+      if (Array.isArray(params[key])) {
+        params[key].push(value);
+      } else{
+        params[key] = [params[key], value]
+      }
+    } else {
+      params[key] = value;
+    }
+  }
+
+  return params;
+}
+
+
+// Notifications
+
+function flash(message) {
+  for (let i = 0; i < flashContainer.children.length; i++) {
+    let item = flashContainer.children[i];
+
+    if (item.children[0].innerText === message) {
+      let raw = item.children[1].innerText;
+      let count = raw.substring(2, raw.length - 1);
+
+      if (count === '') {
+        count = 2;
+      } else {
+        count = parseInt(count) + 1;
+      }
+
+      item.children[1].innerText = ' (' + count.toString() + ')';
+      return;
+    }
+  }
+
+  let flashEl = document.createElement('div');
+  flashEl.classList.add('flash');
+
+  let text = document.createElement('span');
+  text.innerText = message;
+  flashEl.appendChild(text);
+
+  let repeat = document.createElement('span');
+  flashEl.appendChild(repeat);
+
+  flashEl.addEventListener('click', function() {
+    flashEl.classList.remove('visible');
+
+    setTimeout(function() {
+      flashEl.parentNode.removeChild(flashEl);
+    }, 300);
+  });
+
+  flashContainer.appendChild(flashEl);
+
+  setTimeout(function() {
+    flashEl.classList.add('visible');
+  }, 100);
+}
+
+
 // Key codes
 
 const KEY_ENTER = 13;

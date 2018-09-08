@@ -43,7 +43,8 @@ api_patterns = [
     path('photo/first/', api.first_photo, name='first_photo'),
     path('photo/last/', api.last_photo, name='last_photo'),
 
-    path('album/', api.AlbumView.as_view(), name='api_album'),
+    path('album/', api.AlbumView.as_view(), name='api_new_album'),
+    path('album/<path:path>', api.AlbumView.as_view(), name='api_album'),
 
     path('album/photos/', api.get_album_photos, name='get_album_photos'),
 

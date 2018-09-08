@@ -359,23 +359,28 @@ $logo: 2.4rem;
   }
 }
 
-// forms
-form .row {
-  $width: 20%;
+form {
+  .row {
+    $width: 20%;
+    $spacing: 0.5rem;
 
-  @include clearfix();
+    display: flex;
+    align-items: center;
 
-  > label {
-    width: $width;
-  }
+    > label {
+      width: $width;
+      margin-right: $spacing;
+      text-align: right;
+    }
 
-  > .field-wrapper {
-    width: 100% - $width;
-    float: right;
-  }
+    > .field-wrapper {
+      width: 100% - $width;
+      text-align: center;
+    }
 
-  &:not(:last-child) {
-    margin-bottom: 0.5rem;
+    &:not(:last-child) {
+      margin-bottom: $spacing;
+    }
   }
 }
 
@@ -386,8 +391,8 @@ fieldset {
   margin-bottom: 1rem;
 }
 
-legend {
-  margin-bottom: 0.5rem;
+textarea {
+  display: block;
 }
 
 input:not([type="radio"]), select, textarea {
@@ -403,17 +408,9 @@ input:not([type="file"]), select, textarea {
   padding: 4px 8px;
 }
 
-textarea {
-  display: block;
-}
-
 input[type="radio"] + label {
   text-align: right;
   margin: 0 0.5rem 0 0.15rem;
-}
-
-label, .field-wrapper {
-  vertical-align: middle;
 }
 
 #login, #new-album {
