@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.utils.text import slugify
 from django.views.decorators.http import require_GET
 
@@ -8,7 +8,8 @@ from datetime import datetime
 
 from core.context_processors import metadata
 from photos.api.photo import generate_photo_dict
-from photos.api.utils import APIError, APIView, get_album_from_request
+from photos.api.utils import (
+    APIError, APIView, get_album_from_request, api_wrapper)
 from photos.models import Album, Photo, Tag
 from photos.views import get_album_by_path as get_album
 
@@ -133,7 +134,11 @@ class AlbumView(LoginRequiredMixin, APIView):
         return album
 
     def get(self, request, path):
-        album = get_album_by_path(path)
+        try:
+            album = get_album_by_path(path)
+        except Http404:
+            album = get_album_from_request(request)
+
         return JsonResponse(generate_album_dict(album))
 
     def post(self, request):
@@ -185,16 +190,14 @@ class AlbumView(LoginRequiredMixin, APIView):
         })
 
 
+@api_wrapper
 @require_GET
-def get_album_photos(request):
-    album = get_album_from_request(request)
+def get_album_photos(request, path):
+    album = get_album_by_path(path)
     photos = []
 
     if album.password and album.password != request.GET.get('password', ''):
-        return JsonResponse({
-            'success': False,
-            'message': "Album does not exist."
-        })
+        raise APIError("Album does not exist.")
 
     for index, photo in enumerate(album.photos.all().order_by('taken')):
         photos.append(generate_photo_dict(photo, index=index, filmstrip=False))
