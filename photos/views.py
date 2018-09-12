@@ -224,8 +224,7 @@ def edit_album(request, path):
     """Renders the edit album page."""
     a = get_album_by_path(path)
 
-    query = QUERY_ADMIN if request.user.is_staff else QUERY
-    albums = Album.objects.filter(query).order_by('-start')
+    albums = Album.objects.all().order_by('-start')
 
     context = {
         'album': a,
@@ -280,8 +279,12 @@ def download(request, path, md5):
 
 @login_required
 def edit_albums(request):
-    albums = Album.objects.filter(parent__isnull=True).order_by('-start')
-    context = {'albums': albums, 'items_per_page': ITEMS_PER_PAGE}
+    albums = Album.objects.all().order_by('-start')
+    context = {
+        'albums': albums,
+        'items_per_page': ITEMS_PER_PAGE
+    }
+
     return render(request, "edit_albums.html", context)
 
 
