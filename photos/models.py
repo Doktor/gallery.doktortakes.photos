@@ -589,12 +589,8 @@ def update_sidecar_images(sender, instance, *args, **kwargs):
 
             photo.original.close()
 
-        if photo.album.thumbnail_size == SIZE_3600:
-            long, short = 3600, 2400
-        else:
-            long, short = 2400, 1600
-
-        im = create_display_image(path, (long, short), photo.watermark)
+        edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
+        im = create_display_image(path, edge, photo.watermark)
 
     if photo.image:
         photo.image.delete(save=False)
@@ -673,7 +669,12 @@ def create_square_thumbnail(photo, size=(400, 400)):
     return data
 
 
-def create_display_image(path, size, wm_color):
+TOLERANCE = 1 / 1000
+RESAMPLE = PIL.Image.LANCZOS
+RATIOS = (3 / 2, 16 / 9, 2.35 / 1)
+
+
+def create_display_image(path, edge, wm_color):
     with open(path, 'rb') as f:
         image = PIL.Image.open(f)
 
@@ -686,19 +687,32 @@ def create_display_image(path, size, wm_color):
         except KeyError:
             exif = None
 
-        # Resize
+        # Resize, attempting to avoid rounding errors
         width, height = image.size
-        long, short = size
+        long, short = max(*image.size), min(*image.size)
 
-        resize = (long, short) if width >= height else (short, long)
+        for ratio in RATIOS:
+            if abs((long / short) - ratio) < TOLERANCE:
+                # Resize to...
+                r_long, r_short = edge, int(edge / ratio)
 
-        image = image.resize(resize, resample=PIL.Image.LANCZOS)
+                if width > height:
+                    dims = r_long, r_short
+                else:
+                    dims = r_short, r_long
+
+                image = image.resize(dims, resample=RESAMPLE)
+                break
+        else:
+            image.thumbnail((edge, edge), resample=RESAMPLE)
+
         width, height = image.size
 
         # Add watermark
         if WATERMARKS_ENABLED:
-            watermark = WATERMARK_IMAGES.get((long, wm_color))
-            offset = int(WATERMARK_OFFSET * (long / 2400))
+            watermark = WATERMARK_IMAGES.get((edge, wm_color), None)
+
+            offset = int(WATERMARK_OFFSET * (edge / 2400))
 
             x = width - watermark.size[0] - offset
             y = height - watermark.size[1] - offset
