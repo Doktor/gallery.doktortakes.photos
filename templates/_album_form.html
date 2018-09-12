@@ -70,14 +70,14 @@
     </div>
     {% endif %}
 
-    {% if parent %}
     <div class="row">
       <label for="f-parent">Parent</label>
       <div class="field-wrapper">
-        <input class="field" name="parent" id="f-parent" type="text">
+        <input class="field" name="parent" id="f-parent" type="text" {% if parent %}value="{{ parent }}"{% endif %}>
       </div>
     </div>
 
+    {% if select_parent %}
     <div id="set-parent">
       <a href="javascript: void(0)">Set parent album</a>
     </div>
