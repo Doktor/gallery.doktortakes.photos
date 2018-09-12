@@ -11,7 +11,7 @@ import pytz
 
 from photos.api.utils import APIError, get_photo_from_request, api_wrapper
 from photos.models import Photo, generate_md5_hash
-from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP
+from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP, LONG, SHORT
 from photos.views import get_album_by_path, get_photo
 
 
@@ -288,6 +288,15 @@ def upload_photo(request, path):
 
         p.md5 = md5
         p.original.save(file.name, file, save=False)
+
+        dim = p.original.width, p.original.height
+        long, short = max(*dim), min(*dim)
+
+        if long < LONG or short < SHORT:
+            p.original.delete(save=False)
+            raise APIError(
+                f"Image too small: minimum {LONG}x{SHORT} px, "
+                f"uploaded {long}x{short} px")
 
         p.save()
 

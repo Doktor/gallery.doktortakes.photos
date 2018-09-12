@@ -624,14 +624,6 @@ def create_thumbnail(photo):
     elif w < h:
         size = (short, long)
 
-    # Upscale small images
-    if image.size < size:
-        w, h = image.size
-        ratio = max(size[0] / w, size[1] / h)
-        new_w, new_h = int(w * ratio), int(h * ratio)
-
-        image = image.resize((new_w, new_h), PIL.Image.BICUBIC)
-
     image.thumbnail(size)
 
     data = BytesIO()
@@ -650,14 +642,6 @@ def create_square_thumbnail(photo, size=(400, 400)):
 
     if image.format != 'JPEG':
         image = image.convert('RGB')
-
-    # Upscale small images
-    if image.size < size:
-        w, h = image.size
-        ratio = max(size[0] / w, size[1] / h)
-        new_w, new_h = int(w * ratio), int(h * ratio)
-
-        image = image.resize((new_w, new_h), PIL.Image.BICUBIC)
 
     w, h = image.size
 
