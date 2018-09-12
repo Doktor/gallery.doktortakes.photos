@@ -10,6 +10,7 @@ Django = ">=2.0"
 ExifRead = "*"
 Pillow = "*"
 django-storages = "*"
+invoke = "*"
 
 [dev-packages]
 
