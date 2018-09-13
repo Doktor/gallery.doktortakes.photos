@@ -57,7 +57,7 @@
     <h2>Album details</h2>
 
     <div id="album-form-container" class="edit">
-      {% include '_album_form.html' with tags=True select_parent=True %}
+      {% include '_album_form.html' %}
     </div>
 
     <div id="album-set-parent-modal" class="hidden">
@@ -82,6 +82,13 @@
       </div>
       {% endif %}
     </div>
+  </section>
+
+  <!-- Edit subalbums -->
+  <section>
+    <h2>Child albums</h2>
+
+    <a href="{% url 'new_album' %}?parent={{ album.get_path }}">Create new child album</a>
   </section>
 
   <!-- Upload photos -->

@@ -30,8 +30,9 @@ def generate_album_dict(album, method='GET'):
 
     response = {
         'url': album.get_absolute_url(),
-        'path': album.get_path(),
         'name': album.name,
+        'slug': album.slug,
+        'path': album.get_path(),
         'place': album.place,
         'location': album.location,
         'description': album.description,
@@ -110,19 +111,17 @@ class AlbumView(LoginRequiredMixin, APIView):
 
                     album.tags.add(tag)
 
-            # Parent
+        # Parent album
 
-            parent_path = data.get('parent', '')
+        parent_path = data.get('parent', '')
 
-            if not parent_path:
-                album.parent = None
-            else:
-                parent = get_album_by_path(parent_path)
-
-                if parent == album:
-                    raise APIError("An album can't be its own parent.")
-
-                album.parent = parent
+        if not parent_path:
+            album.parent = None
+        else:
+            parent = get_album_by_path(parent_path)
+            if parent == album:
+                raise APIError("An album can't be its own parent.")
+            album.parent = parent
 
         # Clean
 

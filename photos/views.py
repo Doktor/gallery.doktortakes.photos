@@ -218,6 +218,25 @@ def panorama(request, slug):
     return render(request, "panorama.html", {'p': p})
 
 
+@login_required
+def new_album(request):
+    """Renders the add new album page."""
+    if request.method == 'POST':
+        form = AlbumForm(request.POST)
+
+        if form.is_valid():
+            a = form.save()
+
+            messages.success(request, "Album created successfully.")
+            return redirect('edit_album', path=a.get_path())
+
+    context = {
+        'album': None,
+        'parent': request.GET.get('parent', None)
+    }
+    return render(request, "new_album.html", context)
+
+
 @require_GET
 @login_required
 def edit_album(request, path):
@@ -286,19 +305,3 @@ def edit_albums(request):
     }
 
     return render(request, "edit_albums.html", context)
-
-
-@login_required
-def new_album(request):
-    """Renders the add new album page."""
-    if request.method == 'POST':
-        form = AlbumForm(request.POST)
-
-        if form.is_valid():
-            a = form.save()
-
-            messages.success(request, "Album created successfully.")
-            return redirect('edit_album', path=a.get_path())
-
-    context = {'form': AlbumForm()}
-    return render(request, "new_album.html", context)
