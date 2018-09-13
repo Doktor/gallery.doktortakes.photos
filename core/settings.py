@@ -1,3 +1,4 @@
+import json
 import os
 
 
@@ -114,13 +115,31 @@ from django.conf.locale.en import formats as en_formats
 en_formats.DATETIME_FORMAT = "Y-m-d H:i:s"
 
 
-# Static files
+# Static & media files
 
+# Always store static files in local storage
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
 
+# Toggle local/remote storage for media files
+LOCAL_STORAGE = True
 
-# Media file locations
+if LOCAL_STORAGE:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    MEDIA_URL = '/media/'
+else:
+    with open(os.path.join(BASE_DIR, 'data', 'aws.json')) as f:
+        aws = json.loads(f.read())
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+    AWS_ACCESS_KEY_ID = aws['access']
+    AWS_SECRET_ACCESS_KEY = aws['secret']
+    AWS_STORAGE_BUCKET_NAME = aws['bucket']
+    AWS_S3_ENDPOINT_URL = aws['endpoint']
+
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_LOCATION = ''
+    AWS_QUERYSTRING_AUTH = False
+    AWS_DEFAULT_ACL = 'public-read'
+
+    DEFAULT_FILE_STORAGE = 'core.storages.MediaStorage'
+    MEDIA_URL = '/media/'
