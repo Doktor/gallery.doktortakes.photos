@@ -3,7 +3,7 @@ from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
-from django.db.models.signals import pre_save, pre_delete, post_save
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.urls import reverse
@@ -122,6 +122,12 @@ class Album(models.Model):
         """Returns the number of photos in this album and all child albums."""
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
+
+    def delete(self, using=None, keep_parents=False):
+        for photo in self.photos.all():
+            photo.delete()
+
+        super().delete(using=using, keep_parents=keep_parents)
 
     def get_all_subalbums(self, include_self=False):
         albums = []
@@ -255,14 +261,19 @@ def check_album_path(sender, instance, *args, **kwargs):
     albums_to_move[album] = prev.get_path()
 
 
-@receiver(pre_delete, sender=Album, dispatch_uid="photos.models.delete_album")
-def delete_album(sender, instance, *args, **kwargs):
-    """Deletes related files when an album is deleted."""
-    album = instance
+@receiver(post_delete, sender=Album,
+          dispatch_uid="photos.models.delete_album_folders")
+def delete_album_folders(sender, instance, **kwargs):
+    album: Album = instance
 
-    for photo in album.photos.all():
-        photo.image.delete(save=False)
-        photo.thumbnail.delete(save=False)
+    storage = DefaultStorage()
+    path = album.get_path()
+
+    for name in MEDIA_FOLDERS.values():
+        folder_path = os.path.join(name, path)
+
+        if storage.exists(folder_path):
+            storage.delete(folder_path)
 
 
 # Tag
@@ -385,6 +396,14 @@ class Photo(models.Model):
             raise ValidationError("Rating must be between 0 and 5")
 
         super().clean()
+
+    def delete(self, using=None, keep_parents=False):
+        self.original.delete(save=False)
+        self.image.delete(save=False)
+        self.thumbnail.delete(save=False)
+        self.square_thumbnail.delete(save=False)
+
+        super().delete(using=using, keep_parents=keep_parents)
 
     @property
     def filename(self):
