@@ -16,7 +16,6 @@ from photos.fields import JSONField
 from photos.settings import (
     MEDIA_FOLDERS, DEFAULT_PATH,
     PANORAMAS_FOLDER, PANORAMA_THUMBNAILS_FOLDER,
-    LANDSCAPE_SIZE, PORTRAIT_SIZE,
     WATERMARKS_ENABLED, WATERMARK_IMAGES, WATERMARK_OFFSET,
     COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK)
 
@@ -27,7 +26,6 @@ import os
 import PIL.Image
 import pytz
 import uuid
-import warnings
 from io import BytesIO
 from lxml import etree
 
@@ -52,7 +50,6 @@ def format_file_size(b):
 
 
 def get_modified_time_utc(file):
-    """Returns the modification time (UTC) of a file."""
     storage = DefaultStorage()
     return storage.get_modified_time(file.name)
 
@@ -226,7 +223,7 @@ albums_to_move = {}
 
 @receiver(post_save, sender=Album,
           dispatch_uid="photos.models.move_album_files")
-def move_album_files(sender, instance, created, *args, **kwargs):
+def move_album_files(sender, instance, created, **kwargs):
     album: Album = instance
 
     if album not in albums_to_move.keys():
@@ -244,7 +241,7 @@ def move_album_files(sender, instance, created, *args, **kwargs):
 
 @receiver(pre_save, sender=Album,
           dispatch_uid="photos.models.check_album_path")
-def check_album_path(sender, instance, *args, **kwargs):
+def check_album_path(sender, instance, **kwargs):
     album: Album = instance
 
     if not album.get_all_subphotos(include_self=True):
@@ -531,7 +528,7 @@ class Photo(models.Model):
 
 @receiver(pre_save, sender=Photo,
           dispatch_uid='photos.models.update_sidecar_images')
-def update_sidecar_images(sender, instance, *args, **kwargs):
+def update_sidecar_images(sender, instance, **kwargs):
     photo = instance
 
     if hasattr(photo, '_rename'):
@@ -765,7 +762,7 @@ class Panorama(models.Model):
 
 @receiver(pre_save, sender=Panorama,
           dispatch_uid='photos.models.update_panorama')
-def update_panorama(sender, instance, *args, **kwargs):
+def update_panorama(sender, instance, **kwargs):
     pano = instance
 
     if hasattr(pano, '_rename'):
@@ -842,8 +839,7 @@ def update_panorama(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=Panorama,
           dispatch_uid='photos.models.rename_panorama_files')
-def rename_panorama_files(sender, instance, created, *args, **kwargs):
-    """Renames image files after a panorama is created or updated."""
+def rename_panorama_files(sender, instance, created, **kwargs):
     pano = instance
 
     if hasattr(pano, '_update'):
@@ -853,10 +849,10 @@ def rename_panorama_files(sender, instance, created, *args, **kwargs):
 
         for field in fields:
             file = getattr(pano, field)
-            get_path = globals()[f"get_panorama_{field}_path"]
+            path_method = globals()[f"get_panorama_{field}_path"]
 
             old_path = file.path
-            new_name = get_path(pano, file.name)
+            new_name = path_method(pano, file.name)
             new_path = os.path.join(settings.MEDIA_ROOT, new_name)
 
             file.name = new_name
@@ -868,7 +864,6 @@ def rename_panorama_files(sender, instance, created, *args, **kwargs):
 
 
 def create_panorama_thumbnail(pano):
-    """Creates a thumbnail of the given photo."""
     pano.image.open()
 
     image = PIL.Image.open(pano.image)

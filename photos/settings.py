@@ -14,7 +14,7 @@ MEDIA_FOLDERS = {
 }
 
 PANORAMAS_FOLDER = 'panoramas'
-PANORAMA_THUMBNAILS_FOLDER = 'panoramas/thumbs'
+PANORAMA_THUMBNAILS_FOLDER = os.path.join('panoramas', 'thumbs')
 
 DEFAULT_PATH = 'all'
 
