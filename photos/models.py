@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 from django.db.models.signals import pre_save, pre_delete, post_save
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
@@ -137,7 +138,7 @@ class Album(models.Model):
         photos = []
 
         if include_self:
-            photos += list(Photo.objects.filter(album=self))
+            photos += list(self.photos.all())
 
         for album in self.children.all():
             photos += album.get_all_subphotos(include_self=True)
@@ -214,94 +215,44 @@ class Album(models.Model):
         unique_together = ('name', 'parent')
 
 
-@receiver(pre_save, sender=Album,
-          dispatch_uid="photos.models.update_album_name")
-def update_album_name(sender, instance, *args, **kwargs):
-    album = instance
+albums_to_move = {}
 
-    if album.photos.count() == 0:
+
+@receiver(post_save, sender=Album,
+          dispatch_uid="photos.models.move_album_files")
+def move_album_files(sender, instance, created, *args, **kwargs):
+    album: Album = instance
+
+    if album not in albums_to_move.keys():
         return
 
-    # Prevents an infinite loop
-    if hasattr(album, '_rename'):
+    for photo in album.get_all_subphotos(include_self=True):
+        photo.resave()
+
+    storage = DefaultStorage()
+    path = albums_to_move.pop(album)
+
+    for folder in MEDIA_FOLDERS.values():
+        storage.delete(os.path.join(folder, path))
+
+
+@receiver(pre_save, sender=Album,
+          dispatch_uid="photos.models.check_album_path")
+def check_album_path(sender, instance, *args, **kwargs):
+    album: Album = instance
+
+    if not album.get_all_subphotos(include_self=True):
         return
 
     try:
-        old = Album.objects.get(pk=album.pk)
+        prev = Album.objects.get(pk=album.pk)
     except Album.DoesNotExist:
         return
     else:
-        if old.get_path() == album.get_path():
+        if prev.get_path() == album.get_path():
             return
 
-    fallback = False
-
-    old_path = old.get_path()
-    new_path = album.get_path()
-
-    # Move the media folders
-    folders = MEDIA_FOLDERS.values()
-
-    for folder in folders:
-        base = os.path.join(settings.MEDIA_ROOT, folder)
-
-        old_dir = os.path.join(base, old_path)
-        new_dir = os.path.join(base, new_path)
-
-        try:
-            os.rename(old_dir, new_dir)
-        except FileNotFoundError:
-            fallback = True
-            warnings.warn(
-                f"Media folder '{old_dir}' not found, trying fallback method")
-
-    if fallback:
-        # Fallback method if the folders are named incorrectly
-        # This should be fixed now, but just in case...
-
-        # Find the path by checking the path of any photo in the album
-        photo = album.photos.all()[0]
-        path, _ = os.path.split(photo.original.name)
-        old_path = path.replace(MEDIA_FOLDERS['ORIGINAL'] + '/', '')
-
-        for folder in folders:
-            base = os.path.join(settings.MEDIA_ROOT, folder)
-
-            old_dir = os.path.join(base, old_path)
-            new_dir = os.path.join(base, new_path)
-
-            try:
-                os.rename(old_dir, new_dir)
-            except FileNotFoundError as e:
-                raise e
-
-    # Update photo file paths
-    for photo in Photo.objects.filter(album=album):
-        photo.original.name = os.path.join(
-            MEDIA_FOLDERS['ORIGINAL'],
-            new_path,
-            os.path.basename(photo.original.name))
-
-        photo.image.name = os.path.join(
-            MEDIA_FOLDERS['DISPLAY'],
-            new_path,
-            os.path.basename(photo.image.name))
-
-        photo.thumbnail.name = os.path.join(
-            MEDIA_FOLDERS['THUMBNAIL'],
-            new_path,
-            os.path.basename(photo.thumbnail.name))
-
-        photo.square_thumbnail.name = os.path.join(
-            MEDIA_FOLDERS['SQUARE'],
-            new_path,
-            os.path.basename(photo.square_thumbnail.name))
-
-        try:
-            photo._rename = True
-            photo.save()
-        finally:
-            del photo._rename
+    albums_to_move[album] = prev.get_path()
 
 
 @receiver(pre_delete, sender=Album, dispatch_uid="photos.models.delete_album")
@@ -444,6 +395,34 @@ class Photo(models.Model):
 
     def get_path(self):
         return self.album.get_path() if self.album else DEFAULT_PATH
+
+    def resave(self):
+        if not self.pk:
+            return
+
+        delete = []
+
+        for field_name in 'original', 'image', 'thumbnail', 'square_thumbnail':
+            image: ImageFieldFile = getattr(self, field_name)
+
+            # Mark the old file for deletion
+            delete.append(image.name)
+
+            # Resave the files: the new path is automatically determined
+            filename = os.path.basename(image.name)
+            image.save(filename, File(image), save=False)
+
+        try:
+            # Save the new paths
+            self.save()
+        except:
+            pass
+        else:
+            # Delete the old files
+            storage = DefaultStorage()
+
+            for name in delete:
+                storage.delete(name)
 
     def save(self, *args, **kwargs):
         if self.pk:
