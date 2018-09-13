@@ -1,15 +1,12 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods, require_GET
 
 from core.context_processors import metadata as m
-from photos.forms import AlbumForm
-from photos.models import Album, Panorama, Photo, Tag, generate_md5_hash
+from photos.models import Album, Panorama, Photo, Tag
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
@@ -218,18 +215,9 @@ def panorama(request, slug):
     return render(request, "panorama.html", {'p': p})
 
 
+@require_GET
 @login_required
 def new_album(request):
-    """Renders the add new album page."""
-    if request.method == 'POST':
-        form = AlbumForm(request.POST)
-
-        if form.is_valid():
-            a = form.save()
-
-            messages.success(request, "Album created successfully.")
-            return redirect('edit_album', path=a.get_path())
-
     context = {
         'album': None,
         'parent': request.GET.get('parent', None)
