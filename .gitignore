@@ -3,7 +3,6 @@
 
 # Sensitive data
 data/
-keys/
 
 # Database
 *.db

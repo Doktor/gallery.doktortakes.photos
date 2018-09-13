@@ -6,7 +6,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open(os.path.join(BASE_DIR, 'keys', 'django.txt'), 'r') as f:
+with open(os.path.join(BASE_DIR, 'data', 'django.txt'), 'r') as f:
     SECRET_KEY = f.read().strip()
 
 DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
