@@ -27,9 +27,8 @@ import PIL.Image
 import pytz
 import uuid
 import warnings
-from contextlib import contextmanager
 from io import BytesIO
-from libxmp import XMPFiles as XMP, consts as XMPConstants
+from lxml import etree
 
 fromtimestamp = datetime.datetime.fromtimestamp
 strptime = datetime.datetime.strptime
@@ -371,6 +370,16 @@ def generate_md5_hash(file):
     return hasher.hexdigest()
 
 
+XMP_START = b'<x:xmpmeta'
+XMP_END = b'</x:xmpmeta>'
+
+NS = {
+    'x': "adobe:ns:meta/",
+    'rdf': "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    'xmp': "http://ns.adobe.com/xap/1.0/"
+}
+
+
 class Photo(models.Model):
     # Original image
 
@@ -444,53 +453,42 @@ class Photo(models.Model):
         self.original.open()
 
         # EXIF data
-        exif = exifread.process_file(self.original, details=False)
-
+        exif = exifread.process_file(self.original, details=False, debug=False)
         self.exif = {k: v.printable for k, v in exif.items()}
 
         # XMP data
-        # python-xmp-toolkit doesn't accept file objects, so we need a local
-        # copy of the file
-        try:
-            local = True
+        raw_data = BytesIO()
 
-            # If using local storage, this is simple
-            path = self.original.path
-        except NotImplementedError:
-            local = False
+        for chunk in self.original.chunks(chunk_size=CHUNK_SIZE):
+            raw_data.write(chunk)
 
-            # If using remote storage, save a temporary copy to the local disk
-            _, ext = os.path.splitext(self.original.name)
-            filename = os.path.join('temp', f"{uuid.uuid4()}{ext}")
+        with raw_data as f:
+            data = f.read()
 
-            os.makedirs(os.path.join(settings.BASE_DIR, 'temp'), exist_ok=True)
+            start = data.find(XMP_START)
+            end = data.find(XMP_END)
 
-            with open(os.path.join(settings.BASE_DIR, filename), 'wb') as f:
-                for chunk in self.original.chunks(chunk_size=CHUNK_SIZE):
-                    f.write(chunk)
+            if start == -1 or end == -1:
+                pass
+            else:
+                xml = data[start:end + len(XMP_END)].decode('utf-8')
+                root = etree.fromstring(xml)
 
-            path = os.path.abspath(filename)
+                element = root.xpath('.//rdf:Description', namespaces=NS)[0]
 
-        # Process the file
-        xmp = XMP(file_path=path).get_xmp()
+                try:
+                    rating = element.xpath('@xmp:Rating', namespaces=NS)[0]
+                    self.rating = int(rating)
+                except IndexError:
+                    self.rating = 0
 
-        try:
-            rating = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Rating')
-            self.rating = int(rating)
-        except (AttributeError, ValueError):
-            self.rating = 0
-
-        try:
-            label = xmp.get_property(XMPConstants.XMP_NS_XMP, 'Label').lower()
-        except AttributeError:
-            self.watermark = COLOR_NONE
-        else:
-            self.watermark = (COLOR_BLACK if label == 'green' else
-                              COLOR_WHITE)
-
-        # If using remote storage, remove the temporary copy
-        if not local:
-            os.remove(path)
+                try:
+                    label = element.xpath('@xmp:Label', namespaces=NS)[0].lower()
+                except IndexError:
+                    self.watermark = COLOR_NONE
+                else:
+                    self.watermark = \
+                        (COLOR_BLACK if label == 'green' else COLOR_WHITE)
 
         # Timestamps
         modified = get_modified_time_utc(self.original)
@@ -533,17 +531,6 @@ class Photo(models.Model):
         ordering = ('taken', 'uploaded')
 
 
-@contextmanager
-def temp_file():
-    os.makedirs(os.path.join(settings.BASE_DIR, 'temp'), exist_ok=True)
-    filename = os.path.join('temp', str(uuid.uuid4()) + '.jpg')
-    path = os.path.abspath(filename)
-
-    yield path
-
-    os.remove(path)
-
-
 @receiver(pre_save, sender=Photo,
           dispatch_uid='photos.models.update_sidecar_images')
 def update_sidecar_images(sender, instance, *args, **kwargs):
@@ -567,8 +554,11 @@ def update_sidecar_images(sender, instance, *args, **kwargs):
         else:
             del photo._resave
 
+    edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
+
     tb = create_thumbnail(photo)
     sq = create_square_thumbnail(photo)
+    im = create_display_image(photo, edge)
 
     if photo.thumbnail:
         photo.thumbnail.delete(save=False)
@@ -576,26 +566,13 @@ def update_sidecar_images(sender, instance, *args, **kwargs):
     if photo.square_thumbnail:
         photo.square_thumbnail.delete(save=False)
 
-    photo.thumbnail.save(photo.filename, File(tb), save=False)
-    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
-
-    with temp_file() as path:
-        # Make a copy of the file
-        with open(path, 'wb') as f:
-            photo.original.open()
-
-            for chunk in photo.original.chunks(chunk_size=CHUNK_SIZE):
-                f.write(chunk)
-
-            photo.original.close()
-
-        edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
-        im = create_display_image(path, edge, photo.watermark)
-
     if photo.image:
         photo.image.delete(save=False)
 
+    photo.thumbnail.save(photo.filename, File(tb), save=False)
+    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
     photo.image.save(photo.filename, File(im), save=False)
+
     photo.file_size = format_file_size(photo.image.size)
 
     photo._sidecar = True
@@ -674,67 +651,61 @@ RESAMPLE = PIL.Image.LANCZOS
 RATIOS = (3 / 2, 16 / 9, 2.35 / 1)
 
 
-def create_display_image(path, edge, wm_color):
-    with open(path, 'rb') as f:
-        image = PIL.Image.open(f)
+def create_display_image(photo, edge):
+    photo.original.open()
 
-        # Preserve EXIF and XMP metadata
-        xmp_f = XMP(file_path=path)
-        xmp = xmp_f.get_xmp()
+    image = PIL.Image.open(photo.original)
 
-        try:
-            exif = image.info['exif']
-        except KeyError:
-            exif = None
+    # Preserve EXIF metadata
+    try:
+        exif = image.info['exif']
+    except KeyError:
+        exif = None
 
-        # Resize, attempting to avoid rounding errors
-        width, height = image.size
-        long, short = max(*image.size), min(*image.size)
+    # Resize, attempting to avoid rounding errors
+    width, height = image.size
+    long, short = max(*image.size), min(*image.size)
 
-        for ratio in RATIOS:
-            if abs((long / short) - ratio) < TOLERANCE:
-                # Resize to...
-                r_long, r_short = edge, int(edge / ratio)
+    for ratio in RATIOS:
+        if abs((long / short) - ratio) < TOLERANCE:
+            # Resize to...
+            r_long, r_short = edge, int(edge / ratio)
 
-                if width > height:
-                    dims = r_long, r_short
-                else:
-                    dims = r_short, r_long
+            if width > height:
+                dims = r_long, r_short
+            else:
+                dims = r_short, r_long
 
-                image = image.resize(dims, resample=RESAMPLE)
-                break
-        else:
-            image.thumbnail((edge, edge), resample=RESAMPLE)
+            image = image.resize(dims, resample=RESAMPLE)
+            break
+    else:
+        image.thumbnail((edge, edge), resample=RESAMPLE)
 
-        width, height = image.size
+    width, height = image.size
 
-        # Add watermark
-        if WATERMARKS_ENABLED:
-            watermark = WATERMARK_IMAGES.get((edge, wm_color), None)
+    # Add watermark
+    if WATERMARKS_ENABLED:
+        watermark = WATERMARK_IMAGES.get((edge, photo.watermark), None)
 
-            offset = int(WATERMARK_OFFSET * (edge / 2400))
+        offset = int(WATERMARK_OFFSET * (edge / 2400))
 
-            x = width - watermark.size[0] - offset
-            y = height - watermark.size[1] - offset
-            coords = (x, y)
+        x = width - watermark.size[0] - offset
+        y = height - watermark.size[1] - offset
+        coords = (x, y)
 
-            image.paste(watermark, coords, mask=watermark.split()[3])
+        image.paste(watermark, coords, mask=watermark.split()[3])
 
-        # Re-add EXIF and XMP metadata
-        if exif is not None:
-            image.save(path, 'JPEG', quality=90, exif=exif)
-        else:
-            image.save(path, 'JPEG', quality=90)
+    # Save and re-add EXIF metadata
+    data = BytesIO()
 
-        if xmp is not None:
-            xmp_f = XMP(file_path=path, open_forupdate=True)
-            xmp_f.put_xmp(xmp)
-            xmp_f.close_file()
+    if exif is not None:
+        image.save(data, 'JPEG', quality=90, exif=exif)
+    else:
+        image.save(data, 'JPEG', quality=90)
 
-    with open(path, 'rb') as f:
-        data = BytesIO()
-        data.write(f.read())
-        return data
+    photo.original.close()
+
+    return data
 
 
 # Panoramas

@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-xmp-toolkit = "*"
 pytz = "*"
 Django = ">=2.0"
 ExifRead = "*"
 Pillow = "*"
 django-storages = "*"
 invoke = "*"
-"boto3" = "*"
+boto3 = "*"
+lxml = "*"
 
 [dev-packages]
 
