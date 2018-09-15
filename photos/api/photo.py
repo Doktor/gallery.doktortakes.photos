@@ -196,8 +196,6 @@ class PhotoView(View):
             return e.to_response()
 
         try:
-            photo.thumbnail.delete(save=False)
-            photo.image.delete(save=False)
             photo.delete()
 
             return JsonResponse({

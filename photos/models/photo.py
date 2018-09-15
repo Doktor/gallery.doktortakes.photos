@@ -172,10 +172,7 @@ class Photo(models.Model):
             super().save(*args, **kwargs)
         except IntegrityError as e:
             if str(e) == "UNIQUE constraint failed: photos_photo.md5":
-                self.original.delete(save=False)
-                self.image.delete(save=False)
-                self.thumbnail.delete(save=False)
-                self.square_thumbnail.delete(save=False)
+                self.delete()
 
                 from photos.api.utils import APIError
                 raise APIError(f"Duplicate file: {self.md5}")
