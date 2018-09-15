@@ -74,7 +74,14 @@ DATABASES = {
 }
 
 
-# Password validation
+# Security
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
