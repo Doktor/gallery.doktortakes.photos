@@ -15,7 +15,7 @@ handler500 = 'photos.views.handler500'
 register_converter(MD5HashConverter, 'md5')
 
 album_patterns = [
-    path('', views.album_list, name='albums'),
+    path('', views.view_albums, name='albums'),
 
     path('new/', views.new_album, name='new_album'),
     path('edit/', views.edit_albums, name='edit_albums'),
@@ -24,14 +24,14 @@ album_patterns = [
 
     path('<path:path>/edit/', views.edit_album, name='edit_album'),
 
-    path('<path:path>/', views.album, name='album'),
-    path('<path:path>/<md5:md5>', views.photo, name='photo'),
-    path('<path:path>/<md5:md5>/download', views.download, name='download'),
+    path('<path:path>/', views.view_album, name='album'),
+    path('<path:path>/<md5:md5>', views.view_photo, name='photo'),
+    path('<path:path>/<md5:md5>/download', views.download_photo, name='download'),
 ]
 
 tag_patterns = [
-    path('', views.tags, name='tags'),
-    path('<slug:slug>/', views.tag, name='tag'),
+    path('', views.view_tags, name='tags'),
+    path('<slug:slug>/', views.view_tag, name='tag'),
 ]
 
 api_patterns = [
