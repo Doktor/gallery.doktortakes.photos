@@ -10,7 +10,8 @@ import datetime
 import pytz
 
 from photos.api.utils import APIError, get_photo_from_request, api_wrapper
-from photos.models import Photo, generate_md5_hash
+from photos.models import Photo
+from photos.models.utils import generate_md5_hash
 from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP, LONG, SHORT
 from photos.views import get_album_by_path, get_photo
 

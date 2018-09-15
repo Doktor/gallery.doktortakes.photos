@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from photos.models import Album, Photo
+from photos.models import Photo
 from photos.views import get_album_by_path
 
 import functools
