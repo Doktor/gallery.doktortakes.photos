@@ -315,9 +315,10 @@ $logo: 2.4rem;
 
     .no-cover .note {
       position: absolute;
-      top: 45%;
-      width: 100%;
+      top: 50%;
+      left: 50%;
       text-align: center;
+      transform: translateX(-50%) translateY(-50%);
     }
   }
 }
