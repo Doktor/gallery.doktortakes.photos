@@ -14,28 +14,44 @@ from io import BytesIO
 strptime = datetime.datetime.strptime
 
 
-@shared_task
-def create_sidecar_images(pk):
-    photo = Photo.objects.get(pk=pk)
-
-    edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
-
-    tb = create_thumbnail(photo)
+def replace_square_thumbnail(photo: Photo):
     sq = create_square_thumbnail(photo)
-    im = create_display_image(photo, edge)
-
-    if photo.thumbnail:
-        photo.thumbnail.delete(save=False)
 
     if photo.square_thumbnail:
         photo.square_thumbnail.delete(save=False)
 
+    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
+
+
+def replace_display_image(photo: Photo):
+    edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
+
+    im = create_display_image(photo, edge)
+
     if photo.image:
         photo.image.delete(save=False)
 
-    photo.thumbnail.save(photo.filename, File(tb), save=False)
-    photo.square_thumbnail.save(photo.filename, File(sq), save=False)
     photo.image.save(photo.filename, File(im), save=False)
+
+
+def replace_thumbnail(photo: Photo):
+    tb = create_thumbnail(photo)
+
+    if photo.thumbnail:
+        photo.thumbnail.delete(save=False)
+
+    photo.thumbnail.save(photo.filename, File(tb), save=False)
+
+
+@shared_task
+def create_sidecar_images(pk):
+    photo = Photo.objects.get(pk=pk)
+
+    replace_square_thumbnail(photo)
+    replace_display_image(photo)
+
+    if photo.rating >= 4:
+        replace_thumbnail(photo)
 
     photo.file_size = format_file_size(photo.image.size)
 

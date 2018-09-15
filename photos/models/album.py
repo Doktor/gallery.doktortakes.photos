@@ -172,6 +172,23 @@ class Album(models.Model):
         unique_together = ('name', 'parent')
 
 
+@receiver(pre_save, sender=Album,
+          dispatch_uid="photos.models.create_album_cover")
+def create_album_cover(sender, instance, **kwargs):
+    album: Album = instance
+
+    try:
+        prev = Album.objects.get(pk=album.pk)
+    except Album.DoesNotExist:
+        return
+    else:
+        if prev.cover == album.cover:
+            return
+
+    from photos.tasks import replace_thumbnail
+    replace_thumbnail(album.cover)
+
+
 albums_to_move = {}
 
 
