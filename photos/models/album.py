@@ -7,10 +7,12 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
+from core.context_processors import metadata
 from photos.settings import MEDIA_FOLDERS
 
 import os
 
+m = metadata(None)
 
 SIZE_2400 = '2400'
 SIZE_3600 = '3600'
@@ -80,6 +82,9 @@ class Album(models.Model):
 
         super().delete(using=using, keep_parents=keep_parents)
 
+    def get_absolute_url(self):
+        return reverse('album', args=[self.get_path()])
+
     def get_all_subalbums(self, include_self=False):
         albums = []
 
@@ -101,6 +106,9 @@ class Album(models.Model):
             photos += album.get_all_subphotos(include_self=True)
 
         return photos
+
+    def get_edit_url(self):
+        return reverse('edit_album', args=[self.get_path()])
 
     def get_full_date(self):
         formatter = "{date:%A}, {date:%B} {date.day}, {date.year}"
@@ -125,17 +133,14 @@ class Album(models.Model):
         else:
             return ''
 
+    def get_hidden_url(self):
+        return self.get_absolute_url() + self.get_password_query()
+
     def get_location(self):
         if self.location or not self.parent:
             return self.location
 
         return self.parent.get_location()
-
-    def get_place(self):
-        if self.place or not self.parent:
-            return self.place
-
-        return self.parent.get_place()
 
     def get_path(self, previous='', divider='/'):
         if not self.parent:
@@ -151,14 +156,14 @@ class Album(models.Model):
             return self.parent.get_path(
                 previous=self.slug + divider + previous, divider=divider)
 
-    def get_absolute_url(self):
-        return reverse('album', args=[self.get_path()])
+    def get_place(self):
+        if self.place or not self.parent:
+            return self.place
 
-    def get_edit_url(self):
-        return reverse('edit_album', args=[self.get_path()])
+        return self.parent.get_place()
 
-    def get_hidden_url(self):
-        return self.get_absolute_url() + self.get_password_query()
+    def get_parent_path(self):
+        return self.parent.get_path() if self.parent is not None else ''
 
     def get_password_query(self):
         return f"?password={self.password}&" if self.password else ''
@@ -166,6 +171,42 @@ class Album(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def serialize(self, method='GET'):
+        if self.end:
+            end = self.end.strftime("%Y-%m-%d")
+        else:
+            end = None
+
+        response = {
+            'url': self.get_absolute_url(),
+            'name': self.name,
+            'slug': self.slug,
+            'path': self.get_path(),
+            'place': self.place,
+            'location': self.location,
+            'description': self.description,
+            'start': self.start.strftime("%Y-%m-%d"),
+            'end': end,
+            'hidden': int(self.hidden),
+            'password': self.password,
+            'tags': ', '.join((tag.slug for tag in self.tags.all())),
+            'parent': self.get_parent_path(),
+        }
+
+        if self.cover is not None:
+            response['cover'] = {
+                'url': self.cover.image.url,
+                'thumbnail_url': self.cover.thumbnail.url,
+            }
+
+        if method == 'PUT':
+            response.update({
+                'edit_url': self.get_edit_url(),
+                'title': f"Editing {self.name} | {m.get('TITLE')}"
+            })
+
+        return response
 
     class Meta:
         get_latest_by = 'start'

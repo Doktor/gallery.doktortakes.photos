@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
-from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_GET, require_POST
@@ -12,7 +11,7 @@ import pytz
 from photos.api.utils import APIError, get_photo_from_request, api_wrapper
 from photos.models import Photo
 from photos.models.utils import generate_md5_hash
-from photos.settings import ITEMS_PER_PAGE, ITEMS_IN_FILMSTRIP, LONG, SHORT
+from photos.settings import ITEMS_PER_PAGE, LONG, SHORT
 from photos.views import get_album_by_path, get_photo
 
 
@@ -23,162 +22,6 @@ def get_photo_by_hash(path, md5):
         raise APIError("The specified photo doesn't exist.")
 
 
-def format_f_stop(f):
-    """Takes an f-stop as a fractional string and converts it to a number."""
-    try:
-        f = f.split('/')
-    except AttributeError:
-        return 0
-    else:
-        if len(f) == 2:
-            return int(f[0]) / int(f[1])
-        else:
-            return f[0]
-
-
-def get_exif(p):
-    e = p.exif
-
-    camera = e.get('Image Model', 'Camera unknown')
-
-    try:
-        make = e.get('EXIF LensMake', e['Image Make'])
-        model = e['EXIF LensModel']
-
-        lens = f'{make} {model}'
-    except KeyError:
-        lens = 'Lens unknown'
-
-    if 'EF-S' in lens:
-        lens = lens.replace('EF-S', 'EF-S ')
-    elif 'EF' in lens:
-        lens = lens.replace('EF', 'EF ')
-
-    try:
-        shutter_speed = f"{e['EXIF ExposureTime']} s"
-    except KeyError:
-        shutter_speed = 'Unknown'
-
-    try:
-        f_stop = f"f/{format_f_stop(e['EXIF FNumber'])}"
-    except KeyError:
-        if camera != 'Camera unknown':
-            f_stop = 'f/0'
-        else:
-            f_stop = 'Unknown'
-
-    try:
-        iso_speed = f"ISO {e['EXIF ISOSpeedRatings']}"
-    except KeyError:
-        iso_speed = 'Unknown'
-
-    return {
-        'camera': camera,
-        'lens': lens,
-        'shutter_speed': shutter_speed,
-        'aperture': f_stop,
-        'iso_speed': iso_speed,
-    }
-
-
-def get_index(photo):
-    photos = photo.album.photos.all()
-
-    for i, item in enumerate(photos):
-        if item.md5 == photo.md5:
-            return i
-    else:
-        raise RuntimeError
-
-
-def generate_photo_dict(photo, index=None, metadata=True, filmstrip=True):
-    taken = photo.taken.astimezone(pytz.timezone(photo.album.timezone))
-
-    response = {
-        'image_url': photo.image.url,
-        'thumbnail_url': photo.thumbnail.url,
-        'square_thumbnail_url': photo.square_thumbnail.url,
-        'url': photo.get_absolute_url(),
-    }
-
-    if metadata:
-        if index is None:
-            index = get_index(photo)
-
-        response.update({
-            'metadata': {
-                'index': index,
-                'taken': taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
-                'width': photo.width,
-                'height': photo.height,
-                'md5': photo.md5,
-                'new_tab': photo.image.url,
-                'download': reverse(
-                    'download', args=[photo.get_path(), photo.md5]),
-            },
-            'exif': get_exif(photo)
-        })
-
-    if filmstrip:
-        response['filmstrip'] = generate_filmstrip(photo)
-
-    return response
-
-
-def generate_filmstrip(photo):
-    count = ITEMS_IN_FILMSTRIP
-    half = count // 2
-
-    album = photo.album
-    all_photos = album.photos.all()
-
-    if all_photos.count() <= count:
-        photos = [*all_photos]
-    else:
-        # Queries
-        left_q = Q(taken__lt=photo.taken) & (~Q(pk=photo.pk))
-        middle_q1 = Q(taken=photo.taken, uploaded__lt=photo.uploaded)
-        middle_q2 = Q(taken=photo.taken, uploaded__gt=photo.uploaded)
-        right_q = Q(taken__gt=photo.taken) & (~Q(pk=photo.pk))
-
-        # Filter...
-        left = all_photos.filter(left_q).reverse()
-        middle_1 = all_photos.filter(middle_q1)
-        middle_2 = all_photos.filter(middle_q2)
-        right = all_photos.filter(right_q)
-
-        # Join the outside and middle queries
-        left = [*left, *middle_1]
-        right = [*middle_2, *right]
-        lc, rc = len(left), len(right)
-
-        if lc < half:
-            deficit = count - 1 - lc
-            photos = [*left, photo, *right[:deficit]]
-        elif rc < half:
-            deficit = count - 1 - rc
-            photos = [*left[:deficit], photo, *right]
-        else:
-            photos = [*left[:half], photo, *right[:half]]
-
-    photos = sorted(photos, key=lambda p: (p.taken, p.pk))
-
-    result = []
-
-    for photo in photos:
-        result.append({
-            'md5': photo.md5,
-            'url': photo.square_thumbnail.url,
-            'index': get_index(photo),
-        })
-
-    return result
-
-
-def photo_to_response(photo):
-    return JsonResponse(generate_photo_dict(photo))
-
-
 class PhotoView(View):
     def get(self, request, path):
         try:
@@ -186,7 +29,7 @@ class PhotoView(View):
         except APIError as e:
             return e.to_response()
 
-        return photo_to_response(photo)
+        return JsonResponse(photo.serialize())
 
     @method_decorator(login_required)
     def delete(self, request, path):
@@ -227,7 +70,7 @@ def navigate(request, path, method):
         elif method == 'get_next_by_taken':
             nav = photos.order_by('taken')[0]
 
-    return photo_to_response(nav)
+    return JsonResponse(nav.serialize())
 
 
 @api_wrapper
@@ -251,7 +94,7 @@ def navigate_end(path, method):
 
     photo = getattr(photos, method)()
 
-    return photo_to_response(photo)
+    return JsonResponse(photo.serialize())
 
 
 @api_wrapper
@@ -406,7 +249,7 @@ def search_photos(request):
 
     # Generate the response
 
-    data = [generate_photo_dict(photo, metadata=False, filmstrip=False)
+    data = [photo.serialize(metadata=False, filmstrip=False)
             for photo in photos]
 
     response = {

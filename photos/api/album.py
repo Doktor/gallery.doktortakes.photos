@@ -1,18 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse
 from django.utils.text import slugify
 from django.views.decorators.http import require_GET
 
 from datetime import datetime
 
-from core.context_processors import metadata
-from photos.api.photo import generate_photo_dict
 from photos.api.utils import APIError, APIView, api_wrapper
 from photos.models import Album, Photo, Tag
 from photos.views import get_album_by_path as get_album
-
-m = metadata(None)
 
 
 def get_album_by_path(path):
@@ -20,43 +16,6 @@ def get_album_by_path(path):
         return get_album(path)
     except Album.DoesNotExist:
         raise APIError("The specified album doesn't exist.")
-
-
-def generate_album_dict(album, method='GET'):
-    if album.end:
-        end = album.end.strftime("%Y-%m-%d")
-    else:
-        end = None
-
-    response = {
-        'url': album.get_absolute_url(),
-        'name': album.name,
-        'slug': album.slug,
-        'path': album.get_path(),
-        'place': album.place,
-        'location': album.location,
-        'description': album.description,
-        'start': album.start.strftime("%Y-%m-%d"),
-        'end': end,
-        'hidden': int(album.hidden),
-        'password': album.password,
-        'tags': ', '.join((tag.slug for tag in album.tags.all())),
-        'parent': album.parent.get_path() if album.parent is not None else ''
-    }
-
-    if album.cover is not None:
-        response['cover'] = {
-            'url': album.cover.image.url,
-            'thumbnail_url': album.cover.thumbnail.url,
-        }
-
-    if method == 'PUT':
-        response.update({
-            'edit_url': album.get_edit_url(),
-            'title': f"Editing {album.name} | {m.get('TITLE')}"
-        })
-
-    return response
 
 
 class AlbumView(LoginRequiredMixin, APIView):
@@ -134,7 +93,7 @@ class AlbumView(LoginRequiredMixin, APIView):
 
     def get(self, request, path):
         album = get_album_by_path(path)
-        return JsonResponse(generate_album_dict(album))
+        return JsonResponse(album.serialize())
 
     def post(self, request):
         album = self._apply_changes(request, Album())
@@ -152,7 +111,7 @@ class AlbumView(LoginRequiredMixin, APIView):
 
         return JsonResponse({
             'message': "Album updated successfully.",
-            'album': generate_album_dict(album, method='PUT'),
+            'album': album.serialize(method='PUT'),
         })
 
     def patch(self, request, path):
@@ -169,7 +128,7 @@ class AlbumView(LoginRequiredMixin, APIView):
 
         return JsonResponse({
             'message': "Album cover changed successfully.",
-            'album': generate_album_dict(album),
+            'album': album.serialize(),
         })
 
     def delete(self, request, path):
@@ -195,6 +154,6 @@ def get_album_photos(request, path):
         raise APIError("Album does not exist.")
 
     for index, photo in enumerate(album.photos.all().order_by('taken')):
-        photos.append(generate_photo_dict(photo, index=index, filmstrip=False))
+        photos.append(photo.serialize(index=index, filmstrip=False))
 
     return JsonResponse({'photos': photos})

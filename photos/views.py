@@ -36,12 +36,12 @@ def get_albums_from_path(path):
     return albums
 
 
-def get_album_by_path(path):
+def get_album_by_path(path) -> Album:
     """Returns the Album corresponding to the given path."""
     return get_albums_from_path(path)[-1]
 
 
-def get_photo(path, md5):
+def get_photo(path, md5) -> Photo:
     """Returns the Photo in the album with the given path, and with the
     given MD5 hash."""
     a = get_album_by_path(path)
@@ -250,7 +250,7 @@ def photo(request, path, md5):
     """Renders photo pages."""
 
     if request.method == 'GET':
-        from photos.api import get_exif
+        from photos.models.photo import get_exif
 
         path = get_albums_from_path(path)
         a = path[-1]
