@@ -173,6 +173,7 @@ def album(request, path):
     context = {
         'path': get_albums_from_path(path),
         'album': a,
+        'photos': Photo.objects.filter(album=a, sidecar_exists=True),
         'count': a.photos.count(),
         'page_title': title,
         'items_per_page': ITEMS_PER_PAGE,

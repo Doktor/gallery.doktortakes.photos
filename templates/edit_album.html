@@ -145,7 +145,14 @@
       {% for p in photos %}
       <div class="wrapper" data-md5="{{ p.md5 }}">
         <div class="photo">
+          {% if p.square_thumbnail %}
           <img src="{{ p.square_thumbnail.url }}">
+          {% else %}
+          <div class="no-thumbnail">
+            <img src="{% static "images/square-placeholder.png" %}">
+            <div class="note">No thumbnail</div>
+          </div>
+          {% endif %}
         </div>
       </div>
       {% endfor %}

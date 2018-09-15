@@ -133,7 +133,7 @@
     <!-- Photos -->
     <div class="pagination"></div>
     <section id="photos">
-      {% for p in album.photos.all %}
+      {% for p in photos %}
         <div class="wrapper">
           <div class="photo">
             <a href="{% url 'photo' album.get_path p.md5 %}">
