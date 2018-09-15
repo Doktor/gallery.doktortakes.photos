@@ -12,6 +12,7 @@ django-storages = "*"
 invoke = "*"
 boto3 = "*"
 lxml = "*"
+celery = {version = "*", extras = ["redis"]}
 
 [dev-packages]
 

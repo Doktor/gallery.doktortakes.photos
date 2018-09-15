@@ -150,3 +150,13 @@ else:
 
     DEFAULT_FILE_STORAGE = 'core.storages.MediaStorage'
     MEDIA_URL = '/media/'
+
+
+# Task queue
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'US/Eastern'

@@ -28,3 +28,7 @@ photos/migrations/
 
 # Temporary files
 temp/
+
+# Log files
+*.log
+*.rdb
