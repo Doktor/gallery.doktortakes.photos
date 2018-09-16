@@ -141,7 +141,7 @@
     {% endif %}
 
     <!-- Photos -->
-    <div id="photos">
+    <section class="photos">
       {% for p in photos %}
       <div class="wrapper" data-md5="{{ p.md5 }}">
         <div class="photo">
@@ -156,7 +156,7 @@
         </div>
       </div>
       {% endfor %}
-    </div>
+    </section>
     <!-- End photos -->
 
     {% if album.children.count %}
@@ -168,11 +168,18 @@
       {% if sa.photos.count %}
       <h3><a href="{{ sa.get_edit_url }}">{{ sa.name }}</a></h3>
 
-      <div class="children">
+      <div class="photos">
         {% for p in sa.photos.all %}
         <div class="wrapper" data-md5="{{ p.md5 }}">
           <div class="photo">
+            {% if p.square_thumbnail %}
             <img src="{{ p.square_thumbnail.url }}">
+            {% else %}
+            <div class="no-thumbnail">
+              <img src="{% static "images/square-placeholder.png" %}">
+              <div class="note">No thumbnail</div>
+            </div>
+            {% endif %}
           </div>
         </div>
         {% endfor %}

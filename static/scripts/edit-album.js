@@ -7,7 +7,7 @@ const form = $('album-form');
 const cover = $('cover');
 
 const selected = [];
-const photos = $('photos');
+const photos = document.querySelector('.photos');
 
 const totalCount = $('total-count');
 const selectedCount = $('selected-count');

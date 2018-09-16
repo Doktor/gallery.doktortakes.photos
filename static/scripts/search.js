@@ -4,7 +4,7 @@ const form = $('search');
 const submit = $('submit');
 
 const countEl = document.querySelector('#count');
-const photos = $('photos');
+const photos = document.querySelector('.photos');
 
 const api = $('api');
 const API_SEARCH = api.dataset.apiSearch;

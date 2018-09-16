@@ -1,7 +1,7 @@
 let $ = document.getElementById.bind(document);
 
 const api = $('api');
-const photos = $('photos');
+const photos = document.querySelector('.photos');
 
 // Pagination
 

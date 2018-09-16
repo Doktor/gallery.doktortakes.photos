@@ -179,8 +179,7 @@ $logo: 2.4rem;
   font-weight: 700;
 }
 
-#photos,
-.children {
+.photos {
   $spacing: 0.4rem;
   $width: 300px;
 
@@ -201,10 +200,10 @@ $logo: 2.4rem;
       float: none;
       width: 100%;
     }
-    @for $i from 1 to 4 {
+    @for $i from 1 through 4 {
       @media (min-width: $width * ($i) + 1) and
-             (max-width: $width * ($i + 1) + 0) {
-        width: 100% / ($i + 1);
+             (max-width: $width * ($i + 1)) {
+        width: 100% / ($i + 1);  // 50%, 33%, 25%, 20%
       }
     }
     @media (min-width: $width * 5 + 1) {
