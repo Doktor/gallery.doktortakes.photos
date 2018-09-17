@@ -1,7 +1,5 @@
 let $ = document.getElementById.bind(document);
 
-const flashContainer = $('flash');
-
 const form = $('album-form');
 
 const cover = $('cover');
@@ -15,8 +13,8 @@ const selectedCount = $('selected-count');
 const api = $('api');
 
 const API_ALBUM = api.dataset.apiAlbum;
+const API_PHOTO = api.dataset.apiPhoto;
 const API_EDIT_LIST = api.dataset.apiEditList;
-const API_DELETE_PHOTO = api.dataset.apiDeletePhoto;
 
 
 $('album-form-save').addEventListener('click', () => {
@@ -132,29 +130,24 @@ $('change-cover').addEventListener('click', () => {
 
 
 function delete_photos() {
-  for (let wrapper of selected) {
-    delete_photo(wrapper);
-  }
+  selected.forEach((el) => delete_photo(el));
 }
 
-function delete_photo(wrapper) {
+function delete_photo(el) {
   function onError(response) {
     flash(response.error);
   }
 
   function onSuccess(response) {
-    wrapper.remove();
+    el.remove();
     update_total();
     update_count();
 
     flash(response.message);
   }
 
-  let params = {
-    'path': api.dataset.albumPath,
-    'md5': wrapper.dataset.md5,
-  };
-  let url = API_DELETE_PHOTO + query_string(params);
+  let params = {md5: el.dataset.md5};
+  let url = API_PHOTO + query_string(params);
 
   send_request('DELETE', url, onSuccess, onError, null, true);
 }

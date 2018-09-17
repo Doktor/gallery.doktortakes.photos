@@ -2,13 +2,13 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.http import require_GET, require_POST
 
 import datetime
 import pytz
 
-from photos.api.utils import APIError, get_photo_from_request, api_wrapper
+from photos.api.utils import (
+    APIError, APIView, get_photo_from_request, api_wrapper)
 from photos.models import Photo
 from photos.models.utils import generate_md5_hash
 from photos.settings import ITEMS_PER_PAGE, LONG, SHORT
@@ -22,35 +22,16 @@ def get_photo_by_hash(path, md5):
         raise APIError("The specified photo doesn't exist.")
 
 
-class PhotoView(View):
+class PhotoView(APIView):
     def get(self, request, path):
-        try:
-            photo = get_photo_from_request(request, path)
-        except APIError as e:
-            return e.to_response()
-
+        photo = get_photo_from_request(request, path)
         return JsonResponse(photo.serialize())
 
     @method_decorator(login_required)
     def delete(self, request, path):
-        try:
-            photo = get_photo_from_request(request, path)
-        except APIError as e:
-            return e.to_response()
-
-        try:
-            photo.delete()
-
-            return JsonResponse({
-                'success': True,
-                'message': "Photo deleted successfully.",
-            })
-
-        except (IOError, OSError):
-            return JsonResponse({
-                'success': False,
-                'error': "An unknown error occurred when deleting image files."
-            })
+        photo = get_photo_from_request(request, path)
+        photo.delete()
+        return JsonResponse({'message': "Photo deleted successfully."})
 
 
 def navigate(request, path, method):
