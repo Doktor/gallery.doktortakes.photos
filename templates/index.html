@@ -22,18 +22,7 @@
     {% endif %}
 
     <ul class="navlinks">
-      <li><a href="{% url 'about' %}">About</a></li>
-      <li><a href="{% url 'featured' %}">Featured</a></li>
-      <li><a href="{% url 'albums' %}">Photos</a></li>
-      <li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos" target="blank" rel="noopener noreferrer">Trello</a></li>
-      <li><a href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer">Twitter</a></li>
-      {% if request.user.is_staff %}
-      <li><a href="{% url 'admin:index' %}">Admin</a></li>
-      <li><a href="{% url 'edit_albums' %}">Edit</a></li>
-      {% endif %}
-      {% if request.user.is_authenticated %}
-      <li><a href="{% url 'log_out' %}">Log out</a></li>
-      {% endif %}
+      {% include "_navlinks.html" %}
     </ul>
   </header>
 
@@ -44,6 +33,8 @@
     {% endfor %}
   </section>
   {% endif %}
+
+  <hr>
 
   {% if albums %}
     <section id="albums">
