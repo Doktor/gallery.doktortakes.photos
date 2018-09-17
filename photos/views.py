@@ -101,7 +101,7 @@ def index(request):
 
 def featured(request):
     """Renders the featured photos page."""
-    query = Q(album__hidden=False, rating__gte=4)
+    query = Q(album__hidden=False, rating__gte=4, sidecar_exists=True)
     photos = Photo.objects.filter(query).order_by('-taken')
 
     context = {
@@ -153,14 +153,14 @@ def view_album(request, path):
 
             raise Http404
 
-    title = f"{album.name} | {metadata['TITLE']}"
+    photos = Photo.objects.filter(album=album, sidecar_exists=True)
 
     context = {
         'path': get_albums_from_path(path),
         'album': album,
-        'photos': Photo.objects.filter(album=album, sidecar_exists=True),
-        'count': album.photos.count(),
-        'page_title': title,
+        'photos': photos,
+        'count': photos.count(),
+        'page_title': f"{album.name} | {metadata['TITLE']}",
         'items_per_page': ITEMS_PER_PAGE,
     }
 
@@ -246,6 +246,10 @@ def view_photo(request, path, md5):
     path = get_albums_from_path(path)
     album = path[-1]
     photo = Photo.objects.get(album=album, md5=md5)
+
+    if not photo.sidecar_exists:
+        raise Http404
+
     exif = get_exif(photo)
     short_md5 = photo.md5[:7]
     title = f"{short_md5} | {photo.album.name} | {metadata['TITLE']}"
@@ -263,8 +267,10 @@ def view_photo(request, path, md5):
 
 
 def download_photo(request, path, md5):
-    """Starts a download for a photo."""
     photo = get_photo(path, md5)
+
+    if not photo.sidecar_exists:
+        raise Http404
 
     photo.image.open()
 
