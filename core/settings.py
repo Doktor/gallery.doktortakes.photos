@@ -126,6 +126,7 @@ en_formats.DATETIME_FORMAT = "Y-m-d H:i:s"
 
 # Always store static files in local storage
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static.1')
 STATIC_URL = '/static/'
 
 # Toggle local/remote storage for media files

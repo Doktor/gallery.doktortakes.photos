@@ -17,6 +17,8 @@ media/
 
 # Compiled files
 __pycache__/
+.sass-cache/
+static.1/
 *.css
 *.css.map
 

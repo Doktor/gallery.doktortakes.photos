@@ -5,18 +5,52 @@ import json
 import os
 
 
-def create_superuser():
-    User = get_user_model()
+# Task parts
 
-    with open(os.path.join('data', 'superuser.json')) as f:
-        user = json.loads(f.read())
 
-    User.objects.create_superuser(
-        user['username'], user['email'], user['password'])
+manage = "pipenv run python manage.py"
+
+
+def create_superuser(ctx, manual=False):
+    if manual:
+        ctx.run(f"{manage} createsuperuser")
+    else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+        django.setup()
+
+        User = get_user_model()
+
+        with open(os.path.join('data', 'superuser.json')) as f:
+            user = json.loads(f.read())
+
+        User.objects.create_superuser(
+            user['username'], user['email'], user['password'])
+
+
+# Tasks
 
 
 @task
-def clean(ctx, manual=False):
+def build(ctx, manual=False):
+    print("Creating migrations and rebuilding database")
+    ctx.run(f"{manage} makemigrations --no-input photos")
+    ctx.run(f"{manage} migrate --no-input")
+
+    print("Creating superuser account")
+    create_superuser(ctx, manual=manual)
+
+    print("Rebuilding stylesheets")
+    with ctx.cd(os.path.join('static', 'styles')):
+        ctx.run("sass --update .:.")
+
+    print("Collecting static files")
+    ctx.run(f"{manage} collectstatic --no-input")
+
+    print("Done!")
+
+
+@task
+def clean(ctx):
     prompt = "Removing files: are you sure? (Y/N) "
 
     if not input(prompt).upper().startswith('Y'):
@@ -28,18 +62,9 @@ def clean(ctx, manual=False):
     ctx.run("rm -rf temp/")
     ctx.run("rm -rf photos/migrations/")
 
-    manage = "pipenv run python manage.py"
-
-    ctx.run(f"{manage} makemigrations photos")
-    ctx.run(f"{manage} migrate")
-
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
-    django.setup()
-
-    if manual:
-        ctx.run(f"{manage} createsuperuser")
-    else:
-        print("Creating superuser account.")
-        create_superuser()
+    with ctx.cd(os.path.join('static', 'styles')):
+        ctx.run("rm -rf .sass-cache/")
+        ctx.run("rm -f *.css")
+        ctx.run("rm -f *.css.map")
 
     print("Done!")
