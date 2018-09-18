@@ -64,14 +64,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 ENABLE_REGISTRATION = False
 
+
 # Database
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'photos.db'),
-    }
-}
+if DEBUG:
+    filename = os.path.join(BASE_DIR, 'data', 'database_debug.json')
+else:
+    filename = os.path.join(BASE_DIR, 'data', 'database.json')
+
+with open(filename) as f:
+    default = json.loads(f.read())
+
+DATABASES = {'default': default}
 
 
 # Security
