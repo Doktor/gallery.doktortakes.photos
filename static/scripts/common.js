@@ -194,10 +194,11 @@ const KEY_L = 76;
 // Pagination: elements
 
 let Pagination = function(
-    container_el, items_per_page,
+    container_el, items_per_page, paginationSelector,
     {pages = 0, page = 0, save_history = true, load_required = false}) {
   this.containerEl = container_el;
   this.items_per_page = items_per_page;
+  this.paginationSelector = paginationSelector;
   this.pages = pages;
   this.page = page;
   this.save_history = save_history;
@@ -218,7 +219,7 @@ Pagination.prototype.add_dots_button = function(container) {
   el.innerText = '...';
   el.classList.add('page');
 
-  el.addEventListener('click', function(event) {
+  el.addEventListener('click', (event) => {
     let dots = event.target;
 
     let input = document.createElement('input');
@@ -283,7 +284,7 @@ Pagination.prototype.update_page_count = function(count) {
 };
 
 Pagination.prototype.add_buttons = function() {
-  let pagination = document.getElementsByClassName('pagination');
+  let pagination = document.querySelectorAll(this.paginationSelector);
 
   // Show/hide pagination containers
   for (let container of pagination) {

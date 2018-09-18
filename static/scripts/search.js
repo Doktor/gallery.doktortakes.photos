@@ -119,7 +119,7 @@ function get_search_query_string(page) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const pagination = new Pagination(photos, ITEMS_PER_PAGE, {load_required: true});
+  const pagination = new Pagination(photos, ITEMS_PER_PAGE, '.pagination', {load_required: true});
 
   function update_results(callback, query = '') {
     let url = API_SEARCH + (query || get_search_query_string(pagination.page));

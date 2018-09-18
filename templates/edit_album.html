@@ -38,6 +38,8 @@
 
   <div id="api"
        data-album-path="{{ album.get_path }}"
+       data-count="{{ photos.count }}"
+       data-photos-per-page="{{ photos_per_page }}"
        data-api-album="{% url 'api_album' album.get_path %}"
        data-api-photo="{% url 'api_photo' album.get_path %}"
        data-api-edit-list="{% url 'edit_albums' %}"></div>
@@ -131,14 +133,17 @@
     {% endif %}
 
     <!-- Photos -->
+    <div class="pagination pagination-photos"></div>
     <section class="photos">
       {% for p in photos %}
       <div class="wrapper" data-md5="{{ p.md5 }}">
         <div class="photo">
           {% if p.square_thumbnail %}
-          <img src="{{ p.square_thumbnail.url }}">
+          <img class="not-loaded"
+               data-src="{{ p.square_thumbnail.url }}"
+               src="{% static 'images/loading.svg' %}">
           {% else %}
-          <div class="no-thumbnail">
+          <div class="loaded no-thumbnail">
             <img src="{% static "images/square-placeholder.png" %}">
             <div class="note">No thumbnail</div>
           </div>
@@ -147,6 +152,7 @@
       </div>
       {% endfor %}
     </section>
+    <div class="pagination pagination-photos"></div>
     <!-- End photos -->
 
     {% if album.children.count %}

@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
   let pages = Math.ceil(COUNT / ITEMS_PER_PAGE);
 
   const pagination = new Pagination(
-    photos, ITEMS_PER_PAGE, {pages: pages, page: page, save_history: true});
+    photos, ITEMS_PER_PAGE, '.pagination',
+    {pages: pages, page: page, save_history: true});
   pagination.setup();
 });
 

@@ -217,6 +217,7 @@ def edit_album(request, path):
         'album': album,
         'photos': album.photos.all(),
         'parents': get_albums_from_path(path)[:-1],
+        'photos_per_page': ITEMS_PER_PAGE,
 
         'albums': Album.objects.all().order_by('-start'),
         'items_per_page': 6,

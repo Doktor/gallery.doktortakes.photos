@@ -177,7 +177,7 @@ function update_total() {
 }
 
 function update_count() {
-  let selected = document.getElementsByClassName('selected');
+  let selected = photos.querySelectorAll('.selected');
   selectedCount.innerText = selected.length;
 }
 
@@ -241,7 +241,22 @@ document.addEventListener('DOMContentLoaded', function() {
 $('album-delete-submit').addEventListener('click', delete_album);
 
 
-// Search & pagination
+// Pagination for photos
+
+document.addEventListener('DOMContentLoaded', function() {
+  const photo_count = parseInt(api.dataset.count);
+  const photos_per_page = parseInt(api.dataset.photosPerPage);
+
+  let pages = Math.ceil(photo_count / photos_per_page);
+
+  const pagination = new Pagination(
+    photos, photos_per_page, '.pagination.pagination-photos',
+    {pages: pages, page: 1, save_history: false});
+  pagination.setup();
+});
+
+
+// Search & pagination for album search
 
 const modal = $('album-set-parent-modal');
 
@@ -257,11 +272,12 @@ const ITEMS_PER_PAGE = parseInt(SEARCH.dataset.itemsPerPage);
 document.addEventListener('DOMContentLoaded', function() {
   let pages = Math.ceil(COUNT / ITEMS_PER_PAGE);
 
-  let pagination = new Pagination(albumsEl, ITEMS_PER_PAGE,
+  const pagination = new Pagination(
+    albumsEl, ITEMS_PER_PAGE, '.pagination:not(.pagination-photos)',
     {pages: pages, page: 1, save_history: false});
   pagination.setup();
 
-  let search = new Search(pagination, albumsEl, COUNT,
+  const search = new Search(pagination, albumsEl, COUNT,
     countEl, searchEl, noResultsEl);
 });
 
