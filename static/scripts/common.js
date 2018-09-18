@@ -230,8 +230,14 @@ Pagination.prototype.add_dots_button = function(container) {
     });
 
     input.addEventListener('keyup', (event) => {
-      if (event.keyCode === KEY_ENTER && is_number(input.value)) {
-        this.change_page(parseInt(input.value));
+      if (event.keyCode !== KEY_ENTER || !is_number(input.value)) {
+        return;
+      }
+      
+      let page = parseInt(input.value);
+
+      if (page > 0 && page <= this.pages) {
+        this.change_page(page);
       }
     });
 
