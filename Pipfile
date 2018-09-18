@@ -10,9 +10,10 @@ ExifRead = "*"
 Pillow = "*"
 django-storages = "*"
 invoke = "*"
-boto3 = "*"
+boto3 = "==1.9.5"
 lxml = "*"
 celery = {version = "*", extras = ["redis"]}
+psycopg2-binary = "*"
 
 [dev-packages]
 
