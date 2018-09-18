@@ -204,11 +204,5 @@
 
 {% block scripts %}
 <script src="{% static "lib/dropzone/dropzone.js" %}"></script>
-<script>
-  Dropzone.autoDiscover = false;
-  let dropzone = new Dropzone("#dropzone", {
-    paramName: 'files'
-  });
-</script>
 <script src="{% static 'scripts/edit-album.js' %}"></script>
 {% endblock %}

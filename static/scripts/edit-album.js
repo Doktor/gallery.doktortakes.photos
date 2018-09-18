@@ -264,3 +264,10 @@ document.addEventListener('DOMContentLoaded', function() {
   let search = new Search(pagination, albumsEl, COUNT,
     countEl, searchEl, noResultsEl);
 });
+
+
+Dropzone.autoDiscover = false;
+const dropzone = new Dropzone("#dropzone", {
+  paramName: 'files',
+  parallelUploads: 3,
+});
