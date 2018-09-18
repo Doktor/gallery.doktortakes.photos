@@ -1,6 +1,5 @@
 let $ = document.getElementById.bind(document);
 
-const flashContainer = $('flash');
 const form = $('album-form');
 
 const api = $('api');

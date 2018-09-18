@@ -12,14 +12,6 @@
 {% endblock %}
 
 {% block content %}
-  {% if messages %}
-  <section id="messages">
-    {% for m in messages %}
-      <div class="message {{ m.tags }}">{{ m }}</div>
-    {% endfor %}
-  </section>
-  {% endif %}
-
   {% if featured %}
     <h2>Featured</h2>
 

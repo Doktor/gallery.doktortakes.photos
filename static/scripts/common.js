@@ -129,9 +129,11 @@ function send_request(method, url, onSuccess, onError,
 
 // Notifications
 
+const messages = document.getElementById('messages');
+
 function flash(message) {
-  for (let i = 0; i < flashContainer.children.length; i++) {
-    let item = flashContainer.children[i];
+  for (let i = 0; i < messages.children.length; i++) {
+    let item = messages.children[i];
 
     if (item.children[0].innerText === message) {
       let raw = item.children[1].innerText;
@@ -148,28 +150,28 @@ function flash(message) {
     }
   }
 
-  let flashEl = document.createElement('div');
-  flashEl.classList.add('flash');
+  let el = document.createElement('div');
+  el.classList.add('message');
 
   let text = document.createElement('span');
   text.innerText = message;
-  flashEl.appendChild(text);
+  el.appendChild(text);
 
   let repeat = document.createElement('span');
-  flashEl.appendChild(repeat);
+  el.appendChild(repeat);
 
-  flashEl.addEventListener('click', function() {
-    flashEl.classList.remove('visible');
+  el.addEventListener('click', function() {
+    el.classList.remove('visible');
 
     setTimeout(function() {
-      flashEl.parentNode.removeChild(flashEl);
+      el.parentNode.removeChild(el);
     }, 300);
   });
 
-  flashContainer.appendChild(flashEl);
+  messages.appendChild(el);
 
   setTimeout(function() {
-    flashEl.classList.add('visible');
+    el.classList.add('visible');
   }, 100);
 }
 

@@ -30,6 +30,13 @@
   </ul>
 </nav>
 {% endblock %}
+
+<div id="messages">
+  {% for m in messages %}
+  <div class="message {{ m.tags }}">{{ m }}</div>
+  {% endfor %}
+</div>
+
 {% block content %}{% endblock %}
 <script src="{% static 'scripts/common.js' %}"></script>
 {% block scripts %}{% endblock %}

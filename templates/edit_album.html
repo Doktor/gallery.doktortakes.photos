@@ -36,16 +36,6 @@
     {% endspaceless %}
   </header>
 
-  {% if messages %}
-  <section id="messages">
-    {% for m in messages %}
-      <div class="message {{ m.tags }}">{{ m }}</div>
-    {% endfor %}
-  </section>
-  {% endif %}
-
-  <div id="flash"></div>
-
   <div id="api"
        data-album-path="{{ album.get_path }}"
        data-api-album="{% url 'api_album' album.get_path %}"

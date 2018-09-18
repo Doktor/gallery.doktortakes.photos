@@ -11,29 +11,21 @@
   <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
 {% endblock %}
 
-{% block nav %}{% endblock %}
+{% block nav %}
+<header>
+  <h1 class="logo large">Doktor Takes Photos</h1>
 
-{% block content %}
-  <header>
-    <h1 class="logo large">Doktor Takes Photos</h1>
-
-    {% if tagline %}
-    <h2 id="tagline">"{{ tagline }}"</h2>
-    {% endif %}
-
-    <ul class="navlinks">
-      {% include "_navlinks.html" %}
-    </ul>
-  </header>
-
-  {% if messages %}
-  <section id="messages">
-    {% for m in messages %}
-      <div class="message {{ m.tags }}">{{ m }}</div>
-    {% endfor %}
-  </section>
+  {% if tagline %}
+  <h2 id="tagline">"{{ tagline }}"</h2>
   {% endif %}
 
+  <ul class="navlinks">
+    {% include "_navlinks.html" %}
+  </ul>
+</header>
+{% endblock %}
+
+{% block content %}
   <hr>
 
   {% if albums %}

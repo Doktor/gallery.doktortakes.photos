@@ -25,16 +25,6 @@
     <h2>Create new album</h2>
   </header>
 
-  {% if messages %}
-  <section id="messages">
-    {% for m in messages %}
-      <div class="message {{ m.tags }}">{{ m }}</div>
-    {% endfor %}
-  </section>
-  {% endif %}
-
-  <div id="flash"></div>
-
   <div id="api" data-api-album="{% url 'api_new_album' %}"></div>
 
   <div id="album-form-container" class="new">
