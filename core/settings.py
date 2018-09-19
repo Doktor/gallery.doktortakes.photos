@@ -134,7 +134,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static.1')
 STATIC_URL = '/static/'
 
 # Toggle local/remote storage for media files
-LOCAL_STORAGE = True
+LOCAL_STORAGE = False
 
 if LOCAL_STORAGE:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
