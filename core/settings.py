@@ -78,6 +78,45 @@ with open(filename) as f:
 DATABASES = {'default': default}
 
 
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[{asctime}] {levelname} {message}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console_debug': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+            'filters': ['require_debug_true'],
+        },
+        'gunicorn': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'gunicorn'],
+            'propagate': True,
+        },
+    }
+}
+
+
 # Security
 
 if not DEBUG:
