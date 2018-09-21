@@ -1,6 +1,4 @@
-let $ = document.getElementById.bind(document);
-
-const api = $('api');
+const api = document.getElementById('api');
 const photos = document.querySelector('.photos');
 
 // Pagination
@@ -9,12 +7,12 @@ const COUNT = parseInt(api.dataset.count);
 const ITEMS_PER_PAGE = parseInt(api.dataset.itemsPerPage);
 
 document.addEventListener('DOMContentLoaded', function() {
-  let page = get_page_number();
+  let page = getPageNumber();
   let pages = Math.ceil(COUNT / ITEMS_PER_PAGE);
 
   const pagination = new Pagination(
     photos, ITEMS_PER_PAGE, '.pagination',
-    {pages: pages, page: page, save_history: true});
+    {pages: pages, page: page, saveHistory: true});
   pagination.setup();
 });
 

@@ -52,15 +52,15 @@ const exif = {
 };
 
 
-function get_photo_query_string() {
-  return query_string({
+function getPhotoQueryString() {
+  return queryString({
     'md5': photo.dataset.md5,
   });
 }
 
 
 // Updates the primary photo
-function load_photo(url, history = true) {
+function loadPhoto(url, history = true) {
   let request = new XMLHttpRequest();
 
   request.onreadystatechange = function() {
@@ -116,11 +116,11 @@ function load_photo(url, history = true) {
       image.src = item.url;
 
       image.addEventListener('click', () => {
-        let qs = query_string({
+        let qs = queryString({
           'md5': item.md5,
         });
 
-        load_photo(API_GET + qs);
+        loadPhoto(API_GET + qs);
       });
 
       // Index
@@ -161,11 +161,11 @@ document.addEventListener('keyup', function(e) {
     case KEY_LEFT:
     case KEY_RIGHT:
       e.preventDefault();
-      return load_photo(base + query_string({'md5': photo.dataset.md5}));
+      return loadPhoto(base + queryString({'md5': photo.dataset.md5}));
     case KEY_UP:
     case KEY_DOWN:
       e.preventDefault();
-      return load_photo(base);
+      return loadPhoto(base);
   }
 });
 
@@ -177,7 +177,7 @@ const photoswipe = document.getElementById('pswp');
 const items = [];
 
 // Loads photos from the API
-function load_photos(url) {
+function loadPhotos(url) {
   let request = new XMLHttpRequest();
 
   request.onreadystatechange = function() {
@@ -200,7 +200,7 @@ function load_photos(url) {
       })
     });
 
-    load_photoswipe();
+    loadPhotoSwipe();
   };
 
   request.open('GET', url, true);
@@ -208,7 +208,7 @@ function load_photos(url) {
 }
 
 // Loads the PhotoSwipe object
-function load_photoswipe() {
+function loadPhotoSwipe() {
   link.addEventListener('click', function(event) {
     event.preventDefault();
 
@@ -279,17 +279,17 @@ function load_photoswipe() {
     });
 
     gallery.listen('afterChange', function() {
-      let query = query_string({
+      let query = queryString({
         'md5': photo.dataset.md5,
       });
 
       // Swipe right
       if (startX < endX) {
-        return load_photo(API_PREVIOUS + query);
+        return loadPhoto(API_PREVIOUS + query);
       }
       // Swipe left
       if (startX > endX) {
-        return load_photo(API_NEXT + query);
+        return loadPhoto(API_NEXT + query);
       }
     });
 
@@ -316,33 +316,33 @@ const leftArrow = $('pswp__button--arrow--left')[0];
 const rightArrow = $('pswp__button--arrow--right')[0];
 
 leftArrow.addEventListener('click', function() {
-  let query = get_photo_query_string();
-  load_photo(API_PREVIOUS + query);
+  let query = getPhotoQueryString();
+  loadPhoto(API_PREVIOUS + query);
 });
 
 rightArrow.addEventListener('click', function() {
-  let query = get_photo_query_string();
-  load_photo(API_NEXT + query);
+  let query = getPhotoQueryString();
+  loadPhoto(API_NEXT + query);
 });
 
 
 // Load the primary photo
 document.addEventListener('DOMContentLoaded', function() {
-  let query = get_photo_query_string();
-  load_photo(API_GET + query, false);
+  let query = getPhotoQueryString();
+  loadPhoto(API_GET + query, false);
 });
 
 
 // Load the rest of the album
 document.addEventListener('DOMContentLoaded', function() {
-  let query = query_string({'path': photo.dataset.path});
+  let query = queryString({'path': photo.dataset.path});
 
   let base = API_GET_ALBUM_PHOTOS;
 
   if (base.endsWith('&')) {
-    load_photos(base + query.substring(1))
+    loadPhotos(base + query.substring(1))
   } else{
-    load_photos(base + query)
+    loadPhotos(base + query)
   }
 });
 

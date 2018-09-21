@@ -12,12 +12,12 @@ const ITEMS_PER_PAGE = parseInt(SEARCH.dataset.itemsPerPage);
 // Search & pagination
 
 document.addEventListener('DOMContentLoaded', function() {
-  let page = get_page_number();
+  let page = getPageNumber();
   let pages = Math.ceil(COUNT / ITEMS_PER_PAGE);
 
   let pagination = new Pagination(
     albumsEl, ITEMS_PER_PAGE, '.pagination',
-    {pages: pages, page: page, save_history: false});
+    {pages: pages, page: page, saveHistory: false});
   pagination.setup();
 
   let search = new Search(

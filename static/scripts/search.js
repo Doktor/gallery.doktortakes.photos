@@ -12,7 +12,7 @@ const ITEMS_PER_PAGE = api.dataset.itemsPerPage;
 
 // Update results
 
-function create_photo(p) {
+function createPhoto(p) {
   let wrapper = document.createElement('div');
   wrapper.classList.add('wrapper');
 
@@ -34,7 +34,7 @@ function create_photo(p) {
   return wrapper;
 }
 
-function create_empty_wrapper() {
+function createEmptyWrapper() {
   let el = document.createElement('div');
   el.classList.add('wrapper');
   el.classList.add('empty');
@@ -45,7 +45,7 @@ function create_empty_wrapper() {
 // Pagination
 
 // Populates the search form from a query string
-function populate_form(query) {
+function populateForm(query) {
   query = query.substring(1, query.length);
 
   let items = query.split('&');
@@ -84,7 +84,7 @@ function populate_form(query) {
   }
 }
 
-function get_search_query_string(page) {
+function getSearchQueryString(page) {
   let data = new FormData(form);
   let params = {};
 
@@ -107,22 +107,22 @@ function get_search_query_string(page) {
     }
   }
 
-  let query = query_string(params);
+  let query = queryString(params);
 
   let url = query + '#page-' + page;
   history.replaceState(undefined, undefined, url);
 
   params['page'] = page;
-  query = query_string(params);
+  query = queryString(params);
 
   return query;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const pagination = new Pagination(photos, ITEMS_PER_PAGE, '.pagination', {load_required: true});
+  const pagination = new Pagination(photos, ITEMS_PER_PAGE, '.pagination', {loadRequired: true});
 
-  function update_results(callback, query = '') {
-    let url = API_SEARCH + (query || get_search_query_string(pagination.page));
+  function updateResults(callback, query = '') {
+    let url = API_SEARCH + (query || getSearchQueryString(pagination.page));
 
     let request = new XMLHttpRequest();
 
@@ -141,13 +141,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Results
       for (let photo of response.photos) {
-        let el = create_photo(photo);
+        let el = createPhoto(photo);
         fragment.appendChild(el);
       }
 
       // Fill empty slots
       for (let i = response.photos.length; i < ITEMS_PER_PAGE; i++) {
-        let el = create_empty_wrapper();
+        let el = createEmptyWrapper();
         fragment.appendChild(el);
       }
 
@@ -165,16 +165,16 @@ document.addEventListener('DOMContentLoaded', function() {
     request.send();
   }
 
-  pagination.load_new_items = update_results;
+  pagination.loadNewItems = updateResults;
 
-  submit.addEventListener('click', () => { pagination.change_page(1); console.log(2); });
+  submit.addEventListener('click', () => { pagination.changePage(1); console.log(2); });
 
   if (window.location.search !== '') {
-    populate_form(window.location.search);
+    populateForm(window.location.search);
 
-    let page = get_page_number();
-    pagination.change_page(page);
+    let page = getPageNumber();
+    pagination.changePage(page);
   } else {
-    pagination.change_page(1);
+    pagination.changePage(1);
   }
 });

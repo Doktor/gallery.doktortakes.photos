@@ -29,7 +29,7 @@ String.prototype.format = function() {
 
 // Utility functions
 
-function query_string(params) {
+function queryString(params) {
   let escape = encodeURIComponent;
   let query = Object.keys(params)
     .map(function(key) {
@@ -44,7 +44,7 @@ function query_string(params) {
   return '?' + query;
 }
 
-function get_cookie(name) {
+function getCookie(name) {
   let value = null;
 
   if (document.cookie && document.cookie !== '') {
@@ -63,17 +63,17 @@ function get_cookie(name) {
   return value;
 }
 
-function is_number(n) {
+function isNumber(n) {
   return n.match(/^[0-9]+$/) !== null;
 }
 
-function get_page_number() {
+function getPageNumber() {
   let match = window.location.hash.match(/#page-([1-9][0-9]*)/);
   return (match === null) ? 1 : parseInt(match[1]);
 }
 
-function parse_form(formEl) {
-  let data = new FormData(formEl);
+function parseForm(el) {
+  let data = new FormData(el);
   let params = {};
 
   // Parse form data
@@ -94,8 +94,8 @@ function parse_form(formEl) {
   return params;
 }
 
-function send_request(method, url, onSuccess, onError,
-                      data = null, useCSRF = false) {
+function sendRequest(method, url, onSuccess, onError,
+                     data = null, useCSRF = false) {
   let request = new XMLHttpRequest();
 
   request.onreadystatechange = function () {
@@ -115,7 +115,7 @@ function send_request(method, url, onSuccess, onError,
   request.open(method, url, true);
 
   if (useCSRF) {
-    request.setRequestHeader("X-CSRFToken", get_cookie("csrftoken"));
+    request.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
   }
 
   if (data !== null) {
@@ -194,27 +194,27 @@ const KEY_L = 76;
 // Pagination: elements
 
 let Pagination = function(
-    container_el, items_per_page, paginationSelector,
-    {pages = 0, page = 0, save_history = true, load_required = false}) {
-  this.containerEl = container_el;
-  this.items_per_page = items_per_page;
+    containerEl, itemsPerPage, paginationSelector,
+    {pages = 0, page = 0, saveHistory = true, loadRequired = false}) {
+  this.containerEl = containerEl;
+  this.itemsPerPage = itemsPerPage;
   this.paginationSelector = paginationSelector;
   this.pages = pages;
   this.page = page;
-  this.save_history = save_history;
-  this.load_required = load_required;
+  this.saveHistory = saveHistory;
+  this.loadRequired = loadRequired;
 
-  if (this.load_required) {
-    this.load_new_items = function() {};
+  if (this.loadRequired) {
+    this.loadNewItems = function() {};
   }
 };
 
 Pagination.prototype.setup = function() {
-  this.add_buttons(this.pages);
-  this.change_page(this.page, true);
+  this.addButtons(this.pages);
+  this.changePage(this.page, true);
 };
 
-Pagination.prototype.add_dots_button = function(container) {
+Pagination.prototype.addDotsButton = function(container) {
   let el = document.createElement('span');
   el.innerText = '...';
   el.classList.add('page');
@@ -230,14 +230,14 @@ Pagination.prototype.add_dots_button = function(container) {
     });
 
     input.addEventListener('keyup', (event) => {
-      if (event.keyCode !== KEY_ENTER || !is_number(input.value)) {
+      if (event.keyCode !== KEY_ENTER || !isNumber(input.value)) {
         return;
       }
-      
+
       let page = parseInt(input.value);
 
       if (page > 0 && page <= this.pages) {
-        this.change_page(page);
+        this.changePage(page);
       }
     });
 
@@ -248,18 +248,18 @@ Pagination.prototype.add_dots_button = function(container) {
   container.appendChild(el);
 };
 
-Pagination.prototype.add_page_button = function(page, container) {
+Pagination.prototype.addPageButton = function(page, container) {
   let el = document.createElement('span');
   el.classList.add('page');
   el.innerText = page.toString();
   el.dataset.page = page.toString();
 
-  el.addEventListener('click', () => { this.change_page(page); });
+  el.addEventListener('click', () => { this.changePage(page); });
 
   container.appendChild(el);
 };
 
-Pagination.prototype.create_text_button = function(text) {
+Pagination.prototype.createTextButton = function(text) {
   let el = document.createElement('span');
   el.innerText = text;
   el.classList.add('page');
@@ -272,11 +272,11 @@ Pagination.prototype.create_text_button = function(text) {
     switch (el.dataset.page) {
       case 'prev':
         if (current === 1) { return; }
-        this.change_page(current - 1);
+        this.changePage(current - 1);
         break;
       case 'next':
         if (current === pages) { return; }
-        this.change_page(current + 1);
+        this.changePage(current + 1);
         break;
     }
   });
@@ -284,12 +284,12 @@ Pagination.prototype.create_text_button = function(text) {
   return el;
 };
 
-Pagination.prototype.update_page_count = function(count) {
-  this.pages = Math.ceil(count / this.items_per_page);
-  this.change_page(this.pages === 0 ? 0 : 1, true, true);
+Pagination.prototype.updatePageCount = function(count) {
+  this.pages = Math.ceil(count / this.itemsPerPage);
+  this.changePage(this.pages === 0 ? 0 : 1, true, true);
 };
 
-Pagination.prototype.add_buttons = function() {
+Pagination.prototype.addButtons = function() {
   let pagination = document.querySelectorAll(this.paginationSelector);
 
   // Show/hide pagination containers
@@ -306,27 +306,27 @@ Pagination.prototype.add_buttons = function() {
     c.innerHTML = '';
 
     if (last >= 10) {
-      this.add_page_button(1, c);
+      this.addPageButton(1, c);
 
       // 1 ... 3 4 [5] 6 7 ... 20
       // 1 ... 14 15 [16] 17 18 ... 20
       if (current >= 5 && current <= last - 4) {
-        this.add_dots_button(c);
+        this.addDotsButton(c);
 
         for (let page = current - 2; page <= current + 2; page++) {
-          this.add_page_button(page, c);
+          this.addPageButton(page, c);
         }
 
-        this.add_dots_button(c);
+        this.addDotsButton(c);
       }
 
       // 1 ... 15 16 [17] 18 19 20
       // 1 ... 16 17 [18] 19 20
       else if (current > last - 4) {
-        this.add_dots_button(c);
+        this.addDotsButton(c);
 
         for (let page = current - 2; page < last; page++) {
-          this.add_page_button(page, c);
+          this.addPageButton(page, c);
         }
       }
 
@@ -334,27 +334,27 @@ Pagination.prototype.add_buttons = function() {
       // 1 2 3 [4] 5 6 ... 20
       else if (current <= 4) {
         for (let page = 2; page <= current + 2; page++) {
-          this.add_page_button(page, c);
+          this.addPageButton(page, c);
         }
 
-        this.add_dots_button(c);
+        this.addDotsButton(c);
       }
 
-      this.add_page_button(last, c);
+      this.addPageButton(last, c);
     }
 
     else {
       for (let page = 1; page <= last; page++) {
-        this.add_page_button(page, c);
+        this.addPageButton(page, c);
       }
     }
 
     // Previous and next buttons
     if (last >= 2) {
-      let prev = this.create_text_button('Prev');
+      let prev = this.createTextButton('Prev');
       c.insertBefore(prev, c.firstChild);
 
-      let next = this.create_text_button('Next');
+      let next = this.createTextButton('Next');
       c.appendChild(next);
     }
   }
@@ -362,24 +362,24 @@ Pagination.prototype.add_buttons = function() {
 
 // Pagination: implementation
 
-Pagination.prototype.change_page = function(page, force = false, ignore_hidden = false) {
+Pagination.prototype.changePage = function(page, force = false, ignoreHidden = false) {
   if (page === this.page && !force) { return; }
 
   this.page = page;
 
-  if (this.load_required) {
-    this.load_new_items(() => {
-      this.add_buttons();
-      this.select_page();
+  if (this.loadRequired) {
+    this.loadNewItems(() => {
+      this.addButtons();
+      this.selectPage();
     });
   } else {
-    this.show_loaded_items(ignore_hidden);
-    this.add_buttons();
-    this.select_page();
+    this.showLoadedItems(ignoreHidden);
+    this.addButtons();
+    this.selectPage();
   }
 };
 
-Pagination.prototype.select_page = function() {
+Pagination.prototype.selectPage = function() {
   let selected = document.querySelectorAll('.page.selected');
   for (let item of selected) {
     item.classList.remove('selected');
@@ -392,13 +392,13 @@ Pagination.prototype.select_page = function() {
     item.classList.add('selected');
   }
 
-  if (this.save_history) {
+  if (this.saveHistory) {
     let url = document.location.search + '#page-' + this.page;
     history.replaceState(undefined, undefined, url);
   }
 };
 
-Pagination.prototype.show_loaded_items = function(ignore_hidden = false) {
+Pagination.prototype.showLoadedItems = function(ignoreHidden = false) {
   if (this.page === 0) {
     for (let wrapper of this.containerEl.children) {
       wrapper.classList.add('hidden');
@@ -407,11 +407,11 @@ Pagination.prototype.show_loaded_items = function(ignore_hidden = false) {
     return;
   }
 
-  let start = this.items_per_page * (this.page - 1);
-  let end = start + this.items_per_page - 1;
+  let start = this.itemsPerPage * (this.page - 1);
+  let end = start + this.itemsPerPage - 1;
 
   Array.from(this.containerEl.children).forEach((wrapper, i) => {
-    if (ignore_hidden && wrapper.classList.contains('hidden')) { return; }
+    if (ignoreHidden && wrapper.classList.contains('hidden')) { return; }
 
     let image = wrapper.querySelector('img');
 
@@ -462,7 +462,7 @@ let Search = function(pagination, elements, count,
       let total = this.count - hidden;
       let word = total === 1 ? 'album' : 'albums';
 
-      this.pagination.update_page_count(total);
+      this.pagination.updatePageCount(total);
       this.countEl.innerText = "{0} {1}".format(total, word);
       this.noResultsEl.classList.toggle('hidden', total !== 0)
     }, SEARCH_DELAY);

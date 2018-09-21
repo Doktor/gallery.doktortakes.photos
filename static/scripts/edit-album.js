@@ -18,7 +18,7 @@ const API_EDIT_LIST = api.dataset.apiEditList;
 
 
 $('album-form-save').addEventListener('click', () => {
-  let data = parse_form(form);
+  let data = parseForm(form);
 
   function onError(response) {
     flash(response.error);
@@ -41,7 +41,7 @@ $('album-form-save').addEventListener('click', () => {
     window.history.replaceState('', response.title, response.edit_url);
   }
 
-  send_request('PUT', API_ALBUM, onSuccess, onError, data, true);
+  sendRequest('PUT', API_ALBUM, onSuccess, onError, data, true);
 });
 
 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function onError() {}
 
-  send_request('GET', API_ALBUM, onSuccess, onError);
+  sendRequest('GET', API_ALBUM, onSuccess, onError);
 });
 
 
@@ -125,34 +125,34 @@ $('change-cover').addEventListener('click', () => {
 
   let data = {md5: selected[0].dataset.md5};
 
-  send_request('PATCH', API_ALBUM, onSuccess, onError, data, true);
+  sendRequest('PATCH', API_ALBUM, onSuccess, onError, data, true);
 });
 
 
-function delete_photos() {
-  selected.forEach((el) => delete_photo(el));
+function deletePhotos() {
+  selected.forEach((el) => deletePhoto(el));
 }
 
-function delete_photo(el) {
+function deletePhoto(el) {
   function onError(response) {
     flash(response.error);
   }
 
   function onSuccess(response) {
     el.remove();
-    update_total();
-    update_count();
+    updateTotal();
+    updateCount();
 
     flash(response.message);
   }
 
   let params = {md5: el.dataset.md5};
-  let url = API_PHOTO + query_string(params);
+  let url = API_PHOTO + queryString(params);
 
-  send_request('DELETE', url, onSuccess, onError, null, true);
+  sendRequest('DELETE', url, onSuccess, onError, null, true);
 }
 
-function delete_album() {
+function deleteAlbum() {
   function onError(response) {
     flash(response.error);
   }
@@ -166,17 +166,17 @@ function delete_album() {
   }
 
   let params = {name: $('delete-album-name').value};
-  let url = API_ALBUM + query_string(params);
+  let url = API_ALBUM + queryString(params);
 
-  send_request('DELETE', url, onSuccess, onError, null, true);
+  sendRequest('DELETE', url, onSuccess, onError, null, true);
 }
 
 
-function update_total() {
+function updateTotal() {
   totalCount.innerText = photos.children.length;
 }
 
-function update_count() {
+function updateCount() {
   let selected = photos.querySelectorAll('.selected');
   selectedCount.innerText = selected.length;
 }
@@ -185,7 +185,7 @@ function select(el) {
   el.classList.add('selected');
   selected.push(el);
 
-  update_count();
+  updateCount();
 }
 
 function deselect(el) {
@@ -196,13 +196,13 @@ function deselect(el) {
     selected.splice(index, 1);
   }
 
-  update_count();
+  updateCount();
 }
 
 function invert(el) {
   !el.classList.contains('selected') ? select(el) : deselect(el);
 
-  update_count();
+  updateCount();
 }
 
 
@@ -234,24 +234,24 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (!(photos === null && subalbums.length === 0)) {
-    $('delete-photos').addEventListener('click', delete_photos);
+    $('delete-photos').addEventListener('click', deletePhotos);
   }
 });
 
-$('album-delete-submit').addEventListener('click', delete_album);
+$('album-delete-submit').addEventListener('click', deleteAlbum);
 
 
 // Pagination for photos
 
 document.addEventListener('DOMContentLoaded', function() {
-  const photo_count = parseInt(api.dataset.count);
-  const photos_per_page = parseInt(api.dataset.photosPerPage);
+  const photoCount = parseInt(api.dataset.count);
+  const photosPerPage = parseInt(api.dataset.photosPerPage);
 
-  let pages = Math.ceil(photo_count / photos_per_page);
+  let pages = Math.ceil(photoCount / photosPerPage);
 
   const pagination = new Pagination(
-    photos, photos_per_page, '.pagination.pagination-photos',
-    {pages: pages, page: 1, save_history: false});
+    photos, photosPerPage, '.pagination.pagination-photos',
+    {pages: pages, page: 1, saveHistory: false});
   pagination.setup();
 });
 
@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const pagination = new Pagination(
     albumsEl, ITEMS_PER_PAGE, '.pagination:not(.pagination-photos)',
-    {pages: pages, page: 1, save_history: false});
+    {pages: pages, page: 1, saveHistory: false});
   pagination.setup();
 
   const search = new Search(pagination, albumsEl, COUNT,

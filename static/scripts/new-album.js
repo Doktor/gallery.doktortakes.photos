@@ -15,11 +15,11 @@ $('album-form-save').addEventListener('click', () => {
     flash(response.message);
 
     setTimeout(function() {
-      window.location.href = response.redirect_url;
+      window.location.href = response.redirectUrl;
     }, 2000);
   }
 
-  let data = parse_form(form);
+  let data = parseForm(form);
 
-  send_request('POST', API_ALBUM, onSuccess, onError, data, true);
+  sendRequest('POST', API_ALBUM, onSuccess, onError, data, true);
 });
