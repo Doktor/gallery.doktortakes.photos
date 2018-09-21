@@ -113,6 +113,11 @@ LOGGING = {
             'handlers': ['console_debug', 'gunicorn'],
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['console_debug', 'gunicorn'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
     }
 }
 

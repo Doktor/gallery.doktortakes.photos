@@ -65,6 +65,8 @@ urlpatterns = [
          TemplateView.as_view(template_name='about.html'),
          name='about'),
 
+    path('admin/', admin.site.urls),
+
     path('copyright/',
          TemplateView.as_view(template_name='copyright.html'),
          name='copyright'),
@@ -84,7 +86,5 @@ urlpatterns = [
 
 
 if settings.DEBUG:
-    urlpatterns += [path('admin/', admin.site.urls)]
-
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

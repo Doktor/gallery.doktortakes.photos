@@ -3,10 +3,9 @@
 
 # Sensitive data
 data/
-
-# Database
 *.db
 *.bak
+*.pgsql
 
 # Media files
 media/
