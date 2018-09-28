@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.core.files import File
 
 from photos.settings import (
@@ -14,8 +15,8 @@ from io import BytesIO
 strptime = datetime.datetime.strptime
 
 
-def replace_square_thumbnail(photo: Photo):
-    sq = create_square_thumbnail(photo)
+def replace_square_thumbnail(photo: Photo, image):
+    sq = create_square_thumbnail(image)
 
     if photo.square_thumbnail:
         photo.square_thumbnail.delete(save=False)
@@ -23,19 +24,21 @@ def replace_square_thumbnail(photo: Photo):
     photo.square_thumbnail.save(photo.filename, File(sq), save=False)
 
 
-def replace_display_image(photo: Photo):
+def replace_display_image(photo: Photo, image):
     edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
 
-    im = create_display_image(photo, edge)
+    im, w, h = create_display_image(image, edge, photo.watermark)
 
     if photo.image:
         photo.image.delete(save=False)
 
+    photo.width = w
+    photo.height = h
     photo.image.save(photo.filename, File(im), save=False)
 
 
-def replace_thumbnail(photo: Photo):
-    tb = create_thumbnail(photo)
+def replace_thumbnail(photo: Photo, image):
+    tb = create_thumbnail(image)
 
     if photo.thumbnail:
         photo.thumbnail.delete(save=False)
@@ -44,14 +47,15 @@ def replace_thumbnail(photo: Photo):
 
 
 @shared_task
-def create_sidecar_images(pk):
-    photo = Photo.objects.get(pk=pk)
+def create_sidecar_images(pk: int):
+    photo: Photo = Photo.objects.get(pk=pk)
+    file = photo.get_original()
 
-    replace_square_thumbnail(photo)
-    replace_display_image(photo)
+    replace_square_thumbnail(photo, file)
+    replace_display_image(photo, file)
 
     if photo.rating >= 4:
-        replace_thumbnail(photo)
+        replace_thumbnail(photo, file)
 
     photo.file_size = format_file_size(photo.image.size)
 
@@ -59,12 +63,10 @@ def create_sidecar_images(pk):
     photo.save()
 
 
-def create_thumbnail(photo):
-    photo.original.open()
-
+def create_thumbnail(data: BytesIO) -> BytesIO:
     long, short = (2400 / 2, 1600 / 2)
 
-    image = PIL.Image.open(photo.original)
+    image = PIL.Image.open(data)
 
     if image.format != 'JPEG':
         image = image.convert('RGB')
@@ -81,15 +83,11 @@ def create_thumbnail(photo):
     data = BytesIO()
     image.save(data, 'JPEG', quality=80, optimize=True)
 
-    photo.original.close()
-
     return data
 
 
-def create_square_thumbnail(photo, size=(400, 400)):
-    photo.original.open()
-
-    image = PIL.Image.open(photo.original)
+def create_square_thumbnail(data: BytesIO, size=(400, 400)) -> BytesIO:
+    image = PIL.Image.open(data)
 
     if image.format != 'JPEG':
         image = image.convert('RGB')
@@ -119,8 +117,6 @@ def create_square_thumbnail(photo, size=(400, 400)):
     data = BytesIO()
     image.save(data, 'JPEG', quality=75, optimize=True)
 
-    photo.original.close()
-
     return data
 
 
@@ -129,10 +125,8 @@ RESAMPLE = PIL.Image.LANCZOS
 RATIOS = (3 / 2, 16 / 9, 2.35 / 1)
 
 
-def create_display_image(photo, edge):
-    photo.original.open()
-
-    image = PIL.Image.open(photo.original)
+def create_display_image(data: BytesIO, edge: int, wm) -> (BytesIO, int, int):
+    image = PIL.Image.open(data)
 
     # Preserve EXIF metadata
     try:
@@ -163,7 +157,7 @@ def create_display_image(photo, edge):
 
     # Add watermark
     if WATERMARKS_ENABLED:
-        watermark = WATERMARK_IMAGES.get((edge, photo.watermark), None)
+        watermark = WATERMARK_IMAGES.get((edge, wm), None)
 
         offset = int(WATERMARK_OFFSET * (edge / 2400))
 
@@ -181,6 +175,4 @@ def create_display_image(photo, edge):
     else:
         image.save(data, 'JPEG', quality=90)
 
-    photo.original.close()
-
-    return data
+    return data, width, height

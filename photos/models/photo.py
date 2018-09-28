@@ -1,6 +1,8 @@
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
+from django.core.files.uploadedfile import TemporaryUploadedFile, UploadedFile
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields.files import ImageFieldFile
@@ -12,16 +14,18 @@ from django.urls import reverse
 from photos.fields import JSONField
 from photos.settings import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, ITEMS_IN_FILMSTRIP,
-    COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK)
+    COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK, LONG, SHORT)
 from photos.models.utils import (
     CHUNK_SIZE, DATE_FORMAT, get_modified_time_utc)
 
 import datetime
 import exifread
 import os
+import PIL.Image
 import pytz
 from io import BytesIO
 from lxml import etree
+from typing import BinaryIO
 
 strptime = datetime.datetime.strptime
 
@@ -78,8 +82,8 @@ class Photo(models.Model):
     watermark = models.CharField(
         max_length=1, choices=COLOR_CHOICES, default=COLOR_WHITE, blank=True)
     image = models.ImageField(
-        upload_to=get_display_path, editable=False,
-        width_field='width', height_field='height',
+        upload_to=get_display_path,
+        blank=True, null=True, editable=False,
         verbose_name="Display image",
         help_text="Smaller image with watermark applied")
 
@@ -132,6 +136,14 @@ class Photo(models.Model):
 
     def get_absolute_url(self):
         return reverse('photo', args=[self.album.get_path(), self.md5])
+
+    def get_original(self):
+        file = cache.get(self.md5)
+
+        if file is None:
+            file = self.original.file
+
+        return file
 
     def get_path(self):
         return self.album.get_path() if self.album else DEFAULT_PATH
@@ -216,9 +228,9 @@ class Photo(models.Model):
 
 
 @receiver(pre_save, sender=Photo,
-          dispatch_uid='photos.models.parse_image_metadata')
-def parse_image_metadata(sender, instance, **kwargs):
-    photo = instance
+          dispatch_uid='photos.models.process_image_upload')
+def process_image_upload(sender, instance, **kwargs):
+    photo: Photo = instance
 
     try:
         Photo.objects.get(pk=photo.pk)
@@ -227,48 +239,58 @@ def parse_image_metadata(sender, instance, **kwargs):
     else:
         return
 
-    photo.original.open()
+    file = photo.get_original()
+    file.seek(0)
 
-    # EXIF data
-    exif = exifread.process_file(photo.original, details=False, debug=False)
+    # Check the image's dimensions and cancel the upload if it's too small
+    image = PIL.Image.open(file)
+
+    dim = image.width, image.height
+    long, short = max(*dim), min(*dim)
+
+    if long < LONG or short < SHORT:
+        raise ValidationError(
+            f"Image too small: minimum {LONG}x{SHORT} px, "
+            f"uploaded {long}x{short} px")
+
+    # Load EXIF data
+    file.seek(0)
+    exif = exifread.process_file(file, details=False, debug=False)
     photo.exif = {k: v.printable for k, v in exif.items()}
 
-    # XMP data
-    raw_data = BytesIO()
+    # Load XMP data
+    file.seek(0)
+    data = file.read()
 
-    for chunk in photo.original.chunks(chunk_size=CHUNK_SIZE):
-        raw_data.write(chunk)
+    start = data.find(XMP_START)
+    end = data.find(XMP_END)
 
-    with raw_data as f:
-        data = f.read()
+    if start == -1 or end == -1:
+        pass
+    else:
+        xml = data[start:end + len(XMP_END)].decode('utf-8')
+        root = etree.fromstring(xml)
 
-        start = data.find(XMP_START)
-        end = data.find(XMP_END)
+        element = root.xpath('.//rdf:Description', namespaces=NS)[0]
 
-        if start == -1 or end == -1:
-            pass
+        try:
+            rating = element.xpath('@xmp:Rating', namespaces=NS)[0]
+            photo.rating = int(rating)
+        except IndexError:
+            photo.rating = 0
+
+        try:
+            label = element.xpath('@xmp:Label', namespaces=NS)[0].lower()
+        except IndexError:
+            photo.watermark = COLOR_NONE
         else:
-            xml = data[start:end + len(XMP_END)].decode('utf-8')
-            root = etree.fromstring(xml)
+            photo.watermark = \
+                (COLOR_BLACK if label == 'green' else COLOR_WHITE)
 
-            element = root.xpath('.//rdf:Description', namespaces=NS)[0]
-
-            try:
-                rating = element.xpath('@xmp:Rating', namespaces=NS)[0]
-                photo.rating = int(rating)
-            except IndexError:
-                photo.rating = 0
-
-            try:
-                label = element.xpath('@xmp:Label', namespaces=NS)[0].lower()
-            except IndexError:
-                photo.watermark = COLOR_NONE
-            else:
-                photo.watermark = \
-                    (COLOR_BLACK if label == 'green' else COLOR_WHITE)
+    file.seek(0)
 
     # Timestamps
-    modified = get_modified_time_utc(photo.original)
+    modified = get_modified_time_utc(file)
 
     if photo.album is not None:
         tz_name = photo.album.timezone
@@ -289,16 +311,18 @@ def parse_image_metadata(sender, instance, **kwargs):
     else:
         photo.edited = modified
 
-    photo.original.close()
+    # Save the image file
+    file.seek(0)
+    photo.original.save(file.name, File(file), save=False)
 
 
 @receiver(post_save, sender=Photo,
           dispatch_uid='photos.models.create_sidecar_images')
 def create_sidecar_images(sender, instance, created, **kwargs):
-    photo = instance
-
     if not created:
         return
+
+    photo = instance
 
     from photos.tasks import create_sidecar_images
     create_sidecar_images.delay(photo.pk)

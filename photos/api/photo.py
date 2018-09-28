@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -6,12 +7,13 @@ from django.views.decorators.http import require_GET, require_POST
 
 import datetime
 import pytz
+from io import BytesIO
 
 from photos.api.utils import (
     APIError, APIView, get_photo_from_request, api_wrapper)
-from photos.models import Photo
-from photos.models.utils import generate_md5_hash
-from photos.settings import ITEMS_PER_PAGE, LONG, SHORT
+from photos.models.photo import Photo
+from photos.models.utils import generate_md5_hash, CHUNK_SIZE
+from photos.settings import ITEMS_PER_PAGE
 from photos.views import get_album_by_path, get_photo
 
 
@@ -100,6 +102,7 @@ def upload_photo(request, path):
         p = Photo()
         p.album = get_album_by_path(path)
 
+        # Check if this image already exists
         md5 = generate_md5_hash(file)
 
         try:
@@ -110,16 +113,15 @@ def upload_photo(request, path):
             raise APIError(f"Duplicate file: {md5}")
 
         p.md5 = md5
-        p.original.save(file.name, file, save=False)
 
-        dim = p.original.width, p.original.height
-        long, short = max(*dim), min(*dim)
+        data = BytesIO()
+        data.name = file.name
 
-        if long < LONG or short < SHORT:
-            p.original.delete(save=False)
-            raise APIError(
-                f"Image too small: minimum {LONG}x{SHORT} px, "
-                f"uploaded {long}x{short} px")
+        for chunk in file.chunks(chunk_size=CHUNK_SIZE):
+            data.write(chunk)
+
+        # Expires after 24 hours
+        cache.set(md5, data, 60 * 60 * 24)
 
         p.save()
 

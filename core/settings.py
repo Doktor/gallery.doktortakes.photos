@@ -78,6 +78,16 @@ with open(filename) as f:
 DATABASES = {'default': default}
 
 
+# Caching
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache/')
+    }
+}
+
+
 # Logging
 
 LOGGING = {

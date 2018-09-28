@@ -87,7 +87,7 @@ class PhotoAdmin(admin.ModelAdmin):
 
     def preview(self, photo):
         return format_html('<a href="{}"><img height="300" src="{}"></a>',
-                           photo.original.url, photo.image.url)
+                           photo.image.url, photo.image.url)
 
 
 class PanoramaAdmin(admin.ModelAdmin):
