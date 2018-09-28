@@ -101,7 +101,7 @@ class AlbumView(LoginRequiredMixin, APIView):
 
         return JsonResponse({
             'message': "Album created successfully. Redirecting...",
-            'redirect_url': album.get_edit_url(),
+            'redirect': album.get_edit_url(),
         })
 
     def put(self, request, path):

@@ -15,7 +15,7 @@ $('album-form-save').addEventListener('click', () => {
     flash(response.message);
 
     setTimeout(function() {
-      window.location.href = response.redirectUrl;
+      window.location.href = response.redirect;
     }, 2000);
   }
 
