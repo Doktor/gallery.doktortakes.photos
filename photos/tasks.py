@@ -63,8 +63,42 @@ def create_sidecar_images(pk: int):
     photo.save()
 
 
-def create_thumbnail(data: BytesIO) -> BytesIO:
-    long, short = (2400 / 2, 1600 / 2)
+def round_all(*nums):
+    return (int(round(n)) for n in nums)
+
+
+def thumbnail(image, size):
+    original_w, original_h = image.size
+    original_ratio = original_w / original_h
+
+    target_w, target_h = size
+    target_ratio = target_w / target_h
+
+    # Too tall: crop top/bottom
+    if target_ratio > original_ratio:
+        scale = target_w / original_w
+        new_h = target_h / scale
+
+        top = (original_h - new_h) / 2
+        bottom = top + new_h
+
+        image = image.crop(round_all(0, top, original_w, bottom))
+
+    # Too wide: crop left/right
+    elif target_ratio < original_ratio:
+        scale = target_h / original_h
+        new_w = target_w / scale
+
+        left = (original_w - new_w) / 2
+        right = left + new_w
+
+        image = image.crop(round_all(left, 0, right, original_h))
+
+    return image.resize(size, PIL.Image.LANCZOS)
+
+
+def create_thumbnail(data: BytesIO, size=(1200, 800)) -> BytesIO:
+    long, short = size
 
     image = PIL.Image.open(data)
 
@@ -73,12 +107,14 @@ def create_thumbnail(data: BytesIO) -> BytesIO:
 
     w, h = image.size
 
-    if w >= h:
+    if w > h:
         size = (long, short)
     elif w < h:
         size = (short, long)
+    else:
+        size = (long, long)
 
-    image.thumbnail(size)
+    image = thumbnail(image, size)
 
     data = BytesIO()
     image.save(data, 'JPEG', quality=80, optimize=True)
@@ -92,27 +128,7 @@ def create_square_thumbnail(data: BytesIO, size=(400, 400)) -> BytesIO:
     if image.format != 'JPEG':
         image = image.convert('RGB')
 
-    w, h = image.size
-
-    if w > h:
-        x1 = 0.5 * w - 0.5 * h
-        y1 = 0
-        x2 = 0.5 * w + 0.5 * h
-        y2 = h
-    elif w < h:
-        x1 = 0
-        y1 = 0.5 * h - 0.5 * w
-        x2 = w
-        y2 = 0.5 * h + 0.5 * w
-    elif w == h:
-        x1 = 0
-        x2 = w
-        y1 = 0
-        y2 = h
-
-    bounds = map(int, (x1, y1, x2, y2))
-    image = image.crop(bounds)
-    image.thumbnail(size)
+    image = thumbnail(image, size)
 
     data = BytesIO()
     image.save(data, 'JPEG', quality=75, optimize=True)
