@@ -282,52 +282,57 @@ $logo: 2.4rem;
 
     @include fade();
   }
+}
 
-  .album {
-    border: 1px solid $borderColor;
-    position: relative;
+.album {
+  border: 1px solid $borderColor;
+  position: relative;
 
-    img {
-      width: 100%;
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  // Title container
+  .title {
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(20, 20, 20, 0.8);
+    width: 100%;
+  }
+
+  // Title
+  .title div {
+    font-family: $font2;
+    font-weight: 300;
+    text-align: center;
+
+    color: $text;
+    font-size: 1.35rem;
+    line-height: 1;
+    margin: 0.8rem;
+    text-transform: lowercase;
+
+    @media (min-width: 1501px) {
+      font-size: 1.45rem;
+      margin: 1rem;
     }
 
-    // Title container
-    .title {
-      position: absolute;
-      bottom: 0;
-      background-color: rgba(20, 20, 20, 0.8);
-      width: 100%;
+    &:hover {
+      text-decoration: underline;
     }
+  }
 
-    // Title
-    .title div {
-      font-family: $font2;
-      font-weight: 300;
-      text-align: center;
+  &-hidden .title div {
+    color: red;
+  }
 
-      color: $text;
-      font-size: 1.35rem;
-      line-height: 1;
-      margin: 0.8rem;
-      text-transform: lowercase;
-
-      @media (min-width: 1501px) {
-        font-size: 1.45rem;
-        margin: 1rem;
-      }
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    .no-cover .note {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      text-align: center;
-      transform: translateX(-50%) translateY(-50%);
-    }
+  .no-cover .note {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%) translateY(-50%);
   }
 }
 
