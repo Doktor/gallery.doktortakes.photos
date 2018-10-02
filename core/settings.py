@@ -202,7 +202,10 @@ else:
     AWS_STORAGE_BUCKET_NAME = aws['bucket']
     AWS_S3_ENDPOINT_URL = aws['endpoint']
 
-    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # Cache images for up to 14 days
+    CACHE_CONTROL_MAX_AGE = 60 * 60 * 24 * 14
+
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': f'max-age={CACHE_CONTROL_MAX_AGE}'}
     AWS_LOCATION = ''
     AWS_QUERYSTRING_AUTH = False
     AWS_DEFAULT_ACL = 'public-read'
