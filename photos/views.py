@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import Http404, HttpResponse
@@ -162,6 +163,7 @@ def view_album(request, path):
         'count': photos.count(),
         'page_title': f"{album.name} | {metadata['TITLE']}",
         'items_per_page': ITEMS_PER_PAGE,
+        'local_storage': settings.LOCAL_STORAGE,
     }
 
     return render(request, 'album.html', context)
@@ -262,6 +264,7 @@ def view_photo(request, path, md5):
         'exif': exif,
         'short_md5': short_md5,
         'page_title': title,
+        'local_storage': settings.LOCAL_STORAGE,
     }
 
     return render(request, 'photo.html', context)
