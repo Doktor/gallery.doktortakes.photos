@@ -16,7 +16,7 @@ $('album-form-save').addEventListener('click', () => {
 
     setTimeout(function() {
       window.location.href = response.redirect;
-    }, 2000);
+    }, 1000);
   }
 
   let data = parseForm(form);

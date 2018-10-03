@@ -125,6 +125,7 @@ $('change-cover').addEventListener('click', () => {
 
   let data = {md5: selected[0].dataset.md5};
 
+  flash("Generating cover thumbnail.");
   sendRequest('PATCH', API_ALBUM, onSuccess, onError, data, true);
 });
 
