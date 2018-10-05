@@ -6,6 +6,11 @@ const api = $('api');
 const API_ALBUM = api.dataset.apiAlbum;
 
 
+$('generate-password').addEventListener('click', () => {
+  $('f-password').value = getRandomHexString(32);
+});
+
+
 $('album-form-save').addEventListener('click', () => {
   function onError(response) {
     flash(response.error);

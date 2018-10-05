@@ -45,6 +45,11 @@ $('album-form-save').addEventListener('click', () => {
 });
 
 
+$('generate-password').addEventListener('click', () => {
+  $('f-password').value = getRandomHexString(32);
+});
+
+
 $('set-parent').addEventListener('click', () => {
   $('album-set-parent-modal').classList.toggle('hidden');
 

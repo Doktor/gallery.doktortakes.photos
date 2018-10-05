@@ -460,6 +460,11 @@ input[type="radio"] + label {
   margin: 0 0.5rem 0 0.15rem;
 }
 
+.form-action {
+  text-align: right;
+  margin: 0.5rem 0;
+}
+
 #login, #new-album {
   max-width: 600px;
   margin: 0 auto;

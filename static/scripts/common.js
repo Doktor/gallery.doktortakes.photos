@@ -29,6 +29,22 @@ String.prototype.format = function() {
 
 // Utility functions
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const hexadecimal = "0123456789abcdef";
+
+function getRandomHexString(length) {
+  let arr = [];
+
+  for (let i = 0; i < length; i++) {
+    arr.push(hexadecimal.charAt(getRandomInt(0, hexadecimal.length)));
+  }
+
+  return arr.join('');
+}
+
 function queryString(params) {
   let escape = encodeURIComponent;
   let query = Object.keys(params)
