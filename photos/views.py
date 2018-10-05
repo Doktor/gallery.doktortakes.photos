@@ -55,14 +55,14 @@ def get_photo(path, md5) -> Photo:
 # Error handlers
 
 
-def handler404(request):
+def handler404(request, exception=None):
     context = {'name': "404 Not Found"}
     response = render(request, 'errors/404.html', context)
     response.status_code = 404
     return response
 
 
-def handler500(request):
+def handler500(request, exception=None):
     context = {'name': "500 Internal Server Error"}
     response = render(request, 'errors/500.html', context)
     response.status_code = 500
