@@ -2,7 +2,6 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
-from django.core.files.uploadedfile import TemporaryUploadedFile, UploadedFile
 from django.db import models
 from django.db.models import Q
 from django.db.models.fields.files import ImageFieldFile
@@ -16,16 +15,14 @@ from photos.settings import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, ITEMS_IN_FILMSTRIP,
     COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK, LONG, SHORT)
 from photos.models.utils import (
-    CHUNK_SIZE, DATE_FORMAT, get_modified_time_utc)
+    DATE_FORMAT, get_modified_time_utc)
 
 import datetime
 import exifread
 import os
 import PIL.Image
 import pytz
-from io import BytesIO
 from lxml import etree
-from typing import BinaryIO
 
 strptime = datetime.datetime.strptime
 

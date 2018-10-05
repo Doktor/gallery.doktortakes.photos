@@ -80,8 +80,8 @@ urlpatterns = [
     path('featured/', views.featured, name='featured'),
     path('wall/', views.wall, name='wall'),
 
-    path('404/', views.debug404),
-    path('500/', views.debug500),
+    path('404/', views.debug_404, name='debug_404'),
+    path('500/', views.debug_500, name='debug_500'),
 ]
 
 

@@ -55,14 +55,14 @@ def get_photo(path, md5) -> Photo:
 # Error handlers
 
 
-def handler404(request, exception=None):
+def handler_404(request, exception=None):
     context = {'name': "404 Not Found"}
     response = render(request, 'errors/404.html', context)
     response.status_code = 404
     return response
 
 
-def handler500(request, exception=None):
+def handler_500(request, exception=None):
     context = {'name': "500 Internal Server Error"}
     response = render(request, 'errors/500.html', context)
     response.status_code = 500
@@ -72,14 +72,14 @@ def handler500(request, exception=None):
 # Debug
 
 
-@login_required
-def debug404(request):
-    return handler404(request)
+@require_GET
+def debug_404(request):
+    return handler_404(request)
 
 
-@login_required
-def debug500(request):
-    return handler500(request)
+@require_GET
+def debug_500(request):
+    return handler_500(request)
 
 
 # Main pages
@@ -246,9 +246,10 @@ def edit_albums(request):
 def view_photo(request, path, md5):
     from photos.models.photo import get_exif
 
+    photo = get_object_or_404(Photo, md5=md5)
+
     path = get_albums_from_path(path)
     album = path[-1]
-    photo = Photo.objects.get(album=album, md5=md5)
 
     if not photo.sidecar_exists:
         raise Http404
@@ -293,7 +294,7 @@ def search_photos(request):
 
 @require_GET
 def wall(request):
-    q = Q(album__hidden=False) & Q(album__password=None)
+    q = Q(album__hidden=False) & Q(album__password='')
 
     # Only show photos taken within the last 12 months
     today = datetime.date.today()

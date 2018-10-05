@@ -140,9 +140,9 @@ function deletePhoto(el) {
   }
 
   function onSuccess(response) {
-    el.remove();
+    deselect(el);
     updateTotal();
-    updateCount();
+    el.remove();
 
     flash(response.message);
   }
