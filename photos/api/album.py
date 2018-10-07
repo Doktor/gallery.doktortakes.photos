@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.utils.text import slugify
@@ -10,6 +11,8 @@ from photos.api.utils import APIError, APIView, api_wrapper
 from photos.models import Album, Photo, Tag
 from photos.views import get_album_by_path as get_album
 
+User = get_user_model()
+
 
 def get_album_by_path(path):
     try:
@@ -18,11 +21,13 @@ def get_album_by_path(path):
         raise APIError("The specified album doesn't exist.")
 
 
-class AlbumView(LoginRequiredMixin, APIView):
-    # Required fields: internal name, display name
+class AlbumView(APIView):
+    """Handles all CRUD operations for Album objects.
+    Access is restricted to staff users."""
+
     required = (('name', 'album name'), ('start', 'start date'))
 
-    def _apply_changes(self, request, album):
+    def _apply_changes(self, request, album: Album):
         data = self._get_data(request)
 
         # General
@@ -34,7 +39,8 @@ class AlbumView(LoginRequiredMixin, APIView):
         for key in ('name', 'place', 'location', 'description', 'password'):
             setattr(album, key, data.get(key))
 
-        album.hidden = bool(int(data.get('hidden', 0)))
+        # Any album with a password should be hidden, but not vice versa
+        album.hidden = bool(data.get('hidden', 0)) or bool(album.password)
 
         # Dates
 
@@ -50,9 +56,41 @@ class AlbumView(LoginRequiredMixin, APIView):
 
             setattr(album, key, date)
 
-        if album.pk:
-            # Tags
+        # Access permissions
 
+        access = data.get('access', '')
+
+        if access:
+            users, groups = [], []
+
+            for name in access.split(', '):
+                name = name.strip()
+
+                if name.lower().startswith('group:'):
+                    try:
+                        name = name[6:].strip()
+                        group = Group.objects.get(name__iexact=name)
+                    except Group.DoesNotExist:
+                        raise APIError(f"The group '{name}' does not exist.")
+                    else:
+                        groups.append(group)
+                else:
+                    try:
+                        user = User.objects.get(username__iexact=name)
+                    except User.DoesNotExist:
+                        raise APIError(f"The user '{name}' does not exist.")
+                    else:
+                        users.append(user)
+
+            album.users.clear()
+            album.groups.clear()
+
+            album.users.add(*users)
+            album.groups.add(*groups)
+
+        # Tags
+
+        if album.pk:
             album.tags.clear()
             tags = data.get('tags', '')
 
@@ -90,6 +128,12 @@ class AlbumView(LoginRequiredMixin, APIView):
             raise APIError(e.message)
 
         return album
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise APIError("Album does not exist.")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, path):
         album = get_album_by_path(path)
@@ -150,7 +194,7 @@ def get_album_photos(request, path):
     album = get_album_by_path(path)
     photos = []
 
-    if album.password and album.password != request.GET.get('password', ''):
+    if not album.check_access(request):
         raise APIError("Album does not exist.")
 
     for index, photo in enumerate(album.photos.all().order_by('taken')):

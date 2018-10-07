@@ -22,10 +22,10 @@ class AlbumAdmin(admin.ModelAdmin):
                        'start', 'end', 'parent', 'tags'),
         }),
         ('Visibility', {
-            'fields': ('hidden', 'password')
+            'fields': ('hidden', 'password', 'users', 'groups'),
         }),
         ('Cover photo', {
-            'fields': ('cover', 'preview')
+            'fields': ('cover', 'preview'),
         }),
     )
     list_display = ('name', 'location', 'start', 'end',

@@ -113,6 +113,12 @@ class Photo(models.Model):
     def __str__(self):
         return self.filename
 
+    def check_access(self, request):
+        if self.album is None:
+            return True
+
+        return self.album.check_access(request)
+
     def clean(self):
         if self.rating > 5:
             raise ValidationError("Rating must be between 0 and 5")
@@ -144,6 +150,9 @@ class Photo(models.Model):
 
     def get_path(self):
         return self.album.get_path() if self.album else DEFAULT_PATH
+
+    def get_password_url(self):
+        return self.get_absolute_url() + self.album.get_password_query()
 
     def resave(self):
         if not self.pk:
@@ -187,13 +196,13 @@ class Photo(models.Model):
                 from photos.api.utils import APIError
                 raise APIError(f"Duplicate file: {self.md5}")
 
-    def serialize(self, index=None, metadata=True, filmstrip=True):
+    def serialize(self, password=False, index=None, metadata=True, filmstrip=True):
         taken = self.taken.astimezone(pytz.timezone(self.album.timezone))
 
         response = {
             'image_url': self.image.url,
             'square_thumbnail_url': self.square_thumbnail.url,
-            'url': self.get_absolute_url(),
+            'url': self.get_password_url() if password else self.get_absolute_url(),
         }
 
         if metadata:

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.files.storage import DefaultStorage
 from django.db import models
@@ -57,7 +58,10 @@ class Album(models.Model):
         help_text="The album that contains this album")
 
     hidden = models.BooleanField(default=False)
-    password = models.CharField(max_length=128, blank=True, null=True)
+    password = models.CharField(max_length=128, blank=True)
+
+    users = models.ManyToManyField(User, related_name='albums', blank=True)
+    groups = models.ManyToManyField(Group, related_name='albums', blank=True)
 
     tags = models.ManyToManyField('Tag', related_name='albums', blank=True)
 
@@ -68,6 +72,13 @@ class Album(models.Model):
         if self.end is not None and self.end < self.start:
             raise ValidationError(
                 "The end date should be later than the start date.")
+
+        if self.password:
+            self.hidden = True
+
+        if (self.users.exists() or self.groups.exists()) and not self.hidden:
+            self.hidden = True
+
         super().clean()
 
     @property
@@ -75,6 +86,15 @@ class Album(models.Model):
         """Returns the number of photos in this album and all child albums."""
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
+
+    def check_access(self, request):
+        if request.user.has_perm('view', self):
+            return True
+
+        if self.password:
+            return request.GET.get('password', None) == self.password
+        else:
+            return True
 
     def delete(self, using=None, keep_parents=False):
         for photo in self.photos.all():
@@ -84,6 +104,16 @@ class Album(models.Model):
 
     def get_absolute_url(self):
         return reverse('album', args=[self.get_path()])
+
+    def get_access_list(self):
+        names = []
+
+        for user in self.users.all():
+            names.append(user.username.capitalize())
+        for group in self.groups.all():
+            names.append(f"Group: {group.name}")
+
+        return ', '.join(names)
 
     def get_all_subalbums(self, include_self=False):
         albums = []
@@ -133,9 +163,6 @@ class Album(models.Model):
         else:
             return ''
 
-    def get_hidden_url(self):
-        return self.get_absolute_url() + self.get_password_query()
-
     def get_location(self):
         if self.location or not self.parent:
             return self.location
@@ -165,8 +192,18 @@ class Album(models.Model):
     def get_parent_path(self):
         return self.parent.get_path() if self.parent is not None else ''
 
-    def get_password_query(self):
-        return f"?password={self.password}&" if self.password else ''
+    def get_password_query(self, separator=False):
+        if self.password:
+            q = f"?password={self.password}"
+
+            if separator:
+                return q + '&'
+            return q
+        else:
+            return ''
+
+    def get_password_url(self):
+        return self.get_absolute_url() + self.get_password_query()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -190,6 +227,7 @@ class Album(models.Model):
             'end': end,
             'hidden': int(self.hidden),
             'password': self.password,
+            'access': self.get_access_list(),
             'tags': ', '.join((tag.slug for tag in self.tags.all())),
             'parent': self.get_parent_path(),
         }

@@ -30,7 +30,7 @@
     <h2 id="album-name">{{ album.name }}</h2>
     {% spaceless %}
     <ul class="edit-links-center">
-      <li><a id="album-link" href="{{ album.get_hidden_url }}" target="_blank">View</a></li>
+      <li><a id="album-link" href="{{ album.get_absolute_url }}" target="_blank">View</a></li>
       <li><a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a></li>
     </ul>
     {% endspaceless %}

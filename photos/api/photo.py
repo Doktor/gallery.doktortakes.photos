@@ -1,8 +1,6 @@
-from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.db.models import Q
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_GET, require_POST
 
 import datetime
@@ -21,16 +19,22 @@ def get_photo_by_hash(path, md5):
     try:
         return get_photo(path, md5)
     except Photo.DoesNotExist:
-        raise APIError("The specified photo doesn't exist.")
+        raise APIError("The specified photo doesn't exist.", status=404)
 
 
 class PhotoView(APIView):
     def get(self, request, path):
         photo = get_photo_from_request(request, path)
-        return JsonResponse(photo.serialize())
 
-    @method_decorator(login_required)
+        if not photo.check_access(request):
+            raise APIError("Photo does not exist.", status=404)
+
+        return JsonResponse(photo.serialize(password='password' in request.GET))
+
     def delete(self, request, path):
+        if not request.user.is_staff:
+            raise APIError("Not authorized", status=403)
+
         photo = get_photo_from_request(request, path)
         photo.delete()
         return JsonResponse({'message': "Photo deleted successfully."})
@@ -39,6 +43,9 @@ class PhotoView(APIView):
 def navigate(request, path, method):
     md5 = request.GET.get('md5', '')
     photo = get_photo_by_hash(path, md5)
+
+    if not photo.check_access(request):
+        raise APIError("Photo not found", status=404)
 
     try:
         nav = getattr(photo, method)(album=photo.album)
@@ -68,7 +75,7 @@ def next_photo(request, path):
     return navigate(request, path, 'get_next_by_taken')
 
 
-def navigate_end(path, method):
+def navigate_end(request, path, method):
     album = get_album_by_path(path)
     photos = Photo.objects.filter(album=album).order_by('taken')
 
@@ -77,25 +84,30 @@ def navigate_end(path, method):
 
     photo = getattr(photos, method)()
 
+    if not photo.check_access(request):
+        raise APIError("Photo not found", status=404)
+
     return JsonResponse(photo.serialize())
 
 
 @api_wrapper
 @require_GET
 def first_photo(request, path):
-    return navigate_end(path, 'first')
+    return navigate_end(request, path, 'first')
 
 
 @api_wrapper
 @require_GET
 def last_photo(request, path):
-    return navigate_end(path, 'last')
+    return navigate_end(request, path, 'last')
 
 
 @api_wrapper
-@login_required
 @require_POST
 def upload_photo(request, path):
+    if not request.user.is_staff:
+        raise APIError("Not authorized", status=403)
+
     files = request.FILES.getlist('files')
 
     for file in files:

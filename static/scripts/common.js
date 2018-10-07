@@ -45,17 +45,17 @@ function getRandomHexString(length) {
   return arr.join('');
 }
 
-function queryString(params) {
+function queryString(params, skipBlank = false) {
   let escape = encodeURIComponent;
-  let query = Object.keys(params)
-    .map(function(key) {
-      if (Array.isArray(params[key])) {
-        return params[key].map(
-          item => escape(key) + '=' + escape(item)).join('&');
-      } else {
-        return escape(key) + '=' + escape(params[key])
-      }
-    }).join('&');
+
+  let query = Object.entries(params).map(([key, value]) => {
+    if (Array.isArray(value)) {
+      return value.map(item => escape(key) + '=' + escape(item)).join('&');
+    } else {
+      if (skipBlank && value === '') { return; }
+      return escape(key) + '=' + escape(value);
+    }
+  }).join('&');
 
   return '?' + query;
 }

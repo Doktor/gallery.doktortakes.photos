@@ -48,17 +48,20 @@
 {% block content %}
   <!-- API -->
   <div id="api"
+       {% if password %}
+       data-password="{{ album.password }}"
+       {% endif %}
        data-api-get="{% url 'api_photo' album.get_path %}"
        data-api-previous="{% url 'previous_photo' album.get_path %}"
        data-api-next="{% url 'next_photo' album.get_path %}"
        data-api-first="{% url 'first_photo' album.get_path %}"
        data-api-last="{% url 'last_photo' album.get_path %}"
-       data-api-get-album-photos="{% url 'get_album_photos' album.get_path %}{{ album.get_password_query }}">
+       data-api-get-album-photos="{% url 'get_album_photos' album.get_path %}">
   </div>
 
   <!-- Photo -->
   <section id="photo"
-           data-album-url="{{ album.get_hidden_url }}"
+           data-album-url="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}"
            data-path="{{ photo.get_path }}"
            data-md5="{{ photo.md5 }}"
            data-index=""
@@ -179,7 +182,7 @@
         <div>
           <span title="Album"><i class="fas fa-fw fa-book"></i></span>
           {% for album in path %}
-          <a href="{{ album.get_hidden_url }}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
+          <a href="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
           {% endfor %}
         </div>
 

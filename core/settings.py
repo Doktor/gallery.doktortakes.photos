@@ -172,6 +172,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'core.backends.AlbumPermissionsBackend',
+)
+
 
 # Internationalization
 
@@ -203,7 +208,11 @@ STATIC_URL = '/static/'
 LOCAL_STORAGE = False
 
 if LOCAL_STORAGE:
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    if not TEST:
+        MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    else:
+        MEDIA_ROOT = os.path.join(BASE_DIR, 'media_test')
+
     MEDIA_URL = '/media/'
 else:
     with open(os.path.join(BASE_DIR, 'data', 'aws.json')) as f:

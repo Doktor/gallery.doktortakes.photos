@@ -79,6 +79,38 @@
         {{ album.get_full_date }}
       </h3>
 
+      {% if album.password %}
+      <h3 class="info">
+        <span title="Password"><i class="fas fa-fw fa-key"></i></span>
+        {{ album.password }}
+        (<a href="{{ album.get_absolute_url }}">regular link</a>,
+        <a href="{{ album.get_password_url }}">password link</a>)
+      </h3>
+      {% elif request.user.is_staff %}
+      <h3 class="info">
+        <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
+        Hidden album
+      </h3>
+      {% endif %}
+
+      {% if album.hidden %}
+        {% if not request.user.is_staff %}
+        <h3 class="info">
+          <span title="Warning"><i class="fas fa-fw fa-exclamation-triangle"></i></span>
+          This album is hidden; please ask before sharing.
+        </h3>
+        {% endif %}
+
+        {% with access_list=album.get_access_list %}
+        {% if request.user.is_staff and access_list %}
+        <h3 class="info">
+          <span title="Users"><i class="fas fa-fw fa-users"></i></span>
+          {{ access_list }}
+        </h3>
+        {% endif %}
+        {% endwith %}
+      {% endif %}
+
       {% if album.tags.count %}
       <h3 class="info">
         <span title="Tags"><i class="fas fa-fw fa-tags"></i></span>
@@ -128,7 +160,7 @@
       {% for p in photos %}
         <div class="wrapper">
           <div class="photo">
-            <a href="{% url 'photo' album.get_path p.md5 %}">
+            <a href="{% url 'photo' album.get_path p.md5 %}{% if password %}{{ album.get_password_query }}{% endif %}">
               <img class="not-loaded"
                    data-src="{{ p.square_thumbnail.url }}"
                    src="{% static 'images/loading.svg' %}">

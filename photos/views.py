@@ -1,13 +1,14 @@
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
 from photos.models import Album, Panorama, Photo, Tag
+from photos.models.photo import get_exif
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 
@@ -20,6 +21,10 @@ metadata = m(None)
 FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
 ALBUM_QUERY = Q(parent__isnull=True, hidden=False)
 ALBUM_QUERY_ADMIN = Q(parent__isnull=True)
+
+
+def staff_only(f):
+    return user_passes_test(lambda u: u.is_staff)(f)
 
 
 def get_albums_from_path(path):
@@ -119,11 +124,25 @@ def featured(request):
 
 @require_GET
 def view_albums(request):
-    query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
+    hidden = request.GET.get('hidden', '')
+
+    if request.user.is_staff and hidden:
+        query = Q(parent__isnull=True, hidden=True)
+    elif hidden:
+        sub_query = Q(users=request.user)
+        for group in request.user.groups.all():
+            sub_query |= Q(groups=group)
+
+        query = Q(parent__isnull=True) & sub_query
+    else:
+        query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
+
     albums = Album.objects.filter(query).order_by('-start')
+
     context = {
         'albums': albums,
         'items_per_page': ITEMS_PER_PAGE,
+        'view_hidden': bool(hidden),
     }
 
     view = request.GET.get('view', '')
@@ -144,21 +163,15 @@ def view_albums(request):
 def view_album(request, path):
     album = get_album_by_path(path)
 
-    if album.password:
-        password = request.GET.get('password', '')
-
-        if password != album.password:
-            if request.user.is_staff:
-                base = reverse('album', kwargs={'path': path})
-                return redirect(base + f"?password={album.password}")
-
-            raise Http404
+    if not album.check_access(request):
+        raise Http404
 
     photos = Photo.objects.filter(album=album, sidecar_exists=True)
 
     context = {
         'path': get_albums_from_path(path),
         'album': album,
+        'password': 'password' in request.GET,
         'photos': photos,
         'count': photos.count(),
         'page_title': f"{album.name} | {metadata['TITLE']}",
@@ -200,7 +213,7 @@ def view_tag(request, slug):
 
 
 @require_GET
-@login_required
+@staff_only
 def new_album(request):
     context = {
         'album': None,
@@ -211,14 +224,15 @@ def new_album(request):
 
 
 @require_GET
-@login_required
+@staff_only
 def edit_album(request, path):
-    album = get_album_by_path(path)
+    path = get_albums_from_path(path)
+    album = path[-1]
 
     context = {
         'album': album,
         'photos': album.photos.all(),
-        'parents': get_albums_from_path(path)[:-1],
+        'parents': path[:-1],
         'photos_per_page': ITEMS_PER_PAGE,
 
         'albums': Album.objects.all().order_by('-start'),
@@ -229,7 +243,7 @@ def edit_album(request, path):
 
 
 @require_GET
-@login_required
+@staff_only
 def edit_albums(request):
     context = {
         'albums': Album.objects.all().order_by('-start'),
@@ -244,25 +258,24 @@ def edit_albums(request):
 
 @require_GET
 def view_photo(request, path, md5):
-    from photos.models.photo import get_exif
-
-    photo = get_object_or_404(Photo, md5=md5)
-
-    path = get_albums_from_path(path)
-    album = path[-1]
+    photo = Photo.objects.get(md5=md5)
 
     if not photo.sidecar_exists:
         raise Http404
 
-    exif = get_exif(photo)
+    if not photo.check_access(request):
+        raise Http404
+
+    path = get_albums_from_path(path)
     short_md5 = photo.md5[:7]
     title = f"{short_md5} | {photo.album.name} | {metadata['TITLE']}"
 
     context = {
         'path': path,
-        'album': album,
+        'album': path[-1],
+        'password': 'password' in request.GET,
         'photo': photo,
-        'exif': exif,
+        'exif': get_exif(photo),
         'short_md5': short_md5,
         'page_title': title,
         'local_storage': settings.LOCAL_STORAGE,
@@ -271,10 +284,14 @@ def view_photo(request, path, md5):
     return render(request, 'photo.html', context)
 
 
+@require_GET
 def download_photo(request, path, md5):
     photo = get_photo(path, md5)
 
     if not photo.sidecar_exists:
+        raise Http404
+
+    if not photo.check_access(request):
         raise Http404
 
     photo.image.open()
@@ -287,12 +304,14 @@ def download_photo(request, path, md5):
     return response
 
 
+@require_GET
 def search_photos(request):
     context = {'items_per_page': ITEMS_PER_PAGE}
     return render(request, "search.html", context)
 
 
 @require_GET
+@staff_only
 def wall(request):
     q = Q(album__hidden=False) & Q(album__password='')
 

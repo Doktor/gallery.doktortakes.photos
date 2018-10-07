@@ -9,7 +9,7 @@ const API_NEXT = api.dataset.apiNext;
 const API_FIRST = api.dataset.apiFirst;
 const API_LAST = api.dataset.apiLast;
 const API_GET_ALBUM_PHOTOS = api.dataset.apiGetAlbumPhotos;
-
+const API_PASSWORD = api.dataset.password || '';
 
 // Shortcut key mapping
 const KEY_MAPPING = {
@@ -54,8 +54,9 @@ const exif = {
 
 function getPhotoQueryString() {
   return queryString({
-    'md5': photo.dataset.md5,
-  });
+    md5: photo.dataset.md5,
+    password: API_PASSWORD,
+  }, true);
 }
 
 
@@ -118,7 +119,8 @@ function loadPhoto(url, history = true) {
       image.addEventListener('click', () => {
         let qs = queryString({
           'md5': item.md5,
-        });
+          'password': API_PASSWORD,
+        }, true);
 
         loadPhoto(API_GET + qs);
       });
@@ -150,24 +152,6 @@ function loadPhoto(url, history = true) {
   request.open('GET', url, true);
   request.send();
 }
-
-
-// Navigation
-document.addEventListener('keyup', function(e) {
-  let key = e.keyCode;
-  let base = KEY_MAPPING[key.toString()];
-
-  switch (key) {
-    case KEY_LEFT:
-    case KEY_RIGHT:
-      e.preventDefault();
-      return loadPhoto(base + queryString({'md5': photo.dataset.md5}));
-    case KEY_UP:
-    case KEY_DOWN:
-      e.preventDefault();
-      return loadPhoto(base);
-  }
-});
 
 
 // PhotoSwipe container
@@ -309,7 +293,29 @@ function loadPhotoSwipe() {
   });
 }
 
-// Navigation arrows
+
+// Keyboard navigation
+document.addEventListener('keyup', function(e) {
+  let key = e.keyCode;
+  let base = KEY_MAPPING[key.toString()];
+
+  switch (key) {
+    case KEY_LEFT:
+    case KEY_RIGHT:
+      e.preventDefault();
+      return loadPhoto(base + queryString({
+        md5: photo.dataset.md5,
+        password: API_PASSWORD
+      }, true));
+    case KEY_UP:
+    case KEY_DOWN:
+      e.preventDefault();
+      return loadPhoto(base);
+  }
+});
+
+
+// Mouse navigation
 $ = document.getElementsByClassName.bind(document);
 
 const leftArrow = $('pswp__button--arrow--left')[0];
@@ -329,21 +335,18 @@ rightArrow.addEventListener('click', function() {
 // Load the primary photo
 document.addEventListener('DOMContentLoaded', function() {
   let query = getPhotoQueryString();
-  loadPhoto(API_GET + query, false);
+  loadPhoto(API_GET + query, true);
 });
 
 
 // Load the rest of the album
 document.addEventListener('DOMContentLoaded', function() {
-  let query = queryString({'path': photo.dataset.path});
+  let params = {
+    path: photo.dataset.path,
+    password: API_PASSWORD,
+  };
 
-  let base = API_GET_ALBUM_PHOTOS;
-
-  if (base.endsWith('&')) {
-    loadPhotos(base + query.substring(1))
-  } else{
-    loadPhotos(base + query)
-  }
+  loadPhotos(API_GET_ALBUM_PHOTOS + queryString(params, true));
 });
 
 
