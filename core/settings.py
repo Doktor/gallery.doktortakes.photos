@@ -101,6 +101,9 @@ LOGGING = {
         },
     },
     'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
@@ -116,6 +119,7 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.StreamHandler',
             'formatter': 'default',
+            'filters': ['require_debug_false'],
         },
     },
     'loggers': {
@@ -123,11 +127,19 @@ LOGGING = {
             'handlers': ['console_debug', 'gunicorn'],
             'propagate': True,
         },
+        # Standard requests
         'django.request': {
             'handlers': ['console_debug', 'gunicorn'],
-            'level': 'WARNING',
-            'propagate': True,
+            'level': 'DEBUG',
+            'propagate': False,
         },
+        # Requests when running the development server
+        'django.server': {
+            'handlers': ['console_debug'],
+            'level': 'DEBUG',
+            'propagate': False,
+            'filters': ['require_debug_true'],
+        }
     }
 }
 
