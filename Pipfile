@@ -16,6 +16,10 @@ celery = {version = "*", extras = ["redis"]}
 psycopg2-binary = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-django = "*"
+factory-boy = "*"
+faker = "*"
 
 [requires]
 python_version = "3.6"
