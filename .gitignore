@@ -4,12 +4,14 @@
 # Sensitive data
 cache/
 data/
+temp/
 *.db
 *.bak
 *.pgsql
 
 # Media files
 media/
+media_test/
 *.psd
 
 # macOS metadata
@@ -27,9 +29,6 @@ static/lib/
 
 # Migrations (until a stable version is released)
 photos/migrations/
-
-# Temporary files
-temp/
 
 # Log files
 *.log
