@@ -2,8 +2,10 @@ from django.conf import settings
 from django.core.files.storage import DefaultStorage, FileSystemStorage
 from django.db.models.fields.files import ImageFieldFile
 
+import datetime
 import hashlib
 import os
+import pytz
 import uuid
 from io import BytesIO
 
@@ -28,23 +30,27 @@ def generate_md5_hash(file):
     return hasher.hexdigest()
 
 
-def get_modified_time_utc(file):
+def get_modified_time_utc(file) -> datetime.datetime:
+    if isinstance(file, BytesIO):
+        name = os.path.join(settings.BASE_DIR, 'temp', f'{uuid.uuid4()}.tmp')
+
+        try:
+            with open(name, 'wb') as f:
+                f.write(file.read())
+        except:
+            return datetime.datetime.now(tz=pytz.utc)
+        else:
+            ts = os.path.getmtime(name)
+            m_time = datetime.datetime.fromtimestamp(ts).replace(tzinfo=pytz.utc)
+            os.remove(name)
+            return m_time
+
     if isinstance(file, ImageFieldFile):
         storage = DefaultStorage()
     else:
         storage = FileSystemStorage()
 
-        if isinstance(file, BytesIO):
-            name = os.path.join(settings.BASE_DIR, 'temp', f'{uuid.uuid4()}.tmp')
-
-            try:
-                with open(name, 'wb') as f:
-                    f.write(file.read())
-            except:
-                return None
-            else:
-                m_time = storage.get_modified_time(name)
-                os.remove(name)
-                return m_time
-
-    return storage.get_modified_time(file.name)
+    try:
+        return storage.get_modified_time(file.name)
+    except FileNotFoundError:
+        return datetime.datetime.now(tz=pytz.utc)
