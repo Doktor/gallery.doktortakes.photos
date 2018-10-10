@@ -23,6 +23,9 @@ ALBUM_QUERY = Q(parent__isnull=True, hidden=False)
 ALBUM_QUERY_ADMIN = Q(parent__isnull=True)
 
 
+# Helper functions
+
+
 def staff_only(f):
     return user_passes_test(lambda u: u.is_staff)(f)
 
@@ -78,11 +81,13 @@ def handler_500(request, exception=None):
 
 
 @require_GET
+@staff_only
 def debug_404(request):
     return handler_404(request)
 
 
 @require_GET
+@staff_only
 def debug_500(request):
     return handler_500(request)
 
@@ -90,6 +95,7 @@ def debug_500(request):
 # Main pages
 
 
+@require_GET
 def index(request):
     """Renders the index page."""
     query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
@@ -105,6 +111,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+@require_GET
 def featured(request):
     """Renders the featured photos page."""
     query = Q(album__hidden=False, rating__gte=4, sidecar_exists=True)
@@ -327,11 +334,14 @@ def wall(request):
 
 # Panoramas
 
+
+@require_GET
 def panorama_list(request):
     p = Panorama.objects.all().order_by('-taken')
     return render(request, "panoramas.html", {'panoramas': p})
 
 
+@require_GET
 def panorama(request, slug):
     p = get_object_or_404(Panorama, slug=slug)
     return render(request, "panorama.html", {'p': p})
