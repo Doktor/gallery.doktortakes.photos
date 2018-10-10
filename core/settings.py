@@ -3,6 +3,9 @@ import os
 
 
 # General settings
+import sys
+
+TEST = any('test' in argv for argv in sys.argv)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -67,13 +70,19 @@ ENABLE_REGISTRATION = False
 
 # Database
 
-if DEBUG:
-    filename = os.path.join(BASE_DIR, 'data', 'database_debug.json')
-else:
-    filename = os.path.join(BASE_DIR, 'data', 'database.json')
+if not TEST:
+    if DEBUG:
+        filename = os.path.join(BASE_DIR, 'data', 'database_debug.json')
+    else:
+        filename = os.path.join(BASE_DIR, 'data', 'database.json')
 
-with open(filename) as f:
-    default = json.loads(f.read())
+    with open(filename) as f:
+        default = json.loads(f.read())
+else:
+    default = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:'
+    }
 
 DATABASES = {'default': default}
 
@@ -205,15 +214,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static.1')
 STATIC_URL = '/static/'
 
 # Toggle local/remote storage for media files
-LOCAL_STORAGE = False
+if not TEST:
+    LOCAL_STORAGE = False
+else:
+    LOCAL_STORAGE = True
+
+MEDIA_URL = '/media/'
 
 if LOCAL_STORAGE:
     if not TEST:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     else:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media_test')
-
-    MEDIA_URL = '/media/'
 else:
     with open(os.path.join(BASE_DIR, 'data', 'aws.json')) as f:
         aws = json.loads(f.read())
@@ -232,7 +244,6 @@ else:
     AWS_DEFAULT_ACL = 'public-read'
 
     DEFAULT_FILE_STORAGE = 'core.storages.MediaStorage'
-    MEDIA_URL = '/media/'
 
 
 # Task queue
