@@ -2,7 +2,8 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.files.storage import DefaultStorage
 from django.db import models
-from django.db.models.signals import pre_save, post_save, post_delete
+from django.db.models.signals import pre_save, post_save, post_delete, \
+    m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -75,11 +76,6 @@ class Album(models.Model):
 
         if self.password:
             self.hidden = True
-
-        if (self.users.exists() or self.groups.exists()) and not self.hidden:
-            self.hidden = True
-
-        super().clean()
 
     @property
     def count(self):
@@ -207,6 +203,7 @@ class Album(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        self.clean()
         super().save(*args, **kwargs)
 
     def serialize(self, method='GET'):
@@ -249,6 +246,26 @@ class Album(models.Model):
     class Meta:
         get_latest_by = 'start'
         unique_together = ('name', 'parent')
+
+
+@receiver(m2m_changed, sender=Album.users.through,
+          dispatch_uid="photos.models.check_hidden.users")
+@receiver(m2m_changed, sender=Album.groups.through,
+          dispatch_uid="photos.models.check_hidden.groups")
+def check_hidden(sender, instance, action, **kwargs):
+    album: Album = instance
+
+    if not action.startswith('post'):
+        return
+
+    hidden = album.users.exists() or album.groups.exists()
+
+    # Prevent extra saves
+    if album.hidden == hidden:
+        return
+
+    album.hidden = hidden
+    album.save()
 
 
 @receiver(pre_save, sender=Album,
