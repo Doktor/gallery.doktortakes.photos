@@ -56,7 +56,7 @@ def generate_image():
 
 
 class AlbumFactory(factory.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f"Album {n}")
+    name = factory.Sequence(lambda n: f"Album {n} Title")
     start = factory.Faker('date')
 
     class Meta:
@@ -132,7 +132,7 @@ class TestIndex:
         content = response.content.decode('utf-8')
         assert "No albums found" not in content
         assert "View more albums" not in content
-        assert f"<div>{album.name}</div>" in content
+        assert album.name in content
 
     def test_many_albums_exist(self, rf):
         request = rf.get(reverse('index'))
@@ -148,8 +148,8 @@ class TestIndex:
         response = views.index(request)
         content = response.content.decode('utf-8')
         assert "View more albums" in content
-        assert f"<div>{album.name}</div>" not in content
-        assert f"<div>{last.name}</div>" in content
+        assert album.name not in content
+        assert last.name in content
 
 
 @pytest.mark.django_db
