@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User, Group
 from django.core.cache import cache
 from django.core.files import File
 from django.db.models.signals import post_save
@@ -8,7 +8,7 @@ from django.urls import reverse
 from photos import views
 from photos.models import Album, Photo
 from photos.models.utils import generate_md5_hash
-from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS
+from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE
 
 import datetime
 import factory
@@ -27,6 +27,7 @@ methods = ('get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace')
 
 
 # Factory helpers
+
 
 colors = tuple(PIL.ImageColor.colormap.keys())
 generated = []
@@ -53,6 +54,23 @@ def generate_image():
 
 
 # Factories
+
+
+class UserFactory(factory.DjangoModelFactory):
+    username = factory.Sequence(lambda n: f"user-{n}")
+    password = factory.Faker('password', length=8, digits=True, lower_case=True)
+
+    is_staff = False
+
+    class Meta:
+        model = User
+
+
+class GroupFactory(factory.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"Group {n}")
+
+    class Meta:
+        model = Group
 
 
 class AlbumFactory(factory.DjangoModelFactory):
@@ -198,3 +216,100 @@ class TestFeatured:
         content = response.content.decode('utf-8')
         assert first.thumbnail.url not in content
         assert last.thumbnail.url in content
+
+
+@pytest.mark.django_db
+class TestViewAlbums:
+    def get_response(self, user=AnonymousUser(), data=None):
+        rf = RequestFactory()
+
+        request = rf.get(reverse('albums'), data=data)
+        request.user = user
+
+        response = views.view_albums(request)
+        return response.content.decode('utf-8')
+
+    # Tests
+
+    def test_allowed_methods(self):
+        test_allowed_methods(views.view_albums, 'albums', ('get',))
+
+    def test_anonymous_user_cannot_see_hidden_albums(self):
+        album = AlbumFactory(hidden=True)
+
+        content = self.get_response()
+        assert album.name not in content
+
+    def test_anonymous_user_can_see_public_albums(self):
+        album = AlbumFactory()
+
+        content = self.get_response()
+        assert album.name in content
+
+    def test_user_can_see_private_albums_only_when_query_string_is_set(self):
+        user = UserFactory()
+        group = GroupFactory()
+        user.groups.add(group)
+
+        album = AlbumFactory()
+        album.users.add(user)
+
+        album_2 = AlbumFactory()
+        album_2.groups.add(group)
+
+        content = self.get_response(user=user)
+        assert album.name not in content
+        assert album_2.name not in content
+
+        content = self.get_response(user=user, data={'hidden': True})
+        assert album.name in content
+        assert album_2.name in content
+
+    def test_user_cannot_see_other_private_albums(self):
+        user = UserFactory()
+        user_2 = UserFactory()
+        group = GroupFactory()
+
+        album = AlbumFactory()
+        album.users.add(user_2)
+
+        album_2 = AlbumFactory()
+        album_2.groups.add(group)
+
+        content = self.get_response(user=user)
+        assert album.name not in content
+        assert album_2.name not in content
+
+    @pytest.mark.xfail(reason="staff users can see private albums without the query string")
+    def test_staff_user_can_see_private_albums_only_when_query_string_is_set(self):
+        user = UserFactory(is_staff=True)
+        other = UserFactory()
+        group = GroupFactory()
+
+        album = AlbumFactory()
+        album.users.add(other)
+
+        album_2 = AlbumFactory()
+        album_2.groups.add(group)
+
+        content = self.get_response(user=user)
+        assert album.name not in content
+        assert album_2.name not in content
+
+        content = self.get_response(user=user, data={'hidden': True})
+        assert album.name in content
+        assert album_2.name in content
+
+    def test_all_albums_appear_when_many_albums_exist(self):
+        """Extra albums past the per-page limit are hidden by JS and can be
+        shown with the pagination controls."""
+        start = datetime.date(year=2018, month=1, day=1)
+        first = AlbumFactory(start=start)
+
+        for _ in range(ITEMS_PER_PAGE):
+            start = start.replace(day=start.day + 1)
+            last = AlbumFactory(start=start)
+
+        content = self.get_response()
+        assert first.name in content
+        assert last.name in content
