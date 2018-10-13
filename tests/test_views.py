@@ -2,11 +2,13 @@ from django.contrib.auth.models import AnonymousUser, User, Group
 from django.core.cache import cache
 from django.core.files import File
 from django.db.models.signals import post_save
+from django.http import Http404
+from django.templatetags.static import static
 from django.test import RequestFactory
 from django.urls import reverse
 
 from photos import views
-from photos.models import Album, Photo
+from photos.models import Album, Photo, Tag
 from photos.models.utils import generate_md5_hash
 from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE
 
@@ -79,6 +81,13 @@ class AlbumFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = Album
+
+
+class TagFactory(factory.DjangoModelFactory):
+    slug = factory.Sequence(lambda n: f"tag-{n}-slug")
+
+    class Meta:
+        model = Tag
 
 
 class PhotoFactory:
@@ -313,3 +322,110 @@ class TestViewAlbums:
         content = self.get_response()
         assert first.name in content
         assert last.name in content
+
+
+@pytest.mark.skip
+class TestViewAlbum:
+    pass
+
+
+@pytest.mark.django_db
+class TestViewTags:
+    def get_response(self, user=AnonymousUser()):
+        rf = RequestFactory()
+
+        request = rf.get(reverse('tags'))
+        request.user = user
+
+        response = views.view_tags(request)
+        return response.content.decode('utf-8')
+
+    # Tests
+
+    def test_allowed_methods(self):
+        test_allowed_methods(views.view_tags, 'tags', ('get',))
+
+    def test_no_tags_exist(self):
+        content = self.get_response()
+        assert "No tags found" in content
+
+    def test_tags_exist(self):
+        tags = TagFactory.create_batch(10)
+
+        content = self.get_response()
+        assert "No tags found" not in content
+        assert all(tag.slug in content for tag in tags)
+        assert all(tag.get_absolute_url() in content for tag in tags)
+
+    def test_many_tags_exist(self):
+        """All tags should be displayed, regardless of how many there are."""
+        tags = TagFactory.create_batch(1000)
+
+        content = self.get_response()
+        assert all(tag.slug in content for tag in tags)
+
+
+@pytest.mark.django_db
+class TestViewTag:
+    def get_response(self, slug, user=AnonymousUser()):
+        rf = RequestFactory()
+
+        request = rf.get(reverse('tag', kwargs={'slug': slug}))
+        request.user = user
+
+        response = views.view_tag(request, slug)
+        return response.content.decode('utf-8')
+
+    # Tests
+
+    def test_tag_that_does_not_exist(self):
+        with pytest.raises(Http404):
+            self.get_response(None)
+
+    def test_tag_with_no_albums(self):
+        tag = TagFactory(description="Example description")
+
+        content = self.get_response(tag.slug)
+        assert tag.slug in content
+        assert tag.description in content
+        assert static("images/cover-placeholder.png") in content
+        assert "No albums were found with this tag" in content
+
+    def test_tag_with_one_album(self):
+        tag = TagFactory()
+
+        album = AlbumFactory()
+        album.tags.add(tag)
+
+        content = self.get_response(tag.slug)
+        assert "1 album" in content
+        assert album.name in content
+
+    def test_tag_with_many_albums(self):
+        tag = TagFactory()
+
+        albums = AlbumFactory.create_batch(10)
+        for album in albums:
+            album.tags.add(tag)
+
+        content = self.get_response(tag.slug)
+        assert "10 albums" in content
+        assert all(album.name in content for album in albums)
+
+    @pytest.mark.skip(reason="no pagination implemented")
+    def test_tag_with_more_albums_than_page_limit(self):
+        tag = TagFactory()
+
+        albums = AlbumFactory.create_batch(50)
+        for album in albums:
+            album.tags.add(tag)
+
+    def test_view_does_not_show_albums_with_other_tags(self):
+        tag = TagFactory()
+
+        tag_2 = TagFactory()
+        album = AlbumFactory()
+        album.tags.add(tag_2)
+
+        content = self.get_response(tag.slug)
+        assert "No albums were found with this tag" in content
