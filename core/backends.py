@@ -1,5 +1,3 @@
-from django.core.exceptions import PermissionDenied
-
 from photos.models import Album
 
 
@@ -20,16 +18,22 @@ class AlbumPermissionsBackend:
         if permission != 'view':
             return False
 
+        # Staff users have access to everything
         if user.is_staff:
             return True
 
         album = obj
 
+        # Auth backends can't handle passwords, defer to Album.check_access
         if album.password:
             return False
 
+        # Access list does not exist
         if not album.users.exists() and not album.groups.exists():
             return True
+        # Access list exists, but we're checking an anonymous user
+        elif not user.is_authenticated:
+            return False
 
         if user in album.users.all():
             return True
@@ -37,4 +41,4 @@ class AlbumPermissionsBackend:
         if any(group in user.groups.all() for group in album.groups.all()):
             return True
 
-        raise PermissionDenied
+        return False

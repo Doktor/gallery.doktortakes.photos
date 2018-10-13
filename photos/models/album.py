@@ -83,11 +83,10 @@ class Album(models.Model):
     def check_access(self, request):
         if request.user.has_perm('view', self):
             return True
-
-        if self.password:
+        elif self.password:
             return request.GET.get('password', None) == self.password
         else:
-            return True
+            return False
 
     def delete(self, using=None, keep_parents=False):
         for photo in self.photos.all():
