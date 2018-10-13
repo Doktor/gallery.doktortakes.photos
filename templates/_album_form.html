@@ -35,7 +35,14 @@
       <div class="field-wrapper">
         <input class="field" name="location" maxlength="128" id="f-location" type="text">
       </div>
-  </div>
+    </div>
+
+    <div class="row">
+      <label for="f-timezone">Timezone</label>
+      <div class="field-wrapper">
+        <input class="field" name="timezone" id="f-timezone" type="text" {% if not album %}value="US/Eastern"{% endif %}>
+      </div>
+    </div>
 
     <div class="row">
       <label for="f-description">Description</label>

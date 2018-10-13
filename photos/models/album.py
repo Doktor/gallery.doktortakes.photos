@@ -216,6 +216,7 @@ class Album(models.Model):
             'path': self.get_path(),
             'place': self.place,
             'location': self.location,
+            'timezone': self.timezone,
             'description': self.description,
             'start': self.start.strftime("%Y-%m-%d"),
             'end': end,
