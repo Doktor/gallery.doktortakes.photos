@@ -74,9 +74,6 @@ class Album(models.Model):
             raise ValidationError(
                 "The end date should be later than the start date.")
 
-        if self.password:
-            self.hidden = True
-
     @property
     def count(self):
         """Returns the number of photos in this album and all child albums."""
@@ -258,7 +255,7 @@ def check_hidden(sender, instance, action, **kwargs):
     if not action.startswith('post'):
         return
 
-    hidden = album.users.exists() or album.groups.exists()
+    hidden = album.users.exists() or album.groups.exists() or album.password != ''
 
     # Prevent extra saves
     if album.hidden == hidden:

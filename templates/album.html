@@ -79,20 +79,6 @@
         {{ album.get_full_date }}
       </h3>
 
-      {% if album.password %}
-      <h3 class="info">
-        <span title="Password"><i class="fas fa-fw fa-key"></i></span>
-        {{ album.password }}
-        (<a href="{{ album.get_absolute_url }}">regular link</a>,
-        <a href="{{ album.get_password_url }}">password link</a>)
-      </h3>
-      {% elif request.user.is_staff %}
-      <h3 class="info">
-        <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
-        Hidden album
-      </h3>
-      {% endif %}
-
       {% if album.hidden %}
         {% if not request.user.is_staff %}
         <h3 class="info">
@@ -101,14 +87,30 @@
         </h3>
         {% endif %}
 
-        {% with access_list=album.get_access_list %}
-        {% if request.user.is_staff and access_list %}
+        {% if album.password %}
         <h3 class="info">
-          <span title="Users"><i class="fas fa-fw fa-users"></i></span>
-          {{ access_list }}
+          <span title="Password"><i class="fas fa-fw fa-key"></i></span>
+          {{ album.password }}
+          (<a href="{{ album.get_absolute_url }}">regular link</a>,
+          <a href="{{ album.get_password_url }}">password link</a>)
         </h3>
         {% endif %}
+
+        {% if request.user.is_staff %}
+        <h3 class="info">
+          <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
+          Hidden album
+        </h3>
+
+        {% with access_list=album.get_access_list %}
+          {% if access_list %}
+          <h3 class="info">
+            <span title="Users"><i class="fas fa-fw fa-users"></i></span>
+            {{ access_list }}
+          </h3>
+          {% endif %}
         {% endwith %}
+        {% endif %}
       {% endif %}
 
       {% if album.tags.count %}

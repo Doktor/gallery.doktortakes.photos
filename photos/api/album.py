@@ -39,9 +39,6 @@ class AlbumView(APIView):
         for key in ('name', 'place', 'location', 'description', 'password'):
             setattr(album, key, data.get(key))
 
-        # Any album with a password should be hidden, but not vice versa
-        album.hidden = bool(data.get('hidden', 0)) or bool(album.password)
-
         # Dates
 
         for key in ('start', 'end'):
