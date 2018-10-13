@@ -7,6 +7,8 @@ from django.templatetags.static import static
 from django.test import RequestFactory
 from django.urls import reverse
 
+from core.settings import BASE_DIR, MEDIA_ROOT
+
 from photos import views
 from photos.models import Album, Photo, Tag
 from photos.models.utils import generate_md5_hash
@@ -15,6 +17,7 @@ from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE
 import datetime
 import factory
 import faker
+import os
 import PIL.Image
 import PIL.ImageColor
 import pytest
@@ -26,6 +29,20 @@ from io import BytesIO
 
 fake = faker.Faker()
 methods = ('get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace')
+
+
+# Set up
+
+
+assert MEDIA_ROOT == os.path.join(BASE_DIR, 'media_test')
+
+
+def setup_module():
+    os.mkdir(MEDIA_ROOT)
+
+
+def teardown_module():
+    os.remove(MEDIA_ROOT)
 
 
 # Factory helpers
