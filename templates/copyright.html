@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 
-{% block title %}Copyright notices - {{ block.super }}{% endblock %}
+{% block title %}Copyright notices | {{ block.super }}{% endblock %}
 
 {% block meta %}
   {% include "_open_graph_common.html" %}
@@ -16,41 +16,45 @@
 
 {% block content %}
   <section>
-    <h2 id="reuse">Photos</h2>
+    <h1>Copyright notices</h1>
 
-    <p>I hold the copyright to the photos published on this website.<br>The photos are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0 License</a>, unless otherwise specified.</p>
+    <p>Please <a href="https://doktorthehusky.com">contact me</a> if you have any questions.</p>
+
+    <h2>Photos</h2>
+
+    <p>
+      I hold the copyright to all of the photos published on this website.<br>
+      They're released under the <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0 License</a>.
+    </p>
 
     <p>Less formally:</p>
 
     <ul>
       <li>You may post/share any photo for personal use.</li>
-      <li>Please provide credit when possible. My watermark is a form of credit.</li>
+      <li>Please provide credit when possible. (My watermark is a form of credit.)</li>
       <li>Please don't erase or crop out my watermark.</li>
-      <li>Please ask before using photos for commercial purposes.<br><em>Exception</em>: You may use the photos to advertise a fursuit or product that's for sale.</li>
+      <li>Please ask before using photos for commercial purposes.<br><em>Exception</em>: You may use the photos to advertise a fursuit that's for sale.</li>
     </ul>
 
-    <h2>Other content</h2>
-
-    <p>These are the copyright licenses for all of the content on this website, except the photos (see above).<br>Please <a href="https://doktorthehusky.com">contact me</a> if you have any questions.</p>
-
-    <h3>Website</h3>
+    <h2>Website</h2>
 
     <p>
-      The <a href="https://gitlab.com/Doktor/doktortakes.photos">source code</a> for this website is available on GitLab.
-      It's licensed under the <a href="https://gitlab.com/Doktor/doktortakes.photos/blob/master/LICENSE">MIT License</a>.
+      The <a href="https://gitlab.com/Doktor/doktortakes.photos">source code</a> for this website is available on GitLab.<br>
+      It's released under the <a href="https://gitlab.com/Doktor/doktortakes.photos/blob/master/LICENSE">MIT License</a>.
     </p>
 
-    <h3>Photo viewer</h3>
+    <h2>Other</h2>
 
-    <p>The photo viewer used on the photo pages is <a href="http://photoswipe.com/">PhotoSwipe</a>, developed by <a href="http://dimsemenov.com/">Dmitry Semenov</a>. It's used under the <a href="https://github.com/dimsemenov/PhotoSwipe/blob/master/LICENSE">MIT License</a>.</p>
-
-    <h3>Metadata and navigation icons</h3>
-
-    <p>The icons used in the Metadata and Navigation sections of the photo pages are from <a href="http://fontawesome.io/">Font Awesome</a> by Dave Gandy. They are used under the <a href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL">SIL OFL 1.1</a> and the <a href="http://opensource.org/licenses/mit-license.html">MIT License</a>.</p>
-
-    <h3>EXIF icons</h3>
-
-    <p>The icons used in the EXIF section of the photo pages are from the <a href="https://thenounproject.com/DmitryBaranovskiy/collection/photo/">Photo</a> collection created by <a href="http://dmitry.baranovskiy.com/">Dmitry Baranovskiy</a>, published to <a href="https://thenounproject.com/">The Noun Project</a>. They are used under the <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY 3.0 US License</a>.</p>
+    <ul>
+      <li>Primary font: <a href="https://fonts.google.com/specimen/Lekton">Lekton</a> (Open Font License)</li>
+      <li>Secondary font: <a href="https://fonts.google.com/specimen/Roboto">Roboto</a>, <a href="https://fonts.google.com/specimen/Roboto+Condensed">Roboto Condensed</a> (Apache 2.0 License)</li>
+      <li>Stylesheet: <a href="https://necolas.github.io/normalize.css/">Normalize.css</a> (MIT License)</li>
+      <li>Featured photos pages: <a href="https://masonry.desandro.com/">Masonry</a>, <a href="https://imagesloaded.desandro.com/">imagesLoaded</a> (MIT License)</li>
+      <li>Internal content organizer: <a href="https://www.dropzonejs.com/">Dropzone</a> (MIT License)</li>
+      <li>Popup photo viewer: <a href="http://photoswipe.com/">PhotoSwipe</a> (MIT License)</li>
+      <li>Photo page (metadata): <a href="http://fontawesome.io/">Font Awesome</a> (SIL Open Font License 1.1, MIT License)</li>
+      <li>Photo page (EXIF): <a href="https://thenounproject.com/DmitryBaranovskiy/collection/photo/">Photo Collection</a> on The Noun Project (CC BY 3.0 US License)</li>
+    </ul>
   </section>
 
   <footer>
