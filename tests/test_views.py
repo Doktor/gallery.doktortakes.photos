@@ -1,3 +1,5 @@
+import shutil
+
 from django.contrib.auth.models import AnonymousUser, User, Group
 from django.core.cache import cache
 from django.core.files import File
@@ -38,11 +40,11 @@ assert MEDIA_ROOT == os.path.join(BASE_DIR, 'media_test')
 
 
 def setup_module():
-    os.mkdir(MEDIA_ROOT)
+    os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 
 def teardown_module():
-    os.remove(MEDIA_ROOT)
+    shutil.rmtree(MEDIA_ROOT)
 
 
 # Factory helpers
