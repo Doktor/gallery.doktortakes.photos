@@ -31,14 +31,7 @@ def create_superuser(ctx, manual=False):
 
 
 @task
-def build(ctx, manual=False):
-    print("Creating migrations and rebuilding database")
-    ctx.run(f"{manage} makemigrations --no-input photos")
-    ctx.run(f"{manage} migrate --no-input")
-
-    print("Creating superuser account")
-    create_superuser(ctx, manual=manual)
-
+def build(ctx):
     print("Rebuilding stylesheets")
     with ctx.cd(os.path.join('static', 'styles')):
         ctx.run("sass --update .:.")
@@ -47,6 +40,22 @@ def build(ctx, manual=False):
     ctx.run(f"{manage} collectstatic --no-input")
 
     print("Done!")
+
+
+@task(post=[build])
+def full_build(ctx, manual=False):
+    prompt = "Rebuilding database: are you sure? (Y/N) "
+
+    if not input(prompt).upper().startswith('Y'):
+        print("Exiting.")
+        return
+
+    print("Creating migrations and rebuilding database")
+    ctx.run(f"{manage} makemigrations --no-input photos")
+    ctx.run(f"{manage} migrate --no-input")
+
+    print("Creating superuser account")
+    create_superuser(ctx, manual=manual)
 
 
 @task
