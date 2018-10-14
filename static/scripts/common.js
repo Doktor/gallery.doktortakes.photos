@@ -147,6 +147,15 @@ function sendRequest(method, url, onSuccess, onError,
 
 const messages = document.getElementById('messages');
 
+function removeFlash() {
+  this.classList.remove('visible');
+  setTimeout(() => this.parentNode.removeChild(this), 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  Array.from(document.getElementsByClassName('message')).forEach((el) => el.addEventListener('click', removeFlash));
+});
+
 function flash(message) {
   for (let i = 0; i < messages.children.length; i++) {
     let item = messages.children[i];
@@ -176,19 +185,11 @@ function flash(message) {
   let repeat = document.createElement('span');
   el.appendChild(repeat);
 
-  el.addEventListener('click', function() {
-    el.classList.remove('visible');
-
-    setTimeout(function() {
-      el.parentNode.removeChild(el);
-    }, 300);
-  });
+  el.addEventListener('click', removeFlash);
 
   messages.appendChild(el);
 
-  setTimeout(function() {
-    el.classList.add('visible');
-  }, 100);
+  setTimeout(() => el.classList.add('visible'), 100);
 }
 
 

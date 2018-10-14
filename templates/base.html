@@ -33,7 +33,7 @@
 
 <div id="messages">
   {% for m in messages %}
-  <div class="message {{ m.tags }}">{{ m }}</div>
+  <div class="message visible {{ m.tags }}" tabindex="1">{{ m }}</div>
   {% endfor %}
 </div>
 
