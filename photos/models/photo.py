@@ -239,11 +239,7 @@ class Photo(models.Model):
 def process_image_upload(sender, instance, **kwargs):
     photo: Photo = instance
 
-    try:
-        Photo.objects.get(pk=photo.pk)
-    except Photo.DoesNotExist:
-        pass
-    else:
+    if photo.pk is not None:
         return
 
     file = photo.get_original()
