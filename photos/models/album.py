@@ -81,12 +81,29 @@ class Album(models.Model):
                 sum([album.count for album in self.children.all()]))
 
     def check_access(self, request):
-        if request.user.has_perm('view', self):
+        user = request.user
+
+        # Staff users have access to everything
+        if user.is_staff:
             return True
-        elif self.password:
-            return request.GET.get('password', None) == self.password
-        else:
+
+        # Access list does not exist
+        if not self.users.exists() and not self.groups.exists():
+            return True
+        # Access list exists and it's an anonymous user
+        elif not user.is_authenticated:
             return False
+
+        if user in self.users.all():
+            return True
+
+        if any(group in user.groups.all() for group in self.groups.all()):
+            return True
+
+        if self.password:
+            return request.GET.get('password', None) == self.password
+
+        return False
 
     def delete(self, using=None, keep_parents=False):
         for photo in self.photos.all():

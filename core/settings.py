@@ -181,11 +181,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'core.backends.AlbumPermissionsBackend',
-)
-
 
 # Internationalization
 
