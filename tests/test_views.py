@@ -439,7 +439,24 @@ class TestViewTag:
         for album in albums:
             album.tags.add(tag)
 
-    def test_view_does_not_show_albums_with_other_tags(self):
+    def test_tag_cover_is_from_one_of_the_albums(self):
+        tag = TagFactory()
+
+        album = AlbumFactory()
+        album.tags.add(tag)
+
+        photo = PhotoFactory(album=album)
+        album.cover = photo
+        album.save()
+
+        for _ in range(10):
+            other = AlbumFactory()
+            other.tags.add(tag)
+
+        content = self.get_response(tag.slug)
+        assert album.cover.thumbnail.url in content
+
+    def test_albums_with_other_tags_are_not_shown(self):
         tag = TagFactory()
 
         tag_2 = TagFactory()
@@ -448,3 +465,14 @@ class TestViewTag:
 
         content = self.get_response(tag.slug)
         assert "No albums were found with this tag" in content
+
+    # TODO: add a query string toggle to show hidden albums?
+    @pytest.mark.xfail(reason="not implemented")
+    def test_hidden_albums_are_not_shown(self):
+        tag = TagFactory()
+
+        album = AlbumFactory(hidden=True)
+        album.tags.add(tag)
+
+        content = self.get_response(tag.slug)
+        assert album.name not in content
