@@ -4,7 +4,6 @@
 <li><a href="{% url 'albums' %}">Photos</a></li>
 {% if not request.user.is_staff %}
 {% if divider %}<li class="divider"></li>{% endif %}
-<li><a href="https://trello.com/b/z6ZTMYFD/doktor-takes-photos" target="blank" rel="noopener noreferrer">Trello</a></li>
 <li><a href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer">Twitter</a></li>
 {% endif %}
 {% if divider %}<li class="divider"></li>{% endif %}

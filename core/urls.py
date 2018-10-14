@@ -9,8 +9,8 @@ from auth.urls import url_log_in, url_log_out
 from core.converters import MD5HashConverter
 from photos import api, views
 
-handler404 = 'photos.views.handler404'
-handler500 = 'photos.views.handler500'
+handler404 = 'photos.views.handler_404'
+handler500 = 'photos.views.handler_500'
 
 register_converter(MD5HashConverter, 'md5')
 
