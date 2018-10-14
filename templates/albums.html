@@ -14,7 +14,6 @@
 
 {% block content %}
   <section>
-    {% if not view_hidden %}
     <h2>Group photos</h2>
     <p>You can find large group photos <a href="{% url 'panoramas' %}">here</a>.</p>
 
@@ -25,14 +24,11 @@
       <li><a href="?view=details">Detailed cards</a> &mdash; locations, dates, other metadata</li>
       <li><a href="?view=simple">Simple</a> &mdash; text only</li>
     </ul>
-    {% endif %}
 
     <h2>Special pages</h2>
     <ul>
-      {% if request.user.is_authenticated and not view_hidden %}
-      <li><a href="?hidden=true">View your albums</a></li>
-      {% elif view_hidden %}
-      <li><a href="{% url 'albums' %}">View all albums</a></li>
+      {% if request.user.is_authenticated %}
+      <li><a href="{% url 'user' request.user.username %}">View your albums</a></li>
       {% endif %}
       <li><a href="{% url 'tags' %}">View all tags</a></li>
       <li><a href="{% url 'search' %}">Search all photos</a></li>
@@ -54,4 +50,3 @@
     {% include "_copyright.html" %}
   </footer>
 {% endblock %}
-

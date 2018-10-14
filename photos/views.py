@@ -1,9 +1,14 @@
 from django.conf import settings
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.views import View
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
@@ -131,25 +136,12 @@ def featured(request):
 
 @require_GET
 def view_albums(request):
-    hidden = request.GET.get('hidden', '')
-
-    if request.user.is_staff and hidden:
-        query = Q(parent__isnull=True, hidden=True)
-    elif hidden:
-        sub_query = Q(users=request.user)
-        for group in request.user.groups.all():
-            sub_query |= Q(groups=group)
-
-        query = Q(parent__isnull=True) & sub_query
-    else:
-        query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
-
+    query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
     albums = Album.objects.filter(query).order_by('-start')
 
     context = {
         'albums': albums,
         'items_per_page': ITEMS_PER_PAGE,
-        'view_hidden': bool(hidden),
     }
 
     view = request.GET.get('view', '')
@@ -330,6 +322,86 @@ def wall(request):
     context = {'photos': photos}
 
     return render(request, 'wall.html', context)
+
+
+# Users
+
+
+@require_GET
+@login_required
+def view_users(request):
+    return redirect(reverse('user', kwargs={'slug': request.user.username}))
+
+
+@require_GET
+@login_required
+def view_user(request, slug):
+    user = request.user
+
+    if user.username != slug:
+        raise Http404
+
+    if user.is_staff:
+        query = Q(parent__isnull=True, hidden=True)
+    else:
+        sub_query = Q(users=request.user)
+        for group in request.user.groups.all():
+            sub_query |= Q(groups=group)
+
+        query = Q(parent__isnull=True) & sub_query
+
+    albums = Album.objects.filter(query).order_by('-start')
+
+    context = {
+        'user': user,
+        'albums': albums,
+        'items_per_page': ITEMS_PER_PAGE,
+    }
+
+    return render(request, "user.html", context)
+
+
+class ChangePasswordView(LoginRequiredMixin, View):
+    def get(self, request, slug):
+        user = request.user
+
+        if user.username != slug:
+            raise Http404
+
+        return render(request, "user_password.html", {})
+
+    def post(self, request, slug):
+        user = request.user
+
+        if user.username != slug:
+            raise Http404
+
+        data = request.POST
+
+        current, new, repeat = data.get('current', ''), data.get('new', ''), data.get('repeat', '')
+
+        if not current:
+            messages.error(request, "Please enter your current password.")
+            return self.get(request, slug)
+
+        if not user.check_password(current):
+            messages.error(request, "The current password is incorrect.")
+            return self.get(request, slug)
+
+        if not new or not repeat:
+            messages.error(request, "Please enter the new password twice.")
+            return self.get(request, slug)
+
+        if new != repeat:
+            messages.error(request, "The new passwords don't match.")
+            return self.get(request, slug)
+
+        user.set_password(new)
+        user.save()
+        update_session_auth_hash(request, user)
+
+        messages.success(request, "Your password was changed successfully.")
+        return redirect(reverse('user', kwargs={'slug': user.username}))
 
 
 # Panoramas

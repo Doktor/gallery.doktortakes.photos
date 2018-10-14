@@ -50,6 +50,12 @@ api_patterns = [
     path('', api.AlbumView.as_view(), name='api_new_album'),
 ]
 
+user_patterns = [
+    path('', views.view_users, name='users'),
+    path('<slug:slug>/', views.view_user, name='user'),
+    path('<slug:slug>/change-password/', views.ChangePasswordView.as_view(), name='password'),
+]
+
 panorama_patterns = [
     path('', views.panorama_list, name='panoramas'),
     path('<slug:slug>/', views.panorama, name='panorama')
@@ -74,6 +80,8 @@ urlpatterns = [
     path('albums/', include(album_patterns)),
     path('api/albums/', include(api_patterns)),
     path('tags/', include(tag_patterns)),
+
+    path('users/', include(user_patterns)),
 
     path('panoramas/', include(panorama_patterns)),
 

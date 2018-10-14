@@ -465,6 +465,24 @@ input[type="radio"] + label {
   margin: 0.5rem 0;
 }
 
+.form-note {
+  width: 100%;
+  text-align: center;
+}
+
+#password-form-container, #cover {
+  width: 50%;
+  margin: 0 auto;
+}
+
+#password-form-cancel {
+  float: left;
+}
+
+#password-form-save {
+  float: right;
+}
+
 #login, #new-album {
   max-width: 600px;
   margin: 0 auto;
