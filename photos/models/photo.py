@@ -73,6 +73,8 @@ class Photo(models.Model):
     md5 = models.CharField(
         max_length=32, editable=False, unique=True, verbose_name="MD5")
 
+    local_path = models.CharField(max_length=1000, blank=True)
+
     sidecar_exists = models.BooleanField(default=False)
 
     # Display image
@@ -145,7 +147,10 @@ class Photo(models.Model):
         file = cache.get(self.md5)
 
         if file is None:
-            file = self.original.file
+            if self.local_path:
+                file = open(self.local_path, 'rb')
+            else:
+                file = self.original.file
 
         return file
 

@@ -1,4 +1,3 @@
-from django.core.cache import cache
 from django.core.files import File
 
 from photos.settings import (
@@ -61,6 +60,9 @@ def create_sidecar_images(pk: int):
 
     photo.sidecar_exists = True
     photo.save()
+
+    if hasattr(file, 'close'):
+        file.close()
 
 
 def round_all(*nums):

@@ -296,7 +296,7 @@ def create_album_cover(sender, instance, **kwargs):
             return
 
     from photos.tasks import replace_thumbnail
-    replace_thumbnail(album.cover, album.cover.original.file)
+    replace_thumbnail(album.cover, album.cover.get_original())
     album.cover.save()
 
 
