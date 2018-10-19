@@ -40,6 +40,8 @@ class AlbumView(APIView):
         for key in ('name', 'place', 'location', 'description', 'password'):
             setattr(album, key, data.get(key))
 
+        album.hidden = data.get('hidden', '') == 'true'
+
         tz = data.get('timezone', '')
 
         try:

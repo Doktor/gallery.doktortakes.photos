@@ -236,7 +236,7 @@ class Album(models.Model):
             'description': self.description,
             'start': self.start.strftime("%Y-%m-%d"),
             'end': end,
-            'hidden': int(self.hidden),
+            'hidden': str(self.hidden).lower(),
             'password': self.password,
             'access': self.get_access_list(),
             'tags': ', '.join((tag.slug for tag in self.tags.all())),
