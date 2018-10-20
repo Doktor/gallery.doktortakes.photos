@@ -219,7 +219,7 @@ class Album(models.Model):
         self.clean()
         super().save(*args, **kwargs)
 
-    def serialize(self, method='GET'):
+    def serialize(self, edit=False):
         if self.end:
             end = self.end.strftime("%Y-%m-%d")
         else:
@@ -249,7 +249,7 @@ class Album(models.Model):
                 'thumbnail_url': self.cover.thumbnail.url,
             }
 
-        if method == 'PUT':
+        if edit:
             response.update({
                 'edit_url': self.get_edit_url(),
                 'title': f"Editing {self.name} | {m.get('TITLE')}"

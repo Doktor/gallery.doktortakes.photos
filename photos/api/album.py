@@ -146,7 +146,7 @@ class AlbumView(APIView):
 
     def get(self, request, path):
         album = get_album_by_path(path)
-        return JsonResponse(album.serialize())
+        return JsonResponse(album.serialize(edit=True))
 
     def post(self, request):
         album = self._apply_changes(request, Album())
@@ -164,7 +164,7 @@ class AlbumView(APIView):
 
         return JsonResponse({
             'message': "Album updated successfully.",
-            'album': album.serialize(method='PUT'),
+            'album': album.serialize(edit=True),
         })
 
     def patch(self, request, path):
