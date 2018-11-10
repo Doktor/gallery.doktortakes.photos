@@ -147,13 +147,19 @@ function sendRequest(method, url, onSuccess, onError,
 
 const messages = document.getElementById('messages');
 
-function removeFlash() {
-  this.classList.remove('visible');
-  setTimeout(() => this.parentNode.removeChild(this), 1000);
+function removeFlash(el) {
+  el.classList.remove('visible');
+  setTimeout(() => el.parentNode.removeChild(el), 200);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  Array.from(document.getElementsByClassName('message')).forEach((el) => el.addEventListener('click', removeFlash));
+  Array.from(document.getElementsByClassName('message')).forEach((el) => {
+    el.addEventListener('click', () => removeFlash(el));
+
+    if (el.classList.contains('fade')) {
+      setTimeout(() => removeFlash(el), 4000);
+    }
+  });
 });
 
 function flash(message) {
@@ -185,7 +191,7 @@ function flash(message) {
   let repeat = document.createElement('span');
   el.appendChild(repeat);
 
-  el.addEventListener('click', removeFlash);
+  el.addEventListener('click', () => removeFlash(el));
 
   messages.appendChild(el);
 

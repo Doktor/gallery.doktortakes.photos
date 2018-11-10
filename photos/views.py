@@ -404,7 +404,7 @@ class ChangePasswordView(LoginRequiredMixin, View):
         user.save()
         update_session_auth_hash(request, user)
 
-        messages.success(request, "Your password was changed successfully.")
+        messages.success(request, "Your password was changed successfully.", extra_tags='fade')
         return redirect(reverse('user', kwargs={'slug': user.username}))
 
 
