@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.files.storage import DefaultStorage
@@ -23,6 +25,8 @@ SIZES = (
     (SIZE_2400, '2400 x 1600'),
     (SIZE_3600, '3600 x 2400'),
 )
+
+Status = namedtuple('Status', ('code', 'message'))
 
 
 class Album(models.Model):
@@ -80,30 +84,46 @@ class Album(models.Model):
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
 
+    WRONG_PASSWORD = Status(1, "Incorrect password specified.")
+    NO_PASSWORD = Status(2, "This album doesn't have a password but one was specified.")
+
     def check_access(self, request):
         user = request.user
+        password = request.GET.get('password', None)
+
+        access = False
+        status = None
+
+        # If a password is given but the album doesn't have a password
+        if password is not None and not self.password:
+            status = self.NO_PASSWORD
 
         # Staff users have access to everything
         if user.is_staff:
-            return True
+            access = True
+
+            if password is not None and self.password and password != self.password:
+                status = self.WRONG_PASSWORD
+
+            return access, status
 
         # Access list does not exist
         if not self.users.exists() and not self.groups.exists():
-            return True
+            access = True
         # Access list exists and it's an anonymous user
         elif not user.is_authenticated:
-            return False
+            access = False
 
         if user in self.users.all():
-            return True
+            access = True
 
         if any(group in user.groups.all() for group in self.groups.all()):
-            return True
+            access = True
 
         if self.password:
-            return request.GET.get('password', None) == self.password
+            access = password == self.password
 
-        return False
+        return access, status
 
     def delete(self, using=None, keep_parents=False):
         for photo in self.photos.all():

@@ -161,9 +161,13 @@ def view_albums(request):
 @require_GET
 def view_album(request, path):
     album = get_album_by_path(path)
+    access, status = album.check_access(request)
 
-    if not album.check_access(request):
+    if not access:
         raise Http404
+
+    if status is not None:
+        messages.warning(request, status.message)
 
     photos = Photo.objects.filter(album=album, sidecar_exists=True)
 
