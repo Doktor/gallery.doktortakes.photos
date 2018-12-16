@@ -203,8 +203,6 @@ class Photo(models.Model):
                 raise APIError(f"Duplicate file: {self.md5}")
 
     def serialize(self, password=False, index=None, metadata=True, filmstrip=True):
-        taken = self.taken.astimezone(pytz.timezone(self.album.timezone))
-
         response = {
             'image_url': self.image.url,
             'square_thumbnail_url': self.square_thumbnail.url,
@@ -218,7 +216,7 @@ class Photo(models.Model):
             response.update({
                 'metadata': {
                     'index': index,
-                    'taken': taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
+                    'taken': self.taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
                     'width': self.width,
                     'height': self.height,
                     'md5': self.md5,
@@ -299,15 +297,9 @@ def process_image_upload(sender, instance, **kwargs):
 
     # Timestamps
     modified = get_modified_time_utc(file)
+    tz = pytz.utc
 
-    if photo.album is not None:
-        tz_name = photo.album.timezone
-    else:
-        tz_name = 'US/Eastern'
-
-    tz = pytz.timezone(tz_name)
-
-    taken = photo.exif.get('EXIF DateTimeDigitized', None)
+    taken = photo.exif.get('EXIF DateTimeOriginal', None)
     if taken is not None:
         photo.taken = strptime(taken, DATE_FORMAT).replace(tzinfo=tz)
     else:

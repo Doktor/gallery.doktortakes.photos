@@ -1,4 +1,3 @@
-import pytz
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
@@ -41,15 +40,6 @@ class AlbumView(APIView):
             setattr(album, key, data.get(key))
 
         album.hidden = data.get('hidden', '') == 'true'
-
-        tz = data.get('timezone', '')
-
-        try:
-            pytz.timezone(tz)
-        except pytz.exceptions.UnknownTimeZoneError:
-            raise APIError("Invalid timezone.")
-        else:
-            album.timezone = tz
 
         # Dates
 

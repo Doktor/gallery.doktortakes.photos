@@ -101,7 +101,7 @@ class PanoramaAdmin(admin.ModelAdmin):
                        'md5', 'width', 'height', 'file_size')
         }),
         ('Dates', {
-            'fields': ('timezone', 'taken', 'edited', 'uploaded')
+            'fields': ('taken', 'edited', 'uploaded')
         }),
     )
     list_display = ('name', 'location', 'taken', 'md5',

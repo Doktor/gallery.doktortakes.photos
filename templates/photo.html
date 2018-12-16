@@ -93,18 +93,17 @@
 
         <div>
           <span title="Date taken"><i class="fas fa-fw fa-calendar"></i></span>
-          <span id="md-taken">{{ photo.taken|timezone:photo.album.timezone|date:"l, Y-m-d, g:i:s A" }}</span>
+          <span id="md-taken">{{ photo.taken|date:"l, Y-m-d, g:i:s A" }}</span>
         </div>
 
         <div>
-          <span title="Location and timezone"><i class="fas fa-fw fa-map-marker"></i></span>
+          <span title="Location"><i class="fas fa-fw fa-map-marker"></i></span>
           <span>
             {% if album.location %}
             <span id="md-location">{{ album.location }}</span>
             {% else %}
             <span class="note" id="md-location">No location specified</span>
             {% endif %}
-            (<span id="md-timezone">{{ album.timezone }}</span>)
           </span>
         </div>
 

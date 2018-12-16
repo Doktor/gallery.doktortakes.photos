@@ -135,9 +135,7 @@ def update_panorama(sender, instance, **kwargs):
 
     # Timestamps
     modified = get_modified_time_utc(pano.image)
-
-    tz_name = pano.timezone
-    tz = pytz.timezone(tz_name)
+    tz = pytz.utc
 
     taken = pano.exif.get('EXIF DateTimeDigitized', None)
     if taken is not None:

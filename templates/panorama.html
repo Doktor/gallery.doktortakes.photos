@@ -15,7 +15,7 @@
   <header id="panorama">
     <h2 class="title">{{ p.name }}</h2>
     {% if p.location %}<h3 class="location">{{ p.location }}</h3>{% endif %}
-    <h3><time>{{ p.taken|timezone:p.timezone|date:"l, Y-m-d, g:i A" }}</time></h3>
+    <h3><time>{{ p.taken|date:"l, Y-m-d, g:i A" }}</time></h3>
     {% if p.description %}<p class="description">{{ p.description }}</p>{% endif %}
   </header>
 
