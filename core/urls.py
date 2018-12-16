@@ -80,6 +80,7 @@ urlpatterns = [
 
     path('panoramas/', include(panorama_patterns)),
 
+    path('activity/', views.view_activity, name='activity'),
     path('featured/', views.featured, name='featured'),
     path('wall/', views.wall, name='wall'),
 

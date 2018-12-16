@@ -4,6 +4,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
@@ -21,6 +22,7 @@ from photos.settings import (
 import datetime
 import mimetypes
 import random
+import pytz
 
 metadata = m(None)
 
@@ -405,3 +407,71 @@ def panorama_list(request):
 def panorama(request, slug):
     p = get_object_or_404(Panorama, slug=slug)
     return render(request, "panorama.html", {'p': p})
+
+
+# Other
+
+
+def view_activity(request):
+    if (request.user.is_staff and not request.GET.get('cache', '')) or (
+            not request.user.is_staff):
+
+        activity = cache.get('activity')
+
+        if activity is not None:
+            return render(request, "activity.html", {'activity': activity})
+
+    activity = {}
+
+    album_q = Q(album__hidden=False, album__isnull=False)
+
+    now = datetime.datetime.now().replace(tzinfo=pytz.utc)
+    oldest = now - datetime.timedelta(days=180)
+
+    photo = (
+        Photo.objects
+            .filter(album_q)
+            .filter(uploaded__gt=oldest)
+            .order_by('-uploaded')
+            .values('album_id', 'uploaded'))[0]
+
+    while photo:
+        if len(activity.keys()) > 20:
+            break
+
+        album_id = photo['album_id']
+        uploaded = photo['uploaded']
+
+        # Find photos uploaded up to 1 hour before this one
+        activity_group = list(
+            Photo.objects
+                .filter(
+                    album=album_id,
+                    uploaded__gt=uploaded - datetime.timedelta(hours=1),
+                    uploaded__lt=uploaded)
+                .order_by('uploaded')
+                .values('id', 'uploaded'))
+
+        count = len(activity_group)
+        earliest = activity_group[0]['uploaded']
+
+        sample = random.sample(activity_group, min(count, 5))
+        pks = [photo['id'] for photo in sample]
+        thumbs = Photo.objects.filter(id__in=pks)
+
+        activity[earliest] = {
+            'count': count,
+            'album': Album.objects.get(id=album_id),
+            'photos': thumbs,
+        }
+
+        photo = (
+            Photo.objects
+                .filter(album_q)
+                .filter(uploaded__lt=earliest)
+                .order_by('-uploaded')
+                .values('album_id', 'uploaded'))[0]
+
+    cache.set('activity', activity, timeout=None)
+
+    return render(request, "activity.html", {'activity': activity})
