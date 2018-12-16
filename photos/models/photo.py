@@ -39,12 +39,12 @@ NS = {
 
 def get_path(photo, filename, ext=None):
     if ext is None:
-        base, ext = os.path.splitext(filename)
+        _, ext = os.path.splitext(filename)
         ext = ext.lstrip('.')
-    else:
-        base, _ = os.path.splitext(filename)
 
-    return f"{photo.get_path()}/{base}.{ext}"
+    ts = photo.taken.strftime("%Y%m%d_%H%M%S")
+
+    return f"{ts}_{photo.md5[:8]}.{ext}"
 
 
 def get_original_path(photo, filename):

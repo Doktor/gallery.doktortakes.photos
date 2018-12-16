@@ -319,46 +319,6 @@ def create_album_cover(sender, instance, **kwargs):
     album.cover.save()
 
 
-albums_to_move = {}
-
-
-@receiver(pre_save, sender=Album,
-          dispatch_uid="photos.models.check_album_path")
-def check_album_path(sender, instance, **kwargs):
-    album: Album = instance
-
-    if not album.get_all_subphotos(include_self=True):
-        return
-
-    try:
-        prev = Album.objects.get(pk=album.pk)
-    except Album.DoesNotExist:
-        return
-    else:
-        if prev.get_path() == album.get_path():
-            return
-
-    albums_to_move[album] = prev.get_path()
-
-
-@receiver(post_save, sender=Album,
-          dispatch_uid="photos.models.move_album_files")
-def move_album_files(sender, instance, created, **kwargs):
-    album: Album = instance
-
-    if album not in albums_to_move.keys():
-        return
-
-    for photo in album.get_all_subphotos(include_self=True):
-        photo.resave()
-
-    storage = DefaultStorage()
-    path = albums_to_move.pop(album)
-
-    for folder in MEDIA_FOLDERS.values():
-        storage.delete(os.path.join(folder, path))
-
-
 @receiver(post_delete, sender=Album,
           dispatch_uid="photos.models.delete_album_folders")
 def delete_album_folders(sender, instance, **kwargs):
