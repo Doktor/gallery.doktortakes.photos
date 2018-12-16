@@ -55,7 +55,8 @@ class PhotoAdmin(admin.ModelAdmin):
             'fields': ('original', 'exif')
         }),
         ('Display image', {
-            'fields': ('image', 'preview', 'watermark',
+            'fields': ('image', 'square_thumbnail', 'thumbnail',
+                       'preview', 'watermark',
                        'md5', 'dimensions', 'file_size')
         }),
         ('Other', {
@@ -69,7 +70,7 @@ class PhotoAdmin(admin.ModelAdmin):
                     'file_size', 'taken', 'uploaded', 'rating')
     ordering = ('-taken',)
     readonly_fields = (
-        'image', 'preview',
+        'image', 'square_thumbnail', 'thumbnail', 'preview',
         'md5', 'dimensions', 'file_size', 'taken', 'edited')
 
     def get_form(self, *args, **kwargs):
