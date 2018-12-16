@@ -270,8 +270,7 @@ def view_photo(request, path, md5):
         raise Http404
 
     path = get_albums_from_path(path)
-    short_md5 = photo.md5[:7]
-    title = f"{short_md5} | {photo.album.name} | {metadata['TITLE']}"
+    title = f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}"
 
     context = {
         'path': path,
@@ -279,7 +278,7 @@ def view_photo(request, path, md5):
         'password': 'password' in request.GET,
         'photo': photo,
         'exif': get_exif(photo),
-        'short_md5': short_md5,
+        'short_md5': photo.short_md5,
         'page_title': title,
         'local_storage': settings.LOCAL_STORAGE,
     }

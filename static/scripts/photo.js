@@ -139,7 +139,7 @@ function loadPhoto(url, history = true) {
     filmstrip.append(items);
 
     if (history) {
-      let shortMD5 = response.metadata.md5.slice(0, 7);
+      let shortMD5 = response.metadata.md5.slice(0, 8);
 
       window.history.pushState('', shortMD5, response.url);
 

@@ -44,7 +44,7 @@ def get_path(photo, filename, ext=None):
 
     ts = photo.taken.strftime("%Y%m%d_%H%M%S")
 
-    return f"{ts}_{photo.md5[:8]}.{ext}"
+    return f"{ts}_{photo.short_md5}.{ext}"
 
 
 def get_original_path(photo, filename):
@@ -231,6 +231,10 @@ class Photo(models.Model):
             response['filmstrip'] = generate_filmstrip(self)
 
         return response
+
+    @property
+    def short_md5(self):
+        return self.md5[:8]
 
     class Meta:
         get_latest_by = 'taken'
