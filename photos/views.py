@@ -347,13 +347,13 @@ def view_user(request, slug):
     if user.is_staff:
         query = Q(parent__isnull=True, hidden=True)
     else:
-        sub_query = Q(users=request.user)
-        for group in request.user.groups.all():
+        sub_query = Q(users=user)
+        for group in user.groups.all():
             sub_query |= Q(groups=group)
 
         query = Q(parent__isnull=True) & sub_query
 
-    albums = Album.objects.filter(query).order_by('-start')
+    albums = Album.objects.filter(query).distinct().order_by('-start')
 
     context = {
         'user': user,
