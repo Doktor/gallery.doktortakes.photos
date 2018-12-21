@@ -76,6 +76,7 @@ class Photo(models.Model):
     local_path = models.CharField(max_length=1000, blank=True)
 
     sidecar_exists = models.BooleanField(default=False)
+    original_filename = models.CharField(max_length=1000, blank=True)
 
     # Display image
 

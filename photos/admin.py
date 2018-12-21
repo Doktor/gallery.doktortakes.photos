@@ -52,7 +52,7 @@ class PhotoAdmin(admin.ModelAdmin):
     }
     fieldsets = (
         ('Image', {
-            'fields': ('original', 'exif')
+            'fields': ('original', 'original_filename', 'exif')
         }),
         ('Display image', {
             'fields': ('image', 'square_thumbnail', 'thumbnail',
@@ -66,8 +66,8 @@ class PhotoAdmin(admin.ModelAdmin):
             'fields': ('taken', 'edited')
         }),
     )
-    list_display = ('__str__', 'album_name', 'width', 'height',
-                    'file_size', 'taken', 'uploaded', 'rating')
+    list_display = ('__str__', 'original_filename', 'album_name',
+                    'width', 'height', 'file_size', 'taken', 'uploaded')
     ordering = ('-taken',)
     readonly_fields = (
         'image', 'square_thumbnail', 'thumbnail', 'preview',

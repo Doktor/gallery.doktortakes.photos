@@ -129,6 +129,8 @@ def upload_photo(request, path):
         data = BytesIO()
         data.name = file.name
 
+        p.original_filename = file.name
+
         for chunk in file.chunks(chunk_size=CHUNK_SIZE):
             data.write(chunk)
 
