@@ -335,7 +335,7 @@ rightArrow.addEventListener('click', function() {
 // Load the primary photo
 document.addEventListener('DOMContentLoaded', function() {
   let query = getPhotoQueryString();
-  loadPhoto(API_GET + query, true);
+  loadPhoto(API_GET + query, false);
 });
 
 
