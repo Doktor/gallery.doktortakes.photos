@@ -123,7 +123,7 @@
       {% endif %}
 
       {% if album.description %}
-      <p class="description">{{ album.description|safe }}</p>
+      <p class="description">{{ album.description|safe|linebreaks }}</p>
       {% endif %}
     </section>
   </header>
