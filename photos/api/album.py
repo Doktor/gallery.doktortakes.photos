@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.urls import reverse
 from django.utils.text import slugify
 from django.views.decorators.http import require_GET
 
@@ -154,6 +155,8 @@ class AlbumView(APIView):
 
         return JsonResponse({
             'message': "Album updated successfully.",
+            'title': f"Editing {album.name} | Doktor Takes Photos",
+            'edit_url': reverse('edit_album', kwargs={'path': album.get_path()}),
             'album': album.serialize(edit=True),
         })
 
