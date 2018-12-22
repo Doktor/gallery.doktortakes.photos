@@ -147,6 +147,14 @@ $navlinks-spacing: 1.75rem;
     a {
       color: $text;
     }
+
+    &-username a {
+      color: $blue !important;
+    }
+
+    &-log-out a {
+      color: red !important;
+    }
   }
 
   .navlinks-divider {

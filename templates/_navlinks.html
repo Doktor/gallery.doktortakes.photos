@@ -23,10 +23,10 @@
 </li>
 {% endif %}
 {% if request.user.is_authenticated %}
-<li class="navlink">
+<li class="navlink navlink-username">
   <a href="{% url 'user' request.user.username %}">{{ request.user.username }}</a>
 </li>
-<li class="navlink">
+<li class="navlink navlink-log-out">
   <a href="{% url 'log_out' %}">Log out</a>
 </li>
 {% else %}
