@@ -392,7 +392,7 @@ def get_exif(p):
 
 
 def get_index(photo):
-    photos = photo.album.photos.all()
+    photos = photo.album.photos.filter(sidecar_exists=True)
 
     for i, item in enumerate(photos):
         if item.md5 == photo.md5:
@@ -406,7 +406,7 @@ def generate_filmstrip(photo):
     half = count // 2
 
     album = photo.album
-    all_photos = album.photos.all()
+    all_photos = album.photos.filter(sidecar_exists=True)
 
     if all_photos.count() <= count:
         photos = [*all_photos]

@@ -193,13 +193,15 @@ class AlbumView(APIView):
 @api_wrapper
 @require_GET
 def get_album_photos(request, path):
-    album = get_album_by_path(path)
-    photos = []
+    album: Album = get_album_by_path(path)
+    response = []
 
     if not album.check_access(request):
         raise APIError("Album does not exist.")
 
-    for index, photo in enumerate(album.photos.all().order_by('taken')):
-        photos.append(photo.serialize(index=index, filmstrip=False))
+    photos = album.photos.filter(sidecar_exists=True).order_by('taken')
 
-    return JsonResponse({'photos': photos})
+    for index, photo in enumerate(photos):
+        response.append(photo.serialize(index=index, filmstrip=False))
+
+    return JsonResponse({'photos': response})

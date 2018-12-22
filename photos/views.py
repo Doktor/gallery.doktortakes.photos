@@ -270,13 +270,15 @@ def view_photo(request, path, md5):
         raise Http404
 
     path = get_albums_from_path(path)
+    album = path[-1]
     title = f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}"
 
     context = {
         'path': path,
-        'album': path[-1],
+        'album': album,
         'password': 'password' in request.GET,
         'photo': photo,
+        'count': album.photos.filter(sidecar_exists=True).count(),
         'exif': get_exif(photo),
         'short_md5': photo.short_md5,
         'page_title': title,
