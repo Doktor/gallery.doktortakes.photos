@@ -73,24 +73,44 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: lowercase;
 }
 
-// Navigation bar
+/* Header and navigation bar */
 
-$logo: 2.4rem;
+// Color of navbar lines
 $navbar-border: rgb(100, 100, 100);
-$navlinks-spacing: 1.75rem;
+
+// Base size for navbar text
+$navlink-size: 1.5rem;
+$logo-size: $navlink-size * 1.5;
+
+// Spacing between navbar items
+$navlinks-spacing: 1.5rem;
 
 .logo {
-  font-size: $logo;
   line-height: 1;
   text-align: center;
   text-transform: capitalize;
 
-  margin: 0;
   padding: 0;
+  margin: 0 0 1rem 0;
 
-  &.large {
-    font-size: 4.2rem;
+  // Standard size
+
+  font-size: $logo-size;
+
+  @media (min-width: 901px) {
+    font-size: $logo-size * 1.15;
+    margin: 0;
+  }
+
+  // Large size: index page
+
+  &.logo-large {
     margin: 1rem 0;
+    font-size: $logo-size * 1.25;
+
+    @media (min-width: 901px) {
+      font-size: $logo-size * 1.5;
+    }
   }
 }
 
@@ -101,6 +121,10 @@ $navlinks-spacing: 1.75rem;
 }
 
 .navlinks {
+  font-size: $navlink-size;
+  font-family: $font2;
+  text-transform: lowercase;
+
   list-style: none;
   padding: 0;
   margin: 0;
@@ -109,11 +133,10 @@ $navlinks-spacing: 1.75rem;
   justify-content: center;
   flex-wrap: wrap;
 
-  font-family: $font2;
-  text-transform: lowercase;
-
   &.index-navlinks {
-    font-size: 1.8rem;
+    @media (min-width: 901px) {
+      font-size: $navlink-size * 1.25;
+    }
 
     .navlink a {
       color: rgb(160, 160, 160);
@@ -124,14 +147,18 @@ $navlinks-spacing: 1.75rem;
 
       &, &:hover {
         text-decoration: none;
-        transition: color 0.2s;
+        transition: color 0.25s;
       }
     }
   }
 
   li {
     margin: 0 ($navlinks-spacing / 2);
-    line-height: $logo;
+
+    // For proper vertical alignment
+    @media (min-width: 901px) {
+      line-height: $logo-size * 1.15;
+    }
   }
 
   .logo a {
@@ -170,7 +197,7 @@ $navlinks-spacing: 1.75rem;
 
 @media (min-width: 601px) {
   nav .breadcrumbs li {
-    line-height: $logo;
+    line-height: $navlink-size;
   }
 }
 
@@ -686,7 +713,7 @@ ul.edit-links {
 
   li {
     float: left;
-    line-height: $logo;
+    line-height: $navlink-size;
   }
 }
 
