@@ -97,17 +97,6 @@
         </div>
 
         <div>
-          <span title="Location"><i class="fas fa-fw fa-map-marker"></i></span>
-          <span>
-            {% if album.location %}
-            <span id="md-location">{{ album.location }}</span>
-            {% else %}
-            <span class="note" id="md-location">No location specified</span>
-            {% endif %}
-          </span>
-        </div>
-
-        <div>
           <span title="Dimensions"><i class="fas fa-fw fa-camera"></i></span>
           <span>
             <span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span>
