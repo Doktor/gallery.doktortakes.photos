@@ -15,10 +15,6 @@
 <header>
   <h1 class="logo large">Doktor Takes Photos</h1>
 
-  {% if tagline %}
-  <h2 id="tagline">"{{ tagline }}"</h2>
-  {% endif %}
-
   <ul class="navlinks index-navlinks">
     {% include "_navlinks.html" %}
   </ul>
@@ -45,6 +41,10 @@
   <hr>
 
   <footer>
+    {% if tagline %}
+    <div class="tagline">"{{ tagline }}"</div>
+    {% endif %}
+
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>

@@ -54,18 +54,13 @@ body {
   }
 }
 
-
-header {
+.tagline {
+  font-size: 1.6rem;
+  font-style: italic;
+  font-weight: 400;
   margin: 1rem 0;
-
-  #tagline {
-    font-size: 1.6rem;
-    font-style: italic;
-    font-weight: 400;
-    margin: 1rem 0;
-    width: 100%;
-    color: $text;
-  }
+  width: 100%;
+  color: $text;
 }
 
 footer {
