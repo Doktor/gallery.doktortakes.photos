@@ -180,9 +180,7 @@
         <h2>Navigation</h2>
         <div>
           <span title="Album"><i class="fas fa-fw fa-book"></i></span>
-          {% for album in path %}
-          <a href="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">{{ album.name }}</a> {% if not forloop.last %}/{% endif %}
-          {% endfor %}
+          <a href="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Return to album</a>
         </div>
 
         <div>
