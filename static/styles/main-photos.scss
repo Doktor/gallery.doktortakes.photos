@@ -54,28 +54,9 @@ body {
   }
 }
 
-$spacing: 1.75rem;
 
 header {
   margin: 1rem 0;
-
-  .navlinks {
-    font-size: 1.8rem;
-    width: 100%;
-
-    a {
-      color: rgb(160, 160, 160);
-
-      &:hover {
-        color: $text;
-      }
-    }
-
-    a, a:hover {
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-  }
 
   #tagline {
     font-size: 1.6rem;
@@ -97,7 +78,11 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: lowercase;
 }
 
+// Navigation bar
+
 $logo: 2.4rem;
+$navbar-border: rgb(100, 100, 100);
+$navlinks-spacing: 1.75rem;
 
 .logo {
   font-size: $logo;
@@ -114,9 +99,13 @@ $logo: 2.4rem;
   }
 }
 
-.navlinks {
-  $border: rgb(100, 100, 100);
+.navbar {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid $navbar-border;
+  margin-top: -0.5rem;
+}
 
+.navlinks {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -128,40 +117,57 @@ $logo: 2.4rem;
   font-family: $font2;
   text-transform: lowercase;
 
+  &.index-navlinks {
+    font-size: 1.8rem;
+
+    .navlink a {
+      color: rgb(160, 160, 160);
+
+      &:hover {
+        color: $text;
+      }
+
+      &, &:hover {
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+    }
+  }
+
   li {
-    margin: 0 ($spacing / 2);
+    margin: 0 ($navlinks-spacing / 2);
     line-height: $logo;
+  }
 
-    &.divider {
-      color: $border;
-      margin: 0;
+  .logo a {
+    color: $text;
+  }
 
-      @media (min-width: 901px) {
-         margin: 0 ($spacing / 2);
+  .navlink {
+    a {
+      color: $text;
+    }
+  }
 
-         &::before {
-          content: "|";
-        }
+  .navlinks-divider {
+    color: $navbar-border;
+    margin: 0;
+
+    @media (min-width: 901px) {
+       margin: 0 ($navlinks-spacing / 2);
+
+       &::before {
+        content: "|";
       }
     }
   }
 }
 
+//
+
 @media (min-width: 601px) {
   nav .breadcrumbs li {
     line-height: $logo;
-  }
-}
-
-.navbar {
-  $border: rgb(100, 100, 100);
-
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid $border;
-  margin-top: -0.5rem;
-
-  a {
-    color: $text;
   }
 }
 

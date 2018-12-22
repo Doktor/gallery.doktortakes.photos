@@ -1,19 +1,36 @@
-{% if divider %}<li class="divider"></li>{% endif %}
-<li><a href="{% url 'about' %}">About</a></li>
-<li><a href="{% url 'featured' %}">Featured</a></li>
-<li><a href="{% url 'albums' %}">Photos</a></li>
+{% if divider %}<li class="navlinks-divider"></li>{% endif %}
+<li class="navlink">
+  <a href="{% url 'about' %}">About</a>
+</li>
+<li class="navlink">
+  <a href="{% url 'featured' %}">Featured</a>
+</li>
+<li class="navlink">
+  <a href="{% url 'albums' %}">Photos</a>
+</li>
 {% if not request.user.is_staff %}
-{% if divider %}<li class="divider"></li>{% endif %}
-<li><a href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer">Twitter</a></li>
+{% if divider %}<li class="navlinks-divider"></li>{% endif %}
+<li class="navlink">
+  <a href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer">Twitter</a></li>
 {% endif %}
-{% if divider %}<li class="divider"></li>{% endif %}
+{% if divider %}<li class="navlinks-divider"></li>{% endif %}
 {% if request.user.is_staff %}
-<li><a href="{% url 'admin:index' %}">Admin</a></li>
-<li><a href="{% url 'edit_albums' %}">Edit</a></li>
+<li class="navlink">
+  <a href="{% url 'admin:index' %}">Admin</a>
+</li>
+<li class="navlink">
+  <a href="{% url 'edit_albums' %}">Edit</a>
+</li>
 {% endif %}
 {% if request.user.is_authenticated %}
-<li><a href="{% url 'user' request.user.username %}">{{ request.user.username }}</a></li>
-<li><a href="{% url 'log_out' %}">Log out</a></li>
+<li class="navlink">
+  <a href="{% url 'user' request.user.username %}">{{ request.user.username }}</a>
+</li>
+<li class="navlink">
+  <a href="{% url 'log_out' %}">Log out</a>
+</li>
 {% else %}
-<li><a href="{% url 'log_in' %}">Log in</a></li>
+<li class="navlink">
+  <a href="{% url 'log_in' %}">Log in</a>
+</li>
 {% endif %}
