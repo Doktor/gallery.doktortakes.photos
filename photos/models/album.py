@@ -116,11 +116,9 @@ class Album(models.Model):
 
         if user in self.users.all():
             access = True
-
-        if any(group in user.groups.all() for group in self.groups.all()):
+        elif any(group in user.groups.all() for group in self.groups.all()):
             access = True
-
-        if self.password:
+        elif self.password:
             access = password == self.password
 
         return access, status
