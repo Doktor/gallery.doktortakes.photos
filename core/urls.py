@@ -40,11 +40,6 @@ api_patterns = [
     path('<path:path>/photo/', api.PhotoView.as_view(), name='api_photo'),
     path('<path:path>/upload/', api.upload_photo, name='upload_photo'),
 
-    path('<path:path>/previous/', api.previous_photo, name='previous_photo'),
-    path('<path:path>/next/', api.next_photo, name='next_photo'),
-    path('<path:path>/first/', api.first_photo, name='first_photo'),
-    path('<path:path>/last/', api.last_photo, name='last_photo'),
-
     path('<path:path>/photos/', api.get_album_photos, name='get_album_photos'),
     path('<path:path>/', api.AlbumView.as_view(), name='api_album'),
     path('', api.AlbumView.as_view(), name='api_new_album'),

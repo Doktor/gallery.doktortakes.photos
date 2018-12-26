@@ -1,7 +1,7 @@
 from django.core.cache import cache
 from django.db.models import Q
 from django.http import JsonResponse
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
 
 import datetime
 import pytz
@@ -38,68 +38,6 @@ class PhotoView(APIView):
         photo = get_photo_from_request(request, path)
         photo.delete()
         return JsonResponse({'message': "Photo deleted successfully."})
-
-
-def navigate(request, path, method):
-    md5 = request.GET.get('md5', '')
-    photo = get_photo_by_hash(path, md5)
-
-    if not photo.check_access(request):
-        raise APIError("Photo not found", status=404)
-
-    try:
-        nav = getattr(photo, method)(album=photo.album)
-    except Photo.DoesNotExist:
-        photos = Photo.objects.filter(album=photo.album)
-
-        # At the oldest photo: return the newest
-        if method == 'get_previous_by_taken':
-            nav = photos.order_by('-taken')[0]
-
-        # At the newest photo: return the oldest
-        elif method == 'get_next_by_taken':
-            nav = photos.order_by('taken')[0]
-
-    return JsonResponse(nav.serialize())
-
-
-@api_wrapper
-@require_GET
-def previous_photo(request, path):
-    return navigate(request, path, 'get_previous_by_taken')
-
-
-@api_wrapper
-@require_GET
-def next_photo(request, path):
-    return navigate(request, path, 'get_next_by_taken')
-
-
-def navigate_end(request, path, method):
-    album = get_album_by_path(path)
-    photos = Photo.objects.filter(album=album).order_by('taken')
-
-    if not photos:
-        raise APIError("There are no photos in this album.")
-
-    photo = getattr(photos, method)()
-
-    if not photo.check_access(request):
-        raise APIError("Photo not found", status=404)
-
-    return JsonResponse(photo.serialize())
-
-
-@api_wrapper
-@require_GET
-def first_photo(request, path):
-    return navigate_end(request, path, 'first')
-
-
-@api_wrapper
-@require_GET
-def last_photo(request, path):
-    return navigate_end(request, path, 'last')
 
 
 @api_wrapper
@@ -246,8 +184,7 @@ def search_photos(request):
 
     # Generate the response
 
-    data = [photo.serialize(metadata=False, filmstrip=False)
-            for photo in photos]
+    data = [photo.serialize(metadata=False) for photo in photos]
 
     response = {
         'photos': data,

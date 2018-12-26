@@ -51,12 +51,8 @@
        {% if password %}
        data-password="{{ album.password }}"
        {% endif %}
-       data-api-get="{% url 'api_photo' album.get_path %}"
-       data-api-previous="{% url 'previous_photo' album.get_path %}"
-       data-api-next="{% url 'next_photo' album.get_path %}"
-       data-api-first="{% url 'first_photo' album.get_path %}"
-       data-api-last="{% url 'last_photo' album.get_path %}"
-       data-api-get-album-photos="{% url 'get_album_photos' album.get_path %}">
+       data-api-get-album-photos="{% url 'get_album_photos' album.get_path %}"
+       data-md5="{{ photo.md5 }}">
   </div>
 
   <!-- Photo -->

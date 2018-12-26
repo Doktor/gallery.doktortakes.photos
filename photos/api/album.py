@@ -202,6 +202,6 @@ def get_album_photos(request, path):
     photos = album.photos.filter(sidecar_exists=True).order_by('taken')
 
     for index, photo in enumerate(photos):
-        response.append(photo.serialize(index=index, filmstrip=False))
+        response.append(photo.serialize(index=index))
 
     return JsonResponse({'photos': response})

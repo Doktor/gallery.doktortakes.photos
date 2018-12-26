@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
-from django.db.models import Q
 from django.db.models.fields.files import ImageFieldFile
 from django.db.models.signals import pre_save, post_save
 from django.db.utils import IntegrityError
@@ -203,7 +202,7 @@ class Photo(models.Model):
                 from photos.api.utils import APIError
                 raise APIError(f"Duplicate file: {self.md5}")
 
-    def serialize(self, password=False, index=None, metadata=True, filmstrip=True):
+    def serialize(self, password=False, index=None, metadata=True):
         response = {
             'image_url': self.image.url,
             'square_thumbnail_url': self.square_thumbnail.url,
@@ -211,9 +210,6 @@ class Photo(models.Model):
         }
 
         if metadata:
-            if index is None:
-                index = get_index(self)
-
             response.update({
                 'metadata': {
                     'index': index,
@@ -227,9 +223,6 @@ class Photo(models.Model):
                 },
                 'exif': get_exif(self)
             })
-
-        if filmstrip:
-            response['filmstrip'] = generate_filmstrip(self)
 
         return response
 
@@ -389,63 +382,3 @@ def get_exif(p):
         'aperture': f_stop,
         'iso_speed': iso_speed,
     }
-
-
-def get_index(photo):
-    photos = photo.album.photos.filter(sidecar_exists=True)
-
-    for i, item in enumerate(photos):
-        if item.md5 == photo.md5:
-            return i
-    else:
-        raise RuntimeError
-
-
-def generate_filmstrip(photo):
-    count = ITEMS_IN_FILMSTRIP
-    half = count // 2
-
-    album = photo.album
-    all_photos = album.photos.filter(sidecar_exists=True)
-
-    if all_photos.count() <= count:
-        photos = [*all_photos]
-    else:
-        # Queries
-        left_q = Q(taken__lt=photo.taken) & (~Q(pk=photo.pk))
-        middle_q1 = Q(taken=photo.taken, uploaded__lt=photo.uploaded)
-        middle_q2 = Q(taken=photo.taken, uploaded__gt=photo.uploaded)
-        right_q = Q(taken__gt=photo.taken) & (~Q(pk=photo.pk))
-
-        # Filter...
-        left = all_photos.filter(left_q).reverse()
-        middle_1 = all_photos.filter(middle_q1)
-        middle_2 = all_photos.filter(middle_q2)
-        right = all_photos.filter(right_q)
-
-        # Join the outside and middle queries
-        left = [*left, *middle_1]
-        right = [*middle_2, *right]
-        lc, rc = len(left), len(right)
-
-        if lc < half:
-            deficit = count - 1 - lc
-            photos = [*left, photo, *right[:deficit]]
-        elif rc < half:
-            deficit = count - 1 - rc
-            photos = [*left[:deficit], photo, *right]
-        else:
-            photos = [*left[:half], photo, *right[:half]]
-
-    photos = sorted(photos, key=lambda p: (p.taken, p.pk))
-
-    result = []
-
-    for photo in photos:
-        result.append({
-            'md5': photo.md5,
-            'url': photo.square_thumbnail.url,
-            'index': get_index(photo),
-        })
-
-    return result
