@@ -67,6 +67,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 ENABLE_REGISTRATION = False
 
+LOGIN_URL = 'log_in'
+
 
 # Database
 
