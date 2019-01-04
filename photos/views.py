@@ -12,6 +12,7 @@ from django.views import View
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
+from photos.api.photo import get_photo
 from photos.models import Album, Panorama, Photo, Tag
 from photos.models.photo import get_exif
 from photos.settings import (
@@ -55,14 +56,6 @@ def get_albums_from_path(path):
 def get_album_by_path(path) -> Album:
     """Returns the Album corresponding to the given path."""
     return get_albums_from_path(path)[-1]
-
-
-def get_photo(path, md5) -> Photo:
-    """Returns the Photo in the album with the given path, and with the
-    given MD5 hash."""
-    a = get_album_by_path(path)
-    p = get_object_or_404(Photo, md5=md5, album=a)
-    return p
 
 
 # Error handlers
@@ -261,13 +254,7 @@ def edit_albums(request):
 
 @require_GET
 def view_photo(request, path, md5):
-    photo = Photo.objects.get(md5=md5)
-
-    if not photo.sidecar_exists:
-        raise Http404
-
-    if not photo.check_access(request):
-        raise Http404
+    photo = get_photo(request, md5, validate_path=path)
 
     path = get_albums_from_path(path)
     album = path[-1]
@@ -290,14 +277,7 @@ def view_photo(request, path, md5):
 
 @require_GET
 def download_photo(request, path, md5):
-    photo = get_photo(path, md5)
-
-    if not photo.sidecar_exists:
-        raise Http404
-
-    if not photo.check_access(request):
-        raise Http404
-
+    photo = get_photo(request, md5, validate_path=path)
     photo.image.open()
 
     filename = photo.filename

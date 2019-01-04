@@ -1,33 +1,60 @@
+from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
 import datetime
 import pytz
 from io import BytesIO
 
-from photos.api.utils import (
-    APIError, APIView, get_photo_from_request, api_wrapper)
+from photos.api.utils import APIError, APIView, api_wrapper
 from photos.models.photo import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.settings import ITEMS_PER_PAGE
-from photos.views import get_album_by_path, get_photo
 
 
-def get_photo_by_hash(path, md5):
+def get_photo(request, md5, validate_path=None) -> Photo:
+    if validate_path is not None:
+        from photos.views import get_album_by_path
+
+        album = get_album_by_path(validate_path)
+        photo = get_object_or_404(Photo, md5=md5, album=album)
+    else:
+        photo = get_object_or_404(Photo, md5=md5)
+
+    if not photo.sidecar_exists:
+        raise Http404
+
+    access, status = photo.check_access(request)
+
+    if not access:
+        raise Http404
+
+    if status is not None:
+        messages.warning(request, status.message)
+
+    return photo
+
+
+def get_photo_from_request(request, path) -> Photo:
     try:
-        return get_photo(path, md5)
-    except Photo.DoesNotExist:
-        raise APIError("The specified photo doesn't exist.", status=404)
+        md5 = request.GET.get('md5')
+    except KeyError:
+        raise APIError("The parameter 'md5' is required.")
+
+    try:
+        photo = get_photo(request, md5, validate_path=path)
+    except Http404:
+        raise APIError("Photo does not exist.", status=404)
+
+    return photo
 
 
 class PhotoView(APIView):
     def get(self, request, path):
         photo = get_photo_from_request(request, path)
-
-        if not photo.check_access(request):
-            raise APIError("Photo does not exist.", status=404)
 
         return JsonResponse(
             photo.serialize(
@@ -40,6 +67,7 @@ class PhotoView(APIView):
 
         photo = get_photo_from_request(request, path)
         photo.delete()
+
         return JsonResponse({'message': "Photo deleted successfully."})
 
 
@@ -48,6 +76,8 @@ class PhotoView(APIView):
 def upload_photo(request, path):
     if not request.user.is_staff:
         raise APIError("Not authorized", status=403)
+
+    from photos.views import get_album_by_path
 
     files = request.FILES.getlist('files')
 
