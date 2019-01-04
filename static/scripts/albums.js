@@ -23,15 +23,3 @@ document.addEventListener('DOMContentLoaded', function() {
   let search = new Search(
     pagination, albumsEl, COUNT, countEl, searchEl, noResultsEl);
 });
-
-// Shortcuts
-
-document.addEventListener('keydown', function(event) {
-  let key = event.keyCode;
-
-  switch (key) {
-    case KEY_H:
-      window.location.href = '/';
-      break;
-  }
-});
