@@ -317,13 +317,12 @@ def search_photos(request):
 @require_GET
 @staff_only
 def wall(request):
-    q = Q(album__hidden=False) & Q(album__password='')
-
-    # Only show photos taken within the last 12 months
     today = datetime.date.today()
-    q = q & Q(taken__year__gte=today.year - 1, taken__month__gte=today.month)
+    start = today - datetime.timedelta(days=365 * 2)
 
-    photos = Photo.objects.filter(q).order_by('?')[:120]
+    q = Q(album__hidden=False, sidecar_exists=True, taken__gte=start)
+
+    photos = Photo.objects.filter(q).order_by('?')[:60]
     context = {'photos': photos}
 
     return render(request, 'wall.html', context)
