@@ -119,7 +119,14 @@ function sendRequest(method, url, onSuccess, onError,
       return;
     }
 
-    let response = JSON.parse(request.responseText);
+    let response;
+
+    try {
+      response = JSON.parse(request.responseText);
+    } catch (e) {
+      response = "Invalid server response: " + request.status.toString();
+      return flash(response);
+    }
 
     if (request.status !== 200) {
       onError(response);
