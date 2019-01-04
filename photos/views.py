@@ -341,10 +341,13 @@ def view_users(request):
 @require_GET
 @login_required
 def view_user(request, slug):
-    user = request.user
-
-    if user.username != slug:
-        raise Http404
+    if request.user.username == slug:
+        user = request.user
+    else:
+        if request.user.is_staff:
+            user = get_object_or_404(User, username=slug)
+        else:
+            raise Http404
 
     if user.is_staff:
         query = Q(parent__isnull=True, hidden=True)
