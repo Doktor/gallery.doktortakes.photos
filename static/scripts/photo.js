@@ -38,6 +38,7 @@ const metadata = {
 const links = {
   new_tab: $('md-new-tab'),
   download: $('md-download'),
+  admin: $('md-admin'),
 };
 
 const exif = {

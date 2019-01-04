@@ -202,7 +202,7 @@ class Photo(models.Model):
                 from photos.api.utils import APIError
                 raise APIError(f"Duplicate file: {self.md5}")
 
-    def serialize(self, password=False, index=None, metadata=True):
+    def serialize(self, admin=False, password=False, index=None, metadata=True):
         response = {
             'image_url': self.image.url,
             'square_thumbnail_url': self.square_thumbnail.url,
@@ -223,6 +223,9 @@ class Photo(models.Model):
                 },
                 'exif': get_exif(self)
             })
+
+            if admin:
+                response['metadata']['admin'] = reverse('admin:photos_photo_change', args=[self.pk])
 
         return response
 

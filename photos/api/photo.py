@@ -29,7 +29,10 @@ class PhotoView(APIView):
         if not photo.check_access(request):
             raise APIError("Photo does not exist.", status=404)
 
-        return JsonResponse(photo.serialize(password='password' in request.GET))
+        return JsonResponse(
+            photo.serialize(
+                admin=request.user.is_staff,
+                password='password' in request.GET))
 
     def delete(self, request, path):
         if not request.user.is_staff:

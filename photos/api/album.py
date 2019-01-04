@@ -200,8 +200,9 @@ def get_album_photos(request, path):
         raise APIError("Album does not exist.")
 
     photos = album.photos.filter(sidecar_exists=True).order_by('taken')
+    admin = request.user.is_staff
 
     for index, photo in enumerate(photos):
-        response.append(photo.serialize(index=index))
+        response.append(photo.serialize(admin=admin, index=index))
 
     return JsonResponse({'photos': response})

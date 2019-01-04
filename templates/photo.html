@@ -113,6 +113,13 @@
           <span title="Download"><i class="fas fa-fw fa-download"></i></span>
           <span id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></span>
         </div>
+
+        {% if request.user.is_staff %}
+        <div>
+           <span title="Admin"><i class="fas fa-fw fa-toolbox"></i></span>
+           <span id="md-admin"><a href="{% url 'admin:photos_photo_change' photo.pk %}">Admin</a></span>
+        </div>
+        {% endif %}
       </div>
 
       <!-- EXIF -->
