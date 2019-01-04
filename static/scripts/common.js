@@ -236,10 +236,11 @@ let Pagination = function(
 
   if (this.loadRequired) {
     this.loadNewItems = function() {};
+  } else {
+    this.items = this.containerEl.children;
+    this.validItems = this.items;
   }
-};
 
-Pagination.prototype.setup = function() {
   this.addButtons(this.pages);
   this.changePage(this.page, true);
 };
@@ -283,8 +284,7 @@ Pagination.prototype.addPageButton = function(page, container) {
   el.classList.add('page');
   el.innerText = page.toString();
   el.dataset.page = page.toString();
-
-  el.addEventListener('click', () => { this.changePage(page); });
+  el.addEventListener('click', () => this.changePage(page));
 
   container.appendChild(el);
 };
@@ -314,17 +314,12 @@ Pagination.prototype.createTextButton = function(text) {
   return el;
 };
 
-Pagination.prototype.updatePageCount = function(count) {
-  this.pages = Math.ceil(count / this.itemsPerPage);
-  this.changePage(this.pages === 0 ? 0 : 1, true, true);
-};
-
 Pagination.prototype.addButtons = function() {
-  let pagination = document.querySelectorAll(this.paginationSelector);
+  let containers = document.querySelectorAll(this.paginationSelector);
 
   // Show/hide pagination containers
-  for (let container of pagination) {
-    container.classList.toggle('hidden', this.pages <= 1);
+  for (let c of containers) {
+    c.classList.toggle('hidden', this.pages <= 1);
   }
 
   if (this.pages <= 1) { return; }
@@ -332,7 +327,7 @@ Pagination.prototype.addButtons = function() {
   let current = this.page;
   let last = this.pages;
 
-  for (let c of pagination) {
+  for (let c of containers) {
     c.innerHTML = '';
 
     if (last >= 10) {
@@ -392,7 +387,7 @@ Pagination.prototype.addButtons = function() {
 
 // Pagination: implementation
 
-Pagination.prototype.changePage = function(page, force = false, ignoreHidden = false) {
+Pagination.prototype.changePage = function(page, force = false) {
   if (page === this.page && !force) { return; }
 
   this.page = page;
@@ -403,21 +398,21 @@ Pagination.prototype.changePage = function(page, force = false, ignoreHidden = f
       this.selectPage();
     });
   } else {
-    this.showLoadedItems(ignoreHidden);
+    this.showLoadedItems();
     this.addButtons();
     this.selectPage();
   }
 };
 
 Pagination.prototype.selectPage = function() {
+  // Deselect the previous selected page
   let selected = document.querySelectorAll('.page.selected');
   for (let item of selected) {
     item.classList.remove('selected');
   }
 
-  let selector = ".page[data-page='{0}']".format(this.page);
-
-  let pageButtons = document.querySelectorAll(selector);
+  // Select the new selected page
+  let pageButtons = document.querySelectorAll(".page[data-page='{0}']".format(this.page));
   for (let item of pageButtons) {
     item.classList.add('selected');
   }
@@ -428,10 +423,19 @@ Pagination.prototype.selectPage = function() {
   }
 };
 
-Pagination.prototype.showLoadedItems = function(ignoreHidden = false) {
+function loadItem(item) {
+  let image = item.querySelector('img');
+
+  if (image.classList.contains('not-loaded')) {
+    image.src = image.dataset.src;
+    image.classList.remove('not-loaded');
+  }
+}
+
+Pagination.prototype.showLoadedItems = function() {
   if (this.page === 0) {
-    for (let wrapper of this.containerEl.children) {
-      wrapper.classList.add('hidden');
+    for (let item of this.items) {
+      item.classList.add('hidden');
     }
 
     return;
@@ -440,22 +444,20 @@ Pagination.prototype.showLoadedItems = function(ignoreHidden = false) {
   let start = this.itemsPerPage * (this.page - 1);
   let end = start + this.itemsPerPage - 1;
 
-  Array.from(this.containerEl.children).forEach((wrapper, i) => {
-    if (ignoreHidden && wrapper.classList.contains('hidden')) { return; }
-
-    let image = wrapper.querySelector('img');
-
+  Array.from(this.validItems).forEach((item, i) => {
     if (i >= start && i <= end) {
-      if (!image.classList.contains('loaded')) {
-        image.src = image.dataset.src;
-        image.classList.remove('not-loaded');
-        image.classList.add('loaded');
-      }
-      wrapper.classList.remove('hidden');
+      loadItem(item);
+      item.classList.remove('hidden');
     } else {
-      wrapper.classList.add('hidden');
+      item.classList.add('hidden');
     }
   });
+};
+
+Pagination.prototype.setValidItems = function(newItems) {
+  this.validItems = newItems;
+  this.pages = Math.ceil(newItems.length / this.itemsPerPage);
+  this.changePage(this.pages === 0 ? 0 : 1, true);
 };
 
 
@@ -463,38 +465,42 @@ Pagination.prototype.showLoadedItems = function(ignoreHidden = false) {
 
 const SEARCH_DELAY = 200;
 
-let Search = function(pagination, elements, count,
+let Search = function(pagination, items,
                       countEl, searchEl, noResultsEl) {
   this.pagination = pagination;
-  this.elements = elements;
-  this.count = count;
+  this.items = items;
   this.countEl = countEl;
   this.searchEl = searchEl;
   this.noResultsEl = noResultsEl;
 
-  let timeout;
+  this.previous = "";
+  this.timeout = 0;
 
   this.searchEl.addEventListener('keyup', () => {
-    if (this.searchEl.value === this.searchEl.dataset.previous) { return; }
+    if (this.searchEl.value === this.previous) { return; }
+    this.previous = this.searchEl.value;
 
-    this.searchEl.dataset.previous = this.searchEl.value;
+    // Starts filtering after a short delay
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.matches = [];
 
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
       let term = this.searchEl.value.toLowerCase();
 
-      for (let item of this.elements.querySelectorAll('.wrapper')) {
-        let name = item.dataset.name;
-        item.classList.toggle('hidden', !name.includes(term));
+      for (let item of this.items) {
+        if (item.dataset.name.includes(term)) {
+          item.classList.remove('hidden');
+          this.matches.push(item);
+        } else {
+          item.classList.add('hidden');
+        }
       }
 
-      let hidden = this.elements.querySelectorAll('.hidden').length;
-      let total = this.count - hidden;
-      let word = total === 1 ? 'album' : 'albums';
+      this.pagination.setValidItems(this.matches);
 
-      this.pagination.updatePageCount(total);
-      this.countEl.innerText = "{0} {1}".format(total, word);
-      this.noResultsEl.classList.toggle('hidden', total !== 0)
+      let n = this.matches.length;
+      this.countEl.innerText = "{0} {1}".format(n, n === 1 ? 'album' : 'albums');
+      this.noResultsEl.classList.toggle('hidden', n !== 0)
     }, SEARCH_DELAY);
   });
 };

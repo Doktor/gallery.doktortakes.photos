@@ -258,7 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const pagination = new Pagination(
     photos, photosPerPage, '.pagination.pagination-photos',
     {pages: pages, page: 1, saveHistory: false});
-  pagination.setup();
 });
 
 
@@ -281,10 +280,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const pagination = new Pagination(
     albumsEl, ITEMS_PER_PAGE, '.pagination:not(.pagination-photos)',
     {pages: pages, page: 1, saveHistory: false});
-  pagination.setup();
 
-  const search = new Search(pagination, albumsEl, COUNT,
-    countEl, searchEl, noResultsEl);
+  const search = new Search(
+    pagination, albumsEl.children, countEl, searchEl, noResultsEl);
 });
 
 

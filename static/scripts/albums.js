@@ -15,11 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
   let page = getPageNumber();
   let pages = Math.ceil(COUNT / ITEMS_PER_PAGE);
 
-  let pagination = new Pagination(
+  const pagination = new Pagination(
     albumsEl, ITEMS_PER_PAGE, '.pagination',
     {pages: pages, page: page, saveHistory: false});
-  pagination.setup();
 
-  let search = new Search(
-    pagination, albumsEl, COUNT, countEl, searchEl, noResultsEl);
+  const search = new Search(
+    pagination, albumsEl.children, countEl, searchEl, noResultsEl);
 });

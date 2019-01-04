@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const pagination = new Pagination(
     photos, ITEMS_PER_PAGE, '.pagination',
     {pages: pages, page: page, saveHistory: true});
-  pagination.setup();
 });
 
 // Shortcuts
