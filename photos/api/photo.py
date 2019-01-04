@@ -80,10 +80,11 @@ def upload_photo(request, path):
     from photos.views import get_album_by_path
 
     files = request.FILES.getlist('files')
+    album = get_album_by_path(path)
 
     for file in files:
         p = Photo()
-        p.album = get_album_by_path(path)
+        p.album = album
 
         # Check if this image already exists
         md5 = generate_md5_hash(file)
@@ -97,10 +98,19 @@ def upload_photo(request, path):
 
         p.md5 = md5
 
-        data = BytesIO()
-        data.name = file.name
+        filename = file.name
 
-        p.original_filename = file.name
+        try:
+            original = Photo.objects.get(album=album, original_filename=filename)
+        except Photo.DoesNotExist:
+            pass
+        else:
+            original.delete()
+
+        data = BytesIO()
+        data.name = filename
+
+        p.original_filename = filename
 
         for chunk in file.chunks(chunk_size=CHUNK_SIZE):
             data.write(chunk)
