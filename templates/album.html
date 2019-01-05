@@ -36,8 +36,7 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Header -->
-  <header>
+  <section>
     <nav class="album-nav">
       <ul class="breadcrumbs">
         <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'albums' %}">Photos</a></li>
@@ -50,83 +49,83 @@
       <ul class="edit-links">
         <li><a href="{{ album.get_edit_url }}">Edit</a></li>
         <li><a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a></li>
-    </ul>
+      </ul>
       {% endif %}
     </nav>
+  </section>
 
-    <section id="album">
-      <figure class="cover">
-        {% if album.cover %}
-        <img src="{{ album.cover.image.url }}">
-        {% else %}
-        <img src="{% static 'images/cover-placeholder.png' %}">
-        {% endif %}
+  <section id="album">
+    <figure class="cover">
+      {% if album.cover %}
+      <img src="{{ album.cover.image.url }}">
+      {% else %}
+      <img src="{% static 'images/cover-placeholder.png' %}">
+      {% endif %}
 
-        <div class="title-container">
-          <h2 class="title">{{ album.name }}</h2>
-        </div>
-      </figure>
+      <div class="title-container">
+        <h2 class="title">{{ album.name }}</h2>
+      </div>
+    </figure>
 
-      {% if album.get_place or album.get_location %}
+    {% if album.get_place or album.get_location %}
+    <h3 class="info">
+      <span title="Location"><i class="fas fa-fw fa-map-marker"></i></span>
+      {{ album.get_full_location }}
+    </h3>
+    {% endif %}
+
+    <h3 class="info">
+      <span title="Date"><i class="fas fa-fw fa-calendar"></i></span>
+      {{ album.get_full_date }}
+    </h3>
+
+    {% if album.hidden %}
+      {% if not request.user.is_staff %}
       <h3 class="info">
-        <span title="Location"><i class="fas fa-fw fa-map-marker"></i></span>
-        {{ album.get_full_location }}
+        <span title="Warning"><i class="fas fa-fw fa-exclamation-triangle"></i></span>
+        This album is hidden; please ask before sharing.
       </h3>
       {% endif %}
 
+      {% if album.password %}
       <h3 class="info">
-        <span title="Date"><i class="fas fa-fw fa-calendar"></i></span>
-        {{ album.get_full_date }}
-      </h3>
-
-      {% if album.hidden %}
-        {% if not request.user.is_staff %}
-        <h3 class="info">
-          <span title="Warning"><i class="fas fa-fw fa-exclamation-triangle"></i></span>
-          This album is hidden; please ask before sharing.
-        </h3>
-        {% endif %}
-
-        {% if album.password %}
-        <h3 class="info">
-          <span title="Password"><i class="fas fa-fw fa-key"></i></span>
-          {{ album.password }}
-          (<a href="{{ album.get_absolute_url }}">regular link</a>,
-          <a href="{{ album.get_password_url }}">password link</a>)
-        </h3>
-        {% endif %}
-
-        {% if request.user.is_staff %}
-        <h3 class="info">
-          <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
-          Hidden album
-        </h3>
-
-        {% with access_list=album.get_access_list %}
-          {% if access_list %}
-          <h3 class="info">
-            <span title="Users"><i class="fas fa-fw fa-users"></i></span>
-            {{ access_list }}
-          </h3>
-          {% endif %}
-        {% endwith %}
-        {% endif %}
-      {% endif %}
-
-      {% if album.tags.count %}
-      <h3 class="info">
-        <span title="Tags"><i class="fas fa-fw fa-tags"></i></span>
-        {% for tag in album.tags.all %}
-        <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
-        {% endfor %}
+        <span title="Password"><i class="fas fa-fw fa-key"></i></span>
+        {{ album.password }}
+        (<a href="{{ album.get_absolute_url }}">regular link</a>,
+        <a href="{{ album.get_password_url }}">password link</a>)
       </h3>
       {% endif %}
 
-      {% if album.description %}
-      <p class="description">{{ album.description|safe|linebreaks }}</p>
+      {% if request.user.is_staff %}
+      <h3 class="info">
+        <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
+        Hidden album
+      </h3>
+
+      {% with access_list=album.get_access_list %}
+        {% if access_list %}
+        <h3 class="info">
+          <span title="Users"><i class="fas fa-fw fa-users"></i></span>
+          {{ access_list }}
+        </h3>
+        {% endif %}
+      {% endwith %}
       {% endif %}
-    </section>
-  </header>
+    {% endif %}
+
+    {% if album.tags.count %}
+    <h3 class="info">
+      <span title="Tags"><i class="fas fa-fw fa-tags"></i></span>
+      {% for tag in album.tags.all %}
+      <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
+      {% endfor %}
+    </h3>
+    {% endif %}
+
+    {% if album.description %}
+    <p class="description">{{ album.description|safe|linebreaks }}</p>
+    {% endif %}
+  </section>
 
   <hr>
 
