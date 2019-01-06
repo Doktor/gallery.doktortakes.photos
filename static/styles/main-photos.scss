@@ -689,15 +689,7 @@ input[type="radio"] + label {
   width: 100%;
 }
 
-.album-nav, .tag-nav {
-  @include clearfix();
-
-  .breadcrumbs {
-    float: left;
-  }
-}
-
-ul.edit-links, ul.edit-links-center {
+ul.group-edit-links, ul.edit-links-center {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -711,7 +703,7 @@ ul.edit-links, ul.edit-links-center {
   }
 }
 
-ul.edit-links {
+ul.group-edit-links {
   float: right;
 
   li {
@@ -726,61 +718,95 @@ ul.edit-links-center {
   }
 }
 
-.info {
-  text-align: left;
-  font-size: 1.8rem;
-  line-height: 3rem;
-  font-weight: 400;
-
-  text-transform: none;
-  color: $text;
+#panorama, .group {
+  margin-bottom: 0;
 }
 
-#album {
+.group {
   margin: 1rem 0 !important;
 }
 
-#album, #panorama, #tag {
-  margin-bottom: 0;
+.group-nav {
+  @include clearfix();
 
-  .cover {
+  .breadcrumbs {
+    float: left;
+  }
+}
+
+.group-cover {
+  width: 100%;
+  height: 50vh;
+  border: 1px solid $text;
+
+  position: relative;
+  margin-bottom: 1rem;
+
+  img {
     width: 100%;
-    height: 30vh;
-    border: 1px solid $text;
-
-    position: relative;
-    margin-bottom: 1rem;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    height: 100%;
+    object-fit: cover;
   }
+}
 
-  .title-container {
-    position: absolute;
-    bottom: 0;
+.group-inset {
+  $spacing: 1.25rem;
 
-    background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
 
-    padding: 0.5rem 1rem;
-    margin-bottom: 1.25rem;
-    margin-left: 1.25rem;
+  padding: 1rem;
+  bottom: 0;
+
+  // Bottom-center
+  margin-bottom: $spacing;
+  left: 50%;
+  transform: translateX(-50%);
+
+  // Bottom-left
+  @media (min-width: 901px) {
+    margin-left: $spacing;
+    left: unset;
+    transform: none;
   }
+}
 
-  .title {
-    font-size: 3.2rem;
-    line-height: 3.2rem;
+.group-inset-text {
+  text-shadow: 1px 1px 2px black;
+  text-align: center !important;
 
-    text-align: left;
-    text-transform: none;
-    text-shadow: 1px 1px 2px black;
+  @media (min-width: 901px) {
+    text-align: left !important;
   }
+}
 
-  .description {
-    margin: 1rem 0;
+.group-title {
+  font-size: 3.0rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+
+  // Regular case
+  text-transform: none;
+}
+
+.group-info {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 400;
+
+  color: $text;
+  font-family: $font2;
+  text-align: left;
+  text-transform: none;
+  white-space: nowrap;
+
+  &:not(:last-child) {
+    margin-bottom: 0.5rem;
   }
+}
+
+.group-description {
+  margin: 1rem 0;
 }
 
 .breadcrumbs {

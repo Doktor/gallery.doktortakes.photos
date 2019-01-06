@@ -36,8 +36,9 @@
 {% endblock %}
 
 {% block content %}
+  <!-- Navigation -->
   <section>
-    <nav class="album-nav">
+    <nav class="group-nav">
       <ul class="breadcrumbs">
         <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'albums' %}">Photos</a></li>
         {% for album in path %}
@@ -46,7 +47,7 @@
       </ul>
 
       {% if request.user.is_staff %}
-      <ul class="edit-links">
+      <ul class="group-edit-links">
         <li><a href="{{ album.get_edit_url }}">Edit</a></li>
         <li><a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a></li>
       </ul>
@@ -54,67 +55,65 @@
     </nav>
   </section>
 
-  <section id="album">
-    <figure class="cover">
+  <!-- Metadata -->
+  <section class="group">
+    <!-- Cover photo -->
+    <figure class="group-cover">
       {% if album.cover %}
-      <img src="{{ album.cover.image.url }}">
+      <img alt="Cover photo" src="{{ album.cover.image.url }}">
       {% else %}
-      <img src="{% static 'images/cover-placeholder.png' %}">
+      <img alt="Cover photo placeholder" src="{% static 'images/cover-placeholder.png' %}">
       {% endif %}
 
-      <div class="title-container">
-        <h2 class="title">{{ album.name }}</h2>
+      <div class="group-inset">
+        <h2 class="group-inset-text group-title">{{ album.name }}</h2>
+
+        <h3 class="group-inset-text group-info">
+        {% with location=album.get_full_location %}
+          {% if location and location == album.location %}{{ location }} &middot; {% endif %}
+        {% endwith %}
+          {{ album.get_full_date }} &middot;
+          {{ count }} photo{{ count|pluralize }}
+        </h3>
       </div>
     </figure>
 
-    {% if album.get_place or album.get_location %}
-    <h3 class="info">
-      <span title="Location"><i class="fas fa-fw fa-map-marker"></i></span>
-      {{ album.get_full_location }}
-    </h3>
-    {% endif %}
-
-    <h3 class="info">
-      <span title="Date"><i class="fas fa-fw fa-calendar"></i></span>
-      {{ album.get_full_date }}
-    </h3>
-
     {% if album.hidden %}
       {% if not request.user.is_staff %}
-      <h3 class="info">
+      <p class="group-info">
         <span title="Warning"><i class="fas fa-fw fa-exclamation-triangle"></i></span>
         This album is hidden; please ask before sharing.
-      </h3>
+      </p>
       {% endif %}
 
       {% if album.password %}
-      <h3 class="info">
+      <p class="group-info">
         <span title="Password"><i class="fas fa-fw fa-key"></i></span>
         {{ album.password }}
         (<a href="{{ album.get_absolute_url }}">regular link</a>,
         <a href="{{ album.get_password_url }}">password link</a>)
-      </h3>
+      </p>
       {% endif %}
 
       {% if request.user.is_staff %}
-      <h3 class="info">
-        <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
-        Hidden album
-      </h3>
+        <p class="group-info">
+          <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
+          Hidden album
+        </p>
 
-      {% with access_list=album.get_access_list %}
-        {% if access_list %}
-        <h3 class="info">
-          <span title="Users"><i class="fas fa-fw fa-users"></i></span>
-          {{ access_list }}
-        </h3>
-        {% endif %}
-      {% endwith %}
+        {% with access_list=album.get_access_list %}
+          {% if access_list %}
+          <p class="group-info">
+            <span title="Users"><i class="fas fa-fw fa-users"></i></span>
+            {{ access_list }}
+          </p>
+          {% endif %}
+        {% endwith %}
       {% endif %}
     {% endif %}
 
     {% if album.tags.count %}
-    <h3 class="info">
+    <h3 class="group-info">
       <span title="Tags"><i class="fas fa-fw fa-tags"></i></span>
       {% for tag in album.tags.all %}
       <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
@@ -123,37 +122,34 @@
     {% endif %}
 
     {% if album.description %}
-    <p class="description">{{ album.description|safe|linebreaks }}</p>
+    <p class="group-description">{{ album.description|safe|linebreaks }}</p>
     {% endif %}
   </section>
-
-  <hr>
+  <!-- End metadata -->
 
   <!-- Albums -->
   {% with a_count=album.children.count %}
   {% if a_count %}
-    <div class="count">{{ a_count }} album{{ a_count|pluralize }}</div>
-
     <section id="albums">
       {% for c in album.children.all %}
         {% include "_album_card.html" with album=c %}
       {% endfor %}
     </section>
   {% endif %}
-  {% endwith %}
 
-  {% if album.children.count and count %}
+  {% if a_count and count %}
+  <hr>
+  {% elif not a_count and count %}
   <hr>
   {% endif %}
+  {% endwith %}
 
   {% if count %}
-    <!-- Hidden data element -->
+    <!-- API -->
     <div id="api"
        data-count="{{ count }}"
        data-items-per-page="{{ items_per_page }}"
        data-page="1"></div>
-
-    <div class="count">{{ count }} photo{{ count|pluralize }}</div>
 
     <!-- Photos -->
     <div class="pagination"></div>

@@ -19,52 +19,50 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Header -->
-  <header>
-    <nav class="tag-nav">
+  <!-- Navigation -->
+  <section>
+    <nav class="group-nav">
       <ul class="breadcrumbs">
         <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-book"></i> <a href="{% url 'tags' %}">Tags</a></li>
         <li><a href="{{ tag.get_absolute_url }}">{{ tag.slug }}</a></li>
       </ul>
 
       {% if request.user.is_staff %}
-      <ul class="edit-links">
+      <ul class="group-edit-links">
         <li><a href="{% url 'admin:photos_tag_change' tag.pk %}">Admin</a></li>
       </ul>
       {% endif %}
     </nav>
+  </section>
 
-    <section id="tag">
-      <figure class="cover">
-        {% if cover %}
-        <img src="{{ cover.image.url }}">
-        {% else %}
-        <img src="{% static 'images/cover-placeholder.png' %}">
-        {% endif %}
-
-        <div class="title-container">
-          <h2 class="title">#{{ tag.slug }}</h2>
-        </div>
-      </figure>
-
-      {% if tag.description %}
-      <h3 class="info">
-        <span title="Description"><i class="fas fa-fw fa-sticky-note"></i></span>
-        <span>{{ tag.description|safe }}</span>
-      </h3>
+  <!-- Metadata -->
+  <section class="group">
+    <figure class="group-cover">
+      {% if cover %}
+      <img alt="Cover photo" src="{{ cover.image.url }}">
+      {% else %}
+      <img alt="Cover photo placeholder" src="{% static 'images/cover-placeholder.png' %}">
       {% endif %}
-    </section>
-  </header>
 
-  <hr>
+      <div class="group-inset">
+        <h2 class="group-inset-text group-title">#{{ tag.slug }}</h2>
+        <h3 class="group-inset-text group-info">{{ count }} album{{ count|pluralize }}</h3>
+      </div>
+    </figure>
+
+    {% if tag.description %}
+    <p class="group-info">
+      <span title="Description"><i class="fas fa-fw fa-sticky-note"></i></span>
+      <span>{{ tag.description|safe }}</span>
+    </p>
+    {% endif %}
+  </section>
 
   <!-- Albums -->
   {% if count %}
-    <div class="count">{{ count }} album{{ count|pluralize }}</div>
-
     <section id="albums">
       {% for album in albums %}
-        {% include "_album_card.html" %}
+      {% include "_album_card.html" %}
       {% endfor %}
     </section>
   {% else %}
