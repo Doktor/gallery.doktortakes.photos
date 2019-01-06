@@ -168,14 +168,16 @@ class Album(models.Model):
         return reverse('edit_album', args=[self.get_path()])
 
     def get_full_date(self):
-        formatter = "{date:%A}, {date:%B} {date.day}, {date.year}"
+        template = "{date:%a} {date.year}-{date.month:02}-{date.day:02}"
+
         if not self.end or self.start == self.end:
-            date = formatter.format(date=self.start)
+            full_date = template.format(date=self.start)
         else:
-            date = "{start} &mdash; {end}".format(
-                start=formatter.format(date=self.start),
-                end=formatter.format(date=self.end))
-        return mark_safe(date)
+            full_date = "{start} &ndash; {end}".format(
+                start=template.format(date=self.start),
+                end=template.format(date=self.end))
+
+        return mark_safe(full_date)
 
     def get_full_location(self):
         place = self.get_place()
