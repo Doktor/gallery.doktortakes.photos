@@ -170,6 +170,7 @@ def view_album(request, path):
         'password': 'password' in request.GET,
         'photos': photos,
         'count': photos.count(),
+        'a_count': album.children.count(),
         'page_title': f"{album.name} | {metadata['TITLE']}",
         'items_per_page': ITEMS_PER_PAGE,
         'local_storage': settings.LOCAL_STORAGE,

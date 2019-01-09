@@ -72,8 +72,8 @@
         {% with location=album.get_full_location %}
           {% if location and location == album.location %}{{ location }} &middot; {% endif %}
         {% endwith %}
-          {{ album.get_full_date }} &middot;
-          {{ count }} photo{{ count|pluralize }}
+          {{ album.get_full_date }}
+          {% if count or not count and not a_count %} &middot; {{ count }} photo{{ count|pluralize }}{% endif %}
         </h3>
       </div>
     </figure>
@@ -128,7 +128,6 @@
   <!-- End metadata -->
 
   <!-- Albums -->
-  {% with a_count=album.children.count %}
   {% if a_count %}
     <section id="albums">
       {% for c in album.children.all %}
@@ -139,10 +138,9 @@
 
   {% if a_count and count %}
   <hr>
-  {% elif not a_count and count %}
+  {% elif not a_count and count and count > items_per_page %}
   <hr>
   {% endif %}
-  {% endwith %}
 
   {% if count %}
     <!-- API -->
