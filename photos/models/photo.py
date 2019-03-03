@@ -1,3 +1,5 @@
+from typing import Optional, Tuple
+
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.files import File
@@ -7,15 +9,15 @@ from django.db.models.fields.files import ImageFieldFile
 from django.db.models.signals import pre_save, post_save
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.urls import reverse
 
 from core import settings
 from photos.fields import JSONField
+from photos.models.utils import DATE_FORMAT, get_modified_time_utc, Status
 from photos.settings import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, ITEMS_IN_FILMSTRIP,
     COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK, LONG, SHORT)
-from photos.models.utils import (
-    DATE_FORMAT, get_modified_time_utc)
 
 import datetime
 import exifread
@@ -36,7 +38,7 @@ NS = {
 }
 
 
-def get_path(photo, filename, ext=None):
+def get_path(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:
     if ext is None:
         _, ext = os.path.splitext(filename)
         ext = ext.lstrip('.')
@@ -46,19 +48,19 @@ def get_path(photo, filename, ext=None):
     return f"{ts}_{photo.short_md5}.{ext}"
 
 
-def get_original_path(photo, filename):
+def get_original_path(photo: 'Photo', filename: str) -> str:
     return f"{MEDIA['ORIGINAL']}/{get_path(photo, filename)}"
 
 
-def get_display_path(photo, filename):
+def get_display_path(photo: 'Photo', filename: str) -> str:
     return f"{MEDIA['DISPLAY']}/{get_path(photo, filename)}"
 
 
-def get_thumbnail_path(photo, filename):
+def get_thumbnail_path(photo: 'Photo', filename: str) -> str:
     return f"{MEDIA['THUMBNAIL']}/{get_path(photo, filename, ext='jpg')}"
 
 
-def get_square_thumbnail_path(photo, filename):
+def get_square_thumbnail_path(photo: 'Photo', filename: str) -> str:
     return f"{MEDIA['SQUARE']}/{get_path(photo, filename, ext='jpg')}"
 
 
@@ -113,22 +115,22 @@ class Photo(models.Model):
 
     rating = models.PositiveSmallIntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.filename
 
-    def check_access(self, request):
+    def check_access(self, request: HttpRequest) -> Tuple[bool, Optional[Status]]:
         if self.album is None:
-            return True
+            return True, None
 
         return self.album.check_access(request)
 
-    def clean(self):
+    def clean(self) -> None:
         if self.rating > 5:
             raise ValidationError("Rating must be between 0 and 5")
 
         super().clean()
 
-    def delete(self, using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False) -> None:
         self.original.delete(save=False)
         self.image.delete(save=False)
         self.thumbnail.delete(save=False)
@@ -137,13 +139,13 @@ class Photo(models.Model):
         super().delete(using=using, keep_parents=keep_parents)
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         return os.path.basename(self.original.name)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.get_path(), self.md5])
 
-    def get_original(self):
+    def get_original(self) -> File:
         file = cache.get(self.md5)
 
         if file is None:
@@ -154,13 +156,13 @@ class Photo(models.Model):
 
         return file
 
-    def get_path(self):
+    def get_path(self) -> str:
         return self.album.get_path() if self.album else DEFAULT_PATH
 
-    def get_password_url(self):
+    def get_password_url(self) -> str:
         return self.get_absolute_url() + self.album.get_password_query()
 
-    def resave(self):
+    def resave(self) -> None:
         if not self.pk:
             return
 
@@ -188,7 +190,7 @@ class Photo(models.Model):
             for name in delete:
                 storage.delete(name)
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if self.pk:
             super().save(*args, **kwargs)
             return
@@ -202,7 +204,8 @@ class Photo(models.Model):
                 from photos.api.utils import APIError
                 raise APIError(f"Duplicate file: {self.md5}")
 
-    def serialize(self, admin=False, password=False, index=None, metadata=True):
+    def serialize(self, admin: bool = False, password: bool = False,
+                  index: Optional[int] = None, metadata: bool = True) -> dict:
         response = {
             'image_url': self.image.url,
             'square_thumbnail_url': self.square_thumbnail.url,
@@ -230,7 +233,7 @@ class Photo(models.Model):
         return response
 
     @property
-    def short_md5(self):
+    def short_md5(self) -> str:
         return self.md5[:8]
 
     class Meta:
@@ -240,8 +243,8 @@ class Photo(models.Model):
 
 @receiver(pre_save, sender=Photo,
           dispatch_uid='photos.models.process_image_upload')
-def process_image_upload(sender, instance, **kwargs):
-    photo: Photo = instance
+def process_image_upload(sender, instance: Photo, **kwargs) -> None:
+    photo = instance
 
     if photo.pk is not None:
         return
@@ -319,7 +322,7 @@ def process_image_upload(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Photo,
           dispatch_uid='photos.models.create_sidecar_images')
-def create_sidecar_images(sender, instance, created, **kwargs):
+def create_sidecar_images(sender, instance: Photo, created: bool, **kwargs) -> None:
     if not created:
         return
 
@@ -329,7 +332,7 @@ def create_sidecar_images(sender, instance, created, **kwargs):
     create_sidecar_images.delay(photo.pk)
 
 
-def format_f_stop(f):
+def format_f_stop(f: str) -> float:
     """Takes an f-stop as a fractional string and converts it to a number."""
     try:
         f = f.split('/')
@@ -339,10 +342,10 @@ def format_f_stop(f):
         if len(f) == 2:
             return int(f[0]) / int(f[1])
         else:
-            return f[0]
+            return float(f[0])
 
 
-def get_exif(p):
+def get_exif(p: Photo) -> dict:
     e = p.exif
 
     camera = e.get('Image Model', 'Camera unknown')

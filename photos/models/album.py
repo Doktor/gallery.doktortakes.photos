@@ -1,20 +1,20 @@
-from collections import namedtuple
-
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.files.storage import DefaultStorage
 from django.db import models
-from django.db.models.signals import pre_save, post_save, post_delete, \
-    m2m_changed
+from django.db.models.signals import pre_save, post_delete, m2m_changed
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from core.context_processors import metadata
+from photos.models.utils import Status
 from photos.settings import MEDIA_FOLDERS
 
 import os
+from typing import Tuple, Optional, List
 
 m = metadata(None)
 
@@ -25,8 +25,6 @@ SIZES = (
     (SIZE_2400, '2400 x 1600'),
     (SIZE_3600, '3600 x 2400'),
 )
-
-Status = namedtuple('Status', ('code', 'message'))
 
 
 class Album(models.Model):
@@ -70,16 +68,16 @@ class Album(models.Model):
 
     tags = models.ManyToManyField('Tag', related_name='albums', blank=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def clean(self):
+    def clean(self) -> None:
         if self.end is not None and self.end < self.start:
             raise ValidationError(
                 "The end date should be later than the start date.")
 
     @property
-    def count(self):
+    def count(self) -> int:
         """Returns the number of photos in this album and all child albums."""
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
@@ -87,7 +85,7 @@ class Album(models.Model):
     WRONG_PASSWORD = Status(1, "Incorrect password specified.")
     NO_PASSWORD = Status(2, "This album doesn't have a password but one was specified.")
 
-    def check_access(self, request):
+    def check_access(self, request: HttpRequest) -> Tuple[bool, Optional[Status]]:
         user = request.user
         password = request.GET.get('password', None)
 
@@ -123,16 +121,16 @@ class Album(models.Model):
 
         return access, status
 
-    def delete(self, using=None, keep_parents=False):
+    def delete(self, using=None, keep_parents=False) -> None:
         for photo in self.photos.all():
             photo.delete()
 
         super().delete(using=using, keep_parents=keep_parents)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse('album', args=[self.get_path()])
 
-    def get_access_list(self):
+    def get_access_list(self) -> str:
         names = []
 
         for user in self.users.all():
@@ -142,7 +140,7 @@ class Album(models.Model):
 
         return ', '.join(names)
 
-    def get_all_subalbums(self, include_self=False):
+    def get_all_subalbums(self, include_self: bool = False) -> List['Album']:
         albums = []
 
         if include_self:
@@ -153,7 +151,7 @@ class Album(models.Model):
 
         return albums
 
-    def get_all_subphotos(self, include_self=False):
+    def get_all_subphotos(self, include_self: bool = False) -> List['Photo']:
         photos = []
 
         if include_self:
@@ -164,10 +162,10 @@ class Album(models.Model):
 
         return photos
 
-    def get_edit_url(self):
+    def get_edit_url(self) -> str:
         return reverse('edit_album', args=[self.get_path()])
 
-    def get_full_date(self):
+    def get_full_date(self) -> str:
         template = "{date:%a} {date.year}-{date.month:02}-{date.day:02}"
 
         if not self.end or self.start == self.end:
@@ -179,7 +177,7 @@ class Album(models.Model):
 
         return mark_safe(full_date)
 
-    def get_full_location(self):
+    def get_full_location(self) -> str:
         place = self.get_place()
         location = self.get_location()
 
@@ -192,13 +190,13 @@ class Album(models.Model):
         else:
             return ''
 
-    def get_location(self):
+    def get_location(self) -> str:
         if self.location or not self.parent:
             return self.location
 
         return self.parent.get_location()
 
-    def get_path(self, previous='', divider='/'):
+    def get_path(self, previous='', divider='/') -> str:
         if not self.parent:
             if not previous:
                 return self.slug
@@ -212,16 +210,16 @@ class Album(models.Model):
             return self.parent.get_path(
                 previous=self.slug + divider + previous, divider=divider)
 
-    def get_place(self):
+    def get_place(self) -> str:
         if self.place or not self.parent:
             return self.place
 
         return self.parent.get_place()
 
-    def get_parent_path(self):
+    def get_parent_path(self) -> str:
         return self.parent.get_path() if self.parent is not None else ''
 
-    def get_password_query(self, separator=False):
+    def get_password_query(self, separator: bool = False) -> str:
         if self.password:
             q = f"?password={self.password}"
 
@@ -231,15 +229,15 @@ class Album(models.Model):
         else:
             return ''
 
-    def get_password_url(self):
+    def get_password_url(self) -> str:
         return self.get_absolute_url() + self.get_password_query()
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         self.slug = slugify(self.name)
         self.clean()
         super().save(*args, **kwargs)
 
-    def serialize(self, edit=False):
+    def serialize(self, edit: bool = False) -> dict:
         if self.end:
             end = self.end.strftime("%Y-%m-%d")
         else:
@@ -285,8 +283,8 @@ class Album(models.Model):
           dispatch_uid="photos.models.check_hidden.users")
 @receiver(m2m_changed, sender=Album.groups.through,
           dispatch_uid="photos.models.check_hidden.groups")
-def check_hidden(sender, instance, action, **kwargs):
-    album: Album = instance
+def check_hidden(sender, instance: Album, action: str, **kwargs) -> None:
+    album = instance
 
     if not action.startswith('post'):
         return
@@ -303,8 +301,8 @@ def check_hidden(sender, instance, action, **kwargs):
 
 @receiver(pre_save, sender=Album,
           dispatch_uid="photos.models.create_album_cover")
-def create_album_cover(sender, instance, **kwargs):
-    album: Album = instance
+def create_album_cover(sender, instance: Album, **kwargs) -> None:
+    album = instance
 
     try:
         prev = Album.objects.get(pk=album.pk)
@@ -321,8 +319,8 @@ def create_album_cover(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Album,
           dispatch_uid="photos.models.delete_album_folders")
-def delete_album_folders(sender, instance, **kwargs):
-    album: Album = instance
+def delete_album_folders(sender, instance: Album, **kwargs) -> None:
+    album = instance
 
     storage = DefaultStorage()
     path = album.get_path()

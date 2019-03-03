@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import View
@@ -23,6 +23,7 @@ import datetime
 import mimetypes
 import random
 import pytz
+from typing import List, Callable
 
 metadata = m(None)
 
@@ -34,11 +35,11 @@ ALBUM_QUERY_ADMIN = Q(parent__isnull=True)
 # Helper functions
 
 
-def staff_only(f):
+def staff_only(f: Callable) -> Callable:
     return user_passes_test(lambda u: u.is_staff)(f)
 
 
-def get_albums_from_path(path):
+def get_albums_from_path(path: str) -> List[Album]:
     """Returns a list of Albums extracted from the given path."""
     path = path.split('/')
 
@@ -55,7 +56,7 @@ def get_albums_from_path(path):
     return albums
 
 
-def get_album_by_path(path) -> Album:
+def get_album_by_path(path: str) -> Album:
     """Returns the Album corresponding to the given path."""
     return get_albums_from_path(path)[-1]
 
@@ -63,14 +64,14 @@ def get_album_by_path(path) -> Album:
 # Error handlers
 
 
-def handler_404(request, exception=None):
+def handler_404(request: HttpRequest, exception: Exception = None) -> HttpResponse:
     context = {'name': "404 Not Found"}
     response = render(request, 'errors/404.html', context)
     response.status_code = 404
     return response
 
 
-def handler_500(request, exception=None):
+def handler_500(request: HttpRequest, exception: Exception = None) -> HttpResponse:
     context = {'name': "500 Internal Server Error"}
     response = render(request, 'errors/500.html', context)
     response.status_code = 500
@@ -82,13 +83,13 @@ def handler_500(request, exception=None):
 
 @require_GET
 @staff_only
-def debug_404(request):
+def debug_404(request: HttpRequest) -> HttpResponse:
     return handler_404(request)
 
 
 @require_GET
 @staff_only
-def debug_500(request):
+def debug_500(request: HttpRequest) -> HttpResponse:
     return handler_500(request)
 
 
@@ -96,7 +97,7 @@ def debug_500(request):
 
 
 @require_GET
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     """Renders the index page."""
     query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
 
@@ -112,7 +113,7 @@ def index(request):
 
 
 @require_GET
-def featured(request):
+def featured(request: HttpRequest) -> HttpResponse:
     """Renders the featured photos page."""
     query = Q(album__hidden=False, rating__gte=4, sidecar_exists=True)
     photos = Photo.objects.filter(query).order_by('-taken')
@@ -130,7 +131,7 @@ def featured(request):
 
 
 @require_GET
-def view_albums(request):
+def view_albums(request: HttpRequest) -> HttpResponse:
     query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
     albums = Album.objects.filter(query).order_by('-start')
 
@@ -154,7 +155,7 @@ def view_albums(request):
 
 
 @require_GET
-def view_album(request, path):
+def view_album(request: HttpRequest, path: str) -> HttpResponse:
     album = get_album_by_path(path)
     access, status = album.check_access(request)
 
@@ -185,13 +186,13 @@ def view_album(request, path):
 
 
 @require_GET
-def view_tags(request):
+def view_tags(request: HttpRequest) -> HttpResponse:
     context = {'tags': Tag.objects.all()}
     return render(request, 'tags.html', context)
 
 
 @require_GET
-def view_tag(request, slug):
+def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
     tag = get_object_or_404(Tag, slug=slug)
 
     albums = tag.albums.all()
@@ -213,7 +214,7 @@ def view_tag(request, slug):
 
 @require_GET
 @staff_only
-def new_album(request):
+def new_album(request: HttpRequest) -> HttpResponse:
     context = {
         'album': None,
         'parent': request.GET.get('parent', None)
@@ -224,7 +225,7 @@ def new_album(request):
 
 @require_GET
 @staff_only
-def edit_album(request, path):
+def edit_album(request: HttpRequest, path: str) -> HttpResponse:
     path = get_albums_from_path(path)
     album = path[-1]
 
@@ -243,7 +244,7 @@ def edit_album(request, path):
 
 @require_GET
 @staff_only
-def edit_albums(request):
+def edit_albums(request: HttpRequest) -> HttpResponse:
     context = {
         'albums': Album.objects.all().order_by('-start'),
         'items_per_page': ITEMS_PER_PAGE
@@ -256,7 +257,7 @@ def edit_albums(request):
 
 
 @require_GET
-def view_photo(request, path, md5):
+def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
     photo = get_photo(request, md5, validate_path=path)
 
     path = get_albums_from_path(path)
@@ -279,7 +280,7 @@ def view_photo(request, path, md5):
 
 
 @require_GET
-def download_photo(request, path, md5):
+def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
     photo = get_photo(request, md5, validate_path=path)
     photo.image.open()
 
@@ -292,14 +293,14 @@ def download_photo(request, path, md5):
 
 
 @require_GET
-def search_photos(request):
+def search_photos(request: HttpRequest) -> HttpResponse:
     context = {'items_per_page': ITEMS_PER_PAGE}
     return render(request, "search.html", context)
 
 
 @require_GET
 @staff_only
-def wall(request):
+def wall(request: HttpRequest) -> HttpResponse:
     today = datetime.date.today()
     start = today - datetime.timedelta(days=365 * 2)
 
@@ -316,13 +317,13 @@ def wall(request):
 
 @require_GET
 @login_required
-def view_users(request):
+def view_users(request: HttpRequest) -> HttpResponse:
     return redirect(reverse('user', kwargs={'slug': request.user.username}))
 
 
 @require_GET
 @login_required
-def view_user(request, slug):
+def view_user(request: HttpRequest, slug: str) -> HttpResponse:
     if request.user.username == slug:
         user = request.user
     else:
@@ -352,7 +353,7 @@ def view_user(request, slug):
 
 
 class ChangePasswordView(LoginRequiredMixin, View):
-    def get(self, request, slug):
+    def get(self, request: HttpRequest, slug: str) -> HttpResponse:
         user = request.user
 
         if user.username != slug:
@@ -360,7 +361,7 @@ class ChangePasswordView(LoginRequiredMixin, View):
 
         return render(request, "user_password.html", {})
 
-    def post(self, request, slug):
+    def post(self, request: HttpRequest, slug: str) -> HttpResponse:
         user = request.user
 
         if user.username != slug:
@@ -398,13 +399,13 @@ class ChangePasswordView(LoginRequiredMixin, View):
 
 
 @require_GET
-def panorama_list(request):
+def panorama_list(request: HttpRequest) -> HttpResponse:
     p = Panorama.objects.all().order_by('-taken')
     return render(request, "panoramas.html", {'panoramas': p})
 
 
 @require_GET
-def panorama(request, slug):
+def panorama(request: HttpRequest, slug: str) -> HttpResponse:
     p = get_object_or_404(Panorama, slug=slug)
     return render(request, "panorama.html", {'p': p})
 
@@ -412,7 +413,7 @@ def panorama(request, slug):
 # Other
 
 
-def view_activity(request):
+def view_activity(request: HttpRequest) -> HttpResponse:
     if (request.user.is_staff and not request.GET.get('cache', '')) or (
             not request.user.is_staff):
 

@@ -8,8 +8,8 @@ class Tag(models.Model):
 
     description = models.TextField(blank=True)
 
-    def get_absolute_url(self):
-        return reverse('tag', kwargs={'slug': self.slug})
-
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Tag: #{self.slug}"
+
+    def get_absolute_url(self) -> str:
+        return reverse('tag', kwargs={'slug': self.slug})

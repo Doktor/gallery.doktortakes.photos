@@ -1,4 +1,8 @@
+from collections import namedtuple
+from typing import Union
+
 from django.conf import settings
+from django.core.files import File
 from django.core.files.storage import DefaultStorage, FileSystemStorage
 from django.db.models.fields.files import ImageFieldFile
 
@@ -12,8 +16,10 @@ from io import BytesIO
 CHUNK_SIZE = 64 * 1024  # 64 KB
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
 
+Status = namedtuple('Status', ('code', 'message'))
 
-def format_file_size(b):
+
+def format_file_size(b: float) -> str:
     for unit in ('B', 'KB', 'MB', 'GB'):
         if abs(b) < 1024.0:
             return "%3.2f %s" % (b, unit)
@@ -21,7 +27,7 @@ def format_file_size(b):
     return "%.2f %s" % (b, 'TB')
 
 
-def generate_md5_hash(file):
+def generate_md5_hash(file: File) -> str:
     hasher = hashlib.md5()
 
     for chunk in file.chunks(chunk_size=CHUNK_SIZE):
@@ -30,7 +36,7 @@ def generate_md5_hash(file):
     return hasher.hexdigest()
 
 
-def get_modified_time_utc(file) -> datetime.datetime:
+def get_modified_time_utc(file: Union[BytesIO, File]) -> datetime.datetime:
     if isinstance(file, BytesIO):
         name = os.path.join(settings.BASE_DIR, 'temp', f'{uuid.uuid4()}.tmp')
 

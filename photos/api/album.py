@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from django.urls import reverse
 from django.utils.text import slugify
 from django.views.decorators.http import require_GET
@@ -15,7 +15,7 @@ from photos.views import get_album_by_path as get_album
 User = get_user_model()
 
 
-def get_album_by_path(path):
+def get_album_by_path(path: str):
     try:
         return get_album(path)
     except Album.DoesNotExist:
@@ -28,7 +28,7 @@ class AlbumView(APIView):
 
     required = (('name', 'album name'), ('start', 'start date'))
 
-    def _apply_changes(self, request, album: Album):
+    def _apply_changes(self, request: HttpRequest, album: Album) -> Album:
         data = self._get_data(request)
 
         # General
@@ -129,17 +129,17 @@ class AlbumView(APIView):
 
         return album
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpRequest:
         if not request.user.is_staff:
             raise APIError("Album does not exist.")
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request, path):
+    def get(self, request: HttpRequest, path: str) -> JsonResponse:
         album = get_album_by_path(path)
         return JsonResponse(album.serialize(edit=True))
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> JsonResponse:
         album = self._apply_changes(request, Album())
         album.save()
 
@@ -148,7 +148,7 @@ class AlbumView(APIView):
             'redirect': album.get_edit_url(),
         })
 
-    def put(self, request, path):
+    def put(self, request: HttpRequest, path: str) -> JsonResponse:
         album = get_album_by_path(path)
         album = self._apply_changes(request, album)
         album.save()
@@ -160,7 +160,7 @@ class AlbumView(APIView):
             'album': album.serialize(edit=True),
         })
 
-    def patch(self, request, path):
+    def patch(self, request: HttpRequest, path: str) -> JsonResponse:
         album = get_album_by_path(path)
         md5 = self._get_data(request).get('md5', '')
 
@@ -177,7 +177,7 @@ class AlbumView(APIView):
             'album': album.serialize(),
         })
 
-    def delete(self, request, path):
+    def delete(self, request: HttpRequest, path: str) -> JsonResponse:
         album = get_album_by_path(path)
 
         if request.GET.get('name') != album.name:
@@ -192,7 +192,7 @@ class AlbumView(APIView):
 
 @api_wrapper
 @require_GET
-def get_album_photos(request, path):
+def get_album_photos(request: HttpRequest, path: str) -> JsonResponse:
     album: Album = get_album_by_path(path)
     response = []
 

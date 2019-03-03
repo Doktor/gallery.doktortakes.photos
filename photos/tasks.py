@@ -10,11 +10,12 @@ import datetime
 import PIL.Image
 from celery import shared_task
 from io import BytesIO
+from typing import Tuple, Iterator, Union
 
 strptime = datetime.datetime.strptime
 
 
-def replace_square_thumbnail(photo: Photo, image):
+def replace_square_thumbnail(photo: Photo, image: File) -> None:
     sq = create_square_thumbnail(image)
 
     if photo.square_thumbnail:
@@ -23,7 +24,7 @@ def replace_square_thumbnail(photo: Photo, image):
     photo.square_thumbnail.save(photo.filename, File(sq), save=False)
 
 
-def replace_display_image(photo: Photo, image):
+def replace_display_image(photo: Photo, image: File) -> None:
     edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
 
     im, w, h = create_display_image(image, edge, photo.watermark)
@@ -36,7 +37,7 @@ def replace_display_image(photo: Photo, image):
     photo.image.save(photo.filename, File(im), save=False)
 
 
-def replace_thumbnail(photo: Photo, image):
+def replace_thumbnail(photo: Photo, image: File) -> None:
     tb = create_thumbnail(image)
 
     if photo.thumbnail:
@@ -46,7 +47,7 @@ def replace_thumbnail(photo: Photo, image):
 
 
 @shared_task
-def create_sidecar_images(pk: int):
+def create_sidecar_images(pk: int) -> None:
     photo: Photo = Photo.objects.get(pk=pk)
     file = photo.get_original()
 
@@ -65,11 +66,11 @@ def create_sidecar_images(pk: int):
         file.close()
 
 
-def round_all(*nums):
+def round_all(*nums: float) -> Iterator[int]:
     return (int(round(n)) for n in nums)
 
 
-def thumbnail(image, size):
+def thumbnail(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
     original_w, original_h = image.size
     original_ratio = original_w / original_h
 
@@ -99,7 +100,7 @@ def thumbnail(image, size):
     return image.resize(size, PIL.Image.LANCZOS)
 
 
-def create_thumbnail(data: BytesIO, size=(1200, 800)) -> BytesIO:
+def create_thumbnail(data: Union[File, BytesIO], size=(1200, 800)) -> BytesIO:
     long, short = size
 
     image = PIL.Image.open(data)
@@ -124,7 +125,7 @@ def create_thumbnail(data: BytesIO, size=(1200, 800)) -> BytesIO:
     return data
 
 
-def create_square_thumbnail(data: BytesIO, size=(400, 400)) -> BytesIO:
+def create_square_thumbnail(data: Union[File, BytesIO], size=(400, 400)) -> BytesIO:
     image = PIL.Image.open(data)
 
     if image.format != 'JPEG':
@@ -143,7 +144,7 @@ RESAMPLE = PIL.Image.LANCZOS
 RATIOS = (3 / 2, 16 / 9, 2.35 / 1)
 
 
-def create_display_image(data: BytesIO, edge: int, wm) -> (BytesIO, int, int):
+def create_display_image(data: Union[File, BytesIO], edge: int, wm) -> (BytesIO, int, int):
     image = PIL.Image.open(data)
 
     # Preserve EXIF metadata

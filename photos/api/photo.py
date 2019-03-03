@@ -1,7 +1,9 @@
+from typing import Optional
+
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
@@ -15,7 +17,7 @@ from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.settings import ITEMS_PER_PAGE
 
 
-def get_photo(request, md5, validate_path=None) -> Photo:
+def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = None) -> Photo:
     if validate_path is not None:
         from photos.views import get_album_by_path
 
@@ -38,7 +40,7 @@ def get_photo(request, md5, validate_path=None) -> Photo:
     return photo
 
 
-def get_photo_from_request(request, path) -> Photo:
+def get_photo_from_request(request: HttpRequest, path: str) -> Photo:
     try:
         md5 = request.GET.get('md5')
     except KeyError:
@@ -53,7 +55,7 @@ def get_photo_from_request(request, path) -> Photo:
 
 
 class PhotoView(APIView):
-    def get(self, request, path):
+    def get(self, request: HttpRequest, path: str) -> JsonResponse:
         photo = get_photo_from_request(request, path)
 
         return JsonResponse(
@@ -61,7 +63,7 @@ class PhotoView(APIView):
                 admin=request.user.is_staff,
                 password='password' in request.GET))
 
-    def delete(self, request, path):
+    def delete(self, request: HttpRequest, path: str) -> JsonResponse:
         if not request.user.is_staff:
             raise APIError("Not authorized", status=403)
 
@@ -73,7 +75,7 @@ class PhotoView(APIView):
 
 @api_wrapper
 @require_POST
-def upload_photo(request, path):
+def upload_photo(request: HttpRequest, path: str) -> JsonResponse:
     if not request.user.is_staff:
         raise APIError("Not authorized", status=403)
 
@@ -123,7 +125,7 @@ def upload_photo(request, path):
     return JsonResponse({'success': True})
 
 
-def date_query(start, end):
+def date_query(start: str, end: str) -> Q:
     query = Q()
 
     try:
@@ -151,7 +153,7 @@ def date_query(start, end):
     return query
 
 
-def search_photos(request):
+def search_photos(request: HttpRequest) -> JsonResponse:
     params = request.GET
     query = Q(album__hidden=False)
 
