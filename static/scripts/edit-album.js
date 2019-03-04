@@ -231,11 +231,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  let subalbums = document.getElementsByClassName('children');
+  let subalbums = document.getElementsByClassName('subalbum');
 
-  for (let container of subalbums) {
-    for (let photo of container.children) {
-      photo.addEventListener('click', () => invert(photo));
+  for (let subalbum of subalbums) {
+    for (let wrapper of subalbum.children) {
+      wrapper.addEventListener('click', () => invert(wrapper));
     }
   }
 

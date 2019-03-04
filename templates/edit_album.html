@@ -80,6 +80,12 @@
   <section>
     <h2>Child albums</h2>
 
+    <section id="albums">
+    {% for item in album.children.all %}
+      {% include "_album_card.html" with album=item edit=True %}
+    {% endfor %}
+    </section>
+
     <a href="{% url 'new_album' %}?parent={{ album.get_path }}">Create new child album</a>
   </section>
 
@@ -164,7 +170,7 @@
       {% if sa.photos.count %}
       <h3><a href="{{ sa.get_edit_url }}">{{ sa.name }}</a></h3>
 
-      <div class="photos">
+      <div class="photos subalbum">
         {% for p in sa.photos.all %}
         <div class="wrapper" data-md5="{{ p.md5 }}">
           <div class="photo">
