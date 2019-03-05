@@ -328,6 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('keydown', function(event) {
   let key = event.keyCode;
 
+  if (event.ctrlKey || event.metaKey) { return; }
+
   switch (key) {
     case KEY_A:
       window.location.href = photo.dataset.albumUrl;

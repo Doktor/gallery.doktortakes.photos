@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('keydown', function(event) {
   let key = event.keyCode;
 
+  if (event.ctrlKey || event.metaKey) { return; }
+
   switch (key) {
     case KEY_H:
       window.location.href = '/';
