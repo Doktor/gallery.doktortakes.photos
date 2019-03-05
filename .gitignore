@@ -26,6 +26,7 @@ static.1/
 
 # Libraries
 static/lib/
+static/*/debug/
 
 # Migrations (until a stable version is released)
 photos/migrations/

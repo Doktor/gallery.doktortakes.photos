@@ -17,6 +17,8 @@ DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
 with open(os.path.join(BASE_DIR, 'data', 'allowed_hosts.txt')) as f:
     ALLOWED_HOSTS = f.read().strip().split('\n')
 
+INTERNAL_IPS = ['127.0.0.1']
+
 
 # Application definition
 
