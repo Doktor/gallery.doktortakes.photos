@@ -40,7 +40,7 @@
   <section>
     <nav class="group-nav">
       <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'albums' %}">Photos</a></li>
+        <li class="breadcrumbs-icon" title="Breadcrumbs"><i class="fas fa-fw fa-bookmark"></i> <a href="{% url 'albums' %}">Photos</a></li>
         {% for album in path %}
         <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
         {% endfor %}
