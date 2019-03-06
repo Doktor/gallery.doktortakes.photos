@@ -37,7 +37,7 @@ def django_setup():
 def build(ctx):
     print("Rebuilding stylesheets")
     with ctx.cd(os.path.join('static', 'styles')):
-        ctx.run("sass --update .:.")
+        ctx.run("sass --quiet --update --no-source-map --style=compressed .:.")
 
     print("Collecting static files")
     ctx.run(f"{manage} collectstatic --no-input")
