@@ -1,4 +1,4 @@
-{% if divider %}<li class="navlinks-divider"></li>{% endif %}
+{% if divider %}<li class="navlink-divider"></li>{% endif %}
 <li class="navlink">
   <a href="{% url 'about' %}">About</a>
 </li>
@@ -9,11 +9,11 @@
   <a href="{% url 'albums' %}">Photos</a>
 </li>
 {% if not request.user.is_staff %}
-{% if divider %}<li class="navlinks-divider"></li>{% endif %}
+{% if divider %}<li class="navlink-divider"></li>{% endif %}
 <li class="navlink">
   <a href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer">Twitter</a></li>
 {% endif %}
-{% if divider %}<li class="navlinks-divider"></li>{% endif %}
+{% if divider %}<li class="navlink-divider"></li>{% endif %}
 {% if request.user.is_staff %}
 <li class="navlink">
   <a href="{% url 'admin:index' %}">Admin</a>

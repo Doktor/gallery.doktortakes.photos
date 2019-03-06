@@ -136,25 +136,6 @@ $navlinks-spacing: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
 
-  &.index-navlinks {
-    @media (min-width: 901px) {
-      font-size: $navlink-size * 1.25;
-    }
-
-    .navlink a {
-      color: rgb(160, 160, 160);
-
-      &:hover {
-        color: $text;
-      }
-
-      &, &:hover {
-        text-decoration: none;
-        transition: color 0.25s;
-      }
-    }
-  }
-
   li {
     margin: 0 ($navlinks-spacing / 2);
 
@@ -167,31 +148,52 @@ $navlinks-spacing: 1.5rem;
   .logo a {
     color: $text;
   }
+}
 
-  .navlink {
-    a {
-      color: $text;
-    }
+.navlinks-index {
+  @media (min-width: 901px) {
+    font-size: $navlink-size * 1.25;
+  }
+}
 
-    &-username a {
-      color: $blue !important;
-    }
+.navlink {
+  a {
+    color: $text;
 
-    &-log-out a {
-      color: red !important;
+    // Darker link color on the index page
+    .navlinks-index & {
+      color: rgb(160, 160, 160);
+
+      // Brighten on hover
+      &:hover {
+        color: $text;
+      }
+
+      &, &:hover {
+        text-decoration: none;
+        transition: color 0.25s;
+      }
     }
   }
 
-  .navlinks-divider {
-    color: $navbar-border;
-    margin: 0;
+  &-username a {
+    color: $blue !important;
+  }
 
-    @media (min-width: 901px) {
-       margin: 0 ($navlinks-spacing / 2);
+  &-log-out a {
+    color: red !important;
+  }
+}
 
-       &::before {
-        content: "|";
-      }
+.navlink-divider {
+  color: $navbar-border;
+  margin: 0;
+
+  @media (min-width: 901px) {
+    margin: 0 ($navlinks-spacing / 2);
+
+    &::before {
+      content: "|";
     }
   }
 }
