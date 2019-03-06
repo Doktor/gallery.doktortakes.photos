@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Lekton:400,700');
 
-// Mixins
+/* Mixins */
+
 @mixin clearfix() {
   &::after {
     content: ' ';
@@ -23,20 +24,28 @@
   }
 }
 
-// colors
+@mixin fade($t: opacity 0.2s ease-in-out) {
+  -webkit-transition: $t;
+  -moz-transition: $t;
+  -o-transition: $t;
+  -ms-transition: $t;
+  transition: $t;
+}
+
+/* Primary colors */
+
 $borderColor: rgb(200, 200, 200);
 $text: rgb(220, 220, 220);
 $blue: rgb(0, 120, 255);
 
-// fonts
+/* Typefaces */
+
 $font1: "Roboto", sans-serif;
 $font2: "Lekton", "Menlo", "Consolas", monospace;
 
-// general
-*::selection {
-  background-color: $blue;
-}
+/* General */
 
+*::selection,
 *::-moz-selection {
   background-color: $blue;
 }
@@ -57,6 +66,19 @@ body {
   }
 }
 
+footer {
+  font-family: $font2;
+  text-transform: lowercase;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font2;
+  text-transform: lowercase;
+}
+
+/* Generic classes */
+
+// Index page tagline
 .tagline {
   font-size: 1.6rem;
   font-style: italic;
@@ -66,14 +88,73 @@ body {
   color: $text;
 }
 
-footer {
+.note {
+  color: rgb(150, 150, 150);
+  font-style: italic;
+}
+
+.warning {
+  font-weight: 700;
+}
+
+.pagination {
+  margin: 1rem 0;
+}
+
+.breadcrumbs {
   font-family: $font2;
   text-transform: lowercase;
 }
+//
+//@media (min-width: 601px) {
+//  nav .breadcrumbs li {
+//    line-height: $navlink-size;
+//  }
+//}
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font2;
-  text-transform: lowercase;
+ul.breadcrumbs {
+  $spacing: 0.75rem;
+
+  list-style: none;
+  clear: both;
+  margin: 0;
+  padding: 0;
+
+  li {
+    line-height: 1;
+    margin: 0 0 $spacing 0;
+    float: left;
+    text-align: left;
+    width: 100%;
+
+    &:not(:first-child):before {
+      content: "/";
+      position: relative;
+      margin-right: $spacing;
+    }
+
+    @media (min-width: 601px) {
+      width: auto;
+      margin: 0;
+
+      &:not(:first-child)::before {
+        content: "";
+        margin: 0;
+        visibility: hidden;
+      }
+
+      &:not(:last-child)::after {
+        color: gray;
+        content: "/";
+        margin: 0 $spacing;
+        position: relative;
+      }
+    }
+  }
+
+  .bc-icon i {
+    margin-right: 0.25rem;
+  }
 }
 
 /* Header and navigation bar */
@@ -117,6 +198,7 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
+// Navigation bar
 .navbar {
   padding-bottom: 1.5rem;
   border-bottom: 1px solid $navbar-border;
@@ -139,7 +221,7 @@ $navlinks-spacing: 1.5rem;
   li {
     margin: 0 ($navlinks-spacing / 2);
 
-    // For proper vertical alignment
+    // Vertical alignment
     @media (min-width: 901px) {
       line-height: $logo-size * 1.15;
     }
@@ -198,20 +280,148 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
-//
+/* Forms */
 
-.note {
-  color: rgb(150, 150, 150);
-  font-style: italic;
+form {
+  .row {
+    $width: 20%;
+    $spacing: 0.5rem;
+
+    display: flex;
+    align-items: center;
+
+    > label {
+      width: $width;
+      margin-right: $spacing;
+      text-align: right;
+    }
+
+    > .field-wrapper {
+      width: 100% - $width;
+      text-align: center;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: $spacing;
+    }
+  }
 }
 
-.warning {
-  font-weight: 700;
+fieldset {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  margin-bottom: 1rem;
 }
+
+textarea {
+  display: block;
+}
+
+input:not([type="radio"]), select, textarea {
+  width: 100%;
+  border: 2px solid black;
+
+  &:active, &:focus {
+    border-color: rgb(0, 120, 255);
+  }
+}
+
+input:not([type="file"]), select, textarea {
+  padding: 4px 8px;
+}
+
+input[type="radio"] + label {
+  text-align: right;
+  margin: 0 0.5rem 0 0.15rem;
+}
+
+.form-action {
+  text-align: right;
+  margin: 0.5rem 0;
+}
+
+.form-note {
+  width: 100%;
+  text-align: center;
+}
+
+#login, #new-album {
+  max-width: 600px;
+  margin: 0 auto;
+
+  fieldset {
+    border: 1px solid;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* Messages and notifications */
+
+#messages {
+  width: 100%;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 0;
+  z-index: 10000;
+}
+
+.message {
+  width: 100%;
+  display: inline-block;
+  padding: 10px 20px;
+
+  cursor: pointer;
+
+  background-color: rgb(40, 40, 40);
+  border: 1px solid rgb(220, 220, 220);
+  color: rgb(220, 220, 220);
+
+  opacity: 0;
+
+  &.success {
+    $base: #00CB8A;
+    background-color: $base;
+    border-color: darken($base, 20%);
+    color: rgb(20, 20, 20);
+  }
+
+  &.warning {
+    $base: #FFEA00;
+    background-color: $base;
+    border-color: darken($base, 20%);
+    color: rgb(20, 20, 20);
+  }
+
+  &.error {
+    $base: #FF5959;
+    background-color: $base;
+    border-color: darken($base, 20%);
+    color: rgb(20, 20, 20);
+  }
+
+  &.visible {
+    opacity: 1;
+  }
+
+  &, &.visible {
+    @include fade();
+  }
+
+  & + & {
+    border-top: 0 !important;
+  }
+}
+
+/* Photos */
 
 $photoSpacing: 0.4rem;
 $photoWidth: 300px;
 
+// Container
 .photos {
   margin: 1rem (-$photoSpacing);
 
@@ -262,6 +472,8 @@ $photoWidth: 300px;
   @include fade();
 }
 
+/* Featured photos */
+
 #featured {
   $spacing: 0.6rem;
   $width: 400px;
@@ -289,9 +501,12 @@ $photoWidth: 300px;
   }
 }
 
+/* Albums */
+
 $albumSpacing: 0.5rem;
 $albumWidth: 400px;
 
+// Container
 .albums {
   margin: 1rem (-$albumSpacing);
 
@@ -374,139 +589,7 @@ $albumWidth: 400px;
   transform: translateX(-50%) translateY(-50%);
 }
 
-.pagination {
-  margin: 1rem 0;
-}
-
-@mixin fade($t: opacity 0.2s ease-in-out) {
-  -webkit-transition: $t;
-  -moz-transition: $t;
-  -o-transition: $t;
-  -ms-transition: $t;
-  transition: $t;
-}
-
-#messages {
-  width: 100%;
-  text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 0;
-  z-index: 10000;
-}
-
-.message {
-  width: 100%;
-  display: inline-block;
-  padding: 10px 20px;
-
-  cursor: pointer;
-
-  background-color: rgb(40, 40, 40);
-  border: 1px solid rgb(220, 220, 220);
-  color: rgb(220, 220, 220);
-
-  opacity: 0;
-
-  &.success {
-    $base: #00CB8A;
-    background-color: $base;
-    border-color: darken($base, 20%);
-    color: rgb(20, 20, 20);
-  }
-
-  &.warning {
-    $base: #FFEA00;
-    background-color: $base;
-    border-color: darken($base, 20%);
-    color: rgb(20, 20, 20);
-  }
-
-  &.error {
-    $base: #FF5959;
-    background-color: $base;
-    border-color: darken($base, 20%);
-    color: rgb(20, 20, 20);
-  }
-
-  &.visible {
-    opacity: 1;
-  }
-
-  &, &.visible {
-    @include fade();
-  }
-
-  & + & {
-    border-top: 0 !important;
-  }
-}
-
-
-form {
-  .row {
-    $width: 20%;
-    $spacing: 0.5rem;
-
-    display: flex;
-    align-items: center;
-
-    > label {
-      width: $width;
-      margin-right: $spacing;
-      text-align: right;
-    }
-
-    > .field-wrapper {
-      width: 100% - $width;
-      text-align: center;
-    }
-
-    &:not(:last-child) {
-      margin-bottom: $spacing;
-    }
-  }
-}
-
-fieldset {
-  width: 100%;
-  padding: 0;
-  border: 0;
-  margin-bottom: 1rem;
-}
-
-textarea {
-  display: block;
-}
-
-input:not([type="radio"]), select, textarea {
-  width: 100%;
-  border: 2px solid black;
-
-  &:active, &:focus {
-    border-color: rgb(0, 120, 255);
-  }
-}
-
-input:not([type="file"]), select, textarea {
-  padding: 4px 8px;
-}
-
-input[type="radio"] + label {
-  text-align: right;
-  margin: 0 0.5rem 0 0.15rem;
-}
-
-.form-action {
-  text-align: right;
-  margin: 0.5rem 0;
-}
-
-.form-note {
-  width: 100%;
-  text-align: center;
-}
+/* Password change form */
 
 #password-form-container, #cover {
   width: 50%;
@@ -521,16 +604,7 @@ input[type="radio"] + label {
   float: right;
 }
 
-#login, #new-album {
-  max-width: 600px;
-  margin: 0 auto;
-
-  fieldset {
-    border: 1px solid;
-    margin-bottom: 1rem;
-    padding: 0.75rem 1.25rem;
-  }
-}
+/* Album search */
 
 .album-search-container {
   width: 100%;
@@ -566,6 +640,8 @@ input[type="radio"] + label {
 
   margin: 1rem 0;
 }
+
+/* Album lists */
 
 .album-list-simple {
   //
@@ -677,9 +753,7 @@ input[type="radio"] + label {
   }
 }
 
-#panorama-list img {
-  width: 100%;
-}
+/* Album edit links */
 
 ul.group-edit-links, ul.edit-links-center {
   list-style: none;
@@ -709,6 +783,8 @@ ul.edit-links-center {
     display: inline-block;
   }
 }
+
+/* Groups of photos */
 
 #panorama, .group {
   margin-bottom: 0;
@@ -801,59 +877,8 @@ ul.edit-links-center {
   margin: 1rem 0;
 }
 
-.breadcrumbs {
-  font-family: $font2;
-  text-transform: lowercase;
-}
+/* Panoramas */
 
-@media (min-width: 601px) {
-  nav .breadcrumbs li {
-    line-height: $navlink-size;
-  }
-}
-
-// useful classes
-ul.breadcrumbs {
-  $spacing: 0.75rem;
-
-  list-style: none;
-  clear: both;
-  margin: 0;
-  padding: 0;
-
-  li {
-    line-height: 1;
-    margin: 0 0 $spacing 0;
-    float: left;
-    text-align: left;
-    width: 100%;
-
-    &:not(:first-child):before {
-      content: "/";
-      position: relative;
-      margin-right: $spacing;
-    }
-
-    @media (min-width: 601px) {
-      width: auto;
-      margin: 0;
-
-      &:not(:first-child)::before {
-        content: "";
-        margin: 0;
-        visibility: hidden;
-      }
-
-      &:not(:last-child)::after {
-        color: gray;
-        content: "/";
-        margin: 0 $spacing;
-        position: relative;
-      }
-    }
-  }
-
-  .bc-icon i {
-    margin-right: 0.25rem;
-  }
+#panorama-list img {
+  width: 100%;
 }
