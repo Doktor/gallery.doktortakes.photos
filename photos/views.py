@@ -18,12 +18,13 @@ from photos.models import Album, Panorama, Photo, Tag
 from photos.models.photo import get_exif
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
+from photos.utils import get_albums_from_path, get_album_by_path
 
 import datetime
 import mimetypes
 import random
 import pytz
-from typing import List, Callable
+from typing import Callable
 
 metadata = m(None)
 
@@ -37,28 +38,6 @@ ALBUM_QUERY_ADMIN = Q(parent__isnull=True)
 
 def staff_only(f: Callable) -> Callable:
     return user_passes_test(lambda u: u.is_staff)(f)
-
-
-def get_albums_from_path(path: str) -> List[Album]:
-    """Returns a list of Albums extracted from the given path."""
-    path = path.split('/')
-
-    if len(path) == 1:
-        return [get_object_or_404(Album, slug=path[0], parent=None)]
-
-    albums = list()
-    parent = None
-    for item in path:
-        album = get_object_or_404(Album, slug=item, parent=parent)
-        albums.append(album)
-        parent = album
-
-    return albums
-
-
-def get_album_by_path(path: str) -> Album:
-    """Returns the Album corresponding to the given path."""
-    return get_albums_from_path(path)[-1]
 
 
 # Error handlers

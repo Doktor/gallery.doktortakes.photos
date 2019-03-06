@@ -10,7 +10,7 @@ from datetime import datetime
 
 from photos.api.utils import APIError, APIView, api_wrapper
 from photos.models import Album, Photo, Tag
-from photos.views import get_album_by_path as get_album
+from photos.utils import get_album_by_path as get_album
 
 User = get_user_model()
 

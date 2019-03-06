@@ -14,13 +14,12 @@ from io import BytesIO
 from photos.api.utils import APIError, APIView, api_wrapper
 from photos.models.photo import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
+from photos.utils import get_album_by_path
 from photos.settings import ITEMS_PER_PAGE
 
 
 def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = None) -> Photo:
     if validate_path is not None:
-        from photos.views import get_album_by_path
-
         album = get_album_by_path(validate_path)
         photo = get_object_or_404(Photo, md5=md5, album=album)
     else:
@@ -78,8 +77,6 @@ class PhotoView(APIView):
 def upload_photo(request: HttpRequest, path: str) -> JsonResponse:
     if not request.user.is_staff:
         raise APIError("Not authorized", status=403)
-
-    from photos.views import get_album_by_path
 
     files = request.FILES.getlist('files')
     album = get_album_by_path(path)
