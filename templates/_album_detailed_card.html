@@ -5,27 +5,27 @@
   {% else %}
   <a href="{{ album.get_absolute_url }}">
   {% endif %}
-    <div class="row clearfix">
-      <div class="cover">
+    <div class="album-list-dc-row clearfix">
+      <div class="album-list-dc-cover">
         {% if album.cover %}
           <img src="{{ album.cover.thumbnail.url }}">
         {% else %}
-          <div class="no-cover">
+          <div>
             <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
-            <div class="note">No cover</div>
+            <div class="note album-no-cover-note">No cover</div>
           </div>
         {% endif %}
       </div>
 
-      <div class="details">
+      <div class="album-list-dc-details">
         <h3>{{ album.name }}</h3>
         <ul>
           <li>{{ album.start|date:"Y-m-d" }}{% if album.end %} &mdash;
-            {{ album.end|date:"Y-m-d" }}{% endif %}</li>
-          <li>{{ album.photos.count }}
+            {{ album.end|date:"Y-m-d" }}{% endif %}</li><!--
+          --><li>{{ album.photos.count }}
             photo{{ album.photos.count|pluralize }}{% if album.children.exists %}
-              ({{ album.count }} total){% endif %}</li>
-          <li>{% if album.get_location %}{{ album.get_location }}{% else %}
+              ({{ album.count }} total){% endif %}</li><!--
+          --><li>{% if album.get_location %}{{ album.get_location }}{% else %}
             <span class="note">No location</span>{% endif %}</li>
         </ul>
         <div class="note">{{ album.description|striptags|default:"No description" }}</div>
@@ -34,7 +34,7 @@
   </a>
 
   {% if album.children.exists %}
-    <ul class="list">
+    <ul class="album-list-dc-items">
       {% for a in album.children.all %}
         {% with album=a template="_album_detailed_card.html" %}
           {% include template %}

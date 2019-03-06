@@ -63,14 +63,15 @@
       </div>
     </div>
 
-    <div id="cover">
+    <div id="cover" style="position: relative;">
       {% if album.cover %}
       <a href="{{ album.cover.image.url }}" target="_blank" title="Full size">
         <img src="{{ album.cover.thumbnail.url }}">
       </a>
       {% else %}
-      <div class="no-cover">
-        <span class="note">This album does not have a cover.</span>
+      <div class="album-no-cover">
+        <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
+        <div class="note album-no-cover-note">No cover photo</div>
       </div>
       {% endif %}
     </div>
@@ -80,7 +81,7 @@
   <section>
     <h2>Child albums</h2>
 
-    <section id="albums">
+    <section class="albums">
     {% for item in album.children.all %}
       {% include "_album_card.html" with album=item edit=True %}
     {% endfor %}
@@ -142,16 +143,16 @@
     <div class="pagination pagination-photos"></div>
     <section class="photos">
       {% for p in photos %}
-      <div class="wrapper" data-md5="{{ p.md5 }}">
+      <div class="album-wrapper" data-md5="{{ p.md5 }}">
         <div class="photo">
           {% if p.square_thumbnail %}
           <img class="not-loaded"
                data-src="{{ p.square_thumbnail.url }}"
                src="{% static 'images/loading.svg' %}">
           {% else %}
-          <div class="loaded no-thumbnail">
+          <div class="loaded">
             <img src="{% static "images/square-placeholder.png" %}">
-            <div class="note">No thumbnail</div>
+            <div class="photo-no-thumbnail-note">No thumbnail</div>
           </div>
           {% endif %}
         </div>
@@ -172,14 +173,14 @@
 
       <div class="photos subalbum">
         {% for p in sa.photos.all %}
-        <div class="wrapper" data-md5="{{ p.md5 }}">
+        <div class="photo-wrapper" data-md5="{{ p.md5 }}">
           <div class="photo">
             {% if p.square_thumbnail %}
             <img src="{{ p.square_thumbnail.url }}">
             {% else %}
-            <div class="no-thumbnail">
+            <div>
               <img src="{% static "images/square-placeholder.png" %}">
-              <div class="note">No thumbnail</div>
+              <div class="photo-no-thumbnail-note">No thumbnail</div>
             </div>
             {% endif %}
           </div>

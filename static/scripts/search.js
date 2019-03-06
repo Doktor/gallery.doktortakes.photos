@@ -14,7 +14,7 @@ const ITEMS_PER_PAGE = api.dataset.itemsPerPage;
 
 function createPhoto(p) {
   let wrapper = document.createElement('div');
-  wrapper.classList.add('wrapper');
+  wrapper.classList.add('photo-wrapper');
 
   let photo = document.createElement('div');
   photo.classList.add('photo');
@@ -36,7 +36,7 @@ function createPhoto(p) {
 
 function createEmptyWrapper() {
   let el = document.createElement('div');
-  el.classList.add('wrapper');
+  el.classList.add('photo-wrapper');
   el.classList.add('empty');
 
   return el;

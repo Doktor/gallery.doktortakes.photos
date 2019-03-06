@@ -57,7 +57,7 @@ $('set-parent').addEventListener('click', () => {
 });
 
 
-$('album-set-parent-container').querySelectorAll('.wrapper').forEach((item) => {
+$('album-set-parent-container').querySelectorAll('.album-wrapper').forEach((item) => {
   item.addEventListener('click', (event) => {
     event.preventDefault();
 

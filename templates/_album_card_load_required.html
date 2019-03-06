@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="wrapper" data-name="{{ album.name.lower }}" data-path="{{ album.get_path }}">
+<div class="album-wrapper" data-name="{{ album.name.lower }}" data-path="{{ album.get_path }}">
   <div class="album{% if request.user.is_staff and album.hidden %} album-hidden{% endif %}">
     {% if edit %}
     <a href="{{ album.get_edit_url }}">
@@ -12,16 +12,16 @@
              data-src="{{ album.cover.thumbnail.url }}"
              src="{% static 'images/cover-placeholder.png' %}">
       {% else %}
-        <div class="no-cover">
+        <div>
           <img title="{{ album.name }}"
              class="not-loaded"
              data-src="{% static 'images/cover-placeholder.png' %}"
              src="{% static 'images/cover-placeholder.png' %}">
-          <div class="note">No cover</div>
+          <div class="note album-no-cover-note">No cover</div>
         </div>
       {% endif %}
 
-      <div class="title">
+      <div class="album-title">
         <div>{{ album.name }}</div>
       </div>
     </a>

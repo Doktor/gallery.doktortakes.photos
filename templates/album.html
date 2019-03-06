@@ -129,7 +129,7 @@
 
   <!-- Albums -->
   {% if a_count %}
-    <section id="albums">
+    <section class="albums">
       {% for c in album.children.all %}
         {% include "_album_card.html" with album=c %}
       {% endfor %}
@@ -153,7 +153,7 @@
     <div class="pagination"></div>
     <section class="photos">
       {% for p in photos %}
-        <div class="wrapper">
+        <div class="photo-wrapper">
           <div class="photo">
             <a href="{% url 'photo' album.get_path p.md5 %}{% if password %}{{ album.get_password_query }}{% endif %}">
               <img class="not-loaded"

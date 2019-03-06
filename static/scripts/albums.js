@@ -1,6 +1,6 @@
 let $ = document.getElementById.bind(document);
 
-const albumsEl = $('albums');
+const albumsEl = document.querySelector('.albums');
 const countEl = document.querySelector('.count');
 const searchEl = $('search');
 const noResultsEl = $('no-results');

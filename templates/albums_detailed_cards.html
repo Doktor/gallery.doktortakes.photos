@@ -1,8 +1,8 @@
 {% extends "albums.html" %}
 
 {% block album_list %}
-<section id="album-list-detailed">
-  <ul>
+<section class="album-list-dc">
+  <ul class="album-list-dc-items">
     {% for album in albums %}
       {% include "_album_detailed_card.html" with edit=False %}
     {% endfor %}

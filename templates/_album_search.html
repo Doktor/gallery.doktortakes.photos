@@ -3,7 +3,7 @@
      data-items-per-page="{{ items_per_page }}"
      data-page="1"></div>
 
-<div id="album-search-container">
+<div class="album-search-container">
   <input id="search" type="text" placeholder="Search by name...">
 </div>
 
@@ -11,7 +11,7 @@
 
 <div class="pagination above hidden"></div>
 
-<section id="albums">
+<section class="albums">
   {% for album in albums %}
   {% include "_album_card_load_required.html" %}
   {% endfor %}

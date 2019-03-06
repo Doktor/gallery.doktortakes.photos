@@ -212,57 +212,57 @@ $navlinks-spacing: 1.5rem;
   font-weight: 700;
 }
 
-.photos {
-  $spacing: 0.4rem;
-  $width: 300px;
+$photoSpacing: 0.4rem;
+$photoWidth: 300px;
 
-  margin: 1rem (-$spacing);
+.photos {
+  margin: 1rem (-$photoSpacing);
 
   @include clearfix();
-
-  .wrapper {
-    padding: $spacing;
-    position: relative;
-    float: left;
-
-    &.empty {
-      padding: 0;
-    }
-
-    @media (max-width: $width * 1) {
-      float: none;
-      width: 100%;
-    }
-    @for $i from 1 through 4 {
-      @media (min-width: $width * ($i) + 1) and
-             (max-width: $width * ($i + 1)) {
-        width: 100% / ($i + 1);  // 50%, 33%, 25%, 20%
-      }
-    }
-    @media (min-width: $width * 5 + 1) {
-      width: (100% / 6);
-    }
-
-    &.selected img {
-      filter: brightness(0.3);
-    }
-
-    @include fade();
-  }
 
   img {
     display: block;
     width: 100%;
     border: 1px solid $borderColor;
   }
+}
 
-  .no-thumbnail .note {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    text-align: center;
-    transform: translateX(-50%) translateY(-50%);
+.photo-no-thumbnail-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.photo-wrapper {
+  padding: $photoSpacing;
+  position: relative;
+  float: left;
+
+  &.empty {
+    padding: 0;
   }
+
+  @media (max-width: $photoWidth * 1) {
+    float: none;
+    width: 100%;
+  }
+  @for $i from 1 through 4 {
+    @media (min-width: $photoWidth * ($i) + 1) and
+           (max-width: $photoWidth * ($i + 1)) {
+      width: 100% / ($i + 1);  // 50%, 33%, 25%, 20%
+    }
+  }
+  @media (min-width: $photoWidth * 5 + 1) {
+    width: (100% / 6);
+  }
+
+  &.selected img {
+    filter: brightness(0.3);
+  }
+
+  @include fade();
 }
 
 #featured {
@@ -292,29 +292,29 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
-#albums {
-  $spacing: 0.5rem;
-  $width: 400px;
+$albumSpacing: 0.5rem;
+$albumWidth: 400px;
 
-  margin: 1rem (-$spacing);
+.albums {
+  margin: 1rem (-$albumSpacing);
 
   @include clearfix();
+}
 
-  .wrapper {
-    padding: $spacing;
-    width: 100%;
+.album-wrapper {
+  padding: $albumSpacing;
+  width: 100%;
 
-    @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
-      float: left;
-      width: (100% / 2);
-    }
-    @media (min-width: $width * 3 + 1) {
-      float: left;
-      width: (100% / 3);
-    }
-
-    @include fade();
+  @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
+    float: left;
+    width: (100% / 2);
   }
+  @media (min-width: $albumWidth * 3 + 1) {
+    float: left;
+    width: (100% / 3);
+  }
+
+  @include fade();
 }
 
 .album {
@@ -326,16 +326,20 @@ $navlinks-spacing: 1.5rem;
     object-fit: cover;
   }
 
-  // Title container
-  .title {
-    position: absolute;
-    bottom: 0;
-    background-color: rgba(20, 20, 20, 0.8);
-    width: 100%;
+  &-hidden .album-title div {
+    color: red;
   }
+}
 
-  // Title
-  .title div {
+// Album title container
+.album-title {
+  position: absolute;
+  bottom: 0;
+  background-color: rgba(20, 20, 20, 0.8);
+  width: 100%;
+
+  // Text
+  div {
     font-family: $font2;
     font-weight: 300;
     text-align: center;
@@ -355,18 +359,22 @@ $navlinks-spacing: 1.5rem;
       text-decoration: underline;
     }
   }
+}
 
-  &-hidden .title div {
-    color: red;
+// Container for placeholder cover photo
+.album-no-cover {
+  img {
+    border: 1px solid $borderColor;
   }
+}
 
-  .no-cover .note {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    text-align: center;
-    transform: translateX(-50%) translateY(-50%);
-  }
+// Placeholder text
+.album-no-cover-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 .pagination {
@@ -527,7 +535,7 @@ input[type="radio"] + label {
   }
 }
 
-#album-search-container {
+.album-search-container {
   width: 100%;
   margin: 1rem 0;
 
@@ -562,119 +570,112 @@ input[type="radio"] + label {
   margin: 1rem 0;
 }
 
-#album-list-simple {
-  a {
-    color: rgb(0, 120, 255);
-  }
+.album-list-simple {
+  //
+}
 
-  ul ul {
+.album-list-simple-items {
+  & & {
     padding: 0;
     margin: 0 0 0 2rem;
   }
 }
 
-#album-list-detailed {
+.album-list-dc {
   a {
     color: $text;
     text-decoration: none;
   }
+}
 
-  ul {
-    list-style: none;
-    padding-left: 0;
-  }
+.album-list-dc-items {
+  list-style: none;
+  padding-left: 0;
 
-  ul ul {
+  & & {
     margin-left: 2rem;
 
     @media (min-width: 901px) {
       margin-left: 4rem;
     }
   }
+}
 
-  .row {
-    background-color: rgb(20, 20, 20);
-    margin: 1rem 0;
-    border: 1px solid $borderColor;
-    clear: both;
-    cursor: pointer;
+.album-list-dc-row {
+  background-color: rgb(20, 20, 20);
+  margin: 1rem 0;
+  border: 1px solid $borderColor;
+  clear: both;
+  cursor: pointer;
 
-    @media (min-width: 901px) {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &:hover {
-      background-color: rgb(40, 40, 40);
-      box-shadow: 0 0 1rem white;
-    }
-
-    &, &:hover {
-      transition: background-color 0.3s ease-in-out;
-    }
+  @media (min-width: 901px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .cover {
-    width: 100%;
-    position: relative;
-
-    img {
-      width: 100%;
-    }
-
-    .no-cover .note {
-      text-align: center;
-      width: 100%;
-      position: absolute;
-      top: 45%;
-    }
+  &:hover {
+    background-color: rgb(40, 40, 40);
+    box-shadow: 0 0 1rem white;
   }
 
-  .details {
+  &, &:hover {
+    transition: background-color 0.3s ease-in-out;
+  }
+}
+
+.album-list-dc-cover {
+  width: 100%;
+  position: relative;
+
+  img {
     width: 100%;
-    text-align: left;
-    padding: 1rem;
-
-    h3 {
-      margin: 0;
-      line-height: 1.25;
-    }
-
-    > ul {
-      list-style: none;
-      clear: both;
-      margin: 0;
-      padding: 0;
-      @include clearfix();
-    }
-
-    li {
-      float: left;
-
-      &:not(:last-child):after {
-        color: $text;
-        content: "\2022";
-        margin: 0 0.5rem;
-      }
-    }
   }
 
   @media (min-width: 901px) {
-    .cover {
-      width: 20%;
-      float: left;
+    width: 20%;
+    float: left;
 
-      img {
-        border-right: 1px solid $borderColor;
-      }
+    img {
+      border-right: 1px solid $borderColor;
     }
+  }
+}
 
-    .details {
-      width: 80%;
-      float: left;
-      padding-left: 1.5rem;
-      margin: auto 0;
+.album-list-dc-details {
+  width: 100%;
+  text-align: left;
+  padding: 1rem;
+
+  @media (min-width: 901px) {
+    width: 80%;
+    float: left;
+    padding-left: 1.5rem;
+    margin: auto 0;
+  }
+
+  // Name
+  h3 {
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  // Metadata
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Metadata items
+  // Start and end dates, photo count, location
+  li {
+    display: inline-block;
+
+    &:not(:last-child)::after {
+      color: $text;
+      content: "\2022";
+      margin: 0 0.5rem;
     }
   }
 }

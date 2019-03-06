@@ -3,7 +3,7 @@
   <a href="{{ album.get_absolute_url }}">{{ album.name }}</a>
 
   {% if album.children.exists %}
-    <ul class="list">
+    <ul class="album-list-simple-items">
       {% for a in album.children.all %}
         {% with album=a template="_album_simple.html" %}
           {% include template %}
