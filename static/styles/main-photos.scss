@@ -282,31 +282,6 @@ $navlinks-spacing: 1.5rem;
 
 /* Forms */
 
-form {
-  .row {
-    $width: 20%;
-    $spacing: 0.5rem;
-
-    display: flex;
-    align-items: center;
-
-    > label {
-      width: $width;
-      margin-right: $spacing;
-      text-align: right;
-    }
-
-    > .field-wrapper {
-      width: 100% - $width;
-      text-align: center;
-    }
-
-    &:not(:last-child) {
-      margin-bottom: $spacing;
-    }
-  }
-}
-
 fieldset {
   width: 100%;
   padding: 0;
@@ -332,8 +307,36 @@ input:not([type="file"]), select, textarea {
 }
 
 input[type="radio"] + label {
-  text-align: right;
+  // Move label farther away from radio button
   margin: 0 0.5rem 0 0.15rem;
+}
+
+.form-small {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-row {
+  $width: 20%;
+  $spacing: 0.5rem;
+
+  display: flex;
+  align-items: center;
+
+  label {
+    width: $width;
+    margin-right: $spacing;
+    text-align: right;
+  }
+
+  .field-wrapper {
+    width: 100% - $width;
+    text-align: center;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: $spacing;
+  }
 }
 
 .form-action {
@@ -344,17 +347,6 @@ input[type="radio"] + label {
 .form-note {
   width: 100%;
   text-align: center;
-}
-
-#login, #new-album {
-  max-width: 600px;
-  margin: 0 auto;
-
-  fieldset {
-    border: 1px solid;
-    margin-bottom: 1rem;
-    padding: 0.75rem 1.25rem;
-  }
 }
 
 /* Messages and notifications */
