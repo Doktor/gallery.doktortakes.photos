@@ -472,7 +472,8 @@ $photoWidth: 300px;
 .photos {
   margin: 1rem (-$photoSpacing);
 
-  @include clearfix();
+  display: flex;
+  flex-wrap: wrap;
 
   img {
     display: block;
@@ -491,15 +492,8 @@ $photoWidth: 300px;
 
 .photo-wrapper {
   padding: $photoSpacing;
-  position: relative;
-  float: left;
-
-  &.empty {
-    padding: 0;
-  }
 
   @media (max-width: $photoWidth * 1) {
-    float: none;
     width: 100%;
   }
   @for $i from 1 through 4 {
@@ -510,6 +504,10 @@ $photoWidth: 300px;
   }
   @media (min-width: $photoWidth * 5 + 1) {
     width: (100% / 6);
+  }
+
+  &.empty {
+    padding: 0;
   }
 
   &.selected img {
