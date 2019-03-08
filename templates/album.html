@@ -58,7 +58,7 @@
   <!-- Metadata -->
   <section class="group">
     <!-- Cover photo -->
-    <figure class="group-cover">
+    <figure class="group-cover {% if not album.cover %}group-cover-no-image{% endif %}">
       {% if album.cover %}
       <img alt="Cover photo" src="{{ album.cover.image.url }}">
       {% else %}
@@ -136,12 +136,6 @@
     </section>
   {% endif %}
 
-  {% if a_count and count %}
-  <hr>
-  {% elif not a_count and count and count > items_per_page %}
-  <hr>
-  {% endif %}
-
   {% if count %}
     <!-- API -->
     <div id="api"
@@ -170,8 +164,6 @@
     <p>This album does not contain any images.</p>
     {% endif %}
   {% endif %}
-
-  <hr>
 
   <!-- Footer -->
   <footer>

@@ -71,6 +71,8 @@ body {
 footer {
   font-family: $font2;
   text-transform: lowercase;
+
+  margin-top: 3rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -258,7 +260,6 @@ $navlinks-spacing: 1.5rem;
 // Navigation bar
 .navbar {
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid $navbar-border;
   margin-top: -0.5rem;
 }
 
@@ -505,8 +506,6 @@ $photoWidth: 300px;
 }
 
 .photo {
-  border: 1px solid $borderColor;
-
   img {
     width: 100%;
   }
@@ -543,9 +542,7 @@ $photoWidth: 300px;
   }
 
   img {
-    display: block;
     width: 100%;
-    border: 1px solid $text;
   }
 }
 
@@ -578,7 +575,6 @@ $albumWidth: 400px;
 }
 
 .album {
-  border: 1px solid $borderColor;
   position: relative;
 
   img {
@@ -622,11 +618,8 @@ $albumWidth: 400px;
   }
 }
 
-// Container for placeholder cover photo
 .album-no-cover {
-  img {
-    border: 1px solid $borderColor;
-  }
+  background: rgb(40, 40, 40);
 }
 
 // Placeholder text
@@ -854,7 +847,6 @@ ul.edit-links-center {
 .group-cover {
   width: 100%;
   height: 50vh;
-  border: 1px solid $text;
 
   position: relative;
   margin-bottom: 1rem;
@@ -864,6 +856,10 @@ ul.edit-links-center {
     height: 100%;
     object-fit: cover;
   }
+}
+
+.group-cover-no-image {
+  background: rgb(40, 40, 40);
 }
 
 .group-inset {
