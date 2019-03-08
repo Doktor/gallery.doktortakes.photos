@@ -468,26 +468,11 @@ input[type="radio"] + label {
 $photoSpacing: 0.4rem;
 $photoWidth: 300px;
 
-// Container
 .photos {
-  margin: 1rem (-$photoSpacing);
-
   display: flex;
   flex-wrap: wrap;
 
-  img {
-    display: block;
-    width: 100%;
-    border: 1px solid $borderColor;
-  }
-}
-
-.photo-no-thumbnail-note {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  transform: translateX(-50%) translateY(-50%);
+  margin: 1rem (-$photoSpacing);
 }
 
 .photo-wrapper {
@@ -515,6 +500,22 @@ $photoWidth: 300px;
   }
 
   @include fade();
+}
+
+.photo {
+  border: 1px solid $borderColor;
+
+  img {
+    width: 100%;
+  }
+}
+
+.photo-no-thumbnail-note {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 /* Featured photos */
@@ -551,24 +552,24 @@ $photoWidth: 300px;
 $albumSpacing: 0.5rem;
 $albumWidth: 400px;
 
-// Container
 .albums {
-  margin: 1rem (-$albumSpacing);
+  display: flex;
+  flex-wrap: wrap;
 
-  @include clearfix();
+  margin: 1rem (-$albumSpacing);
 }
 
 .album-wrapper {
   padding: $albumSpacing;
-  width: 100%;
 
+  @media (max-width: $albumWidth * 2) {
+    width: 100%;
+  }
   @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
-    float: left;
-    width: (100% / 2);
+    width: (100% / 2);  // 50%
   }
   @media (min-width: $albumWidth * 3 + 1) {
-    float: left;
-    width: (100% / 3);
+    width: (100% / 3);  // 33%
   }
 
   @include fade();
@@ -581,10 +582,6 @@ $albumWidth: 400px;
   img {
     width: 100%;
     object-fit: cover;
-  }
-
-  &-hidden .album-title div {
-    color: red;
   }
 }
 
@@ -615,6 +612,11 @@ $albumWidth: 400px;
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  // Hidden albums
+  .album-hidden & div {
+    color: red;
   }
 }
 
