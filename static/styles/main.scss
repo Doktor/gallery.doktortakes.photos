@@ -97,10 +97,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-.pagination {
-  margin: 1rem 0;
-}
-
 .breadcrumbs {
   $spacing: 0.75rem;
 
@@ -125,6 +121,7 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-block;
     margin: 0 0 $spacing 0;
     text-align: left;
+    float: left;
     width: 100%;
 
     @mixin hide() {
@@ -162,6 +159,57 @@ h1, h2, h3, h4, h5, h6 {
       }
     }
   }
+}
+
+
+.pagination {
+  text-align: left;
+  margin: 1rem 0;
+
+  &.above {
+    margin: 1rem 0;
+  }
+
+  &.below {
+    margin: 1rem 0;
+  }
+
+  .page, .skip {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 6px 8px;
+
+    color: gainsboro;
+    background-color: rgb(40, 40, 40);
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 2px;
+
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
+
+  .page {
+    cursor: pointer;
+
+    &.selected, &:hover {
+      background-color: rgb(100, 100, 100);
+    }
+
+    &, &:hover {
+      transition: background-color 0.25s;
+    }
+  }
+
+  .skip {
+    width: 60px;
+  }
+
+  // Prevent selection
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 /* Header and navigation bar */
