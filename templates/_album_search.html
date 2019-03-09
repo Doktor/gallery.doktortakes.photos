@@ -9,7 +9,7 @@
 
 <div class="count">{{ albums.count }} album{{ albums.count|pluralize }}</div>
 
-<div class="pagination hidden"></div>
+<div class="pagination pagination-above hidden"></div>
 
 <section class="albums">
   {% for album in albums %}
@@ -20,5 +20,5 @@
 <div id="no-results" class="hidden">No albums found.</div>
 
 {% if pagination_below %}
-<div class="pagination hidden"></div>
+<div class="pagination pagination-below hidden"></div>
 {% endif %}

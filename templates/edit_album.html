@@ -140,7 +140,7 @@
     {% endif %}
 
     <!-- Photos -->
-    <div class="pagination pagination-photos"></div>
+    <div class="pagination pagination-photos pagination-above"></div>
     <section class="photos">
       {% for p in photos %}
       <div class="album-wrapper" data-md5="{{ p.md5 }}">
@@ -159,7 +159,7 @@
       </div>
       {% endfor %}
     </section>
-    <div class="pagination pagination-photos"></div>
+    <div class="pagination pagination-photos pagination-below"></div>
     <!-- End photos -->
 
     {% if album.children.count %}

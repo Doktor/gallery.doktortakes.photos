@@ -43,6 +43,11 @@ $blue: rgb(0, 120, 255);
 $font1: "Roboto", sans-serif;
 $font2: "Lekton", "Menlo", "Consolas", monospace;
 
+// Other
+
+$itemSpacing: 0.5rem;
+
+
 /* General */
 
 *::selection,
@@ -170,7 +175,21 @@ h1, h2, h3, h4, h5, h6 {
 .pagination {
   font-family: $font2;
   text-align: left;
-  margin: 1rem 0;
+  margin: 0;
+
+  &.pagination-above {
+    margin-top: 2 * $itemSpacing;
+    margin-bottom: $itemSpacing;
+  }
+
+  .albums ~ &.pagination-above {
+    margin: $itemSpacing 0;
+  }
+
+  &.pagination-below {
+    margin-top: $itemSpacing;
+    margin-bottom: 2 * $itemSpacing;
+  }
 
   font-size: 1.25rem;
   line-height: 1;
@@ -506,18 +525,17 @@ input[type="radio"] + label {
 
 /* Photos */
 
-$photoSpacing: 0.4rem;
 $photoWidth: 300px;
 
 .photos {
   display: flex;
   flex-wrap: wrap;
 
-  margin: 1rem (-$photoSpacing);
+  margin: $itemSpacing (-$itemSpacing);
 }
 
 .photo-wrapper {
-  padding: $photoSpacing;
+  padding: $itemSpacing;
 
   @media (max-width: $photoWidth * 1) {
     width: 100%;
@@ -560,13 +578,12 @@ $photoWidth: 300px;
 /* Featured photos */
 
 #featured {
-  $spacing: 0.6rem;
   $width: 400px;
 
-  margin: 0 (-$spacing) 1rem (-$spacing);
+  margin: 0 (-$itemSpacing) 1rem (-$itemSpacing);
 
   .item {
-    padding: $spacing;
+    padding: $itemSpacing;
     width: 100%;
 
     @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
@@ -586,18 +603,17 @@ $photoWidth: 300px;
 
 /* Albums */
 
-$albumSpacing: 0.5rem;
 $albumWidth: 400px;
 
 .albums {
   display: flex;
   flex-wrap: wrap;
 
-  margin: 1rem (-$albumSpacing);
+  margin: $itemSpacing (-$itemSpacing);
 }
 
 .album-wrapper {
-  padding: $albumSpacing;
+  padding: $itemSpacing;
 
   @media (max-width: $albumWidth * 2) {
     width: 100%;
@@ -866,12 +882,8 @@ ul.edit-links-center {
 
 /* Groups of photos */
 
-#panorama, .group {
-  margin-bottom: 0;
-}
-
 .group {
-  margin: 1rem 0 !important;
+  margin-bottom: 0;
 }
 
 .group-nav {
@@ -887,7 +899,6 @@ ul.edit-links-center {
   height: 50vh;
 
   position: relative;
-  margin-bottom: 1rem;
 
   img {
     width: 100%;
@@ -961,6 +972,10 @@ ul.edit-links-center {
 }
 
 /* Panoramas */
+
+#panorama {
+  margin-bottom: 0;
+}
 
 #panorama-list img {
   width: 100%;
