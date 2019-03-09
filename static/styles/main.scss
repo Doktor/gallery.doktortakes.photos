@@ -165,38 +165,48 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Pagination */
 
 .pagination {
+  font-family: $font2;
   text-align: left;
   margin: 1rem 0;
 
-  &.above {
-    margin: 1rem 0;
-  }
+  font-size: 1.25rem;
+  line-height: 1;
 
-  &.below {
-    margin: 1rem 0;
-  }
+  // '.page-skip' is nested because its specificity isn't high enough to
+  // override the 'input' selectors
 
-  .page, .skip {
+  .page, .page-skip {
     display: inline-block;
-    margin-right: 6px;
-    padding: 6px 8px;
 
     color: gainsboro;
     background-color: rgb(40, 40, 40);
-    border: 1px solid rgb(100, 100, 100);
-    border-radius: 2px;
-
-    font-size: 1.2rem;
-    line-height: 1.2rem;
+    border: 1px solid rgb(80, 80, 80);
+    padding: 8px 12px;
   }
 
   .page {
     cursor: pointer;
+    border-right: 0;
 
-    &.selected, &:hover {
-      background-color: rgb(100, 100, 100);
+    // "..." button
+    &:not([data-page]) {
+      letter-spacing: -3px;
+      padding: 8px 10px;
+    }
+
+    &:last-child {
+      border-right: 1px solid rgb(80, 80, 80);
+    }
+
+    &.selected, &.selected:hover {
+      background-color: $blue;
+    }
+
+    &:hover {
+      background-color: rgb(80, 80, 80);
     }
 
     &, &:hover {
@@ -204,8 +214,12 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 
-  .skip {
-    width: 60px;
+  .page-skip {
+    width: 80px;
+
+    & + .page {
+      border-left: none;
+    }
   }
 
   // Prevent selection

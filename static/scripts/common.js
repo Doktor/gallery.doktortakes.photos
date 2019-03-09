@@ -254,7 +254,7 @@ Pagination.prototype.addDotsButton = function(container) {
     let dots = event.target;
 
     let input = document.createElement('input');
-    input.classList.add('skip');
+    input.classList.add('page-skip');
 
     input.addEventListener('blur', () =>{
       input.parentElement.replaceChild(dots, input);
