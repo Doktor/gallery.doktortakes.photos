@@ -338,6 +338,30 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
+/* Index page */
+
+.view-more {
+  margin: 1rem 0;
+}
+
+.view-more-link {
+  display: block;
+  padding: 1rem;
+  border: 1px solid $blue;
+
+  line-height: 1;
+
+  &:hover {
+    background-color: $blue;
+    color: rgb(220, 220, 220);
+    text-decoration: none;
+  }
+
+  &, &:hover {
+    transition: 0.2s background-color, 0.2s color;
+  }
+}
+
 /* Forms */
 
 fieldset {

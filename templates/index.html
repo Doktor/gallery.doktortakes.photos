@@ -30,8 +30,8 @@
     </section>
 
     {% if more_albums %}
-    <section>
-      <h4><a href="{% url 'albums' %}">View more albums</a></h4>
+    <section class="view-more">
+      <a class="view-more-link" href="{% url 'albums' %}">View more albums</a>
     </section>
     {% endif %}
   {% else %}
