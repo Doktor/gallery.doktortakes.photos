@@ -30,7 +30,9 @@
 
     {% if more_photos %}
     <section class="view-more">
-      <a class="view-more-link" href="{{ featured_url }}">View more featured photos</a>
+      <div class="view-more-wrapper">
+        <a class="view-more-link" href="{{ featured_url }}">View more featured photos</a>
+      </div>
     </section>
     {% endif %}
   {% else %}

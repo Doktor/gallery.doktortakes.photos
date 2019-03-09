@@ -371,18 +371,24 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
-/* Index page */
+/* Button: "view more" */
 
 .view-more {
-  margin: 1rem 0;
+  margin: 1rem (-$itemSpacing);
+}
+
+.view-more-wrapper {
+  padding: $itemSpacing;
+  width: (100% / 3);
+  margin-left: (100% / 3);
 }
 
 .view-more-link {
   display: block;
+  line-height: 1;
+
   padding: 1rem;
   border: 1px solid $blue;
-
-  line-height: 1;
 
   &:hover {
     background-color: $blue;
