@@ -12,15 +12,23 @@
   <meta property="og:url" content="{{ BASE_URL }}{% url 'copyright' %}">
 {% endblock %}
 
+{% block style %}
+<style>
+h2, h3 {
+  margin-top: 1.5rem;
+}
+</style>
+{% endblock %}
+
 {% block classes %}small{% endblock %}
 
 {% block content %}
   <section>
-    <h1>Copyright notices</h1>
+    <h2>Copyright notices</h2>
 
     <p>Please <a href="https://doktorthehusky.com">contact me</a> if you have any questions.</p>
 
-    <h2>Photos</h2>
+    <h3>Photos</h3>
 
     <p>
       I hold the copyright to all of the photos published on this website.<br>
@@ -36,14 +44,14 @@
       <li>Please ask before using photos for commercial purposes.<br><em>Exception</em>: You may use the photos to advertise a fursuit that's for sale.</li>
     </ul>
 
-    <h2>Website</h2>
+    <h3>Website</h3>
 
     <p>
       The <a href="https://gitlab.com/Doktor/doktortakes.photos">source code</a> for this website is available on GitLab.<br>
       It's released under the <a href="https://gitlab.com/Doktor/doktortakes.photos/blob/master/LICENSE">MIT License</a>.
     </p>
 
-    <h2>Other</h2>
+    <h3>Other</h3>
 
     <ul>
       <li>Primary font: <a href="https://fonts.google.com/specimen/Lekton">Lekton</a> (Open Font License)</li>
