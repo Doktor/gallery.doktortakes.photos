@@ -1,0 +1,53 @@
+<section class="container">
+  <form method="post"
+    {% if action %}
+      action="{{ action }}"
+    {% else %}
+      action="{{ post }}"
+    {% endif %}>
+
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <div class="errors">
+      {% for error in form.non_field_errors %}
+      <div class="message error">{{ error }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <fieldset>
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}" class="col-form-label">
+          {% if field.field.required %}
+          <span class="required">{{ field.label }}</span>
+          {% else %}
+          {{ field.label }}
+          {% endif %}
+        </label>
+
+        <div>
+          {{ field }}
+        </div>
+
+        {% if not hide_field_errors and field.errors %}
+        <div>
+          {% for error in field.errors %}
+          <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if not hide_help_text and field.help_text %}
+        <div class="form-text text-muted">{{ field.help_text|safe }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </fieldset>
+
+    <input type="hidden" name="next" value="{{ next }}">
+
+    <button type="submit" class="btn btn-primary">{{ submit }}</button>
+  </form>
+</section>
