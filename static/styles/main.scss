@@ -360,14 +360,10 @@ $navlinks-spacing: 1.5rem;
 
 .navlink-divider {
   color: $navbar-border;
-  margin: 0;
+  margin: 0 ($navlinks-spacing / 3) !important;
 
-  @media (min-width: 901px) {
-    margin: 0 ($navlinks-spacing / 2);
-
-    &::before {
-      content: "\00b7";
-    }
+  &::before {
+    content: "\00b7";  // Center dot
   }
 }
 
