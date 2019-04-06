@@ -946,11 +946,16 @@ ul.edit-links-center {
   @media (min-width: 901px) {
     text-align: left !important;
   }
+
+  &.group-info {
+    margin-bottom: 0;
+  }
 }
 
 .group-title {
   font-size: 3.0rem;
   line-height: 1;
+  margin-top: 0;
   margin-bottom: 0.5rem;
 
   // Regular case
