@@ -4,7 +4,7 @@ from photos.models import Album
 
 from typing import List
 
-from photos.utils.image import thumbnail
+from photos.utils.image import fit_image
 
 
 def get_albums_from_path(path: str) -> List[Album]:

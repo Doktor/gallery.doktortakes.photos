@@ -18,6 +18,7 @@ PANORAMA_THUMBNAILS_FOLDER = os.path.join('panoramas', 'thumbs')
 
 DEFAULT_PATH = 'all'
 
+
 # Index page
 
 INDEX_ALBUMS = 12
@@ -43,6 +44,11 @@ ITEMS_IN_FILMSTRIP = 11
 LONG, SHORT = 2400, 1600
 LANDSCAPE_SIZE = (LONG, SHORT)
 PORTRAIT_SIZE = (SHORT, LONG)
+
+
+# Thumbnails
+SQUARE_THUMBNAIL_SIZE = (400, 400)
+THUMBNAIL_QUALITY = 80
 
 
 # Watermarks
@@ -71,5 +77,7 @@ if WATERMARKS_ENABLED:
             image = PIL.Image.open(path, 'r').convert('RGBA')
             key = (size, color[0])
             WATERMARK_IMAGES[key] = image
+
+    DEFAULT_WATERMARK = WATERMARK_IMAGES[(2400, 'w')]
 
 WATERMARK_OFFSET = 30
