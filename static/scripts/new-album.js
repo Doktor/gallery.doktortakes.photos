@@ -1,6 +1,6 @@
 let $ = document.getElementById.bind(document);
 
-const form = $('album-form');
+const form = document.querySelector('form');
 
 const api = $('api');
 const API_ALBUM = api.dataset.apiAlbum;
