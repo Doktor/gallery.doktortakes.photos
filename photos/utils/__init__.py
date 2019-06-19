@@ -4,6 +4,8 @@ from photos.models import Album
 
 from typing import List
 
+from photos.utils.image import thumbnail
+
 
 def get_albums_from_path(path: str) -> List[Album]:
     """Returns a list of Albums extracted from the given path."""
