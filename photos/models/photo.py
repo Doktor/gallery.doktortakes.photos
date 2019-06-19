@@ -149,7 +149,7 @@ class Photo(models.Model):
         file = cache.get(self.md5)
 
         if file is None:
-            if self.local_path:
+            if self.local_path and os.path.isfile(self.local_path):
                 file = open(self.local_path, 'rb')
             else:
                 file = self.original.file
