@@ -379,8 +379,11 @@ $navlinks-spacing: 1.5rem;
 
 .view-more-wrapper {
   padding: $itemSpacing;
-  width: (100% / 3);
-  margin-left: (100% / 3);
+
+  @media (min-width: 901px) {
+    width: (100% / 3);
+    margin-left: (100% / 3);
+  }
 }
 
 .view-more-link {
