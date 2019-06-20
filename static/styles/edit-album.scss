@@ -11,13 +11,54 @@ h2 {
   margin: 0.5rem 0;
 }
 
-#album-form-container, #cover {
-  width: 50%;
-  margin: 0 auto;
+.album-details {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  margin-top: 1rem;
 }
 
-#album-form-container.edit {
-  float: left;
+.album-form-container, .album-cover-container {
+  width: 100%;
+
+  @media (min-width: 1201px) {
+    width: 50%;
+  }
+}
+
+.album-cover-container {
+  order: 1;
+
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  .album {
+    max-width: 600px;
+  }
+
+  @media (min-width: 1201px) {
+    order: 2;
+
+    display: block;
+    margin-bottom: 0;
+    padding-left: 0.5rem;
+
+    .album {
+      max-width: unset;
+      width: 100%;
+    }
+  }
+}
+
+.album-form-container {
+  order: 2;
+
+  @media (min-width: 1201px) {
+    order: 1;
+    padding-right: 0.5rem;
+  }
 }
 
 #album-form-cancel {
@@ -82,20 +123,6 @@ h2 {
   }
 }
 
-#cover {
-  float: left;
-  padding-left: 1rem;
-
-  .no-cover {
-    border: 1px solid rgb(220, 220, 220);
-    padding: 8px;
-    text-align: center;
-  }
-
-  img {
-    width: 100%;
-  }
-}
 
 #counts,
 #select,

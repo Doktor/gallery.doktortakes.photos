@@ -1,6 +1,6 @@
 let $ = document.getElementById.bind(document);
 
-const form = $('album-form');
+const form = document.querySelector('.album-form-container form');
 
 const cover = $('cover');
 

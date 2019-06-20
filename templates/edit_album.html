@@ -50,10 +50,23 @@
        data-api-edit-list="{% url 'edit_albums' %}"></div>
 
   <!-- Album details -->
-  <section class="clearfix">
-    <h2>Album details</h2>
+  <h2>Album details</h2>
 
-    <div id="album-form-container" class="edit">
+  <section class="album-details">
+    <div class="album-cover-container">
+      <div class="album {% if not album.cover %}album-no-cover{% endif %}">
+        {% if album.cover %}
+        <a href="{{ album.cover.image.url }}" target="_blank" title="Full size">
+          <img src="{{ album.cover.thumbnail.url }}" alt="Album cover image">
+        </a>
+        {% else %}
+        <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}" alt="Album cover image placeholder">
+        <div class="note album-no-cover-note">No cover photo</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="album-form-container">
       {% include '_album_form.html' %}
     </div>
 
@@ -68,18 +81,6 @@
       </div>
     </div>
 
-    <div id="cover" style="position: relative;">
-      {% if album.cover %}
-      <a href="{{ album.cover.image.url }}" target="_blank" title="Full size">
-        <img src="{{ album.cover.thumbnail.url }}">
-      </a>
-      {% else %}
-      <div class="album-no-cover">
-        <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}">
-        <div class="note album-no-cover-note">No cover photo</div>
-      </div>
-      {% endif %}
-    </div>
   </section>
 
   <!-- Edit subalbums -->
