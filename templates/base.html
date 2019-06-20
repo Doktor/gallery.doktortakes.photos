@@ -22,6 +22,9 @@
   <link rel="stylesheet" href="{% static 'styles/main.css' %}">
   <link rel="shortcut icon" href="{% static 'favicon.png' %}">
 
+  <script src="{% static 'scripts/common.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+
   {% block style %}{% endblock %}
 </head>
 
@@ -42,7 +45,5 @@
 </div>
 
 {% block content %}{% endblock %}
-<script src="{% static 'scripts/common.js' %}"></script>
-{% block scripts %}{% endblock %}
 </body>
 </html>

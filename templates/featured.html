@@ -11,6 +11,14 @@
   <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
 {% endblock %}
 
+{% block scripts %}
+{% if featured %}
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js" defer></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" defer></script>
+<script src="{% static 'scripts/featured.js' %}" defer></script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
   {% if featured %}
     <h2>Featured</h2>
@@ -43,12 +51,4 @@
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-{% if featured %}
- <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="{% static 'scripts/featured.js' %}"></script>
-{% endif %}
 {% endblock %}

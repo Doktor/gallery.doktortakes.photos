@@ -7,6 +7,12 @@
 <meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
+{% block scripts %}
+{% if albums %}
+<script src="{% static 'scripts/albums.js' %}" defer></script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
   <h2><a href="{% url 'new_album' %}">Add new album</a></h2>
 
@@ -21,10 +27,4 @@
   <footer>
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-{% if albums %}
-<script src="{% static 'scripts/albums.js' %}"></script>
-{% endif %}
 {% endblock %}

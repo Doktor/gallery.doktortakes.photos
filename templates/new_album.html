@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="{% static "styles/edit-album.css" %}">
 {% endblock %}
 
+{% block scripts %}
+<script src="{% static 'scripts/new-album.js' %}" defer></script>
+{% endblock %}
+
 {% block classes %}small{% endblock %}
 
 {% block content %}
@@ -32,6 +36,3 @@
   </div>
 {% endblock %}
 
-{% block scripts %}
-<script src="{% static 'scripts/new-album.js' %}"></script>
-{% endblock %}

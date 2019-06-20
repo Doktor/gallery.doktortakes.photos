@@ -43,6 +43,16 @@
 <link rel="stylesheet" href="{% static 'styles/photo.css' %}">
 {% endblock %}
 
+{% block scripts %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.js" defer></script>
+
+<script src="{% static 'scripts/photo.js' %}" defer></script>
+{% endblock %}
+
 {% block nav %}{% endblock %}
 
 {% block content %}
@@ -195,14 +205,4 @@
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.js"></script>
-
-<script src="{% static 'scripts/photo.js' %}"></script>
 {% endblock %}

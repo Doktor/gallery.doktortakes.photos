@@ -35,6 +35,12 @@
 {% endif %}
 {% endblock %}
 
+{% block scripts %}
+{% if count %}
+<script src="{% static 'scripts/album.js' %}" defer></script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
   <!-- Navigation -->
   <section>
@@ -172,10 +178,4 @@
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-{% if count %}
-<script src="{% static 'scripts/album.js' %}"></script>
-{% endif %}
 {% endblock %}

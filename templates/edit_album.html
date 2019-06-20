@@ -12,6 +12,11 @@
 <link rel="stylesheet" href="{% static "styles/edit-album.css" %}">
 {% endblock %}
 
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.js" defer></script>
+<script src="{% static 'scripts/edit-album.js' %}" defer></script>
+{% endblock %}
+
 {% block classes %}small{% endblock %}
 
 {% block content %}
@@ -213,9 +218,4 @@
   <footer>
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.js"></script>
-<script src="{% static 'scripts/edit-album.js' %}"></script>
 {% endblock %}

@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="{% static 'styles/search.css' %}">
 {% endblock %}
 
+{% block scripts %}
+<script src="{% static 'scripts/search.js' %}" defer></script>
+{% endblock %}
+
 {% block content %}
   <section>
     <form id="search">
@@ -139,8 +143,4 @@
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}
   </footer>
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'scripts/search.js' %}"></script>
 {% endblock %}
