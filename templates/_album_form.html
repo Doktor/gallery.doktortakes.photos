@@ -62,10 +62,10 @@
       <label>Hidden</label>
       <div class="field-wrapper">
         <input class="field" type="radio" id="hidden1" name="hidden" value="false" checked>
-        <label for="hidden1">No</label>
+        <label for="hidden1" class="radio-choice-small">No</label>
 
         <input class="field" type="radio" id="hidden2" name="hidden" value="true">
-        <label for="hidden2">Yes</label>
+        <label for="hidden2" class="radio-choice-small">Yes</label>
       </div>
     </div>
 
@@ -74,10 +74,10 @@
       <div class="field-wrapper">
         <input class="field" name="password" id="f-password" type="text">
       </div>
-    </div>
 
-    <div id="generate-password" class="form-action">
-      <a href="javascript: void(0)">Generate password</a>
+      <div id="generate-password" class="form-action">
+        <a href="javascript: void(0)">Generate password</a>
+      </div>
     </div>
 
     <div class="form-row">
@@ -101,13 +101,13 @@
       <div class="field-wrapper">
         <input class="field" name="parent" id="f-parent" type="text" {% if parent %}value="{{ parent }}"{% endif %}>
       </div>
-    </div>
 
-    {% if album %}
-    <div id="set-parent" class="form-action">
-      <a href="javascript: void(0)">Set parent album</a>
+      {% if album %}
+      <div id="set-parent" class="form-action">
+        <a href="javascript: void(0)">Set parent album</a>
+      </div>
+      {% endif %}
     </div>
-    {% endif %}
   </fieldset>
 
   <button id="album-form-save" type="button">{{ submit_text|default:"Save" }}</button>
