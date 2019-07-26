@@ -76,7 +76,7 @@
 
         <h3 class="group-inset-text group-info">
         {% with location=album.get_full_location %}
-          {% if location and location == album.location %}{{ location }} &middot; {% endif %}
+          {% if location %}{{ location }} &middot; {% endif %}
         {% endwith %}
           {{ album.get_full_date }}
           {% if count or not count and not a_count %} &middot; {{ count }} photo{{ count|pluralize }}{% endif %}
