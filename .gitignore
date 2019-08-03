@@ -5,9 +5,12 @@
 cache/
 data/
 temp/
-*.db
 *.bak
+*.db
+*.json
+*.log
 *.pgsql
+*.rdb
 
 # Media files
 media/
@@ -30,7 +33,3 @@ static/*/debug/
 
 # Migrations (until a stable version is released)
 photos/migrations/
-
-# Log files
-*.log
-*.rdb
