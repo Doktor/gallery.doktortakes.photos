@@ -37,6 +37,8 @@ NS = {
     'xmp': "http://ns.adobe.com/xap/1.0/"
 }
 
+IMAGE_TYPES = ['original', 'display_image', 'square_thumbnail', 'thumbnail']
+
 
 def get_path(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:
     if ext is None:
@@ -158,6 +160,37 @@ class Photo(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.get_path(), self.md5])
+
+    def get_image_file(self, image_type: str) -> Optional[ImageFieldFile]:
+        if image_type == 'original':
+            return self.original
+        elif image_type == 'display_image':
+            return self.image
+        elif image_type == 'square_thumbnail':
+            return self.square_thumbnail
+        elif image_type == 'thumbnail':
+            return self.thumbnail
+        else:
+            raise ValueError
+
+    def get_image_filename(self, image_type: str) -> Optional[str]:
+        file = self.get_image_file(image_type)
+        return file.name if file is not None else None
+
+    def get_image_filename_candidate(self, image_type: str) -> Optional[str]:
+        if image_type == 'original':
+            function = get_original_path
+        elif image_type == 'display_image':
+            function = get_display_path
+        elif image_type == 'square_thumbnail':
+            function = get_square_thumbnail_path
+        elif image_type == 'thumbnail':
+            function = get_thumbnail_path
+        else:
+            raise ValueError
+
+        filename = self.get_image_filename(image_type)
+        return function(self, filename) if filename is not None else None
 
     def get_original(self) -> File:
         file = cache.get(self.md5)
