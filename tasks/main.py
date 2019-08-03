@@ -35,6 +35,11 @@ def django_setup():
 
 
 @task
+def celery(ctx):
+    ctx.run("pipenv run celery -A core worker --loglevel=info")
+
+
+@task
 def build(ctx):
     print("Rebuilding stylesheets")
     with ctx.cd(os.path.join('static', 'styles')):
