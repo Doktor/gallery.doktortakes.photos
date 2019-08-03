@@ -51,11 +51,6 @@ user_patterns = [
     path('<slug:slug>/change-password/', views.ChangePasswordView.as_view(), name='password'),
 ]
 
-panorama_patterns = [
-    path('', views.panorama_list, name='panoramas'),
-    path('<slug:slug>/', views.panorama, name='panorama')
-]
-
 urlpatterns = [
     url_log_in,
     url_log_out,
@@ -77,8 +72,6 @@ urlpatterns = [
     path('tags/', include(tag_patterns)),
 
     path('users/', include(user_patterns)),
-
-    path('panoramas/', include(panorama_patterns)),
 
     path('activity/', views.view_activity, name='activity'),
     path('featured/', views.featured, name='featured'),

@@ -14,7 +14,7 @@ from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
 from photos.api.photo import get_photo
-from photos.models import Album, Panorama, Photo, Tag
+from photos.models import Album, Photo, Tag
 from photos.models.photo import get_exif
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
@@ -372,21 +372,6 @@ class ChangePasswordView(LoginRequiredMixin, View):
 
         messages.success(request, "Your password was changed successfully.", extra_tags='fade')
         return redirect(reverse('user', kwargs={'slug': user.username}))
-
-
-# Panoramas
-
-
-@require_GET
-def panorama_list(request: HttpRequest) -> HttpResponse:
-    p = Panorama.objects.all().order_by('-taken')
-    return render(request, "panoramas.html", {'panoramas': p})
-
-
-@require_GET
-def panorama(request: HttpRequest, slug: str) -> HttpResponse:
-    p = get_object_or_404(Panorama, slug=slug)
-    return render(request, "panorama.html", {'p': p})
 
 
 # Other
