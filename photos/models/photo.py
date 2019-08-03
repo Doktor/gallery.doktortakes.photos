@@ -142,6 +142,20 @@ class Photo(models.Model):
     def filename(self) -> str:
         return os.path.basename(self.original.name)
 
+    def generate_image(self, image_type: str) -> None:
+        file = self.get_original()
+
+        if image_type == 'display_image':
+            from photos.tasks import update_display_image
+            function = update_display_image
+        elif image_type == 'square_thumbnail':
+            from photos.tasks import update_square_thumbnail
+            function = update_square_thumbnail
+        else:
+            return
+
+        function(self, file)
+
     def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.get_path(), self.md5])
 
