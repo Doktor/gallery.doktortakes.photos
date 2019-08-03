@@ -330,6 +330,10 @@ $navlinks-spacing: 1.5rem;
 }
 
 .navlink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   a {
     color: $text;
 
@@ -355,6 +359,54 @@ $navlinks-spacing: 1.5rem;
 
   &-log-out a {
     color: red !important;
+  }
+}
+
+// Displays the Twitter icon in a circle
+// Background: circle
+.navlink-fa-stack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+
+  background-color: $text;
+
+  .navlinks-index & {
+    @media (min-width: 901px) {
+      width: $navlink-size * 1.25;
+      height: $navlink-size * 1.25;
+    }
+
+    background-color: rgb(160, 160, 160);
+  }
+
+  color: rgb(20, 20, 20);
+
+  &:hover {
+    background-color: $text;
+  }
+
+  &, &:hover {
+    transition: background-color 0.25s;
+  }
+
+  // Foreground: icon
+  i {
+    font-size: 55%;
+  }
+}
+
+.navlink-fa-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    text-decoration: none;
   }
 }
 

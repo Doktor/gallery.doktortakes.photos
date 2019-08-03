@@ -11,12 +11,14 @@
 {% if not request.user.is_staff %}
 {% if divider %}<li class="navlink-divider"></li>{% endif %}
 <li class="navlink">
-  <a href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer" title="Twitter">
-    <i class="fab fa-fw fa-twitter-square"></i>
+  <a class="navlink-fa-wrapper" href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer" title="Twitter">
+    <span class="navlink-fa-stack">
+      <i class="fab fa-twitter"></i>
+    </span>
   </a>
 </li>
 <li class="navlink">
-  <a href="https://doktorthehusky.com" target="blank" rel="noopener noreferrer" title="Website">
+  <a class="navlink-fa-wrapper" href="https://doktorthehusky.com" target="blank" rel="noopener noreferrer" title="Website">
     <i class="fas fa-globe-americas"></i>
   </a>
 </li>
