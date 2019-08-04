@@ -251,15 +251,19 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Header and navigation bar */
 
-// Color of navbar lines
-$navbar-border: rgb(100, 100, 100);
+// Base font size
+$nav-font-size: 1.5rem;
+$nav-font-size-index: $nav-font-size * 1.25;
+$logo-size: $nav-font-size * 1.5;
 
-// Base size for navbar text
-$navlink-size: 1.5rem;
-$logo-size: $navlink-size * 1.5;
+// Color of nav items (on the index page)
+$nav-item-color: rgb(160, 160, 160);
 
-// Spacing between navbar items
-$navlinks-spacing: 1.5rem;
+// Color of nav dividers (on non-index pages)
+$nav-divider-color: rgb(120, 120, 120);
+
+// Spacing between nav items
+$nav-item-spacing: 1.5rem;
 
 .logo {
   line-height: 1;
@@ -291,107 +295,96 @@ $navlinks-spacing: 1.5rem;
 }
 
 // Navigation bar
-.navbar {
+.nav {
   padding-bottom: 1.5rem;
   margin-top: -0.5rem;
 }
 
-.navlinks {
-  font-size: $navlink-size;
+.nav-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  font-size: $nav-font-size;
   font-family: $font2;
   text-transform: lowercase;
 
   list-style: none;
   padding: 0;
   margin: 0;
-
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  li {
-    margin: 0 ($navlinks-spacing / 2);
-
-    // Vertical alignment
-    @media (min-width: 901px) {
-      line-height: $logo-size * 1.15;
-    }
-  }
-
-  .logo a {
-    color: $text;
-  }
 }
 
-.navlinks-index {
+.nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0 ($nav-item-spacing / 2);
+
+  // Vertical alignment
   @media (min-width: 901px) {
-    font-size: $navlink-size * 1.25;
+    line-height: $logo-size * 1.15;
   }
 }
 
-.navlink {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// Change color of items on hover
+@mixin nav-item-hover($property) {
+  #{$property}: $nav-item-color;
 
-  a {
-    color: $text;
+  &:hover {
+    #{$property}: $text;
+  }
 
-    // Darker link color on the index page
-    .navlinks-index & {
-      color: rgb(160, 160, 160);
+  &, &:hover {
+    text-decoration: none;
+    transition: #{$property} 0.25s;
+  }
+}
 
-      // Brighten on hover
-      &:hover {
-        color: $text;
-      }
+.nav-item-link {
+  color: $text;
 
-      &, &:hover {
-        text-decoration: none;
-        transition: color 0.25s;
-      }
+  &-profile {
+    color: $blue;
+  }
+
+  &-log-out {
+    color: red;
+  }
+
+  .nav-items-index & {
+    @include nav-item-hover(color);
+
+    @media (min-width: 901px) {
+      font-size: $nav-font-size-index;
     }
   }
-
-  &-username a {
-    color: $blue !important;
-  }
-
-  &-log-out a {
-    color: red !important;
-  }
 }
 
-// Displays the Twitter icon in a circle
-// Background: circle
-.navlink-fa-stack {
+// Displays a Font Awesome icon in a circle
+// The icon element should be the only child element of a container element
+// with this class.
+.fa-stack {
   display: flex;
   justify-content: center;
   align-items: center;
 
+  // Background: circle
   width: 24px;
   height: 24px;
   border-radius: 100%;
 
+  color: rgb(20, 20, 20);
   background-color: $text;
 
-  .navlinks-index & {
+  .nav-items-index & {
+    @include nav-item-hover(background-color);
+
     @media (min-width: 901px) {
-      width: $navlink-size * 1.25;
-      height: $navlink-size * 1.25;
+      width: $nav-font-size-index;
+      height: $nav-font-size-index;
     }
-
-    background-color: rgb(160, 160, 160);
-  }
-
-  color: rgb(20, 20, 20);
-
-  &:hover {
-    background-color: $text;
-  }
-
-  &, &:hover {
-    transition: background-color 0.25s;
   }
 
   // Foreground: icon
@@ -400,7 +393,7 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
-.navlink-fa-wrapper {
+.nav-item-fa-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -410,16 +403,16 @@ $navlinks-spacing: 1.5rem;
   }
 }
 
-.navlink-divider {
-  color: $navbar-border;
-  margin: 0 ($navlinks-spacing / 3) !important;
+.nav-divider {
+  color: $nav-divider-color;
+  margin: 0 ($nav-item-spacing / 3) !important;
 
   &::before {
     content: "\00b7";  // Center dot
   }
 }
 
-.navbar-secondary {
+.nav-secondary {
   display: flex;
 }
 
@@ -931,7 +924,7 @@ ul.group-edit-links {
 
   li {
     float: left;
-    line-height: $navlink-size;
+    line-height: $nav-font-size;
   }
 }
 

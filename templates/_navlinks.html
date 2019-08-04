@@ -1,51 +1,78 @@
-{% if divider %}<li class="navlink-divider"></li>{% endif %}
-<li class="navlink">
-  <a href="{% url 'about' %}">About</a>
+<!-- Site logo (in base templates -->
+
+<!-- Main links -->
+{% if divider %}<li class="nav-divider"></li>{% endif %}
+<li class="nav-item">
+  <a class="nav-item-link" href="{% url 'about' %}">About</a>
 </li>
-<li class="navlink">
-  <a href="{% url 'featured' %}">Featured</a>
+<li class="nav-item">
+  <a class="nav-item-link" href="{% url 'featured' %}">Featured</a>
 </li>
-<li class="navlink">
-  <a href="{% url 'albums' %}">Photos</a>
+<li class="nav-item">
+  <a class="nav-item-link" href="{% url 'albums' %}">Photos</a>
 </li>
+
+<!-- Social media links -->
 {% if not request.user.is_staff %}
-{% if divider %}<li class="navlink-divider"></li>{% endif %}
-<li class="navlink">
-  <a class="navlink-fa-wrapper" href="https://twitter.com/DoktorTheHusky" target="blank" rel="noopener noreferrer" title="Twitter">
-    <span class="navlink-fa-stack">
+{% if divider %}<li class="nav-divider"></li>{% endif %}
+
+<!-- Twitter -->
+<li class="nav-item">
+  <a class="nav-item-link nav-item-fa-wrapper"
+     href="https://twitter.com/DoktorTheHusky"
+     target="blank"
+     rel="noopener noreferrer"
+     title="Twitter">
+    <span class="fa-stack">
       <i class="fab fa-twitter"></i>
     </span>
   </a>
 </li>
-<li class="navlink">
-  <a class="navlink-fa-wrapper" href="https://t.me/DoktorTakesPhotos" target="blank" rel="noopener noreferrer" title="Telegram">
+
+<!-- Telegram -->
+<li class="nav-item">
+  <a class="nav-item-link nav-item-fa-wrapper"
+     href="https://t.me/DoktorTakesPhotos"
+     target="blank"
+     rel="noopener noreferrer"
+     title="Telegram">
     <i class="fab fa-telegram"></i>
   </a>
 </li>
-<li class="navlink">
-  <a class="navlink-fa-wrapper" href="https://doktorthehusky.com" target="blank" rel="noopener noreferrer" title="Website">
+
+<!-- Website -->
+<li class="nav-item">
+  <a class="nav-item-link nav-item-fa-wrapper"
+     href="https://doktorthehusky.com"
+     target="blank"
+     rel="noopener noreferrer"
+     title="Website">
     <i class="fas fa-globe-americas"></i>
   </a>
 </li>
 {% endif %}
-{% if divider %}<li class="navlink-divider"></li>{% endif %}
+
+<!-- Content management -->
+{% if divider %}<li class="nav-divider"></li>{% endif %}
 {% if request.user.is_staff %}
-<li class="navlink">
-  <a href="{% url 'admin:index' %}">Admin</a>
+<li class="nav-item">
+  <a class="nav-item-link" href="{% url 'admin:index' %}">Admin</a>
 </li>
-<li class="navlink">
-  <a href="{% url 'edit_albums' %}">Edit</a>
+<li class="nav-item">
+  <a class="nav-item-link" href="{% url 'edit_albums' %}">Edit</a>
 </li>
 {% endif %}
+
+<!-- User management -->
 {% if request.user.is_authenticated %}
-<li class="navlink navlink-username">
-  <a href="{% url 'user' request.user.username %}">{{ request.user.username }}</a>
+<li class="nav-item">
+  <a class="nav-item-link nav-item-link-profile" href="{% url 'user' request.user.username %}">{{ request.user.username }}</a>
 </li>
-<li class="navlink navlink-log-out">
-  <a href="{% url 'log_out' %}">Log out</a>
+<li class="nav-item">
+  <a class="nav-item-link nav-item-link-log-out" href="{% url 'log_out' %}">Log out</a>
 </li>
 {% else %}
-<li class="navlink">
-  <a href="{% url 'log_in' %}">Log in</a>
+<li class="nav-item">
+  <a class="nav-item-link" href="{% url 'log_in' %}">Log in</a>
 </li>
 {% endif %}

@@ -30,9 +30,13 @@
 
 <body class="{% block classes %}{% endblock %}">
 {% block nav %}
-<nav class="navbar">
-  <ul class="navlinks">
-    <li class="logo-li"><h1 class="logo"><a href="{% url 'index' %}">Doktor Takes Photos</a></h1></li>
+<nav class="nav">
+  <ul class="nav-items">
+    <li class="nav-item">
+      <h1 class="logo">
+        <a class="nav-item-link" href="{% url 'index' %}">Doktor Takes Photos</a>
+      </h1>
+    </li>
     {% include "_navlinks.html" with divider=True %}
   </ul>
 </nav>
