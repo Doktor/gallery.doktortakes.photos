@@ -82,54 +82,34 @@
   }
 }
 
-#data, footer {
+.info, footer {
   margin: 0 auto;
   width: 90%;
 }
 
-#data {
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
   text-align: left;
   margin-top: 2rem;
+}
 
-  .fa {
-    color: rgb(220, 220, 220);
-    display: inline-block;
-    text-align: center;
-    width: 1.8rem;
-  }
-
-  > div > div {
-    margin-bottom: 2rem;
-    width: 100%;
-  }
+.info > div {
+  width: 100%;
+  margin-bottom: 1rem;
 
   @media (min-width: 901px) {
-    > div {
-      @include clearfix();
-
-      > div {
-        width: 50%;
-        float: left;
-
-        $spacing: 1rem;
-
-        &:first-child {
-          padding-right: $spacing / 2;
-        }
-        &:last-child {
-          padding-left: $spacing / 2;
-        }
-      }
-    }
+    width: 50%;
   }
 }
 
-.metadata {
-  #md-md5 {
-    font-family: "Lekton", "Consolas", monospace;
-    line-height: 1;
-    word-break: break-all;
-  }
+#md-md5 {
+  font-family: "Consolas", monospace;
+  line-height: 1;
+  word-break: break-all;
 }
 
 dl, dt, dd {
@@ -140,30 +120,39 @@ dt, dd {
   display: inline;
 }
 
-.keyboard {
-  #keys {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-
-    li {
-      margin: 0.5rem 0;
-    }
+.info-keyboard {
+  div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
-  kbd {
-    background-color: rgb(60, 60, 60);
-    border: 2px solid rgb(100, 100, 100);
-    border-radius:  3px;
-    padding: 3px 6px;
-    font-family: "Roboto Condensed", sans-serif;
-    font-weight: 700;
-    color: rgb(220, 220, 220);
+  dt {
+    font-size: 0;
+    margin-right: 0.35rem;
   }
 }
 
-.links {
-  div {
-    line-height: 1.6;
+kbd {
+  border: 2px solid rgb(100, 100, 100);
+  border-radius: 3px;
+  padding: 0 5px;
+
+  background-color: rgb(60, 60, 60);
+  color: rgb(220, 220, 220);
+
+  font-family: "Consolas", monospace;
+  font-size: 14pt;
+  font-weight: 700;
+
+  & + kbd {
+    margin-left: 0.35rem;
+  }
+
+  i {
+    padding: 0 3px;
+
+    font-size: 10pt;
+    font-weight: unset;
   }
 }

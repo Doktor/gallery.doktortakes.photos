@@ -83,124 +83,137 @@
     <div id="filmstrip-container"></div>
   </section>
 
-  <section id="data">
-    <!-- Top half -->
-    <div>
-      <!-- Metadata -->
-      <div class="metadata">
-        <h2>Metadata</h2>
+  <section class="info">
+    <div class="info-metadata">
+      <h2>Metadata</h2>
 
+      <dl>
         <div>
-          <span title="Sequence number"><i class="fas fa-fw fa-list-ol"></i></span>
-          <span>
-            <span id="md-index">?</span> / <span id="md-count">{{ count }}</span>
-          </span>
+          <dt><i title="Sequence number" class="fas fa-fw fa-list-ol"></i></dt>
+          <dd><span id="md-index">?</span> / <span id="md-count">{{ count }}</span></dd>
         </div>
 
         <div>
-          <span title="Date taken"><i class="fas fa-fw fa-clock"></i></span>
-          <span id="md-taken">{{ photo.taken|date:"l, Y-m-d, g:i:s A" }}</span>
+          <dt><i title="Date taken" class="fas fa-fw fa-clock"></i></dt>
+          <dd id="md-taken">{{ photo.taken|date:"l, Y-m-d, g:i:s A" }}</dd>
         </div>
 
         <div>
-          <span title="Dimensions"><i class="fas fa-fw fa-image"></i></span>
-          <span>
-            <span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span>
-          </span>
+          <dt><i title="Dimensions" class="fas fa-fw fa-image"></i></dt>
+          <dd><span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span></dd>
         </div>
 
         <div>
-          <span title="MD5 checksum"><i class="fas fa-fw fa-check-circle"></i></span>
-          <span id="md-md5">{{ photo.md5 }}</span>
+          <dt><i title="MD5 checksum" class="fas fa-fw fa-check-circle"></i></dt>
+          <dd id="md-md5">{{ photo.md5 }}</dd>
         </div>
 
         <div>
-          <span title="Open in new tab"><i class="fas fa-fw fa-external-link-square-alt"></i></span>
-          <span id="md-new-tab"><a href="{{ photo.image.url }}">Open in new tab</a></span>
+          <dt><i title="Open in new tab" class="fas fa-fw fa-external-link-square-alt"></i></dt>
+          <dd id="md-new-tab"><a href="{{ photo.image.url }}">Open in new tab</a></dd>
         </div>
 
         <div>
-          <span title="Download"><i class="fas fa-fw fa-download"></i></span>
-          <span id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></span>
+          <dt><i title="Download" class="fas fa-fw fa-download"></i></dt>
+          <dd id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></dd>
         </div>
 
         {% if request.user.is_staff %}
         <div>
-           <span title="Admin"><i class="fas fa-fw fa-toolbox"></i></span>
-           <span id="md-admin"><a href="{% url 'admin:photos_photo_change' photo.pk %}">Admin</a></span>
+          <dt title="Admin"><i class="fas fa-fw fa-toolbox"></i></dt>
+          <dd id="md-admin"><a href="{% url 'admin:photos_photo_change' photo.pk %}">Admin</a></dd>
         </div>
         {% endif %}
-      </div>
-
-      <!-- EXIF -->
-      <div class="exif">
-        <h2>EXIF</h2>
-
-        <dl>
-          <div>
-            <dt><i title="Camera model" class="fas fa-fw fa-camera"></i></dt>
-            <dd><span id="exif-camera">{{ exif.camera }}</span></dd>
-          </div>
-
-          <div>
-            <dt><i title="Camera lens" class="fas fa-fw fa-camera-retro"></i></dt>
-            <dd><span id="exif-lens">{{ exif.lens }}</span></dd>
-          </div>
-
-          <div>
-            <dt><i title="Shutter speed" class="fas fa-fw fa-stopwatch"></i></dt>
-            <dd><span id="exif-shutter-speed">{{ exif.shutter_speed }}</span></dd>
-          </div>
-
-          <div>
-            <dt><i title="Aperture setting" class="fas fa-fw fa-mountain"></i></dt>
-            <dd><span id="exif-aperture">{{ exif.aperture }}</span></dd>
-          </div>
-
-          <div>
-            <dt><i title="ISO sensitivity" class="fas fa-fw fa-film"></i></dt>
-            <dd><span id="exif-iso-speed">{{ exif.iso_speed }}</span></dd>
-          </div>
-        </dl>
-      </div>
+      </dl>
     </div>
-    <!-- End top half -->
 
-    <!-- Bottom half -->
-    <div>
-      <!-- Keyboard shortcuts -->
-      <div class="keyboard">
-        <h2>Keyboard shortcuts</h2>
-        <ul id="keys">
-          <li><kbd>Left</kbd> <kbd>Right</kbd> View previous/next photo</li>
-          <li><kbd>Up</kbd> <kbd>Down</kbd> Skip to first/last photo</li>
-          <li><kbd>A</kbd> Return to album</li>
-          <li><kbd>D</kbd> Download this photo</li>
-          <li><kbd>H</kbd> Return home</li>
-          <li><kbd>L</kbd> Return to album list</li>
-        </ul>
-      </div>
+    <div class="info-exif">
+      <h2>EXIF</h2>
 
-      <!-- Navigation -->
-      <div class="links">
-        <h2>Navigation</h2>
+      <dl>
         <div>
-          <span title="Album"><i class="fas fa-fw fa-book"></i></span>
-          <a href="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Return to album</a>
+          <dt><i title="Camera model" class="fas fa-fw fa-camera"></i></dt>
+          <dd><span id="exif-camera">{{ exif.camera }}</span></dd>
         </div>
 
         <div>
-           <span title="List of photos"><i class="fas fa-fw fa-list"></i></span>
-           <a href="{% url 'albums' %}">Return to album list</a>
+          <dt><i title="Camera lens" class="fas fa-fw fa-camera-retro"></i></dt>
+          <dd><span id="exif-lens">{{ exif.lens }}</span></dd>
         </div>
 
         <div>
-          <span title="Index"><i class="fas fa-fw fa-home"></i></span>
-          <a href="{% url 'index' %}">Return home</a>
+          <dt><i title="Shutter speed" class="fas fa-fw fa-stopwatch"></i></dt>
+          <dd><span id="exif-shutter-speed">{{ exif.shutter_speed }}</span></dd>
         </div>
-      </div>
+
+        <div>
+          <dt><i title="Aperture setting" class="fas fa-fw fa-mountain"></i></dt>
+          <dd><span id="exif-aperture">{{ exif.aperture }}</span></dd>
+        </div>
+
+        <div>
+          <dt><i title="ISO sensitivity" class="fas fa-fw fa-film"></i></dt>
+          <dd><span id="exif-iso-speed">{{ exif.iso_speed }}</span></dd>
+        </div>
+      </dl>
     </div>
-    <!-- End bottom half -->
+
+    <div class="info-keyboard">
+      <h2>Shortcuts</h2>
+
+      <dl>
+        <div>
+          <dt><kbd><i class="fas fa-fw fa-arrow-left"></i></kbd> <kbd><i class="fas fa-fw fa-arrow-right"></i></kbd></dt>
+          <dd>View previous/next photo</dd>
+        </div>
+
+        <div>
+          <dt><kbd><i class="fas fa-fw fa-arrow-up"></i></kbd> <kbd><i class="fas fa-fw fa-arrow-down"></i></kbd></dt>
+          <dd>Skip to first/last photo</dd>
+        </div>
+
+        <div>
+          <dt><kbd>A</kbd></dt>
+          <dd>Return to album</dd>
+        </div>
+
+        <div>
+          <dt><kbd>D</kbd></dt>
+          <dd>Download this photo</dd>
+        </div>
+
+        <div>
+          <dt><kbd>H</kbd></dt>
+          <dd>Return home</dd>
+        </div>
+
+        <div>
+          <dt><kbd>L</kbd></dt>
+          <dd>Return to album list</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="info-links">
+      <h2>Navigation</h2>
+
+      <dl>
+        <div>
+          <dt title="Album"><i class="fas fa-fw fa-book"></i></dt>
+          <dd><a href="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Return to album</a></dd>
+        </div>
+
+        <div>
+          <dt title="Album list"><i class="fas fa-fw fa-list"></i></dt>
+          <dd><a href="{% url 'albums' %}">Return to album list</a></dd>
+        </div>
+
+        <div>
+          <dt title="Index"><i class="fas fa-fw fa-home"></i></dt>
+          <dd><a href="{% url 'index' %}">Return home</a></dd>
+        </div>
+      </dl>
+    </div>
   </section>
 
   {% include "_photoswipe.html" %}
