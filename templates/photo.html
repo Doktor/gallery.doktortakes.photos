@@ -98,12 +98,12 @@
         </div>
 
         <div>
-          <span title="Date taken"><i class="fas fa-fw fa-calendar"></i></span>
+          <span title="Date taken"><i class="fas fa-fw fa-clock"></i></span>
           <span id="md-taken">{{ photo.taken|date:"l, Y-m-d, g:i:s A" }}</span>
         </div>
 
         <div>
-          <span title="Dimensions"><i class="fas fa-fw fa-camera"></i></span>
+          <span title="Dimensions"><i class="fas fa-fw fa-image"></i></span>
           <span>
             <span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span>
           </span>
@@ -115,7 +115,7 @@
         </div>
 
         <div>
-          <span title="Open in new tab"><i class="fas fa-fw fa-external-link-alt"></i></span>
+          <span title="Open in new tab"><i class="fas fa-fw fa-external-link-square-alt"></i></span>
           <span id="md-new-tab"><a href="{{ photo.image.url }}">Open in new tab</a></span>
         </div>
 
