@@ -88,6 +88,7 @@
 }
 
 #data {
+  text-align: left;
   margin-top: 2rem;
 
   .fa {
@@ -123,50 +124,20 @@
   }
 }
 
-.metadata, .keyboard, .links {
-  text-align: left;
-}
-
 .metadata {
   #md-md5 {
-    font-family: monospace;
+    font-family: "Lekton", "Consolas", monospace;
+    line-height: 1;
     word-break: break-all;
   }
 }
 
-.exif {
-  .camera, .exposure {
-    clear: both;
-  }
+dl, dt, dd {
+  margin: 0;
+}
 
-  .camera {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgb(220, 220, 220);
-
-    > div {
-      width: 100%;
-    }
-  }
-
-  .exposure {
-    > div {
-      float: left;
-      width: 33.33333333%;
-    }
-
-    > div:not(:last-child) {
-      border-right: 1px solid rgb(220, 220, 220);
-    }
-
-    @include clearfix();
-  }
-
-  img {
-    height: 3rem;
-    margin: 0 auto;
-    display: inline-block;
-  }
+dt, dd {
+  display: inline;
 }
 
 .keyboard {

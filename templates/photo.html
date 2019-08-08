@@ -136,28 +136,32 @@
       <div class="exif">
         <h2>EXIF</h2>
 
-        <div class="camera">
-          <div><img src="{% static 'images/exif/camera.svg' %}" title="Camera"><img src="{% static 'images/exif/lens.svg' %}" title="Lens"></div>
-          <div id="exif-camera">{{ exif.camera }}</div>
-          <div id="exif-lens">{{ exif.lens }}</div>
-        </div>
-
-        <div class="exposure">
+        <dl>
           <div>
-            <div><img src="{% static 'images/exif/shutter-speed.svg' %}" title="Shutter speed"></div>
-            <div id="exif-shutter-speed">{{ exif.shutter_speed }}</div>
+            <dt><i title="Camera model" class="fas fa-fw fa-camera"></i></dt>
+            <dd><span id="exif-camera">{{ exif.camera }}</span></dd>
           </div>
 
           <div>
-            <div><img src="{% static 'images/exif/aperture.svg' %}" title="Aperture"></div>
-            <div id="exif-aperture">{{ exif.aperture }}</div>
+            <dt><i title="Camera lens" class="fas fa-fw fa-camera-retro"></i></dt>
+            <dd><span id="exif-lens">{{ exif.lens }}</span></dd>
           </div>
 
           <div>
-            <div><img src="{% static 'images/exif/iso_speed.svg' %}" title="ISO speed"></div>
-            <div id="exif-iso-speed">{{ exif.iso_speed }}</div>
+            <dt><i title="Shutter speed" class="fas fa-fw fa-stopwatch"></i></dt>
+            <dd><span id="exif-shutter-speed">{{ exif.shutter_speed }}</span></dd>
           </div>
-        </div>
+
+          <div>
+            <dt><i title="Aperture setting" class="fas fa-fw fa-mountain"></i></dt>
+            <dd><span id="exif-aperture">{{ exif.aperture }}</span></dd>
+          </div>
+
+          <div>
+            <dt><i title="ISO sensitivity" class="fas fa-fw fa-film"></i></dt>
+            <dd><span id="exif-iso-speed">{{ exif.iso_speed }}</span></dd>
+          </div>
+        </dl>
       </div>
     </div>
     <!-- End top half -->
