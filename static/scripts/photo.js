@@ -1,6 +1,3 @@
-let $;
-
-
 // API paths
 const api = document.getElementById('api');
 
@@ -8,22 +5,22 @@ const API_GET_ALBUM_PHOTOS = api.dataset.apiGetAlbumPhotos;
 const API_PASSWORD = api.dataset.password || '';
 
 
-// Photo container
-const photo = document.getElementById('photo');
-const link = photo.children[0];
-const image = link.children[0];
-
-
 // Navigation
 const settings = {
+  // Index of the current image
   position: null,
-  items: 9,
+  // Number of items in the filmstrip
+  nFilmstripItems: 9,
+  // 1/2 of the above (hardcoded)
   half: 4,
 };
 
 
 // Gallery elements
-$ = document.getElementById.bind(document);
+let $ = document.getElementById.bind(document);
+
+const photoContainer = document.getElementById('photo');
+const photoLink = photoContainer.querySelector('.photo-link');
 
 const filmstrip = $('filmstrip-container');
 
@@ -52,87 +49,139 @@ const exif = {
 
 // PhotoSwipe
 const photoswipe = document.getElementById('pswp');
-const psItems = [];
+const photoswipeItems = [];
 
 
 // Album items
 const items = [];
+const preloaded = [];
 
-
+const elements = {
+  static: document.querySelector('.photo-static'),
+  landscape: document.querySelector('.photo-landscape'),
+  portrait: document.querySelector('.photo-portrait'),
+  previous: document.querySelector('.photo-previous'),
+  next: document.querySelector('.photo-next'),
+};
 
 // Updates the primary photo
 function loadPhoto(index, history = true) {
-  if (settings.position === index) { return; }
+  if (settings.position === index) {
+    return;
+  }
 
-  // Loop around at the start/end of the album
-  if (index < 0) { index = items.length - 1; }
-  else if (index > items.length - 1) { index = 0; }
+  let itemsLength = items.length;
 
-  let response = items[index];
+  // Loop to the other end at the start/end of the album
+  if (index < 0) {
+    index = itemsLength - 1;
+  } else if (index > itemsLength - 1) {
+    index = 0;
+  }
+
   settings.position = index;
 
-  // Metadata
+  // Get the new photo
+  let item = items[index];
+
+  // Update image
+  photoLink.href = item.image_url;
+  let isLandscape = item.metadata.width > item.metadata.height;
+
+  if (isLandscape) {
+    elements.landscape.src = item.image_url;
+  } else {
+    elements.portrait.src = item.image_url;
+  }
+
+  elements.landscape.classList.toggle('hidden', !isLandscape);
+  elements.portrait.classList.toggle('hidden', isLandscape);
+
+  // Update metadata
   ['index', 'md5', 'width', 'height'].forEach(function(key) {
-    photo.dataset[key] = response.metadata[key];
+    photoContainer.dataset[key] = item.metadata[key];
   });
 
-  link.href = response.image_url;
-  image.src = response.image_url;
-
+  // Update primary metadata
   Object.keys(metadata).forEach(function(key) {
-    metadata[key].innerText = response.metadata[key];
+    metadata[key].innerText = item.metadata[key];
   });
 
-  metadata.index.innerText = parseInt(response.metadata.index) + 1;
+  metadata.index.innerText = parseInt(item.metadata.index) + 1;
 
-  // Links
+  // Update links
   Object.keys(links).forEach(function(key) {
     let el = links[key];
 
     if (el !== null) {
-      el.querySelector('a').href = response.metadata[key];
+      el.querySelector('a').href = item.metadata[key];
     }
   });
 
-  // EXIF
+  // Update EXIF
   Object.keys(exif).forEach(function(key) {
-    exif[key].innerText = response.exif[key];
+    exif[key].innerText = item.exif[key];
   });
 
   // Filmstrip
-  let start = 0, end = 0;
+  let startIndex = 0, endIndex = 0;
 
   // Fewer items than filmstrip length
-  if (items.length < settings.items) {
-    start = 0;
-    end = items.length;
+  if (itemsLength < settings.nFilmstripItems) {
+    startIndex = 0;
+    endIndex = itemsLength;
   }
-  // Beginning of the filmstrip
-  else if (settings.position < (settings.half)) {
-    start = 0;
-    end = settings.items;
+  // Start
+  else if (settings.position < settings.half) {
+    startIndex = 0;
+    endIndex = settings.nFilmstripItems;
   }
-  // End of the filmstrip
-  else if (settings.position >= (items.length - settings.half)) {
-    start = items.length - settings.items;
-    end = items.length;
+  // End
+  else if (settings.position >= itemsLength - settings.half) {
+    startIndex = itemsLength - settings.nFilmstripItems;
+    endIndex = itemsLength;
   }
-  // Everything else
+  // Middle
   else {
-    start = index - settings.half;
-    end = index + settings.half + 1;
+    startIndex = index - settings.half;
+    endIndex = index + settings.half + 1;
   }
 
   Array.prototype.forEach.call(filmstrip.children, function(item, i) {
     item.classList.toggle('selected', i === index);
-    item.classList.toggle('hidden', !(start <= i && i < end));
+    item.classList.toggle('hidden', !(startIndex <= i && i < endIndex));
   });
+
+  // Preload images
+
+  // Adding "itemsLength" prevents negative indexes.
+  let prevIndex = (settings.position - 1 + itemsLength) % itemsLength;
+  let nextIndex = (settings.position + 1) % itemsLength;
+
+  let prev = items[prevIndex];
+
+  if (!prev.isPreloaded) {
+    prev.isPreloaded = true;
+
+    let prevImage = new Image();
+    prevImage.src = items[prevIndex].image_url;
+    preloaded.push(prevImage);
+  }
+
+  let next = items[nextIndex];
+  if (!next.isPreloaded) {
+    next.isPreloaded = true;
+
+    let nextImage = new Image();
+    nextImage.src = items[nextIndex].image_url;
+    preloaded.push(nextImage);
+  }
 
   // Browser history
   if (history) {
-    let shortMD5 = response.metadata.md5.slice(0, 8);
+    let shortMD5 = item.metadata.md5.slice(0, 8);
 
-    window.history.pushState('', shortMD5, response.url);
+    window.history.pushState('', shortMD5, item.url);
 
     let title = document.title.split(' | ');
     title[0] = shortMD5;
@@ -152,7 +201,7 @@ function loadPhotos() {
       // Get index of this item
       if (item.metadata.md5 === api.dataset.md5) { thisIndex = i; }
 
-      psItems.push({
+      photoswipeItems.push({
         'src': item.image_url,
         'w': item.metadata.width,
         'h': item.metadata.height,
@@ -187,7 +236,7 @@ function loadPhotos() {
   }
 
   let params = {
-    path: photo.dataset.path,
+    path: photoContainer.dataset.path,
     password: API_PASSWORD,
   };
   let url = API_GET_ALBUM_PHOTOS + queryString(params, true);
@@ -195,9 +244,13 @@ function loadPhotos() {
   sendRequest('GET', url, onSuccess, null);
 }
 
+function getActiveImageElement() {
+  return elements.landscape.classList.contains('hidden') ? elements.portrait : elements.landscape;
+}
+
 // Loads the PhotoSwipe object
 function loadPhotoSwipe() {
-  link.addEventListener('click', function(event) {
+  photoLink.addEventListener('click', function(event) {
     event.preventDefault();
 
     let options = {
@@ -209,7 +262,7 @@ function loadPhotoSwipe() {
       escKey: true,
       arrowKeys: true,
 
-      index: parseInt(photo.dataset.index),
+      index: parseInt(photoContainer.dataset.index),
 
       showHideOpacity: true,
       closeOnScroll: false,
@@ -217,7 +270,7 @@ function loadPhotoSwipe() {
       showAnimationDuration: 500,
 
       getThumbBoundsFn: function() {
-        let item = image;
+        let item = getActiveImageElement();
         let y = window.pageYOffset || document.documentElement.scrollTop;
         let rect = item.getBoundingClientRect();
 
@@ -226,7 +279,7 @@ function loadPhotoSwipe() {
     };
 
     const gallery = new PhotoSwipe(
-      photoswipe, PhotoSwipeUI_Default, psItems, options);
+      photoswipe, PhotoSwipeUI_Default, photoswipeItems, options);
 
     gallery.init();
 
@@ -305,6 +358,8 @@ function loadPhotoSwipe() {
 
 // Load the album
 document.addEventListener('DOMContentLoaded', () => {
+  elements.static.classList.add('hidden');
+
   loadPhotos();
 
   // Keyboard navigation
@@ -336,7 +391,7 @@ document.addEventListener('keydown', function(event) {
 
   switch (key) {
     case KEY_A:
-      window.location.href = photo.dataset.albumUrl;
+      window.location.href = photoContainer.dataset.albumUrl;
       break;
     case KEY_D:
       window.location.href = links.download.children[0].href;

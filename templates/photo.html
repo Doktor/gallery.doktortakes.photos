@@ -73,8 +73,16 @@
            data-index=""
            data-width=""
            data-height="">
-    <a href="">
-      <img src="{{ photo.image.url }}" alt="Photo {{ short_md5 }}: click to zoom" title="Click to zoom">
+    <a class="photo-link" href="">
+      <!-- Fallback image for browsers with scripts disabled -->
+      <img class="photo-static" src="{{ photo.image.url }}"
+           alt="Original photo" title="Click to zoom">
+
+      <!-- Primary image elements -->
+      <img class="photo-landscape" src=""
+           alt="Container for landscape photos" title="Click to zoom">
+      <img class="photo-portrait" src=""
+           alt="Container for portrait photos" title="Click to zoom">
     </a>
   </section>
 
