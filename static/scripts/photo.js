@@ -87,7 +87,11 @@ function loadPhoto(index, history = true) {
 
   // Links
   Object.keys(links).forEach(function(key) {
-    links[key].children[0].href = response.metadata[key];
+    let el = links[key];
+
+    if (el !== null) {
+      el.querySelector('a').href = response.metadata[key];
+    }
   });
 
   // EXIF
