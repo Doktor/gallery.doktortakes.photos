@@ -33,20 +33,6 @@
 #filmstrip-container {
   $fadeTime: 0.2s;
 
-  & {
-    transform-origin: top;
-    transition-delay: 0.5s !important;
-  }
-
-  &:hover {
-    transform: scale(1.5);
-    transition-delay: 0s !important;
-  }
-
-  &, &:hover {
-    transition: transform 0.2s ease-in-out;
-  }
-
   .item {
     display: inline-block;
     opacity: 0.35;
@@ -79,13 +65,18 @@
 
   img {
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     margin: 0 4px;
     border: 1px solid gainsboro;
 
     clear: both;
     cursor: pointer;
+
+    @media (min-width: 901px) {
+      width: 80px;
+      height: 80px;
+    }
   }
 }
 
