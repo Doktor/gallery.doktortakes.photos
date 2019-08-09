@@ -34,15 +34,21 @@
   $fadeTime: 0.2s;
 
   .item {
-    display: inline-block;
-    opacity: 0.35;
+    $step: 0.35;
 
-    &:hover, &.selected {
-      opacity: 1;
+    display: inline-block;
+    opacity: 1 - $step * 2;
+
+    &:hover {
+      opacity: 1 - $step;
     }
 
     &, &:hover {
       transition: opacity $fadeTime ease-in-out;
+    }
+
+    &.selected, &.selected:hover {
+      opacity: 1;
     }
 
     .index {
