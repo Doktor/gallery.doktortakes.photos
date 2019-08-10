@@ -330,15 +330,12 @@ function loadPhotoSwipe() {
       }
     });
 
-    document.addEventListener('keyup', function(e) {
-      let key = e.keyCode;
-
-      switch (key) {
-        case KEY_UP:
+    document.addEventListener('keydown', function(e) {
+      switch (event.key) {
+        case "ArrowUp":
           e.preventDefault();
           return gallery.goTo(0);
-
-        case KEY_DOWN:
+        case "ArrowDown":
           e.preventDefault();
           return gallery.goTo(gallery.items.length - 1);
       }
