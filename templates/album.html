@@ -134,6 +134,13 @@
         {% endfor %}
       </div>
       {% endif %}
+
+      {% if album.description %}
+      <div class="group-info-item group-description">
+        <i title="Description" class="fas fa-fw fa-book"></i>
+        <span>{{ album.description|safe|linebreaksbr }}</span>
+      </div>
+      {% endif %}
     </div>
   </section>
   <!-- End metadata -->
@@ -145,12 +152,6 @@
         {% include "_album_card.html" with album=c %}
       {% endfor %}
     </section>
-  {% endif %}
-
-  {% if album.description %}
-  <section>
-    <div class="group-description">{{ album.description|safe|linebreaks }}</div>
-  </section>
   {% endif %}
 
   {% if count %}

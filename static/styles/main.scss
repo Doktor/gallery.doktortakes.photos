@@ -1061,8 +1061,8 @@ $group-row-spacing: 0.75rem;
   &:not(:last-child) {
     margin-bottom: $group-row-spacing;
   }
-}
 
-.group-description {
-  margin: $group-row-spacing 0;
+  &.group-description {
+    line-height: 1.15;
+  }
 }
