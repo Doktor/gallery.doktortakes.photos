@@ -179,16 +179,11 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
 # Tags
 
 
+@staff_only
 @require_GET
 def view_tags(request: HttpRequest) -> HttpResponse:
     tags = Tag.objects.all()
-    filtered = []
-
-    for tag in tags:
-        if all(not album.hidden for album in tag.albums.all()):
-            filtered.append(tag)
-
-    context = {'tags': filtered}
+    context = {'tags': tags}
     return render(request, 'tags.html', context)
 
 
