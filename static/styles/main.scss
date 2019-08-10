@@ -441,10 +441,12 @@ $nav-item-spacing: 1.5rem;
 
 .view-more-link {
   display: block;
+
+  @include primary-font();
   line-height: 1;
 
-  padding: 1rem;
   border: 1px solid $blue;
+  padding: 1rem;
 
   &:hover {
     background-color: $blue;
