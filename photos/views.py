@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -29,11 +29,29 @@ from typing import Callable
 metadata = m(None)
 
 FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
-ALBUM_QUERY = Q(parent__isnull=True, hidden=False)
-ALBUM_QUERY_ADMIN = Q(parent__isnull=True)
 
 
 # Helper functions
+
+
+def get_albums_for_user(user, exclude_public=False) -> QuerySet:
+    """Returns a QuerySet of the albums that a user has access to."""
+    if not user.is_authenticated:
+        query = Q(parent__isnull=True, hidden=False)
+    elif user.is_staff:
+        query = Q(parent__isnull=True)
+    else:
+        sub_query = Q(users=user)
+
+        for group in user.groups.all():
+            sub_query |= Q(groups=group)
+
+        query = Q(parent__isnull=True) & sub_query
+
+    if exclude_public:
+        query &= Q(hidden=True)
+
+    return Album.objects.filter(query).distinct()
 
 
 def staff_only(f: Callable) -> Callable:
@@ -78,9 +96,7 @@ def debug_500(request: HttpRequest) -> HttpResponse:
 @require_GET
 def index(request: HttpRequest) -> HttpResponse:
     """Renders the index page."""
-    query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
-
-    albums = Album.objects.filter(query).order_by('-start')
+    albums = get_albums_for_user(request.user).order_by('-start')
 
     context = {
         'tagline': random.choice(TAGLINES),
@@ -111,8 +127,7 @@ def featured(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_albums(request: HttpRequest) -> HttpResponse:
-    query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
-    albums = Album.objects.filter(query).order_by('-start')
+    albums = get_albums_for_user(request.user).order_by('-start')
 
     context = {
         'albums': albums,
@@ -180,9 +195,7 @@ def view_tags(request: HttpRequest) -> HttpResponse:
 @require_GET
 def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
     tag = get_object_or_404(Tag, slug=slug)
-
-    query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
-    albums = tag.albums.filter(query).order_by('-start')
+    albums = get_albums_for_user(request.user).filter(tags=tag)
 
     if not albums:
         raise Http404
@@ -323,16 +336,7 @@ def view_user(request: HttpRequest, slug: str) -> HttpResponse:
         else:
             raise Http404
 
-    if user.is_staff:
-        query = Q(parent__isnull=True, hidden=True)
-    else:
-        sub_query = Q(users=user)
-        for group in user.groups.all():
-            sub_query |= Q(groups=group)
-
-        query = Q(parent__isnull=True) & sub_query
-
-    albums = Album.objects.filter(query).distinct().order_by('-start')
+    albums = get_albums_for_user(user, exclude_public=True)
 
     context = {
         'user': user,
