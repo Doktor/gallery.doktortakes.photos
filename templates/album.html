@@ -42,25 +42,6 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Navigation -->
-  <section>
-    <nav class="group-nav">
-      <ul class="breadcrumbs">
-        <li class="breadcrumbs-icon" title="Breadcrumbs"><i class="fas fa-fw fa-bookmark"></i> <a href="{% url 'albums' %}">Photos</a></li>
-        {% for album in path %}
-        <li><a href="{{ album.get_absolute_url }}">{{ album.name }}</a></li>
-        {% endfor %}
-      </ul>
-
-      {% if request.user.is_staff %}
-      <ul class="group-edit-links">
-        <li><a href="{{ album.get_edit_url }}">Edit</a></li>
-        <li><a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a></li>
-      </ul>
-      {% endif %}
-    </nav>
-  </section>
-
   <!-- Metadata -->
   <section class="group">
     <!-- Cover photo -->
@@ -72,7 +53,11 @@
       {% endif %}
 
       <div class="group-inset">
-        <h2 class="group-inset-text group-title">{{ album.name }}</h2>
+        <div class="group-inset-row">
+          <h2 class="group-inset-text group-title">{{ album.name }}</h2>
+
+          <!-- <button class="group-menu-button">...</button> -->
+        </div>
 
         <h3 class="group-inset-text group-info">
         {% with location=album.get_full_location %}
@@ -81,6 +66,24 @@
           {{ album.get_full_date }}
           {% if count or not count and not a_count %} &middot; {{ count }} photo{{ count|pluralize }}{% endif %}
         </h3>
+
+        {% with parent=album.parent is_staff=request.user.is_staff %}
+        {% if parent or is_staff %}
+        <!-- Navigation -->
+        <div class="group-inset-text group-info">
+          {% if parent %}
+          <a href="{{ parent.get_absolute_url }}">View parent album</a>
+          {% endif %}
+
+          {% if parent and is_staff %} &middot; {% endif %}
+
+          <!-- Staff links -->
+          {% if is_staff %}
+          <a href="{{ album.get_edit_url }}">Edit</a> &middot; <a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% endwith %}
       </div>
     </figure>
 
