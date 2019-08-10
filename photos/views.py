@@ -166,7 +166,14 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
 
 @require_GET
 def view_tags(request: HttpRequest) -> HttpResponse:
-    context = {'tags': Tag.objects.all()}
+    tags = Tag.objects.all()
+    filtered = []
+
+    for tag in tags:
+        if all(not album.hidden for album in tag.albums.all()):
+            filtered.append(tag)
+
+    context = {'tags': filtered}
     return render(request, 'tags.html', context)
 
 
@@ -174,8 +181,13 @@ def view_tags(request: HttpRequest) -> HttpResponse:
 def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
     tag = get_object_or_404(Tag, slug=slug)
 
-    albums = tag.albums.all()
-    cover = random.choice(albums).cover if albums else None
+    query = ALBUM_QUERY_ADMIN if request.user.is_staff else ALBUM_QUERY
+    albums = tag.albums.filter(query).order_by('-start')
+
+    if not albums:
+        raise Http404
+
+    cover = random.choice(albums).cover
 
     context = {
         'tag': tag,
