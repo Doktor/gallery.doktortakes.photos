@@ -59,18 +59,18 @@
           <!-- <button class="group-menu-button">...</button> -->
         </div>
 
-        <h3 class="group-inset-text group-info">
+        <div class="group-inset-text">
         {% with location=album.get_full_location %}
           {% if location %}{{ location }} &middot; {% endif %}
         {% endwith %}
           {{ album.get_full_date }}
           {% if count or not count and not a_count %} &middot; {{ count }} photo{{ count|pluralize }}{% endif %}
-        </h3>
+        </div>
 
         {% with parent=album.parent is_staff=request.user.is_staff %}
         {% if parent or is_staff %}
         <!-- Navigation -->
-        <div class="group-inset-text group-info">
+        <div class="group-inset-text">
           {% if parent %}
           <a href="{{ parent.get_absolute_url }}">View parent album</a>
           {% endif %}
@@ -87,48 +87,54 @@
       </div>
     </figure>
 
-    {% if album.hidden %}
-      {% if not request.user.is_staff %}
-      <p class="group-info">
-        <span title="Warning"><i class="fas fa-fw fa-exclamation-triangle"></i></span>
-        This album is hidden; please ask before sharing.
-      </p>
-      {% endif %}
+    <div class="group-info">
+      {% if album.hidden %}
+        <!-- Hidden warning -->
+        {% if not request.user.is_staff %}
+        <div class="group-info-item">
+          <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
+          This album is hidden; please ask before sharing.
+        </div>
+        {% endif %}
 
-      {% if album.password %}
-      <p class="group-info">
-        <span title="Password"><i class="fas fa-fw fa-key"></i></span>
-        {{ album.password }}
-        (<a href="{{ album.get_absolute_url }}">regular link</a>,
-        <a href="{{ album.get_password_url }}">password link</a>)
-      </p>
-      {% endif %}
+        <!-- Password link -->
+        {% if album.password %}
+        <div class="group-info-item">
+          <i title="Password" class="fas fa-fw fa-key"></i>
+          {{ album.password }}
+          (<a href="{{ album.get_absolute_url }}">regular link</a>,
+          <a href="{{ album.get_password_url }}">password link</a>)
+        </div>
+        {% endif %}
 
-      {% if request.user.is_staff %}
-        <p class="group-info">
-          <span title="Warning"><i class="fas fa-fw fa-key"></i></span>
+        <!-- Hidden warning (staff) -->
+        {% if request.user.is_staff %}
+        <div class="group-info-item">
+          <i title="Warning" class="fas fa-fw fa-key"></i>
           Hidden album
-        </p>
+        </div>
 
+        <!-- Access list -->
         {% with access_list=album.get_access_list %}
           {% if access_list %}
-          <p class="group-info">
-            <span title="Users"><i class="fas fa-fw fa-users"></i></span>
+          <div class="group-info-item">
+            <i title="Users" class="fas fa-fw fa-users"></i>
             {{ access_list }}
-          </p>
+          </div>
           {% endif %}
         {% endwith %}
+        {% endif %}
       {% endif %}
-    {% endif %}
 
-    {% if album.tags.count %}
-    <h3 class="group-info">
-      <span title="Tags"><i class="fas fa-fw fa-tags"></i></span>
-      {% for tag in album.tags.all %}
-      <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
-      {% endfor %}
-    </h3>
-    {% endif %}
+      {% if album.tags.count %}
+      <div class="group-info-item">
+        <i title="Tags" class="fas fa-fw fa-tags"></i>
+        {% for tag in album.tags.all %}
+        <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
   </section>
   <!-- End metadata -->
 

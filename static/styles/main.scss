@@ -975,6 +975,7 @@ $group-row-spacing: 0.75rem;
 }
 
 .group-inset {
+  // Spacing from the edges of the image
   $spacing: 1.25rem;
 
   position: absolute;
@@ -1012,8 +1013,13 @@ $group-row-spacing: 0.75rem;
     text-align: left !important;
   }
 
-  &.group-info {
-    margin-bottom: 0;
+  @include primary-font();
+  font-size: 1.5rem;
+  line-height: 1;
+  white-space: nowrap;
+
+  &:not(:last-child) {
+    margin-bottom: $group-row-spacing;
   }
 }
 
@@ -1036,14 +1042,19 @@ $group-row-spacing: 0.75rem;
 }
 
 .group-info {
+  margin: 1.25rem 0 $group-row-spacing 0;
+}
+
+.group-info-item {
   @include primary-font();
-  color: $text;
-  font-weight: 400;
   font-size: 1.5rem;
   line-height: 1;
   text-align: left;
   text-transform: none;
-  white-space: nowrap;
+
+  i {
+    margin-right: 0.25rem;
+  }
 
   &:not(:last-child) {
     margin-bottom: $group-row-spacing;
@@ -1051,5 +1062,5 @@ $group-row-spacing: 0.75rem;
 }
 
 .group-description {
-  margin: 1rem 0;
+  margin: $group-row-spacing 0;
 }
