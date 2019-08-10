@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lekton:400,700');
+@import url('https://fonts.googleapis.com/css?family=Contrail+One:400,700');
 
 /* Mixins */
 
@@ -41,7 +41,7 @@ $blue: rgb(0, 120, 255);
 /* Typefaces */
 
 @mixin primary-font() {
-  font-family: "Lekton", "Menlo", "Consolas", monospace;
+  font-family: "Contrail One", sans-serif;
   letter-spacing: -0.05rem;
 }
 
