@@ -149,7 +149,7 @@
     <div class="pagination pagination-photos pagination-above"></div>
     <section class="photos">
       {% for p in photos %}
-      <div class="album-wrapper" data-md5="{{ p.md5 }}">
+      <div class="photo-wrapper" data-md5="{{ p.md5 }}">
         <div class="photo">
           {% if p.square_thumbnail %}
           <img class="not-loaded"
