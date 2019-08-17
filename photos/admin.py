@@ -19,7 +19,7 @@ class AlbumAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Main', {
             'fields': ('name', 'slug', 'location', 'description',
-                       'start', 'end', 'parent', 'tags'),
+                       'start', 'end', 'parent', 'tags', 'thumbnail_size'),
         }),
         ('Visibility', {
             'fields': ('hidden', 'password', 'users', 'groups'),
