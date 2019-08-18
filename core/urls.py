@@ -35,14 +35,14 @@ tag_patterns = [
 ]
 
 api_patterns = [
-    path('search/', api.search_photos, name='search_photos'),
+    path('albums/search/', api.search_photos, name='search_photos'),
 
-    path('<path:path>/photo/', api.PhotoDetail.as_view(), name='api_photo'),
-    path('<path:path>/upload/', api.upload_photo, name='upload_photo'),
+    path('albums/<path:path>/photo/', api.PhotoDetail.as_view(), name='api_photo'),
+    path('albums/<path:path>/upload/', api.upload_photo, name='upload_photo'),
 
-    path('<path:path>/photos/', api.get_album_photos, name='get_album_photos'),
-    path('<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
-    path('', api.AlbumList.as_view(), name='api_new_album'),
+    path('albums/<path:path>/photos/', api.get_album_photos, name='get_album_photos'),
+    path('albums/<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
+    path('albums/', api.AlbumList.as_view(), name='api_new_album'),
 ]
 
 user_patterns = [
@@ -56,29 +56,18 @@ urlpatterns = [
     url_log_out,
 
     path('', views.index, name='index'),
-
-    path('about/',
-         TemplateView.as_view(template_name='about.html'),
-         name='about'),
-
-    path('admin/', admin.site.urls),
-
-    path('copyright/',
-         TemplateView.as_view(template_name='copyright.html'),
-         name='copyright'),
-
-    path('albums/', include(album_patterns)),
-    path('api/albums/', include(api_patterns)),
-    path('tags/', include(tag_patterns)),
-
-    path('users/', include(user_patterns)),
-
-    path('activity/', views.view_activity, name='activity'),
-    path('featured/', views.featured, name='featured'),
-    path('wall/', views.wall, name='wall'),
-
     path('404/', views.debug_404, name='debug_404'),
     path('500/', views.debug_500, name='debug_500'),
+    path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
+    path('activity/', views.view_activity, name='activity'),
+    path('admin/', admin.site.urls),
+    path('albums/', include(album_patterns)),
+    path('api/', include(api_patterns)),
+    path('copyright/', TemplateView.as_view(template_name='copyright.html'), name='copyright'),
+    path('featured/', views.featured, name='featured'),
+    path('tags/', include(tag_patterns)),
+    path('users/', include(user_patterns)),
+    path('wall/', views.wall, name='wall'),
 ]
 
 
