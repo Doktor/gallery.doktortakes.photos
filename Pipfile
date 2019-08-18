@@ -8,6 +8,7 @@ boto3 = "==1.9.5"
 celery = {version = "*", extras = ["redis"]}
 Django = ">=2.0"
 django-storages = "*"
+djangorestframework = "*"
 ExifRead = "*"
 invoke = "*"
 lxml = "*"
