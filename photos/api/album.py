@@ -1,8 +1,8 @@
 from django.db.models import Q
-from django.http import JsonResponse, HttpRequest, Http404
-from django.views.decorators.http import require_GET
+from django.http import Http404
 
 from rest_framework import serializers
+from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 
 from photos.api.fields import (AlbumField, GroupField, TagField, UserField,
     get_album_by_path)
-from photos.api.utils import APIError, api_wrapper
+from photos.api.photo import PhotoSerializer
 from photos.models import Album
 
 from http import HTTPStatus as Status
@@ -86,19 +86,22 @@ class AlbumSerializer(serializers.ModelSerializer):
         )
 
 
-@api_wrapper
-@require_GET
-def get_album_photos(request: HttpRequest, path: str) -> JsonResponse:
+@api_view()
+def get_album_photos(request: Request, path: str) -> Response:
     album: Album = get_album_by_path(path)
     response = []
 
     if not album.check_access(request):
-        raise APIError("Album does not exist.")
+        return Response({'error': "Album does not exist."}, status=Status.NOT_FOUND)
 
     photos = album.photos.filter(sidecar_exists=True).order_by('taken')
     admin = request.user.is_staff
 
     for index, photo in enumerate(photos):
-        response.append(photo.serialize(admin=admin, index=index))
+        context = {
+            'index': index,
+            'is_staff': request.user.is_staff,
+        }
+        response.append(PhotoSerializer(photo, context=context).data)
 
-    return JsonResponse({'photos': response})
+    return Response({'photos': response})

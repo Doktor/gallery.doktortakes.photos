@@ -16,7 +16,6 @@ from core.context_processors import metadata as m
 from photos.api.photo import get_photo
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow, ACCESS_LEVELS
-from photos.models.photo import get_exif
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 from photos.utils import get_albums_from_path, get_album_by_path
@@ -278,7 +277,7 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
         'password': 'password' in request.GET,
         'photo': photo,
         'count': album.photos.filter(sidecar_exists=True).count(),
-        'exif': get_exif(photo),
+        'exif': photo.get_exif(),
         'short_md5': photo.short_md5,
         'page_title': title,
         'local_storage': settings.LOCAL_STORAGE,

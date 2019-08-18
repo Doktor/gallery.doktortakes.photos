@@ -1,11 +1,17 @@
-from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import JsonResponse, Http404, HttpResponse, HttpRequest
+from django.http import Http404, HttpRequest
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from photos.api.utils import APIError, APIView, api_wrapper
+from rest_framework import serializers
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from photos.models.album import Allow
 from photos.models.photo import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
@@ -14,6 +20,8 @@ from photos.settings import ITEMS_PER_PAGE
 
 import datetime
 import pytz
+from collections import OrderedDict
+from http import HTTPStatus as Status
 from io import BytesIO
 from typing import Optional
 
@@ -34,44 +42,92 @@ def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = Non
     return photo
 
 
-def get_photo_from_request(request: HttpRequest, path: str) -> Photo:
-    try:
-        md5 = request.GET.get('md5')
-    except KeyError:
-        raise APIError("The parameter 'md5' is required.")
+class PhotoDetail(APIView):
+    @staticmethod
+    def get_photo(request: Request, path: str) -> Photo:
+        try:
+            md5 = request.query_params.get('md5')
+        except KeyError:
+            raise ValidationError("The parameter 'md5' is required.")
 
-    try:
-        photo = get_photo(request, md5, validate_path=path)
-    except Http404:
-        raise APIError("Photo does not exist.", status=404)
+        try:
+            photo = get_photo(request, md5, validate_path=path)
+        except Http404:
+            raise ValidationError("Photo does not exist.")
 
-    return photo
+        return photo
 
+    def get(self, request: Request, path: str) -> Response:
+        photo = self.get_photo(request, path)
+        serializer = PhotoSerializer(photo)
 
-class PhotoView(APIView):
-    def get(self, request: HttpRequest, path: str) -> JsonResponse:
-        photo = get_photo_from_request(request, path)
+        return Response(serializer.data)
 
-        return JsonResponse(
-            photo.serialize(
-                admin=request.user.is_staff,
-                password='password' in request.GET))
-
-    def delete(self, request: HttpRequest, path: str) -> JsonResponse:
+    def delete(self, request: Request, path: str) -> Response:
         if not request.user.is_staff:
-            raise APIError("Not authorized", status=403)
+            return Response(None, status=Status.FORBIDDEN)
 
-        photo = get_photo_from_request(request, path)
+        photo = self.get_photo(request, path)
         photo.delete()
 
-        return JsonResponse({'message': "Photo deleted successfully."})
+        return Response(status=Status.NO_CONTENT)
 
 
-@api_wrapper
+class PhotoSerializer(serializers.ModelSerializer):
+    # Links
+    image = serializers.ImageField(use_url=True)
+    square_thumbnail = serializers.ImageField(use_url=True)
+    url = serializers.CharField(read_only=True, source='get_absolute_url')
+    download = serializers.CharField(read_only=True, source='get_download_url')
+    admin = serializers.SerializerMethodField(read_only=True, allow_null=True)
+
+    # Metadata
+    taken = serializers.DateTimeField(
+        read_only=True, format="%A, %Y-%m-%d, %-I:%M:%S %p")
+    index = serializers.IntegerField(
+        read_only=True, allow_null=True, default=None)
+    exif = serializers.DictField(read_only=True, source='get_exif')
+
+    def get_admin(self, obj: Photo):
+        if self.context.get('is_staff', False):
+            return reverse('admin:photos_photo_change', args=[obj.pk])
+        else:
+            return None
+
+    def to_representation(self, instance: Photo) -> dict:
+        instance.index = self.context.get('index', None)
+
+        result = super().to_representation(instance)
+
+        # Don't serialize null values
+        return OrderedDict(
+            [(key, result[key]) for key in result if result[key] is not None])
+
+    class Meta:
+        model = Photo
+        fields = (
+            'image', 'square_thumbnail', 'url', 'download', 'admin',
+            'taken',
+            'width', 'height', 'md5', 'index',
+            'exif'
+        )
+
+
+class SimplePhotoSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True)
+    square_thumbnail = serializers.ImageField(use_url=True)
+    url = serializers.CharField(read_only=True, source='get_absolute_url')
+
+    class Meta:
+        model = Photo
+        fields = ('image', 'square_thumbnail', 'url')
+
+
+@api_view
 @require_POST
-def upload_photo(request: HttpRequest, path: str) -> JsonResponse:
+def upload_photo(request: Request, path: str) -> Response:
     if not request.user.is_staff:
-        raise APIError("Not authorized", status=403)
+        return Response(None, status=Status.FORBIDDEN)
 
     files = request.FILES.getlist('files')
     album = get_album_by_path(path)
@@ -88,7 +144,7 @@ def upload_photo(request: HttpRequest, path: str) -> JsonResponse:
         except Photo.DoesNotExist:
             pass
         else:
-            raise APIError(f"Duplicate file: {md5}")
+            raise ValidationError(f"Duplicate file: {md5}")
 
         p.md5 = md5
 
@@ -114,7 +170,7 @@ def upload_photo(request: HttpRequest, path: str) -> JsonResponse:
 
         p.save()
 
-    return JsonResponse({'success': True})
+    return Response({'success': True}, status=Status.OK)
 
 
 def date_query(start: str, end: str) -> Q:
@@ -145,8 +201,9 @@ def date_query(start: str, end: str) -> Q:
     return query
 
 
-def search_photos(request: HttpRequest) -> JsonResponse:
-    params = request.GET
+@api_view()
+def search_photos(request: Request) -> Response:
+    params = request.query_params
     query = Q(album__access_level=Allow.PUBLIC)
 
     # Filtering: general
@@ -221,11 +278,11 @@ def search_photos(request: HttpRequest) -> JsonResponse:
 
     # Generate the response
 
-    data = [photo.serialize(metadata=False) for photo in photos]
+    data = [SimplePhotoSerializer(photo).data for photo in photos]
 
     response = {
         'photos': data,
         'count': total,
     }
 
-    return JsonResponse(response)
+    return Response(response)

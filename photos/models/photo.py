@@ -160,6 +160,12 @@ class Photo(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.get_path(), self.md5])
 
+    def get_download_url(self) -> str:
+        return reverse('download', kwargs={'path': self.get_path(), 'md5': self.md5})
+
+    def get_exif(self) -> dict:
+        return get_exif(self)
+
     def get_image_file(self, image_type: str) -> Optional[ImageFieldFile]:
         if image_type == 'original':
             return self.original
@@ -249,34 +255,6 @@ class Photo(models.Model):
 
                 from photos.api.utils import APIError
                 raise APIError(f"Duplicate file: {self.md5}")
-
-    def serialize(self, admin: bool = False, password: bool = False,
-                  index: Optional[int] = None, metadata: bool = True) -> dict:
-        response = {
-            'image_url': self.image.url,
-            'square_thumbnail_url': self.square_thumbnail.url,
-            'url': self.get_password_url() if password else self.get_absolute_url(),
-        }
-
-        if metadata:
-            response.update({
-                'metadata': {
-                    'index': index,
-                    'taken': self.taken.strftime("%A, %Y-%m-%d, %-I:%M:%S %p"),
-                    'width': self.width,
-                    'height': self.height,
-                    'md5': self.md5,
-                    'new_tab': self.image.url,
-                    'download': reverse(
-                        'download', args=[self.get_path(), self.md5]),
-                },
-                'exif': get_exif(self)
-            })
-
-            if admin:
-                response['metadata']['admin'] = reverse('admin:photos_photo_change', args=[self.pk])
-
-        return response
 
     @property
     def short_md5(self) -> str:
@@ -391,8 +369,8 @@ def format_f_stop(f: str) -> float:
             return float(f[0])
 
 
-def get_exif(p: Photo) -> dict:
-    e = p.exif
+def get_exif(photo: Photo) -> dict:
+    e = photo.exif
 
     camera = e.get('Image Model', 'Camera unknown')
 

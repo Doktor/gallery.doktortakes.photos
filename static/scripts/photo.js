@@ -33,7 +33,7 @@ const metadata = {
 };
 
 const links = {
-  new_tab: $('md-new-tab'),
+  image: $('md-new-tab'),
   download: $('md-download'),
   admin: $('md-admin'),
 };
@@ -85,13 +85,13 @@ function loadPhoto(index, history = true) {
   let item = items[index];
 
   // Update image
-  photoLink.href = item.image_url;
-  let isLandscape = item.metadata.width > item.metadata.height;
+  photoLink.href = item.image;
+  let isLandscape = item.width > item.height;
 
   if (isLandscape) {
-    elements.landscape.src = item.image_url;
+    elements.landscape.src = item.image;
   } else {
-    elements.portrait.src = item.image_url;
+    elements.portrait.src = item.image;
   }
 
   elements.landscape.classList.toggle('hidden', !isLandscape);
@@ -99,22 +99,22 @@ function loadPhoto(index, history = true) {
 
   // Update metadata
   ['index', 'md5', 'width', 'height'].forEach(function(key) {
-    photoContainer.dataset[key] = item.metadata[key];
+    photoContainer.dataset[key] = item[key];
   });
 
   // Update primary metadata
   Object.keys(metadata).forEach(function(key) {
-    metadata[key].innerText = item.metadata[key];
+    metadata[key].innerText = item[key];
   });
 
-  metadata.index.innerText = parseInt(item.metadata.index) + 1;
+  metadata.index.innerText = parseInt(item.index) + 1;
 
   // Update links
   Object.keys(links).forEach(function(key) {
     let el = links[key];
 
     if (el !== null) {
-      el.querySelector('a').href = item.metadata[key];
+      el.querySelector('a').href = item[key];
     }
   });
 
@@ -164,7 +164,7 @@ function loadPhoto(index, history = true) {
     prev.isPreloaded = true;
 
     let prevImage = new Image();
-    prevImage.src = items[prevIndex].image_url;
+    prevImage.src = items[prevIndex].image;
     preloaded.push(prevImage);
   }
 
@@ -173,13 +173,13 @@ function loadPhoto(index, history = true) {
     next.isPreloaded = true;
 
     let nextImage = new Image();
-    nextImage.src = items[nextIndex].image_url;
+    nextImage.src = items[nextIndex].image;
     preloaded.push(nextImage);
   }
 
   // Browser history
   if (history) {
-    let shortMD5 = item.metadata.md5.slice(0, 8);
+    let shortMD5 = item.md5.slice(0, 8);
 
     window.history.pushState('', shortMD5, item.url);
 
@@ -199,12 +199,12 @@ function loadPhotos() {
       items.push(item);
 
       // Get index of this item
-      if (item.metadata.md5 === api.dataset.md5) { thisIndex = i; }
+      if (item.md5 === api.dataset.md5) { thisIndex = i; }
 
       photoswipeItems.push({
         'src': item.image_url,
-        'w': item.metadata.width,
-        'h': item.metadata.height,
+        'w': item.width,
+        'h': item.height,
       })
     });
 
@@ -216,13 +216,13 @@ function loadPhotos() {
 
       // Image
       let image = document.createElement('img');
-      image.src = item.square_thumbnail_url;
-      image.addEventListener('click', () => loadPhoto(item.metadata.index));
+      image.src = item.square_thumbnail;
+      image.addEventListener('click', () => loadPhoto(item.index));
 
       // Index
       let index = document.createElement('div');
       index.classList.add('index');
-      index.innerText = parseInt(item.metadata.index) + 1;
+      index.innerText = parseInt(item.index) + 1;
 
       div.appendChild(image);
       div.appendChild(index);
