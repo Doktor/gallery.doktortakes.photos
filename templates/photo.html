@@ -27,7 +27,7 @@
 <meta name="twitter:description" content="{{ DESCRIPTION }}">
 <meta name="twitter:image" content="{% if local_storage %}{{ BASE_URL }}{% endif %}{{ photo.image.url }}">
 
-{% if album.hidden %}
+{% if not album.allow_public %}
 <meta name="robots" content="noindex,nofollow">
 {% endif %}
 {% endblock %}

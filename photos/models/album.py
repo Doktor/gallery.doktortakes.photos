@@ -10,11 +10,10 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from core.context_processors import metadata
-from photos.models.utils import Status
 from photos.settings import MEDIA_FOLDERS
 
 import os
-from typing import Tuple, Optional, List
+from typing import List
 
 m = metadata(None)
 
@@ -24,6 +23,23 @@ SIZE_3600 = '3600'
 SIZES = (
     (SIZE_2400, '2400 x 1600'),
     (SIZE_3600, '3600 x 2400'),
+)
+
+
+class Allow:
+    PUBLIC = 0
+    SIGNED_IN = 10
+    OWNERS = 20
+    STAFF = 30
+    SUPERUSER = 100
+
+
+ACCESS_LEVELS = (
+    (Allow.PUBLIC, "Public"),
+    (Allow.SIGNED_IN, "Signed in"),
+    (Allow.OWNERS, "Owners"),
+    (Allow.STAFF, "Staff"),
+    (Allow.SUPERUSER, "Superusers"),
 )
 
 
@@ -60,9 +76,11 @@ class Album(models.Model):
         related_name='children', blank=True, null=True,
         help_text="The album that contains this album")
 
-    hidden = models.BooleanField(default=False)
-    password = models.CharField(max_length=128, blank=True)
+    # Permissions
+    access_level = models.PositiveSmallIntegerField(
+        choices=ACCESS_LEVELS, default=Allow.PUBLIC)
 
+    password = models.CharField(max_length=128, blank=True)
     users = models.ManyToManyField(User, related_name='albums', blank=True)
     groups = models.ManyToManyField(Group, related_name='albums', blank=True)
 
@@ -70,6 +88,10 @@ class Album(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def allow_public(self) -> bool:
+        return self.access_level == Allow.PUBLIC
 
     def clean(self) -> None:
         if self.end is not None and self.end < self.start:
@@ -82,44 +104,41 @@ class Album(models.Model):
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
 
-    WRONG_PASSWORD = Status(1, "Incorrect password specified.")
-    NO_PASSWORD = Status(2, "This album doesn't have a password but one was specified.")
-
-    def check_access(self, request: HttpRequest) -> Tuple[bool, Optional[Status]]:
+    def check_access(self, request: HttpRequest) -> bool:
+        album = self
         user = request.user
-        password = request.GET.get('password', None)
 
-        access = False
-        status = None
+        if user.is_superuser:
+            return True
 
-        # If a password is given but the album doesn't have a password
-        if password is not None and not self.password:
-            status = self.NO_PASSWORD
+        try:
+            password = request.GET['password']
+        except KeyError:
+            password = False
 
-        # Staff users have access to everything
-        if user.is_staff:
-            access = True
+        # Password access supersedes all other permission checks
+        if album.password and password and album.password == password:
+            return True
 
-            if password is not None and self.password and password != self.password:
-                status = self.WRONG_PASSWORD
+        elif album.access_level == Allow.PUBLIC:
+            return True
 
-            return access, status
+        elif album.access_level == Allow.SIGNED_IN:
+            return user.is_authenticated
 
-        # Access list does not exist
-        if not self.users.exists() and not self.groups.exists():
-            access = True
-        # Access list exists and it's an anonymous user
-        elif not user.is_authenticated:
-            access = False
+        elif album.access_level == Allow.OWNERS:
+            if user in album.users.all():
+                return True
+            elif any(group in user.groups.all() for group in album.groups.all()):
+                return True
+            else:
+                return False
 
-        if user in self.users.all():
-            access = True
-        elif any(group in user.groups.all() for group in self.groups.all()):
-            access = True
-        elif self.password:
-            access = password == self.password
+        elif album.access_level == Allow.STAFF:
+            return user.is_staff
 
-        return access, status
+        elif album.access_level == Allow.SUPERUSER:
+            return user.is_superuser
 
     def delete(self, using=None, keep_parents=False) -> None:
         for photo in self.photos.all():
@@ -253,9 +272,9 @@ class Album(models.Model):
             'description': self.description,
             'start': self.start.strftime("%Y-%m-%d"),
             'end': end,
-            'hidden': str(self.hidden).lower(),
             'password': self.password,
             'access': self.get_access_list(),
+            'level': self.access_level,
             'tags': ', '.join((tag.slug for tag in self.tags.all())),
             'parent': self.get_parent_path(),
         }
@@ -277,26 +296,6 @@ class Album(models.Model):
     class Meta:
         get_latest_by = 'start'
         unique_together = ('name', 'parent')
-
-
-@receiver(m2m_changed, sender=Album.users.through,
-          dispatch_uid="photos.models.check_hidden.users")
-@receiver(m2m_changed, sender=Album.groups.through,
-          dispatch_uid="photos.models.check_hidden.groups")
-def check_hidden(sender, instance: Album, action: str, **kwargs) -> None:
-    album = instance
-
-    if not action.startswith('post'):
-        return
-
-    hidden = album.users.exists() or album.groups.exists() or album.password != ''
-
-    # Prevent extra saves
-    if album.hidden == hidden:
-        return
-
-    album.hidden = hidden
-    album.save()
 
 
 @receiver(pre_save, sender=Album,

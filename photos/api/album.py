@@ -40,8 +40,6 @@ class AlbumView(APIView):
         for key in ('name', 'place', 'location', 'description', 'password'):
             setattr(album, key, data.get(key))
 
-        album.hidden = data.get('hidden', '') == 'true'
-
         # Dates
 
         for key in ('start', 'end'):
@@ -57,6 +55,11 @@ class AlbumView(APIView):
             setattr(album, key, date)
 
         # Access permissions
+
+        level = data.get('level', '')
+
+        if level:
+            album.access_level = level
 
         access = data.get('access', '')
 

@@ -16,8 +16,6 @@ from io import BytesIO
 CHUNK_SIZE = 64 * 1024  # 64 KB
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
 
-Status = namedtuple('Status', ('code', 'message'))
-
 
 def format_file_size(b: float) -> str:
     for unit in ('B', 'KB', 'MB', 'GB'):

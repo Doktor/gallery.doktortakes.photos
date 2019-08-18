@@ -59,13 +59,13 @@
     </div>
 
     <div class="form-row">
-      <label>Hidden</label>
+      <label for="f-level">Access level</label>
       <div class="field-wrapper">
-        <input class="field" type="radio" id="hidden1" name="hidden" value="false" checked>
-        <label for="hidden1" class="radio-choice-small">No</label>
-
-        <input class="field" type="radio" id="hidden2" name="hidden" value="true">
-        <label for="hidden2" class="radio-choice-small">Yes</label>
+        <select class="field" name="level" id="f-level">
+          {% for value, name in access_levels %}
+          <option value="{{ value }}">{{ name }}</option>
+          {% endfor %}
+        </select>
       </div>
     </div>
 

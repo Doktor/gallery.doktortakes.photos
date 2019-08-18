@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <div class="album-wrapper">
-  <div class="album {% if request.user.is_staff and album.hidden %}album-hidden{% endif %} {% if not album.cover %}album-no-cover{% endif %}">
+  <div class="album {% if request.user.is_staff and not album.allow_public %}album-hidden{% endif %} {% if not album.cover %}album-no-cover{% endif %}">
     {% if edit %}
     <a href="{{ album.get_edit_url }}">
     {% else %}

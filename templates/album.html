@@ -30,7 +30,7 @@
 <meta name="twitter:image" content="{% if local_storage %}{{ BASE_URL }}{% endif %}{{ album.cover.image.url }}">
 {% endif %}
 
-{% if album.hidden %}
+{% if not album.allow_public %}
 <meta name="robots" content="noindex, nofollow">
 {% endif %}
 {% endblock %}
@@ -88,31 +88,29 @@
     </figure>
 
     <div class="group-info">
-      {% if album.hidden %}
-        <!-- Hidden warning -->
+      {% if not album.allow_public %}
+        <!-- Warning -->
         {% if not request.user.is_staff %}
         <div class="group-info-item">
           <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
-          This album is hidden; please ask before sharing.
+          Please ask before sharing these photos.
         </div>
         {% endif %}
+
+        <!-- Access level -->
+        {% if request.user.is_staff %}
+        <div class="group-info-item">
+          <i title="Access level" class="fas fa-fw fa-lock"></i>
+          Access level: {{ album.get_access_level_display }}
+        </div>
 
         <!-- Password link -->
         {% if album.password %}
         <div class="group-info-item">
           <i title="Password" class="fas fa-fw fa-key"></i>
-          {{ album.password }}
-          (<a href="{{ album.get_absolute_url }}">regular link</a>,
-          <a href="{{ album.get_password_url }}">password link</a>)
+          Password: <a href="{{ album.get_password_url }}">{{ album.password }}</a>
         </div>
         {% endif %}
-
-        <!-- Hidden warning (staff) -->
-        {% if request.user.is_staff %}
-        <div class="group-info-item">
-          <i title="Warning" class="fas fa-fw fa-key"></i>
-          Hidden album
-        </div>
 
         <!-- Access list -->
         {% with access_list=album.get_access_list %}

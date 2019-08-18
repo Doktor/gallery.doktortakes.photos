@@ -15,6 +15,7 @@ from django.views.decorators.http import require_GET
 from core.context_processors import metadata as m
 from photos.api.photo import get_photo
 from photos.models import Album, Photo, Tag
+from photos.models.album import Allow, ACCESS_LEVELS
 from photos.models.photo import get_exif
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
@@ -36,22 +37,31 @@ FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
 
 def get_albums_for_user(user, exclude_public=False) -> QuerySet:
     """Returns a QuerySet of the albums that a user has access to."""
-    if not user.is_authenticated:
-        query = Q(parent__isnull=True, hidden=False)
+    if user.is_superuser:
+        q = Q(parent__isnull=True, access_level__lte=Allow.SUPERUSER)
     elif user.is_staff:
-        query = Q(parent__isnull=True)
-    else:
-        sub_query = Q(users=user)
+        q = Q(parent__isnull=True, access_level__lte=Allow.STAFF)
+    elif user.is_authenticated:
+        # Direct ownership
+        owner_q = Q(users=user)
 
+        # Group (indirect) ownership
         for group in user.groups.all():
-            sub_query |= Q(groups=group)
+            owner_q |= Q(groups=group)
 
-        query = Q(parent__isnull=True) & sub_query
+        owner_q &= Q(parent__isnull=True, access_level__lte=Allow.OWNERS)
+
+        # Everything else
+        q = owner_q | Q(parent__isnull=True, access_level__lte=Allow.SIGNED_IN)
+    elif user.is_anonymous:
+        q = Q(parent__isnull=True, access_level=Allow.PUBLIC)
+    else:
+        q = Q()
 
     if exclude_public:
-        query &= Q(hidden=True)
+        q &= Q(access_level__gt=Allow.PUBLIC)
 
-    return Album.objects.filter(query).distinct()
+    return Album.objects.filter(q).distinct().order_by('-start')
 
 
 def staff_only(f: Callable) -> Callable:
@@ -96,7 +106,7 @@ def debug_500(request: HttpRequest) -> HttpResponse:
 @require_GET
 def index(request: HttpRequest) -> HttpResponse:
     """Renders the index page."""
-    albums = get_albums_for_user(request.user).order_by('-start')
+    albums = get_albums_for_user(request.user)
 
     context = {
         'tagline': random.choice(TAGLINES),
@@ -110,7 +120,7 @@ def index(request: HttpRequest) -> HttpResponse:
 @require_GET
 def featured(request: HttpRequest) -> HttpResponse:
     """Renders the featured photos page."""
-    query = Q(album__hidden=False, rating__gte=4, sidecar_exists=True)
+    query = Q(album__access_level=Allow.PUBLIC, rating__gte=4, sidecar_exists=True)
     photos = Photo.objects.filter(query).order_by('-taken')
 
     context = {
@@ -151,13 +161,9 @@ def view_albums(request: HttpRequest) -> HttpResponse:
 @require_GET
 def view_album(request: HttpRequest, path: str) -> HttpResponse:
     album = get_album_by_path(path)
-    access, status = album.check_access(request)
 
-    if not access:
+    if not album.check_access(request):
         raise Http404
-
-    if status is not None:
-        messages.warning(request, status.message)
 
     photos = Photo.objects.filter(album=album, sidecar_exists=True)
 
@@ -216,7 +222,8 @@ def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
 def new_album(request: HttpRequest) -> HttpResponse:
     context = {
         'album': None,
-        'parent': request.GET.get('parent', None)
+        'parent': request.GET.get('parent', None),
+        'access_levels': ACCESS_LEVELS
     }
 
     return render(request, "new_album.html", context)
@@ -236,6 +243,8 @@ def edit_album(request: HttpRequest, path: str) -> HttpResponse:
 
         'albums': Album.objects.all().order_by('-start'),
         'items_per_page': 6,
+
+        'access_levels': ACCESS_LEVELS
     }
 
     return render(request, "edit_album.html", context)
@@ -303,7 +312,7 @@ def wall(request: HttpRequest) -> HttpResponse:
     today = datetime.date.today()
     start = today - datetime.timedelta(days=365 * 2)
 
-    q = Q(album__hidden=False, sidecar_exists=True, taken__gte=start)
+    q = Q(album__access_level=Allow.PUBLIC, sidecar_exists=True, taken__gte=start)
 
     photos = Photo.objects.filter(q).order_by('?')[:60]
     context = {'photos': photos}
@@ -399,7 +408,7 @@ def view_activity(request: HttpRequest) -> HttpResponse:
 
     activity = {}
 
-    album_q = Q(album__hidden=False, album__isnull=False)
+    album_q = Q(album__access_level=Allow.PUBLIC, album__isnull=False)
 
     now = datetime.datetime.now().replace(tzinfo=pytz.utc)
     oldest = now - datetime.timedelta(days=180)

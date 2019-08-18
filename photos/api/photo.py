@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Q
@@ -7,15 +5,17 @@ from django.http import JsonResponse, Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
-import datetime
-import pytz
-from io import BytesIO
-
 from photos.api.utils import APIError, APIView, api_wrapper
+from photos.models.album import Allow
 from photos.models.photo import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album_by_path
 from photos.settings import ITEMS_PER_PAGE
+
+import datetime
+import pytz
+from io import BytesIO
+from typing import Optional
 
 
 def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = None) -> Photo:
@@ -28,13 +28,8 @@ def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = Non
     if not photo.sidecar_exists:
         raise Http404
 
-    access, status = photo.check_access(request)
-
-    if not access:
+    if not photo.check_access(request):
         raise Http404
-
-    if status is not None:
-        messages.warning(request, status.message)
 
     return photo
 
@@ -152,7 +147,7 @@ def date_query(start: str, end: str) -> Q:
 
 def search_photos(request: HttpRequest) -> JsonResponse:
     params = request.GET
-    query = Q(album__hidden=False)
+    query = Q(album__access_level=Allow.PUBLIC)
 
     # Filtering: general
 

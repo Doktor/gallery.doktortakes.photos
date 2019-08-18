@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.files import File
@@ -14,7 +12,7 @@ from django.urls import reverse
 
 from core import settings
 from photos.fields import JSONField
-from photos.models.utils import DATE_FORMAT, get_modified_time_utc, Status
+from photos.models.utils import DATE_FORMAT, get_modified_time_utc
 from photos.settings import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, ITEMS_IN_FILMSTRIP,
     COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK, LONG, SHORT)
@@ -25,6 +23,7 @@ import os
 import PIL.Image
 import pytz
 from lxml import etree
+from typing import Optional
 
 strptime = datetime.datetime.strptime
 
@@ -120,9 +119,9 @@ class Photo(models.Model):
     def __str__(self) -> str:
         return self.filename
 
-    def check_access(self, request: HttpRequest) -> Tuple[bool, Optional[Status]]:
+    def check_access(self, request: HttpRequest) -> bool:
         if self.album is None:
-            return True, None
+            return True
 
         return self.album.check_access(request)
 
