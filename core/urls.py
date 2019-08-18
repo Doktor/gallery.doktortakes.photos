@@ -41,8 +41,8 @@ api_patterns = [
     path('<path:path>/upload/', api.upload_photo, name='upload_photo'),
 
     path('<path:path>/photos/', api.get_album_photos, name='get_album_photos'),
-    path('<path:path>/', api.AlbumView.as_view(), name='api_album'),
-    path('', api.AlbumView.as_view(), name='api_new_album'),
+    path('<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
+    path('', api.AlbumList.as_view(), name='api_new_album'),
 ]
 
 user_patterns = [

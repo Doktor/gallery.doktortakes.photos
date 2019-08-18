@@ -94,6 +94,9 @@ class Album(models.Model):
         return self.access_level == Allow.PUBLIC
 
     def clean(self) -> None:
+        if self.parent == self:
+            raise ValidationError("An album can't be its own parent.")
+
         if self.end is not None and self.end < self.start:
             raise ValidationError(
                 "The end date should be later than the start date.")
@@ -251,44 +254,6 @@ class Album(models.Model):
         self.slug = slugify(self.name)
         self.clean()
         super().save(*args, **kwargs)
-
-    def serialize(self, edit: bool = False) -> dict:
-        if self.end:
-            end = self.end.strftime("%Y-%m-%d")
-        else:
-            end = None
-
-        response = {
-            'url': self.get_absolute_url(),
-            'name': self.name,
-            'slug': self.slug,
-            'path': self.get_path(),
-            'place': self.place,
-            'location': self.location,
-            'description': self.description,
-            'start': self.start.strftime("%Y-%m-%d"),
-            'end': end,
-            'password': self.password,
-            'users': self.get_users(),
-            'groups': self.get_groups(),
-            'level': self.access_level,
-            'tags': ', '.join((tag.slug for tag in self.tags.all())),
-            'parent': self.get_parent_path(),
-        }
-
-        if self.cover is not None:
-            response['cover'] = {
-                'url': self.cover.image.url,
-                'thumbnail_url': self.cover.thumbnail.url,
-            }
-
-        if edit:
-            response.update({
-                'edit_url': self.get_edit_url(),
-                'title': f"Editing {self.name} | {m.get('TITLE')}"
-            })
-
-        return response
 
     class Meta:
         get_latest_by = 'start'

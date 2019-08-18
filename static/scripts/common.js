@@ -103,7 +103,13 @@ function parseForm(el) {
         params[key] = [params[key], value]
       }
     } else {
-      params[key] = value;
+      if (['tags', 'access', 'users', 'groups'].includes(key)) {
+        params[key] = value ? value.split(',') : [];
+      } else if (key === 'end') {
+        params[key] = value ? value : null;
+      } else {
+        params[key] = value;
+      }
     }
   }
 
