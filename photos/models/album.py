@@ -86,6 +86,12 @@ class Album(models.Model):
 
     tags = models.ManyToManyField('Tag', related_name='albums', blank=True)
 
+    def __eq__(self, other):
+        if not isinstance(other, Album):
+            return False
+
+        return self.get_path() == other.get_path()
+
     def __str__(self) -> str:
         return self.name
 
