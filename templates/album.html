@@ -112,14 +112,14 @@
         </div>
         {% endif %}
 
-        <!-- Access list -->
-        {% with access_list=album.get_access_list %}
-          {% if access_list %}
-          <div class="group-info-item">
-            <i title="Users" class="fas fa-fw fa-users"></i>
-            {{ access_list }}
-          </div>
-          {% endif %}
+        <!-- Users and groups -->
+        {% with users=album.get_users groups=album.get_groups %}
+        {% if users or groups %}
+        <div class="group-info-item">
+          <i title="Users and groups" class="fas fa-fw fa-users"></i>
+          {{ users }}{% if users and groups %}, {% endif %}{{ groups }}
+        </div>
+        {% endif %}
         {% endwith %}
         {% endif %}
       {% endif %}

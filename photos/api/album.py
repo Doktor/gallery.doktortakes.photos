@@ -61,12 +61,30 @@ class AlbumView(APIView):
         if level:
             album.access_level = level
 
-        access = data.get('access', '')
+        users_string = data.get('users', '')
 
-        if access:
-            users, groups = [], []
+        if users_string:
+            new_users, new_groups = [], []
 
-            for name in access.split(', '):
+            for name in users_string.split(', '):
+                name = name.strip()
+
+                try:
+                    user = User.objects.get(username__iexact=name)
+                except User.DoesNotExist:
+                    raise APIError(f"The user '{name}' does not exist.")
+                else:
+                    new_users.append(user)
+
+            album.users.clear()
+            album.users.add(*new_users)
+
+        groups_string = data.get('groups', '')
+
+        if groups_string:
+            new_groups = []
+
+            for name in groups_string.split(', '):
                 name = name.strip()
 
                 if name.lower().startswith('group:'):
@@ -76,20 +94,12 @@ class AlbumView(APIView):
                     except Group.DoesNotExist:
                         raise APIError(f"The group '{name}' does not exist.")
                     else:
-                        groups.append(group)
+                        new_groups.append(group)
                 else:
-                    try:
-                        user = User.objects.get(username__iexact=name)
-                    except User.DoesNotExist:
-                        raise APIError(f"The user '{name}' does not exist.")
-                    else:
-                        users.append(user)
+                    continue
 
-            album.users.clear()
             album.groups.clear()
-
-            album.users.add(*users)
-            album.groups.add(*groups)
+            album.groups.add(*new_groups)
 
         # Tags
 

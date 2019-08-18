@@ -149,16 +149,6 @@ class Album(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('album', args=[self.get_path()])
 
-    def get_access_list(self) -> str:
-        names = []
-
-        for user in self.users.all():
-            names.append(user.username.capitalize())
-        for group in self.groups.all():
-            names.append(f"Group: {group.name}")
-
-        return ', '.join(names)
-
     def get_all_subalbums(self, include_self: bool = False) -> List['Album']:
         albums = []
 
@@ -209,6 +199,9 @@ class Album(models.Model):
         else:
             return ''
 
+    def get_groups(self) -> str:
+        return ', '.join(f'Group: {group.name}' for group in self.groups.all())
+
     def get_location(self) -> str:
         if self.location or not self.parent:
             return self.location
@@ -251,6 +244,9 @@ class Album(models.Model):
     def get_password_url(self) -> str:
         return self.get_absolute_url() + self.get_password_query()
 
+    def get_users(self) -> str:
+        return ', '.join(user.username.capitalize() for user in self.users.all())
+
     def save(self, *args, **kwargs) -> None:
         self.slug = slugify(self.name)
         self.clean()
@@ -273,7 +269,8 @@ class Album(models.Model):
             'start': self.start.strftime("%Y-%m-%d"),
             'end': end,
             'password': self.password,
-            'access': self.get_access_list(),
+            'users': self.get_users(),
+            'groups': self.get_groups(),
             'level': self.access_level,
             'tags': ', '.join((tag.slug for tag in self.tags.all())),
             'parent': self.get_parent_path(),
