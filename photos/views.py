@@ -265,7 +265,7 @@ def edit_albums(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(request, md5, validate_path=path)
+    photo = get_photo(request, md5, path=path)
 
     path = get_albums_from_path(path)
     album = path[-1]
@@ -288,7 +288,7 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
 @require_GET
 def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(request, md5, validate_path=path)
+    photo = get_photo(request, md5, path=path)
     photo.image.open()
 
     filename = photo.filename

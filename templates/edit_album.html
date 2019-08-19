@@ -46,7 +46,6 @@
        data-count="{{ photos.count }}"
        data-photos-per-page="{{ photos_per_page }}"
        data-api-album="{% url 'api_album' album.get_path %}"
-       data-api-photo="{% url 'api_photo' album.get_path %}"
        data-api-edit-list="{% url 'edit_albums' %}"></div>
 
   <!-- Album details -->
@@ -149,7 +148,8 @@
     <div class="pagination pagination-photos pagination-above"></div>
     <section class="photos">
       {% for p in photos %}
-      <div class="photo-wrapper" data-md5="{{ p.md5 }}">
+      <div class="photo-wrapper"
+           data-md5="{{ p.md5 }}" data-api="{% url 'api_photo' p.md5 %}">
         <div class="photo">
           {% if p.square_thumbnail %}
           <img class="not-loaded"

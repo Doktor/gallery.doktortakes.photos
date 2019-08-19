@@ -13,7 +13,6 @@ const selectedCount = $('selected-count');
 const api = $('api');
 
 const API_ALBUM = api.dataset.apiAlbum;
-const API_PHOTO = api.dataset.apiPhoto;
 const API_EDIT_LIST = api.dataset.apiEditList;
 
 
@@ -153,7 +152,7 @@ function deletePhoto(el) {
   }
 
   let params = {md5: el.dataset.md5};
-  let url = API_PHOTO + queryString(params);
+  let url = el.dataset.api + queryString(params);
 
   sendRequest('DELETE', url, onSuccess, onError, null, true);
 }

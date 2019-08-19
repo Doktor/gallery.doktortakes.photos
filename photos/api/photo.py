@@ -26,9 +26,13 @@ from io import BytesIO
 from typing import Optional
 
 
-def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = None) -> Photo:
-    if validate_path is not None:
-        album = get_album_by_path(validate_path)
+def get_photo(request: HttpRequest, md5: str, path: Optional[str] = None) -> Photo:
+    if path is not None:
+        try:
+            album = get_album_by_path(path)
+        except IndexError:
+            raise Http404
+
         photo = get_object_or_404(Photo, md5=md5, album=album)
     else:
         photo = get_object_or_404(Photo, md5=md5)
@@ -44,30 +48,25 @@ def get_photo(request: HttpRequest, md5: str, validate_path: Optional[str] = Non
 
 class PhotoDetail(APIView):
     @staticmethod
-    def get_photo(request: Request, path: str) -> Photo:
+    def get_photo(request: Request, md5: str) -> Photo:
         try:
-            md5 = request.query_params.get('md5')
-        except KeyError:
-            raise ValidationError("The parameter 'md5' is required.")
-
-        try:
-            photo = get_photo(request, md5, validate_path=path)
+            photo = get_photo(request, md5)
         except Http404:
             raise ValidationError("Photo does not exist.")
 
         return photo
 
-    def get(self, request: Request, path: str) -> Response:
-        photo = self.get_photo(request, path)
+    def get(self, request: Request, md5: str) -> Response:
+        photo = self.get_photo(request, md5)
         serializer = PhotoSerializer(photo)
 
         return Response(serializer.data)
 
-    def delete(self, request: Request, path: str) -> Response:
+    def delete(self, request: Request, md5: str) -> Response:
         if not request.user.is_staff:
             return Response(None, status=Status.FORBIDDEN)
 
-        photo = self.get_photo(request, path)
+        photo = self.get_photo(request, md5)
         photo.delete()
 
         return Response(status=Status.NO_CONTENT)
