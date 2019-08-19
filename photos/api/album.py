@@ -38,13 +38,15 @@ class AlbumDetail(APIView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request: Request, path: str) -> Response:
+    @staticmethod
+    def get(request: Request, path: str) -> Response:
         album = get_album(path)
         serializer = AlbumSerializer(album)
 
         return Response(serializer.data)
 
-    def patch(self, request: Request, path: str) -> Response:
+    @staticmethod
+    def patch(request: Request, path: str) -> Response:
         album = get_album(path)
         serializer = AlbumCoverSerializer(album, data=request.data)
 
@@ -54,7 +56,8 @@ class AlbumDetail(APIView):
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-    def put(self, request: Request, path: str) -> Response:
+    @staticmethod
+    def put(request: Request, path: str) -> Response:
         album = get_album(path)
         serializer = AlbumSerializer(album, data=request.data)
 
@@ -64,7 +67,8 @@ class AlbumDetail(APIView):
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-    def delete(self, request: Request, path: str) -> Response:
+    @staticmethod
+    def delete(request: Request, path: str) -> Response:
         album = get_album(path)
         album.delete()
 
@@ -101,7 +105,8 @@ class AlbumCoverSerializer(serializers.ModelSerializer):
 
 
 class AlbumPhotoList(APIView):
-    def get(self, request: Request, path: str) -> Response:
+    @staticmethod
+    def get(request: Request, path: str) -> Response:
         album = get_album(path)
 
         if not album.check_access(request):
@@ -119,7 +124,8 @@ class AlbumPhotoList(APIView):
 
         return Response({'photos': response})
 
-    def post(self, request: Request, path: str) -> Response:
+    @staticmethod
+    def post(request: Request, path: str) -> Response:
         if not request.user.is_staff:
             return Response({'error': "Album does not exist."}, status=Status.NOT_FOUND)
 

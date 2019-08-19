@@ -19,13 +19,15 @@ from http import HTTPStatus as Status
 
 
 class PhotoDetail(APIView):
-    def get(self, request: Request, md5: str) -> Response:
+    @staticmethod
+    def get(request: Request, md5: str) -> Response:
         photo = get_photo(md5, request)
         serializer = PhotoSerializer(photo)
 
         return Response(serializer.data)
 
-    def delete(self, request: Request, md5: str) -> Response:
+    @staticmethod
+    def delete(request: Request, md5: str) -> Response:
         if not request.user.is_staff:
             return Response(None, status=Status.FORBIDDEN)
 
