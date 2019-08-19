@@ -124,14 +124,16 @@
         {% endif %}
       {% endif %}
 
-      {% if album.tags.count %}
+      {% with tags=album.tags.all %}
+      {% if tags %}
       <div class="group-info-item">
         <i title="Tags" class="fas fa-fw fa-tags"></i>
-        {% for tag in album.tags.all %}
+        {% for tag in tags %}
         <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
         {% endfor %}
       </div>
       {% endif %}
+      {% endwith %}
 
       {% if album.description %}
       <div class="group-info-item group-description">

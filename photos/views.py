@@ -104,12 +104,15 @@ def debug_500(request: HttpRequest) -> HttpResponse:
 @require_GET
 def index(request: HttpRequest) -> HttpResponse:
     """Renders the index page."""
-    albums = get_albums_for_user(request.user)
+    all_albums = get_albums_for_user(request.user).select_related('cover')
+
+    count = len(all_albums)
+    albums = all_albums[:INDEX_ALBUMS]
 
     context = {
         'tagline': random.choice(TAGLINES),
-        'albums': albums[:INDEX_ALBUMS],
-        'more_albums': len(albums) > INDEX_ALBUMS,
+        'albums': albums,
+        'more_albums': count > INDEX_ALBUMS,
     }
 
     return render(request, 'index.html', context)
@@ -119,7 +122,7 @@ def index(request: HttpRequest) -> HttpResponse:
 def featured(request: HttpRequest) -> HttpResponse:
     """Renders the featured photos page."""
     query = Q(album__access_level=Allow.PUBLIC, rating__gte=4, sidecar_exists=True)
-    photos = Photo.objects.filter(query).order_by('-taken')
+    photos = Photo.objects.filter(query).order_by('-taken').select_related('album')
 
     context = {
         'featured_url': reverse('search') + FEATURED_QUERY,
@@ -135,7 +138,7 @@ def featured(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_albums(request: HttpRequest) -> HttpResponse:
-    albums = get_albums_for_user(request.user).order_by('-start')
+    albums = get_albums_for_user(request.user).order_by('-start').select_related('cover')
 
     context = {
         'albums': albums,
@@ -234,13 +237,15 @@ def edit_album(request: HttpRequest, path: str) -> HttpResponse:
     path = get_albums(path)
     album = path[-1]
 
+    albums = Album.objects.all().order_by('-start').select_related('cover', 'parent')
+
     context = {
         'album': album,
         'photos': album.photos.all(),
         'parents': path[:-1],
         'photos_per_page': ITEMS_PER_PAGE,
 
-        'albums': Album.objects.all().order_by('-start'),
+        'albums': albums,
         'items_per_page': 6,
 
         'access_levels': ACCESS_LEVELS
@@ -252,8 +257,10 @@ def edit_album(request: HttpRequest, path: str) -> HttpResponse:
 @require_GET
 @staff_only
 def edit_albums(request: HttpRequest) -> HttpResponse:
+    albums = Album.objects.all().order_by('-start').select_related('cover', 'parent')
+
     context = {
-        'albums': Album.objects.all().order_by('-start'),
+        'albums': albums,
         'items_per_page': ITEMS_PER_PAGE
     }
 
@@ -311,7 +318,7 @@ def wall(request: HttpRequest) -> HttpResponse:
 
     q = Q(album__access_level=Allow.PUBLIC, sidecar_exists=True, taken__gte=start)
 
-    photos = Photo.objects.filter(q).order_by('?')[:60]
+    photos = Photo.objects.filter(q).order_by('?').select_related('album')[:60]
     context = {'photos': photos}
 
     return render(request, 'wall.html', context)
@@ -337,7 +344,7 @@ def view_user(request: HttpRequest, slug: str) -> HttpResponse:
         else:
             raise Http404
 
-    albums = get_albums_for_user(user, exclude_public=True)
+    albums = get_albums_for_user(user, exclude_public=True).select_related('cover')
 
     context = {
         'user': user,
