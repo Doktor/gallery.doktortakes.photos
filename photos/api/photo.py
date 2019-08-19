@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from rest_framework import serializers
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,7 +30,7 @@ class PhotoDetail(APIView):
     @staticmethod
     def delete(request: Request, md5: str) -> Response:
         if not request.user.is_staff:
-            return Response(None, status=Status.FORBIDDEN)
+            raise ValidationError(code=Status.FORBIDDEN)
 
         photo = get_photo(md5, request)
         photo.delete()

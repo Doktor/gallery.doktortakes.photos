@@ -34,7 +34,7 @@ class AlbumList(APIView):
 class AlbumDetail(APIView):
     def dispatch(self, request: Request, *args, **kwargs) -> Response:
         if not request.user.is_staff:
-            raise ValidationError("Album does not exist.")
+            raise ValidationError("Album does not exist.", code=Status.NOT_FOUND)
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -110,7 +110,7 @@ class AlbumPhotoList(APIView):
         album = get_album(path)
 
         if not album.check_access(request):
-            return Response({'error': "Album does not exist."}, status=Status.NOT_FOUND)
+            raise ValidationError("Album does not exist.", code=Status.NOT_FOUND)
 
         response = []
         photos = album.photos.filter(sidecar_exists=True).order_by('taken')
@@ -122,12 +122,12 @@ class AlbumPhotoList(APIView):
             }
             response.append(PhotoSerializer(photo, context=context).data)
 
-        return Response({'photos': response})
+        return Response({'photos': response}, status=Status.OK)
 
     @staticmethod
     def post(request: Request, path: str) -> Response:
         if not request.user.is_staff:
-            return Response({'error': "Album does not exist."}, status=Status.NOT_FOUND)
+            raise ValidationError("Album does not exist.", code=Status.NOT_FOUND)
 
         files = request.FILES.getlist('files')
         album = get_album(path)

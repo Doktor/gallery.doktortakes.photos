@@ -9,6 +9,7 @@ from rest_framework.exceptions import ValidationError
 from photos.models import Photo, Tag, Album
 from photos.utils import get_album
 
+from http import HTTPStatus as Status
 from typing import Optional
 
 User = get_user_model()
@@ -29,7 +30,7 @@ class GroupField(serializers.RelatedField):
         try:
             group = Group.objects.get(name__iexact=name)
         except Group.DoesNotExist:
-            raise ValidationError(f"The group '{name}' does not exist.")
+            raise ValidationError(f"Group '{name}' does not exist.", code=Status.BAD_REQUEST)
         else:
             return group
 
@@ -39,7 +40,10 @@ class GroupField(serializers.RelatedField):
 
 class PhotoHashField(serializers.RelatedField):
     def to_internal_value(self, data: str) -> Photo:
-        return get_object_or_404(Photo, md5=data)
+        try:
+            return Photo.objects.get(md5=data)
+        except Photo.DoesNotExist:
+            raise ValidationError(f"Photo '{data}' does not exist.", code=Status.BAD_REQUEST)
 
     def to_representation(self, value: Photo) -> str:
         return value.md5
@@ -50,7 +54,7 @@ class TagField(serializers.RelatedField):
         slug = slugify(data)
 
         if not slug:
-            raise ValidationError("Tag name can't be empty.")
+            raise ValidationError("Tag name can't be empty.", code=Status.BAD_REQUEST)
 
         try:
             tag = Tag.objects.get(slug=slug)
@@ -70,7 +74,7 @@ class UserField(serializers.RelatedField):
         try:
             user = User.objects.get(username__iexact=name)
         except User.DoesNotExist:
-            raise ValidationError(f"The user '{name}' does not exist.")
+            raise ValidationError(f"User '{name}' does not exist.", code=Status.BAD_REQUEST)
         else:
             return user
 
