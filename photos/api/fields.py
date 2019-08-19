@@ -34,7 +34,7 @@ class GroupField(serializers.RelatedField):
             return group
 
     def to_representation(self, value: Group) -> str:
-        return f"Group: {value.name}"
+        return value.name
 
 
 class PhotoHashField(serializers.RelatedField):
