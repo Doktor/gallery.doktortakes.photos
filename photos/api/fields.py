@@ -15,14 +15,6 @@ from typing import Optional
 User = get_user_model()
 
 
-class AlbumField(serializers.RelatedField):
-    def to_internal_value(self, data: str) -> Optional[Album]:
-        return get_album(data) if data else None
-
-    def to_representation(self, value: Album) -> str:
-        return value.get_path()
-
-
 class GroupField(serializers.RelatedField):
     def to_internal_value(self, data: str) -> Group:
         name = data.lower().strip().replace('group:', '').strip()
@@ -36,6 +28,14 @@ class GroupField(serializers.RelatedField):
 
     def to_representation(self, value: Group) -> str:
         return value.name
+
+
+class NullableAlbumField(serializers.RelatedField):
+    def to_internal_value(self, data: str) -> Optional[Album]:
+        return get_album(data) if data else None
+
+    def to_representation(self, value: Album) -> str:
+        return value.get_path()
 
 
 class PhotoHashField(serializers.RelatedField):

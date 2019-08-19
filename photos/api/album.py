@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.fields import (
-    AlbumField, GroupField, PhotoHashField, TagField, UserField)
+    GroupField, NullableAlbumField, PhotoHashField, TagField, UserField)
 from photos.api.photo import PhotoSerializer
 from photos.models.album import Album
 from photos.models.photo import Photo
@@ -82,7 +82,7 @@ class AlbumSerializer(serializers.ModelSerializer):
     tags = TagField(many=True, allow_empty=True, queryset=Q())
     users = UserField(many=True, allow_empty=True, queryset=Q())
     groups = GroupField(many=True, allow_empty=True, queryset=Q())
-    parent = AlbumField(allow_empty=True, allow_null=True, queryset=Q())
+    parent = NullableAlbumField(allow_empty=True, allow_null=True, queryset=Q())
 
     class Meta:
         model = Album
