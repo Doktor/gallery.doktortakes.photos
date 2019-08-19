@@ -1,16 +1,12 @@
 from django.core.cache import cache
-from django.db.models import Q
 
-from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.fields import (
-    GroupField, NullableAlbumField, PhotoHashField, TagField, UserField)
-from photos.api.photo import PhotoSerializer
-from photos.models.album import Album
+from photos.api.serializers import (
+    AlbumSerializer, AlbumCoverSerializer, PhotoSerializer)
 from photos.models.photo import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album
@@ -73,35 +69,6 @@ class AlbumDetail(APIView):
         album.delete()
 
         return Response(status=Status.NO_CONTENT)
-
-
-class AlbumSerializer(serializers.ModelSerializer):
-    slug = serializers.CharField(read_only=True)
-    path = serializers.CharField(read_only=True, source='get_path')
-
-    tags = TagField(many=True, allow_empty=True, queryset=Q())
-    users = UserField(many=True, allow_empty=True, queryset=Q())
-    groups = GroupField(many=True, allow_empty=True, queryset=Q())
-    parent = NullableAlbumField(allow_empty=True, allow_null=True, queryset=Q())
-
-    class Meta:
-        model = Album
-        fields = (
-            'name', 'slug', 'path',
-            'place', 'location', 'description', 'tags',
-            'start', 'end',
-            'thumbnail_size',
-            'access_level', 'password', 'users', 'groups',
-            'parent',
-        )
-
-
-class AlbumCoverSerializer(serializers.ModelSerializer):
-    cover = PhotoHashField(allow_empty=True, allow_null=True, queryset=Q())
-
-    class Meta:
-        model = Album
-        fields = ('cover',)
 
 
 class AlbumPhotoList(APIView):

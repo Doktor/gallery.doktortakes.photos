@@ -1,13 +1,12 @@
 from django.db.models import Q
-from django.urls import reverse
 
-from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from photos.api.serializers import PhotoSerializer, SimplePhotoSerializer
 from photos.models.album import Allow
 from photos.models.photo import Photo
 from photos.settings import ITEMS_PER_PAGE
@@ -15,7 +14,6 @@ from photos.utils import get_photo
 
 import datetime
 import pytz
-from collections import OrderedDict
 from http import HTTPStatus as Status
 
 
@@ -36,56 +34,6 @@ class PhotoDetail(APIView):
         photo.delete()
 
         return Response(status=Status.NO_CONTENT)
-
-
-class PhotoSerializer(serializers.ModelSerializer):
-    # Links
-    image = serializers.ImageField(use_url=True)
-    square_thumbnail = serializers.ImageField(use_url=True)
-    url = serializers.CharField(read_only=True, source='get_absolute_url')
-    download = serializers.CharField(read_only=True, source='get_download_url')
-    admin = serializers.SerializerMethodField(read_only=True, allow_null=True)
-
-    # Metadata
-    taken = serializers.DateTimeField(
-        read_only=True, format="%A, %Y-%m-%d, %-I:%M:%S %p")
-    index = serializers.IntegerField(
-        read_only=True, allow_null=True, default=None)
-    exif = serializers.DictField(read_only=True, source='get_exif')
-
-    def get_admin(self, obj: Photo):
-        if self.context.get('is_staff', False):
-            return reverse('admin:photos_photo_change', args=[obj.pk])
-        else:
-            return None
-
-    def to_representation(self, instance: Photo) -> dict:
-        instance.index = self.context.get('index', None)
-
-        result = super().to_representation(instance)
-
-        # Don't serialize null values
-        return OrderedDict(
-            [(key, result[key]) for key in result if result[key] is not None])
-
-    class Meta:
-        model = Photo
-        fields = (
-            'image', 'square_thumbnail', 'url', 'download', 'admin',
-            'taken',
-            'width', 'height', 'md5', 'index',
-            'exif'
-        )
-
-
-class SimplePhotoSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=True)
-    square_thumbnail = serializers.ImageField(use_url=True)
-    url = serializers.CharField(read_only=True, source='get_absolute_url')
-
-    class Meta:
-        model = Photo
-        fields = ('image', 'square_thumbnail', 'url')
 
 
 def date_query(start: str, end: str) -> Q:
