@@ -252,9 +252,7 @@ class Photo(models.Model):
         except IntegrityError as e:
             if str(e) == "UNIQUE constraint failed: photos_photo.md5":
                 self.delete()
-
-                from photos.api.utils import APIError
-                raise APIError(f"Duplicate file: {self.md5}")
+                raise ValidationError(f"Duplicate file: {self.md5}")
 
     @property
     def short_md5(self) -> str:
