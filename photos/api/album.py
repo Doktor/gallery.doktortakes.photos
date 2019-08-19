@@ -1,6 +1,5 @@
 from django.core.cache import cache
 from django.db.models import Q
-from django.http import Http404
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -9,13 +8,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.fields import (
-    AlbumField, GroupField, PhotoHashField, TagField, UserField,
-    get_album_by_path)
+    AlbumField, GroupField, PhotoHashField, TagField, UserField)
 from photos.api.photo import PhotoSerializer
 from photos.models.album import Album
 from photos.models.photo import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
-from photos.utils import get_album_by_path
+from photos.utils import get_album
 
 from http import HTTPStatus as Status
 from io import BytesIO
@@ -40,21 +38,14 @@ class AlbumDetail(APIView):
 
         return super().dispatch(request, *args, **kwargs)
 
-    @staticmethod
-    def get_album(path: str) -> Album:
-        try:
-            return get_album_by_path(path)
-        except (Album.DoesNotExist, IndexError):
-            raise Http404
-
     def get(self, request: Request, path: str) -> Response:
-        album = self.get_album(path)
+        album = get_album(path)
         serializer = AlbumSerializer(album)
 
         return Response(serializer.data)
 
     def patch(self, request: Request, path: str) -> Response:
-        album = self.get_album(path)
+        album = get_album(path)
         serializer = AlbumCoverSerializer(album, data=request.data)
 
         if serializer.is_valid():
@@ -64,7 +55,7 @@ class AlbumDetail(APIView):
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
     def put(self, request: Request, path: str) -> Response:
-        album = self.get_album(path)
+        album = get_album(path)
         serializer = AlbumSerializer(album, data=request.data)
 
         if serializer.is_valid():
@@ -74,7 +65,7 @@ class AlbumDetail(APIView):
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
     def delete(self, request: Request, path: str) -> Response:
-        album = self.get_album(path)
+        album = get_album(path)
         album.delete()
 
         return Response(status=Status.NO_CONTENT)
@@ -110,12 +101,8 @@ class AlbumCoverSerializer(serializers.ModelSerializer):
 
 
 class AlbumPhotoList(APIView):
-    @staticmethod
-    def get_album(path):
-        return get_album_by_path(path)
-
     def get(self, request: Request, path: str) -> Response:
-        album = self.get_album(path)
+        album = get_album(path)
 
         if not album.check_access(request):
             return Response({'error': "Album does not exist."}, status=Status.NOT_FOUND)
@@ -137,7 +124,7 @@ class AlbumPhotoList(APIView):
             return Response({'error': "Album does not exist."}, status=Status.NOT_FOUND)
 
         files = request.FILES.getlist('files')
-        album = self.get_album(path)
+        album = get_album(path)
 
         photos = []
 

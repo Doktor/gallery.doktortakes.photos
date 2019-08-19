@@ -1,37 +1,22 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from photos.models import Photo, Tag, Album
-from photos.utils import get_album_by_path as get_album
+from photos.utils import get_album
 
 from typing import Optional
 
 User = get_user_model()
 
 
-def get_album_by_path(path: str):
-    try:
-        return get_album(path)
-    except Album.DoesNotExist:
-        raise ValidationError("The specified album doesn't exist.")
-
-
 class AlbumField(serializers.RelatedField):
     def to_internal_value(self, data: str) -> Optional[Album]:
-        if not data:
-            return None
-
-        try:
-            parent = get_album_by_path(data)
-        except Album.DoesNotExist:
-            raise ValidationError(
-                f"The album with path '{data}' does not exist.")
-        else:
-            return parent
+        return get_album(data) if data else None
 
     def to_representation(self, value: Album) -> str:
         return value.get_path()
@@ -54,12 +39,7 @@ class GroupField(serializers.RelatedField):
 
 class PhotoHashField(serializers.RelatedField):
     def to_internal_value(self, data: str) -> Photo:
-        try:
-            photo = Photo.objects.get(md5=data)
-        except Photo.DoesNotExist:
-            raise ValidationError(f"The photo with hash '{data}' does not exist.")
-        else:
-            return photo
+        return get_object_or_404(Photo, md5=data)
 
     def to_representation(self, value: Photo) -> str:
         return value.md5

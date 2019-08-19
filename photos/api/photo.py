@@ -1,59 +1,26 @@
 from django.db.models import Q
-from django.http import Http404, HttpRequest
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from rest_framework import serializers
 from rest_framework.decorators import api_view
-from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.models.album import Allow
 from photos.models.photo import Photo
-from photos.utils import get_album_by_path
 from photos.settings import ITEMS_PER_PAGE
+from photos.utils import get_photo
 
 import datetime
 import pytz
 from collections import OrderedDict
 from http import HTTPStatus as Status
-from typing import Optional
-
-
-def get_photo(request: HttpRequest, md5: str, path: Optional[str] = None) -> Photo:
-    if path is not None:
-        try:
-            album = get_album_by_path(path)
-        except IndexError:
-            raise Http404
-
-        photo = get_object_or_404(Photo, md5=md5, album=album)
-    else:
-        photo = get_object_or_404(Photo, md5=md5)
-
-    if not photo.sidecar_exists:
-        raise Http404
-
-    if not photo.check_access(request):
-        raise Http404
-
-    return photo
 
 
 class PhotoDetail(APIView):
-    @staticmethod
-    def get_photo(request: Request, md5: str) -> Photo:
-        try:
-            photo = get_photo(request, md5)
-        except Http404:
-            raise ValidationError("Photo does not exist.")
-
-        return photo
-
     def get(self, request: Request, md5: str) -> Response:
-        photo = self.get_photo(request, md5)
+        photo = get_photo(md5, request)
         serializer = PhotoSerializer(photo)
 
         return Response(serializer.data)
@@ -62,7 +29,7 @@ class PhotoDetail(APIView):
         if not request.user.is_staff:
             return Response(None, status=Status.FORBIDDEN)
 
-        photo = self.get_photo(request, md5)
+        photo = get_photo(md5, request)
         photo.delete()
 
         return Response(status=Status.NO_CONTENT)

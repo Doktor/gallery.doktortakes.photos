@@ -13,12 +13,11 @@ from django.views import View
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
-from photos.api.photo import get_photo
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow, ACCESS_LEVELS
 from photos.settings import (
     INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
-from photos.utils import get_albums_from_path, get_album_by_path
+from photos.utils import get_album, get_albums, get_photo
 
 import datetime
 import mimetypes
@@ -159,7 +158,8 @@ def view_albums(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_album(request: HttpRequest, path: str) -> HttpResponse:
-    album = get_album_by_path(path)
+    albums = get_albums(path)
+    album = albums[-1]
 
     if not album.check_access(request):
         raise Http404
@@ -167,7 +167,7 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
     photos = Photo.objects.filter(album=album, sidecar_exists=True)
 
     context = {
-        'path': get_albums_from_path(path),
+        'path': albums,
         'album': album,
         'password': 'password' in request.GET,
         'photos': photos,
@@ -231,7 +231,7 @@ def new_album(request: HttpRequest) -> HttpResponse:
 @require_GET
 @staff_only
 def edit_album(request: HttpRequest, path: str) -> HttpResponse:
-    path = get_albums_from_path(path)
+    path = get_albums(path)
     album = path[-1]
 
     context = {
@@ -265,14 +265,12 @@ def edit_albums(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(request, md5, path=path)
+    photo = get_photo(md5, request, path=path)
+    album = get_album(path)
 
-    path = get_albums_from_path(path)
-    album = path[-1]
     title = f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}"
 
     context = {
-        'path': path,
         'album': album,
         'password': 'password' in request.GET,
         'photo': photo,
@@ -288,7 +286,7 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
 @require_GET
 def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(request, md5, path=path)
+    photo = get_photo(md5, request, path=path)
     photo.image.open()
 
     filename = photo.filename
