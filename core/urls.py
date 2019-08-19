@@ -9,6 +9,8 @@ from auth.urls import url_log_in, url_log_out
 from core.converters import MD5HashConverter
 from photos import api, views
 
+import debug_toolbar
+
 handler404 = 'photos.views.handler_404'
 handler500 = 'photos.views.handler_500'
 
@@ -54,6 +56,7 @@ urlpatterns = [
     url_log_out,
 
     path('', views.index, name='index'),
+    path('__debug__/', include(debug_toolbar.urls)),
     path('404/', views.debug_404, name='debug_404'),
     path('500/', views.debug_500, name='debug_500'),
     path('about/', TemplateView.as_view(template_name='about.html'), name='about'),

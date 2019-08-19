@@ -18,6 +18,7 @@ pytz = "*"
 redis = "*"
 
 [dev-packages]
+django-debug-toolbar = "*"
 factory-boy = "*"
 faker = "*"
 pytest = "*"
