@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from photos.models import Tag, Album
+from photos.models import Photo, Tag, Album
 from photos.utils import get_album_by_path as get_album
 
 from typing import Optional
@@ -50,6 +50,19 @@ class GroupField(serializers.RelatedField):
 
     def to_representation(self, value: Group) -> str:
         return f"Group: {value.name}"
+
+
+class PhotoHashField(serializers.RelatedField):
+    def to_internal_value(self, data: str) -> Photo:
+        try:
+            photo = Photo.objects.get(md5=data)
+        except Photo.DoesNotExist:
+            raise ValidationError(f"The photo with hash '{data}' does not exist.")
+        else:
+            return photo
+
+    def to_representation(self, value: Photo) -> str:
+        return value.md5
 
 
 class TagField(serializers.RelatedField):

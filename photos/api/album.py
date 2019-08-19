@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.fields import (
-    AlbumField, GroupField, TagField, UserField, get_album_by_path)
+    AlbumField, GroupField, PhotoHashField, TagField, UserField,
+    get_album_by_path)
 from photos.api.photo import PhotoSerializer
 from photos.models.album import Album
 from photos.models.photo import Photo
@@ -52,6 +53,16 @@ class AlbumDetail(APIView):
 
         return Response(serializer.data)
 
+    def patch(self, request: Request, path: str) -> Response:
+        album = self.get_album(path)
+        serializer = AlbumCoverSerializer(album, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=Status.BAD_REQUEST)
+
     def put(self, request: Request, path: str) -> Response:
         album = self.get_album(path)
         serializer = AlbumSerializer(album, data=request.data)
@@ -88,6 +99,14 @@ class AlbumSerializer(serializers.ModelSerializer):
             'access_level', 'password', 'users', 'groups',
             'parent',
         )
+
+
+class AlbumCoverSerializer(serializers.ModelSerializer):
+    cover = PhotoHashField(allow_empty=True, allow_null=True, queryset=Q())
+
+    class Meta:
+        model = Album
+        fields = ('cover',)
 
 
 class AlbumPhotoList(APIView):
