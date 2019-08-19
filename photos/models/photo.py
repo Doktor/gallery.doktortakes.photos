@@ -10,6 +10,8 @@ from django.dispatch import receiver
 from django.http import HttpRequest
 from django.urls import reverse
 
+from rest_framework.request import Request
+
 from core import settings
 from photos.fields import JSONField
 from photos.models.utils import DATE_FORMAT, get_modified_time_utc
@@ -23,7 +25,7 @@ import os
 import PIL.Image
 import pytz
 from lxml import etree
-from typing import Optional
+from typing import Optional, Union
 
 strptime = datetime.datetime.strptime
 
@@ -119,7 +121,7 @@ class Photo(models.Model):
     def __str__(self) -> str:
         return self.filename
 
-    def check_access(self, request: HttpRequest) -> bool:
+    def check_access(self, request: Union[HttpRequest, Request]) -> bool:
         if self.album is None:
             return True
 

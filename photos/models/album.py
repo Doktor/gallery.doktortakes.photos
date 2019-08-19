@@ -9,11 +9,13 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
+from rest_framework.request import Request
+
 from core.context_processors import metadata
 from photos.settings import MEDIA_FOLDERS
 
 import os
-from typing import List
+from typing import List, Union
 
 m = metadata(None)
 
@@ -113,7 +115,7 @@ class Album(models.Model):
         return (self.photos.count() +
                 sum([album.count for album in self.children.all()]))
 
-    def check_access(self, request: HttpRequest) -> bool:
+    def check_access(self, request: Union[HttpRequest, Request]) -> bool:
         album = self
         user = request.user
 
