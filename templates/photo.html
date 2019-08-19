@@ -61,7 +61,7 @@
        {% if password %}
        data-password="{{ album.password }}"
        {% endif %}
-       data-api-get-album-photos="{% url 'get_album_photos' album.get_path %}"
+       data-api-get-album-photos="{% url 'api_album_photos' album.get_path %}"
        data-md5="{{ photo.md5 }}">
   </div>
 

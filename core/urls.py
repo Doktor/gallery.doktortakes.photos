@@ -38,10 +38,9 @@ api_patterns = [
     path('photos/search', api.search_photos, name='search_photos'),
     path('photos/<md5:md5>/', api.PhotoDetail.as_view(), name='api_photo'),
 
-    path('albums/', api.AlbumList.as_view(), name='api_new_album'),
+    path('albums/<path:path>/photos/', api.AlbumPhotoList.as_view(), name='api_album_photos'),
     path('albums/<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
-    path('albums/<path:path>/photos', api.get_album_photos, name='get_album_photos'),
-    path('albums/<path:path>/upload', api.upload_photo, name='upload_photo'),
+    path('albums/', api.AlbumList.as_view(), name='api_new_album'),
 ]
 
 user_patterns = [

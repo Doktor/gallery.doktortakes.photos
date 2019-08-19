@@ -1,9 +1,7 @@
-from django.core.cache import cache
 from django.db.models import Q
 from django.http import Http404, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.decorators.http import require_POST
 
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -14,7 +12,6 @@ from rest_framework.views import APIView
 
 from photos.models.album import Allow
 from photos.models.photo import Photo
-from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album_by_path
 from photos.settings import ITEMS_PER_PAGE
 
@@ -22,7 +19,6 @@ import datetime
 import pytz
 from collections import OrderedDict
 from http import HTTPStatus as Status
-from io import BytesIO
 from typing import Optional
 
 
@@ -120,56 +116,6 @@ class SimplePhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ('image', 'square_thumbnail', 'url')
-
-
-@api_view
-@require_POST
-def upload_photo(request: Request, path: str) -> Response:
-    if not request.user.is_staff:
-        return Response(None, status=Status.FORBIDDEN)
-
-    files = request.FILES.getlist('files')
-    album = get_album_by_path(path)
-
-    for file in files:
-        p = Photo()
-        p.album = album
-
-        # Check if this image already exists
-        md5 = generate_md5_hash(file)
-
-        try:
-            Photo.objects.get(md5=md5)
-        except Photo.DoesNotExist:
-            pass
-        else:
-            raise ValidationError(f"Duplicate file: {md5}")
-
-        p.md5 = md5
-
-        filename = file.name
-
-        try:
-            original = Photo.objects.get(album=album, original_filename=filename)
-        except Photo.DoesNotExist:
-            pass
-        else:
-            original.delete()
-
-        data = BytesIO()
-        data.name = filename
-
-        p.original_filename = filename
-
-        for chunk in file.chunks(chunk_size=CHUNK_SIZE):
-            data.write(chunk)
-
-        # Expires after 24 hours
-        cache.set(md5, data, 60 * 60 * 24)
-
-        p.save()
-
-    return Response({'success': True}, status=Status.OK)
 
 
 def date_query(start: str, end: str) -> Q:
