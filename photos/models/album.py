@@ -279,6 +279,9 @@ def create_album_cover(sender, instance: Album, **kwargs) -> None:
         if prev.cover == album.cover:
             return
 
+        if album.cover is None:
+            return
+
     from photos.tasks import update_thumbnail
     update_thumbnail(album.cover, album.cover.get_original())
     album.cover.save()
