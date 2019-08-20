@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.db.models import Q, QuerySet
+from django.db.models import Count, Q, QuerySet
 from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -23,6 +23,7 @@ import datetime
 import mimetypes
 import random
 import pytz
+from collections import OrderedDict
 from typing import Callable
 
 metadata = m(None)
@@ -138,25 +139,67 @@ def featured(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_albums(request: HttpRequest) -> HttpResponse:
-    albums = get_albums_for_user(request.user).order_by('-start').select_related('cover')
+    view = request.GET.get('view', '')
+    user = request.user
+
+    if view == 'simple':
+        template = 'albums_simple.html'
+        albums = get_all_albums(user, select_cover=False)
+    elif view == 'details':
+        template = 'albums_detailed_cards.html'
+        albums = get_all_albums(user)
+    else:
+        template = 'albums_cards.html'
+        albums = get_top_level_albums(user)
 
     context = {
         'albums': albums,
         'items_per_page': ITEMS_PER_PAGE,
     }
 
-    view = request.GET.get('view', '')
-
-    if view == 'simple':
-        template = 'albums_simple.html'
-    elif view == 'cards':
-        template = 'albums_cards.html'
-    elif view == 'details':
-        template = 'albums_detailed_cards.html'
-    else:
-        template = 'albums_cards.html'
-
     return render(request, template, context)
+
+
+def get_top_level_albums(user):
+    return get_albums_for_user(user).order_by('-start').select_related('cover')
+
+
+def get_all_albums(user, select_cover=True):
+    """Returns all albums as a hierarchical list."""
+
+    albums = (
+        get_albums_for_user(user, include_children=True)
+            .select_related('parent')
+            .prefetch_related('children')
+            .annotate(photos_count=Count('photos'))
+            .order_by('-start')
+    )
+
+    if select_cover:
+        albums = albums.select_related('cover')
+
+    albums_by_pk = OrderedDict([(album.pk, album) for album in albums])
+
+    def get(pk: int) -> tuple:
+        album = albums_by_pk[pk]
+
+        if album.children.exists():
+            children = [get(child.pk) for child in album.children.all()]
+        else:
+            children = []
+
+        album.total_count = (album.photos_count +
+            sum(child.photos_count for child, _ in children))
+
+        return album, children
+
+    ret = []
+
+    for album in albums:
+        if album.parent is None:
+            ret.append(get(album.pk))
+
+    return ret
 
 
 @require_GET

@@ -3,7 +3,7 @@
 {% block album_list %}
 <section class="album-list-simple">
   <ul class="album-list-simple-items">
-    {% for album in albums %}
+    {% for album, children in albums %}
       {% include "_album_simple.html" %}
     {% endfor %}
   </ul>
