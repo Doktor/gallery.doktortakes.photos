@@ -33,12 +33,14 @@ FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
 # Helper functions
 
 
-def get_albums_for_user(user, exclude_public=False) -> QuerySet:
+def get_albums_for_user(user, exclude_public=False, include_children=False) -> QuerySet:
     """Returns a QuerySet of the albums that a user has access to."""
+    q = Q() if include_children else Q(parent__isnull=True)
+
     if user.is_superuser:
-        q = Q(parent__isnull=True, access_level__lte=Allow.SUPERUSER)
+        q &= Q(access_level__lte=Allow.SUPERUSER)
     elif user.is_staff:
-        q = Q(parent__isnull=True, access_level__lte=Allow.STAFF)
+        q &= Q(access_level__lte=Allow.STAFF)
     elif user.is_authenticated:
         # Direct ownership
         owner_q = Q(users=user)
@@ -47,14 +49,12 @@ def get_albums_for_user(user, exclude_public=False) -> QuerySet:
         for group in user.groups.all():
             owner_q |= Q(groups=group)
 
-        owner_q &= Q(parent__isnull=True, access_level__lte=Allow.OWNERS)
+        owner_q &= Q(access_level__lte=Allow.OWNERS)
 
         # Everything else
-        q = owner_q | Q(parent__isnull=True, access_level__lte=Allow.SIGNED_IN)
+        q = owner_q | Q(access_level__lte=Allow.SIGNED_IN)
     elif user.is_anonymous:
-        q = Q(parent__isnull=True, access_level=Allow.PUBLIC)
-    else:
-        q = Q()
+        q &= Q(access_level=Allow.PUBLIC)
 
     if exclude_public:
         q &= Q(access_level__gt=Allow.PUBLIC)
