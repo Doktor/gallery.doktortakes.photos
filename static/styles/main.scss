@@ -1242,3 +1242,37 @@ $group-row-spacing: 0.75rem;
     line-height: 1.15;
   }
 }
+
+/* Photo wall */
+.photo-wall {
+  display: flex;
+  flex-wrap: wrap;
+
+  width: 100%;
+  margin: 0;
+}
+
+.photo-wall-item {
+  width: (100% / 5);
+
+  @media (min-width: 901px) and (max-width: 1500px) {
+    width: (100% / 8);
+  }
+  @media (min-width: 1501px) {
+    width: (100% / 10);
+  }
+
+  filter: brightness(1.0);
+
+  &:hover {
+    filter: brightness(0.6);
+  }
+
+  &, &:hover {
+    transition: filter 0.2s ease-in-out;
+  }
+
+  img {
+    width: 100%;
+  }
+}
