@@ -1243,6 +1243,11 @@ $group-row-spacing: 0.75rem;
   }
 }
 
+/* Changelog */
+.commit-hash {
+  font-family: Consolas, monospace;
+}
+
 /* Photo wall */
 .photo-wall {
   display: flex;

@@ -64,6 +64,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),
+    path('changes/', views.view_changes, name='changes'),
     path('copyright/', TemplateView.as_view(template_name='copyright.html'), name='copyright'),
     path('featured/', views.featured, name='featured'),
     path('tags/', include(tag_patterns)),

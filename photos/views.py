@@ -16,7 +16,7 @@ from core.context_processors import metadata as m
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow, ACCESS_LEVELS
 from photos.settings import (
-    INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
+    GIT_STATUS, INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
 from photos.utils import get_album, get_albums, get_photo
 
 import datetime
@@ -507,3 +507,7 @@ def view_activity(request: HttpRequest) -> HttpResponse:
     cache.set('activity', activity, timeout=None)
 
     return render(request, "activity.html", {'activity': activity})
+
+
+def view_changes(request: HttpRequest) -> HttpResponse:
+    return render(request, "changes.html", {'status': GIT_STATUS})

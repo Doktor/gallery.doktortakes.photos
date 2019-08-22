@@ -1,15 +1,24 @@
 from django.contrib.auth import get_user_model
 from invoke import task
+import datetime
 import django
 import hashlib
 import json
 import os
 import pprint
+import pytz
+import shlex
+import subprocess
 
 
 # Task parts
 
 manage = "pipenv run python manage.py"
+
+
+def check_output(command: str) -> str:
+    return subprocess.run(
+        shlex.split(command), stdout=subprocess.PIPE, universal_newlines=True).stdout
 
 
 def create_superuser(ctx, manual=False):
@@ -40,6 +49,36 @@ def celery(ctx):
 
 
 @task
+def generate_git_status(ctx):
+    def get_last_commit_datetime():
+        raw = check_output("git log -1 --format=%at").strip()
+        utc = datetime.datetime.utcfromtimestamp(int(raw)).replace(tzinfo=pytz.utc)
+        local = utc.astimezone(pytz.timezone('US/Eastern'))
+
+        return local.strftime('%Y-%m-%d %H:%M:%S')
+
+    def get_last_commit_hash():
+        return check_output("git log -1 --format=%H").strip()
+
+    def get_last_20_commits():
+        raw = check_output("git log --max-count=20 --format=\"%H %s\"").strip()
+        lines = [line.split(' ', 1) for line in raw.split('\n')]
+
+        return [{'hash': line[0], 'subject': line[1]} for line in lines]
+
+    data = {
+        'commit_list': "https://gitlab.com/Doktor/doktortakes.photos/commits/master",
+        'commit_link': "https://gitlab.com/Doktor/doktortakes.photos/commit/",
+        'last_commit_datetime': get_last_commit_datetime(),
+        'last_commit_hash': get_last_commit_hash(),
+        'last_20_commits': get_last_20_commits(),
+    }
+
+    with open('data/git.json', 'w') as f:
+        f.write(json.dumps(data))
+
+
+@task(post=[generate_git_status])
 def build(ctx):
     print("Rebuilding stylesheets")
     with ctx.cd(os.path.join('static', 'styles')):

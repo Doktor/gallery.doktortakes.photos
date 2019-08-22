@@ -1,5 +1,7 @@
 from django.conf import settings
 
+import datetime
+import json
 import os
 import PIL.Image
 
@@ -78,3 +80,18 @@ if WATERMARKS_ENABLED:
     DEFAULT_WATERMARK = WATERMARK_IMAGES[(2400, 'w')]
 
 WATERMARK_OFFSET = 30
+
+
+# Changelog
+GIT_STATUS_PATH = os.path.join(settings.BASE_DIR, 'data', 'git.json')
+
+if os.path.isfile(GIT_STATUS_PATH):
+    with open(GIT_STATUS_PATH, encoding='utf8') as f:
+        data = json.loads(f.read().strip())
+
+        data['last_commit_datetime'] = datetime.datetime.strptime(
+            data['last_commit_datetime'], "%Y-%m-%d %H:%M:%S")
+
+        GIT_STATUS = data
+else:
+    GIT_STATUS = None
