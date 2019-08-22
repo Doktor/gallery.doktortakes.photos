@@ -35,7 +35,7 @@ class NullableAlbumField(serializers.RelatedField):
         return get_album(data) if data else None
 
     def to_representation(self, value: Album) -> str:
-        return value.get_path()
+        return value.path
 
 
 class PhotoHashField(serializers.RelatedField):

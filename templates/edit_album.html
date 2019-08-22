@@ -42,10 +42,10 @@
   </header>
 
   <div id="api"
-       data-album-path="{{ album.get_path }}"
+       data-album-path="{{ album.path }}"
        data-count="{{ photos.count }}"
        data-photos-per-page="{{ photos_per_page }}"
-       data-api-album="{% url 'api_album' album.get_path %}"
+       data-api-album="{% url 'api_album' album.path %}"
        data-api-edit-list="{% url 'edit_albums' %}"></div>
 
   <!-- Album details -->
@@ -92,7 +92,7 @@
     {% endfor %}
     </section>
 
-    <a href="{% url 'new_album' %}?parent={{ album.get_path }}">Create new child album</a>
+    <a href="{% url 'new_album' %}?parent={{ album.path }}">Create new child album</a>
   </section>
 
   <!-- Upload photos -->
@@ -100,7 +100,7 @@
     <h2>Upload photos</h2>
 
     <div id="upload">
-      <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'api_album_photos' album.get_path %}">
+      <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'api_album_photos' album.path %}">
         {% csrf_token %}
         <div class="fallback">
           <input type="file" name="files" multiple>

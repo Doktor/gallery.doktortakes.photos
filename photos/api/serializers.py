@@ -12,7 +12,7 @@ from collections import OrderedDict
 
 class AlbumSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(read_only=True)
-    path = serializers.CharField(read_only=True, source='get_path')
+    path = serializers.CharField(read_only=True)
 
     tags = TagField(many=True, allow_empty=True, queryset=Q())
     users = UserField(many=True, allow_empty=True, queryset=Q())

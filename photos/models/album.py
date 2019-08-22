@@ -78,6 +78,10 @@ class Album(models.Model):
         related_name='children', blank=True, null=True,
         help_text="The album that contains this album")
 
+    path = models.TextField(
+        blank=True, editable=False,
+        help_text="The path to this album; automatically set")
+
     # Permissions
     access_level = models.PositiveSmallIntegerField(
         choices=ACCESS_LEVELS, default=Allow.PUBLIC)
@@ -87,12 +91,6 @@ class Album(models.Model):
     groups = models.ManyToManyField(Group, related_name='albums', blank=True)
 
     tags = models.ManyToManyField('Tag', related_name='albums', blank=True)
-
-    def __eq__(self, other):
-        if not isinstance(other, Album):
-            return False
-
-        return self.get_path() == other.get_path()
 
     def __str__(self) -> str:
         return self.name
@@ -158,7 +156,7 @@ class Album(models.Model):
         super().delete(using=using, keep_parents=keep_parents)
 
     def get_absolute_url(self) -> str:
-        return reverse('album', args=[self.get_path()])
+        return reverse('album', args=[self.path])
 
     def get_all_subalbums(self, include_self: bool = False) -> List['Album']:
         albums = []
@@ -183,7 +181,7 @@ class Album(models.Model):
         return photos
 
     def get_edit_url(self) -> str:
-        return reverse('edit_album', args=[self.get_path()])
+        return reverse('edit_album', args=[self.path])
 
     def get_full_date(self) -> str:
         template = "{date:%a} {date.year}-{date.month:02}-{date.day:02}"
@@ -231,16 +229,13 @@ class Album(models.Model):
                 previous=self.slug, divider=divider)
         else:
             return self.parent.get_path(
-                previous=self.slug + divider + previous, divider=divider)
+                previous=f"{self.slug}{divider}{previous}", divider=divider)
 
     def get_place(self) -> str:
         if self.place or not self.parent:
             return self.place
 
         return self.parent.get_place()
-
-    def get_parent_path(self) -> str:
-        return self.parent.get_path() if self.parent is not None else ''
 
     def get_password_query(self, separator: bool = False) -> str:
         if self.password:
@@ -259,8 +254,11 @@ class Album(models.Model):
         return ', '.join(user.username.capitalize() for user in self.users.all())
 
     def save(self, *args, **kwargs) -> None:
-        self.slug = slugify(self.name)
         self.clean()
+
+        self.slug = slugify(self.name)
+        self.path = self.get_path()
+
         super().save(*args, **kwargs)
 
     class Meta:
@@ -293,12 +291,10 @@ def create_album_cover(sender, instance: Album, **kwargs) -> None:
           dispatch_uid="photos.models.delete_album_folders")
 def delete_album_folders(sender, instance: Album, **kwargs) -> None:
     album = instance
-
     storage = DefaultStorage()
-    path = album.get_path()
 
     for name in MEDIA_FOLDERS.values():
-        folder_path = os.path.join(name, path)
+        folder_path = os.path.join(name, album.path)
 
         if storage.exists(folder_path):
             storage.delete(folder_path)

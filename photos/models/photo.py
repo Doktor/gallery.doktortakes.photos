@@ -160,10 +160,10 @@ class Photo(models.Model):
         function(self, file)
 
     def get_absolute_url(self) -> str:
-        return reverse('photo', args=[self.album.get_path(), self.md5])
+        return reverse('photo', args=[self.album.path, self.md5])
 
     def get_download_url(self) -> str:
-        return reverse('download', kwargs={'path': self.get_path(), 'md5': self.md5})
+        return reverse('download', kwargs={'path': self.path, 'md5': self.md5})
 
     def get_exif(self) -> dict:
         return get_exif(self)
@@ -210,11 +210,12 @@ class Photo(models.Model):
 
         return file
 
-    def get_path(self) -> str:
-        return self.album.get_path() if self.album else DEFAULT_PATH
-
     def get_password_url(self) -> str:
         return self.get_absolute_url() + self.album.get_password_query()
+
+    @property
+    def path(self) -> str:
+        return self.album.path if self.album else DEFAULT_PATH
 
     def resave(self) -> None:
         if not self.pk:

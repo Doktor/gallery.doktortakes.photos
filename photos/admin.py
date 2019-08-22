@@ -28,8 +28,7 @@ class AlbumAdmin(admin.ModelAdmin):
             'fields': ('cover', 'preview'),
         }),
     )
-    list_display = ('name', 'location', 'start', 'end',
-                    'description', 'get_path')
+    list_display = ('name', 'location', 'start', 'end', 'description', 'path')
     ordering = ('-start',)
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('preview',)

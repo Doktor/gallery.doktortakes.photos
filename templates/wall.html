@@ -35,7 +35,7 @@ body {
 <section id="wall">
   {% for photo in photos %}
     <div class="photo">
-      <a href="{% url 'photo' photo.get_path photo.md5 %}">
+      <a href="{% url 'photo' photo.path photo.md5 %}">
         <img src="{{ photo.square_thumbnail.url }}">
       </a>
     </div>

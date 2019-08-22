@@ -167,7 +167,7 @@
       {% for p in photos %}
         <div class="photo-wrapper">
           <div class="photo">
-            <a href="{% url 'photo' album.get_path p.md5 %}{% if password %}{{ album.get_password_query }}{% endif %}">
+            <a href="{% url 'photo' album.path p.md5 %}{% if password %}{{ album.get_password_query }}{% endif %}">
               <img class="not-loaded"
                    data-src="{{ p.square_thumbnail.url }}"
                    src="{% static 'images/loading.svg' %}">

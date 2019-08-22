@@ -61,14 +61,14 @@
        {% if password %}
        data-password="{{ album.password }}"
        {% endif %}
-       data-api-get-album-photos="{% url 'api_album_photos' album.get_path %}"
+       data-api-get-album-photos="{% url 'api_album_photos' album.path %}"
        data-md5="{{ photo.md5 }}">
   </div>
 
   <!-- Photo -->
   <section id="photo"
            data-album-url="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}"
-           data-path="{{ photo.get_path }}"
+           data-path="{{ photo.path }}"
            data-md5="{{ photo.md5 }}"
            data-index=""
            data-width=""
@@ -123,7 +123,7 @@
 
         <div>
           <dt><i title="Download" class="fas fa-fw fa-download"></i></dt>
-          <dd id="md-download"><a href="{% url 'download' photo.get_path photo.md5 %}">Download</a></dd>
+          <dd id="md-download"><a href="{% url 'download' photo.path photo.md5 %}">Download</a></dd>
         </div>
 
         {% if request.user.is_staff %}
