@@ -41,7 +41,7 @@ NS = {
 IMAGE_TYPES = ['original', 'display_image', 'square_thumbnail', 'thumbnail']
 
 
-def get_path(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:
+def get_filename(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:
     if ext is None:
         _, ext = os.path.splitext(filename)
         ext = ext.lstrip('.')
@@ -52,19 +52,19 @@ def get_path(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:
 
 
 def get_original_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['ORIGINAL']}/{get_path(photo, filename)}"
+    return f"{MEDIA['ORIGINAL']}/{get_filename(photo, filename)}"
 
 
 def get_display_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['DISPLAY']}/{get_path(photo, filename)}"
+    return f"{MEDIA['DISPLAY']}/{get_filename(photo, filename)}"
 
 
 def get_thumbnail_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['THUMBNAIL']}/{get_path(photo, filename, ext='jpg')}"
+    return f"{MEDIA['THUMBNAIL']}/{get_filename(photo, filename, ext='jpg')}"
 
 
 def get_square_thumbnail_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['SQUARE']}/{get_path(photo, filename, ext='jpg')}"
+    return f"{MEDIA['SQUARE']}/{get_filename(photo, filename, ext='jpg')}"
 
 
 class Photo(models.Model):
