@@ -389,6 +389,11 @@ def get_exif(photo: Photo) -> dict:
         lens = lens.replace('EF', 'EF ')
 
     try:
+        focal_length = f"{e['EXIF FocalLength']} mm"
+    except KeyError:
+        focal_length = 'Unknown'
+
+    try:
         shutter_speed = f"{e['EXIF ExposureTime']} s"
     except KeyError:
         shutter_speed = 'Unknown'
@@ -409,6 +414,7 @@ def get_exif(photo: Photo) -> dict:
     return {
         'camera': camera,
         'lens': lens,
+        'focal_length': focal_length,
         'shutter_speed': shutter_speed,
         'aperture': f_stop,
         'iso_speed': iso_speed,

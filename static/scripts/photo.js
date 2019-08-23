@@ -41,6 +41,7 @@ const links = {
 const exif = {
   camera: $('exif-camera'),
   lens: $('exif-lens'),
+  focal_length: $('exif-focal-length'),
   shutter_speed: $('exif-shutter-speed'),
   aperture: $('exif-aperture'),
   iso_speed: $('exif-iso-speed'),
