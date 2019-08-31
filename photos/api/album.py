@@ -142,3 +142,20 @@ class AlbumPhotoList(APIView):
             photos.append(PhotoSerializer(photo).data)
 
         return Response({'photos': photos}, status=Status.OK)
+
+    @staticmethod
+    def delete(request: Request, path: str) -> Response:
+        if not request.user.is_staff:
+            raise ValidationError("Not authorized.", code=Status.UNAUTHORIZED)
+
+        album = get_album(path)
+
+        try:
+            hashes = request.data['photos']
+        except KeyError:
+            raise ValidationError("No photos were specified.", code=Status.BAD_REQUEST)
+
+        for photo in Photo.objects.filter(album=album, md5__in=hashes):
+            photo.delete()
+
+        return Response(status=Status.NO_CONTENT)
