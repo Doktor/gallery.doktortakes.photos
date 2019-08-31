@@ -49,7 +49,9 @@ class AlbumDetail(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+
+            photo = PhotoSerializer(album.cover)
+            return Response(photo.data)
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
