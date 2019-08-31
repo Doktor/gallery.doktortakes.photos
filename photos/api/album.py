@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.urls import reverse
 
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
@@ -68,7 +69,8 @@ class AlbumDetail(APIView):
         album = get_album(path)
         album.delete()
 
-        return Response(status=Status.NO_CONTENT)
+        response = {'redirect_to': reverse('edit_albums')}
+        return Response(response, status=Status.OK)
 
 
 class AlbumPhotoList(APIView):
