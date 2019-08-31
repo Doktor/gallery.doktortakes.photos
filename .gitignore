@@ -8,6 +8,7 @@ temp/
 *.bak
 *.db
 *.json
+!package.json
 *.log
 *.pgsql
 *.rdb
@@ -23,11 +24,13 @@ media_test/
 # Compiled files
 __pycache__/
 .sass-cache/
+static/bundles/
 static.1/
 *.css
 *.css.map
 
 # Libraries
+node_modules/
 static/lib/
 static/*/debug/
 

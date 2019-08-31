@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'storages',
     'photos',
+    'webpack_loader',
 ]
 
 REST_FRAMEWORK = {
@@ -262,6 +263,16 @@ else:
 
     DEFAULT_FILE_STORAGE = 'core.storages.MediaStorage'
 
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'STATS_FILE': os.path.join(BASE_DIR, 'src', 'webpack-stats.json'),
+    }
+}
 
 # Task queue
 
