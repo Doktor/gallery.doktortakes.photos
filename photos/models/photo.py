@@ -162,6 +162,9 @@ class Photo(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.path, self.md5])
 
+    def get_access_code_url(self) -> str:
+        return self.get_absolute_url() + self.album.get_access_code_query()
+
     def get_download_url(self) -> str:
         return reverse('download', kwargs={'path': self.path, 'md5': self.md5})
 
@@ -209,9 +212,6 @@ class Photo(models.Model):
                 file = self.original.file
 
         return file
-
-    def get_password_url(self) -> str:
-        return self.get_absolute_url() + self.album.get_password_query()
 
     @property
     def path(self) -> str:

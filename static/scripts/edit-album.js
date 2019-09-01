@@ -44,8 +44,8 @@ $('album-form-save').addEventListener('click', () => {
 });
 
 
-$('generate-password').addEventListener('click', () => {
-  $('f-password').value = getRandomHexString(32);
+$('generate-access-code').addEventListener('click', () => {
+  $('f-access-code').value = getRandomHexString(32);
 });
 
 

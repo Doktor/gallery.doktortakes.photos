@@ -6,8 +6,8 @@ const api = $('api');
 const API_ALBUM = api.dataset.apiAlbum;
 
 
-$('generate-password').addEventListener('click', () => {
-  $('f-password').value = getRandomHexString(32);
+$('generate-access-code').addEventListener('click', () => {
+  $('f-access-code').value = getRandomHexString(32);
 });
 
 

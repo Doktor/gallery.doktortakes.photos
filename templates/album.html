@@ -104,11 +104,11 @@
           Access level: {{ album.get_access_level_display }}
         </div>
 
-        <!-- Password link -->
-        {% if album.password %}
+        <!-- Access code link -->
+        {% if album.access_code %}
         <div class="group-info-item">
-          <i title="Password" class="fas fa-fw fa-key"></i>
-          Password: <a href="{{ album.get_password_url }}">{{ album.password }}</a>
+          <i title="Access code" class="fas fa-fw fa-key"></i>
+          Access code: <a href="{{ album.get_access_code_url }}">{{ album.access_code }}</a>
         </div>
         {% endif %}
 

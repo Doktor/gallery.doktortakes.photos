@@ -215,7 +215,7 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
     context = {
         'path': albums,
         'album': album,
-        'password': 'password' in request.GET,
+        'access_code': 'code' in request.GET,
         'photos': photos,
         'count': photos.count(),
         'a_count': album.children.count(),
@@ -322,7 +322,7 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
     context = {
         'album': album,
-        'password': 'password' in request.GET,
+        'access_code': 'code' in request.GET,
         'photo': photo,
         'count': album.photos.filter(sidecar_exists=True).count(),
         'exif': photo.get_exif(),

@@ -22,7 +22,7 @@ class AlbumAdmin(admin.ModelAdmin):
                        'start', 'end', 'parent', 'tags', 'thumbnail_size'),
         }),
         ('Visibility', {
-            'fields': ('access_level', 'password', 'users', 'groups'),
+            'fields': ('access_level', 'access_code', 'users', 'groups'),
         }),
         ('Cover photo', {
             'fields': ('cover', 'preview'),

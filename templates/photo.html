@@ -58,8 +58,8 @@
 {% block content %}
   <!-- API -->
   <div id="api"
-       {% if password %}
-       data-password="{{ album.password }}"
+       {% if access_code %}
+       data-access_code="{{ album.access_code }}"
        {% endif %}
        data-api-get-album-photos="{% url 'api_album_photos' album.path %}"
        data-md5="{{ photo.md5 }}">
@@ -67,7 +67,7 @@
 
   <!-- Photo -->
   <section id="photo"
-           data-album-url="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}"
+           data-album-url="{% if access_code %}{{ album.get_access_code_url }}{% else %}{{ album.get_absolute_url }}{% endif %}"
            data-path="{{ photo.path }}"
            data-md5="{{ photo.md5 }}"
            data-index=""
@@ -213,7 +213,7 @@
       <dl>
         <div>
           <dt title="Album"><i class="fas fa-fw fa-book"></i></dt>
-          <dd><a href="{% if password %}{{ album.get_password_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Return to album</a></dd>
+          <dd><a href="{% if access_code %}{{ album.get_access_code_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Return to album</a></dd>
         </div>
 
         <div>

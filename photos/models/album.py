@@ -86,7 +86,7 @@ class Album(models.Model):
     access_level = models.PositiveSmallIntegerField(
         choices=ACCESS_LEVELS, default=Allow.PUBLIC)
 
-    password = models.CharField(max_length=128, blank=True)
+    access_code = models.CharField(max_length=128, blank=True)
     users = models.ManyToManyField(User, related_name='albums', blank=True)
     groups = models.ManyToManyField(Group, related_name='albums', blank=True)
 
@@ -121,12 +121,12 @@ class Album(models.Model):
             return True
 
         try:
-            password = request.GET['password']
+            code = request.GET['code']
         except KeyError:
-            password = False
+            code = False
 
-        # Password access supersedes all other permission checks
-        if album.password and password and album.password == password:
+        # Access code supersedes all other permission checks
+        if album.access_code and code and album.access_code == code:
             return True
 
         elif album.access_level == Allow.PUBLIC:
@@ -157,6 +157,19 @@ class Album(models.Model):
 
     def get_absolute_url(self) -> str:
         return reverse('album', args=[self.path])
+
+    def get_access_code_query(self, separator: bool = False) -> str:
+        if self.access_code:
+            q = f"?code={self.access_code}"
+
+            if separator:
+                return q + '&'
+            return q
+        else:
+            return ''
+
+    def get_access_code_url(self) -> str:
+        return self.get_absolute_url() + self.get_access_code_query()
 
     def get_all_subalbums(self, include_self: bool = False) -> List['Album']:
         albums = []
@@ -236,19 +249,6 @@ class Album(models.Model):
             return self.place
 
         return self.parent.get_place()
-
-    def get_password_query(self, separator: bool = False) -> str:
-        if self.password:
-            q = f"?password={self.password}"
-
-            if separator:
-                return q + '&'
-            return q
-        else:
-            return ''
-
-    def get_password_url(self) -> str:
-        return self.get_absolute_url() + self.get_password_query()
 
     def get_users(self) -> str:
         return ', '.join(user.username.capitalize() for user in self.users.all())
