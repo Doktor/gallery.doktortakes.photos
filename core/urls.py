@@ -7,7 +7,8 @@ from django.views.generic import TemplateView
 
 from auth.urls import url_log_in, url_log_out
 from core.converters import MD5HashConverter
-from photos import api, views
+from photos import views
+from photos.api import views as api
 
 import debug_toolbar
 

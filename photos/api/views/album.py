@@ -6,9 +6,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers import (
-    AlbumSerializer, AlbumCoverSerializer, PhotoSerializer)
-from photos.models.photo import Photo
+from photos.api.serializers import AlbumSerializer, AlbumCoverSerializer, PhotoSerializer
+from photos.models import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album
 

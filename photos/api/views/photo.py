@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.serializers import PhotoSerializer, SimplePhotoSerializer
+from photos.models import Photo
 from photos.models.album import Allow
-from photos.models.photo import Photo
 from photos.settings import ITEMS_PER_PAGE
 from photos.utils import get_photo
 
