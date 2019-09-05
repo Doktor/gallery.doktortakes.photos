@@ -171,6 +171,9 @@ class Album(models.Model):
     def get_access_code_url(self) -> str:
         return self.get_absolute_url() + self.get_access_code_query()
 
+    def get_admin_url(self) -> str:
+        return reverse('admin:photos_album_change', args=[self.pk])
+
     def get_all_subalbums(self, include_self: bool = False) -> List['Album']:
         albums = []
 
