@@ -277,24 +277,7 @@ def new_album(request: HttpRequest) -> HttpResponse:
 @require_GET
 @staff_only
 def edit_album(request: HttpRequest, path: str) -> HttpResponse:
-    path = get_albums(path)
-    album = path[-1]
-
-    albums = Album.objects.all().order_by('-start').select_related('cover', 'parent')
-
-    context = {
-        'album': album,
-        'photos': album.photos.all(),
-        'parents': path[:-1],
-        'photos_per_page': ITEMS_PER_PAGE,
-
-        'albums': albums,
-        'items_per_page': 6,
-
-        'access_levels': ACCESS_LEVELS
-    }
-
-    return render(request, "edit_album.html", context)
+    return render(request, "edit_album.html", {'album': get_album(path)})
 
 
 @require_GET

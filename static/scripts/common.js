@@ -1,5 +1,13 @@
 // Additional prototype functions
 
+Array.prototype.clear = function() {
+  this.splice(0, this.length);
+};
+
+Array.prototype.remove = function(item) {
+  this.splice(this.indexOf(item), 1);
+};
+
 Element.prototype.clearChildren = function() {
   while (this.firstChild) {
     this.removeChild(this.firstChild);
@@ -209,6 +217,8 @@ function flash(message) {
   messages.appendChild(el);
 
   setTimeout(() => el.classList.add('visible'), 100);
+
+  return el;
 }
 
 

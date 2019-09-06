@@ -1,0 +1,94 @@
+import Vue from "vue";
+import Vuex from "vuex";
+import {actions} from "./actions";
+import {getters} from "./getters";
+import {mutations} from "./mutations";
+
+Vue.use(Vuex);
+
+
+// Helper functions
+
+export function getCsrfToken() {
+  return getCookie('csrftoken');
+}
+
+
+// API endpoints and static files
+
+const api = document.getElementById('api');
+
+export const endpoints = {
+  album: api.dataset.apiAlbum,
+  albumPhotos: api.dataset.apiAlbumPhotos,
+};
+
+export const staticFiles = {
+  coverPlaceholder: api.dataset.staticCoverPlaceholder,
+  squareThumbnailPlaceholder: api.dataset.staticSquareThumbnailPlaceholder,
+};
+
+
+// Other constants
+
+export const production = process.env.NODE_ENV === 'production';
+
+const settings = {
+  itemsPerPage: production ? 30 : 10,
+};
+
+export const accessLevels = [
+  {
+    level: 0,
+    name: 'Public',
+  },
+  {
+    level: 10,
+    name: 'Signed in',
+  },
+  {
+    level: 20,
+    name: 'Owners',
+  },
+  {
+    level: 30,
+    name: 'Staff',
+  },
+  {
+    level: 100,
+    name: 'Superusers',
+  },
+];
+
+export const fields = {
+  list: ['users', 'groups', 'tags'],
+  readonly: [
+    'slug', 'path', 'cover', 'children',
+    'url', 'edit_url', 'admin_url',
+  ],
+};
+
+
+// Store
+
+export const store = new Vuex.Store({
+  state: {
+    strict: !production,
+
+    loading: true,
+
+    album: {},
+    photos: [],
+    count: 0,
+    selected: [],
+
+    page: 1,
+    loaded: [],
+
+    settings: settings,
+  },
+
+  actions,
+  getters,
+  mutations,
+});

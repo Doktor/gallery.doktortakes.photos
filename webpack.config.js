@@ -7,6 +7,10 @@ module.exports = {
 
   context: __dirname,
 
+  entry: {
+    editAlbum: path.resolve('src/entry/editAlbum.js'),
+  },
+
   output: {
     path: path.resolve('./static/bundles/'),
     filename: '[name].[hash].js',

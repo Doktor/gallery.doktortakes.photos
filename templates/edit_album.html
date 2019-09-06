@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}Editing {{ album.name }} | {{ block.super }}{% endblock %}
 
@@ -14,207 +15,21 @@
 
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.js" defer></script>
-<script src="{% static 'scripts/edit-album.js' %}" defer></script>
+{% render_bundle 'editAlbum' attrs='defer' %}
 {% endblock %}
 
 {% block classes %}small{% endblock %}
 
 {% block content %}
-  <header>
-    <nav class="nav-secondary">
-      <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit_albums' %}">Edit</a></li>
-        {% for item in parents %}
-        <li><a href="{{ item.get_edit_url }}">{{ item.name }}</a></li>
-        {% endfor %}
-        <li><a id="album-edit-link" href="{{ album.get_edit_url }}">{{ album.name }}</a>
-        </li>
-      </ul>
-    </nav>
-
-    <h2 id="album-name">{{ album.name }}</h2>
-    {% spaceless %}
-    <ul class="edit-links-center">
-      <li><a id="album-link" href="{{ album.get_absolute_url }}" target="_blank">View</a></li>
-      <li><a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a></li>
-    </ul>
-    {% endspaceless %}
-  </header>
-
   <div id="api"
-       data-album-path="{{ album.path }}"
-       data-count="{{ photos.count }}"
-       data-photos-per-page="{{ photos_per_page }}"
        data-api-album="{% url 'api_album' album.path %}"
-       data-api-edit-list="{% url 'edit_albums' %}"></div>
+       data-api-album-photos="{% url 'api_album_photos' album.path %}"
 
-  <!-- Album details -->
-  <h2>Album details</h2>
+       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+       data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
+  ></div>
 
-  <section class="album-details">
-    <div class="album-cover-container">
-      <div class="album {% if not album.cover %}album-no-cover{% endif %}">
-        {% if album.cover %}
-        <a href="{{ album.cover.image.url }}" target="_blank" title="Full size">
-          <img src="{{ album.cover.thumbnail.url }}" alt="Album cover image">
-        </a>
-        {% else %}
-        <img src="{% static "images/cover-placeholder.png" %}" title="{{ album.name }}" alt="Album cover image placeholder">
-        <div class="note album-no-cover-note">No cover photo</div>
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="album-form-container">
-      {% include '_album_form.html' %}
-    </div>
-
-    <div id="album-set-parent-modal" class="hidden">
-      <div id="album-set-parent-container">
-        <div class="header">
-          <h2>Set parent album</h2>
-          <span class="close"><i class="far fa-fw fa-window-close"></i></span>
-        </div>
-
-        {% include '_album_search.html' with edit=True %}
-      </div>
-    </div>
-
-  </section>
-
-  <!-- Edit subalbums -->
-  <section>
-    <h2>Child albums</h2>
-
-    <section class="albums">
-    {% for item in album.children.all %}
-      {% include "_album_card.html" with album=item edit=True %}
-    {% endfor %}
-    </section>
-
-    <a href="{% url 'new_album' %}?parent={{ album.path }}">Create new child album</a>
-  </section>
-
-  <!-- Upload photos -->
-  <section>
-    <h2>Upload photos</h2>
-
-    <div id="upload">
-      <form id="dropzone" class="dropzone" method="post" enctype="multipart/form-data" action="{% url 'api_album_photos' album.path %}">
-        {% csrf_token %}
-        <div class="fallback">
-          <input type="file" name="files" multiple>
-          <input type="submit" value="Upload">
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- Manage photos -->
-  <section>
-    <h2>Manage photos</h2>
-    <div id="counts">
-      <span id="total-count">{{ photos.count }}</span> photo{{ photos.count|pluralize }} in album,
-      <span id="selected-count">0</span> photos selected
-    </div>
-
-    <div id="select">
-      <button id="select-all" type="button">Select all</button>
-      <button id="select-none" type="button">Select none</button>
-      <button id="select-invert" type="button">Invert selection</button>
-    </div>
-
-    <div id="actions" class="clearfix">
-      <span>
-        <button id="change-cover">Set cover</button>
-      </span>
-
-      <span id="danger-zone">
-        <button id="delete-photos" type="button">Delete</button>
-      </span>
-    </div>
-
-    <!-- No photos or subalbums -->
-    {% if not photos.count and not album.children.count %}
-    <p>This album does not contain any photos.</p>
-    {% endif %}
-
-    <!-- Distinguish between this album and its subalbums -->
-    {% if photos.count and album.children.count %}
-    <h2>Photos in this album</h2>
-    {% endif %}
-
-    <!-- Photos -->
-    <div class="pagination pagination-photos pagination-above"></div>
-    <section class="photos">
-      {% for p in photos %}
-      <div class="photo-wrapper"
-           data-md5="{{ p.md5 }}" data-api="{% url 'api_photo' p.md5 %}">
-        <div class="photo">
-          {% if p.square_thumbnail %}
-          <img class="not-loaded"
-               data-src="{{ p.square_thumbnail.url }}"
-               src="{% static 'images/loading.svg' %}">
-          {% else %}
-          <div class="loaded">
-            <img src="{% static "images/square-placeholder.png" %}">
-            <div class="photo-no-thumbnail-note">No thumbnail</div>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-      {% endfor %}
-    </section>
-    <div class="pagination pagination-photos pagination-below"></div>
-    <!-- End photos -->
-
-    {% if album.children.count %}
-    <h2>Photos in subalbums</h2>
-
-    <!-- Subalbums -->
-    {% for sa in album.get_all_subalbums %}
-      <!-- Subalbum photos -->
-      {% if sa.photos.count %}
-      <h3><a href="{{ sa.get_edit_url }}">{{ sa.name }}</a></h3>
-
-      <div class="photos subalbum">
-        {% for p in sa.photos.all %}
-        <div class="photo-wrapper" data-md5="{{ p.md5 }}">
-          <div class="photo">
-            {% if p.square_thumbnail %}
-            <img src="{{ p.square_thumbnail.url }}">
-            {% else %}
-            <div>
-              <img src="{% static "images/square-placeholder.png" %}">
-              <div class="photo-no-thumbnail-note">No thumbnail</div>
-            </div>
-            {% endif %}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
-      <!-- End subalbum photos -->
-    {% endfor %}
-    <!-- End subalbums -->
-
-    {% endif %}
-  </section>
-
-  <!-- Delete album -->
-  <section id="delete-album">
-    <h2>Delete album</h2>
-
-    <p class="warning">Delete this album and every album and photo contained within it. Deletion cannot be undone!</p>
-    <p>To confirm deletion, enter the name of the album, case-sensitive.</p>
-
-    <form class="clearfix">
-      <div class="form-row">
-      <input id="delete-album-name" title="Name" name="name" type="text">
-      <button id="album-delete-submit" type="button">Delete</button>
-      </div>
-    </form>
-  </section>
+  <div id="app"></div>
 
   <footer>
     {% include "_copyright.html" %}
