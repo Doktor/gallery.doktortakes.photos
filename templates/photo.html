@@ -113,7 +113,7 @@
 
         <div>
           <dt><i title="MD5 checksum" class="fas fa-fw fa-check-circle"></i></dt>
-          <dd id="md-md5">{{ photo.md5 }}</dd>
+          <dd id="md-md5">{{ photo.md5|slice:"0:8" }}</dd>
         </div>
 
         <div>

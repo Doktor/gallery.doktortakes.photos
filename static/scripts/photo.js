@@ -105,7 +105,11 @@ function loadPhoto(index, history = true) {
 
   // Update primary metadata
   Object.keys(metadata).forEach(function(key) {
-    metadata[key].innerText = item[key];
+    if (key === 'md5') {
+      metadata[key].innerText = item.md5.slice(0, 8);
+    } else {
+      metadata[key].innerText = item[key];
+    }
   });
 
   metadata.index.innerText = parseInt(item.index) + 1;
