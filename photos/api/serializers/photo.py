@@ -8,9 +8,12 @@ from collections import OrderedDict
 
 
 class PhotoSerializer(serializers.ModelSerializer):
+    # Image links
+    image = serializers.ImageField(use_url=True, read_only=True)
+    square_thumbnail = serializers.ImageField(use_url=True, read_only=True)
+    thumbnail = serializers.ImageField(use_url=True, read_only=True, allow_null=True)
+
     # Links
-    image = serializers.ImageField(use_url=True)
-    square_thumbnail = serializers.ImageField(use_url=True)
     url = serializers.CharField(read_only=True, source='get_absolute_url')
     download = serializers.CharField(read_only=True, source='get_download_url')
     admin = serializers.SerializerMethodField(read_only=True, allow_null=True)
@@ -40,7 +43,8 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = (
-            'image', 'square_thumbnail', 'url', 'download', 'admin',
+            'image', 'square_thumbnail', 'thumbnail',
+            'url', 'download', 'admin',
             'taken',
             'width', 'height', 'md5', 'index',
             'exif'
