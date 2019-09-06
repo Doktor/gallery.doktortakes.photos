@@ -9,6 +9,7 @@ module.exports = {
 
   entry: {
     editAlbum: path.resolve('src/entry/editAlbum.js'),
+    newAlbum: path.resolve('src/entry/newAlbum.js'),
   },
 
   output: {

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}New album | {{ block.super }}{% endblock %}
 
@@ -12,27 +13,22 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'scripts/new-album.js' %}" defer></script>
+{% render_bundle 'newAlbum' attrs='defer' %}
 {% endblock %}
 
 {% block classes %}small{% endblock %}
 
 {% block content %}
   <header>
-    <nav class="nav-secondary">
-      <ul class="breadcrumbs">
-        <li class="bc-icon" title="Breadcrumbs"><i class="fas fa-fw fa-book"></i> <a href="{% url 'edit_albums' %}">Edit</a></li>
-        <li><a href="{% url 'new_album' %}">New</a></li>
-      </ul>
-    </nav>
-
     <h2>Create new album</h2>
   </header>
 
-  <div id="api" data-api-album="{% url 'api_new_album' %}"></div>
+  <div id="api" data-api-album-list="{% url 'api_new_album' %}"></div>
 
-  <div id="album-form-container" class="new">
-    {% include '_album_form.html' %}
-  </div>
+  <div id="app"></div>
+
+  <footer>
+    {% include "_copyright.html" %}
+  </footer>
 {% endblock %}
 

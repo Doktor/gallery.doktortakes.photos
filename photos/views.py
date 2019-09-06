@@ -265,13 +265,7 @@ def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
 @require_GET
 @staff_only
 def new_album(request: HttpRequest) -> HttpResponse:
-    context = {
-        'album': None,
-        'parent': request.GET.get('parent', None),
-        'access_levels': ACCESS_LEVELS
-    }
-
-    return render(request, "new_album.html", context)
+    return render(request, "new_album.html", {})
 
 
 @require_GET

@@ -7,6 +7,26 @@ function parseResponse(response) {
   });
 }
 
+function parseAlbumData(album) {
+  let data = {};
+
+  Object.entries(album).forEach(([key, value]) => {
+    // Don't send readonly fields
+    if (fields.readonly.includes(key)) {
+    }
+    // Parse list fields
+    else if (fields.list.includes(key)) {
+      data[key] = value.split(',').filter(x => x.trim().length > 0);
+    }
+    // Everything else
+    else {
+      data[key] = value;
+    }
+  });
+
+  return data;
+}
+
 
 export const actions = {
   getData(context) {
@@ -69,23 +89,33 @@ export const actions = {
     .catch(console.log);
   },
 
-  saveAlbum(context) {
-    let data = {};
+  createAlbum(context) {
+    let data = parseAlbumData(context.state.album);
 
-    // Prepare data for sending
-    Object.entries(context.state.album).forEach(([key, value]) => {
-      // Don't send readonly fields
-      if (fields.readonly.includes(key)) {
-      }
-      // Parse list fields
-      else if (fields.list.includes(key)) {
-        data[key] = value.split(',').filter(x => x.trim().length > 0);
-      }
-      // Everything else
-      else {
-        data[key] = value;
+    fetch(endpoints.albumList, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken(),
+      },
+    })
+    .then(parseResponse)
+    .then(j => {
+      flash("Album created successfully. Redirecting...");
+      setTimeout(() => window.location = j.redirect_to, 1500);
+    })
+    .catch(j => {
+      for (let [field, errors] of Object.entries(j)) {
+        for (let error of errors) {
+          flash("{0}: {1}".format(field, error));
+        }
       }
     });
+  },
+
+  saveAlbum(context) {
+    let data = parseAlbumData(context.state.album);
 
     fetch(endpoints.album, {
       method: 'PUT',

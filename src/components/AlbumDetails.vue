@@ -24,7 +24,7 @@
     </div>
 
     <div class="album-form-container">
-      <AlbumForm/>
+      <AlbumForm :update="true"/>
     </div>
   </section>
 </template>

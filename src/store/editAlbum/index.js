@@ -20,6 +20,7 @@ const api = document.getElementById('api');
 
 export const endpoints = {
   album: api.dataset.apiAlbum,
+  albumList: api.dataset.apiAlbumList,
   albumPhotos: api.dataset.apiAlbumPhotos,
 };
 

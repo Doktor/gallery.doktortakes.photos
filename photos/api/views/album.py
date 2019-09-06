@@ -21,8 +21,10 @@ class AlbumList(APIView):
         serializer = AlbumSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=Status.CREATED)
+            album = serializer.save()
+            response = {'redirect_to': album.get_edit_url()}
+
+            return Response(response, status=Status.CREATED)
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 

@@ -9,7 +9,7 @@
         </div>
       </div>
 
-      <div class="form-row">
+      <div v-if="update" class="form-row">
         <label for="f-slug">Slug</label>
         <div class="field-wrapper">
           <input class="field" name="slug" id="f-slug" type="text"
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="form-row">
+      <div v-if="update" class="form-row">
         <label for="f-path">Path</label>
         <div class="field-wrapper">
           <input class="field" name="path" id="f-path" type="text"
@@ -176,7 +176,7 @@
       },
 
       submit() {
-        this.$store.dispatch('saveAlbum');
+        this.$store.dispatch(this.update ? 'saveAlbum' : 'createAlbum');
       },
     },
 
@@ -184,6 +184,10 @@
       saveButtonText: {
         type: String,
         default: "Save",
+      },
+      update: {
+        type: Boolean,
+        required: true,
       },
     },
   }
