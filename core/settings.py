@@ -144,12 +144,14 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'default',
             'filters': ['require_debug_true'],
+            'stream': sys.stdout,
         },
         'gunicorn': {
             'level': 'WARNING',
             'class': 'logging.StreamHandler',
             'formatter': 'default',
             'filters': ['require_debug_false'],
+            'stream': sys.stdout,
         },
     },
     'loggers': {
