@@ -285,8 +285,8 @@ def edit_albums(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(md5, request, path=path)
-    album = get_album(path)
+    photo = get_photo(md5, request, path=path, select_album=True)
+    album = photo.album
 
     title = f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}"
 

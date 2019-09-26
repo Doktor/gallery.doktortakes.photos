@@ -8,34 +8,34 @@ from typing import List, Optional
 
 
 def get_albums(path: str) -> List[Album]:
-    """Returns all of the albums in the path. Raises Http404 if any part of the path is invalid."""
-    path = path.split('/')
+    base = get_object_or_404(Album, path=path)
+    albums = [base]
 
-    if len(path) == 1:
-        return [get_object_or_404(Album, slug=path[0], parent=None)]
+    while base.parent is not None:
+        albums.append(base.parent)
+        base = base.parent
 
-    albums = []
-    parent = None
-
-    for item in path:
-        album = get_object_or_404(Album, slug=item, parent=parent)
-        albums.append(album)
-        parent = album
-
-    return albums
+    return albums[::-1]
 
 
 def get_album(path: str) -> Album:
-    """Returns the last album in the path. Raises Http404 if the path is invalid."""
-    return get_albums(path)[-1]
+    return get_object_or_404(Album, path=path)
 
 
-def get_photo(md5: str, request: HttpRequest, path: Optional[str] = None) -> Photo:
+def get_photo(md5: str, request: HttpRequest,
+              path: Optional[str] = None, select_album: bool = False) -> Photo:
+    qs = Photo.objects.filter(md5=md5)
+
     if path is not None:
-        album = get_album(path)
-        photo = get_object_or_404(Photo, md5=md5, album=album)
-    else:
-        photo = get_object_or_404(Photo, md5=md5)
+        qs = qs.filter(album__path=path)
+
+    if select_album:
+        qs = qs.select_related('album')
+
+    if not qs:
+        raise Http404
+
+    photo = qs[0]
 
     if not photo.sidecar_exists:
         raise Http404
