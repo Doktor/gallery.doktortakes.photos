@@ -44,11 +44,6 @@ def django_setup():
 
 
 @task
-def celery(ctx):
-    ctx.run("pipenv run celery -A core worker --loglevel=info")
-
-
-@task
 def generate_git_status(ctx):
     def get_last_commit_datetime():
         raw = check_output("git log -1 --format=%at").strip()

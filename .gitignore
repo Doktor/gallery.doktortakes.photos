@@ -4,6 +4,7 @@
 # Sensitive data
 cache/
 data/
+logs/
 temp/
 *.bak
 *.db
