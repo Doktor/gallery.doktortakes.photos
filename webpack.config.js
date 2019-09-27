@@ -8,6 +8,7 @@ module.exports = {
   context: __dirname,
 
   entry: {
+    editAlbums: path.resolve('src/entry/editAlbums.js'),
     editAlbum: path.resolve('src/entry/editAlbum.js'),
     newAlbum: path.resolve('src/entry/newAlbum.js'),
   },

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}Edit albums | {{ block.super }}{% endblock %}
 
@@ -8,21 +9,17 @@
 {% endblock %}
 
 {% block scripts %}
-{% if albums %}
-<script src="{% static 'scripts/albums.js' %}" defer></script>
-{% endif %}
+{% render_bundle 'editAlbums' attrs='defer' %}
 {% endblock %}
 
 {% block content %}
-  <h2><a href="{% url 'new_album' %}">Add new album</a></h2>
+  <div id="api"
+       data-api-album-list="{% url 'api_albums' %}"
 
-  {% if albums %}
-  <h2>Edit existing album</h2>
+       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+  ></div>
 
-  {% include '_album_search.html' with edit=True pagination_below=True %}
-  {% else %}
-  <p>No albums available.</p>
-  {% endif %}
+  <div id="app"></div>
 
   <footer>
     {% include "_copyright.html" %}

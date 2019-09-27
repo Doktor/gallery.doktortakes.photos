@@ -277,14 +277,7 @@ def edit_album(request: HttpRequest, path: str) -> HttpResponse:
 @require_GET
 @staff_only
 def edit_albums(request: HttpRequest) -> HttpResponse:
-    albums = Album.objects.all().order_by('-start').select_related('cover', 'parent')
-
-    context = {
-        'albums': albums,
-        'items_per_page': ITEMS_PER_PAGE
-    }
-
-    return render(request, "edit_albums.html", context)
+    return render(request, "edit_albums.html", {})
 
 
 # Photos

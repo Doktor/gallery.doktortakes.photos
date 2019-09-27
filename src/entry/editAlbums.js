@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import EditAlbum from '../views/EditAlbum.vue'
-import {store} from "../store/editAlbum/index.js";
+import EditAlbums from '../views/EditAlbums.vue'
+import {store} from "../store/editAlbums";
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production';
 
@@ -9,7 +9,7 @@ const app = new Vue({
   el: '#app',
   store,
   components: {
-    EditAlbum,
+    EditAlbums,
   },
-  template: `<EditAlbum/>`,
+  template: `<EditAlbums/>`,
 });
