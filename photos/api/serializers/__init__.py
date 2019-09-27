@@ -1,2 +1,2 @@
-from .photo import PhotoSerializer, SimplePhotoSerializer
-from .album import AlbumSerializer, AlbumCoverSerializer
+from .photo import PhotoSerializer, SimplePhotoSerializer, PhotoThumbnailSerializer
+from .album import AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer

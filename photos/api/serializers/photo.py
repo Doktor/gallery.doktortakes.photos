@@ -59,3 +59,11 @@ class SimplePhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ('image', 'square_thumbnail', 'url')
+
+
+class PhotoThumbnailSerializer(serializers.ModelSerializer):
+    thumbnail = serializers.ImageField(use_url=True)
+
+    class Meta:
+        model = Photo
+        fields = ('thumbnail',)

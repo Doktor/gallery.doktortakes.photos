@@ -6,16 +6,25 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers import AlbumSerializer, AlbumCoverSerializer, PhotoSerializer
+from photos.api.serializers import (
+    AlbumSerializer, AlbumCoverSerializer, PhotoSerializer, SimpleAlbumSerializer)
 from photos.models import Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album
+from photos.views import get_albums_for_user
 
 from http import HTTPStatus as Status
 from io import BytesIO
 
 
 class AlbumList(APIView):
+    @staticmethod
+    def get(request: Request) -> Response:
+        albums = get_albums_for_user(request.user).select_related('cover')
+        serializer = SimpleAlbumSerializer(albums, many=True)
+
+        return Response({'albums': serializer.data})
+
     @staticmethod
     def post(request: Request) -> Response:
         serializer = AlbumSerializer(data=request.data)
