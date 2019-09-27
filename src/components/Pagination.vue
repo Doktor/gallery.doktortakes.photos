@@ -112,3 +112,17 @@
     }
   }
 </script>
+
+<style scoped>
+  .page:not([data-page]) {
+    letter-spacing: normal !important;
+  }
+
+  .page-flip {
+    letter-spacing: -3px !important;
+  }
+
+  .page-selected, .page-selected:hover {
+    background-color: rgb(0, 120, 255) !important;
+  }
+</style>
