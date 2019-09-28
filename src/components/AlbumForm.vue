@@ -130,7 +130,7 @@
   import {mapGetters, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import GenerateAccessCode from './GenerateAccessCode.vue';
-  import {accessLevels} from '../store/editAlbum';
+  import {accessLevels} from '../store/editor';
 
 
   export default {

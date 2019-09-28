@@ -31,7 +31,7 @@ class AlbumList(APIView):
 
         if serializer.is_valid():
             album = serializer.save()
-            response = {'redirect_to': album.get_edit_url()}
+            response = {'path': album.path}
 
             return Response(response, status=Status.CREATED)
 
@@ -81,8 +81,7 @@ class AlbumDetail(APIView):
         album = get_album(path)
         album.delete()
 
-        response = {'redirect_to': reverse('edit_albums')}
-        return Response(response, status=Status.OK)
+        return Response(None, status=Status.NO_CONTENT)
 
 
 class AlbumPhotoList(APIView):

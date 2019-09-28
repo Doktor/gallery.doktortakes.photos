@@ -21,13 +21,13 @@
 </template>
 
 <script>
-  import {endpoints, getCsrfToken} from "../store/editAlbum";
+  import {endpoints, getCsrfToken} from "../store/editor";
 
 
   export default {
     data() {
       return {
-        action: endpoints.albumPhotos,
+        action: endpoints.albumPhotoList.replace(":path", this.path),
         csrfToken: getCsrfToken(),
       }
     },
@@ -39,6 +39,13 @@
         paramName: 'files',
         parallelUploads: 3,
       });
+    },
+
+    props: {
+      path: {
+        type: String,
+        required: true,
+      }
     }
   }
 </script>

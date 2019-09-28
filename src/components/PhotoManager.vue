@@ -27,7 +27,7 @@
 
     <div class="photo-actions">
       <div>
-        <button @click="setCover">Set cover</button>
+        <button @click="setAlbumCover">Set cover</button>
       </div>
 
       <div>
@@ -73,7 +73,7 @@
     methods: {
       ...mapActions([
         'deleteSelected',
-        'setCover',
+        'setAlbumCover',
       ]),
       ...mapMutations([
         'selectAll',

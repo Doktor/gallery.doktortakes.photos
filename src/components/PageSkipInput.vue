@@ -16,23 +16,12 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
-
-
   function isInteger(n) {
     return /^[1-9]+[0-9]?$/.test(n);
   }
 
-  export default {
-    computed: {
-      ...mapGetters([
-        'pages',
-      ]),
-      ...mapState([
-        'page',
-      ]),
-    },
 
+  export default {
     data() {
       return {
         active: this.active,
@@ -53,7 +42,7 @@
           return;
         }
 
-        this.$store.commit('changePage', page);
+        this.$store.commit('setPage', {page: page, mutation: this.mutation});
         this.active = false;
       },
 
@@ -65,5 +54,21 @@
         this.$nextTick(() => this.$refs.skip.focus());
       },
     },
+
+    props: {
+      mutation: {
+        type: String,
+        required: true,
+      },
+
+      page: {
+        type: Number,
+        required: true,
+      },
+      pages: {
+        type: Number,
+        required: true,
+      },
+    }
   }
 </script>

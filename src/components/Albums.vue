@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Pagination :itemsPerPage="itemsPerPage" :page="page" :pages="pages"/>
+    <Pagination :mutation="'setAlbumPage'" :itemsPerPage="albumsPerPage" :page="page" :pages="albumPages"/>
     <section class="albums">
       <Album
           v-for="(album, index) in albums"
@@ -10,7 +10,7 @@
           :key="album.path"
       />
     </section>
-    <Pagination :itemsPerPage="itemsPerPage" :page="page" :pages="pages"/>
+    <Pagination :mutation="'setAlbumPage'" :itemsPerPage="albumsPerPage" :page="page" :pages="albumPages"/>
   </section>
 </template>
 
@@ -28,15 +28,15 @@
 
     computed: {
       indexStart() {
-        return this.itemsPerPage * (this.page - 1);
+        return this.albumsPerPage * (this.page - 1);
       },
       indexEnd() {
-        return this.indexStart + this.itemsPerPage - 1;
+        return this.indexStart + this.albumsPerPage - 1;
       },
 
       ...mapGetters([
-        'itemsPerPage',
-        'pages',
+        'albumsPerPage',
+        'albumPages',
       ]),
       ...mapState([
         'page',
@@ -44,8 +44,10 @@
     },
 
     props: {
-      albums: Array,
-      required: true,
+      albums: {
+        type: Array,
+        required: true,
+      },
     }
   }
 </script>

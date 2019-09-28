@@ -259,25 +259,13 @@ def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
     return render(request, 'tag.html', context)
 
 
-# Edit albums
+# Editor
 
 
 @require_GET
 @staff_only
-def new_album(request: HttpRequest) -> HttpResponse:
-    return render(request, "new_album.html", {})
-
-
-@require_GET
-@staff_only
-def edit_album(request: HttpRequest, path: str) -> HttpResponse:
-    return render(request, "edit_album.html", {'album': get_album(path)})
-
-
-@require_GET
-@staff_only
-def edit_albums(request: HttpRequest) -> HttpResponse:
-    return render(request, "edit_albums.html", {})
+def editor(request: HttpRequest, path=None) -> HttpResponse:
+    return render(request, "editor.html", {})
 
 
 # Photos

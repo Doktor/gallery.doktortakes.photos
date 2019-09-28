@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Pagination :itemsPerPage="itemsPerPage" :page="page" :pages="pages"/>
+    <Pagination :mutation="'setPhotoPage'" :itemsPerPage="photosPerPage" :page="page" :pages="photoPages"/>
     <section class="photos">
       <Photo
           v-for="photo in photos"
@@ -11,7 +11,7 @@
           :photo="photo"
       ></Photo>
     </section>
-    <Pagination :itemsPerPage="itemsPerPage" :page="page" :pages="pages"/>
+    <Pagination :mutation="'setPhotoPage'" :itemsPerPage="photosPerPage" :page="page" :pages="photoPages"/>
   </section>
 </template>
 
@@ -29,15 +29,15 @@
 
     computed: {
       indexStart() {
-        return this.itemsPerPage * (this.page - 1);
+        return this.photosPerPage * (this.page - 1);
       },
       indexEnd() {
-        return this.indexStart + this.itemsPerPage - 1;
+        return this.indexStart + this.photosPerPage - 1;
       },
 
       ...mapGetters([
-        'itemsPerPage',
-        'pages',
+        'photosPerPage',
+        'photoPages',
       ]),
       ...mapState([
         'page',

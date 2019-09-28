@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import {staticFiles} from "../store/editAlbum";
+  import {staticFiles} from "../store/editor";
 
 
   export default {

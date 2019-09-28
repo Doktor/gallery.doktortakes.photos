@@ -19,9 +19,9 @@ export function getCsrfToken() {
 const api = document.getElementById('api');
 
 export const endpoints = {
-  album: api.dataset.apiAlbum,
-  albumList: api.dataset.apiAlbumList,
-  albumPhotos: api.dataset.apiAlbumPhotos,
+  albumList: "/api/albums/",
+  albumDetail: "/api/albums/:path/",
+  albumPhotoList: "/api/albums/:path/photos/",
 };
 
 export const staticFiles = {
@@ -35,7 +35,8 @@ export const staticFiles = {
 export const production = process.env.NODE_ENV === 'production';
 
 const settings = {
-  itemsPerPage: production ? 30 : 10,
+  albumsPerPage: 12,
+  photosPerPage: production ? 30 : 10,
 };
 
 export const accessLevels = [
@@ -78,6 +79,13 @@ export const store = new Vuex.Store({
 
     loading: true,
 
+    // Albums
+    albums: [],
+    results: [],
+    search: '',
+    pagesLoaded: [],
+
+    // Album
     album: {},
     photos: [],
     count: 0,

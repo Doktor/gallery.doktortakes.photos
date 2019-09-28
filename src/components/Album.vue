@@ -7,8 +7,8 @@
         class="album"
         :class="getClasses"
     >
-      <a
-          :href="album.edit_url"
+      <router-link
+          :to="{name: 'editAlbum', params: {path: album.path}}"
       >
         <img
             v-if="album.cover"
@@ -28,13 +28,13 @@
         <div class="album-title">
           <div>{{ album.name }}</div>
         </div>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
 
 <script>
-  import {staticFiles} from "../store/editAlbums";
+  import {staticFiles} from "../store/editor";
 
 
   export default {

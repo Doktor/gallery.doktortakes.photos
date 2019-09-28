@@ -8,9 +8,7 @@ module.exports = {
   context: __dirname,
 
   entry: {
-    editAlbums: path.resolve('src/entry/editAlbums.js'),
-    editAlbum: path.resolve('src/entry/editAlbum.js'),
-    newAlbum: path.resolve('src/entry/newAlbum.js'),
+    editor: path.resolve('src/editor.js'),
   },
 
   output: {
@@ -43,6 +41,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },

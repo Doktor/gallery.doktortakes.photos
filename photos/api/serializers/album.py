@@ -48,8 +48,7 @@ class AlbumCoverSerializer(serializers.ModelSerializer):
 class SimpleAlbumSerializer(serializers.ModelSerializer):
     path = serializers.CharField(read_only=True)
     cover = PhotoThumbnailSerializer(read_only=True)
-    edit_url = serializers.CharField(read_only=True, source='get_edit_url')
 
     class Meta:
         model = Album
-        fields = ('name', 'path', 'access_level', 'cover', 'edit_url')
+        fields = ('name', 'path', 'access_level', 'cover')

@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load render_bundle from webpack_loader %}
 
-{% block title %}Editing {{ album.name }} | {{ block.super }}{% endblock %}
+{% block title %}Editor | {{ block.super }}{% endblock %}
 
 {% block meta %}
 <meta name="robots" content="noindex, nofollow">
@@ -10,21 +10,17 @@
 
 {% block style %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.css">
-<link rel="stylesheet" href="{% static "styles/edit-album.css" %}">
 {% endblock %}
 
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.js" defer></script>
-{% render_bundle 'editAlbum' attrs='defer' %}
+{% render_bundle 'editor' attrs='defer' %}
 {% endblock %}
 
 {% block classes %}small{% endblock %}
 
 {% block content %}
   <div id="api"
-       data-api-album="{% url 'api_album' album.path %}"
-       data-api-album-photos="{% url 'api_album_photos' album.path %}"
-
        data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
        data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
   ></div>

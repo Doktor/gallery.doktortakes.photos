@@ -1,5 +1,7 @@
 <template>
-  <div id="app">
+  <div>
+    <router-link :to="{name: 'index'}">Back to editor</router-link>
+    <h2>Create new album</h2>
     <AlbumForm
         class="form-small"
         :save-button-text="'Create album'"
@@ -23,5 +25,9 @@
         'album',
       ]),
     },
+
+    created() {
+      this.$store.commit('clearAlbum');
+    }
   }
 </script>

@@ -20,16 +20,17 @@ register_converter(MD5HashConverter, 'md5')
 album_patterns = [
     path('', views.view_albums, name='albums'),
 
-    path('new/', views.new_album, name='new_album'),
-    path('edit/', views.edit_albums, name='edit_albums'),
-
     path('search/', views.search_photos, name='search'),
-
-    path('<path:path>/edit/', views.edit_album, name='edit_album'),
 
     path('<path:path>/', views.view_album, name='album'),
     path('<path:path>/<md5:md5>', views.view_photo, name='photo'),
     path('<path:path>/<md5:md5>/download', views.download_photo, name='download'),
+]
+
+editor_patterns = [
+    path('', views.editor, name='editor'),
+    path('albums/new', views.editor, name='editor_new_album'),
+    path('albums/edit/<path:path>', views.editor, name='editor_edit_album'),
 ]
 
 tag_patterns = [
@@ -67,6 +68,7 @@ urlpatterns = [
     path('api/', include(api_patterns)),
     path('changes/', views.view_changes, name='changes'),
     path('copyright/', TemplateView.as_view(template_name='copyright.html'), name='copyright'),
+    path('editor/', include(editor_patterns)),
     path('featured/', views.featured, name='featured'),
     path('tags/', include(tag_patterns)),
     path('users/', include(user_patterns)),

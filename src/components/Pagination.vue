@@ -13,7 +13,7 @@
           :class="{'page-selected': page === n}"
           @click="selectPage(n)"
       >{{ n }}</span>
-      <PageSkipInput v-else/>
+      <PageSkipInput v-else :mutation="mutation" :page="page" :pages="pages"/>
     </template>
 
     <span
@@ -78,25 +78,22 @@
           return;
         }
 
-        this.$store.commit('changePage', page);
+        this.$store.commit('setPage', {page: page, mutation: this.mutation});
       },
       selectNextPage() {
-        if (this.page === this.pages) {
-          return;
-        }
-
-        this.$store.commit('changePage', this.page + 1);
+        this.selectPage(this.page + 1);
       },
       selectPreviousPage() {
-        if (this.page === 1) {
-          return;
-        }
-
-        this.$store.commit('changePage', this.page - 1);
+        this.selectPage(this.page - 1);
       }
     },
 
     props: {
+      mutation: {
+        type: String,
+        required: true,
+      },
+
       itemsPerPage: {
         type: Number,
         required: true,

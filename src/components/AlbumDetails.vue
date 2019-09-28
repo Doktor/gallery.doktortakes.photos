@@ -32,7 +32,7 @@
 <script>
   import {mapState} from 'vuex';
   import AlbumForm from './AlbumForm.vue';
-  import {staticFiles} from "../store/editAlbum";
+  import {staticFiles} from "../store/editor";
 
 
   export default {

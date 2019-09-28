@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <router-link :to="{name: 'index'}">Back to editor</router-link>
+
     <template v-if="!loading">
       <header>
         <h2 id="album-name">{{ album.name }}</h2>
@@ -24,7 +26,7 @@
       <h2>Album details</h2>
       <AlbumDetails/>
 
-      <PhotoUploader/>
+      <PhotoUploader :path="path"/>
       <PhotoManager/>
 
       <DeleteAlbum/>
@@ -53,10 +55,14 @@
         'album',
         'loading',
       ]),
+
+      path() {
+        return this.$route.params.path;
+      }
     },
 
     created() {
-      this.$store.dispatch('getData');
+      this.$store.dispatch('getAlbum', this.path);
     },
 
     mounted() {
@@ -81,5 +87,24 @@
 
   #album-form-save {
     align-self: flex-end;
+  }
+
+  .count {
+    line-height: 1;
+    margin: 1rem 0;
+  }
+
+  .manage-photos {
+    margin: 1rem 0;
+  }
+
+  .photo-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .delete-album {
+    display: flex;
+    max-width: 600px;
   }
 </style>

@@ -1,5 +1,5 @@
-import {updateField} from "vuex-map-fields";
 import Vue from "vue";
+import {updateField} from "vuex-map-fields";
 import {fields} from "./index.js";
 
 
@@ -10,9 +10,45 @@ export const mutations = {
   // vuex-map-fields
   updateField,
 
-  changePage(state, page) {
+  setPage(state, {page, mutation}) {
     state.page = page;
+    this.commit(mutation, page);
+  },
+
+  setAlbumPage(state, page) {
+    state.results.filter((album) => !album.loaded).forEach((album, index) => {
+      if (page === Math.floor(index / state.settings.albumsPerPage) + 1) {
+        album.isLoaded = true;
+      }
+    });
+  },
+
+  setPhotoPage(state, page) {
     state.loaded.push(page);
+  },
+
+  filterAlbums(state) {
+    let term = state.search;
+
+    if (!term) {
+      state.results = state.albums;
+      return;
+    }
+
+    state.results = state.albums.filter(
+      (album) => album.name.match(new RegExp(term, "i")));
+    this.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+  },
+
+  setAlbums(state, albums) {
+    albums.map((album) => album.isLoaded = false);
+
+    state.albums = albums;
+    state.results = state.albums;
+  },
+
+  setLoading(state, loading) {
+    state.loading = loading;
   },
 
   selectPhoto(state, photo) {
@@ -38,6 +74,23 @@ export const mutations = {
     state.selected.clear();
   },
 
+  clearAlbum(state) {
+    state.album = {
+      name: '',
+      place: '',
+      location: '',
+      description: '',
+      start: null,
+      end: null,
+      access_level: 0,
+      access_code: '',
+      users: '',
+      groups: '',
+      tags: '',
+      parent: '',
+    };
+  },
+
   setAlbum(state, album) {
     let newTitle = titleTemplate.format(album.name);
 
@@ -61,7 +114,7 @@ export const mutations = {
   setPhotos(state, photos) {
     for (let [index, photo] of photos.entries()) {
       photo.index = index;
-      photo.page = Math.floor(index / state.settings.itemsPerPage) + 1;
+      photo.page = Math.floor(index / state.settings.photosPerPage) + 1;
     }
 
     state.photos = photos;

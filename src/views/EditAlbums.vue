@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div>
     <template v-if="!loading">
-      <h2><a href="/albums/new/">Add new album</a></h2>
+      <h2><router-link :to="{name: 'newAlbum'}">Add new album</router-link></h2>
 
       <h2>Edit existing album</h2>
 

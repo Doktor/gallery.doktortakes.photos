@@ -1,4 +1,5 @@
 import {endpoints, fields, getCsrfToken} from "./index.js";
+import {router} from '../../router/editor';
 
 
 function parseResponse(response) {
@@ -29,25 +30,44 @@ function parseAlbumData(album) {
 
 
 export const actions = {
-  getData(context) {
+  getAlbums(context) {
+    context.commit('setLoading', true);
+
+    fetch(endpoints.albumList)
+    .then(parseResponse)
+    .then(j => context.commit('setAlbums', j.albums))
+    .then(() => {
+      context.commit('setLoading', false);
+      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+    })
+    .catch(console.log);
+  },
+
+  getAlbum(context, path) {
+    context.commit('setLoading', true);
+
     Promise.all([
       // Album data
-      fetch(endpoints.album)
+      fetch(endpoints.albumDetail.replace(":path", path))
       .then(parseResponse)
       .then(j => context.commit('setAlbum', j))
       .catch(console.log),
 
       // Album photos
-      fetch(endpoints.albumPhotos)
+      fetch(endpoints.albumPhotoList.replace(":path", path))
       .then(parseResponse)
       .then(j => context.commit('setPhotos', j.photos))
       .catch(console.log),
-
-    ]).then(() => context.state.loading = false);
+    ])
+    .then(() => {
+      context.commit('setLoading', false);
+      context.commit('setPage', {page: 1, mutation: 'setPhotoPage'});
+    })
+    .catch(console.log);
   },
 
   deleteAlbum() {
-    fetch(endpoints.album, {
+    fetch(endpoints.replace(":path", context.state.album.path), {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -57,7 +77,7 @@ export const actions = {
     .then(parseResponse)
     .then((j) => {
       flash("Album deleted successfully. Redirecting...");
-      setTimeout(() => window.location = j.redirect_to, 1500);
+      setTimeout(() => router.push({name: 'index'}), 1500);
     })
     .catch(console.log);
   },
@@ -69,7 +89,7 @@ export const actions = {
       photos.push(photo.md5);
     }
 
-    fetch(endpoints.albumPhotos, {
+    fetch(endpoints.albumPhotoList.replace(":path", context.state.album.path), {
       method: 'DELETE',
       body: JSON.stringify({
         'photos': photos,
@@ -102,8 +122,11 @@ export const actions = {
     })
     .then(parseResponse)
     .then(j => {
-      flash("Album created successfully. Redirecting...");
-      setTimeout(() => window.location = j.redirect_to, 1500);
+      let n = flash("Album created successfully. Redirecting...");
+      setTimeout(
+        () => router.push({name: 'editAlbum', params: {path: j.path}}),
+        1500);
+      setTimeout(() => n.remove(), 2500);
     })
     .catch(j => {
       for (let [field, errors] of Object.entries(j)) {
@@ -117,7 +140,7 @@ export const actions = {
   saveAlbum(context) {
     let data = parseAlbumData(context.state.album);
 
-    fetch(endpoints.album, {
+    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
@@ -139,7 +162,7 @@ export const actions = {
     });
   },
 
-  setCover(context) {
+  setAlbumCover(context) {
     if (context.state.selected.length !== 1) {
       return;
     }
@@ -153,7 +176,7 @@ export const actions = {
 
     let notification = flash("Setting cover image.");
 
-    fetch(endpoints.album, {
+    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
       method: 'PATCH',
       body: JSON.stringify({'cover': photo.md5}),
       headers: {
