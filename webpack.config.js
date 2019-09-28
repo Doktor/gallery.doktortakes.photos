@@ -18,6 +18,10 @@ module.exports = {
     filename: '[name].[hash].js',
   },
 
+  stats: {
+    colors: true,
+  },
+
   plugins: [
     new BundleTracker({
       filename: './src/webpack-stats.json',
