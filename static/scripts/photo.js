@@ -207,7 +207,7 @@ function loadPhotos() {
       if (item.md5 === api.dataset.md5) { thisIndex = i; }
 
       photoswipeItems.push({
-        'src': item.image_url,
+        'src': item.image,
         'w': item.width,
         'h': item.height,
       })
