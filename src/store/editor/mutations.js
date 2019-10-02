@@ -3,12 +3,17 @@ import {updateField} from "vuex-map-fields";
 import {fields} from "./index.js";
 
 
-const titleTemplate = "Editing {0} | Doktor Takes Photos";
+const titleTemplate = "{0} | Doktor Takes Photos";
+const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
 
 
 export const mutations = {
   // vuex-map-fields
   updateField,
+
+  setUser(state, user) {
+    state.user = user;
+  },
 
   setPage(state, {page, mutation}) {
     state.page = page;
@@ -92,14 +97,6 @@ export const mutations = {
   },
 
   setAlbum(state, album) {
-    let newTitle = titleTemplate.format(album.name);
-
-    // Update page title and browser history
-    if (document.title !== newTitle) {
-      document.title = newTitle;
-      window.history.replaceState(null, newTitle, album.edit_url);
-    }
-
     state.album = album;
 
     // Store list fields as comma-separated strings
@@ -107,6 +104,7 @@ export const mutations = {
       state.album[field] = album[field].join(', ');
     }
   },
+
   setAlbumField(state, data) {
     Vue.set(state.album, data.key, data.value);
   },
@@ -118,5 +116,19 @@ export const mutations = {
     }
 
     state.photos = photos;
-  }
+  },
+
+  updateDocumentTitle(state) {
+    document.title = titleTemplate.format(state.album.name);
+  },
+
+  updateDocumentTitleForEditor(state) {
+    let newTitle = editorTitleTemplate.format(state.album.name);
+
+    // Update history entry
+    if (document.title !== newTitle) {
+      document.title = newTitle;
+      window.history.replaceState(null, newTitle, state.album.edit_url);
+    }
+  },
 };

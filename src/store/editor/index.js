@@ -22,6 +22,7 @@ export const endpoints = {
   albumList: "/api/albums/",
   albumDetail: "/api/albums/:path/",
   albumPhotoList: "/api/albums/:path/photos/",
+  currentUser: "/api/me/",
 };
 
 export const staticFiles = {
@@ -62,6 +63,9 @@ export const accessLevels = [
   },
 ];
 
+export const accessLevelsMap = Object.assign({},
+  ...accessLevels.map(({level, name}) => {return {[level]: name}}));
+
 export const fields = {
   list: ['users', 'groups', 'tags'],
   readonly: [
@@ -76,6 +80,8 @@ export const fields = {
 export const store = new Vuex.Store({
   state: {
     strict: !production,
+
+    user: {},
 
     loading: true,
 

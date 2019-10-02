@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 
-{% block title %}{{ page_title }}{% endblock %}
+{% block title %}{{ album.name }} | {{ TITLE }}{% endblock %}
 
 {% block meta %}
-<meta property="og:title" content="{{ page_title }}">
+<meta property="og:title" content="{{ album.name }} | {{ TITLE }}">
 <meta property="og:description" content="{{ DESCRIPTION }}">
 <meta property="og:site_name" content="{{ TITLE }}">
 <meta property="og:url" content="{{ BASE_URL }}{{ album.get_absolute_url }}">
@@ -24,7 +25,7 @@
 <meta name="twitter:card" content="photo">
 <meta name="twitter:site" content="{{ TWITTER }}">
 <meta name="twitter:creator" content="{{ TWITTER }}">
-<meta name="twitter:title" content="{{ page_title }}">
+<meta name="twitter:title" content="{{ album.name }} | {{ TITLE }}">
 <meta name="twitter:description" content="{{ DESCRIPTION }}">
 {% if album.cover %}
 <meta name="twitter:image" content="{% if local_storage %}{{ BASE_URL }}{% endif %}{{ album.cover.image.url }}">
@@ -36,154 +37,17 @@
 {% endblock %}
 
 {% block scripts %}
-{% if count %}
-<script src="{% static 'scripts/album.js' %}" defer></script>
-{% endif %}
+  {% render_bundle 'browser' attrs='defer' %}
 {% endblock %}
 
 {% block content %}
-  <!-- Metadata -->
-  <section class="group">
-    <!-- Cover photo -->
-    <figure class="group-cover {% if not album.cover %}group-cover-no-image{% endif %}">
-      {% if album.cover %}
-      <img alt="Cover photo" src="{{ album.cover.image.url }}">
-      {% else %}
-      <img alt="Cover photo placeholder" src="{% static 'images/cover-placeholder.png' %}">
-      {% endif %}
+  <div id="api"
+       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+       data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
+  ></div>
 
-      <div class="group-inset">
-        <div class="group-inset-row">
-          <h2 class="group-inset-text group-title">{{ album.name }}</h2>
+  <div id="app"></div>
 
-          <!-- <button class="group-menu-button">...</button> -->
-        </div>
-
-        <div class="group-inset-text">
-        {% with location=album.get_full_location %}
-          {% if location %}{{ location }} &middot; {% endif %}
-        {% endwith %}
-          {{ album.get_full_date }}
-          {% if count or not count and not a_count %} &middot; {{ count }} photo{{ count|pluralize }}{% endif %}
-        </div>
-
-        {% with parent=album.parent is_staff=request.user.is_staff %}
-        {% if parent or is_staff %}
-        <!-- Navigation -->
-        <div class="group-inset-text">
-          {% if parent %}
-          <a href="{{ parent.get_absolute_url }}">View parent album</a>
-          {% endif %}
-
-          {% if parent and is_staff %} &middot; {% endif %}
-
-          <!-- Staff links -->
-          {% if is_staff %}
-          <a href="{{ album.get_edit_url }}">Edit</a> &middot; <a href="{% url 'admin:photos_album_change' album.pk %}">Admin</a>
-          {% endif %}
-        </div>
-        {% endif %}
-        {% endwith %}
-      </div>
-    </figure>
-
-    <div class="group-info">
-      {% if not album.allow_public %}
-        <!-- Warning -->
-        {% if not request.user.is_staff %}
-        <div class="group-info-item">
-          <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
-          Please ask before sharing these photos.
-        </div>
-        {% endif %}
-
-        <!-- Access level -->
-        {% if request.user.is_staff %}
-        <div class="group-info-item">
-          <i title="Access level" class="fas fa-fw fa-lock"></i>
-          Access level: {{ album.get_access_level_display }}
-        </div>
-
-        <!-- Access code link -->
-        {% if album.access_code %}
-        <div class="group-info-item">
-          <i title="Access code" class="fas fa-fw fa-key"></i>
-          Access code: <a href="{{ album.get_access_code_url }}">{{ album.access_code }}</a>
-        </div>
-        {% endif %}
-
-        <!-- Users and groups -->
-        {% with users=album.get_users groups=album.get_groups %}
-        {% if users or groups %}
-        <div class="group-info-item">
-          <i title="Users and groups" class="fas fa-fw fa-users"></i>
-          {{ users }}{% if users and groups %}, {% endif %}{{ groups }}
-        </div>
-        {% endif %}
-        {% endwith %}
-        {% endif %}
-      {% endif %}
-
-      {% with tags=album.tags.all %}
-      {% if tags %}
-      <div class="group-info-item">
-        <i title="Tags" class="fas fa-fw fa-tags"></i>
-        {% for tag in tags %}
-        <span><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></span>
-        {% endfor %}
-      </div>
-      {% endif %}
-      {% endwith %}
-
-      {% if album.description %}
-      <div class="group-info-item group-description">
-        <i title="Description" class="fas fa-fw fa-book"></i>
-        <span>{{ album.description|safe|linebreaksbr }}</span>
-      </div>
-      {% endif %}
-    </div>
-  </section>
-  <!-- End metadata -->
-
-  <!-- Albums -->
-  {% if a_count %}
-    <section class="albums">
-      {% for c in album.children.all %}
-        {% include "_album_card.html" with album=c %}
-      {% endfor %}
-    </section>
-  {% endif %}
-
-  {% if count %}
-    <!-- API -->
-    <div id="api"
-       data-count="{{ count }}"
-       data-items-per-page="{{ items_per_page }}"
-       data-page="1"></div>
-
-    <!-- Photos -->
-    <div class="pagination pagination-above"></div>
-    <section class="photos">
-      {% for p in photos %}
-        <div class="photo-wrapper">
-          <div class="photo">
-            <a href="{% url 'photo' album.path p.md5 %}{% if password %}{{ album.get_password_query }}{% endif %}">
-              <img class="not-loaded"
-                   data-src="{{ p.square_thumbnail.url }}"
-                   src="{% static 'images/loading.svg' %}">
-            </a>
-          </div>
-        </div>
-      {% endfor %}
-    </section>
-    <div class="pagination pagination-below"></div>
-  {% else %}
-    {% if not album.children.count %}
-    <p>This album does not contain any images.</p>
-    {% endif %}
-  {% endif %}
-
-  <!-- Footer -->
   <footer>
     {% include "_reuse.html" %}
     {% include "_copyright.html" %}

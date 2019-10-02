@@ -62,7 +62,10 @@
     },
 
     created() {
-      this.$store.dispatch('getAlbum', this.path);
+      this.$store.dispatch('getAlbum', {
+        path: this.path,
+        setDocumentTitle: 'updateDocumentTitleForEditor',
+      });
     },
 
     mounted() {

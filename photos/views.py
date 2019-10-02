@@ -186,23 +186,10 @@ def get_all_albums(user, select_cover=True):
 
 @require_GET
 def view_album(request: HttpRequest, path: str) -> HttpResponse:
-    albums = get_albums(path)
-    album = albums[-1]
-
-    if not album.check_access(request):
-        raise Http404
-
-    photos = Photo.objects.filter(album=album, sidecar_exists=True)
+    album = get_album(path)
 
     context = {
-        'path': albums,
         'album': album,
-        'access_code': 'code' in request.GET,
-        'photos': photos,
-        'count': photos.count(),
-        'a_count': album.children.count(),
-        'page_title': f"{album.name} | {metadata['TITLE']}",
-        'items_per_page': ITEMS_PER_PAGE,
         'local_storage': settings.LOCAL_STORAGE,
     }
 

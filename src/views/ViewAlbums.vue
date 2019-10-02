@@ -58,7 +58,8 @@
       </div>
 
       <template v-if="results.length">
-        <Albums v-if="view === undefined || view === 'default'" :albums="results"/>
+        <Albums v-if="view === undefined || view === 'default'"
+                :albums="results"/>
 
         <section v-else-if="view === 'detailed'" class="album-list-dc">
           <AlbumListDetailedCards :albums="results"/>
@@ -105,6 +106,7 @@
 
     created() {
       this.$store.dispatch('getAlbums');
+      document.body.classList.add('small');
     },
 
     filters: {

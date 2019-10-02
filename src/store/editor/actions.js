@@ -30,6 +30,13 @@ function parseAlbumData(album) {
 
 
 export const actions = {
+  getUser(context) {
+    fetch(endpoints.currentUser)
+    .then(parseResponse)
+    .then(j => context.commit('setUser', j))
+    .catch(console.log);
+  },
+
   getAlbums(context) {
     context.commit('setLoading', true);
 
@@ -43,7 +50,7 @@ export const actions = {
     .catch(console.log);
   },
 
-  getAlbum(context, path) {
+  getAlbum(context, {path, setDocumentTitle}) {
     context.commit('setLoading', true);
 
     Promise.all([
@@ -62,6 +69,7 @@ export const actions = {
     .then(() => {
       context.commit('setLoading', false);
       context.commit('setPage', {page: 1, mutation: 'setPhotoPage'});
+      context.commit(setDocumentTitle);
     })
     .catch(console.log);
   },
@@ -151,6 +159,7 @@ export const actions = {
     .then(parseResponse)
     .then(j => {
       context.commit('setAlbum', j);
+      context.commit('updateDocumentTitleForEditor');
       flash("Album saved successfully.");
     })
     .catch(j => {
