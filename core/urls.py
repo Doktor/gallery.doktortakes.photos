@@ -45,6 +45,8 @@ api_patterns = [
     path('albums/<path:path>/photos/', api.AlbumPhotoList.as_view(), name='api_album_photos'),
     path('albums/<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
     path('albums/', api.AlbumList.as_view(), name='api_albums'),
+
+    path('me/', api.get_current_user, name='api_current_user'),
 ]
 
 user_patterns = [
