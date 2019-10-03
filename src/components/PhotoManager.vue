@@ -42,7 +42,7 @@
     <p v-if="!photos.length">
       This album does not contain any photos.
     </p>
-    <Photos v-else :photos="photos"/>
+    <Photos v-else :photos="photos" :allowSelect="true"/>
   </section>
 </template>
 

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 {% load tz %}
 
 {% block title %}{{ page_title }}{% endblock %}
@@ -27,20 +28,9 @@
 <meta name="twitter:description" content="{{ DESCRIPTION }}">
 <meta name="twitter:image" content="{% if local_storage %}{{ BASE_URL }}{% endif %}{{ photo.image.url }}">
 
-{% if not album.allow_public %}
+{% if not allow_public %}
 <meta name="robots" content="noindex,nofollow">
 {% endif %}
-{% endblock %}
-
-{% block style %}
-<style>
-  body {
-    margin: 0;
-    width: 100%;
-    max-width: none;
-  }
-</style>
-<link rel="stylesheet" href="{% static 'styles/photo.css' %}">
 {% endblock %}
 
 {% block scripts %}
@@ -50,186 +40,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.js" defer></script>
 
-<script src="{% static 'scripts/photo.js' %}" defer></script>
+{% render_bundle 'browser' attrs='defer' %}
 {% endblock %}
 
-{% block nav %}{% endblock %}
-
 {% block content %}
-  <!-- API -->
   <div id="api"
-       {% if access_code %}
-       data-access_code="{{ album.access_code }}"
-       {% endif %}
-       data-api-get-album-photos="{% url 'api_album_photos' album.path %}"
-       data-md5="{{ photo.md5 }}">
-  </div>
+       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+       data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
+  ></div>
 
-  <!-- Photo -->
-  <section id="photo"
-           data-album-url="{% if access_code %}{{ album.get_access_code_url }}{% else %}{{ album.get_absolute_url }}{% endif %}"
-           data-path="{{ photo.path }}"
-           data-md5="{{ photo.md5 }}"
-           data-index=""
-           data-width=""
-           data-height="">
-    <a class="photo-link" href="">
-      <!-- Fallback image for browsers with scripts disabled -->
-      <img class="photo-static" src="{{ photo.image.url }}"
-           alt="Original photo" title="Click to zoom">
-
-      <!-- Primary image elements -->
-      <img class="photo-landscape" src=""
-           alt="Container for landscape photos" title="Click to zoom">
-      <img class="photo-portrait" src=""
-           alt="Container for portrait photos" title="Click to zoom">
-    </a>
-  </section>
-
-  <!-- Filmstrip -->
-  <section id="filmstrip">
-    <div id="filmstrip-container"></div>
-  </section>
-
-  <section class="info">
-    <div class="info-metadata">
-      <h2>Metadata</h2>
-
-      <dl>
-        <div>
-          <dt><i title="Sequence number" class="fas fa-fw fa-list-ol"></i></dt>
-          <dd><span id="md-index">?</span> / <span id="md-count">{{ count }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="Date taken" class="fas fa-fw fa-clock"></i></dt>
-          <dd id="md-taken">{{ photo.taken|date:"l, Y-m-d, g:i:s A" }}</dd>
-        </div>
-
-        <div>
-          <dt><i title="Dimensions" class="fas fa-fw fa-image"></i></dt>
-          <dd><span id="md-width">{{ photo.width }}</span> &times; <span id="md-height">{{ photo.height }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="MD5 checksum" class="fas fa-fw fa-check-circle"></i></dt>
-          <dd id="md-md5">{{ photo.md5|slice:"0:8" }}</dd>
-        </div>
-
-        <div>
-          <dt><i title="Open in new tab" class="fas fa-fw fa-external-link-square-alt"></i></dt>
-          <dd id="md-new-tab"><a href="{{ photo.image.url }}">Open in new tab</a></dd>
-        </div>
-
-        <div>
-          <dt><i title="Download" class="fas fa-fw fa-download"></i></dt>
-          <dd id="md-download"><a href="{% url 'download' photo.path photo.md5 %}">Download</a></dd>
-        </div>
-
-        {% if request.user.is_staff %}
-        <div>
-          <dt title="Admin"><i class="fas fa-fw fa-toolbox"></i></dt>
-          <dd id="md-admin"><a href="{% url 'admin:photos_photo_change' photo.pk %}">Admin</a></dd>
-        </div>
-        {% endif %}
-      </dl>
-    </div>
-
-    <div class="info-exif">
-      <h2>EXIF</h2>
-
-      <dl>
-        <div>
-          <dt><i title="Camera model" class="fas fa-fw fa-camera"></i></dt>
-          <dd><span id="exif-camera">{{ exif.camera }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="Camera lens" class="fas fa-fw fa-camera-retro"></i></dt>
-          <dd><span id="exif-lens">{{ exif.lens }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="Focal length" class="fas fa-fw fa-ruler-horizontal"></i></dt>
-          <dd><span id="exif-focal-length">{{ exif.focal_length }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="Shutter speed" class="fas fa-fw fa-stopwatch"></i></dt>
-          <dd><span id="exif-shutter-speed">{{ exif.shutter_speed }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="Aperture setting" class="fas fa-fw fa-mountain"></i></dt>
-          <dd><span id="exif-aperture">{{ exif.aperture }}</span></dd>
-        </div>
-
-        <div>
-          <dt><i title="ISO sensitivity" class="fas fa-fw fa-film"></i></dt>
-          <dd><span id="exif-iso-speed">{{ exif.iso_speed }}</span></dd>
-        </div>
-      </dl>
-    </div>
-
-    <div class="info-keyboard">
-      <h2>Shortcuts</h2>
-
-      <dl>
-        <div>
-          <dt><kbd>D</kbd></dt>
-          <dd>Download this photo</dd>
-        </div>
-
-        <div>
-          <dt><kbd><i class="fas fa-fw fa-arrow-left"></i></kbd> <kbd><i class="fas fa-fw fa-arrow-right"></i></kbd></dt>
-          <dd>View previous/next photo</dd>
-        </div>
-
-        <div>
-          <dt><kbd><i class="fas fa-fw fa-arrow-up"></i></kbd> <kbd><i class="fas fa-fw fa-arrow-down"></i></kbd></dt>
-          <dd>View first/last photo</dd>
-        </div>
-
-        <div>
-          <dt><kbd>A</kbd></dt>
-          <dd>View album</dd>
-        </div>
-
-        <div>
-          <dt><kbd>L</kbd></dt>
-          <dd>View album list</dd>
-        </div>
-
-        <div>
-          <dt><kbd>H</kbd></dt>
-          <dd>View index</dd>
-        </div>
-      </dl>
-    </div>
-
-    <div class="info-links">
-      <h2>Navigation</h2>
-
-      <dl>
-        <div>
-          <dt title="Album"><i class="fas fa-fw fa-book"></i></dt>
-          <dd><a href="{% if access_code %}{{ album.get_access_code_url }}{% else %}{{ album.get_absolute_url }}{% endif %}">Return to album</a></dd>
-        </div>
-
-        <div>
-          <dt title="Album list"><i class="fas fa-fw fa-list"></i></dt>
-          <dd><a href="{% url 'albums' %}">Return to album list</a></dd>
-        </div>
-
-        <div>
-          <dt title="Index"><i class="fas fa-fw fa-home"></i></dt>
-          <dd><a href="{% url 'index' %}">Return home</a></dd>
-        </div>
-      </dl>
-    </div>
-  </section>
-
-  {% include "_photoswipe.html" %}
+  <div id="app"></div>
 
   <footer>
     {% include "_reuse.html" %}

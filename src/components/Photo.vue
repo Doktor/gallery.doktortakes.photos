@@ -5,17 +5,22 @@
       @click="onPhotoClicked"
   >
     <div class="photo">
-      <img
-          v-if="photo.square_thumbnail"
-          :src="getThumbnail"
-          alt="Photo thumbnail"
+      <div
+          :is="allowSelect ? 'div' : 'router-link'"
+          :to="allowSelect ? null : photoLink"
       >
-      <div v-else>
         <img
-            :src="placeholder"
-            alt="Photo thumbnail placeholder"
+            v-if="photo.square_thumbnail"
+            :src="getThumbnail"
+            alt="Photo thumbnail"
         >
-        <div class="photo-no-thumbnail-note">No thumbnail</div>
+        <div v-else>
+          <img
+              :src="placeholder"
+              alt="Photo thumbnail placeholder"
+          >
+          <div class="photo-no-thumbnail-note">No thumbnail</div>
+        </div>
       </div>
     </div>
   </div>
@@ -39,6 +44,16 @@
           ? this.photo.square_thumbnail
           : this.placeholder
       },
+
+      photoLink() {
+        return {
+          name: 'photo',
+          params: {
+            path: this.photo.path,
+            md5: this.photo.md5,
+          },
+        }
+      },
     },
 
     data() {
@@ -49,6 +64,10 @@
 
     methods: {
       onPhotoClicked() {
+        if (!this.allowSelect) {
+          return;
+        }
+
         let action = this.isSelected ? 'deselectPhoto' : 'selectPhoto';
         this.$store.commit(action, this.photo);
       },
@@ -57,6 +76,11 @@
     props: {
       photo: {
         type: Object,
+        required: true,
+      },
+
+      allowSelect: {
+        type: Boolean,
         required: true,
       },
 

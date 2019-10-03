@@ -111,8 +111,7 @@
 
     <Albums v-if="album.children" :albums="album.children"/>
 
-    <!-- TODO: Photo links -->
-    <Photos :photos="photos"/>
+    <Photos :photos="photos" :allowSelect="false"/>
   </div>
 </template>
 

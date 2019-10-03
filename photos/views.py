@@ -243,18 +243,11 @@ def editor(request: HttpRequest, path=None) -> HttpResponse:
 @require_GET
 def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
     photo = get_photo(md5, request, path=path, select_album=True)
-    album = photo.album
-
-    title = f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}"
 
     context = {
-        'album': album,
-        'access_code': 'code' in request.GET,
+        'allow_public': photo.album.allow_public,
         'photo': photo,
-        'count': album.photos.filter(sidecar_exists=True).count(),
-        'exif': photo.get_exif(),
-        'short_md5': photo.short_md5,
-        'page_title': title,
+        'page_title': f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}",
         'local_storage': settings.LOCAL_STORAGE,
     }
 

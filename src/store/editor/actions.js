@@ -50,7 +50,7 @@ export const actions = {
     .catch(console.log);
   },
 
-  getAlbum(context, {path, setDocumentTitle}) {
+  getAlbum(context, {path, setDocumentTitle, md5 = null}) {
     context.commit('setLoading', true);
 
     Promise.all([
@@ -67,9 +67,13 @@ export const actions = {
       .catch(console.log),
     ])
     .then(() => {
+      if (md5 !== null) {
+        context.commit('setPhotoInitial', md5);
+      } else {
+        context.commit(setDocumentTitle);
+      }
       context.commit('setLoading', false);
       context.commit('setPage', {page: 1, mutation: 'setPhotoPage'});
-      context.commit(setDocumentTitle);
     })
     .catch(console.log);
   },

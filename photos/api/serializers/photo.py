@@ -47,7 +47,7 @@ class PhotoSerializer(serializers.ModelSerializer):
             'url', 'download', 'admin',
             'taken',
             'width', 'height', 'md5', 'index',
-            'exif'
+            'path', 'exif',
         )
 
 

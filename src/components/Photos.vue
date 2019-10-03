@@ -4,12 +4,13 @@
     <section class="photos">
       <Photo
           v-for="photo in photos"
+          :allowSelect="allowSelect"
           :isLoaded="loaded.includes(photo.page)"
           :isSelected="selected.includes(photo)"
           :isVisible="indexStart <= photo.index && photo.index <= indexEnd"
           :key="photo.md5"
           :photo="photo"
-      ></Photo>
+      />
     </section>
     <Pagination :mutation="'setPhotoPage'" :itemsPerPage="photosPerPage" :page="page" :pages="photoPages"/>
   </section>
@@ -47,6 +48,10 @@
     },
 
     props: {
+      allowSelect: {
+        type: Boolean,
+        default: false,
+      },
       photos: {
         type: Array,
         required: true,

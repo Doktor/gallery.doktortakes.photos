@@ -6,6 +6,8 @@ import {fields} from "./index.js";
 const titleTemplate = "{0} | Doktor Takes Photos";
 const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
 
+const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
+
 
 export const mutations = {
   // vuex-map-fields
@@ -113,9 +115,55 @@ export const mutations = {
     for (let [index, photo] of photos.entries()) {
       photo.index = index;
       photo.page = Math.floor(index / state.settings.photosPerPage) + 1;
+      photo.loaded = false;
     }
 
     state.photos = photos;
+  },
+
+  setPhotoInitial(state, md5) {
+    let photo = state.photos.filter((photo) => photo.md5 === md5)[0];
+    this.commit('setPhoto', photo.index);
+  },
+
+  setPhoto(state, index) {
+    if (index === state.photo.index) {
+      return;
+    }
+
+    // Wrap around
+    if (index < 0) {
+      index = state.photos.length - 1;
+    } else if (index > state.photos.length - 1) {
+      index = 0;
+    }
+
+    let photo = state.photos[index];
+    photo.loaded = true;
+
+    state.photo = photo;
+
+    let length = state.photos.length;
+
+    let prev = (photo.index - 1 + length) % length;
+    this.commit('preloadPhoto', prev);
+    let next = (photo.index + 1) % length;
+    this.commit('preloadPhoto', next);
+
+    let title = photoTitleTemplate.format(photo.md5.substring(0, 8), state.album.name);
+    document.title = title;
+    window.history.pushState(null, title, photo.url);
+  },
+
+  preloadPhoto(state, index) {
+    let photo = state.photos[index];
+
+    if (!photo.loaded) {
+      let image = new Image();
+      image.src = photo.image;
+
+      photo.loaded = true;
+    }
   },
 
   updateDocumentTitle(state) {
