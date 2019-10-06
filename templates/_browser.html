@@ -1,0 +1,22 @@
+{% load staticfiles %}
+{% load render_bundle from webpack_loader %}
+
+<div id="api"
+     data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+     data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
+></div>
+
+<div id="app"></div>
+
+<footer>
+  {% include "_reuse.html" %}
+  {% include "_copyright.html" %}
+</footer>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.js" defer></script>
+
+{% render_bundle 'browser' attrs='defer' %}

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% load render_bundle from webpack_loader %}
 
 {% block title %}{{ album.name }} | {{ TITLE }}{% endblock %}
 
@@ -36,20 +35,6 @@
 {% endif %}
 {% endblock %}
 
-{% block scripts %}
-  {% render_bundle 'browser' attrs='defer' %}
-{% endblock %}
-
 {% block content %}
-  <div id="api"
-       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
-       data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
-  ></div>
-
-  <div id="app"></div>
-
-  <footer>
-    {% include "_reuse.html" %}
-    {% include "_copyright.html" %}
-  </footer>
+  {% include "_browser.html" %}
 {% endblock %}
