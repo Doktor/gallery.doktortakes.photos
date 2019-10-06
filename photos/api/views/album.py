@@ -1,6 +1,7 @@
 from django.core.cache import cache
-from django.urls import reverse
+from django.http import Http404
 
+from rest_framework import exceptions, permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework.views import APIView
 
 from photos.api.serializers import (
     AlbumSerializer, AlbumForListViewSerializer, AlbumCoverSerializer, PhotoSerializer)
-from photos.models import Photo
+from photos.models import Album, Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album
 from photos.views import get_albums_for_user
@@ -27,6 +28,9 @@ class AlbumList(APIView):
 
     @staticmethod
     def post(request: Request) -> Response:
+        if not request.user.is_staff:
+            raise exceptions.PermissionDenied
+
         serializer = AlbumSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -39,22 +43,31 @@ class AlbumList(APIView):
 
 
 class AlbumDetail(APIView):
-    def dispatch(self, request: Request, *args, **kwargs) -> Response:
-        if not request.user.is_staff:
-            raise ValidationError("Album does not exist.", code=Status.NOT_FOUND)
-
-        return super().dispatch(request, *args, **kwargs)
-
     @staticmethod
-    def get(request: Request, path: str) -> Response:
-        album = get_album(path)
+    def get_album(request: Request, path: str) -> Album:
+        try:
+            album = get_album(path)
+        except Http404:
+            raise exceptions.NotFound
+
+        if not album.check_access(request):
+            raise exceptions.NotFound
+
+        if request.method not in permissions.SAFE_METHODS and not request.user.is_staff:
+            raise exceptions.PermissionDenied
+
+        return album
+
+    # Methods
+
+    def get(self, request: Request, path: str) -> Response:
+        album = self.get_album(request, path)
         serializer = AlbumSerializer(album)
 
         return Response(serializer.data)
 
-    @staticmethod
-    def patch(request: Request, path: str) -> Response:
-        album = get_album(path)
+    def patch(self, request: Request, path: str) -> Response:
+        album = self.get_album(request, path)
         serializer = AlbumCoverSerializer(album, data=request.data)
 
         if serializer.is_valid():
@@ -65,9 +78,8 @@ class AlbumDetail(APIView):
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-    @staticmethod
-    def put(request: Request, path: str) -> Response:
-        album = get_album(path)
+    def put(self, request: Request, path: str) -> Response:
+        album = self.get_album(request, path)
         serializer = AlbumSerializer(album, data=request.data)
 
         if serializer.is_valid():
@@ -76,9 +88,8 @@ class AlbumDetail(APIView):
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-    @staticmethod
-    def delete(request: Request, path: str) -> Response:
-        album = get_album(path)
+    def delete(self, request: Request, path: str) -> Response:
+        album = self.get_album(request, path)
         album.delete()
 
         return Response(None, status=Status.NO_CONTENT)
