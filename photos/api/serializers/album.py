@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from photos.api.fields import (
     TagField, UserField, GroupField, NullableAlbumField, PhotoHashField)
-from photos.api.serializers import PhotoSerializer, PhotoThumbnailSerializer
+from photos.api.serializers import PhotoThumbnailSerializer
 from photos.models import Album
 
 
@@ -12,7 +12,7 @@ class AlbumSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(read_only=True)
     path = serializers.CharField(read_only=True)
 
-    cover = PhotoSerializer(read_only=True)
+    cover = PhotoThumbnailSerializer(read_only=True)
 
     tags = TagField(many=True, allow_empty=True, queryset=Q())
     users = UserField(many=True, allow_empty=True, queryset=Q())
@@ -45,10 +45,16 @@ class AlbumCoverSerializer(serializers.ModelSerializer):
         fields = ('cover',)
 
 
-class SimpleAlbumSerializer(serializers.ModelSerializer):
-    path = serializers.CharField(read_only=True)
+class AlbumForListViewSerializer(serializers.ModelSerializer):
     cover = PhotoThumbnailSerializer(read_only=True)
 
     class Meta:
         model = Album
-        fields = ('name', 'path', 'access_level', 'cover')
+        fields = (
+            'name', 'path',
+            'place', 'location', 'description',
+            'start', 'end',
+            'cover',
+            'access_level',
+        )
+        read_only_fields = fields
