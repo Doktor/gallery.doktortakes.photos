@@ -8,6 +8,7 @@
           :isLoaded="album.isLoaded"
           :isVisible="indexStart <= index && index <= indexEnd"
           :key="album.path"
+          :route="route"
       />
     </section>
     <Pagination :mutation="'setAlbumPage'" :itemsPerPage="albumsPerPage" :page="page" :pages="albumPages"/>
@@ -48,6 +49,10 @@
         type: Array,
         required: true,
       },
+      route: {
+        type: String,
+        default: "album",
+      }
     }
   }
 </script>

@@ -18,7 +18,7 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <Albums v-if="results.length" :albums="results"/>
+      <Albums v-if="results.length" :albums="results" :route="'editAlbum'"/>
       <div v-else>No albums found.</div>
     </template>
   </div>

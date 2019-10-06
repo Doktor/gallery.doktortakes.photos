@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 {% block title %}Photos | {{ block.super }}{% endblock %}
 {% block meta %}
@@ -10,35 +12,19 @@
   <meta property="og:url" content="{{ BASE_URL }}{% url 'albums' %}">
 {% endblock %}
 
+{% block scripts %}
+  {% render_bundle 'browser' attrs='defer' %}
+{% endblock %}
+
 {% block classes %}small{% endblock %}
 
 {% block content %}
-  <section>
-    <h2>Views</h2>
-    <p>View the list of albums in different formats.</p>
-    <ul>
-      <li><a href="?view=cards">Cards</a> &mdash; default</li>
-      <li><a href="?view=details">Detailed cards</a> &mdash; locations, dates, other metadata</li>
-      <li><a href="?view=simple">Simple</a> &mdash; text only</li>
-    </ul>
+  <div id="api"
+       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+       data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
+  ></div>
 
-    <h2>Special pages</h2>
-    <ul>
-      {% if request.user.is_authenticated %}
-      <li><a href="{% url 'user' request.user.username %}">View your albums</a></li>
-      {% endif %}
-      <li><a href="{% url 'tags' %}">View all tags</a></li>
-      <li><a href="{% url 'search' %}">Search all photos</a></li>
-    </ul>
-
-    <h2>Photos</h2>
-    {% if albums %}
-    {% block album_list %}
-    {% endblock %}
-    {% else %}
-    <p>No photos available.</p>
-    {% endif %}
-  </section>
+  <div id="app"></div>
 
   <footer>
     {% include "_reuse.html" %}

@@ -139,25 +139,7 @@ def featured(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_albums(request: HttpRequest) -> HttpResponse:
-    view = request.GET.get('view', '')
-    user = request.user
-
-    if view == 'simple':
-        template = 'albums_simple.html'
-        albums = get_all_albums(user, select_cover=False)
-    elif view == 'details':
-        template = 'albums_detailed_cards.html'
-        albums = get_all_albums(user)
-    else:
-        template = 'albums_cards.html'
-        albums = get_top_level_albums(user)
-
-    context = {
-        'albums': albums,
-        'items_per_page': ITEMS_PER_PAGE,
-    }
-
-    return render(request, template, context)
+    return render(request, "albums.html", {})
 
 
 def get_top_level_albums(user):

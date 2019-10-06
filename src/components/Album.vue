@@ -8,7 +8,7 @@
         :class="getClasses"
     >
       <router-link
-          :to="{name: 'editAlbum', params: {path: album.path}}"
+          :to="{name: route, params: {path: album.path}}"
       >
         <img
             v-if="album.cover"
@@ -62,6 +62,10 @@
       album: {
         type: Object,
         required: true,
+      },
+      route: {
+        type: String,
+        default: "album",
       },
 
       isLoaded: {
