@@ -11,8 +11,7 @@ from photos.api.serializers import (
     AlbumSerializer, AlbumForListViewSerializer, AlbumCoverSerializer, PhotoSerializer)
 from photos.models import Album, Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
-from photos.utils import get_album
-from photos.views import get_albums_for_user
+from photos.utils import get_album, get_albums_for_user
 
 from http import HTTPStatus as Status
 from io import BytesIO

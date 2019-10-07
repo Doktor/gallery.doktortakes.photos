@@ -1,7 +1,10 @@
+from django.db.models import QuerySet, Q
+
 from django.http import HttpRequest, Http404
 from django.shortcuts import get_object_or_404
 
 from photos.models import Album, Photo
+from photos.models.album import Allow
 from photos.utils.image import fit_image
 
 from typing import List, Optional
@@ -44,3 +47,32 @@ def get_photo(md5: str, request: HttpRequest,
         raise Http404
 
     return photo
+
+
+def get_albums_for_user(user, exclude_public=False, include_children=False) -> QuerySet:
+    """Returns a QuerySet of the albums that a user has access to."""
+    q = Q() if include_children else Q(parent__isnull=True)
+
+    if user.is_superuser:
+        q &= Q(access_level__lte=Allow.SUPERUSER)
+    elif user.is_staff:
+        q &= Q(access_level__lte=Allow.STAFF)
+    elif user.is_authenticated:
+        # Direct ownership
+        owner_q = Q(users=user)
+
+        # Group (indirect) ownership
+        for group in user.groups.all():
+            owner_q |= Q(groups=group)
+
+        owner_q &= Q(access_level__lte=Allow.OWNERS)
+
+        # Everything else
+        q = owner_q | Q(access_level__lte=Allow.SIGNED_IN)
+    elif user.is_anonymous:
+        q &= Q(access_level=Allow.PUBLIC)
+
+    if exclude_public:
+        q &= Q(access_level__gt=Allow.PUBLIC)
+
+    return Album.objects.filter(q).distinct().order_by('-start')

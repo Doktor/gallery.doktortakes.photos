@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.db.models import Count, Q, QuerySet
+from django.db.models import Count, Q
 from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -14,10 +14,10 @@ from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
 from photos.models import Album, Photo, Tag
-from photos.models.album import Allow, ACCESS_LEVELS
+from photos.models.album import Allow
 from photos.settings import (
     GIT_STATUS, INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
-from photos.utils import get_album, get_albums, get_photo
+from photos.utils import get_album, get_albums_for_user, get_photo
 
 import datetime
 import mimetypes
@@ -32,35 +32,6 @@ FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
 
 
 # Helper functions
-
-
-def get_albums_for_user(user, exclude_public=False, include_children=False) -> QuerySet:
-    """Returns a QuerySet of the albums that a user has access to."""
-    q = Q() if include_children else Q(parent__isnull=True)
-
-    if user.is_superuser:
-        q &= Q(access_level__lte=Allow.SUPERUSER)
-    elif user.is_staff:
-        q &= Q(access_level__lte=Allow.STAFF)
-    elif user.is_authenticated:
-        # Direct ownership
-        owner_q = Q(users=user)
-
-        # Group (indirect) ownership
-        for group in user.groups.all():
-            owner_q |= Q(groups=group)
-
-        owner_q &= Q(access_level__lte=Allow.OWNERS)
-
-        # Everything else
-        q = owner_q | Q(access_level__lte=Allow.SIGNED_IN)
-    elif user.is_anonymous:
-        q &= Q(access_level=Allow.PUBLIC)
-
-    if exclude_public:
-        q &= Q(access_level__gt=Allow.PUBLIC)
-
-    return Album.objects.filter(q).distinct().order_by('-start')
 
 
 def staff_only(f: Callable) -> Callable:
