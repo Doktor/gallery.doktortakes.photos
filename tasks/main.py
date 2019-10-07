@@ -43,7 +43,15 @@ def django_setup():
 # Tasks
 
 
-@task
+def collect_static_files(ctx):
+    ctx.run(f"{manage} collectstatic --no-input")
+
+
+def compile_css(ctx):
+    with ctx.cd(os.path.join('static', 'styles')):
+        ctx.run("sass --quiet --update --no-source-map --style=compressed .:.")
+
+
 def generate_git_status(ctx):
     def get_last_commit_datetime():
         raw = check_output("git log -1 --format=%at").strip()
@@ -73,16 +81,19 @@ def generate_git_status(ctx):
         f.write(json.dumps(data))
 
 
-@task(post=[generate_git_status])
+@task
 def build(ctx):
-    print("Rebuilding stylesheets")
-    with ctx.cd(os.path.join('static', 'styles')):
-        ctx.run("sass --quiet --update --no-source-map --style=compressed .:.")
+    print("Compiling stylesheets")
+    compile_css(ctx)
 
     print("Collecting static files")
-    ctx.run(f"{manage} collectstatic --no-input")
+    collect_static_files(ctx)
+
+    print("Generating Git status file")
+    generate_git_status(ctx)
 
     print("Done!")
+
 
 
 @task(post=[build])
