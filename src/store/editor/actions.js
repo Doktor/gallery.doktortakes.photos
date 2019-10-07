@@ -78,6 +78,18 @@ export const actions = {
     .catch(console.log);
   },
 
+  getTags(context) {
+    context.commit('setLoading', true);
+
+    fetch(endpoints.tagList)
+    .then(parseResponse)
+    .then(j => {
+      context.commit('setLoading', false);
+      context.commit('setTags', j.tags);
+    })
+    .catch(console.log);
+  },
+
   deleteAlbum() {
     fetch(endpoints.replace(":path", context.state.album.path), {
       method: 'DELETE',

@@ -54,6 +54,10 @@ export const mutations = {
     state.results = state.albums;
   },
 
+  setTags(state, tags) {
+    state.tags = tags;
+  },
+
   setLoading(state, loading) {
     state.loading = loading;
   },

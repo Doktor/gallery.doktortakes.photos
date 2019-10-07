@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import ViewAlbum from "../views/ViewAlbum.vue";
 import ViewAlbums from "../views/ViewAlbums.vue";
 import ViewPhoto from "../views/ViewPhoto.vue";
+import ViewTags from "../views/ViewTags.vue";
 
 
 const routes = [
@@ -26,6 +27,22 @@ const routes = [
     path: '/albums/:path+/:md5',
     name: 'photo',
     component: ViewPhoto,
+    pathToRegexpOptions: {
+      strict: true,
+    },
+  },
+
+  {
+    path: '/tags/',
+    name: 'tags',
+    component: ViewTags,
+    pathToRegexpOptions: {
+      strict: true,
+    },
+  },
+  {
+    path: '/tags/:slug/',
+    name: 'tag',
     pathToRegexpOptions: {
       strict: true,
     },

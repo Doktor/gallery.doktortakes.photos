@@ -22,6 +22,7 @@ export const endpoints = {
   albumList: "/api/albums/",
   albumDetail: "/api/albums/:path/",
   albumPhotoList: "/api/albums/:path/photos/",
+  tagList: "/api/tags/",
   currentUser: "/api/me/",
 };
 
@@ -90,6 +91,9 @@ export const store = new Vuex.Store({
     results: [],
     search: '',
     pagesLoaded: [],
+
+    // Tags
+    tags: [],
 
     // Album
     album: {},

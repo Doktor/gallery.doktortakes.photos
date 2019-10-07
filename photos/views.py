@@ -170,12 +170,9 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
 # Tags
 
 
-@staff_only
 @require_GET
 def view_tags(request: HttpRequest) -> HttpResponse:
-    tags = Tag.objects.all()
-    context = {'tags': tags}
-    return render(request, 'tags.html', context)
+    return render(request, 'tags.html', {})
 
 
 @require_GET

@@ -9,26 +9,6 @@
   <meta property="og:url" content="{{ BASE_URL }}{% url 'tags' %}">
 {% endblock %}
 
-{% block classes %}small{% endblock %}
-
 {% block content %}
-  <section>
-    <h2>Tags</h2>
-    {% if tags %}
-      <ul>
-      {% for tag in tags %}
-        <li><a href="{{ tag.get_absolute_url }}">#{{ tag.slug }}</a></li>
-      {% endfor %}
-      </ul>
-    {% else %}
-      <p>No tags found.</p>
-    {% endif %}
-  </section>
-
-  <hr>
-
-  <footer>
-    {% include "_reuse.html" %}
-    {% include "_copyright.html" %}
-  </footer>
+  {% include "_browser.html" %}
 {% endblock %}
