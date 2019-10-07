@@ -36,7 +36,7 @@ def run_redis(log_file="redis.log"):
 
 def run_webpack(log_file="webpack.log"):
     print("Starting Webpack build listener")
-    run_command("./node_modules/.bin/webpack", log_file)
+    run_command("./node_modules/.bin/webpack --config webpack.dev.js", log_file)
 
 
 @task()
