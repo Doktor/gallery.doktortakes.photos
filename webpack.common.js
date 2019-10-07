@@ -2,9 +2,8 @@ const path = require('path');
 const BundleTracker = require('webpack-bundle-tracker');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-module.exports = {
-  mode: 'development',
 
+module.exports = {
   context: __dirname,
 
   entry: {
@@ -15,10 +14,6 @@ module.exports = {
   output: {
     path: path.resolve('./static/bundles/'),
     filename: '[name].[hash].js',
-  },
-
-  stats: {
-    colors: true,
   },
 
   plugins: [
@@ -55,10 +50,4 @@ module.exports = {
       vue: 'vue/dist/vue.js',
     },
   },
-
-  watch: true,
-  watchOptions: {
-    aggregateTimeout: 300,
-    poll: 1000
-  }
 };
