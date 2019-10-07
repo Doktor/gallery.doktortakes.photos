@@ -3,7 +3,7 @@ from django.db.models import QuerySet, Q
 from django.http import HttpRequest, Http404
 from django.shortcuts import get_object_or_404
 
-from photos.models import Album, Photo
+from photos.models import Album, Photo, Tag
 from photos.models.album import Allow
 from photos.utils.image import fit_image
 
@@ -76,3 +76,12 @@ def get_albums_for_user(user, exclude_public=False, include_children=False) -> Q
         q &= Q(access_level__gt=Allow.PUBLIC)
 
     return Album.objects.filter(q).distinct().order_by('-start')
+
+
+def get_tags_for_user(user) -> QuerySet:
+    """Returns a QuerySet of the tags on the albums that a user has access to."""
+    return (
+        Tag.objects
+            .filter(albums__in=get_albums_for_user(user))
+            .distinct()
+            .order_by('slug'))
