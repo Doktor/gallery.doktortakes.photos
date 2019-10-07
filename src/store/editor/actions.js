@@ -90,6 +90,20 @@ export const actions = {
     .catch(console.log);
   },
 
+  getTag(context, slug) {
+    context.commit('setLoading', true);
+
+    fetch(endpoints.tagDetail.replace(":slug", slug))
+    .then(parseResponse)
+    .then(j => {
+      context.commit('setLoading', false);
+      context.commit('setTag', j.tag);
+      context.commit('setAlbums', j.albums);
+      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+    })
+    .catch(console.log);
+  },
+
   deleteAlbum() {
     fetch(endpoints.replace(":path", context.state.album.path), {
       method: 'DELETE',

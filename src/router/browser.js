@@ -4,6 +4,7 @@ import ViewAlbum from "../views/ViewAlbum.vue";
 import ViewAlbums from "../views/ViewAlbums.vue";
 import ViewPhoto from "../views/ViewPhoto.vue";
 import ViewTags from "../views/ViewTags.vue";
+import ViewTag from "../views/ViewTag.vue";
 
 
 const routes = [
@@ -43,6 +44,7 @@ const routes = [
   {
     path: '/tags/:slug/',
     name: 'tag',
+    component: ViewTag,
     pathToRegexpOptions: {
       strict: true,
     },

@@ -93,10 +93,10 @@
 
         <div v-if="album.tags" class="group-info-item">
           <i title="Tags" class="fas fa-fw fa-tags"></i>
-          <!-- TODO: Tag links -->
-          <span><!--
-          --><template v-for="tag in album.tags.split(', ')"><!--
-            -->#{{ tag }}
+          <span>
+            <template v-for="(slug, index) in tags">
+              <router-link class="tag" :to="{name: 'tag', params: {slug: slug}}">#{{ slug }}</router-link>
+              <span v-if="index !== tags.length - 1" v-html="nbsp"></span>
             </template>
           </span>
         </div>
@@ -178,12 +178,20 @@
           : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
       },
 
+      nbsp() {
+        return "&nbsp;";
+      },
+
       path() {
         return this.$route.params.path;
       },
 
       placeholder() {
         return staticFiles.coverPlaceholder;
+      },
+
+      tags() {
+        return this.album.tags.split(', ');
       },
 
       userIsStaff() {

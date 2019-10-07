@@ -4,7 +4,7 @@
 
     <ul v-if="tags" class="tags">
       <li v-for="tag in tags">
-        <router-link :to="{name: 'tag', params: {path: tag.slug}}">
+        <router-link :to="{name: 'tag', params: {slug: tag.slug}}">
           #{{ tag.slug }}
         </router-link>
       </li>

@@ -58,6 +58,10 @@ export const mutations = {
     state.tags = tags;
   },
 
+  setTag(state, tag) {
+    state.tag = tag;
+  },
+
   setLoading(state, loading) {
     state.loading = loading;
   },

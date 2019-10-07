@@ -178,19 +178,9 @@ def view_tags(request: HttpRequest) -> HttpResponse:
 @require_GET
 def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
     tag = get_object_or_404(Tag, slug=slug)
-    albums = get_albums_for_user(request.user).filter(tags=tag)
-
-    if not albums:
-        raise Http404
-
-    cover = random.choice(albums).cover
 
     context = {
-        'tag': tag,
-        'albums': albums,
-        'cover': cover,
         'page_title': f"Tag: #{tag.slug} | {metadata['TITLE']}",
-        'count': albums.count(),
     }
 
     return render(request, 'tag.html', context)
