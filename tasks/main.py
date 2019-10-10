@@ -52,6 +52,14 @@ def compile_css(ctx):
         ctx.run("sass --quiet --update --no-source-map --style=compressed .:.")
 
 
+def npm_install(ctx):
+    ctx.run("npm install")
+
+
+def compile_js(ctx):
+    ctx.run("./node_modules/.bin/webpack --config webpack.prod.js")
+
+
 def generate_git_status(ctx):
     def get_last_commit_datetime():
         raw = check_output("git log -1 --format=%at").strip()
@@ -86,6 +94,13 @@ def build(ctx):
     print("Compiling stylesheets")
     compile_css(ctx)
 
+    if input("Update NPM packages? (Y/N) ").upper().startswith('Y'):
+        print("Updating packages")
+        npm_install(ctx)
+
+    print("Compiling scripts")
+    compile_js(ctx)
+
     print("Collecting static files")
     collect_static_files(ctx)
 
@@ -93,7 +108,6 @@ def build(ctx):
     generate_git_status(ctx)
 
     print("Done!")
-
 
 
 @task(post=[build])
