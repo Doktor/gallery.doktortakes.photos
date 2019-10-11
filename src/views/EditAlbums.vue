@@ -47,18 +47,7 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <template v-if="results.length">
-        <Albums v-if="view === undefined || view === 'default'"
-                :albums="results" :route="'editAlbum'"/>
-
-        <section v-else-if="view === 'detailed'" class="album-list-dc">
-          <AlbumListDetailedCards :albums="results" :route="'editAlbum'"/>
-        </section>
-
-        <section v-else-if="view === 'simple'">
-          <AlbumListSimple :albums="results" :route="'editAlbum'"/>
-        </section>
-      </template>
+      <Albums v-if="results.length" :albums="results" :route="'editAlbum'"/>
       <div v-else>No albums found.</div>
     </template>
   </div>

@@ -57,18 +57,7 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <template v-if="results.length">
-        <Albums v-if="view === undefined || view === 'default'"
-                :albums="results" :route="'album'"/>
-
-        <section v-else-if="view === 'detailed'" class="album-list-dc">
-          <AlbumListDetailedCards :albums="results" :route="'album'"/>
-        </section>
-
-        <section v-else-if="view === 'simple'">
-          <AlbumListSimple :albums="results" :route="'album'"/>
-        </section>
-      </template>
+      <Albums v-if="results.length" :albums="results" :route="'album'"/>
       <div v-else>No albums found.</div>
     </div>
   </div>
@@ -78,15 +67,11 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "../components/Albums.vue";
-  import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
-  import AlbumListSimple from "../components/AlbumListSimple.vue";
 
 
   export default {
     components: {
       Albums,
-      AlbumListDetailedCards,
-      AlbumListSimple,
     },
 
     computed: {
@@ -99,9 +84,6 @@
         'loading',
       ]),
 
-      view() {
-        return this.$route.query.view;
-      },
     },
 
     created() {
