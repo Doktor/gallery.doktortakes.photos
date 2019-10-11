@@ -1,37 +1,6 @@
 <template>
   <div v-if="!loading">
     <div>
-      <h2>Views</h2>
-      <p>View the list of albums in different formats.</p>
-      <ul>
-        <li>
-          <router-link
-              title="Cards"
-              :to="{name: 'albums'}"
-          >
-            Cards
-          </router-link> &mdash; default
-        </li>
-        <li>
-          <router-link
-              title="Detailed cards"
-              :to="{name: 'albums', query: {view: 'detailed'}}"
-          >
-            Detailed cards
-          </router-link> &mdash; locations, dates, other metadata
-        </li>
-        <li>
-          <router-link
-              title="Cards"
-              :to="{name: 'albums', query: {view: 'simple'}}"
-          >
-            Simple
-          </router-link> &mdash; text only
-        </li>
-      </ul>
-    </div>
-
-    <div>
       <h2>Special pages</h2>
       <ul>
         <!-- TODO: Add user albums link -->
@@ -57,7 +26,7 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <Albums v-if="results.length" :albums="results" :route="'album'"/>
+      <Albums v-if="results.length" :albums="results" :albumRoute="'album'"/>
       <div v-else>No albums found.</div>
     </div>
   </div>

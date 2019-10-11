@@ -7,33 +7,6 @@
 
       <h2>Edit existing album</h2>
 
-      <ul>
-        <li>
-          <router-link
-              title="Cards"
-              :to="{name: 'index'}"
-          >
-            Cards
-          </router-link>
-        </li>
-        <li>
-          <router-link
-              title="Detailed cards"
-              :to="{name: 'index', query: {view: 'detailed'}}"
-          >
-            Detailed cards
-          </router-link>
-        </li>
-        <li>
-          <router-link
-              title="Cards"
-              :to="{name: 'index', query: {view: 'simple'}}"
-          >
-            Simple
-          </router-link>
-        </li>
-      </ul>
-
       <div class="album-search-container">
         <input
             type="text"
@@ -47,7 +20,7 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <Albums v-if="results.length" :albums="results" :route="'editAlbum'"/>
+      <Albums v-if="results.length" :albums="results" :albumRoute="'editAlbum'"/>
       <div v-else>No albums found.</div>
     </template>
   </div>

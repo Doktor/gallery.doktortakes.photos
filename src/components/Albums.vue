@@ -7,6 +7,8 @@
         :page="page"
         :pages="albumPages"/>
 
+    <AlbumListViewSelector/>
+
     <section v-if="view === undefined || view === 'default'" class="albums">
       <AlbumCard
           v-for="(album, index) in albums"
@@ -14,14 +16,14 @@
           :isLoaded="album.isLoaded"
           :isVisible="indexStart <= index && index <= indexEnd"
           :key="album.path"
-          :route="route"
+          :route="albumRoute"
       />
     </section>
     <section v-else-if="view === 'detailed'" class="album-list-dc">
-      <AlbumListDetailedCards :albums="albums" :route="route"/>
+      <AlbumListDetailedCards :albums="albums" :route="albumRoute"/>
     </section>
     <section v-else-if="view === 'simple'">
-      <AlbumListSimple :albums="albums" :route="route"/>
+      <AlbumListSimple :albums="albums" :route="albumRoute"/>
     </section>
 
     <Pagination
@@ -39,6 +41,7 @@
   import Pagination from './Pagination.vue';
   import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
   import AlbumListSimple from "../components/AlbumListSimple.vue";
+  import AlbumListViewSelector from "../components/AlbumListViewSelector.vue";
 
 
   export default {
@@ -46,6 +49,7 @@
       AlbumCard,
       AlbumListDetailedCards,
       AlbumListSimple,
+      AlbumListViewSelector,
       Pagination,
     },
 
@@ -79,7 +83,7 @@
         type: Array,
         required: true,
       },
-      route: {
+      albumRoute: {
         type: String,
         default: "album",
       }
