@@ -4,6 +4,7 @@
         v-for="album in albums"
         :album="album"
         :key="album.path"
+        :route="route"
     />
   </ul>
 </template>
@@ -20,8 +21,14 @@
     name: "AlbumListDetailedCards",
 
     props: {
-      albums: Array,
-      required: true,
+      albums: {
+        type: Array,
+        required: true,
+      },
+      route: {
+        type: String,
+        default: "album",
+      },
     },
   }
 </script>

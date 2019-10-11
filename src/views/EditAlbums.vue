@@ -1,9 +1,38 @@
 <template>
   <div>
     <template v-if="!loading">
-      <h2><router-link :to="{name: 'newAlbum'}">Add new album</router-link></h2>
+      <h2>
+        <router-link :to="{name: 'newAlbum'}">Add new album</router-link>
+      </h2>
 
       <h2>Edit existing album</h2>
+
+      <ul>
+        <li>
+          <router-link
+              title="Cards"
+              :to="{name: 'index'}"
+          >
+            Cards
+          </router-link>
+        </li>
+        <li>
+          <router-link
+              title="Detailed cards"
+              :to="{name: 'index', query: {view: 'detailed'}}"
+          >
+            Detailed cards
+          </router-link>
+        </li>
+        <li>
+          <router-link
+              title="Cards"
+              :to="{name: 'index', query: {view: 'simple'}}"
+          >
+            Simple
+          </router-link>
+        </li>
+      </ul>
 
       <div class="album-search-container">
         <input
@@ -18,7 +47,18 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <Albums v-if="results.length" :albums="results" :route="'editAlbum'"/>
+      <template v-if="results.length">
+        <Albums v-if="view === undefined || view === 'default'"
+                :albums="results" :route="'editAlbum'"/>
+
+        <section v-else-if="view === 'detailed'" class="album-list-dc">
+          <AlbumListDetailedCards :albums="results" :route="'editAlbum'"/>
+        </section>
+
+        <section v-else-if="view === 'simple'">
+          <AlbumListSimple :albums="results" :route="'editAlbum'"/>
+        </section>
+      </template>
       <div v-else>No albums found.</div>
     </template>
   </div>
@@ -28,11 +68,15 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "../components/Albums.vue";
+  import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
+  import AlbumListSimple from "../components/AlbumListSimple.vue";
 
 
   export default {
     components: {
       Albums,
+      AlbumListDetailedCards,
+      AlbumListSimple,
     },
 
     computed: {
@@ -44,6 +88,10 @@
         'results',
         'loading',
       ]),
+
+      view() {
+        return this.$route.query.view;
+      },
     },
 
     created() {

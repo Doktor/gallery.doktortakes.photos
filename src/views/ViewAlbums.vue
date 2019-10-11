@@ -36,7 +36,7 @@
       <ul>
         <!-- TODO: Add user albums link -->
         <li><a title="User albums" href="">View your albums</a></li>
-        <li><a title="Tags" href="/tags/">View all tags</a></li>
+        <li><router-link title="Tags" :to="{name: 'tags'}">View all tags</router-link></li>
         <li><a title="Search" href="search/">Search all photos</a></li>
       </ul>
     </div>
@@ -59,14 +59,14 @@
 
       <template v-if="results.length">
         <Albums v-if="view === undefined || view === 'default'"
-                :albums="results"/>
+                :albums="results" :route="'album'"/>
 
         <section v-else-if="view === 'detailed'" class="album-list-dc">
-          <AlbumListDetailedCards :albums="results"/>
+          <AlbumListDetailedCards :albums="results" :route="'album'"/>
         </section>
 
         <section v-else-if="view === 'simple'">
-          <AlbumListSimple :albums="results"/>
+          <AlbumListSimple :albums="results" :route="'album'"/>
         </section>
       </template>
       <div v-else>No albums found.</div>
@@ -101,7 +101,7 @@
 
       view() {
         return this.$route.query.view;
-      }
+      },
     },
 
     created() {

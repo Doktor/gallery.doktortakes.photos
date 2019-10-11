@@ -1,6 +1,6 @@
 <template>
   <li>
-    <a :href="album.url" :title="album.name">
+    <router-link :to="{name: route, params: {path: album.path}}" :title="album.name">
       <div class="album-list-dc-row clearfix">
         <div class="album-list-dc-cover">
           <img
@@ -34,12 +34,13 @@
           <div class="note" v-html="album.description"></div>
         </div>
       </div>
-    </a>
+    </router-link>
 
     <AlbumListDetailedCards
         v-if="album.children"
-        :albums="album.children"
         class="album-list-dc-items"
+        :albums="album.children"
+        :route="route"
     />
   </li>
 
@@ -92,6 +93,10 @@
       album: {
         type: Object,
         required: true,
+      },
+      route: {
+        type: String,
+        default: "album",
       },
     },
   };

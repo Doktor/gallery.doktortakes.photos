@@ -2,14 +2,14 @@
   <ul>
     <li v-for="album in albums">
       <router-link
-          :to="{name: 'album', params: {path: album.path}}"
+          :to="{name: route, params: {path: album.path}}"
           :title="album.name"
           :href="album.url"
       >
         {{ album.name }}
       </router-link>
 
-      <AlbumListSimple v-if="album.children" :albums="album.children"/>
+      <AlbumListSimple v-if="album.children" :albums="album.children" :route="route"/>
     </li>
   </ul>
 </template>
@@ -19,8 +19,14 @@
     name: "AlbumListSimple",
 
     props: {
-      albums: Array,
-      required: true,
+      albums: {
+        type: Array,
+        required: true,
+      },
+      route: {
+        type: String,
+        default: "album",
+      },
     },
   }
 </script>
