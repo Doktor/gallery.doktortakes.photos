@@ -1,5 +1,5 @@
 <template>
-  <section class="albums">
+  <div>
     <AlbumCard
         v-for="(album, index) in albums"
         :album="album"
@@ -8,7 +8,7 @@
         :key="album.path"
         :route="route"
     />
-  </section>
+  </div>
 </template>
 
 <script>

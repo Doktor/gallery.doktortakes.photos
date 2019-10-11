@@ -9,14 +9,16 @@
 
     <AlbumListViewSelector/>
 
-    <section v-if="view === undefined || view === 'default'">
-      <AlbumListCards :albums="albums" :route="albumRoute" :indexStart="indexStart" :indexEnd="indexEnd"/>
-    </section>
-    <section v-else-if="view === 'detailed'" class="album-list-dc">
-      <AlbumListDetailedCards :albums="albums" :route="albumRoute"/>
-    </section>
-    <section v-else-if="view === 'simple'">
-      <AlbumListSimple :albums="albums" :route="albumRoute"/>
+    <section>
+      <component
+          :is="albumListComponent"
+          :class="classes"
+
+          :albums="albums"
+          :route="albumRoute"
+          :indexStart="indexStart"
+          :indexEnd="indexEnd"
+      />
     </section>
 
     <Pagination
@@ -57,8 +59,27 @@
         'page',
       ]),
 
+      albumListComponent() {
+        switch (this.view) {
+          case "detailed":
+            return "AlbumListDetailedCards";
+          case "simple":
+            return "AlbumListSimple";
+          default:
+            return "AlbumListCards";
+        }
+      },
+
       allowPagination() {
         return this.view === undefined || this.view === 'default';
+      },
+
+      classes() {
+        return {
+          "albums": this.view === undefined || this.view === "default",
+          "album-list-simple": this.view === "simple",
+          "album-list-dc": this.view === "detailed",
+        }
       },
 
       indexStart() {
