@@ -217,12 +217,8 @@ class Album(models.Model):
 
         if place and location:
             return f"{place}, {location}"
-        elif place:
-            return place
-        elif location:
-            return location
-        else:
-            return ''
+
+        return place or location or ""
 
     def get_groups(self) -> str:
         return ', '.join(f'Group: {group.name}' for group in self.groups.all())
