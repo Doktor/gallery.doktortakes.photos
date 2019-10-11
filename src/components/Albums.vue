@@ -9,15 +9,8 @@
 
     <AlbumListViewSelector/>
 
-    <section v-if="view === undefined || view === 'default'" class="albums">
-      <AlbumCard
-          v-for="(album, index) in albums"
-          :album="album"
-          :isLoaded="album.isLoaded"
-          :isVisible="indexStart <= index && index <= indexEnd"
-          :key="album.path"
-          :route="albumRoute"
-      />
+    <section v-if="view === undefined || view === 'default'">
+      <AlbumListCards :albums="albums" :route="albumRoute" :indexStart="indexStart" :indexEnd="indexEnd"/>
     </section>
     <section v-else-if="view === 'detailed'" class="album-list-dc">
       <AlbumListDetailedCards :albums="albums" :route="albumRoute"/>
@@ -39,6 +32,7 @@
   import {mapGetters, mapState} from 'vuex';
   import AlbumCard from "./AlbumCard.vue";
   import Pagination from './Pagination.vue';
+  import AlbumListCards from "./AlbumListCards.vue";
   import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
   import AlbumListSimple from "../components/AlbumListSimple.vue";
   import AlbumListViewSelector from "../components/AlbumListViewSelector.vue";
@@ -46,6 +40,7 @@
 
   export default {
     components: {
+      AlbumListCards,
       AlbumCard,
       AlbumListDetailedCards,
       AlbumListSimple,
