@@ -2,7 +2,7 @@
   <section>
     <Pagination :mutation="'setAlbumPage'" :itemsPerPage="albumsPerPage" :page="page" :pages="albumPages"/>
     <section class="albums">
-      <Album
+      <AlbumCard
           v-for="(album, index) in albums"
           :album="album"
           :isLoaded="album.isLoaded"
@@ -16,14 +16,14 @@
 </template>
 
 <script>
-  import Album from "./Album.vue";
+  import AlbumCard from "./AlbumCard.vue";
   import Pagination from './Pagination.vue';
   import {mapGetters, mapState} from 'vuex';
 
 
   export default {
     components: {
-      Album,
+      AlbumCard,
       Pagination,
     },
 
