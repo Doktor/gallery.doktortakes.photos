@@ -5,14 +5,14 @@
   >
     <div
         class="album"
-        :class="getClasses"
+        :class="classes"
     >
       <router-link
           :to="{name: route, params: {path: album.path}}"
       >
         <img
             v-if="album.cover"
-            :src="getThumbnail"
+            :src="thumbnail"
             :title="album.name"
             alt="Album cover"
         >
@@ -39,13 +39,14 @@
 
   export default {
     computed: {
-      getClasses() {
+      classes() {
         return {
           'album-hidden': this.album.access_level > 0,
           'album-no-cover': this.album.cover === null,
         }
       },
-      getThumbnail() {
+
+      thumbnail() {
         return this.isLoaded
           ? this.album.cover.thumbnail
           : this.placeholder;

@@ -1,8 +1,10 @@
 <template>
   <ul class="album-list-dc-items">
     <AlbumDetailedCard
-        v-for="album in albums"
+        v-for="(album, index) in albums"
         :album="album"
+        :isLoaded="album.isLoaded"
+        :isVisible="indexStart <= index && index <= indexEnd"
         :key="album.path"
         :route="route"
     />
@@ -28,6 +30,13 @@
       route: {
         type: String,
         default: "album",
+      },
+
+      indexStart: {
+        type: Number,
+      },
+      indexEnd: {
+        type: Number,
       },
     },
   }

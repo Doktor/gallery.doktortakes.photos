@@ -1,7 +1,6 @@
 <template>
   <section>
     <Pagination
-        v-if="allowPagination"
         :mutation="'setAlbumPage'"
         :itemsPerPage="albumsPerPage"
         :page="page"
@@ -22,7 +21,6 @@
     </section>
 
     <Pagination
-        v-if="allowPagination"
         :mutation="'setAlbumPage'"
         :itemsPerPage="albumsPerPage"
         :page="page"
@@ -68,10 +66,6 @@
           default:
             return "AlbumListCards";
         }
-      },
-
-      allowPagination() {
-        return this.view === undefined || this.view === 'default';
       },
 
       classes() {

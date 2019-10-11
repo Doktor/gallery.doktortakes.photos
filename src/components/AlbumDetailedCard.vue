@@ -1,11 +1,11 @@
 <template>
-  <li>
+  <li :class="{'hidden': !this.isVisible}">
     <router-link :to="{name: route, params: {path: album.path}}" :title="album.name">
       <div class="album-list-dc-row clearfix">
         <div class="album-list-dc-cover">
           <img
               v-if="album.cover !== null"
-              :src="album.cover.thumbnail"
+              :src="thumbnail"
               :title="album.name"
               alt="Album cover"
           >
@@ -76,9 +76,17 @@
         return place || location || "";
       },
 
-      placeholder() {
-        return staticFiles.coverPlaceholder;
+      thumbnail() {
+        return this.isLoaded
+          ? this.album.cover.thumbnail
+          : this.placeholder;
       },
+    },
+
+    data() {
+      return {
+        placeholder: staticFiles.coverPlaceholder,
+      }
     },
 
     filters: {
@@ -97,6 +105,15 @@
       route: {
         type: String,
         default: "album",
+      },
+
+      isLoaded: {
+        type: Boolean,
+        required: true,
+      },
+      isVisible: {
+        type: Boolean,
+        required: true,
       },
     },
   };
