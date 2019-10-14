@@ -47,6 +47,7 @@ class AlbumCoverSerializer(serializers.ModelSerializer):
 
 class AlbumForListViewSerializer(serializers.ModelSerializer):
     cover = PhotoThumbnailSerializer(read_only=True)
+    tags = TagField(many=True, allow_empty=True, queryset=Q())
 
     class Meta:
         model = Album
@@ -54,7 +55,7 @@ class AlbumForListViewSerializer(serializers.ModelSerializer):
             'name', 'path',
             'place', 'location', 'description',
             'start', 'end',
-            'cover',
+            'cover', 'tags',
             'access_level',
         )
         read_only_fields = fields

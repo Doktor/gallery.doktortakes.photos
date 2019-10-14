@@ -20,7 +20,9 @@ from io import BytesIO
 class AlbumList(APIView):
     @staticmethod
     def get(request: Request) -> Response:
-        albums = get_albums_for_user(request.user).select_related('cover')
+        albums = (get_albums_for_user(request.user)
+                  .select_related('cover')
+                  .prefetch_related('tags'))
         serializer = AlbumForListViewSerializer(albums, many=True)
 
         return Response({'albums': serializer.data})

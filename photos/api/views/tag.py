@@ -25,7 +25,10 @@ class TagDetail(APIView):
         except Tag.DoesNotExist:
             raise exceptions.NotFound
 
-        albums = get_albums_for_user(request.user).filter(tags=tag).select_related('cover')
+        albums = (get_albums_for_user(request.user)
+                  .filter(tags=tag)
+                  .select_related('cover')
+                  .prefetch_related('tags'))
 
         album_serializer = AlbumForListViewSerializer(albums, many=True)
         tag_serializer = TagSerializer(tag)
