@@ -1,5 +1,7 @@
 import VueRouter from 'vue-router';
 
+import {store} from "../store/index.js";
+
 import ViewAlbum from "../views/ViewAlbum.vue";
 import ViewAlbums from "../views/ViewAlbums.vue";
 import ViewPhoto from "../views/ViewPhoto.vue";
@@ -60,23 +62,48 @@ const editorRoutes = [
     path: '/editor/',
     name: 'index',
     component: EditAlbums,
+    meta: {
+      staff: true,
+    },
   },
   {
     path: '/editor/albums/new',
     name: 'newAlbum',
     component: NewAlbum,
+    meta: {
+      staff: true,
+    },
   },
   {
     path: '/editor/albums/edit/:path',
     name: 'editAlbum',
     component: EditAlbum,
+    meta: {
+      staff: true,
+    },
   },
 ];
 
 const routes = browserRoutes.concat(editorRoutes);
 
-
-export const router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   routes,
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.staff)) {
+    let user = store.state.user;
+
+    if (user.status === 'staff' || user.status === 'superuser') {
+      return next();
+    } else {
+      document.window.location = "/log-in/";
+    }
+  }
+
+  next();
+});
+
+
+export {router};
