@@ -36,6 +36,7 @@
   import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
   import AlbumListSimple from "../components/AlbumListSimple.vue";
   import AlbumListViewSelector from "../components/AlbumListViewSelector.vue";
+  import AlbumTable from "./AlbumTable.vue";
 
 
   export default {
@@ -45,6 +46,7 @@
       AlbumListDetailedCards,
       AlbumListSimple,
       AlbumListViewSelector,
+      AlbumTable,
       Pagination,
     },
 
@@ -55,6 +57,7 @@
       ]),
       ...mapState([
         'page',
+        'user',
       ]),
 
       albumListComponent() {
@@ -63,6 +66,8 @@
             return "AlbumListDetailedCards";
           case "simple":
             return "AlbumListSimple";
+          case "table":
+            return this.userIsStaff ? "AlbumTable" : "AlbumListCards";
           default:
             return "AlbumListCards";
         }
@@ -81,6 +86,10 @@
       },
       indexEnd() {
         return this.indexStart + this.albumsPerPage - 1;
+      },
+
+      userIsStaff() {
+        return this.user.status === 'staff' || this.user.status === 'superuser';
       },
 
       view() {
