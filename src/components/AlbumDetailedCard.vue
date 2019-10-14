@@ -48,7 +48,7 @@
 
 <script>
   import AlbumListDetailedCards from "./AlbumListDetailedCards.vue";
-  import {staticFiles} from "../store/editor";
+  import {staticFiles} from "../store/index.js";
 
 
   export default {

@@ -8,26 +8,8 @@
 <meta name="robots" content="noindex, nofollow">
 {% endblock %}
 
-{% block style %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.css">
-{% endblock %}
-
-{% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.js" defer></script>
-{% render_bundle 'editor' attrs='defer' %}
-{% endblock %}
-
 {% block classes %}small{% endblock %}
 
 {% block content %}
-  <div id="api"
-       data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
-       data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
-  ></div>
-
-  <div id="app"></div>
-
-  <footer>
-    {% include "_copyright.html" %}
-  </footer>
+  {% include "_browser.html" %}
 {% endblock %}

@@ -1,5 +1,5 @@
 import {endpoints, fields, getCsrfToken} from "./index.js";
-import {router} from '../../router/editor';
+import {router} from "../router/main.js";
 
 
 function parseResponse(response) {

@@ -2,8 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RouterEntryPoint from "./views/RouterEntryPoint.vue";
-import {router} from "./router/browser";
-import {store} from "./store/editor";
+import {router} from "./router/main.js";
+import {store} from "./store/index.js";
 
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production';

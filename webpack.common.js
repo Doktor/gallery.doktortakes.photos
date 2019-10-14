@@ -7,8 +7,7 @@ module.exports = {
   context: __dirname,
 
   entry: {
-    browser: path.resolve('src/browser.js'),
-    editor: path.resolve('src/editor.js'),
+    main: path.resolve('src/main.js'),
   },
 
   output: {

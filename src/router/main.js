@@ -6,8 +6,12 @@ import ViewPhoto from "../views/ViewPhoto.vue";
 import ViewTags from "../views/ViewTags.vue";
 import ViewTag from "../views/ViewTag.vue";
 
+import EditAlbum from "../views/EditAlbum.vue";
+import EditAlbums from "../views/EditAlbums.vue";
+import NewAlbum from "../views/NewAlbum.vue";
 
-const routes = [
+
+const browserRoutes = [
   {
     path: '/albums/',
     name: 'albums',
@@ -50,6 +54,26 @@ const routes = [
     },
   },
 ];
+
+const editorRoutes = [
+  {
+    path: '/editor/',
+    name: 'index',
+    component: EditAlbums,
+  },
+  {
+    path: '/editor/albums/new',
+    name: 'newAlbum',
+    component: NewAlbum,
+  },
+  {
+    path: '/editor/albums/edit/:path',
+    name: 'editAlbum',
+    component: EditAlbum,
+  },
+];
+
+const routes = browserRoutes.concat(editorRoutes);
 
 
 export const router = new VueRouter({

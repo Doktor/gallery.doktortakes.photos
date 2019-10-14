@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {endpoints, getCsrfToken} from "../store/editor";
+  import {endpoints, getCsrfToken} from "../store/index.js";
 
 
   export default {

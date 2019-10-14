@@ -39,6 +39,7 @@
 
 <script>
   import {mapState} from 'vuex';
+  import {router} from "../router/main.js";
 
   import Exif from "../components/photo/Exif.vue";
   import Filmstrip from "../components/photo/Filmstrip.vue";
@@ -46,7 +47,6 @@
   import Links from "../components/photo/Links.vue";
   import Metadata from "../components/photo/Metadata.vue";
   import PhotoSwipe from "../components/photo/PhotoSwipe.vue";
-  import {router} from "../router/browser";
   import initPhotoSwipe from "../photoswipe.js";
 
 

@@ -116,10 +116,11 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex';
+  import {accessLevelsMap, staticFiles} from "../store/index.js";
+
   import Albums from "../components/Albums.vue";
   import Photos from '../components/Photos.vue';
-  import {mapState} from 'vuex';
-  import {accessLevelsMap, staticFiles} from "../store/editor";
 
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
