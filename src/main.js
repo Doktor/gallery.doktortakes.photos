@@ -20,9 +20,5 @@ const app = new Vue({
     RouterEntryPoint,
   },
 
-  created() {
-    this.$store.dispatch('getUser');
-  },
-
   template: `<RouterEntryPoint/>`,
 });

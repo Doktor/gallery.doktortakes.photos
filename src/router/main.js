@@ -92,17 +92,24 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.staff)) {
-    let user = store.state.user;
+  store.dispatch('getUser').then(() => {
+    if (to.matched.some(record => record.meta.staff)) {
+      let user = store.state.user;
 
-    if (user.status === 'staff' || user.status === 'superuser') {
-      return next();
+      if (user.status === 'staff' || user.status === 'superuser') {
+        next();
+      } else {
+        next({
+          path: '/log-in/',
+          query: {
+            redirect: to.fullPath,
+          },
+        });
+      }
     } else {
-      document.window.location = "/log-in/";
+      next();
     }
-  }
-
-  next();
+  })
 });
 
 

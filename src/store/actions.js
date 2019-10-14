@@ -31,7 +31,11 @@ function parseAlbumData(album) {
 
 export const actions = {
   getUser(context) {
-    fetch(endpoints.currentUser)
+    if (Object.entries(context.state.user).length !== 0) {
+      return Promise.resolve();
+    }
+
+    return fetch(endpoints.currentUser)
     .then(parseResponse)
     .then(j => context.commit('setUser', j))
     .catch(console.log);
