@@ -1,18 +1,19 @@
 <template>
   <div v-if="!loading">
     <div>
-      <h2>Special pages</h2>
+      <h2>{{ user.name }}</h2>
+
       <ul>
-        <li v-if="user.status !== 'anonymous'">
-          <router-link
-              title="User albums"
-              :to="{name: 'user', params: {slug: user.name}}"
-          >
-            View your albums
-          </router-link>
-        </li>
-        <li><router-link title="Tags" :to="{name: 'tags'}">View all tags</router-link></li>
-        <li><a title="Search" href="/search/">Search all photos</a></li>
+        <li>Account created: {{ user.account_created }}</li>
+        <li>Last sign in: {{ user.last_sign_in }}</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>User settings</h2>
+
+      <ul>
+        <li>Change your password</li>
       </ul>
     </div>
 
@@ -63,7 +64,7 @@
     },
 
     created() {
-      this.$store.dispatch('getAlbums');
+      this.$store.dispatch('getUserAlbums');
       document.body.classList.add('small');
     },
 

@@ -41,6 +41,19 @@ export const actions = {
     .catch(console.log);
   },
 
+  getUserAlbums(context) {
+    context.commit('setLoading', true);
+
+    fetch(endpoints.currentUserAlbums)
+    .then(parseResponse)
+    .then(j => {
+      context.commit('setLoading', false);
+      context.commit('setAlbums', j.albums);
+      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+    })
+    .catch(console.log);
+  },
+
   getAlbums(context) {
     context.commit('setLoading', true);
 

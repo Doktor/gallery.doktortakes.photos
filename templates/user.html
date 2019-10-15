@@ -1,47 +1,12 @@
 {% extends "base.html" %}
-{% load staticfiles %}
-{% load tz %}
 
 {% block title %}User: {{ user.username.capitalize }} | {{ block.super }}{% endblock %}
-{% block meta %}
-{% endblock %}
 
-{% block scripts %}
-{% if albums %}
-<script src="{% static 'scripts/albums.js' %}" defer></script>
-{% endif %}
+{% block meta %}
 {% endblock %}
 
 {% block classes %}small{% endblock %}
 
 {% block content %}
-  <section>
-    <h2>{{ user.username.capitalize }}</h2>
-
-    <ul>
-      <li>Account created: {{ user.date_joined|timezone:"US/Eastern"|date:"Y-m-d H:i:s" }}</li>
-      <li>Last sign in: {{ user.last_login|timezone:"US/Eastern"|date:"Y-m-d H:i:s" }}</li>
-    </ul>
-
-    <h2>User settings</h2>
-
-    <ul>
-      <li><a href="{% url 'password' request.user.username %}">Change your password</a></li>
-    </ul>
-
-    <h2>Photos</h2>
-
-    {% if albums %}
-    {% include '_album_search.html' with edit=False pagination_below=True %}
-    {% else %}
-    <p>No photos available.</p>
-    {% endif %}
-  </section>
-
-  <hr>
-
-  <footer>
-    {% include "_reuse.html" %}
-    {% include "_copyright.html" %}
-  </footer>
+  {% include "_browser.html" %}
 {% endblock %}
