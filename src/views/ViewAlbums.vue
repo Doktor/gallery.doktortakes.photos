@@ -6,7 +6,7 @@
         <!-- TODO: Add user albums link -->
         <li><a title="User albums" href="">View your albums</a></li>
         <li><router-link title="Tags" :to="{name: 'tags'}">View all tags</router-link></li>
-        <li><a title="Search" href="search/">Search all photos</a></li>
+        <li><a title="Search" href="/search/">Search all photos</a></li>
       </ul>
     </div>
 

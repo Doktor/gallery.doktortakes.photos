@@ -20,8 +20,6 @@ register_converter(MD5HashConverter, 'md5')
 album_patterns = [
     path('', views.view_albums, name='albums'),
 
-    path('search/', views.search_photos, name='search'),
-
     path('<path:path>/', views.view_album, name='album'),
     path('<path:path>/<md5:md5>', views.view_photo, name='photo'),
     path('<path:path>/<md5:md5>/download', views.download_photo, name='download'),
@@ -75,6 +73,7 @@ urlpatterns = [
     path('copyright/', TemplateView.as_view(template_name='copyright.html'), name='copyright'),
     path('editor/', include(editor_patterns)),
     path('featured/', views.featured, name='featured'),
+    path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),
     path('users/', include(user_patterns)),
     path('wall/', views.wall, name='wall'),
