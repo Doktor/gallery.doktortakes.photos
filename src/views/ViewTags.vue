@@ -35,5 +35,6 @@
 <style lang="scss" scoped>
   .tags {
     text-align: left;
+    column-width: 250px;
   }
 </style>
