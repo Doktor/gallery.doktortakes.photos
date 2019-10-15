@@ -48,6 +48,7 @@ api_patterns = [
     path('tags/', api.TagList.as_view(), name='api_tags'),
 
     path('me/', api.get_current_user, name='api_current_user'),
+    path('me/albums/', api.get_albums_for_current_user, name='api_current_user_albums'),
 ]
 
 user_patterns = [
