@@ -1,3 +1,6 @@
+from datetime import datetime
+import pytz
+
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -6,20 +9,28 @@ from photos.api.serializers import AlbumForListViewSerializer
 from photos.utils import get_albums_for_user
 
 
+def get_formatted_time(dt: datetime) -> str:
+    return dt.astimezone(pytz.timezone("US/Eastern")).strftime("%Y-%m-%d %H:%M:%S")
+
+
 @api_view()
 def get_current_user(request: Request) -> Response:
-    if request.user.is_superuser:
+    user = request.user
+
+    if user.is_superuser:
         status = "superuser"
-    elif request.user.is_staff:
+    elif user.is_staff:
         status = "staff"
-    elif request.user.is_authenticated:
+    elif user.is_authenticated:
         status = "user"
     else:
-        status = "anonymous"
+        return Response({"status": "anonymous"})
 
     return Response({
-        "name": request.user.username,
+        "name": user.username,
         "status": status,
+        "account_created": get_formatted_time(user.date_joined),
+        "last_sign_in": get_formatted_time(user.last_login),
     })
 
 
