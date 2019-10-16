@@ -10,12 +10,8 @@
     />
 
     <section class="photos">
-      <Photo
+      <PhotoSearchResult
           v-for="(photo, index) in searchResults.photos"
-          :allowSelect="false"
-          :isLoaded="true"
-          :isSelected="false"
-          :isVisible="true"
           :key="index"
           :photo="photo"
       />
@@ -32,14 +28,14 @@
 
 <script>
   import Pagination from './Pagination.vue';
-  import Photo from './Photo.vue';
+  import PhotoSearchResult from './PhotoSearchResult.vue';
   import {mapGetters, mapState} from 'vuex';
 
 
   export default {
     components: {
       Pagination,
-      Photo,
+      PhotoSearchResult,
     },
 
     computed: {
