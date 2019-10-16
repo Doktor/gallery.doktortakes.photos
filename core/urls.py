@@ -49,12 +49,13 @@ api_patterns = [
 
     path('me/', api.get_current_user, name='api_current_user'),
     path('me/albums/', api.get_albums_for_current_user, name='api_current_user_albums'),
+    path('me/password/', api.change_password, name='api_change_password'),
 ]
 
 user_patterns = [
     path('', views.view_users, name='users'),
     path('<slug:slug>/', views.view_user, name='user'),
-    path('<slug:slug>/change-password/', views.ChangePasswordView.as_view(), name='password'),
+    path('<slug:slug>/password/', views.change_password, name='password'),
 ]
 
 urlpatterns = [

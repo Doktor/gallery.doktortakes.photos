@@ -1,15 +1,11 @@
 from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
-from django.views import View
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
@@ -276,47 +272,15 @@ def view_user(request: HttpRequest, slug: str) -> HttpResponse:
     return render(request, "user.html", context)
 
 
-class ChangePasswordView(LoginRequiredMixin, View):
-    def get(self, request: HttpRequest, slug: str) -> HttpResponse:
-        user = request.user
+@require_GET
+@login_required
+def change_password(request: HttpRequest, slug: str) -> HttpResponse:
+    user = request.user
 
-        if user.username != slug:
-            raise Http404
+    if user.username != slug:
+        raise Http404
 
-        return render(request, "user_password.html", {})
-
-    def post(self, request: HttpRequest, slug: str) -> HttpResponse:
-        user = request.user
-
-        if user.username != slug:
-            raise Http404
-
-        data = request.POST
-
-        current, new, repeat = data.get('current', ''), data.get('new', ''), data.get('repeat', '')
-
-        if not current:
-            messages.error(request, "Please enter your current password.")
-            return self.get(request, slug)
-
-        if not user.check_password(current):
-            messages.error(request, "The current password is incorrect.")
-            return self.get(request, slug)
-
-        if not new or not repeat:
-            messages.error(request, "Please enter the new password twice.")
-            return self.get(request, slug)
-
-        if new != repeat:
-            messages.error(request, "The new passwords don't match.")
-            return self.get(request, slug)
-
-        user.set_password(new)
-        user.save()
-        update_session_auth_hash(request, user)
-
-        messages.success(request, "Your password was changed successfully.", extra_tags='fade')
-        return redirect(reverse('user', kwargs={'slug': user.username}))
+    return render(request, "user_password.html", {})
 
 
 # Other

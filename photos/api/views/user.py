@@ -1,6 +1,10 @@
 from datetime import datetime
+from http import HTTPStatus
 import pytz
 
+from django.contrib.auth import update_session_auth_hash
+
+from rest_framework import exceptions
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -42,3 +46,40 @@ def get_albums_for_current_user(request: Request) -> Response:
     serializer = AlbumForListViewSerializer(albums, many=True)
 
     return Response({"albums": serializer.data})
+
+
+@api_view(["POST"])
+def change_password(request: Request) -> Response:
+    user = request.user
+
+    if user.is_anonymous:
+        raise exceptions.NotAuthenticated
+
+    data = request.data
+
+    current = data.get('current', '')
+    password1 = data.get('password1', '')
+    password2 = data.get('password2', '')
+
+    errors = []
+
+    if not current:
+        errors.append("Please enter your current password.")
+
+    if not user.check_password(current):
+        errors.append("The current password is incorrect.")
+
+    if not password1 or not password2:
+        errors.append("Please enter the new password twice.")
+
+    if password1 != password2:
+        errors.append("The new passwords don't match.")
+
+    if errors:
+        return Response({"errors": errors}, status=HTTPStatus.BAD_REQUEST)
+
+    user.set_password(password1)
+    user.save()
+    update_session_auth_hash(request, user)
+
+    return Response({"message": "Your password was changed successfully."})
