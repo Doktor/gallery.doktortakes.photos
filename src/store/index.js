@@ -26,6 +26,7 @@ export const endpoints = {
   tagDetail: "/api/tags/:slug/",
   currentUser: "/api/me/",
   currentUserAlbums: "/api/me/albums/",
+  changePassword: "/api/me/password/",
 };
 
 export const staticFiles = {

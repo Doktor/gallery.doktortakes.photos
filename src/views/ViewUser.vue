@@ -13,7 +13,11 @@
       <h2>User settings</h2>
 
       <ul>
-        <li>Change your password</li>
+        <li>
+          <router-link :to="{name: 'changePassword', params: {slug: user.name}}">
+            Change your password
+          </router-link>
+        </li>
       </ul>
     </div>
 

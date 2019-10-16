@@ -54,6 +54,29 @@ export const actions = {
     .catch(console.log);
   },
 
+  changePassword(context, data) {
+    fetch(endpoints.changePassword, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken(),
+      },
+    })
+    .then(parseResponse)
+    .then(j => {
+      flash(j.message);
+
+      setTimeout(() => router.push({
+        name: 'user',
+        params: {
+          slug: context.state.user.name
+        },
+      }), 1000);
+    })
+    .catch(j => j.errors.forEach(flash));
+  },
+
   getAlbums(context) {
     context.commit('setLoading', true);
 
