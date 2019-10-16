@@ -144,6 +144,17 @@ export const actions = {
     .catch(console.log);
   },
 
+  searchPhotos(context, queryString) {
+    fetch(endpoints.searchPhotos + queryString)
+    .then(parseResponse)
+    .then(j => {
+      context.commit('setSearchResults', j.photos);
+      context.commit('setSearchResultsCount', j.count);
+      context.commit('setPage', {page: j.page, mutation: 'setPhotoPage'});
+    })
+    .catch(console.log);
+  },
+
   deleteAlbum() {
     fetch(endpoints.replace(":path", context.state.album.path), {
       method: 'DELETE',

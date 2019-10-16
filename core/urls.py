@@ -37,7 +37,7 @@ tag_patterns = [
 ]
 
 api_patterns = [
-    path('photos/search', api.search_photos, name='search_photos'),
+    path('photos/search/', api.search_photos, name='search_photos'),
     path('photos/<md5:md5>/', api.PhotoDetail.as_view(), name='api_photo'),
 
     path('albums/<path:path>/photos/', api.AlbumPhotoList.as_view(), name='api_album_photos'),

@@ -12,7 +12,7 @@
           </router-link>
         </li>
         <li><router-link title="Tags" :to="{name: 'tags'}">View all tags</router-link></li>
-        <li><a title="Search" href="/search/">Search all photos</a></li>
+        <li><router-link title="Search" :to="{name: 'search'}">Search all photos</router-link></li>
       </ul>
     </div>
 

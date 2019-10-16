@@ -13,6 +13,24 @@ export function getCsrfToken() {
   return getCookie('csrftoken');
 }
 
+export function getQueryString(params) {
+  let esc = encodeURIComponent;
+
+  let query = Object.entries(params)
+  .map(([key, value]) => {
+    if (Array.isArray(value)) {
+      if (value.length > 0) {
+        return esc(key) + "=" + esc(value.join(","));
+      }
+    } else if (value !== null && value !== "") {
+      return esc(key) + "=" + esc(value);
+    }
+  })
+  .filter(item => item !== undefined);
+
+  return "?" + query.join("&");
+}
+
 
 // API endpoints and static files
 
@@ -24,6 +42,7 @@ export const endpoints = {
   albumPhotoList: "/api/albums/:path/photos/",
   tagList: "/api/tags/",
   tagDetail: "/api/tags/:slug/",
+  searchPhotos: "/api/photos/search/",
   currentUser: "/api/me/",
   currentUserAlbums: "/api/me/albums/",
   changePassword: "/api/me/password/",
@@ -107,6 +126,13 @@ export const store = new Vuex.Store({
 
     // Photo
     photo: {},
+
+    // Photo search
+    searchResults: {
+      page: 1,
+      photos: [],
+      count: 0,
+    },
 
     page: 1,
     loaded: [],

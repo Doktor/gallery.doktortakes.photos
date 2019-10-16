@@ -34,6 +34,22 @@ export const mutations = {
     state.loaded.push(page);
   },
 
+  setSearchResults(state, photos) {
+    state.searchResults.photos = photos;
+  },
+
+  clearSearchResults(state) {
+    state.searchResults.photos = [];
+  },
+
+  setSearchResultsPage(state, page) {
+    state.searchResults.page = page;
+  },
+
+  setSearchResultsCount(state, count) {
+    state.searchResults.count = count;
+  },
+
   filterAlbums(state) {
     let term = state.search;
 

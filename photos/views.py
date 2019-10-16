@@ -223,8 +223,7 @@ def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
 @require_GET
 def search_photos(request: HttpRequest) -> HttpResponse:
-    context = {'items_per_page': ITEMS_PER_PAGE}
-    return render(request, "search.html", context)
+    return render(request, "search.html", {})
 
 
 @require_GET

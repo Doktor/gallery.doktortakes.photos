@@ -10,6 +10,8 @@ import ViewTag from "../views/ViewTag.vue";
 import ViewUser from "../views/ViewUser.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 
+import SearchPhotos from "../views/SearchPhotos.vue";
+
 import EditAlbum from "../views/EditAlbum.vue";
 import EditAlbums from "../views/EditAlbums.vue";
 import NewAlbum from "../views/NewAlbum.vue";
@@ -53,6 +55,15 @@ const browserRoutes = [
     path: '/tags/:slug/',
     name: 'tag',
     component: ViewTag,
+    pathToRegexpOptions: {
+      strict: true,
+    },
+  },
+
+  {
+    path: '/search/',
+    name: 'search',
+    component: SearchPhotos,
     pathToRegexpOptions: {
       strict: true,
     },

@@ -87,11 +87,11 @@ def search_photos(request: Request) -> Response:
 
             query &= Q(**{field: value})
 
-    rating = params.getlist('rating')
-    if rating:
+    ratings = params.get('ratings', '').split(',')
+    if ratings:
         subquery = Q()
 
-        for value in rating:
+        for value in ratings:
             try:
                 value = int(value)
             except ValueError:
@@ -103,11 +103,11 @@ def search_photos(request: Request) -> Response:
 
     # Filtering: dates
 
-    taken_start = params.get('taken-start', '')
-    taken_end = params.get('taken-end', '')
+    taken_start = params.get('takenStart', '')
+    taken_end = params.get('takenEnd', '')
 
-    uploaded_start = params.get('uploaded-start', '')
-    uploaded_end = params.get('uploaded-end', '')
+    uploaded_start = params.get('uploadedStart', '')
+    uploaded_end = params.get('uploadedEnd', '')
 
     query &= date_query(taken_start, taken_end)
     query &= date_query(uploaded_start, uploaded_end)
@@ -122,30 +122,33 @@ def search_photos(request: Request) -> Response:
     if params.get('direction') == 'new':
         order = f"-{order}"
 
-    # Execute the query!
+    # Execute the query
 
-    photos = Photo.objects.filter(query).order_by(order)
+    photos = Photo.objects.filter(query).order_by(order).select_related('album')
     total = photos.count()
+
+    # Pagination
 
     try:
         page = int(params.get('page'))
     except (ValueError, KeyError):
         page = 1
 
-    # Pagination
+    per_page = int(params.get('photosPerPage', 0)) or ITEMS_PER_PAGE
 
-    first = ITEMS_PER_PAGE * (page - 1)
-    last = first + ITEMS_PER_PAGE
+    first = per_page * (page - 1)
+    last = first + per_page
 
     photos = photos[first:last]
 
     # Generate the response
 
-    data = [SimplePhotoSerializer(photo).data for photo in photos]
+    data = [PhotoSerializer(photo).data for photo in photos]
 
     response = {
         'photos': data,
         'count': total,
+        'page': page,
     }
 
     return Response(response)
