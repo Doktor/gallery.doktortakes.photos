@@ -63,7 +63,6 @@ urlpatterns = [
     url_log_out,
 
     path('', views.index, name='index'),
-    path('__debug__/', include(debug_toolbar.urls)),
     path('404/', views.debug_404, name='debug_404'),
     path('500/', views.debug_500, name='debug_500'),
     path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
@@ -83,5 +82,7 @@ urlpatterns = [
 
 
 if settings.DEBUG:
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
