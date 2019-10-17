@@ -462,32 +462,81 @@ $nav-item-spacing: 1.5rem;
 
 /* Forms */
 
+$form-border-radius: 4px;
+$form-font-size: 1.3rem;
+
 // Margin above/below input elements
 $inputMargin: 5px;
 
 form {
   display: flex;
-  flex-direction: column;
-  padding: 1rem;
+  justify-content: center;
 
-  background: rgb(40, 40, 40);
+  width: 100%;
+  padding: 1rem;
+  border-radius: $form-border-radius;
+
+  background-color: rgb(40, 40, 40);
+}
+
+.form--1-column {
+  flex-direction: column;
+  align-items: center;
+}
+
+.form--2-columns {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+
+  .form-column {
+    width: 100%;
+    margin: 0;
+  }
+
+  fieldset {
+    padding: 1rem;
+    border: 1px solid rgb(60, 60, 60);
+    border-radius: $form-border-radius;
+  }
+
+  @media (min-width: 901px) {
+    .form-column {
+      width: 50%;
+    }
+
+    .form-column-1 {
+      padding-right: 0.5rem;
+    }
+
+    .form-column-2 {
+      padding-left: 0.5rem;
+    }
+  }
 }
 
 fieldset {
-  border: 0;
-  margin: 0 0 1rem 0;
-  padding: 0;
+  display: block;
+
   width: 100%;
+
+  padding: 0;
+  border: 0;
+  margin: 0;
+  margin-bottom: 1rem;
 }
 
 legend {
-  display: block;
-  width: 100%;
-  padding-bottom: $inputMargin;
-  border-bottom: 1px solid $text;
-  margin-bottom: $inputMargin * 3;
+  padding: 0 0.5rem;
+  margin-left: -0.5rem;
+  margin-bottom: 0.5rem;
 
-  font-size: 110%;
+  @include primary-font();
+  text-transform: lowercase;
+  text-align: center;
+  line-height: 1;
+  font-size: 150%;
   font-weight: 700;
 }
 
@@ -497,8 +546,8 @@ textarea {
 
 input, textarea {
   background-color: rgb(60, 60, 60);
-  border: 1px solid rgb(60, 60, 60);
-  border-radius: 4px;
+  border: 1px solid rgb(80, 80, 80);
+  border-radius: $form-border-radius;
   color: $text;
 
   &:active, &:focus {
@@ -513,20 +562,27 @@ input:disabled {
   cursor: not-allowed;
 }
 
-input:not([type="radio"]), select, textarea {
+input[type="date"],
+input[type="number"],
+input[type="password"],
+input[type="text"],
+select,
+textarea {
   width: 100%;
-}
+  padding: 8px 10px;
 
-input:not([type="file"]), input:not([type="radio"]), select, textarea {
-  padding: 4px 8px;
+  font-size: $form-font-size;
+  line-height: 1;
 }
 
 label {
   display: block;
 
   width: 100%;
-  margin-bottom: $inputMargin;
+  margin-bottom: 0.5rem;
 
+  font-size: $form-font-size;
+  line-height: 1;
   font-weight: bold;
   text-align: left;
 }
@@ -536,80 +592,66 @@ label {
   justify-content: start;
 }
 
-input[type="radio"] {
-  display: none;
-  visibility: hidden;
-}
+.form-control-options {
+  display: flex;
 
-// First radio choice
-input[type="radio"]:first-child + label {
-  border-radius: 4px 0 0 4px;
-}
+  input[type="radio"],
+  input[type="checkbox"] {
+    display: none;
+    visibility: hidden;
 
-// Middle radio choices
-input[type="radio"] + label:not(:last-child) {
-  border-right: 0;
-}
+    // Change the appearance of the label to a button
+    & + label {
+      flex-basis: 100%;
 
-// Last radio choice
-input[type="radio"] + label:last-child {
-  border-radius: 0 4px 4px 0;
-}
+      padding: 12px 0;
+      margin: 0;
 
-label {
-  &.radio-choice-small {
-    width: 100px;
+      background: rgb(60, 60, 60);
+      border: 1px solid rgb(80, 80, 80);
+      color: $text;
+
+      font-weight: normal;
+      text-align: center;
+
+      // First choice
+      &:first-of-type {
+        border-radius: $form-border-radius 0 0 $form-border-radius;
+      }
+
+      // Middle choices
+      &:not(:last-child) {
+        border-right: 0;
+      }
+
+      // Last choice
+      &:last-of-type {
+        border-radius: 0 $form-border-radius $form-border-radius 0;
+      }
+    }
+
+    &:checked + label {
+      background: $blue;
+      border-color: $blue;
+      color: white;
+    }
   }
-
-  &.radio-choice-medium {
-    width: 150px;
-  }
-
-  &.radio-choice-large {
-    width: 200px;
-  }
 }
 
-// Change the appearance of the label to a button
-input[type="radio"] + label {
-  display: block;
-
-  width: 100px;
-  padding: 8px 0;
-  margin: 0;
-
-  background: rgb(60, 60, 60);
-  border: 1px solid rgb(80, 80, 80);
-  color: $text;
-
-  text-align: center;
-  font-weight: normal;
-}
-
-input[type="radio"]:checked + label {
-  background: $blue;
-  border-color: $blue;
-  color: white;
-}
-
-.form-small {
+.form--small {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.form-row {
-  margin-bottom: 0.8rem;
+.form-control {
+  margin-bottom: 1.2rem;
 
   &:last-child {
     margin-bottom: 0;
   }
-
-  .field-wrapper {
-    width: 100%;
-  }
 }
 
-.form-action {
+.form-link-action {
   text-align: right;
   margin-top: 0.2rem;
 }
@@ -621,48 +663,81 @@ input[type="radio"]:checked + label {
   font-size: 80%;
 }
 
+.form-error {
+  margin-top: 5px;
+
+  color: red;
+  font-size: 80%;
+}
+
+.field--invalid {
+  border: 1px solid red;
+}
+
+// Form: buttons
+
 .form-buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+
   width: 100%;
 }
 
 .form-button {
   display: block;
 
-  width: 100px;
-  padding: 8px 0;
+  width: 110px;
+  padding: 12px 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: $form-border-radius;
 
-  background: $text;
+  background-color: $text;
   color: rgb(20, 20, 20);
 
   text-align: center;
-  text-decoration: none;
+  line-height: 1;
 
-  &:hover {
-    background: lighten($text, 10%);
-
-    text-decoration: none;
-  }
-}
-
-.form-button {
   cursor: pointer;
-}
-
-.form-button-cancel {
-}
-
-.form-button-save {
-  background-color: $blue;
-  color: white;
 
   &:hover {
-    background-color: lighten($blue, 10%);
+    background-color: lighten($text, 15%);
   }
+
+  &, &:hover {
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+
+  &-primary {
+    background-color: $blue;
+    color: white;
+
+    &:hover {
+      background-color: lighten($blue, 15%);
+    }
+  }
+
+  &-secondary {
+    //
+  }
+}
+
+// Form: range inputs
+
+$separator-width: 5%;
+
+.form-control-range-input {
+  display: flex;
+
+  input, select, textarea {
+    width: (100% - $separator-width) / 2;
+  }
+}
+
+.form-control-range-input-separator {
+  width: $separator-width;
+
+  text-align: center;
 }
 
 /* Messages and notifications */

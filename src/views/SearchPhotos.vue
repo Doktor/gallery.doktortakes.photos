@@ -1,5 +1,6 @@
 <template>
   <section>
+    <h2>Search all photos</h2>
     <SearchPhotoForm/>
     <SearchResults/>
   </section>

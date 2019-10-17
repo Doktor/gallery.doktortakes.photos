@@ -5,7 +5,7 @@
 {% block content %}
 <section>
   <h2>Log in</h2>
-  <form class="form-small" method="post" action="{% url 'log_in' %}">
+  <form class="form--small" method="post" action="{% url 'log_in' %}">
     {% csrf_token %}
     <fieldset>
       <div class="form-row">

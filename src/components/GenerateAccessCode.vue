@@ -1,5 +1,5 @@
 <template>
-  <div class="form-action">
+  <div class="form-link-action">
     <a @click.prevent="generateCode">Generate access code</a>
   </div>
 </template>

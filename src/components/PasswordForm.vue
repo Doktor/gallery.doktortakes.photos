@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form class="form--1-column form--small">
     <fieldset>
       <PasswordFormField
           :name="'Current'"
@@ -7,13 +7,9 @@
           @input="onEdit('current')"
           :errors="current.errors"
       />
-    </fieldset>
-
-    <fieldset>
-      <legend>Set your password</legend>
 
       <PasswordFormField
-          :name="'Password'"
+          :name="'New password'"
           v-model="password1.value"
           @input="onEdit('password1')"
           :errors="password1.errors"
@@ -30,14 +26,14 @@
 
     <div class="form-buttons">
       <router-link
-          class="form-button form-button-cancel"
+          class="form-button form-button-secondary"
           :to="{name: 'user'}"
       >
         Cancel
       </router-link>
 
       <button
-          class="form-button form-button-save"
+          class="form-button form-button-primary"
           type="submit"
           @click.prevent="submit"
       >
@@ -153,54 +149,12 @@
 </script>
 
 <style lang="scss" scoped>
-  $text: rgb(220, 220, 220);
-  $blue: rgb(0, 120, 255);
-
   form {
     width: 50%;
     margin: 0 auto;
   }
 
   .form-buttons {
-    display: flex;
-    flex-direction: row;
     justify-content: space-between;
-
-    width: 100%;
-  }
-
-  .form-button {
-    display: block;
-
-    width: 110px;
-    padding: 8px 0;
-    border: 0;
-    border-radius: 4px;
-
-    background-color: $text;
-    color: rgb(20, 20, 20);
-
-    text-align: center;
-    text-decoration: none;
-
-    &:hover {
-      background-color: lighten($text, 15%);
-      text-decoration: none;
-    }
-
-    &, &:hover {
-      transition: background-color 0.3s;
-    }
-  }
-
-  .form-button-cancel { }
-
-  .form-button-save {
-    background-color: $blue;
-    color: white;
-
-    &:hover {
-      background-color: lighten($blue, 15%);
-    }
   }
 </style>

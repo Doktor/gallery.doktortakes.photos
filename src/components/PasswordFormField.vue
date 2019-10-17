@@ -1,19 +1,17 @@
 <template>
-  <div class="form-row">
+  <div class="form-control">
     <label :for="'f-' + slug">{{ name }}</label>
-    <div class="field-wrapper">
-      <input
-          class="field"
-          :class="{'field-invalid': errors.length > 0}"
-          :id="'f-' + slug"
-          :name="slug"
-          type="password"
-          autocomplete="off"
+    <input
+        class="field"
+        :class="{'field-invalid': errors.length > 0}"
+        :id="'f-' + slug"
+        :name="slug"
+        type="password"
+        autocomplete="off"
 
-          :value="value"
-          @input="$emit('input', $event.target.value)"
-      >
-    </div>
+        :value="value"
+        @input="$emit('input', $event.target.value)"
+    >
 
     <div
         v-if="helpText"
@@ -59,16 +57,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .field-invalid {
-    border: 1px solid red;
-  }
-
-  .form-error {
-    margin-top: 5px;
-
-    color: red;
-    font-size: 80%;
-  }
-</style>

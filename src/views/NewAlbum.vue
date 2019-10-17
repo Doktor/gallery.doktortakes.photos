@@ -3,7 +3,7 @@
     <router-link :to="{name: 'index'}">Back to editor</router-link>
     <h2>Create new album</h2>
     <AlbumForm
-        class="form-small"
+        class="form--small"
         :save-button-text="'Create album'"
         :update="false"
     />

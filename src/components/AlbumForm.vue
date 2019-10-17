@@ -1,124 +1,83 @@
 <template>
-  <form v-on:submit.prevent="submit">
+  <form class="form--1-column" v-on:submit.prevent="submit">
     <fieldset>
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-name">Name</label>
-        <div class="field-wrapper">
-          <input class="field" name="name" maxlength="256" id="f-name"
-                 type="text" v-model="name" required>
-        </div>
+        <input class="field" name="name" maxlength="256" id="f-name" type="text" v-model="name" required>
       </div>
 
-      <div v-if="update" class="form-row">
+      <div v-if="update" class="form-control">
         <label for="f-slug">Slug</label>
-        <div class="field-wrapper">
-          <input class="field" name="slug" id="f-slug" type="text"
-                 :value="album.slug" disabled readonly>
-        </div>
+        <input class="field" name="slug" id="f-slug" type="text" :value="album.slug" disabled readonly>
       </div>
 
-      <div v-if="update" class="form-row">
+      <div v-if="update" class="form-control">
         <label for="f-path">Path</label>
-        <div class="field-wrapper">
-          <input class="field" name="path" id="f-path" type="text"
-                 :value="album.path" disabled>
-        </div>
+        <input class="field" name="path" id="f-path" type="text" :value="album.path" disabled>
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-place">Place</label>
-        <div class="field-wrapper">
-          <input class="field" name="place" maxlength="128" id="f-place"
-                 type="text" v-model="place">
-        </div>
+        <input class="field" name="place" maxlength="128" id="f-place" type="text" v-model="place">
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-location">Location</label>
-        <div class="field-wrapper">
-          <input class="field" name="location" maxlength="128" id="f-location"
-                 type="text" v-model="location">
-        </div>
+        <input class="field" name="location" maxlength="128" id="f-location" type="text" v-model="location">
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-description">Description</label>
-        <div class="field-wrapper">
-          <textarea class="field" name="description" maxlength="1000"
-                    id="f-description" rows="5"
-                    v-model="description"></textarea>
-        </div>
+        <textarea class="field" name="description" maxlength="1000"
+                  id="f-description" rows="5" v-model="description"></textarea>
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-start">Start</label>
-        <div class="field-wrapper">
-          <input class="field" name="start" id="f-start" type="date"
-                 v-model="start" required>
-        </div>
+        <input class="field" name="start" id="f-start" type="date" v-model="start" required>
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-end">End</label>
-        <div class="field-wrapper">
-          <input class="field" name="end" id="f-end" v-model="end"
-                 type="date">
-        </div>
+        <input class="field" name="end" id="f-end" type="date" v-model="end">
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-level">Access level</label>
-        <div class="field-wrapper">
-          <select class="field" name="level" id="f-level"
-                  v-model="access_level">
-            <option v-for="item in accessLevels" :value="item.level">
-              {{ item.name }}
-            </option>
-          </select>
-        </div>
+        <select class="field" name="level" id="f-level"
+                v-model="access_level">
+          <option v-for="item in accessLevels" :value="item.level">
+            {{ item.name }}
+          </option>
+        </select>
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-access-code">Access code</label>
-        <div class="field-wrapper">
-          <input class="field" name="access-code" id="f-access-code"
-                 v-model="access_code" type="text">
-        </div>
+        <input class="field" name="access-code" id="f-access-code" type="text" v-model="access_code">
 
         <GenerateAccessCode
             v-on:set-access-code="setAccessCode"></GenerateAccessCode>
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-users">Users</label>
-        <div class="field-wrapper">
-          <input class="field" name="users" id="f-users"
-                 v-model="users" type="text">
-        </div>
+        <input class="field" name="users" id="f-users" type="text" v-model="users">
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-groups">Groups</label>
-        <div class="field-wrapper">
-          <input class="field" name="groups" id="f-groups"
-                 v-model="groups" type="text">
-        </div>
+        <input class="field" name="groups" id="f-groups" type="text" v-model="groups">
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-tags">Tags</label>
-        <div class="field-wrapper">
-          <input class="field" name="tags" id="f-tags" type="text"
-                 v-model="tags">
-        </div>
+        <input class="field" name="tags" id="f-tags" type="text" v-model="tags">
       </div>
 
-      <div class="form-row">
+      <div class="form-control">
         <label for="f-parent">Parent</label>
-        <div class="field-wrapper">
-          <input class="field" name="parent" id="f-parent" type="text"
-                 v-model="parent">
-        </div>
+        <input class="field" name="parent" id="f-parent" type="text" v-model="parent">
       </div>
     </fieldset>
 
