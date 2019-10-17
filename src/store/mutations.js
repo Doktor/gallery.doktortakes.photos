@@ -39,7 +39,11 @@ export const mutations = {
   },
 
   clearSearchResults(state) {
-    state.searchResults.photos = Array(10).fill({});
+    state.searchResults.photos = Array(state.searchResults.itemsPerPage).fill({});
+  },
+
+  setSearchResultsItemsPerPage(state, itemsPerPage) {
+    state.searchResults.itemsPerPage = itemsPerPage;
   },
 
   setSearchResultsPage(state, page) {

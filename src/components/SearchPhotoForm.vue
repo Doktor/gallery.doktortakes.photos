@@ -31,6 +31,25 @@
           </div>
         </div>
       </fieldset>
+
+      <fieldset>
+        <legend>Items per page</legend>
+
+        <div class="form-control">
+          <div class="form-control-options">
+            <template v-for="count in countChoices">
+              <input
+                  type="radio"
+                  :id="'f-per-page-' + count"
+                  name="perPage"
+                  :value="count"
+                  v-model="itemsPerPage"
+              >
+              <label :for="'f-per-page-' + count">{{ count }}</label>
+            </template>
+          </div>
+        </div>
+      </fieldset>
     </div>
 
     <div class="form-column form-column-2">
@@ -111,16 +130,12 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
+  import {mapState} from 'vuex';
   import {getQueryString} from "../store/index.js";
 
 
   export default {
     computed: {
-      ...mapGetters([
-        'photosPerPage',
-      ]),
-
       ...mapState([
         'searchResults',
       ]),
@@ -128,12 +143,17 @@
       allRatings() {
         return [0, 1, 2, 3, 4, 5];
       },
+
+      countChoices() {
+        return [10, 30, 60, 120];
+      },
     },
 
     data() {
       return {
         order: "taken",
         direction: "new",
+        itemsPerPage: 10,
 
         ratings: [],
 
@@ -150,20 +170,25 @@
     },
 
     methods: {
-      search() {
+      search(resetPage = true) {
+        if (resetPage) {
+          this.$store.commit('setSearchResultsPage', 1);
+          this.$store.commit('setSearchResultsItemsPerPage', this.itemsPerPage);
+        }
+
         this.$store.commit('clearSearchResults');
         this.$store.dispatch('searchPhotos', getQueryString({
           ...this.$data,
 
           page: this.searchResults.page,
-          photosPerPage: this.photosPerPage,
+          itemsPerPage: this.itemsPerPage,
         }));
       }
     },
 
     watch: {
       'searchResults.page': function() {
-        this.search();
+        this.search(false);
       },
     },
   }

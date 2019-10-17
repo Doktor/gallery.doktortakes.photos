@@ -134,7 +134,7 @@ def search_photos(request: Request) -> Response:
     except (ValueError, KeyError):
         page = 1
 
-    per_page = int(params.get('photosPerPage', 0)) or ITEMS_PER_PAGE
+    per_page = int(params.get('itemsPerPage', 0)) or ITEMS_PER_PAGE
 
     first = per_page * (page - 1)
     last = first + per_page

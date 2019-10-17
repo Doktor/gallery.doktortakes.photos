@@ -4,7 +4,7 @@
 
     <Pagination
         :mutation="'setSearchResultsPage'"
-        :itemsPerPage="photosPerPage"
+        :itemsPerPage="searchResults.itemsPerPage"
         :page="searchResults.page"
         :pages="pages"
     />
@@ -19,7 +19,7 @@
 
     <Pagination
         :mutation="'setSearchResultsPage'"
-        :itemsPerPage="photosPerPage"
+        :itemsPerPage="searchResults.itemsPerPage"
         :page="searchResults.page"
         :pages="pages"
     />
@@ -29,7 +29,7 @@
 <script>
   import Pagination from './Pagination.vue';
   import PhotoSearchResult from './PhotoSearchResult.vue';
-  import {mapGetters, mapState} from 'vuex';
+  import {mapState} from 'vuex';
 
 
   export default {
@@ -39,15 +39,12 @@
     },
 
     computed: {
-      ...mapGetters([
-        'photosPerPage',
-      ]),
       ...mapState([
         'searchResults',
       ]),
 
       pages() {
-        return Math.floor(this.searchResults.count / this.photosPerPage);
+        return Math.ceil(this.searchResults.count / this.searchResults.itemsPerPage);
       }
     },
   }

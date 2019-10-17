@@ -130,6 +130,7 @@ export const store = new Vuex.Store({
     // Photo search
     searchResults: {
       page: 1,
+      itemsPerPage: 10,
       photos: [],
       count: 0,
     },
