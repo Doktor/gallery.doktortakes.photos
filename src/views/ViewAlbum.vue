@@ -37,7 +37,7 @@
           <div v-if="album.parent || userIsStaff" class="group-inset-text">
             <router-link
                 v-if="album.parent"
-                :to="{name: 'album', params: {path: album.parent}}"
+                :to="{name: 'album', params: {path: album.parent.split('/')}}"
             >
               View parent album
             </router-link>
@@ -109,7 +109,16 @@
       </div>
     </section>
 
-    <Albums v-if="album.children" :albums="album.children"/>
+    <section class="albums">
+      <AlbumCard
+          v-if="album.children"
+          v-for="childAlbum in album.children"
+          :album="childAlbum"
+          :is-loaded="true"
+          :is-visible="true"
+          :key="childAlbum.path.join('/')"
+      />
+    </section>
 
     <Photos :photos="photos" :allowSelect="false"/>
   </div>
@@ -119,7 +128,7 @@
   import {mapState} from 'vuex';
   import {accessLevelsMap, staticFiles} from "../store/index.js";
 
-  import Albums from "../components/Albums.vue";
+  import AlbumCard from "../components/AlbumCard.vue";
   import Photos from '../components/Photos.vue';
 
 
@@ -142,7 +151,7 @@
 
   export default {
     components: {
-      Albums,
+      AlbumCard,
       Photos,
     },
 

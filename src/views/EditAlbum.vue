@@ -26,6 +26,27 @@
       <h2>Album details</h2>
       <AlbumDetails/>
 
+      <template>
+        <h2>Related albums</h2>
+
+        <router-link
+            v-if="album.parent !== null"
+            :to="{name: 'editAlbum', params: {path: album.parent.split('/')}}">
+          Edit parent album
+        </router-link>
+
+        <div v-if="album.children.length > 0" class="albums">
+          <AlbumCard
+              v-for="childAlbum in album.children"
+              :album="childAlbum"
+              :is-loaded="true"
+              :is-visible="true"
+              :key="childAlbum.path.join('/')"
+              :route="'editAlbum'"
+          />
+        </div>
+      </template>
+
       <PhotoUploader :path="album.path"/>
       <PhotoManager/>
 
@@ -35,6 +56,7 @@
 </template>
 
 <script>
+  import AlbumCard from '../components/AlbumCard.vue';
   import AlbumDetails from '../components/AlbumDetails.vue';
   import DeleteAlbum from '../components/DeleteAlbum.vue';
   import PhotoManager from '../components/PhotoManager.vue';
@@ -44,6 +66,7 @@
 
   export default {
     components: {
+      AlbumCard,
       AlbumDetails,
       DeleteAlbum,
       PhotoManager,
