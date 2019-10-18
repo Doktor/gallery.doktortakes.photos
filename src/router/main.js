@@ -97,7 +97,7 @@ const editorRoutes = [
     },
   },
   {
-    path: '/editor/albums/new',
+    path: '/editor/albums/new/',
     name: 'newAlbum',
     component: NewAlbum,
     meta: {
@@ -105,7 +105,7 @@ const editorRoutes = [
     },
   },
   {
-    path: '/editor/albums/edit/:path',
+    path: '/editor/albums/edit/:path+/',
     name: 'editAlbum',
     component: EditAlbum,
     meta: {
