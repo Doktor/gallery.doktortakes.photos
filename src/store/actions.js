@@ -95,13 +95,13 @@ export const actions = {
 
     Promise.all([
       // Album data
-      fetch(endpoints.albumDetail.replace(":path", path))
+      fetch(endpoints.albumDetail.replace(":path", path.join('/')))
       .then(parseResponse)
       .then(j => context.commit('setAlbum', j))
       .catch(console.log),
 
       // Album photos
-      fetch(endpoints.albumPhotoList.replace(":path", path))
+      fetch(endpoints.albumPhotoList.replace(":path", path.join('/')))
       .then(parseResponse)
       .then(j => context.commit('setPhotos', j.photos))
       .catch(console.log),
@@ -156,7 +156,7 @@ export const actions = {
   },
 
   deleteAlbum() {
-    fetch(endpoints.replace(":path", context.state.album.path), {
+    fetch(endpoints.replace(":path", context.state.album.path.join('/')), {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -178,7 +178,7 @@ export const actions = {
       photos.push(photo.md5);
     }
 
-    fetch(endpoints.albumPhotoList.replace(":path", context.state.album.path), {
+    fetch(endpoints.albumPhotoList.replace(":path", context.state.album.path.join('/')), {
       method: 'DELETE',
       body: JSON.stringify({
         'photos': photos,
@@ -213,7 +213,7 @@ export const actions = {
     .then(j => {
       let n = flash("Album created successfully. Redirecting...");
       setTimeout(
-        () => router.push({name: 'editAlbum', params: {path: j.path}}),
+        () => router.push({name: 'editAlbum', params: {path: j.path.join('/')}}),
         1500);
       setTimeout(() => n.remove(), 2500);
     })
@@ -229,7 +229,7 @@ export const actions = {
   saveAlbum(context) {
     let data = parseAlbumData(context.state.album);
 
-    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
+    fetch(endpoints.albumDetail.replace(":path", context.state.album.path.join('/')), {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
@@ -266,7 +266,7 @@ export const actions = {
 
     let notification = flash("Setting cover image.");
 
-    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
+    fetch(endpoints.albumDetail.replace(":path", context.state.album.path.join('/')), {
       method: 'PATCH',
       body: JSON.stringify({'cover': photo.md5}),
       headers: {

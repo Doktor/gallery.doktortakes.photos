@@ -26,7 +26,7 @@
       <h2>Album details</h2>
       <AlbumDetails/>
 
-      <PhotoUploader :path="path"/>
+      <PhotoUploader :path="album.path.join('/')"/>
       <PhotoManager/>
 
       <DeleteAlbum/>

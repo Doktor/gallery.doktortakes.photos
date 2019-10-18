@@ -5,7 +5,7 @@
         :album="album"
         :isLoaded="album.isLoaded"
         :isVisible="indexStart <= index && index <= indexEnd"
-        :key="album.path"
+        :key="album.path.join('/')"
         :route="route"
     />
   </ul>

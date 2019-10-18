@@ -68,7 +68,10 @@ export const mutations = {
   },
 
   setAlbums(state, albums) {
-    albums.map((album) => album.isLoaded = false);
+    albums.map((album) => {
+      album.isLoaded = false;
+      album.path = album.path.split('/');
+    });
 
     state.albums = albums;
     state.results = state.albums;
@@ -127,12 +130,14 @@ export const mutations = {
   },
 
   setAlbum(state, album) {
-    state.album = album;
+    album.path = album.path.split('/');
 
     // Store list fields as comma-separated strings
     for (let field of fields.list) {
-      state.album[field] = album[field].join(', ');
+      album[field] = album[field].join(', ');
     }
+
+    state.album = album;
   },
 
   setAlbumField(state, data) {
