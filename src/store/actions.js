@@ -215,7 +215,7 @@ export const actions = {
     .then(j => {
       let n = flash("Album created successfully. Redirecting...");
       setTimeout(
-        () => router.push({name: 'editAlbum', params: {path: j.path.join('/')}}),
+        () => router.push({name: 'editAlbum', params: {path: j.path}}),
         1500);
       setTimeout(() => n.remove(), 2500);
     })

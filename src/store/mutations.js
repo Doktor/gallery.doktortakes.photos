@@ -132,6 +132,10 @@ export const mutations = {
   setAlbum(state, album) {
     album.path = album.path.split('/');
 
+    for (let child of album.children) {
+      child.path = child.path.split('/');
+    }
+
     // Store list fields as comma-separated strings
     for (let field of fields.list) {
       album[field] = album[field].join(', ');

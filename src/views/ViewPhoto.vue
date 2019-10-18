@@ -81,7 +81,7 @@
       },
 
       routePath() {
-        return this.$route.params.routePath;
+        return this.$route.params.path;
       },
     },
 
