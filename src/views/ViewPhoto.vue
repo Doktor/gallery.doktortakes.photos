@@ -80,14 +80,14 @@
         return this.$route.params.md5;
       },
 
-      path() {
-        return this.$route.params.path;
+      routePath() {
+        return this.$route.params.routePath;
       },
     },
 
     created() {
       this.$store.dispatch('getAlbum', {
-        path: this.path,
+        routePath: this.routePath,
         setDocumentTitle: 'updateDocumentTitle',
         md5: this.md5,
       });

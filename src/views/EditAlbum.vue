@@ -56,14 +56,14 @@
         'loading',
       ]),
 
-      path() {
+      routePath() {
         return this.$route.params.path;
       }
     },
 
     created() {
       this.$store.dispatch('getAlbum', {
-        path: this.path,
+        routePath: this.routePath,
         setDocumentTitle: 'updateDocumentTitleForEditor',
       });
     },

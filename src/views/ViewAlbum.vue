@@ -183,12 +183,12 @@
         return "&nbsp;";
       },
 
-      path() {
-        return this.$route.params.path;
-      },
-
       placeholder() {
         return staticFiles.coverPlaceholder;
+      },
+
+      routePath() {
+        return this.$route.params.path;
       },
 
       tags() {

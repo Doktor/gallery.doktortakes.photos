@@ -90,18 +90,20 @@ export const actions = {
     .catch(console.log);
   },
 
-  getAlbum(context, {path, setDocumentTitle, md5 = null}) {
+  getAlbum(context, {routePath, setDocumentTitle, md5 = null}) {
     context.commit('setLoading', true);
+
+    let path = Array.isArray(routePath) ? routePath.join('/') : routePath;
 
     Promise.all([
       // Album data
-      fetch(endpoints.albumDetail.replace(":path", path.join('/')))
+      fetch(endpoints.albumDetail.replace(":path", path))
       .then(parseResponse)
       .then(j => context.commit('setAlbum', j))
       .catch(console.log),
 
       // Album photos
-      fetch(endpoints.albumPhotoList.replace(":path", path.join('/')))
+      fetch(endpoints.albumPhotoList.replace(":path", path))
       .then(parseResponse)
       .then(j => context.commit('setPhotos', j.photos))
       .catch(console.log),
