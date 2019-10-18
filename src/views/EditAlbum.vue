@@ -62,10 +62,22 @@
     },
 
     created() {
-      this.$store.dispatch('getAlbum', {
-        routePath: this.routePath,
-        setDocumentTitle: 'updateDocumentTitleForEditor',
-      });
+      this.loadAlbum();
+    },
+
+    methods: {
+      loadAlbum() {
+        this.$store.dispatch('getAlbum', {
+          routePath: this.routePath,
+          setDocumentTitle: 'updateDocumentTitleForEditor',
+        });
+      },
+    },
+
+    watch: {
+      routePath() {
+        this.loadAlbum();
+      },
     },
 
     mounted() {

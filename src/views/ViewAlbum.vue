@@ -201,17 +201,28 @@
     },
 
     created() {
-      this.$store.dispatch('getAlbum', {
-        path: this.path,
-        setDocumentTitle: 'updateDocumentTitle',
-      });
-
+      this.loadAlbum();
       document.body.classList.remove('small');
     },
 
     filters: {
       pluralize(value) {
         return value === 1 ? '' : 's';
+      },
+    },
+
+    methods: {
+      loadAlbum() {
+        this.$store.dispatch('getAlbum', {
+          routePath: this.routePath,
+          setDocumentTitle: 'updateDocumentTitle',
+        });
+      }
+    },
+
+    watch: {
+      routePath() {
+        this.loadAlbum();
       },
     },
   }
