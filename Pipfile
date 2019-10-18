@@ -7,6 +7,7 @@ name = "pypi"
 boto3 = "==1.9.5"
 celery = {version = "*", extras = ["redis"]}
 Django = ">=2.0"
+django-mptt = "*"
 django-storages = "*"
 django-webpack-loader = "*"
 djangorestframework = "*"
