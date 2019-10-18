@@ -12,7 +12,7 @@ from core.context_processors import metadata as m
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow
 from photos.settings import (
-    GIT_STATUS, INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE, TAGLINES)
+    GIT_STATUS, INDEX_ALBUMS, ITEMS_PER_PAGE, TAGLINES)
 from photos.utils import get_album, get_albums_for_user, get_photo
 
 import datetime

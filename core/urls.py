@@ -37,6 +37,7 @@ tag_patterns = [
 ]
 
 api_patterns = [
+    path('photos/featured/', api.get_featured_photos, name='api_featured_photos'),
     path('photos/search/', api.search_photos, name='search_photos'),
     path('photos/<md5:md5>/', api.PhotoDetail.as_view(), name='api_photo'),
 

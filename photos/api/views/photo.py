@@ -36,6 +36,15 @@ class PhotoDetail(APIView):
         return Response(status=Status.NO_CONTENT)
 
 
+@api_view()
+def get_featured_photos(request: Request) -> Response:
+    query = Q(album__access_level=Allow.PUBLIC, rating__gte=4, sidecar_exists=True)
+    photos = Photo.objects.filter(query).order_by('-taken').select_related('album')
+
+    serializer = PhotoSerializer(photos[:30], many=True)
+    return Response({'photos': serializer.data})
+
+
 def date_query(start: str, end: str) -> Q:
     query = Q()
 
