@@ -17,11 +17,18 @@ class AlbumSerializer(serializers.ModelSerializer):
     tags = TagField(many=True, allow_empty=True, queryset=Q())
     users = UserField(many=True, allow_empty=True, queryset=Q())
     groups = GroupField(many=True, allow_empty=True, queryset=Q())
+
     parent = NullableAlbumField(allow_empty=True, allow_null=True, queryset=Q())
+    children = serializers.SerializerMethodField(read_only=True)
 
     url = serializers.CharField(read_only=True, source='get_absolute_url')
     edit_url = serializers.CharField(read_only=True, source='get_edit_url')
     admin_url = serializers.CharField(read_only=True, source='get_admin_url')
+
+    @staticmethod
+    def get_children(obj: Album):
+        albums = obj.get_children().select_related('cover')
+        return AlbumDescendantSerializer(albums, many=True).data
 
     class Meta:
         model = Album
@@ -32,9 +39,17 @@ class AlbumSerializer(serializers.ModelSerializer):
             'cover',
             'thumbnail_size',
             'access_level', 'access_code', 'users', 'groups',
-            'parent',
+            'parent', 'children',
             'url', 'edit_url', 'admin_url',
         )
+
+
+class AlbumDescendantSerializer(serializers.ModelSerializer):
+    cover = PhotoThumbnailSerializer(read_only=True)
+
+    class Meta:
+        model = Album
+        fields = ('name', 'path', 'cover')
 
 
 class AlbumCoverSerializer(serializers.ModelSerializer):
