@@ -30,12 +30,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'rest_framework',
     'storages',
     'photos',
     'webpack_loader',
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
 
 REST_FRAMEWORK = {
     'DEFAULT_METADATA_CLASS': None,
