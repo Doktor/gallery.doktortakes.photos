@@ -8,6 +8,7 @@ from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+from mptt.models import MPTTModel, TreeForeignKey
 
 from rest_framework.request import Request
 
@@ -45,7 +46,7 @@ ACCESS_LEVELS = (
 )
 
 
-class Album(models.Model):
+class Album(MPTTModel):
     name = models.CharField(max_length=256)
     slug = models.SlugField(max_length=256)
 
@@ -73,7 +74,7 @@ class Album(models.Model):
         related_name='cover_for', blank=True, null=True,
         help_text="The cover photo for this album")
 
-    parent = models.ForeignKey(
+    parent = TreeForeignKey(
         'self', models.SET_NULL,
         related_name='children', blank=True, null=True,
         help_text="The album that contains this album")
