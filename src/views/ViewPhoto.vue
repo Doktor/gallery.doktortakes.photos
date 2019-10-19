@@ -1,25 +1,10 @@
 <template>
   <div v-if="!loading">
-    <section id="photo">
-      <a class="photo-link" ref="viewer">
-        <img
-            class="photo-landscape"
-            :class="{'hidden': isPortrait}"
-            :src="photo.image"
-            alt="Container for landscape photos"
-            title="Click to zoom"
-            ref="image"
-        >
-        <img
-            class="photo-portrait"
-            :class="{'hidden': isLandscape}"
-            :src="photo.image"
-            alt="Container for portrait photos"
-            title="Click to zoom"
-            ref="image"
-        >
-      </a>
-    </section>
+    <PhotoViewer
+        :count="this.photos.length - 1"
+        :onClick="onClick"
+        :photo="photo"
+    />
 
     <Filmstrip
         :photos="photos"
@@ -47,11 +32,13 @@
   import Links from "../components/photo/Links.vue";
   import Metadata from "../components/photo/Metadata.vue";
   import PhotoSwipe from "../components/photo/PhotoSwipe.vue";
+  import PhotoViewer from "../components/PhotoViewer.vue";
   import initPhotoSwipe from "../photoswipe.js";
 
 
   export default {
     components: {
+      PhotoViewer,
       Exif,
       Filmstrip,
       KeyboardShortcuts,
@@ -67,14 +54,6 @@
         'photo',
         'photos',
       ]),
-
-      isLandscape() {
-        return this.photo.width >= this.photo.height;
-      },
-
-      isPortrait() {
-        return !this.isLandscape;
-      },
 
       md5() {
         return this.$route.params.md5;
@@ -93,6 +72,12 @@
       });
     },
 
+    data() {
+      return {
+        onClick: () => {},
+      }
+    },
+
     destroyed() {
       this.toggleClasses(false);
     },
@@ -102,20 +87,6 @@
         document.body.classList.toggle('photo-viewer', state);
         document.querySelector('.nav').classList.toggle('hidden', state);
       },
-
-      previous() {
-        this.$store.commit('setPhoto', this.photo.index - 1);
-      },
-      next() {
-        this.$store.commit('setPhoto', this.photo.index + 1);
-      },
-
-      first() {
-        this.$store.commit('setPhoto', 0);
-      },
-      last() {
-        this.$store.commit('setPhoto', this.photos.length - 1);
-      },
     },
 
     mounted() {
@@ -124,21 +95,6 @@
       document.addEventListener('keyup', (event) => {
         if (event.ctrlKey || event.metaKey) {
           return;
-        }
-
-        if (event.key.startsWith("Arrow")) {
-          event.preventDefault();
-
-          switch (event.key) {
-            case "ArrowLeft":
-              return this.previous();
-            case "ArrowRight":
-              return this.next();
-            case "ArrowUp":
-              return this.first();
-            case "ArrowDown":
-              return this.last();
-          }
         }
 
         switch (event.key.toLowerCase()) {
@@ -160,7 +116,7 @@
           return;
         }
 
-        this.$nextTick(() => initPhotoSwipe.bind(this)());
+        this.$nextTick(() => this.onClick = initPhotoSwipe.bind(this)());
         unsubscribe();
       });
     },
@@ -176,24 +132,6 @@
 </style>
 
 <style lang="scss" scoped>
-  #photo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    margin: 0;
-    width: 100%;
-
-    @media (min-width: 1201px) {
-      height: 100vh;
-    }
-
-    img {
-      max-width: 100%;
-      max-height: 100vh;
-    }
-  }
-
   .info, footer {
     margin: 0 auto;
     width: 90%;

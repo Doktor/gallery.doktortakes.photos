@@ -9,7 +9,15 @@ export default function initPhotoSwipe() {
     }
   });
 
-  this.$refs.viewer.addEventListener('click', (event) => {
+  const previous = () => {
+    this.$store.commit('setPhoto', this.photo.index - 1);
+  };
+
+  const next = () => {
+    this.$store.commit('setPhoto', this.photo.index + 1);
+  };
+
+  const onClick = (event) => {
     event.preventDefault();
 
     let options = {
@@ -29,7 +37,7 @@ export default function initPhotoSwipe() {
       showAnimationDuration: 500,
 
       getThumbBoundsFn: () => {
-        let item = this.$refs.image;
+        let item = event.target;
         let y = window.pageYOffset || document.documentElement.scrollTop;
         let rect = item.getBoundingClientRect();
 
@@ -81,11 +89,11 @@ export default function initPhotoSwipe() {
     gallery.listen('afterChange', function() {
       // Swipe right
       if (startX < endX) {
-        return this.$store.commit('setPhoto', this.photo.index - 1);
+        previous();
       }
       // Swipe left
       if (startX > endX) {
-        return this.$store.commit('setPhoto', this.photo.index + 1);
+        next();
       }
     });
 
@@ -99,11 +107,13 @@ export default function initPhotoSwipe() {
           return gallery.goTo(gallery.items.length - 1);
       }
     });
-  });
+  };
 
   const leftArrow = document.querySelector('.pswp__button--arrow--left');
-  leftArrow.addEventListener('click', () => this.previous());
+  leftArrow.addEventListener('click', () => previous());
 
   const rightArrow = document.querySelector('.pswp__button--arrow--right');
-  rightArrow.addEventListener('click', () => this.next());
+  rightArrow.addEventListener('click', () => next());
+
+  return onClick;
 }
