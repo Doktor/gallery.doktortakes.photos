@@ -42,6 +42,7 @@ export const endpoints = {
   albumPhotoList: "/api/albums/:path/photos/",
   tagList: "/api/tags/",
   tagDetail: "/api/tags/:slug/",
+  featuredPhotos: "/api/photos/featured/",
   searchPhotos: "/api/photos/search/",
   currentUser: "/api/me/",
   currentUserAlbums: "/api/me/albums/",

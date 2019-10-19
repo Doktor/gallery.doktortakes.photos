@@ -87,17 +87,7 @@ def index(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def featured(request: HttpRequest) -> HttpResponse:
-    """Renders the featured photos page."""
-    query = Q(album__access_level=Allow.PUBLIC, rating__gte=4, sidecar_exists=True)
-    photos = Photo.objects.filter(query).order_by('-taken').select_related('album')
-
-    context = {
-        'featured_url': reverse('search') + FEATURED_QUERY,
-        'featured': photos[:INDEX_FEATURED_PHOTOS],
-        'more_photos': len(photos) > INDEX_FEATURED_PHOTOS,
-    }
-
-    return render(request, 'featured.html', context)
+    return render(request, 'featured.html', {})
 
 
 # Albums

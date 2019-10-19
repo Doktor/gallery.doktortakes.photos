@@ -146,6 +146,18 @@ export const actions = {
     .catch(console.log);
   },
 
+  getFeaturedPhotos(context) {
+    context.commit('setLoading', true);
+
+    fetch(endpoints.featuredPhotos)
+    .then(parseResponse)
+    .then(j => {
+      context.commit('setLoading', false);
+      context.commit('setPhotos', j.photos);
+    })
+    .catch(console.log);
+  },
+
   searchPhotos(context, queryString) {
     fetch(endpoints.searchPhotos + queryString)
     .then(parseResponse)

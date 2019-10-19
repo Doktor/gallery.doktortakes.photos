@@ -5,6 +5,7 @@ import {store} from "../store/index.js";
 import ViewAlbum from "../views/ViewAlbum.vue";
 import ViewAlbums from "../views/ViewAlbums.vue";
 import ViewPhoto from "../views/ViewPhoto.vue";
+import ViewFeaturedPhotos from "../views/ViewFeaturedPhotos.vue";
 import ViewTags from "../views/ViewTags.vue";
 import ViewTag from "../views/ViewTag.vue";
 import ViewUser from "../views/ViewUser.vue";
@@ -38,6 +39,15 @@ const browserRoutes = [
     path: '/albums/:path+/:md5',
     name: 'photo',
     component: ViewPhoto,
+    pathToRegexpOptions: {
+      strict: true,
+    },
+  },
+
+  {
+    path: '/featured/',
+    name: 'featured',
+    component: ViewFeaturedPhotos,
     pathToRegexpOptions: {
       strict: true,
     },

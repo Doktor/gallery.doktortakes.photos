@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block title %}Featured photos | {{ block.super }}{% endblock %}
+
 {% block meta %}
   {% include "_open_graph_common.html" %}
 
@@ -11,44 +13,6 @@
   <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
 {% endblock %}
 
-{% block scripts %}
-{% if featured %}
-  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js" defer></script>
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" defer></script>
-<script src="{% static 'scripts/featured.js' %}" defer></script>
-{% endif %}
-{% endblock %}
-
 {% block content %}
-  {% if featured %}
-    <h2>Featured</h2>
-
-    <section id="featured">
-    <div class="container">
-      <div class="grid-sizer"></div>
-        {% for photo in featured %}
-        <div class="item">
-          <a href="{% url 'photo' photo.path photo.md5 %}">
-            <img src="{{ photo.thumbnail.url }}">
-          </a>
-        </div>
-        {% endfor %}
-      </div>
-    </section>
-
-    {% if more_photos %}
-    <section class="view-more">
-      <div class="view-more-wrapper">
-        <a class="view-more-link" href="{{ featured_url }}">View more featured photos</a>
-      </div>
-    </section>
-    {% endif %}
-  {% else %}
-    <p>No featured photos found.</p>
-  {% endif %}
-
-  <footer>
-    {% include "_reuse.html" %}
-    {% include "_copyright.html" %}
-  </footer>
+  {% include "_browser.html" %}
 {% endblock %}

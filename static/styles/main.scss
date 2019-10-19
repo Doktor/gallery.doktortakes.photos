@@ -851,32 +851,6 @@ $photoWidth: 300px;
   transform: translateX(-50%) translateY(-50%);
 }
 
-/* Featured photos */
-
-#featured {
-  $width: 400px;
-
-  margin: 0 (-$itemSpacing) 1rem (-$itemSpacing);
-
-  .item {
-    padding: $itemSpacing;
-    width: 100%;
-
-    @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
-      width: (100% / 2);
-    }
-    @media (min-width: $width * 3 + 1) {
-      width: (100% / 3);
-    }
-
-    @include fade();
-  }
-
-  img {
-    width: 100%;
-  }
-}
-
 /* Albums */
 
 $albumWidth: 400px;
