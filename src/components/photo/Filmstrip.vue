@@ -5,7 +5,7 @@
         <img
             class="filmstrip-image"
             :src="photo.square_thumbnail"
-            @click="setPhoto(photo.index)"
+            @click="setPhoto({index: photo.index})"
         >
         <div class="filmstrip-index">{{ photo.index + 1 }}</div>
       </div>

@@ -152,8 +152,15 @@ export const actions = {
     fetch(endpoints.featuredPhotos)
     .then(parseResponse)
     .then(j => {
+      let photos = j.photos;
+
+      photos.forEach((photo, index) => {
+        photo.index = index;
+      });
+
       context.commit('setLoading', false);
-      context.commit('setPhotos', j.photos);
+      context.commit('setPhotos', photos);
+      context.commit('setPhoto', {index: 0, history: false});
     })
     .catch(console.log);
   },

@@ -10,11 +10,11 @@ export default function initPhotoSwipe() {
   });
 
   const previous = () => {
-    this.$store.commit('setPhoto', this.photo.index - 1);
+    this.$store.commit('setPhoto', {index: this.photo.index - 1});
   };
 
   const next = () => {
-    this.$store.commit('setPhoto', this.photo.index + 1);
+    this.$store.commit('setPhoto', {index: this.photo.index + 1});
   };
 
   const onClick = (event) => {

@@ -33,21 +33,25 @@
 
     methods: {
       first() {
-        this.$store.commit('setPhoto', 0);
+        this.$store.commit(
+          'setPhoto', {index: 0, history: this.useHistory});
       },
       previous() {
-        this.$store.commit('setPhoto', this.photo.index - 1);
+        this.$store.commit(
+          'setPhoto', {index: this.photo.index - 1, history: this.useHistory});
       },
       next() {
-        this.$store.commit('setPhoto', this.photo.index + 1);
+        this.$store.commit(
+          'setPhoto', {index: this.photo.index + 1, history: this.useHistory});
       },
       last() {
-        this.$store.commit('setPhoto', this.count);
+        this.$store.commit(
+          'setPhoto', {index: this.count, history: this.useHistory});
       },
     },
 
     mounted() {
-      document.addEventListener('keyup', (event) => {
+      document.addEventListener('keydown', (event) => {
         if (event.ctrlKey || event.metaKey) {
           return;
         }
@@ -82,6 +86,10 @@
         type: Object,
         required: true,
       },
+      useHistory: {
+        type: Boolean,
+        default: true,
+      }
     },
   }
 </script>

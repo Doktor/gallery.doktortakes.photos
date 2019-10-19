@@ -1,43 +1,49 @@
 <template>
   <div v-if="!loading">
-    <h2>Featured</h2>
+    <h2>Featured photos</h2>
 
-    <div v-if="photos.length > 0">
-      <section id="featured">
-        <div class="container">
-          <div class="grid-sizer"></div>
-          <div v-for="photo in photos" class="item">
-            <router-link
-                :to="{name: 'photo', params: {path: photo.path, md5: photo.md5}}">
-              <img alt="Photo" :src="photo.thumbnail">
-            </router-link>
-          </div>
-        </div>
-      </section>
+    <PhotoViewer
+        :count="this.photos.length - 1"
+        :onClick="onClick"
+        :photo="photo"
+        :useHistory="false"
+    />
 
-      <section class="view-more">
-        <div class="view-more-wrapper">
-          <!-- TODO: query string -->
-          <router-link class="view-more-link" :to="{name: 'search'}">
-            View more featured photos
-          </router-link>
-        </div>
-      </section>
-    </div>
+    <Filmstrip
+        :photos="photos"
+        :position="photo.index"
+    />
 
-    <p v-else>No featured photos found.</p>
+    <section class="view-more">
+      <div class="view-more-wrapper">
+        <!-- TODO: query string -->
+        <router-link class="view-more-link" :to="{name: 'search'}">
+          View more featured photos
+        </router-link>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex';
 
+  import Filmstrip from "../components/photo/Filmstrip.vue";
+  import PhotoViewer from "../components/PhotoViewer.vue";
+  import {router} from "../router/main.js";
+
 
   export default {
+    components: {
+      PhotoViewer,
+      Filmstrip,
+    },
+
     computed: {
       ...mapState([
         'loading',
         'photos',
+        'photo',
       ]),
     },
 
@@ -45,16 +51,17 @@
       this.$store.dispatch('getFeaturedPhotos');
     },
 
-    watch: {
-      photos() {
-        let el = document.querySelector('#featured .container');
-        new imagesLoaded(el, function() {
-          new Masonry(el, {
-            itemSelector: '.item',
-          });
+    methods: {
+      onClick() {
+        router.push({
+          name: 'photo',
+          params: {
+            path: this.photo.path,
+            md5: this.photo.md5
+          },
         });
-      }
-    }
+      },
+    },
   }
 </script>
 

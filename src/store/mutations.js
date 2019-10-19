@@ -160,10 +160,10 @@ export const mutations = {
 
   setPhotoInitial(state, md5) {
     let photo = state.photos.filter((photo) => photo.md5 === md5)[0];
-    this.commit('setPhoto', photo.index);
+    this.commit('setPhoto', {index: photo.index});
   },
 
-  setPhoto(state, index) {
+  setPhoto(state, {index, history = true}) {
     if (index === state.photo.index) {
       return;
     }
@@ -187,9 +187,11 @@ export const mutations = {
     let next = (photo.index + 1) % length;
     this.commit('preloadPhoto', next);
 
-    let title = photoTitleTemplate.format(photo.md5.substring(0, 8), state.album.name);
-    document.title = title;
-    window.history.pushState(null, title, photo.url);
+    if (history) {
+      let title = photoTitleTemplate.format(photo.md5.substring(0, 8), state.album.name);
+      document.title = title;
+      window.history.pushState(null, title, photo.url);
+    }
   },
 
   preloadPhoto(state, index) {
