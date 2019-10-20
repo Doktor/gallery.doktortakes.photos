@@ -23,77 +23,50 @@ const browserRoutes = [
     path: '/albums/',
     name: 'albums',
     component: ViewAlbums,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
   {
     path: '/albums/:path+/',
     name: 'album',
     component: ViewAlbum,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
   {
     path: '/albums/:path+/:md5',
     name: 'photo',
     component: ViewPhoto,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
 
   {
     path: '/featured/',
     name: 'featured',
     component: ViewFeaturedPhotos,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
 
   {
     path: '/tags/',
     name: 'tags',
     component: ViewTags,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
   {
     path: '/tags/:slug/',
     name: 'tag',
     component: ViewTag,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
 
   {
     path: '/search/',
     name: 'search',
     component: SearchPhotos,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
 
   {
     path: '/users/:slug/',
     name: 'user',
     component: ViewUser,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
   {
     path: '/users/:slug/password/',
     name: 'changePassword',
     component: ChangePassword,
-    pathToRegexpOptions: {
-      strict: true,
-    },
   },
 ];
 
@@ -125,6 +98,7 @@ const editorRoutes = [
 ];
 
 const routes = browserRoutes.concat(editorRoutes);
+routes.forEach((route) => route.pathToRegexpOptions = {strict: true});
 
 const router = new VueRouter({
   mode: 'history',
