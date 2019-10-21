@@ -211,7 +211,6 @@
 
     created() {
       this.loadAlbum();
-      document.body.classList.remove('small');
     },
 
     filters: {

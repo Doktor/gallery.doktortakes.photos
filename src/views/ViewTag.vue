@@ -61,7 +61,6 @@
 
     created() {
       this.$store.dispatch('getTag', this.slug);
-      document.body.classList.add('small');
     },
 
     filters: {

@@ -27,7 +27,6 @@
 
     created() {
       this.$store.dispatch('getTags');
-      document.body.classList.add('small');
     },
   }
 </script>

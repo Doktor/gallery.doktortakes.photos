@@ -78,20 +78,7 @@
       }
     },
 
-    destroyed() {
-      this.toggleClasses(false);
-    },
-
-    methods: {
-      toggleClasses(state) {
-        document.body.classList.toggle('photo-viewer', state);
-        document.querySelector('.nav').classList.toggle('hidden', state);
-      },
-    },
-
     mounted() {
-      this.toggleClasses(true);
-
       document.addEventListener('keyup', (event) => {
         if (event.ctrlKey || event.metaKey) {
           return;

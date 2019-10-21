@@ -23,6 +23,9 @@ const browserRoutes = [
     path: '/albums/',
     name: 'albums',
     component: ViewAlbums,
+    meta: {
+      body: 'small',
+    },
   },
   {
     path: '/albums/:path+/',
@@ -33,6 +36,10 @@ const browserRoutes = [
     path: '/albums/:path+/:md5',
     name: 'photo',
     component: ViewPhoto,
+    meta: {
+      body: 'photo-viewer',
+      nav: false,
+    }
   },
 
   {
@@ -45,11 +52,17 @@ const browserRoutes = [
     path: '/tags/',
     name: 'tags',
     component: ViewTags,
+    meta: {
+      body: 'small',
+    },
   },
   {
     path: '/tags/:slug/',
     name: 'tag',
     component: ViewTag,
+    meta: {
+      body: 'small',
+    },
   },
 
   {
@@ -62,11 +75,17 @@ const browserRoutes = [
     path: '/users/:slug/',
     name: 'user',
     component: ViewUser,
+    meta: {
+      body: 'small',
+    },
   },
   {
     path: '/users/:slug/password/',
     name: 'changePassword',
     component: ChangePassword,
+    meta: {
+      body: 'small',
+    },
   },
 ];
 
@@ -84,6 +103,7 @@ const editorRoutes = [
     name: 'newAlbum',
     component: NewAlbum,
     meta: {
+      body: 'small',
       staff: true,
     },
   },
@@ -92,6 +112,7 @@ const editorRoutes = [
     name: 'editAlbum',
     component: EditAlbum,
     meta: {
+      body: 'small',
       staff: true,
     },
   },
@@ -124,6 +145,23 @@ router.beforeEach((to, from, next) => {
       next();
     }
   })
+});
+
+router.afterEach((to, from) => {
+  for (let record of to.matched) {
+    // <body>
+    let body = record.meta.body;
+
+    if (body === undefined) {
+      document.body.className = "";
+    } else {
+      document.body.className = body;
+    }
+
+    // .nav
+    document.querySelector('.nav')
+      .classList.toggle('hidden', record.meta.nav === false)
+  }
 });
 
 

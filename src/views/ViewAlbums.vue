@@ -64,7 +64,6 @@
 
     created() {
       this.$store.dispatch('getAlbums');
-      document.body.classList.add('small');
     },
 
     filters: {
