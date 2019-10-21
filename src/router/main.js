@@ -11,6 +11,7 @@ import ViewTag from "../views/ViewTag.vue";
 import ViewUser from "../views/ViewUser.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 
+import ViewAbout from "../views/ViewAbout.vue";
 import ViewCopyright from "../views/ViewCopyright.vue";
 
 import SearchPhotos from "../views/SearchPhotos.vue";
@@ -90,6 +91,14 @@ const browserRoutes = [
     },
   },
 
+  {
+    path: '/about/',
+    name: 'about',
+    component: ViewAbout,
+    meta: {
+      body: 'small',
+    },
+  },
   {
     path: '/copyright/',
     name: 'copyright',

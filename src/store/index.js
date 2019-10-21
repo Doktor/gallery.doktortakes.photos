@@ -50,6 +50,7 @@ export const endpoints = {
 };
 
 export const staticFiles = {
+  blueDog: api.dataset.staticBlueDog,
   coverPlaceholder: api.dataset.staticCoverPlaceholder,
   squareThumbnailPlaceholder: api.dataset.staticSquareThumbnailPlaceholder,
 };
