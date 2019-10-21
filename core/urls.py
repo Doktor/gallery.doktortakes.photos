@@ -22,13 +22,13 @@ album_patterns = [
 
     path('<path:path>/', views.view_album, name='album'),
     path('<path:path>/<md5:md5>', views.view_photo, name='photo'),
-    path('<path:path>/<md5:md5>/download', views.download_photo, name='download'),
+    path('<path:path>/<md5:md5>/download/', views.download_photo, name='download'),
 ]
 
 editor_patterns = [
     path('', views.editor, name='editor'),
-    path('albums/new', views.editor, name='editor_new_album'),
-    path('albums/edit/<path:path>', views.editor, name='editor_edit_album'),
+    path('albums/new/', views.editor, name='editor_new_album'),
+    path('albums/edit/<path:path>/', views.editor, name='editor_edit_album'),
 ]
 
 tag_patterns = [
