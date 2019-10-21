@@ -11,6 +11,8 @@ import ViewTag from "../views/ViewTag.vue";
 import ViewUser from "../views/ViewUser.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 
+import ViewCopyright from "../views/ViewCopyright.vue";
+
 import SearchPhotos from "../views/SearchPhotos.vue";
 
 import EditAlbum from "../views/EditAlbum.vue";
@@ -87,6 +89,15 @@ const browserRoutes = [
       body: 'small',
     },
   },
+
+  {
+    path: '/copyright/',
+    name: 'copyright',
+    component: ViewCopyright,
+    meta: {
+      body: 'small',
+    },
+  }
 ];
 
 const editorRoutes = [
