@@ -60,7 +60,8 @@ def compile_js(ctx):
     ctx.run("./node_modules/.bin/webpack --config webpack.prod.js")
 
 
-def generate_git_status(ctx):
+@task
+def git_status(ctx):
     def get_last_commit_datetime():
         raw = check_output("git log -1 --format=%at").strip()
         utc = datetime.datetime.utcfromtimestamp(int(raw)).replace(tzinfo=pytz.utc)
@@ -105,7 +106,7 @@ def build(ctx):
     collect_static_files(ctx)
 
     print("Generating Git status file")
-    generate_git_status(ctx)
+    git_status(ctx)
 
     print("Done!")
 
