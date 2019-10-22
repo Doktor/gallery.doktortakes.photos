@@ -305,5 +305,19 @@ export const actions = {
       flash("Cover image set successfully.")
     })
     .catch(console.log);
+  },
+
+  getRecent(context) {
+    context.commit('setLoading', true);
+
+    fetch(endpoints.recent)
+    .then(parseResponse)
+    .then(j => {
+      context.commit('setAlbums', j.recent_albums);
+      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+      context.commit('setGitStatus', j.git_status);
+      context.commit('setLoading', false);
+    })
+    .catch(console.log);
   }
 };

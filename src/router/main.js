@@ -13,6 +13,7 @@ import ChangePassword from "../views/ChangePassword.vue";
 
 import ViewAbout from "../views/ViewAbout.vue";
 import ViewCopyright from "../views/ViewCopyright.vue";
+import ViewRecent from "../views/ViewRecent.vue";
 
 import SearchPhotos from "../views/SearchPhotos.vue";
 
@@ -106,6 +107,15 @@ const browserRoutes = [
     meta: {
       body: 'small',
     },
+  },
+
+  {
+    path: '/recent/',
+    name: 'recent',
+    component: ViewRecent,
+    meta: {
+      body: 'small',
+    }
   }
 ];
 

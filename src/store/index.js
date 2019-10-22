@@ -47,6 +47,7 @@ export const endpoints = {
   currentUser: "/api/me/",
   currentUserAlbums: "/api/me/albums/",
   changePassword: "/api/me/password/",
+  recent: "/api/recent/",
 };
 
 export const staticFiles = {
@@ -140,6 +141,7 @@ export const store = new Vuex.Store({
     page: 1,
     loaded: [],
 
+    gitStatus: {},
     settings: settings,
   },
 

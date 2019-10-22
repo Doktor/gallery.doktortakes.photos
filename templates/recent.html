@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Recent | {{ block.super }}{% endblock %}
+
+{% block meta %}
+{% include "_open_graph_common.html" %}
+<meta property="og:type" content="profile">
+<meta property="profile:first_name" content="Doktor">
+<meta property="profile:username" content="Doktor">
+<meta property="og:url" content="{{ BASE_URL }}{% url 'recent' %}">
+{% endblock %}
+
+{% block content %}
+  {% include "_browser.html" %}
+{% endblock %}

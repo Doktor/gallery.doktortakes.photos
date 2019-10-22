@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User
-from django.core.cache import cache
 from django.db.models import Q
 from django.http import Http404, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
@@ -9,7 +8,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
-from photos.models import Album, Photo, Tag
+from photos.models import Photo, Tag
 from photos.models.album import Allow
 from photos.settings import (
     GIT_STATUS, INDEX_ALBUMS, ITEMS_PER_PAGE, TAGLINES)
@@ -18,7 +17,6 @@ from photos.utils import get_album, get_albums_for_user, get_photo
 import datetime
 import mimetypes
 import random
-import pytz
 from typing import Callable
 
 metadata = m(None)
@@ -232,70 +230,5 @@ def change_password(request: HttpRequest, slug: str) -> HttpResponse:
 # Other
 
 
-def view_activity(request: HttpRequest) -> HttpResponse:
-    if (request.user.is_staff and not request.GET.get('cache', '')) or (
-            not request.user.is_staff):
-
-        activity = cache.get('activity')
-
-        if activity is not None:
-            return render(request, "activity.html", {'activity': activity})
-
-    activity = {}
-
-    album_q = Q(album__access_level=Allow.PUBLIC, album__isnull=False)
-
-    now = datetime.datetime.now().replace(tzinfo=pytz.utc)
-    oldest = now - datetime.timedelta(days=180)
-
-    photo = (
-        Photo.objects
-            .filter(album_q)
-            .filter(uploaded__gt=oldest)
-            .order_by('-uploaded')
-            .values('album_id', 'uploaded'))[0]
-
-    while photo:
-        if len(activity.keys()) > 20:
-            break
-
-        album_id = photo['album_id']
-        uploaded = photo['uploaded']
-
-        # Find photos uploaded up to 1 hour before this one
-        activity_group = list(
-            Photo.objects
-                .filter(
-                    album=album_id,
-                    uploaded__gt=uploaded - datetime.timedelta(hours=1),
-                    uploaded__lt=uploaded)
-                .order_by('uploaded')
-                .values('id', 'uploaded'))
-
-        count = len(activity_group)
-        earliest = activity_group[0]['uploaded']
-
-        sample = random.sample(activity_group, min(count, 5))
-        pks = [photo['id'] for photo in sample]
-        thumbs = Photo.objects.filter(id__in=pks)
-
-        activity[earliest] = {
-            'count': count,
-            'album': Album.objects.get(id=album_id),
-            'photos': thumbs,
-        }
-
-        photo = (
-            Photo.objects
-                .filter(album_q)
-                .filter(uploaded__lt=earliest)
-                .order_by('-uploaded')
-                .values('album_id', 'uploaded'))[0]
-
-    cache.set('activity', activity, timeout=None)
-
-    return render(request, "activity.html", {'activity': activity})
-
-
-def view_changes(request: HttpRequest) -> HttpResponse:
-    return render(request, "changes.html", {'status': GIT_STATUS})
+def view_recent(request: HttpRequest) -> HttpResponse:
+    return render(request, "recent.html", {})

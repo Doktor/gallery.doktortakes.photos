@@ -218,4 +218,8 @@ export const mutations = {
       window.history.replaceState(null, newTitle, state.album.edit_url);
     }
   },
+
+  setGitStatus(state, status) {
+    state.gitStatus = status;
+  },
 };

@@ -1,8 +1,10 @@
 from django.conf import settings
+from django.contrib.humanize.templatetags.humanize import naturaltime
 
 import datetime
 import json
 import os
+
 import PIL.Image
 
 
@@ -89,8 +91,8 @@ if os.path.isfile(GIT_STATUS_PATH):
     with open(GIT_STATUS_PATH, encoding='utf8') as f:
         data = json.loads(f.read().strip())
 
-        data['last_commit_datetime'] = datetime.datetime.strptime(
-            data['last_commit_datetime'], "%Y-%m-%d %H:%M:%S")
+        data['last_commit_naturaltime'] = naturaltime(
+            datetime.datetime.strptime(data['last_commit_datetime'], "%Y-%m-%d %H:%M:%S"))
 
         GIT_STATUS = data
 else:
