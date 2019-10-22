@@ -51,6 +51,8 @@ api_patterns = [
     path('me/', api.get_current_user, name='api_current_user'),
     path('me/albums/', api.get_albums_for_current_user, name='api_current_user_albums'),
     path('me/password/', api.change_password, name='api_change_password'),
+
+    path('recent/', api.get_recent),
 ]
 
 user_patterns = [
