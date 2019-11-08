@@ -75,7 +75,6 @@ def index(request: HttpRequest) -> HttpResponse:
     albums = all_albums[:INDEX_ALBUMS]
 
     context = {
-        'tagline': random.choice(TAGLINES),
         'albums': albums,
         'more_albums': count > INDEX_ALBUMS,
     }

@@ -11,16 +11,6 @@
   <meta property="article:modified_time" content="{{ LAST_UPDATE|date:"c" }}">
 {% endblock %}
 
-{% block nav %}
-<header>
-  <h1 class="logo logo-large">Doktor Takes Photos</h1>
-
-  <ul class="nav-items nav-items-index">
-    {% include "_navlinks.html" %}
-  </ul>
-</header>
-{% endblock %}
-
 {% block content %}
-  {% include "_browser.html" with tagline=tagline %}
+  {% include "_browser.html" %}
 {% endblock %}

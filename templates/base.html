@@ -13,6 +13,16 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css" integrity="sha384-wxqG4glGB3nlqX0bi23nmgwCSjWIW13BdLUEYC4VIMehfbcro/ATkyDsF/AbIOVe" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.js" defer></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.js" defer></script>
+
   {% if debug %}
   <link rel="stylesheet" href="{% static 'styles/debug/common.css' %}">
   {% else %}
@@ -28,24 +38,12 @@
 </head>
 
 <body class="{% block classes %}{% endblock %}">
-{% block nav %}
-<nav class="nav">
-  <ul class="nav-items">
-    <li class="nav-item">
-      <h1 class="logo">
-        <a class="nav-item-link" href="{% url 'index' %}">Doktor Takes Photos</a>
-      </h1>
-    </li>
-    {% include "_navlinks.html" with divider=True %}
-  </ul>
-</nav>
-{% endblock %}
-
-<div id="messages">
-  {% for m in messages %}
-  <div class="message visible {{ m.tags }}" tabindex="1">{{ m }}</div>
-  {% endfor %}
-</div>
+<div id="api"
+     data-tagline="{{ TAGLINE }}"
+     data-static-blue-dog="{% static 'images/camera.png' %}"
+     data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
+     data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
+></div>
 
 {% block content %}{% endblock %}
 </body>

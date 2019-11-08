@@ -100,6 +100,8 @@ export const fields = {
   ],
 };
 
+export const tagline = api.dataset.tagline;
+
 
 // Store
 
