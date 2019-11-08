@@ -150,7 +150,7 @@ const browserRoutes = [
 const editorRoutes = [
   {
     path: '/editor/',
-    name: 'index',
+    name: 'editorIndex',
     component: EditAlbums,
     meta: {
       staff: true,

@@ -188,7 +188,7 @@ export const actions = {
     .then(parseResponse)
     .then((j) => {
       flash("Album deleted successfully. Redirecting...");
-      setTimeout(() => router.push({name: 'index'}), 1500);
+      setTimeout(() => router.push({name: 'editorIndex'}), 1500);
     })
     .catch(console.log);
   },

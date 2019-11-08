@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-link :to="{name: 'index'}">Back to editor</router-link>
+    <router-link :to="{name: 'editorIndex'}">Back to editor</router-link>
 
     <template v-if="!loading">
       <header>
