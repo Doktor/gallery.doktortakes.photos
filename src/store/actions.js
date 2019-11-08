@@ -142,6 +142,7 @@ export const actions = {
       context.commit('setTag', j.tag);
       context.commit('setAlbums', j.albums);
       context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+      document.title = "Tag: #{0} | Doktor Takes Photos".format(j.tag.slug);
     })
     .catch(console.log);
   },

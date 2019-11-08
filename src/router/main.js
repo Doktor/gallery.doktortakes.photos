@@ -22,6 +22,8 @@ import EditAlbums from "../views/EditAlbums.vue";
 import NewAlbum from "../views/NewAlbum.vue";
 
 
+const baseTitle = "Doktor Takes Photos";
+
 const browserRoutes = [
   {
     path: '/albums/',
@@ -29,12 +31,16 @@ const browserRoutes = [
     component: ViewAlbums,
     meta: {
       body: 'small',
+      title: "Albums",
     },
   },
   {
     path: '/albums/:path+/',
     name: 'album',
     component: ViewAlbum,
+    meta: {
+      title: false,
+    },
   },
   {
     path: '/albums/:path+/:md5',
@@ -43,13 +49,17 @@ const browserRoutes = [
     meta: {
       body: 'photo-viewer',
       nav: false,
-    }
+      title: false,
+    },
   },
 
   {
     path: '/featured/',
     name: 'featured',
     component: ViewFeaturedPhotos,
+    meta: {
+      title: "Featured",
+    },
   },
 
   {
@@ -58,6 +68,7 @@ const browserRoutes = [
     component: ViewTags,
     meta: {
       body: 'small',
+      title: "Tags",
     },
   },
   {
@@ -66,6 +77,7 @@ const browserRoutes = [
     component: ViewTag,
     meta: {
       body: 'small',
+      title: false,
     },
   },
 
@@ -73,6 +85,9 @@ const browserRoutes = [
     path: '/search/',
     name: 'search',
     component: SearchPhotos,
+    meta: {
+      title: "Search",
+    },
   },
 
   {
@@ -81,6 +96,7 @@ const browserRoutes = [
     component: ViewUser,
     meta: {
       body: 'small',
+      title: false,
     },
   },
   {
@@ -89,6 +105,7 @@ const browserRoutes = [
     component: ChangePassword,
     meta: {
       body: 'small',
+      title: "Change your password",
     },
   },
 
@@ -98,6 +115,7 @@ const browserRoutes = [
     component: ViewAbout,
     meta: {
       body: 'small',
+      title: "About",
     },
   },
   {
@@ -106,6 +124,7 @@ const browserRoutes = [
     component: ViewCopyright,
     meta: {
       body: 'small',
+      title: "Copyright",
     },
   },
 
@@ -115,7 +134,8 @@ const browserRoutes = [
     component: ViewRecent,
     meta: {
       body: 'small',
-    }
+      title: "Recent changes",
+    },
   }
 ];
 
@@ -126,6 +146,7 @@ const editorRoutes = [
     component: EditAlbums,
     meta: {
       staff: true,
+      title: "Edit albums",
     },
   },
   {
@@ -135,6 +156,7 @@ const editorRoutes = [
     meta: {
       body: 'small',
       staff: true,
+      title: "Create new album",
     },
   },
   {
@@ -144,6 +166,7 @@ const editorRoutes = [
     meta: {
       body: 'small',
       staff: true,
+      title: "Edit album: {album}",
     },
   },
 ];
@@ -191,6 +214,17 @@ router.afterEach((to, from) => {
     // .nav
     document.querySelector('.nav')
       .classList.toggle('hidden', record.meta.nav === false)
+
+    // Document title
+    let title = record.meta.title;
+
+    if (title === false) {
+      // Don't change the title
+    } else if (title !== undefined) {
+      document.title = title + " | " + baseTitle;
+    } else {
+      document.title = baseTitle;
+    }
   }
 });
 
