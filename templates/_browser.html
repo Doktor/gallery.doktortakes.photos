@@ -10,6 +10,10 @@
 <div id="app"></div>
 
 <footer>
+  {% if tagline %}
+  <div class="tagline">"{{ tagline }}"</div>
+  {% endif %}
+
   {% include "_reuse.html" %}
   {% include "_copyright.html" %}
 </footer>

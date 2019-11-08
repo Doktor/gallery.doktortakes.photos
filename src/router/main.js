@@ -2,6 +2,8 @@ import VueRouter from 'vue-router';
 
 import {store} from "../store/index.js";
 
+import ViewIndex from "../views/ViewIndex.vue";
+
 import ViewAlbum from "../views/ViewAlbum.vue";
 import ViewAlbums from "../views/ViewAlbums.vue";
 import ViewPhoto from "../views/ViewPhoto.vue";
@@ -25,6 +27,12 @@ import NewAlbum from "../views/NewAlbum.vue";
 const baseTitle = "Doktor Takes Photos";
 
 const browserRoutes = [
+  {
+    path: '/',
+    name: 'index',
+    component: ViewIndex,
+  },
+
   {
     path: '/albums/',
     name: 'albums',
@@ -212,8 +220,11 @@ router.afterEach((to, from) => {
     }
 
     // .nav
-    document.querySelector('.nav')
-      .classList.toggle('hidden', record.meta.nav === false)
+    let nav = document.querySelector('.nav');
+
+    if (nav !== null) {
+      nav.classList.toggle('hidden', record.meta.nav === false);
+    }
 
     // Document title
     let title = record.meta.title;
