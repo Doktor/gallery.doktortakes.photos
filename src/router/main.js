@@ -209,6 +209,10 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
+  if (to.name !== from.name) {
+    window.scrollTo(0, 0);
+  }
+
   for (let record of to.matched) {
     // <body>
     let body = record.meta.body;
