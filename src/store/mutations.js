@@ -23,6 +23,7 @@ export const mutations = {
   },
 
   setAlbumPage(state, page) {
+    state.page = page;
     state.results.filter((album) => !album.loaded).forEach((album, index) => {
       if (page === Math.floor(index / state.settings.albumsPerPage) + 1) {
         album.isLoaded = true;
@@ -67,14 +68,32 @@ export const mutations = {
     this.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
   },
 
-  setAlbums(state, albums) {
+  setAllAlbums(state, albums) {
     albums.map((album) => {
       album.isLoaded = false;
       album.path = album.path.split('/');
     });
 
+    state.allAlbums = albums;
     state.albums = albums;
-    state.results = state.albums;
+    state.results = albums;
+  },
+
+  setAlbums(state, albums) {
+    state.albums = albums;
+    state.results = albums;
+  },
+
+  setAlbumsByTag(state, tag) {
+    this.commit('setAlbums', state.allAlbums.filter((album) => album.tags.includes(tag)));
+  },
+
+  setAlbumsToAllAlbums(state) {
+    this.commit('setAlbums', state.allAlbums);
+  },
+
+  setAlbumsToPrivateAlbums(state) {
+    this.commit('setAlbums', state.allAlbums.filter((album) => album.access_level > 0));
   },
 
   setTags(state, tags) {

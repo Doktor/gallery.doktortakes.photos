@@ -41,19 +41,6 @@ export const actions = {
     .catch(console.log);
   },
 
-  getUserAlbums(context) {
-    context.commit('setLoading', true);
-
-    fetch(endpoints.currentUserAlbums)
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setLoading', false);
-      context.commit('setAlbums', j.albums);
-      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
-    })
-    .catch(console.log);
-  },
-
   changePassword(context, data) {
     fetch(endpoints.changePassword, {
       method: 'POST',
@@ -77,15 +64,18 @@ export const actions = {
     .catch(j => j.errors.forEach(flash));
   },
 
-  getAlbums(context) {
+  getAllAlbums(context) {
+    if (context.state.allAlbums.length > 0) {
+      return Promise.resolve();
+    }
+
     context.commit('setLoading', true);
 
-    fetch(endpoints.albumList)
+    return fetch(endpoints.albumList)
     .then(parseResponse)
-    .then(j => context.commit('setAlbums', j.albums))
-    .then(() => {
+    .then(j => {
+      context.commit('setAllAlbums', j.albums);
       context.commit('setLoading', false);
-      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
     })
     .catch(console.log);
   },
@@ -140,8 +130,6 @@ export const actions = {
     .then(j => {
       context.commit('setLoading', false);
       context.commit('setTag', j.tag);
-      context.commit('setAlbums', j.albums);
-      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
       document.title = "Tag: #{0} | Doktor Takes Photos".format(j.tag.slug);
     })
     .catch(console.log);

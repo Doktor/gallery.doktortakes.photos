@@ -61,6 +61,10 @@
 
     created() {
       this.$store.dispatch('getTag', this.slug);
+      this.$store.dispatch('getAllAlbums').then(() => {
+        this.$store.commit('setAlbumsByTag', this.slug);
+        this.$store.commit('setAlbumPage', 1);
+      });
     },
 
     filters: {

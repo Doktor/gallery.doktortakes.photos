@@ -54,16 +54,17 @@
         'search',
       ]),
       ...mapState([
-        'albums',
         'results',
         'loading',
         'user',
       ]),
-
     },
 
     created() {
-      this.$store.dispatch('getAlbums');
+      this.$store.dispatch('getAllAlbums').then(() => {
+        this.$store.commit('setAlbumsToAllAlbums');
+        this.$store.commit('setAlbumPage', 1);
+      })
     },
 
     filters: {

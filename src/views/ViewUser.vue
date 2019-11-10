@@ -59,16 +59,17 @@
         'search',
       ]),
       ...mapState([
-        'albums',
         'results',
         'loading',
         'user',
       ]),
-
     },
 
     created() {
-      this.$store.dispatch('getUserAlbums');
+      this.$store.dispatch('getAllAlbums').then(() => {
+        this.$store.commit('setAlbumsToPrivateAlbums');
+        this.$store.commit('setAlbumPage', 1);
+      })
     },
 
     filters: {

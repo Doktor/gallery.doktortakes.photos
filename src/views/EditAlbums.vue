@@ -57,7 +57,10 @@
     },
 
     created() {
-      this.$store.dispatch('getAlbums');
+      this.$store.dispatch('getAllAlbums').then(() => {
+        this.$store.commit('setAlbumsToTopLevelAlbums');
+        this.$store.commit('setAlbumPage', 1);
+      })
     },
 
     filters: {
