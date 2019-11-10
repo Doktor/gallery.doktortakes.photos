@@ -52,7 +52,7 @@ export const actions = {
     })
     .then(parseResponse)
     .then(j => {
-      flash(j.message);
+      context.commit('addNotification', j.message);
 
       setTimeout(() => router.push({
         name: 'user',
@@ -61,7 +61,11 @@ export const actions = {
         },
       }), 1000);
     })
-    .catch(j => j.errors.forEach(flash));
+    .catch(j => {
+      j.errors.forEach((err) => {
+        context.commit('addNotification', err)
+      });
+    });
   },
 
   getAllAlbums(context) {
@@ -174,7 +178,7 @@ export const actions = {
     })
     .then(parseResponse)
     .then((j) => {
-      flash("Album deleted successfully. Redirecting...");
+      context.commit('addNotification', "Album deleted successfully. Redirecting...");
       setTimeout(() => router.push({name: 'editorIndex'}), 1500);
     })
     .catch(console.log);
@@ -220,16 +224,18 @@ export const actions = {
     })
     .then(parseResponse)
     .then(j => {
-      let n = flash("Album created successfully. Redirecting...");
+      context.commit('addTimedNotification', {
+        message: "Album created successfully. Redirecting...",
+        hideAfter: 2500,
+      });
       setTimeout(
         () => router.push({name: 'editAlbum', params: {path: j.path}}),
         1500);
-      setTimeout(() => n.remove(), 2500);
     })
     .catch(j => {
       for (let [field, errors] of Object.entries(j)) {
         for (let error of errors) {
-          flash("{0}: {1}".format(field, error));
+          context.commit('addNotification', "{0}: {1}".format(field, error));
         }
       }
     });
@@ -250,12 +256,12 @@ export const actions = {
     .then(j => {
       context.commit('setAlbum', j);
       context.commit('updateDocumentTitleForEditAlbum');
-      flash("Album saved successfully.");
+      context.commit('addNotification', "Album saved successfully.");
     })
     .catch(j => {
       for (let [field, errors] of Object.entries(j)) {
         for (let error of errors) {
-          flash("{0}: {1}".format(field, error));
+          context.commit('addNotification', "{0}: {1}".format(field, error));
         }
       }
     });
@@ -273,9 +279,9 @@ export const actions = {
       return;
     }
 
-    let notification = flash("Setting cover image.");
+    context.commit('addNotification', "Setting cover image.");
 
-    fetch(endpoints.albumDetail.replace(":path", context.state.album.path.join('/')), {
+    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
       method: 'PATCH',
       body: JSON.stringify({'cover': photo.md5}),
       headers: {
@@ -289,8 +295,8 @@ export const actions = {
         key: 'cover',
         value: j,
       });
-      notification.remove();
-      flash("Cover image set successfully.")
+      context.commit('removeNotification', "Setting cover image.");
+      context.commit('addNotification', "Cover image set successfully.");
     })
     .catch(console.log);
   },

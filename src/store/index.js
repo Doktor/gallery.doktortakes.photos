@@ -129,6 +129,7 @@ export const store = new Vuex.Store({
     strict: !production,
 
     user: {},
+    notifications: [],
 
     loading: true,
 

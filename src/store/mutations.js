@@ -13,6 +13,26 @@ export const mutations = {
   // vuex-map-fields
   updateField,
 
+  addNotification(state, message) {
+    if (state.notifications.includes(message)) {
+      return;
+    }
+
+    state.notifications.push(message);
+  },
+
+  addTimedNotification(state, {message, hideAfter = 0}) {
+    this.commit('addNotification', message);
+
+    if (hideAfter > 0) {
+      setTimeout(() => this.commit('removeNotification', message), hideAfter);
+    }
+  },
+
+  removeNotification(state, message) {
+    state.notifications.remove(message);
+  },
+
   setUser(state, user) {
     state.user = user;
   },

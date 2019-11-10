@@ -16,7 +16,7 @@
       />
     </nav>
 
-    <div id="messages"></div>
+    <Notifications/>
 
     <router-view/>
 
@@ -31,12 +31,14 @@
 
 <script>
   import Navlinks from "../components/Navlinks.vue";
+  import Notifications from "../components/Notifications.vue";
   import {tagline} from "../store";
 
 
   export default {
     components: {
       Navlinks,
+      Notifications,
     },
 
     computed: {
