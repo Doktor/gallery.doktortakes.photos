@@ -80,33 +80,41 @@ export const actions = {
     .catch(console.log);
   },
 
-  getAlbum(context, {routePath, setDocumentTitle, md5 = null}) {
+  getAlbum(context, path) {
+    path = Array.isArray(path) ? path.join('/') : path;
+
+    if (context.state.albumDetailCache.hasOwnProperty(path)) {
+      context.commit('setAlbum', context.state.albumDetailCache[path]);
+      context.commit('setPhotos', context.state.albumPhotosCache[path]);
+
+      return Promise.resolve();
+    }
+
     context.commit('setLoading', true);
 
-    let path = Array.isArray(routePath) ? routePath.join('/') : routePath;
-
-    Promise.all([
+    return Promise.all([
       // Album data
       fetch(endpoints.albumDetail.replace(":path", path))
       .then(parseResponse)
-      .then(j => context.commit('setAlbum', j))
+      .then(j => {
+        let album = j;
+        album.cached = true;
+
+        context.commit('setAlbum', album);
+        context.commit('updateAlbumDetailCache', {path: path, album: album})
+      })
       .catch(console.log),
 
       // Album photos
       fetch(endpoints.albumPhotoList.replace(":path", path))
       .then(parseResponse)
-      .then(j => context.commit('setPhotos', j.photos))
+      .then(j => {
+        context.commit('setPhotos', j.photos);
+        context.commit('updateAlbumPhotosCache', {path: path, photos: j.photos})
+      })
       .catch(console.log),
     ])
-    .then(() => {
-      if (md5 !== null) {
-        context.commit('setPhotoInitial', md5);
-      } else {
-        context.commit(setDocumentTitle);
-      }
-      context.commit('setLoading', false);
-      context.commit('setPage', {page: 1, mutation: 'setPhotoPage'});
-    })
+    .then(() => context.commit('setLoading', false))
     .catch(console.log);
   },
 
@@ -241,7 +249,7 @@ export const actions = {
     .then(parseResponse)
     .then(j => {
       context.commit('setAlbum', j);
-      context.commit('updateDocumentTitleForEditor');
+      context.commit('updateDocumentTitleForEditAlbum');
       flash("Album saved successfully.");
     })
     .catch(j => {

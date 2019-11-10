@@ -221,9 +221,9 @@
 
     methods: {
       loadAlbum() {
-        this.$store.dispatch('getAlbum', {
-          routePath: this.routePath,
-          setDocumentTitle: 'updateDocumentTitle',
+        this.$store.dispatch('getAlbum', this.routePath).then(() => {
+          this.$store.commit('updateDocumentTitleForAlbum');
+          this.$store.commit('setPhotoPage', 1);
         });
       }
     },

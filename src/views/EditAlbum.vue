@@ -90,9 +90,9 @@
 
     methods: {
       loadAlbum() {
-        this.$store.dispatch('getAlbum', {
-          routePath: this.routePath,
-          setDocumentTitle: 'updateDocumentTitleForEditor',
+        this.$store.dispatch('getAlbum', this.routePath).then(() => {
+          this.$store.commit('setPhotoPage', 1);
+          this.$store.commit('updateDocumentTitleForEditAlbum');
         });
       },
     },

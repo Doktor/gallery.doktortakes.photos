@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading && Object.keys(photo).length !== 0">
     <PhotoViewer
         :count="this.photos.length - 1"
         :onClick="onClick"
@@ -65,10 +65,8 @@
     },
 
     created() {
-      this.$store.dispatch('getAlbum', {
-        routePath: this.routePath,
-        setDocumentTitle: 'updateDocumentTitle',
-        md5: this.md5,
+      this.$store.dispatch('getAlbum', this.routePath).then(() => {
+        this.$store.commit('setPhotoInitial', this.md5);
       });
     },
 
@@ -99,7 +97,7 @@
       });
 
       let unsubscribe = this.$store.subscribe((mutation, state) => {
-        if (mutation.type !== 'setLoading' || mutation.payload !== false) {
+        if (mutation.type !== 'setPhoto') {
           return;
         }
 

@@ -32,6 +32,7 @@ export const mutations = {
   },
 
   setPhotoPage(state, page) {
+    state.page = page;
     state.loaded.push(page);
   },
 
@@ -149,15 +150,17 @@ export const mutations = {
   },
 
   setAlbum(state, album) {
-    album.path = album.path.split('/');
+    if (album.cached === undefined || !album.cached) {
+      album.path = album.path.split('/');
 
-    for (let child of album.children) {
-      child.path = child.path.split('/');
-    }
+      for (let child of album.children) {
+        child.path = child.path.split('/');
+      }
 
-    // Store list fields as comma-separated strings
-    for (let field of fields.list) {
-      album[field] = album[field].join(', ');
+      // Store list fields as comma-separated strings
+      for (let field of fields.list) {
+        album[field] = album[field].join(', ');
+      }
     }
 
     state.album = album;
@@ -224,11 +227,11 @@ export const mutations = {
     }
   },
 
-  updateDocumentTitle(state) {
+  updateDocumentTitleForAlbum(state) {
     document.title = titleTemplate.format(state.album.name);
   },
 
-  updateDocumentTitleForEditor(state) {
+  updateDocumentTitleForEditAlbum(state) {
     let newTitle = editorTitleTemplate.format(state.album.name);
 
     // Update history entry
@@ -241,4 +244,12 @@ export const mutations = {
   setGitStatus(state, status) {
     state.gitStatus = status;
   },
+
+  updateAlbumDetailCache(state, {path, album}) {
+    Vue.set(state.albumDetailCache, path, album);
+  },
+
+  updateAlbumPhotosCache(state, {path, photos}) {
+    Vue.set(state.albumPhotosCache, path, photos);
+  }
 };
