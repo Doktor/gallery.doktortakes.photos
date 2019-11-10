@@ -94,9 +94,9 @@
         <div v-if="album.tags" class="group-info-item">
           <i title="Tags" class="fas fa-fw fa-tags"></i>
           <span>
-            <template v-for="(slug, index) in tags">
+            <template v-for="(slug, index) in album.tags">
               <router-link class="tag" :to="{name: 'tag', params: {slug: slug}}">#{{ slug }}</router-link>
-              <span v-if="index !== tags.length - 1" v-html="nbsp"></span>
+              <span v-if="index !== album.tags.length - 1" v-html="nbsp"></span>
             </template>
           </span>
         </div>
@@ -198,10 +198,6 @@
 
       routePath() {
         return this.$route.params.path;
-      },
-
-      tags() {
-        return this.album.tags.split(', ');
       },
 
       userIsStaff() {
