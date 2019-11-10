@@ -24,7 +24,7 @@ import EditAlbums from "../views/EditAlbums.vue";
 import NewAlbum from "../views/NewAlbum.vue";
 
 
-const baseTitle = "Doktor Takes Photos";
+export const baseTitle = "Doktor Takes Photos";
 
 const browserRoutes = [
   {

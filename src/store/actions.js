@@ -111,26 +111,17 @@ export const actions = {
   },
 
   getTags(context) {
+    if (context.state.tags.length > 0) {
+      return Promise.resolve();
+    }
+
     context.commit('setLoading', true);
 
-    fetch(endpoints.tagList)
+    return fetch(endpoints.tagList)
     .then(parseResponse)
     .then(j => {
       context.commit('setLoading', false);
       context.commit('setTags', j.tags);
-    })
-    .catch(console.log);
-  },
-
-  getTag(context, slug) {
-    context.commit('setLoading', true);
-
-    fetch(endpoints.tagDetail.replace(":slug", slug))
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setLoading', false);
-      context.commit('setTag', j.tag);
-      document.title = "Tag: #{0} | Doktor Takes Photos".format(j.tag.slug);
     })
     .catch(console.log);
   },

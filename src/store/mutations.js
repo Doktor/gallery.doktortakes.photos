@@ -100,8 +100,8 @@ export const mutations = {
     state.tags = tags;
   },
 
-  setTag(state, tag) {
-    state.tag = tag;
+  setTag(state, slug) {
+    state.tag = state.tags.filter((tag) => tag.slug === slug)[0];
   },
 
   setLoading(state, loading) {

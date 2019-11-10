@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading && tag !== null">
     <h2>#{{ tag.slug }}</h2>
 
     <div class="album-search-container">
@@ -26,6 +26,7 @@
   import Albums from "../components/Albums.vue";
   import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
   import AlbumListSimple from "../components/AlbumListSimple.vue";
+  import {baseTitle} from "../router/main.js";
 
 
   export default {
@@ -40,7 +41,6 @@
         'search',
       ]),
       ...mapState([
-        'albums',
         'loading',
         'results',
         'tag',
@@ -60,10 +60,15 @@
     },
 
     created() {
-      this.$store.dispatch('getTag', this.slug);
-      this.$store.dispatch('getAllAlbums').then(() => {
-        this.$store.commit('setAlbumsByTag', this.slug);
-        this.$store.commit('setAlbumPage', 1);
+      document.title = "Tag: #{0} | {1}".format(this.slug, baseTitle);
+
+      this.$store.dispatch('getTags').then(() => {
+        this.$store.commit('setTag', this.slug);
+
+        this.$store.dispatch('getAllAlbums').then(() => {
+          this.$store.commit('setAlbumsByTag', this.slug);
+          this.$store.commit('setAlbumPage', 1);
+        });
       });
     },
 
