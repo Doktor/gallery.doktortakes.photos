@@ -37,7 +37,7 @@
     </router-link>
 
     <AlbumListDetailedCards
-        v-if="album.children"
+        v-if="album.children.length > 0"
         class="album-list-dc-items"
         :albums="album.children"
         :route="route"
@@ -47,13 +47,12 @@
 </template>
 
 <script>
-  import AlbumListDetailedCards from "./AlbumListDetailedCards.vue";
   import {staticFiles} from "../store/index.js";
 
 
   export default {
     components: {
-      AlbumListDetailedCards
+      AlbumListDetailedCards: () => import("./AlbumListDetailedCards.vue")
     },
 
     computed: {
