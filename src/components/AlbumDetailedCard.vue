@@ -40,6 +40,8 @@
         v-if="album.children.length > 0"
         class="album-list-dc-items"
         :albums="album.children"
+        :indexStart="0"
+        :indexEnd="album.children.length"
         :route="route"
     />
   </li>
