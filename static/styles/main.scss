@@ -184,6 +184,9 @@ h1, h2, h3, h4, h5, h6 {
   @include primary-font();
   text-align: left;
 
+  display: flex;
+  justify-content: space-between;
+
   margin: 0;
 
   &.pagination-above {

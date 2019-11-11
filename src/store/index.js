@@ -78,11 +78,6 @@ export const staticFiles = {
 
 export const production = process.env.NODE_ENV === 'production';
 
-const settings = {
-  albumsPerPage: 12,
-  photosPerPage: production ? 30 : 10,
-};
-
 export const accessLevels = [
   {
     level: 0,
@@ -167,7 +162,10 @@ export const store = new Vuex.Store({
     loaded: [],
 
     gitStatus: {},
-    settings: settings,
+
+    // Settings
+    albumsPerPage: 12,
+    photosPerPage: 30,
   },
 
   actions,

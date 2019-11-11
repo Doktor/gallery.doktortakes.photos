@@ -1,6 +1,7 @@
 <template>
   <section>
-    <Pagination :mutation="'setPhotoPage'" :itemsPerPage="photosPerPage" :page="page" :pages="photoPages"/>
+    <PaginationPhotos/>
+
     <section class="photos">
       <Photo
           v-for="photo in photos"
@@ -12,39 +13,37 @@
           :photo="photo"
       />
     </section>
-    <Pagination :mutation="'setPhotoPage'" :itemsPerPage="photosPerPage" :page="page" :pages="photoPages"/>
+
+    <PaginationPhotos/>
   </section>
 </template>
 
 <script>
-  import Pagination from './Pagination.vue';
+  import PaginationPhotos from './PaginationPhotos.vue';
   import Photo from './Photo.vue';
-  import {mapGetters, mapState} from 'vuex';
+  import {mapState} from 'vuex';
 
 
   export default {
     components: {
-      Pagination,
+      PaginationPhotos,
       Photo,
     },
 
     computed: {
+      ...mapState([
+        'page',
+        'photosPerPage',
+        'loaded',
+        'selected',
+      ]),
+
       indexStart() {
         return this.photosPerPage * (this.page - 1);
       },
       indexEnd() {
         return this.indexStart + this.photosPerPage - 1;
       },
-
-      ...mapGetters([
-        'photosPerPage',
-        'photoPages',
-      ]),
-      ...mapState([
-        'page',
-        'loaded',
-        'selected',
-      ]),
     },
 
     props: {

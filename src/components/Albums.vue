@@ -1,10 +1,6 @@
 <template>
   <section>
-    <Pagination
-        :mutation="'setAlbumPage'"
-        :itemsPerPage="albumsPerPage"
-        :page="page"
-        :pages="albumPages"/>
+    <PaginationAlbums/>
 
     <AlbumListViewSelector/>
 
@@ -20,23 +16,19 @@
       />
     </section>
 
-    <Pagination
-        :mutation="'setAlbumPage'"
-        :itemsPerPage="albumsPerPage"
-        :page="page"
-        :pages="albumPages"/>
+    <PaginationAlbums/>
   </section>
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
+  import {mapState} from 'vuex';
   import AlbumCard from "./AlbumCard.vue";
-  import Pagination from './Pagination.vue';
   import AlbumListCards from "./AlbumListCards.vue";
   import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
   import AlbumListSimple from "../components/AlbumListSimple.vue";
   import AlbumListViewSelector from "../components/AlbumListViewSelector.vue";
   import AlbumTable from "./AlbumTable.vue";
+  import PaginationAlbums from './PaginationAlbums.vue';
 
 
   export default {
@@ -47,15 +39,12 @@
       AlbumListSimple,
       AlbumListViewSelector,
       AlbumTable,
-      Pagination,
+      PaginationAlbums,
     },
 
     computed: {
-      ...mapGetters([
-        'albumsPerPage',
-        'albumPages',
-      ]),
       ...mapState([
+        'albumsPerPage',
         'page',
         'user',
       ]),

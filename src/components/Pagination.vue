@@ -1,27 +1,41 @@
 <template>
-  <section v-if="pages > 1" class="pagination">
-    <span
-        class="page page-flip"
-        @click="selectPreviousPage">
-      Prev
-    </span>
-
-    <template v-for="n in getPages()">
+  <div v-if="pages > 1" class="pagination">
+    <span>
       <span
-          v-if="n !== 'skip'"
-          class="page"
-          :class="{'page-selected': page === n}"
-          @click="selectPage(n)"
-      >{{ n }}</span>
-      <PageSkipInput v-else :mutation="mutation" :page="page" :pages="pages"/>
-    </template>
+          class="page page-flip"
+          @click="selectPreviousPage">
+        Prev
+      </span>
 
-    <span
-        class="page page-flip"
-        @click="selectNextPage">
-      Next
+      <template v-for="n in getPages()">
+        <span
+            v-if="n !== 'skip'"
+            class="page"
+            :class="{'page-selected': page === n}"
+            @click="selectPage(n)"
+        >{{ n }}</span>
+        <PageSkipInput v-else :mutation="mutation" :page="page" :pages="pages"/>
+      </template>
+
+      <span
+          class="page page-flip"
+          @click="selectNextPage">
+        Next
+      </span>
     </span>
-  </section>
+
+    <span class="pagination-items-per-page">
+      <span class="page page-select">Items per page</span>
+      <span
+          v-for="count in itemsPerPageChoices"
+          class="page"
+          :class="{'page-selected': count === itemsPerPage}"
+          @click="setItemsPerPage(count)"
+      >
+        {{ count }}
+      </span>
+    </span>
+  </div>
 </template>
 
 <script>
@@ -93,11 +107,19 @@
         type: String,
         required: true,
       },
-
       itemsPerPage: {
         type: Number,
         required: true,
       },
+      itemsPerPageChoices: {
+        type: Array,
+        required: true,
+      },
+      setItemsPerPage: {
+        type: Function,
+        required: true,
+      },
+
       page: {
         type: Number,
         required: true,
@@ -121,5 +143,9 @@
 
   .page-selected, .page-selected:hover {
     background-color: rgb(0, 120, 255) !important;
+  }
+
+  .pagination-items-per-page {
+    margin-left: 1rem;
   }
 </style>

@@ -44,7 +44,7 @@ export const mutations = {
   setAlbumPage(state, page) {
     state.page = page;
     state.results.filter((album) => !album.loaded).forEach((album, index) => {
-      if (page === Math.floor(index / state.settings.albumsPerPage) + 1) {
+      if (page === Math.floor(index / state.albumsPerPage) + 1) {
         album.isLoaded = true;
       }
     });
@@ -191,7 +191,7 @@ export const mutations = {
   setPhotos(state, photos) {
     for (let [index, photo] of photos.entries()) {
       photo.index = index;
-      photo.page = Math.floor(index / state.settings.photosPerPage) + 1;
+      photo.page = Math.floor(index / state.photosPerPage) + 1;
       photo.loaded = false;
     }
 
@@ -269,5 +269,15 @@ export const mutations = {
 
   updateAlbumPhotosCache(state, {path, photos}) {
     Vue.set(state.albumPhotosCache, path, photos);
-  }
+  },
+
+  setAlbumsPerPage(state, count) {
+    state.albumsPerPage = count;
+    this.commit('setAlbumPage', 1);
+  },
+
+  setPhotosPerPage(state, count) {
+    state.photosPerPage = count;
+    this.commit('setPhotoPage', 1);
+  },
 };

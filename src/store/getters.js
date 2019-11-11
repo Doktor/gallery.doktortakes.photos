@@ -8,19 +8,11 @@ export const getters = {
     return state.album.access_code;
   },
 
-  albumsPerPage(state) {
-    return state.settings.albumsPerPage;
-  },
-
-  photosPerPage(state) {
-    return state.settings.photosPerPage;
-  },
-
   albumPages(state) {
-    return Math.ceil(state.results.length / state.settings.albumsPerPage);
+    return Math.ceil(state.results.length / state.albumsPerPage);
   },
 
   photoPages(state) {
-    return Math.ceil(state.photos.length / state.settings.photosPerPage);
+    return Math.ceil(state.photos.length / state.photosPerPage);
   },
 };
