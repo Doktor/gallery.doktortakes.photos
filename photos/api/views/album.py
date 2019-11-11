@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.serializers import (
-    AlbumSerializer, AlbumForListViewSerializer, AlbumCoverSerializer, PhotoSerializer)
+    AlbumSerializer, AlbumCoverSerializer, PhotoSerializer)
 from photos.models import Album, Photo
 from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album, get_albums_for_user
@@ -20,10 +20,10 @@ from io import BytesIO
 class AlbumList(APIView):
     @staticmethod
     def get(request: Request) -> Response:
-        albums = (get_albums_for_user(request.user)
-                  .select_related('cover')
-                  .prefetch_related('tags'))
-        serializer = AlbumForListViewSerializer(albums, many=True)
+        albums = (get_albums_for_user(request.user, include_children=True)
+                  .select_related('cover', 'parent')
+                  .prefetch_related('children', 'tags', 'users', 'groups'))
+        serializer = AlbumSerializer(albums, many=True)
 
         return Response({'albums': serializer.data})
 

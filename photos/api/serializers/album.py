@@ -27,8 +27,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_children(obj: Album):
-        albums = obj.get_children().select_related('cover')
-        return AlbumDescendantSerializer(albums, many=True).data
+        return AlbumPathSerializer(obj.children, many=True).data
 
     class Meta:
         model = Album
@@ -44,12 +43,10 @@ class AlbumSerializer(serializers.ModelSerializer):
         )
 
 
-class AlbumDescendantSerializer(serializers.ModelSerializer):
-    cover = PhotoThumbnailSerializer(read_only=True)
-
+class AlbumPathSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
-        fields = ('name', 'path', 'cover')
+        fields = ('path',)
 
 
 class AlbumCoverSerializer(serializers.ModelSerializer):
