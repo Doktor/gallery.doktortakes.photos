@@ -45,11 +45,9 @@ api_patterns = [
     path('albums/<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
     path('albums/', api.AlbumList.as_view(), name='api_albums'),
 
-    path('tags/<slug:slug>/', api.TagDetail.as_view(), name='api_tag'),
     path('tags/', api.TagList.as_view(), name='api_tags'),
 
     path('me/', api.get_current_user, name='api_current_user'),
-    path('me/albums/', api.get_albums_for_current_user, name='api_current_user_albums'),
     path('me/password/', api.change_password, name='api_change_password'),
 
     path('recent/', api.get_recent),
