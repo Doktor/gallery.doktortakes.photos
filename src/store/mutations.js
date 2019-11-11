@@ -36,11 +36,6 @@ export const mutations = {
     state.user = user;
   },
 
-  setPage(state, {page, mutation}) {
-    state.page = page;
-    this.commit(mutation, page);
-  },
-
   setAlbumPage(state, page) {
     state.page = page;
     state.results.filter((album) => !album.loaded).forEach((album, index) => {
@@ -85,7 +80,7 @@ export const mutations = {
 
     state.results = state.albums.filter(
       (album) => album.name.match(new RegExp(term, "i")));
-    this.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+    this.commit('setAlbumPage', 1);
   },
 
   setAllAlbums(state, albums) {

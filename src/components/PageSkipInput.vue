@@ -42,7 +42,7 @@
           return;
         }
 
-        this.$store.commit('setPage', {page: page, mutation: this.mutation});
+        this.setPage(page);
         this.active = false;
       },
 
@@ -56,8 +56,8 @@
     },
 
     props: {
-      mutation: {
-        type: String,
+      setPage: {
+        type: Function,
         required: true,
       },
 

@@ -3,7 +3,7 @@
       :itemsPerPage="albumsPerPage"
       :itemsPerPageChoices="itemsPerPageChoices"
       :setItemsPerPage="setItemsPerPage"
-      :mutation="'setAlbumPage'"
+      :setPage="setPage"
       :page="page"
       :pages="albumPages"
   />
@@ -34,6 +34,9 @@
     },
 
     methods: {
+      setPage(page) {
+        this.$store.commit('setAlbumPage', page);
+      },
       setItemsPerPage(count) {
         this.$store.commit('setAlbumsPerPage', count);
       },
