@@ -220,6 +220,7 @@
 
     methods: {
       loadAlbum() {
+        this.$store.commit('clearPhotos');
         this.$store.dispatch('getAlbum', this.routePath).then(() => {
           this.$store.commit('updateDocumentTitleForAlbum');
           this.$store.commit('setPhotoPage', 1);

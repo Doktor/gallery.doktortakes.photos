@@ -198,6 +198,10 @@ export const mutations = {
     state.photos = photos;
   },
 
+  clearPhotos(state) {
+    state.photos = [];
+  },
+
   setPhotoInitial(state, md5) {
     let photo = state.photos.filter((photo) => photo.md5 === md5)[0];
     this.commit('setPhoto', {index: photo.index});
