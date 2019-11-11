@@ -3,7 +3,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers import AlbumForListViewSerializer, TagSerializer
+from photos.api.serializers import AlbumSerializer, TagSerializer
 from photos.models import Tag
 from photos.utils import get_albums_for_user, get_tags_for_user
 
@@ -30,7 +30,7 @@ class TagDetail(APIView):
                   .select_related('cover')
                   .prefetch_related('tags'))
 
-        album_serializer = AlbumForListViewSerializer(albums, many=True)
+        album_serializer = AlbumSerializer(albums, many=True)
         tag_serializer = TagSerializer(tag)
 
         return Response({
