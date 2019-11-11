@@ -129,7 +129,7 @@ export const store = new Vuex.Store({
     user: {},
     notifications: [],
 
-    loading: true,
+    loading: 0,
 
     // Cache
     albumDetailCache: {},

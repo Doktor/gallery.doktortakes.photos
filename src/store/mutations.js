@@ -126,7 +126,7 @@ export const mutations = {
   },
 
   setLoading(state, loading) {
-    state.loading = loading;
+    loading ? state.loading += 1 : state.loading -= 1;
   },
 
   selectPhoto(state, photo) {
