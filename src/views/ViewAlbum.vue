@@ -81,12 +81,15 @@
             </span>
           </div>
 
-          <div v-if="album.users || album.groups" class="group-info-item">
+          <div
+              v-if="album.users.length > 0 || album.groups.length > 0"
+              class="group-info-item"
+          >
             <i title="Users and groups" class="fas fa-fw fa-users"></i>
             <span><!--
-            -->{{ album.users }}<!--
-            --><template v-if="album.users && album.groups">, </template><!--
-            -->{{ album.groups }}
+            -->{{ album.users.join("/") }}<!--
+            --><template v-if="album.users.length > 0 && album.groups.length > 0">, </template><!--
+            -->{{ album.groups.join("/") }}
             </span>
           </div>
         </template>
@@ -116,7 +119,7 @@
           :album="childAlbum"
           :is-loaded="true"
           :is-visible="true"
-          :key="childAlbum.path.join('/')"
+          :key="childAlbum.path"
       />
     </section>
 

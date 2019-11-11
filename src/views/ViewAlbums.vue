@@ -62,7 +62,7 @@
 
     created() {
       this.$store.dispatch('getAllAlbums').then(() => {
-        this.$store.commit('setAlbumsToAllAlbums');
+        this.$store.commit('setAlbumsToTopLevelAlbums');
         this.$store.commit('setAlbumPage', 1);
       })
     },

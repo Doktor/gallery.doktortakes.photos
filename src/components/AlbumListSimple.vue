@@ -3,7 +3,7 @@
     <template v-for="(album, index) in albums">
       <li v-if="indexStart <= index && index <= indexEnd">
         <router-link
-            :to="{name: route, params: {path: album.path}}"
+            :to="{name: route, params: {path: album.pathSplit}}"
             :title="album.name"
             :href="album.url"
         >

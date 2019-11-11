@@ -8,7 +8,7 @@ function parseResponse(response) {
   });
 }
 
-function parseAlbumData(album) {
+function parseAlbumForAPI(album) {
   let data = {};
 
   Object.entries(album).forEach(([key, value]) => {
@@ -84,42 +84,27 @@ export const actions = {
     .catch(console.log);
   },
 
-  getAlbum(context, path) {
-    path = Array.isArray(path) ? path.join('/') : path;
-
-    if (context.state.albumDetailCache.hasOwnProperty(path)) {
-      context.commit('setAlbum', context.state.albumDetailCache[path]);
-      context.commit('setPhotos', context.state.albumPhotosCache[path]);
-
-      return Promise.resolve();
-    }
-
+  getAlbum(context, rawPath) {
     context.commit('setLoading', true);
 
-    return Promise.all([
-      // Album data
-      fetch(endpoints.albumDetail.replace(":path", path))
-      .then(parseResponse)
-      .then(j => {
-        let album = j;
-        album.cached = true;
+    let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
 
-        context.commit('setAlbum', album);
-        context.commit('updateAlbumDetailCache', {path: path, album: album})
-      })
-      .catch(console.log),
+    return context.dispatch('getAllAlbums').then(() => {
+      if (context.state.albumPhotosCache.hasOwnProperty(path)) {
+        context.commit('setPhotos', context.state.albumPhotosCache[path]);
+      } else {
+        fetch(endpoints.albumPhotoList.replace(":path", path))
+        .then(parseResponse)
+        .then(j => {
+          context.commit('setPhotos', j.photos);
+          context.commit('updateAlbumPhotosCache', {path: path, photos: j.photos});
+        })
+        .catch(console.log);
+      }
 
-      // Album photos
-      fetch(endpoints.albumPhotoList.replace(":path", path))
-      .then(parseResponse)
-      .then(j => {
-        context.commit('setPhotos', j.photos);
-        context.commit('updateAlbumPhotosCache', {path: path, photos: j.photos})
-      })
-      .catch(console.log),
-    ])
-    .then(() => context.commit('setLoading', false))
-    .catch(console.log);
+      context.commit('setAlbumByPath', path);
+      context.commit('setLoading', false);
+    });
   },
 
   getTags(context) {
@@ -169,7 +154,7 @@ export const actions = {
   },
 
   deleteAlbum() {
-    fetch(endpoints.replace(":path", context.state.album.path.join('/')), {
+    fetch(endpoints.replace(":path", context.state.album.path), {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -191,7 +176,7 @@ export const actions = {
       photos.push(photo.md5);
     }
 
-    fetch(endpoints.albumPhotoList.replace(":path", context.state.album.path.join('/')), {
+    fetch(endpoints.albumPhotoList.replace(":path", context.state.album.path), {
       method: 'DELETE',
       body: JSON.stringify({
         'photos': photos,
@@ -212,7 +197,7 @@ export const actions = {
   },
 
   createAlbum(context) {
-    let data = parseAlbumData(context.state.album);
+    let data = parseAlbumForAPI(context.state.album);
 
     fetch(endpoints.albumList, {
       method: 'POST',
@@ -242,9 +227,9 @@ export const actions = {
   },
 
   saveAlbum(context) {
-    let data = parseAlbumData(context.state.album);
+    let data = parseAlbumForAPI(context.state.album);
 
-    fetch(endpoints.albumDetail.replace(":path", context.state.album.path.join('/')), {
+    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {

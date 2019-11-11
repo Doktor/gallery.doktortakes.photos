@@ -8,7 +8,7 @@
         :class="classes"
     >
       <router-link
-          :to="{name: route, params: {path: album.path}}"
+          :to="{name: route, params: {path: album.pathSplit}}"
       >
         <img
             v-if="album.cover"

@@ -15,7 +15,7 @@
           v-for="(album, index) in albums"
           :album="album"
           :isVisible="indexStart <= index && index <= indexEnd"
-          :key="album.path.join('/')"
+          :key="album.path"
           :route="route"
       />
     </tbody>

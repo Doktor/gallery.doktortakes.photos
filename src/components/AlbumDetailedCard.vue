@@ -1,6 +1,6 @@
 <template>
   <li :class="{'hidden': !this.isVisible}">
-    <router-link :to="{name: route, params: {path: album.path}}" :title="album.name">
+    <router-link :to="{name: route, params: {path: album.pathSplit}}" :title="album.name">
       <div class="album-list-dc-row clearfix">
         <div class="album-list-dc-cover">
           <img

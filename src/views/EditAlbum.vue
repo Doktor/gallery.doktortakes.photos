@@ -41,7 +41,7 @@
               :album="childAlbum"
               :is-loaded="true"
               :is-visible="true"
-              :key="childAlbum.path.join('/')"
+              :key="childAlbum.path"
               :route="'editAlbum'"
           />
         </div>

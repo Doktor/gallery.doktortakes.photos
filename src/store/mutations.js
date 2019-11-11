@@ -1,6 +1,5 @@
 import Vue from "vue";
 import {updateField} from "vuex-map-fields";
-import {fields} from "./index.js";
 
 
 const titleTemplate = "{0} | Doktor Takes Photos";
@@ -92,7 +91,15 @@ export const mutations = {
   setAllAlbums(state, albums) {
     albums.map((album) => {
       album.isLoaded = false;
-      album.path = album.path.split('/');
+      album.pathSplit = album.path.split('/');
+      return album;
+    });
+
+    albums.map((album) => {
+      // Child albums are sent in this format: [{path: "..."}, {path: "..."}, ...]
+      let childPaths = album.children.map((item) => item.path);
+      album.children = [...albums.filter((album) => childPaths.includes(album.path))];
+      return album;
     });
 
     state.allAlbums = albums;
@@ -109,8 +116,8 @@ export const mutations = {
     this.commit('setAlbums', state.allAlbums.filter((album) => album.tags.includes(tag)));
   },
 
-  setAlbumsToAllAlbums(state) {
-    this.commit('setAlbums', state.allAlbums);
+  setAlbumsToTopLevelAlbums(state) {
+    this.commit('setAlbums', state.allAlbums.filter((album) => album.parent === null));
   },
 
   setAlbumsToPrivateAlbums(state) {
@@ -169,20 +176,11 @@ export const mutations = {
     };
   },
 
+  setAlbumByPath(state, path) {
+    state.album = state.allAlbums.filter((album) => album.path === path)[0];
+  },
+
   setAlbum(state, album) {
-    if (album.cached === undefined || !album.cached) {
-      album.path = album.path.split('/');
-
-      for (let child of album.children) {
-        child.path = child.path.split('/');
-      }
-
-      // Store list fields as comma-separated strings
-      for (let field of fields.list) {
-        album[field] = album[field].join(', ');
-      }
-    }
-
     state.album = album;
   },
 
@@ -263,10 +261,6 @@ export const mutations = {
 
   setGitStatus(state, status) {
     state.gitStatus = status;
-  },
-
-  updateAlbumDetailCache(state, {path, album}) {
-    Vue.set(state.albumDetailCache, path, album);
   },
 
   updateAlbumPhotosCache(state, {path, photos}) {
