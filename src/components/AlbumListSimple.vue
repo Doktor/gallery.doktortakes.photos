@@ -10,7 +10,7 @@
           {{ album.name }}
         </router-link>
 
-        <AlbumListSimple v-if="album.children" :albums="album.children" :route="route"/>
+        <AlbumListSimple v-if="album.children.length > 0" :albums="album.children" :route="route"/>
       </li>
     </template>
   </ul>
