@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from auth.urls import url_log_in, url_log_out
 from core.converters import MD5HashConverter
 from photos import views
-from photos.api import views as api
+from photos.api.urls import api_patterns
 
 import debug_toolbar
 
@@ -34,23 +34,6 @@ editor_patterns = [
 tag_patterns = [
     path('', views.view_tags, name='tags'),
     path('<slug:slug>/', views.view_tag, name='tag'),
-]
-
-api_patterns = [
-    path('photos/featured/', api.get_featured_photos, name='api_featured_photos'),
-    path('photos/search/', api.search_photos, name='search_photos'),
-    path('photos/<md5:md5>/', api.PhotoDetail.as_view(), name='api_photo'),
-
-    path('albums/<path:path>/photos/', api.AlbumPhotoList.as_view(), name='api_album_photos'),
-    path('albums/<path:path>/', api.AlbumDetail.as_view(), name='api_album'),
-    path('albums/', api.AlbumList.as_view(), name='api_albums'),
-
-    path('tags/', api.TagList.as_view(), name='api_tags'),
-
-    path('me/', api.get_current_user, name='api_current_user'),
-    path('me/password/', api.change_password, name='api_change_password'),
-
-    path('recent/', api.get_recent),
 ]
 
 user_patterns = [
