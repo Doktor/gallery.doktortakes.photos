@@ -181,75 +181,67 @@ h1, h2, h3, h4, h5, h6 {
 /* Pagination */
 
 .pagination {
-  @include primary-font();
-  text-align: left;
-
   display: flex;
   justify-content: space-between;
 
-  margin: 0;
-
-  &.pagination-above {
-    margin-top: 2 * $itemSpacing;
-    margin-bottom: $itemSpacing;
-  }
-
-  .albums ~ &.pagination-above {
-    margin: $itemSpacing 0;
-  }
-
-  &.pagination-below {
-    margin-top: $itemSpacing;
-    margin-bottom: 2 * $itemSpacing;
-  }
-
+  @include primary-font();
+  text-align: left;
   font-size: 1.25rem;
   line-height: 1;
+  letter-spacing: unset;
 
-  // '.page-skip' is nested because its specificity isn't high enough to
-  // override the 'input' selectors
+  margin: 0;
 
-  .page, .page-skip {
+  $itemBackgroundColor: rgb(40, 40, 40);
+
+  .item {
     display: inline-block;
 
     color: gainsboro;
-    background-color: rgb(40, 40, 40);
+    background-color: $itemBackgroundColor;
     border: 1px solid rgb(80, 80, 80);
-    padding: 8px 12px;
-  }
-
-  .page {
-    cursor: pointer;
     border-right: 0;
+    padding: 8px 12px;
 
-    // "..." button
-    &:not([data-page]) {
-      letter-spacing: -3px;
-      padding: 8px 10px;
-    }
+    line-height: 1;
 
     &:last-child {
       border-right: 1px solid rgb(80, 80, 80);
     }
 
-    &.selected, &.selected:hover {
-      background-color: $blue;
+    &:not(.item-label) {
+      &:hover {
+        background-color: rgb(80, 80, 80);
+      }
+
+      &, &:hover {
+        transition: background-color 0.25s;
+      }
     }
 
-    &:hover {
-      background-color: rgb(80, 80, 80);
-    }
+    &:not(.item-unselectable) {
+      cursor: pointer;
 
-    &, &:hover {
-      transition: background-color 0.25s;
+      &.selected, &.selected:hover {
+        background-color: $blue;
+      }
     }
   }
 
-  .page-skip {
-    width: 80px;
+  .item-thin {
+    letter-spacing: -1px;
+  }
 
-    & + .page {
-      border-left: none;
+  .item-page-skip-inactive {
+    padding: 8px 10px;
+  }
+
+  .item-page-skip-active {
+    width: 80px;
+    border-radius: 0;
+
+    &, &:hover {
+      background-color: $itemBackgroundColor;
     }
   }
 

@@ -2,7 +2,7 @@
   <div v-if="pages > 1" class="pagination">
     <span>
       <span
-          class="page page-flip"
+          class="item"
           @click="selectPreviousPage">
         Prev
       </span>
@@ -10,26 +10,31 @@
       <template v-for="n in getPages()">
         <span
             v-if="n !== 'skip'"
-            class="page"
-            :class="{'page-selected': page === n}"
+            class="item item-thin"
+            :class="{'selected': page === n}"
             @click="selectPage(n)"
         >{{ n }}</span>
-        <PageSkipInput v-else :setPage="setPage" :page="page" :pages="pages"/>
+        <PageSkipInput
+            v-else
+            :setPage="setPage"
+            :page="page"
+            :pages="pages"
+        />
       </template>
 
       <span
-          class="page page-flip"
+          class="item"
           @click="selectNextPage">
         Next
       </span>
     </span>
 
     <span v-if="itemsPerPageChoices.length > 0" class="pagination-items-per-page">
-      <span class="page page-select">Items per page</span>
+      <span class="item item-label item-unselectable">Items per page</span>
       <span
           v-for="count in itemsPerPageChoices"
-          class="page"
-          :class="{'page-selected': count === itemsPerPage}"
+          class="item item-thin"
+          :class="{'selected': count === itemsPerPage}"
           @click="setItemsPerPage(count)"
       >
         {{ count }}
@@ -131,21 +136,3 @@
     }
   }
 </script>
-
-<style scoped>
-  .page:not([data-page]) {
-    letter-spacing: normal !important;
-  }
-
-  .page-flip {
-    letter-spacing: -3px !important;
-  }
-
-  .page-selected, .page-selected:hover {
-    background-color: rgb(0, 120, 255) !important;
-  }
-
-  .pagination-items-per-page {
-    margin-left: 1rem;
-  }
-</style>

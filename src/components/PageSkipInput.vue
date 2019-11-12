@@ -1,14 +1,14 @@
 <template>
   <span
       v-if="!active"
-      class="page page-dots"
+      class="item item-thin item-page-skip-inactive"
       @click="showInput">
     ...
   </span>
   <input
       v-else
       ref="skip"
-      class="page-skip"
+      class="item item-unselectable item-page-skip-active"
       title="Skip to page"
       @blur="hideInput"
       @keyup.enter="selectPage"
@@ -24,7 +24,7 @@
   export default {
     data() {
       return {
-        active: this.active,
+        active: false,
       }
     },
 
