@@ -15,10 +15,6 @@ function parseAlbumForAPI(album) {
     // Don't send readonly fields
     if (fields.readonly.includes(key)) {
     }
-    // Parse list fields
-    else if (fields.list.includes(key)) {
-      data[key] = value.split(',').filter(x => x.trim().length > 0);
-    }
     // Everything else
     else {
       data[key] = value;

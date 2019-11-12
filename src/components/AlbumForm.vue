@@ -113,9 +113,6 @@
         'album.end',
         'album.access_level',
         'album.access_code',
-        'album.users',
-        'album.groups',
-        'album.tags',
         'album.parent',
       ]),
     },
@@ -123,6 +120,9 @@
     data() {
       return {
         accessLevels: accessLevels,
+        users: "",
+        groups: "",
+        tags: "",
       }
     },
 
@@ -135,8 +135,21 @@
       },
 
       submit() {
+        for (let key of ["users", "groups", "tags"]) {
+          this.$store.commit('setAlbumField', {
+            key: key,
+            value: this.$data[key].split(',').map(v => v.trim()).filter(v => v.length > 0),
+          });
+        }
+
         this.$store.dispatch(this.update ? 'saveAlbum' : 'createAlbum');
       },
+    },
+
+    mounted() {
+      this.users = this.album.users.join(", ");
+      this.groups = this.album.groups.join(", ");
+      this.tags = this.album.tags.join(", ");
     },
 
     props: {

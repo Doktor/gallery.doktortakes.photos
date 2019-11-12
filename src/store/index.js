@@ -105,7 +105,6 @@ export const accessLevelsMap = Object.assign({},
   ...accessLevels.map(({level, name}) => {return {[level]: name}}));
 
 export const fields = {
-  list: ['users', 'groups', 'tags'],
   readonly: [
     'slug', 'path', 'cover', 'children',
     'url', 'edit_url', 'admin_url',
