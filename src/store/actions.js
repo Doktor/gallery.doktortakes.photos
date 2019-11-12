@@ -148,7 +148,7 @@ export const actions = {
     .then(j => {
       context.commit('setSearchResults', j.photos);
       context.commit('setSearchResultsCount', j.count);
-      context.commit('setPage', {page: j.page, mutation: 'setPhotoPage'});
+      context.commit('setPhotoPage', j.page);
     })
     .catch(console.log);
   },

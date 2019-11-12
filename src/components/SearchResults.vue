@@ -2,12 +2,7 @@
   <section>
     <h2>{{ searchResults.count }} results</h2>
 
-    <Pagination
-        :mutation="'setSearchResultsPage'"
-        :itemsPerPage="searchResults.itemsPerPage"
-        :page="searchResults.page"
-        :pages="pages"
-    />
+    <PaginationSearch/>
 
     <section class="photos">
       <PhotoSearchResult
@@ -17,24 +12,19 @@
       />
     </section>
 
-    <Pagination
-        :mutation="'setSearchResultsPage'"
-        :itemsPerPage="searchResults.itemsPerPage"
-        :page="searchResults.page"
-        :pages="pages"
-    />
+    <PaginationSearch/>
   </section>
 </template>
 
 <script>
-  import Pagination from './Pagination.vue';
-  import PhotoSearchResult from './PhotoSearchResult.vue';
   import {mapState} from 'vuex';
+  import PaginationSearch from "./PaginationSearch.vue";
+  import PhotoSearchResult from './PhotoSearchResult.vue';
 
 
   export default {
     components: {
-      Pagination,
+      PaginationSearch,
       PhotoSearchResult,
     },
 

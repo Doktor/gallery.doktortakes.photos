@@ -24,7 +24,7 @@
       </span>
     </span>
 
-    <span class="pagination-items-per-page">
+    <span v-if="itemsPerPageChoices.length > 0" class="pagination-items-per-page">
       <span class="page page-select">Items per page</span>
       <span
           v-for="count in itemsPerPageChoices"
@@ -107,12 +107,16 @@
         type: Number,
         required: true,
       },
-      itemsPerPageChoices: {
-        type: Array,
-        required: true,
-      },
       setItemsPerPage: {
         type: Function,
+      },
+      itemsPerPageChoices: {
+        type: Array,
+        default: () => [],
+      },
+
+      page: {
+        type: Number,
         required: true,
       },
       setPage: {
@@ -120,10 +124,6 @@
         required: true,
       },
 
-      page: {
-        type: Number,
-        required: true,
-      },
       pages: {
         type: Number,
         required: true,
