@@ -35,16 +35,7 @@
           Edit parent album
         </router-link>
 
-        <div v-if="album.children.length > 0" class="albums">
-          <AlbumCard
-              v-for="childAlbum in album.children"
-              :album="childAlbum"
-              :is-loaded="true"
-              :is-visible="true"
-              :key="childAlbum.path"
-              :route="'editAlbum'"
-          />
-        </div>
+        <AlbumChildren :route="'editAlbum'"/>
       </template>
 
       <PhotoUploader :path="album.path"/>
@@ -57,6 +48,7 @@
 
 <script>
   import AlbumCard from '../components/AlbumCard.vue';
+  import AlbumChildren from "../components/AlbumChildren.vue";
   import AlbumDetails from '../components/AlbumDetails.vue';
   import DeleteAlbum from '../components/DeleteAlbum.vue';
   import PhotoManager from '../components/PhotoManager.vue';
@@ -67,6 +59,7 @@
   export default {
     components: {
       AlbumCard,
+      AlbumChildren,
       AlbumDetails,
       DeleteAlbum,
       PhotoManager,
@@ -116,7 +109,8 @@
   }
 
   section {
-    margin: 2rem 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
   h2 {
