@@ -12,7 +12,7 @@ from photos.models import Photo, Tag
 from photos.models.album import Allow
 from photos.settings import (
     GIT_STATUS, INDEX_ALBUMS, ITEMS_PER_PAGE, TAGLINES)
-from photos.utils import get_album, get_albums_for_user, get_photo
+from photos.utils import get_album_for_user_or_404, get_albums_for_user, get_photo_for_user_or_404
 
 import datetime
 import mimetypes
@@ -97,7 +97,7 @@ def view_albums(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_album(request: HttpRequest, path: str) -> HttpResponse:
-    album = get_album(path)
+    album = get_album_for_user_or_404(request, path)
 
     context = {
         'album': album,
@@ -140,7 +140,7 @@ def editor(request: HttpRequest, path=None) -> HttpResponse:
 
 @require_GET
 def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(md5, request, path=path, select_album=True)
+    photo = get_photo_for_user_or_404(request, md5, path=path, select_album=True)
 
     context = {
         'allow_public': photo.album.allow_public,
@@ -154,7 +154,7 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
 @require_GET
 def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo(md5, request, path=path)
+    photo = get_photo_for_user_or_404(request, md5, path=path)
     photo.image.open()
 
     filename = photo.filename

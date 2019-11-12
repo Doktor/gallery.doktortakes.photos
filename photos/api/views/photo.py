@@ -1,7 +1,8 @@
 from django.db.models import Q
+from django.http import Http404
 
+from rest_framework import exceptions
 from rest_framework.decorators import api_view
-from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,27 +11,39 @@ from photos.api.serializers import PhotoSerializer, SimplePhotoSerializer
 from photos.models import Photo
 from photos.models.album import Allow
 from photos.settings import ITEMS_PER_PAGE
-from photos.utils import get_photo
+from photos.utils import get_photo_for_user_or_404
 
 import datetime
 import pytz
 from http import HTTPStatus as Status
 
 
+class PhotoNotFound(exceptions.APIException):
+    status_code = Status.NOT_FOUND
+
+    def __init__(self):
+        super().__init__("Photo not found.")
+
+
 class PhotoDetail(APIView):
     @staticmethod
-    def get(request: Request, md5: str) -> Response:
-        photo = get_photo(md5, request)
+    def get_photo(request, md5) -> Photo:
+        try:
+            return get_photo_for_user_or_404(request, md5)
+        except Http404:
+            raise PhotoNotFound
+
+    def get(self, request: Request, md5: str) -> Response:
+        photo = self.get_photo(request, md5)
         serializer = PhotoSerializer(photo)
 
         return Response(serializer.data)
 
-    @staticmethod
-    def delete(request: Request, md5: str) -> Response:
+    def delete(self, request: Request, md5: str) -> Response:
         if not request.user.is_staff:
-            raise ValidationError(code=Status.FORBIDDEN)
+            raise exceptions.PermissionDenied("Not authorized.")
 
-        photo = get_photo(md5, request)
+        photo = self.get_photo(request, md5)
         photo.delete()
 
         return Response(status=Status.NO_CONTENT)

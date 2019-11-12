@@ -2,12 +2,13 @@ from django.db.models import QuerySet, Q
 
 from django.http import HttpRequest, Http404
 from django.shortcuts import get_object_or_404
+from rest_framework.request import Request
 
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow
 from photos.utils.image import fit_image
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 
 def get_albums(path: str) -> List[Album]:
@@ -21,12 +22,17 @@ def get_albums(path: str) -> List[Album]:
     return albums[::-1]
 
 
-def get_album(path: str) -> Album:
-    return get_object_or_404(Album, path=path)
+def get_album_for_user_or_404(request: Union[HttpRequest, Request], path: str) -> Album:
+    album = get_object_or_404(Album, path=path)
+
+    if album.check_access(request):
+        return album
+
+    raise Http404
 
 
-def get_photo(md5: str, request: HttpRequest,
-              path: Optional[str] = None, select_album: bool = False) -> Photo:
+def get_photo_for_user_or_404(request: Union[HttpRequest, Request], md5: str,
+                              path: Optional[str] = None, select_album: bool = False) -> Photo:
     qs = Photo.objects.filter(md5=md5)
 
     if path is not None:
@@ -38,7 +44,7 @@ def get_photo(md5: str, request: HttpRequest,
     if not qs:
         raise Http404
 
-    photo = qs[0]
+    photo = qs.first()
 
     if not photo.sidecar_exists:
         raise Http404

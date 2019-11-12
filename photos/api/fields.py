@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from photos.models import Photo, Tag, Album
-from photos.utils import get_album
+from photos.utils import get_album_for_user_or_404
 
 from http import HTTPStatus as Status
 from typing import Optional
@@ -32,7 +32,7 @@ class GroupField(serializers.RelatedField):
 
 class NullableAlbumField(serializers.RelatedField):
     def to_internal_value(self, data: str) -> Optional[Album]:
-        return get_album(data) if data else None
+        return get_object_or_404(Album, path=data) if data else None
 
     def to_representation(self, value: Album) -> str:
         return value.path
