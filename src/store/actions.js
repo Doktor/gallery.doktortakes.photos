@@ -85,22 +85,29 @@ export const actions = {
 
     let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
 
-    return context.dispatch('getAllAlbums').then(() => {
-      if (context.state.albumPhotosCache.hasOwnProperty(path)) {
+    if (context.state.albumPhotosCache.hasOwnProperty(path)) {
+      return context.dispatch('getAllAlbums').then(() => {
         context.commit('setPhotos', context.state.albumPhotosCache[path]);
-      } else {
+
+        context.commit('setAlbumByPath', path);
+        context.commit('setLoading', false);
+      });
+    } else {
+      return Promise.all([
+        context.dispatch('getAllAlbums'),
+
         fetch(endpoints.albumPhotoList.replace(":path", path))
         .then(parseResponse)
         .then(j => {
           context.commit('setPhotos', j.photos);
           context.commit('updateAlbumPhotosCache', {path: path, photos: j.photos});
         })
-        .catch(console.log);
-      }
-
-      context.commit('setAlbumByPath', path);
-      context.commit('setLoading', false);
-    });
+        .catch(console.log)
+      ]).then(() => {
+        context.commit('setAlbumByPath', path);
+        context.commit('setLoading', false);
+      });
+    }
   },
 
   getTags(context) {
