@@ -221,10 +221,16 @@ export const mutations = {
 
     let length = state.photos.length;
 
-    let prev = (photo.index - 1 + length) % length;
-    this.commit('preloadPhoto', prev);
-    let next = (photo.index + 1) % length;
-    this.commit('preloadPhoto', next);
+    // Preload previous 2 and next 2 photos
+    let prev = (photo.index - 2 + length) % length;
+
+    for (let i = prev; i < prev + 5; i++) {
+      let photo = state.photos[i % length];
+
+      if (!photo.loaded) {
+        this.commit('preloadPhoto', photo);
+      }
+    }
 
     if (history) {
       let title = photoTitleTemplate.format(photo.md5.substring(0, 8), state.album.name);
@@ -233,9 +239,7 @@ export const mutations = {
     }
   },
 
-  preloadPhoto(state, index) {
-    let photo = state.photos[index];
-
+  preloadPhoto(state, photo) {
     if (!photo.loaded) {
       let image = new Image();
       image.src = photo.image;
