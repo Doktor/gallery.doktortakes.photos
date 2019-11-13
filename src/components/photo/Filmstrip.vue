@@ -5,7 +5,7 @@
         <img
             class="filmstrip-image"
             :src="photo.square_thumbnail"
-            @click="setPhoto({index: photo.index})"
+            @click="onClick(photo.index)"
         >
         <div class="filmstrip-index">{{ photo.index + 1 }}</div>
       </div>
@@ -44,6 +44,10 @@
           hidden: !(this.start <= index && index < this.end),
           selected: this.position === index,
         }
+      },
+
+      onClick(index) {
+        this.$store.commit('setPhoto', {index: index, history: this.useHistory});
       },
 
       updateRange() {
@@ -90,6 +94,11 @@
       position: {
         type: Number,
         required: true,
+      },
+
+      useHistory: {
+        type: Boolean,
+        default: true,
       },
     },
   }

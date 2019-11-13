@@ -12,6 +12,7 @@
     <Filmstrip
         :photos="photos"
         :position="photo.index"
+        :useHistory="false"
     />
 
     <section class="view-more">
