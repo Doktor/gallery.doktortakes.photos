@@ -87,6 +87,7 @@ export const mutations = {
     albums.map((album) => {
       album.isLoaded = false;
       album.pathSplit = album.path.split('/');
+      album.tags.sort();
       return album;
     });
 
