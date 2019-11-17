@@ -37,6 +37,15 @@
 
 
   export default {
+    beforeRouteEnter(to, from, next) {
+      next(view => document.addEventListener('keyup', view.handleKey));
+    },
+
+    beforeRouteLeave(to, from, next) {
+      document.removeEventListener('keyup', this.handleKey);
+      next();
+    },
+
     components: {
       PhotoViewer,
       Exif,
@@ -76,8 +85,8 @@
       }
     },
 
-    mounted() {
-      document.addEventListener('keyup', (event) => {
+    methods: {
+      handleKey(event) {
         if (event.ctrlKey || event.metaKey) {
           return;
         }
@@ -94,8 +103,10 @@
             window.location.href = "/";
             break;
         }
-      });
+      },
+    },
 
+    mounted() {
       let unsubscribe = this.$store.subscribe((mutation, state) => {
         if (mutation.type !== 'setPhoto') {
           return;
