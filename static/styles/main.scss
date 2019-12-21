@@ -1219,13 +1219,10 @@ $group-row-spacing: 0.75rem;
   line-height: 1;
   text-align: left;
   text-transform: none;
+  margin-bottom: $group-row-spacing;
 
   i {
     margin-right: 6px;
-  }
-
-  &:not(:last-child) {
-    margin-bottom: $group-row-spacing;
   }
 
   &.group-description {
