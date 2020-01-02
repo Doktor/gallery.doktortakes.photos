@@ -165,9 +165,9 @@ export const mutations = {
       end: null,
       access_level: 0,
       access_code: '',
-      users: '',
-      groups: '',
-      tags: '',
+      users: [],
+      groups: [],
+      tags: [],
       parent: '',
     };
   },
