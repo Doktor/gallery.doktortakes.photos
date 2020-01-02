@@ -95,10 +95,6 @@
         this.loadAlbum();
       },
     },
-
-    mounted() {
-      this.$store.commit('changePage', 1);
-    },
   }
 </script>
 
