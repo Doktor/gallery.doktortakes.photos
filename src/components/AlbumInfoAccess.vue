@@ -26,10 +26,10 @@
     >
       <i title="Users and groups" class="fas fa-fw fa-users"></i>
       <span><!--
-      -->{{ album.users.join("/") }}<!--
+      -->{{ album.users.join(", ") }}<!--
       --><template
           v-if="album.users.length > 0 && album.groups.length > 0">, </template><!--
-      -->{{ album.groups.join("/") }}
+      -->{{ album.groups.join(", ") }}
       </span>
     </div>
   </div>
