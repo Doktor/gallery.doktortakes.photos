@@ -1,4 +1,4 @@
-import {endpoints, fields, getCsrfToken} from "./index.js";
+import {endpoints, fields, getCsrfToken, getQueryString} from "./index.js";
 import {router} from "../router/main.js";
 
 
@@ -80,10 +80,14 @@ export const actions = {
     .catch(console.log);
   },
 
-  getAlbum(context, rawPath) {
+  getAlbum(context, {rawPath, code}) {
     context.commit('setLoading', true);
 
     let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
+
+    if (code) {
+      return this.dispatch('getAlbumWithAccessCode', {path, code})
+    }
 
     if (context.state.albumPhotosCache.hasOwnProperty(path)) {
       return context.dispatch('getAllAlbums').then(() => {
@@ -108,6 +112,28 @@ export const actions = {
         context.commit('setLoading', false);
       });
     }
+  },
+
+  getAlbumWithAccessCode(context, {path, code}) {
+    let qs = getQueryString({code});
+
+    return Promise.all([
+      fetch(endpoints.albumDetail.replace(":path", path) + qs)
+      .then(parseResponse)
+      .then(j => {
+        context.commit('setAlbum', j);
+      })
+      .catch(console.log),
+
+      fetch(endpoints.albumPhotoList.replace(":path", path) + qs)
+      .then(parseResponse)
+      .then(j => {
+        context.commit('setPhotos', j.photos);
+      })
+      .catch(console.log),
+    ]).then(() => {
+      context.commit('setLoading', false);
+    });
   },
 
   getTags(context) {

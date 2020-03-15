@@ -24,6 +24,12 @@
 
 
   export default {
+    computed: {
+      routeAccessCode() {
+        return this.$route.query.code || "";
+      }
+    },
+
     data() {
       return {
         start: 0,
@@ -47,7 +53,8 @@
       },
 
       onClick(index) {
-        this.$store.commit('setPhoto', {index: index, history: this.useHistory});
+        this.$store.commit('setPhoto',
+          {index: index, history: this.useHistory, code: this.routeAccessCode});
       },
 
       updateRange() {

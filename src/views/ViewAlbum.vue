@@ -37,6 +37,10 @@
         'photos',
       ]),
 
+      routeAccessCode() {
+        return this.$route.query.code || "";
+      },
+
       routePath() {
         return this.$route.params.path;
       },
@@ -49,7 +53,7 @@
     methods: {
       loadAlbum() {
         this.$store.commit('clearPhotos');
-        this.$store.dispatch('getAlbum', this.routePath).then(() => {
+        this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode}).then(() => {
           this.$store.commit('updateDocumentTitleForAlbum');
           this.$store.commit('setPhotoPage', 1);
         });

@@ -52,6 +52,9 @@
             path: this.photo.path,
             md5: this.photo.md5,
           },
+          query: {
+            code: this.$route.query.code,
+          },
         }
       },
     },

@@ -55,7 +55,7 @@
             path: this.album.path,
           },
           query: {
-            access_code: this.album.access_code,
+            code: this.album.access_code,
           }
         }
       },

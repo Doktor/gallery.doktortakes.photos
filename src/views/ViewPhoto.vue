@@ -68,14 +68,18 @@
         return this.$route.params.md5;
       },
 
+      routeAccessCode() {
+        return this.$route.query.code || "";
+      },
+
       routePath() {
         return this.$route.params.path;
       },
     },
 
     created() {
-      this.$store.dispatch('getAlbum', this.routePath).then(() => {
-        this.$store.commit('setPhotoInitial', this.md5);
+      this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode}).then(() => {
+        this.$store.commit('setPhotoInitial', {md5: this.md5, code: this.routeAccessCode});
       });
     },
 

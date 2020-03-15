@@ -1,5 +1,6 @@
 import Vue from "vue";
 import {updateField} from "vuex-map-fields";
+import {getQueryString} from "./index.js";
 
 
 const titleTemplate = "{0} | Doktor Takes Photos";
@@ -198,12 +199,12 @@ export const mutations = {
     state.photos = [];
   },
 
-  setPhotoInitial(state, md5) {
+  setPhotoInitial(state, {md5, code = ""}) {
     let photo = state.photos.filter((photo) => photo.md5 === md5)[0];
-    this.commit('setPhoto', {index: photo.index});
+    this.commit('setPhoto', {index: photo.index, code: code});
   },
 
-  setPhoto(state, {index, history = true}) {
+  setPhoto(state, {index, history = true, code = ""}) {
     if (index === state.photo.index) {
       return;
     }
@@ -236,7 +237,9 @@ export const mutations = {
     if (history) {
       let title = photoTitleTemplate.format(photo.md5.substring(0, 8), state.album.name);
       document.title = title;
-      window.history.pushState(null, title, photo.url);
+
+      let qs = code ? getQueryString({code: code}) : "";
+      window.history.pushState(null, title, photo.url + qs);
     }
   },
 
