@@ -5,8 +5,7 @@
         {{ album.name }}
       </router-link>
     </td>
-    <td>{{ album.start }}</td>
-    <td>{{ album.end }}</td>
+    <td>{{ album.start }}<template v-if="album.end"> &ndash; {{ album.end }}</template></td>
     <td>{{ fullLocation }}</td>
     <td class="album-table-tags">
       <template v-for="(slug, index) in album.tags">

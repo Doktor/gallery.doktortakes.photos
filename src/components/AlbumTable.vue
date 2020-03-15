@@ -3,8 +3,7 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Start</th>
-        <th>End</th>
+        <th>Date</th>
         <th>Location</th>
         <th class="album-table-tags">Tags</th>
         <th>Access</th>
