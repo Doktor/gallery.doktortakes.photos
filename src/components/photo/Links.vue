@@ -6,7 +6,7 @@
       <div>
         <dt title="Album"><i class="fas fa-fw fa-book"></i></dt>
         <dd>
-          <router-link :to="{name: 'album', params: {path: album.pathSplit}}">Return to album</router-link>
+          <router-link :to="albumRoute">Return to album</router-link>
         </dd>
       </div>
 
@@ -34,6 +34,18 @@
       ...mapState([
         'album',
       ]),
+
+      albumRoute() {
+        return {
+          name: 'album',
+          params: {
+            path: this.album.path,
+          },
+          query: {
+            code: this.$route.query.code,
+          },
+        }
+      }
     },
   }
 </script>
