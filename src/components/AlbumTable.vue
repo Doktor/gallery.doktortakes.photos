@@ -8,6 +8,7 @@
         <th>Location</th>
         <th class="album-table-tags">Tags</th>
         <th>Access</th>
+        <th>Owners</th>
       </tr>
     </thead>
     <tbody>

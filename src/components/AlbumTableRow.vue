@@ -15,6 +15,15 @@
       </template>
     </td>
     <td>{{ album.access_level }}</td>
+    <td>
+      <template v-if="album.users.length > 0">
+        <strong>Users:</strong> {{ album.users.join(", ") }}
+        </template>
+      <template v-if="album.users && album.groups"><br></template>
+      <template v-if="album.groups.length > 0">
+        <strong>Groups:</strong> {{ album.groups.join(", ") }}
+      </template>
+    </td>
   </tr>
 </template>
 
