@@ -52,7 +52,7 @@
         return {
           name: 'album',
           params: {
-            path: this.album.path,
+            path: this.album.pathSplit,
           },
           query: {
             code: this.album.access_code,

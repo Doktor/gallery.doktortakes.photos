@@ -97,7 +97,7 @@
 
         switch (event.key.toLowerCase()) {
           case "a":
-            return router.push({name: "album", params: {path: this.album.path}});
+            return router.push({name: "album", params: {path: this.album.pathSplit}});
           case "l":
             return router.push({name: "albums"});
           case "d":
