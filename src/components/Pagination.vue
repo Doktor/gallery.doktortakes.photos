@@ -1,6 +1,6 @@
 <template>
-  <div v-if="pages > 1" class="pagination">
-    <span>
+  <div class="pagination">
+    <span v-if="pages > 1">
       <span
           class="item"
           @click="selectPreviousPage">
@@ -12,10 +12,12 @@
             v-if="n !== 'skip'"
             class="item item-thin"
             :class="{'selected': page === n}"
+            :key="n"
             @click="selectPage(n)"
         >{{ n }}</span>
         <PageSkipInput
             v-else
+            :key="n"
             :setPage="setPage"
             :page="page"
             :pages="pages"
@@ -35,6 +37,7 @@
           v-for="count in itemsPerPageChoices"
           class="item item-thin"
           :class="{'selected': count === itemsPerPage}"
+          :key="count"
           @click="setItemsPerPage(count)"
       >
         {{ count }}
@@ -136,3 +139,12 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+// Keep this control on the right when the page control is hidden
+.pagination .pagination-items-per-page {
+  &:only-child {
+    margin-left: auto;
+  }
+}
+</style>
