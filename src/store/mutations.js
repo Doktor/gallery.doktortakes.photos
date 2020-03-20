@@ -281,6 +281,11 @@ export const mutations = {
 
   setPhotosPerPage(state, count) {
     state.photosPerPage = count;
+
+    state.photos.forEach((photo, index) => {
+      photo.page = Math.floor(index / state.photosPerPage) + 1;
+    });
+
     this.commit('setPhotoPage', 1);
   },
 };
