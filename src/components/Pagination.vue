@@ -1,6 +1,6 @@
 <template>
   <div class="pagination">
-    <span v-if="pages > 1">
+    <span>
       <span
           class="item"
           @click="selectPreviousPage">
