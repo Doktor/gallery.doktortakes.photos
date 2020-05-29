@@ -20,6 +20,22 @@
                 title="View album on admin site"
             >Admin</a>
           </li>
+          <li>
+            <a
+              :href="urlProductionSite"
+              title="View album on production site"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Production</a>
+          </li>
+          <li>
+            <a
+              :href="urlAlphaSite"
+              title="View album on alpha site"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Alpha</a>
+          </li>
         </ul>
       </header>
 
@@ -54,6 +70,7 @@
   import PhotoManager from '../components/PhotoManager.vue';
   import PhotoUploader from '../components/PhotoUploader.vue';
   import {mapState} from 'vuex';
+  import {domains} from '../store';
 
 
   export default {
@@ -74,7 +91,15 @@
 
       routePath() {
         return this.$route.params.path;
-      }
+      },
+
+      urlAlphaSite() {
+        return new URL(this.album.url, domains.alpha).href;
+      },
+
+      urlProductionSite() {
+        return new URL(this.album.url, domains.production).href;
+      },
     },
 
     created() {

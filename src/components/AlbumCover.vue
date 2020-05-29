@@ -35,19 +35,37 @@
           View parent album
         </router-link>
 
-        <template v-if="album.parent && userIsStaff"> &middot;</template>
+        <template v-if="userIsStaff">
+          <span v-if="album.parent">&middot;</span>
 
-        <router-link
-            v-if="userIsStaff"
+          <router-link
             :to="{name: 'editAlbum', params: {path: album.path}}"
-        >
-          Edit
-        </router-link>
+          >
+            Edit
+          </router-link>
 
-        &middot;
+          &middot;
 
-        <!-- TODO: Admin site link -->
-        <a href="/admin/">Admin</a>
+          <a :href="album.admin_url">Admin</a>
+
+          &middot;
+
+          <a
+            :href="urlProductionSite"
+            title="View album on production site"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Production</a>
+
+          &middot;
+
+          <a
+            :href="urlAlphaSite"
+            title="View album on alpha site"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Alpha</a>
+        </template>
       </div>
     </div>
   </figure>
@@ -56,7 +74,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {staticFiles} from "../store/index.js";
+  import {domains, staticFiles} from "../store";
 
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -105,6 +123,14 @@
 
       placeholder() {
         return staticFiles.coverPlaceholder;
+      },
+
+      urlAlphaSite() {
+        return new URL(this.album.url, domains.alpha).href;
+      },
+
+      urlProductionSite() {
+        return new URL(this.album.url, domains.production).href;
       },
 
       userIsStaff() {

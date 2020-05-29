@@ -113,6 +113,11 @@ export const fields = {
 
 export const tagline = api.dataset.tagline;
 
+export const domains = {
+  production: "https://doktortakes.photos",
+  alpha: "https://alpha.doktortakes.photos",
+}
+
 
 // Store
 
