@@ -22,9 +22,7 @@
       </div>
 
       <div class="group-inset-text">
-        <template v-if="album.location">
-          <span>{{ album.location }}</span> &middot;
-        </template>
+        <span v-if="location">{{ location }} &middot; </span>
         <span v-html="date"></span> &middot;
         <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
       </div>
@@ -92,6 +90,17 @@
         return end === null
           ? formatDate(start)
           : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
+      },
+
+      location() {
+        let place = this.album.place;
+        let location = this.album.location;
+
+        if (place && location) {
+          return "{0}, {1}".format(place, location);
+        }
+
+        return place || location || "";
       },
 
       placeholder() {
