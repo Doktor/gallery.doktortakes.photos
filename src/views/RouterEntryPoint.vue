@@ -24,7 +24,7 @@
       <div v-if="tagline" class="tagline">"{{ tagline }}"</div>
 
       <p>Photos are free for personal use <router-link :to="{name: 'copyright'}">(Details)</router-link></p>
-      <p class="copyright">Website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor 2016&ndash;2019</p>
+      <p class="copyright">website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor</p>
     </footer>
   </div>
 </template>
@@ -56,3 +56,9 @@
     },
   }
 </script>
+
+<style>
+.copyright {
+  text-transform: none;
+}
+</style>
