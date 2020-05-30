@@ -2,11 +2,11 @@ import {endpoints, fields, getCsrfToken, getQueryString} from "./index.js";
 import {router} from "../router/main.js";
 
 
-function parseResponse(response) {
-  return response.json().then(j => {
-    return response.ok ? j : Promise.reject(j);
-  });
+async function parseResponse(response) {
+  let j = await response.json();
+  return response.ok ? j : Promise.reject(j);
 }
+
 
 function parseAlbumForAPI(album) {
   let data = {};
