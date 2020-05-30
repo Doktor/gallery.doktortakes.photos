@@ -42,7 +42,7 @@
       <h2>Album details</h2>
       <AlbumDetails/>
 
-      <template>
+      <template v-if="album.parent || album.children.length > 0">
         <h2>Related albums</h2>
 
         <router-link
