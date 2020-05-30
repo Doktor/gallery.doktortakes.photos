@@ -225,34 +225,47 @@ export const actions = {
     .catch(console.log);
   },
 
-  createAlbum(context) {
+  async createAlbum(context) {
     let data = parseAlbumForAPI(context.state.album);
 
-    fetch(endpoints.albumList, {
+    let rawResponse = await fetch(endpoints.albumList, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCsrfToken(),
       },
-    })
-    .then(parseResponse)
-    .then(j => {
-      context.commit('addTimedNotification', {
-        message: "Album created successfully. Redirecting...",
-        hideAfter: 2500,
-      });
-      setTimeout(
-        () => router.push({name: 'editAlbum', params: {path: j.path}}),
-        1500);
-    })
-    .catch(j => {
+    });
+
+    let response;
+    try {
+      response = await parseResponse(rawResponse);
+    } catch {
       for (let [field, errors] of Object.entries(j)) {
         for (let error of errors) {
           context.commit('addNotification', "{0}: {1}".format(field, error));
         }
       }
+      return;
+    }
+
+    let path = response.path;
+
+    if (!path) {
+      context.commit('addNotification', "An unknown API error occurred when creating the album.");
+      return;
+    }
+
+    context.commit('getAlbum', {rawPath: path});
+
+    context.commit('addTimedNotification', {
+      message: "Album created successfully. Redirecting...",
+      hideAfter: 2500,
     });
+
+    setTimeout(
+      () => router.push({name: 'editAlbum', params: {path: path}}),
+      1500);
   },
 
   saveAlbum(context) {
