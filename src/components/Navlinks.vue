@@ -116,7 +116,7 @@
         </a>
       </li>
     </template>
-    <li v-else class="nav-item">
+    <li v-else-if="!isIndex" class="nav-item">
       <a class="nav-item-link" href="/log-in/">
         Log in
       </a>
@@ -133,6 +133,10 @@
       ...mapState([
         'user',
       ]),
+
+      isIndex() {
+        return this.$route.name === 'index';
+      },
 
       userIsStaff() {
         return this.user.status === 'staff' || this.user.status === 'superuser';
