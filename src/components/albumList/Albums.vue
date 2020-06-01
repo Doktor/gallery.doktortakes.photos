@@ -1,6 +1,6 @@
 <template>
   <section>
-    <PaginationAlbums/>
+    <PaginationAlbums v-if="!isSkeleton"/>
 
     <AlbumListViewSelector/>
 
@@ -13,10 +13,11 @@
           :route="albumRoute"
           :indexStart="indexStart"
           :indexEnd="indexEnd"
+          :isSkeleton="isSkeleton"
       />
     </section>
 
-    <PaginationAlbums/>
+    <PaginationAlbums v-if="!isSkeleton"/>
   </section>
 </template>
 
@@ -94,7 +95,12 @@
       albumRoute: {
         type: String,
         default: "album",
-      }
+      },
+
+      isSkeleton: {
+        type: Boolean,
+        default: false,
+      },
     }
   }
 </script>

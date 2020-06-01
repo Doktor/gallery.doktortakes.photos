@@ -3,9 +3,11 @@
     <AlbumCard
         v-for="(album, index) in albums"
         :album="album"
-        :isLoaded="album.isLoaded"
-        :isVisible="indexStart <= index && index <= indexEnd"
-        :key="album.path"
+        :index="index"
+        :isLoaded="isSkeleton ? true : album.isLoaded"
+        :isSkeleton="isSkeleton"
+        :isVisible="isSkeleton ? true : indexStart <= index && index <= indexEnd"
+        :key="isSkeleton ? index : album.path"
         :route="route"
     />
   </div>
@@ -37,6 +39,11 @@
       indexEnd: {
         type: Number,
         required: true,
+      },
+
+      isSkeleton: {
+        type: Boolean,
+        default: false,
       },
     },
   }

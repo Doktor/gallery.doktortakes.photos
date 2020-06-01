@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div>
     <div>
       <h2>Special pages</h2>
       <ul>
@@ -32,7 +32,13 @@
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <Albums v-if="results.length" :albums="results" :albumRoute="'album'"/>
+      <Albums
+        v-if="loading"
+        :albums="new Array(12).fill({})"
+        :albumRoute="'album'"
+        :isSkeleton="true"
+      />
+      <Albums v-else-if="results.length" :albums="results" :albumRoute="'album'"/>
       <div v-else>No albums found.</div>
     </div>
   </div>
@@ -60,11 +66,10 @@
       ]),
     },
 
-    created() {
-      this.$store.dispatch('getAllAlbums').then(() => {
-        this.$store.commit('setAlbumsToTopLevelAlbums');
-        this.$store.commit('setAlbumPage', 1);
-      })
+    async created() {
+      await this.$store.dispatch('getAllAlbums');
+      this.$store.commit('setAlbumsToTopLevelAlbums');
+      this.$store.commit('setAlbumPage', 1);
     },
 
     filters: {
