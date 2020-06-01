@@ -49,7 +49,7 @@
 </template>
 
 <script>
-  import {staticFiles} from "../store/index.js";
+  import {staticFiles} from "../../store/index.js";
 
 
   export default {

@@ -31,8 +31,8 @@
 
 <script>
   import {mapState} from 'vuex';
-  import Albums from "../components/Albums.vue";
-  import Photos from '../components/Photos.vue';
+  import Albums from "../components/albumList/Albums.vue";
+  import Photos from '../components/photoList/Photos.vue';
 
 
   export default {

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import SearchPhotoForm from '../components/SearchPhotoForm.vue';
-  import SearchResults from "../components/SearchResults.vue";
+  import SearchPhotoForm from '../components/search/SearchPhotoForm.vue';
+  import SearchResults from "../components/search/SearchResults.vue";
 
 
   export default {

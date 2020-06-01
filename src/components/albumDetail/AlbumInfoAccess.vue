@@ -38,7 +38,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {accessLevelsMap} from "../store/index.js";
+  import {accessLevelsMap} from "../../store/index.js";
 
 
   export default {

@@ -24,11 +24,11 @@
   import {mapState} from 'vuex';
   import AlbumCard from "./AlbumCard.vue";
   import AlbumListCards from "./AlbumListCards.vue";
-  import AlbumListDetailedCards from "../components/AlbumListDetailedCards.vue";
-  import AlbumListSimple from "../components/AlbumListSimple.vue";
-  import AlbumListViewSelector from "../components/AlbumListViewSelector.vue";
+  import AlbumListDetailedCards from "./AlbumListDetailedCards.vue";
+  import AlbumListSimple from "./AlbumListSimple.vue";
+  import AlbumListViewSelector from "./AlbumListViewSelector.vue";
   import AlbumTable from "./AlbumTable.vue";
-  import PaginationAlbums from './PaginationAlbums.vue';
+  import PaginationAlbums from '../pagination/PaginationAlbums.vue';
 
 
   export default {

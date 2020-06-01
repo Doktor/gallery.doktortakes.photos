@@ -14,11 +14,11 @@
 <script>
   import {mapState} from 'vuex';
 
-  import AlbumCard from "../components/AlbumCard.vue";
-  import AlbumChildren from "../components/AlbumChildren.vue";
-  import AlbumCover from "../components/AlbumCover.vue";
-  import AlbumInfo from "../components/AlbumInfo.vue";
-  import Photos from '../components/Photos.vue';
+  import AlbumCard from "../components/albumList/AlbumCard.vue";
+  import AlbumChildren from "../components/albumList/AlbumChildren.vue";
+  import AlbumCover from "../components/albumDetail/AlbumCover.vue";
+  import AlbumInfo from "../components/albumDetail/AlbumInfo.vue";
+  import Photos from '../components/photoList/Photos.vue';
 
 
   export default {

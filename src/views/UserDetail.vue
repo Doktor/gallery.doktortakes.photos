@@ -46,7 +46,7 @@
 <script>
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
-  import Albums from "../components/Albums.vue";
+  import Albums from "../components/albumList/Albums.vue";
 
 
   export default {

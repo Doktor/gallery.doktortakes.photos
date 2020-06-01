@@ -74,7 +74,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {domains, staticFiles} from "../store";
+  import {domains, staticFiles} from "../../store";
 
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

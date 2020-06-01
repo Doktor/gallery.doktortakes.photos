@@ -26,13 +26,13 @@
   import {mapState} from 'vuex';
   import {router} from "../router/main.js";
 
-  import Exif from "../components/photo/Exif.vue";
-  import Filmstrip from "../components/photo/Filmstrip.vue";
-  import KeyboardShortcuts from '../components/photo/KeyboardShortcuts.vue';
-  import Links from "../components/photo/Links.vue";
-  import Metadata from "../components/photo/Metadata.vue";
-  import PhotoSwipe from "../components/photo/PhotoSwipe.vue";
-  import PhotoViewer from "../components/PhotoViewer.vue";
+  import Exif from "../components/photoDetail/Exif.vue";
+  import Filmstrip from "../components/photoDetail/Filmstrip.vue";
+  import KeyboardShortcuts from '../components/photoDetail/KeyboardShortcuts.vue';
+  import Links from "../components/photoDetail/Links.vue";
+  import Metadata from "../components/photoDetail/Metadata.vue";
+  import PhotoSwipe from "../components/photoDetail/PhotoSwipe.vue";
+  import PhotoViewer from "../components/photoDetail/PhotoViewer.vue";
   import initPhotoSwipe from "../photoswipe.js";
 
 

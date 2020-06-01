@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import Photos from './Photos.vue';
+  import Photos from '../photoList/Photos.vue';
   import {mapActions, mapMutations, mapState} from 'vuex';
 
 

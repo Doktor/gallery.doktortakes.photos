@@ -29,7 +29,7 @@
   import {randomChoice} from '../main';
   import {router} from "../router/main";
   import {tagline} from "../store";
-  import AlbumListCards from "../components/AlbumListCards.vue";
+  import AlbumListCards from "../components/albumList/AlbumListCards.vue";
   import Navlinks from "../components/Navlinks.vue";
 
 

@@ -29,8 +29,8 @@
 <script>
   import {mapState} from 'vuex';
 
-  import Filmstrip from "../components/photo/Filmstrip.vue";
-  import PhotoViewer from "../components/PhotoViewer.vue";
+  import Filmstrip from "../components/photoDetail/Filmstrip.vue";
+  import PhotoViewer from "../components/photoDetail/PhotoViewer.vue";
   import {router} from "../router/main.js";
 
 

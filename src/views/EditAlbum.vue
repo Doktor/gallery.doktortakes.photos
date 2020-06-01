@@ -63,12 +63,12 @@
 </template>
 
 <script>
-  import AlbumCard from '../components/AlbumCard.vue';
-  import AlbumChildren from "../components/AlbumChildren.vue";
-  import AlbumDetails from '../components/AlbumDetails.vue';
-  import DeleteAlbum from '../components/DeleteAlbum.vue';
-  import PhotoManager from '../components/PhotoManager.vue';
-  import PhotoUploader from '../components/PhotoUploader.vue';
+  import AlbumCard from '../components/albumList/AlbumCard.vue';
+  import AlbumChildren from "../components/albumList/AlbumChildren.vue";
+  import AlbumDetails from '../components/editor/AlbumDetails.vue';
+  import DeleteAlbum from '../components/editor/DeleteAlbum.vue';
+  import PhotoManager from '../components/editor/PhotoManager.vue';
+  import PhotoUploader from '../components/editor/PhotoUploader.vue';
   import {mapState} from 'vuex';
   import {domains} from '../store';
 

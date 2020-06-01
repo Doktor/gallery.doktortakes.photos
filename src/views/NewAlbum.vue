@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import AlbumForm from '../components/AlbumForm.vue';
+  import AlbumForm from '../components/editor/AlbumForm.vue';
   import {mapState} from 'vuex';
 
 
