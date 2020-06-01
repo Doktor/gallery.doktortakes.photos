@@ -26,6 +26,11 @@ const app = new Vue({
 
 // Utility functions
 
+export function randomChoice(items) {
+  let index = Math.floor(Math.random() * items.length);
+  return items[index];
+}
+
 Array.prototype.clear = function() {
   this.splice(0, this.length);
 };

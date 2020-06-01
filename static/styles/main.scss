@@ -261,13 +261,13 @@ $nav-font-size-index: $nav-font-size * 1.25;
 $logo-size: $nav-font-size * 1.5;
 
 // Color of nav items (on the index page)
-$nav-item-color: rgb(160, 160, 160);
+$nav-item-color: white;
 
 // Color of nav dividers (on non-index pages)
 $nav-divider-color: rgb(120, 120, 120);
 
 // Spacing between nav items
-$nav-item-spacing: 1.5rem;
+$nav-item-spacing: 1.7rem;
 
 .logo {
   line-height: 1;
@@ -293,7 +293,7 @@ $nav-item-spacing: 1.5rem;
     font-size: $logo-size * 1.25;
 
     @media (min-width: 901px) {
-      font-size: $logo-size * 1.5;
+      font-size: $logo-size * 1.35;
     }
   }
 }
@@ -330,6 +330,16 @@ $nav-item-spacing: 1.5rem;
   @media (min-width: 901px) {
     line-height: $logo-size * 1.15;
   }
+
+  .nav-items-index & {
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }
 
 // Change color of items on hover
@@ -359,6 +369,9 @@ $nav-item-spacing: 1.5rem;
 
   .nav-items-index & {
     @include nav-item-hover(color);
+
+    color: white;
+    line-height: 1;
 
     @media (min-width: 901px) {
       font-size: $nav-font-size-index;

@@ -1,14 +1,6 @@
 <template>
   <div id="app">
-    <header v-if="isIndex">
-      <h1 class="logo logo-large">Doktor Takes Photos</h1>
-      <Navlinks
-          class="nav-items nav-items-index"
-          :showDividers="false"
-          :showLogo="false"
-      />
-    </header>
-    <nav v-else class="nav">
+    <nav v-if="!isIndex" class="nav">
       <Navlinks
           class="nav-items"
           :showDividers="true"
@@ -20,7 +12,7 @@
 
     <router-view/>
 
-    <footer>
+    <footer v-if="!isIndex">
       <div v-if="tagline" class="tagline">"{{ tagline }}"</div>
 
       <p>Photos are free for personal use <router-link :to="{name: 'copyright'}">(Details)</router-link></p>
@@ -43,15 +35,11 @@
 
     computed: {
       isIndex() {
-        return this.route === 'index';
+        return this.$route.name === 'index';
       },
 
       tagline() {
         return tagline;
-      },
-
-      route() {
-        return this.$route.name;
       },
     },
   }
