@@ -2,20 +2,20 @@ import VueRouter from 'vue-router';
 
 import {store} from "../store/index.js";
 
-import ViewIndex from "../views/ViewIndex.vue";
+import Index from "../views/Index.vue";
 
-import ViewAlbum from "../views/ViewAlbum.vue";
-import ViewAlbums from "../views/ViewAlbums.vue";
-import ViewPhoto from "../views/ViewPhoto.vue";
-import ViewFeaturedPhotos from "../views/ViewFeaturedPhotos.vue";
-import ViewTags from "../views/ViewTags.vue";
-import ViewTag from "../views/ViewTag.vue";
-import ViewUser from "../views/ViewUser.vue";
+import AlbumList from "../views/AlbumList.vue";
+import AlbumDetail from "../views/AlbumDetail.vue";
+import PhotoDetail from "../views/PhotoDetail.vue";
+import FeaturedPhotos from "../views/FeaturedPhotos.vue";
+import TagList from "../views/TagList.vue";
+import TagDetail from "../views/TagDetail.vue";
+import UserDetail from "../views/UserDetail.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 
-import ViewAbout from "../views/ViewAbout.vue";
-import ViewCopyright from "../views/ViewCopyright.vue";
-import ViewRecent from "../views/ViewRecent.vue";
+import About from "../views/About.vue";
+import Copyright from "../views/Copyright.vue";
+import Recent from "../views/Recent.vue";
 
 import SearchPhotos from "../views/SearchPhotos.vue";
 
@@ -30,13 +30,13 @@ const browserRoutes = [
   {
     path: '/',
     name: 'index',
-    component: ViewIndex,
+    component: Index,
   },
 
   {
     path: '/albums/',
     name: 'albums',
-    component: ViewAlbums,
+    component: AlbumList,
     meta: {
       body: 'small',
       title: "Albums",
@@ -45,7 +45,7 @@ const browserRoutes = [
   {
     path: '/albums/:path+/',
     name: 'album',
-    component: ViewAlbum,
+    component: AlbumDetail,
     meta: {
       title: false,
     },
@@ -53,7 +53,7 @@ const browserRoutes = [
   {
     path: '/albums/:path+/:md5',
     name: 'photo',
-    component: ViewPhoto,
+    component: PhotoDetail,
     meta: {
       body: 'photo-viewer',
       nav: false,
@@ -64,7 +64,7 @@ const browserRoutes = [
   {
     path: '/featured/',
     name: 'featured',
-    component: ViewFeaturedPhotos,
+    component: FeaturedPhotos,
     meta: {
       title: "Featured",
     },
@@ -73,7 +73,7 @@ const browserRoutes = [
   {
     path: '/tags/',
     name: 'tags',
-    component: ViewTags,
+    component: TagList,
     meta: {
       body: 'small',
       title: "Tags",
@@ -82,7 +82,7 @@ const browserRoutes = [
   {
     path: '/tags/:slug/',
     name: 'tag',
-    component: ViewTag,
+    component: TagDetail,
     meta: {
       body: 'small',
       title: false,
@@ -101,7 +101,7 @@ const browserRoutes = [
   {
     path: '/users/:slug/',
     name: 'user',
-    component: ViewUser,
+    component: UserDetail,
     meta: {
       body: 'small',
       title: false,
@@ -120,7 +120,7 @@ const browserRoutes = [
   {
     path: '/about/',
     name: 'about',
-    component: ViewAbout,
+    component: About,
     meta: {
       body: 'small',
       title: "About",
@@ -129,7 +129,7 @@ const browserRoutes = [
   {
     path: '/copyright/',
     name: 'copyright',
-    component: ViewCopyright,
+    component: Copyright,
     meta: {
       body: 'small',
       title: "Copyright",
@@ -139,7 +139,7 @@ const browserRoutes = [
   {
     path: '/recent/',
     name: 'recent',
-    component: ViewRecent,
+    component: Recent,
     meta: {
       body: 'small',
       title: "Recent changes",
