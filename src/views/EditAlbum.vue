@@ -102,22 +102,21 @@
       },
     },
 
-    created() {
-      this.loadAlbum();
+    async created() {
+      await this.loadAlbum();
     },
 
     methods: {
-      loadAlbum() {
-        this.$store.dispatch('getAlbum', this.routePath).then(() => {
-          this.$store.commit('setPhotoPage', 1);
-          this.$store.commit('updateDocumentTitleForEditAlbum');
-        });
+      async loadAlbum() {
+        await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: ""});
+        this.$store.commit('setPhotoPage', 1);
+        this.$store.commit('updateDocumentTitleForEditAlbum');
       },
     },
 
     watch: {
-      routePath() {
-        this.loadAlbum();
+      async routePath() {
+        await this.loadAlbum();
       },
     },
   }
