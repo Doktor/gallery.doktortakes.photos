@@ -1,6 +1,34 @@
 <template>
-  <div>
+  <main>
+    <div class="container-fixed">
+      <h2>Albums</h2>
+
+      <div class="count">
+        {{ results.length }} album{{ results.length|pluralize}}
+      </div>
+
+      <div class="album-search-container">
+        <input
+            type="text"
+            placeholder="Search by name..."
+            v-model="search"
+            @keyup="filterAlbums"
+        >
+      </div>
+    </div>
+
     <div>
+      <Albums
+        v-if="loading"
+        :albums="new Array(12).fill({})"
+        :albumRoute="'album'"
+        :isSkeleton="true"
+      />
+      <Albums v-else-if="results.length" :albums="results" :albumRoute="'album'"/>
+      <div v-else>No albums found.</div>
+    </div>
+
+    <div class="container-fixed">
       <h2>Special pages</h2>
       <ul>
         <li v-if="user.status !== 'anonymous'">
@@ -15,33 +43,7 @@
         <li><router-link title="Search" :to="{name: 'search'}">Search all photos</router-link></li>
       </ul>
     </div>
-
-    <div>
-      <h2>Albums</h2>
-
-      <div class="album-search-container">
-        <input
-            type="text"
-            placeholder="Search by name..."
-            v-model="search"
-            @keyup="filterAlbums"
-        >
-      </div>
-
-      <div class="count">
-        {{ results.length }} album{{ results.length|pluralize}}
-      </div>
-
-      <Albums
-        v-if="loading"
-        :albums="new Array(12).fill({})"
-        :albumRoute="'album'"
-        :isSkeleton="true"
-      />
-      <Albums v-else-if="results.length" :albums="results" :albumRoute="'album'"/>
-      <div v-else>No albums found.</div>
-    </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -85,3 +87,11 @@
     },
   }
 </script>
+
+<style scoped>
+.container-fixed {
+  max-width: 1200px;
+  text-align: left;
+  margin: 0 auto;
+}
+</style>
