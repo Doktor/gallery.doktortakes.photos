@@ -6,50 +6,55 @@
       <img style="background: rgb(40, 40, 40)" :src="placeholder" alt="A blue dog holding a camera" title="Me!">
     </figure>
 
-    <p>I'm Doktor! I'm 21. I live in Boston, Massachusetts, USA. In my free time, I take photos of animals.</p>
+    <p>I'm Doktor! I'm a semi-professional photographer based in the greater Boston area. My primary photographic interest is portraiture, and I love taking portraits of fursuiters (and occasionally regular humans). I also enjoy event photography and nature photography.</p>
 
-    <p>I have a <a href="https://t.me/DoktorTakesPhotos">Telegram channel</a> where I post random photos that I'm working on. I also rarely use <a href="https://twitter.com/DoktorTheHusky">Twitter</a>.</p>
+    <p>I have a <a href="https://t.me/DoktorTakesPhotos">Telegram channel</a> where I post works in progress, new photos, and website announcements. I also have accounts on <a href="https://twitter.com/DoktorTheHusky">Twitter</a> and <a href="https://www.instagram.com/doktorthehusky/">Instagram</a>, but I don't use those very often.</p>
 
-    <p>If you want to support my work, check out my <a href="https://ko-fi.com/doktor">Ko-fi</a> page!</p>
+    <p>If you'd like to support my work, please check out my <a href="https://ko-fi.com/doktor">Ko-fi</a> page. Thanks!</p>
 
-    <p>You can find links to my accounts on other websites <a href="https://doktorthehusky.com">here</a>.</p>
+    <h2>Commercial work</h2>
+
+    <p>Due to work and time constraints, I am frequently unavailable for private shoots, but you are welcome to contact me about business inquiries.</p>
 
     <h2>Contact</h2>
 
     <ul>
       <li>Twitter: <a href="https://twitter.com/DoktorTheHusky">@DoktorTheHusky</a></li>
+      <li>Instagram: <a href="https://www.instagram.com/doktorthehusky/">@doktorthehusky</a></li>
       <li>Email: <a href="mailto:doktorthehusky@gmail.com">doktorthehusky@gmail.com</a></li>
+      <li>Website: <a href="https://doktorthehusky.com">doktorthehusky.com</a></li>
     </ul>
 
     <h2>Photography</h2>
 
-    <p>I'm self-taught &mdash; I've never had any formal training in photography. There's a list of resources I recommend at the bottom of this page. The most important thing you can do is take lots of photos!</p>
-
-    <p>I don't specialize in any specific photography disciplines, but I particularly enjoy portraits, nature, and events.</p>
-
-    <h3>Photos</h3>
-
-    <p>The photos that I post on this website are free for personal use &mdash; <router-link :to="{name: 'copyright'}">see here for details</router-link>.</p>
+    <p>I'm self-taught: I haven't had any formal training in photography. I learn primarily from other camera-inclined friends, online resources, and taking thousands of photos. I've provided a list of online resources that I recommend at the bottom of this page. Regardless of what your background is, the most important thing you can do to learn is to take a lot of photos!</p>
 
     <h3>Background</h3>
 
-    <p>In September 2015, the start of my last year in high school, I picked up a DSLR for the first time. I took photos for the yearbook with moderate success.</p>
+    <p>In 2015, my last year of high school, I picked up a DSLR for the first time. I borrowed my parents' Canon EOS 550D and took photos for the school yearbook. It was a moderate success, and a few of my photos were published in the yearbook.</p>
 
-    <p>In January 2016, I attended my first convention, Anthro New England 2016. It was my first time seeing and interacting with fursuiters. It was also my first time taking photos of fursuiters. As the saying goes, the rest is history. &#x1F631;</p>
-
-    <p>My first camera was my parents' Canon EOS 550D. In June 2016, I switched to a Canon EOS 80D. In October 2017, I switched to my current camera, a Canon EOS 5D Mark IV.</p>
+    <p>In January 2016, I attended my first convention, Anthro New England 2016. I knew exactly 1 other person attending, so I volunteered to help run the con's first Photo Room so I had something interesting to do. It was the first time I had picked up a camera since high school, and my photos turned out "just okay" (at least by my current standards), but I was instantly hooked. I dove head-first into photography and the community after the con.</p>
 
     <h3>Anthro New England</h3>
 
-    <p>I'm a staff member for <a href="http://www.anthronewengland.com/">Anthro New England</a> (ANE), a convention held in Boston, MA. I'm part of the Photography Department. I organize and run the Photo Room, the Fursuit Group Photo, and the Fursuit "Parade". I volunteered in the Photo Room in 2016, and have been organizing and running it since then.</p>
+    <p>I'm a staff member for <a href="http://www.anthronewengland.com/">Anthro New England</a> (ANE), a convention held annually at the Boston Park Plaza in Boston, MA. I work in the Photography Department, and I help organize and run fursuiting & photography initiatives, including the Photo Room, the Fursuit Group Photo, and the Fursuit Parade. As of ANE 2020, I organize and run the Fursuit Group Photo and Fursuit Parade, and design cool flyers for all of the department's initiatives.</p>
 
-    <h3>Commercial work</h3>
+    <p>I took photos in the Photo Room in 2016, 2017, 2018, and 2019, and you can find all of those photos on this website. As of ANE 2020, I'm not directly involved in running the Photo Room. That responsibility has been delegated to Sven. If you're looking for Photo Room photos from ANE 2020, you should check out his website <a href="https://svenfennecphotos.com/home">here</a>!</p>
 
-    <p>Due to time constraints, I don't frequently take on private shoots, but get in touch if you have ideas.</p>
+    <h2>Equipment</h2>
+
+    <p>Here's a short list of the camera equipment I use frequently.</p>
+
+    <ul>
+      <li>Canon EOS 5D Mark IV</li>
+      <li>Canon EF 16-35mm f/4L IS USM</li>
+      <li>Canon EF 70-200mm f/2.8L IS II USM</li>
+      <li>Flashpoint eVOLV 200 Pro TTL</li>
+    </ul>
 
     <h2>Software</h2>
 
-    <p>I currently use the <a href="https://www.adobe.com/creativecloud/photography.html">Adobe Creative Cloud photography plan.</a></p>
+    <p>I edit my photos with Adobe Creative Cloud programs. I'm subscribed to their <a href="https://www.adobe.com/creativecloud/photography.html">photography plan.</a></p>
 
     <ul>
       <li><a href="https://www.adobe.com/products/photoshop.html">Adobe Photoshop</a></li>
@@ -57,6 +62,8 @@
     </ul>
 
     <h2>Resources</h2>
+
+    <p>Here's a list of photography resources that I frequently browse or refer to.</p>
 
     <ul>
       <li><a href="https://www.reddit.com/r/canon/">/r/canon</a></li>
