@@ -19,7 +19,7 @@
           :to="{name: route.name, query: {view: 'simple'}}"
       >Simple</router-link>
     </li>
-    <li v-if="userIsStaff">
+    <li>
       <router-link
           title="Table"
           :to="{name: route.name, query: {view: 'table'}}"
@@ -29,21 +29,10 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-
-
   export default {
     computed: {
-      ...mapState([
-        'user',
-      ]),
-
       route() {
         return this.$route;
-      },
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
       },
     },
   }

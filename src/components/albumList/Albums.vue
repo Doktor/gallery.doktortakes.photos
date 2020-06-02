@@ -2,7 +2,7 @@
   <section>
     <PaginationAlbums v-if="!isSkeleton"/>
 
-    <AlbumListViewSelector/>
+    <AlbumListViewSelector v-if="userIsStaff"/>
 
     <section>
       <component
