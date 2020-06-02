@@ -18,7 +18,7 @@ All commit messages are tagged based on the sections of the app that are affecte
 - `admin`: Django admin site
 - `api`: Django REST Framework API
 - `doc`: documentation
-- `frontend`: components (including component stylesheets), state management, and routing
+- `fe`: frontend; components (including component stylesheets), state management, and routing
 - `models`: Django models
 - `other`: Everything else
 - `packages`: frontend and backend package dependencies
@@ -34,4 +34,5 @@ All commit messages are tagged based on the sections of the app that are affecte
 
 ## Deprecated
 
+- `frontend`: use `fe` instead
 - `scripts`: static script files handled by Django
