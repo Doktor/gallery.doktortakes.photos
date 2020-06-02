@@ -10,3 +10,28 @@ The application itself doesn't have a name. It implements a highly-opinionated p
 - Album access permissions with user or group granularity
 - Search through albums
 - Lazy-loading of thumbnail images
+
+# Commit message tags
+
+All commit messages are tagged based on the sections of the app that are affected.
+
+- `admin`: Django admin site
+- `api`: Django REST Framework API
+- `doc`: documentation
+- `frontend`: components (including component stylesheets), state management, and routing
+- `models`: Django models
+- `other`: Everything else
+- `packages`: frontend and backend package dependencies
+- `refactor`: general refactoring (no features or fixes)
+- `settings`: Django settings
+- `styles`: site-wide stylesheets
+- `tasks`: Python utilities run with Invoke
+- `templates`: Django templates
+- `tests`: backend tests
+- `urls`: Django URL patterns and routing
+- `utils`: Python utility functions
+- `views`: Django views (not API views)
+
+## Deprecated
+
+- `scripts`: static script files handled by Django
