@@ -1093,24 +1093,6 @@ ul.edit-links-center {
   }
 }
 
-.group-cover {
-  width: 100%;
-  height: 50vh;
-
-  position: relative;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.group-cover-no-image {
-  background: rgb(40, 40, 40);
-}
-
-
 /* Changelog */
 .commit-hash {
   font-family: Consolas, monospace;

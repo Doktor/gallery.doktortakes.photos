@@ -42,3 +42,23 @@
     },
   }
 </script>
+
+<style lang="scss" scoped>
+  .group-cover {
+    width: 100%;
+    height: 50vh;
+
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .group-cover-no-image {
+    background-color: rgb(20, 20, 20);
+    border: 1px solid rgb(40, 40, 40);
+  }
+</style>
