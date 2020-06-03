@@ -1,7 +1,7 @@
 <template>
   <figure
       class="group-cover"
-      :class="{'group-cover-no-image': album.cover === null}"
+      :class="{'no-image': album.cover === null}"
   >
     <img
         v-if="album.cover !== null"
@@ -9,13 +9,6 @@
         :src="album.cover.thumbnail"
         :title="album.name"
     >
-    <img
-        v-else
-        alt="Cover photo placeholder"
-        :src="placeholder"
-        :title="album.name"
-    >
-
     <AlbumCoverOverlay/>
   </figure>
 </template>
@@ -55,10 +48,12 @@
       height: 100%;
       object-fit: cover;
     }
-  }
 
-  .group-cover-no-image {
-    background-color: rgb(20, 20, 20);
-    border: 1px solid rgb(40, 40, 40);
+    &.no-image {
+      height: unset;
+
+      background-color: rgb(20, 20, 20);
+      border: 1px solid rgb(40, 40, 40);
+    }
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="overlay-container">
-    <div class="overlay-section overlay-header">
+  <div class="overlay-container" :class="{'no-image': album.cover === null}">
+    <div class="overlay-section">
       <div class="overlay-item">
         <h2 class="title">{{ album.name }}</h2>
       </div>
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="overlay-section overlay-body">
+    <div class="overlay-section">
       <div v-if="location" class="overlay-item">
         <i title="Location" class="fas fa-fw fa-map-marker-alt"></i>
         <span>{{ location }}</span>
@@ -131,28 +131,24 @@
 <style lang="scss" scoped>
   .overlay-container {
     position: absolute;
-    left: 0;
     top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     background-color: rgba(0, 0, 0, 0.6);
 
-    width: 100%;
-    height: 100%;
+    &.no-image {
+      position: unset;
+    }
   }
 
   .overlay-section {
-    position: absolute;
-    left: 0;
-
     padding: 1.8rem;
-  }
-
-  .overlay-header {
-    top: 0;
-  }
-
-  .overlay-body {
-    bottom: 0;
   }
 
   .title {
