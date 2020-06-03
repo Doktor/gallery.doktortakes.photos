@@ -2,7 +2,6 @@
   <div v-if="!loading">
     <section class="group">
       <AlbumCover/>
-      <AlbumInfo/>
     </section>
 
     <AlbumChildren/>
@@ -17,7 +16,6 @@
   import AlbumCard from "../components/albumList/AlbumCard.vue";
   import AlbumChildren from "../components/albumList/AlbumChildren.vue";
   import AlbumCover from "../components/albumDetail/AlbumCover.vue";
-  import AlbumInfo from "../components/albumDetail/AlbumInfo.vue";
   import Photos from '../components/photoList/Photos.vue';
 
 
@@ -26,7 +24,6 @@
       AlbumCard,
       AlbumChildren,
       AlbumCover,
-      AlbumInfo,
       Photos,
     },
 
