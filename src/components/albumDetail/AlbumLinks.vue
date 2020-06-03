@@ -3,29 +3,28 @@
     <i title="Links" class="fas fa-fw fa-link"></i>
 
     <router-link
+      class="album-link"
       :to="{name: 'editAlbum', params: {path: album.path}}"
-    >
-      Edit
-    </router-link>
+    >Edit</router-link>
 
-    &middot;
-
-    <a :href="album.admin_url">Admin</a>
-
-    &middot;
+    <a
+      :href="album.admin_url"
+      class="album-link"
+      title="View album on admin site"
+    >Admin</a>
 
     <a
       :href="urlProductionSite"
-      title="View album on production site"
+      class="album-link"
+      title="View album on production site (new tab)"
       target="_blank"
       rel="noopener noreferrer"
     >Production</a>
 
-    &middot;
-
     <a
       :href="urlAlphaSite"
-      title="View album on alpha site"
+      class="album-link"
+      title="View album on alpha site (new tab)"
       target="_blank"
       rel="noopener noreferrer"
     >Alpha</a>
@@ -53,3 +52,13 @@
     },
   }
 </script>
+
+<style scoped lang="scss">
+  .album-link {
+
+    &:not(:last-child)::after {
+      color: rgb(220, 220, 220);
+      content: "\00a0\00b7\00a0";  // nbsp, middle dot, nbsp
+    }
+  }
+</style>
