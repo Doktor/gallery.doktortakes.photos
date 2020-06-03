@@ -7,11 +7,15 @@
       :to="{name: 'editAlbum', params: {path: album.path}}"
     >Edit</router-link>
 
+    <span class="divider"></span>
+
     <a
       :href="album.admin_url"
       class="album-link"
       title="View album on admin site"
     >Admin</a>
+
+    <span class="divider"></span>
 
     <a
       :href="urlProductionSite"
@@ -20,6 +24,8 @@
       target="_blank"
       rel="noopener noreferrer"
     >Production</a>
+
+    <span class="divider"></span>
 
     <a
       :href="urlAlphaSite"
@@ -54,9 +60,13 @@
 </script>
 
 <style scoped lang="scss">
-  .album-link {
+  .divider {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
-    &:not(:last-child)::after {
+    &::before {
       color: rgb(220, 220, 220);
       content: "\00a0\00b7\00a0";  // nbsp, middle dot, nbsp
     }
