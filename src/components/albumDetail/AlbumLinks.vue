@@ -1,5 +1,5 @@
 <template>
-  <div class="group-overlay-list-item">
+  <div class="overlay-item">
     <i title="Links" class="fas fa-fw fa-link"></i>
 
     <router-link

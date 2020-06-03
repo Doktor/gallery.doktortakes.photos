@@ -1,25 +1,25 @@
 <template>
-  <div class="group-overlay-container">
-    <div class="group-overlay-header">
-      <div class="group-overlay-row">
-        <h2 class="group-overlay-text group-title">{{ album.name }}</h2>
+  <div class="overlay-container">
+    <div class="overlay-section overlay-header">
+      <div class="overlay-item">
+        <h2 class="title">{{ album.name }}</h2>
       </div>
 
-      <div class="group-overlay-text">
+      <div class="overlay-item">
         <span v-html="date"></span> &middot;
         <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
       </div>
     </div>
 
-    <div class="group-overlay-body">
-      <div v-if="location" class="group-overlay-list-item">
+    <div class="overlay-section overlay-body">
+      <div v-if="location" class="overlay-item">
         <i title="Location" class="fas fa-fw fa-map-marker-alt"></i>
         <span>{{ location }}</span>
       </div>
 
-      <AlbumAccessInfo/>
+      <AlbumAccessInfo class="overlay-item"/>
 
-      <div v-if="album.tags.length > 0" class="group-overlay-list-item">
+      <div v-if="album.tags.length > 0" class="overlay-item">
         <i title="Tags" class="fas fa-fw fa-tags"></i>
         <span>
           <template v-for="(slug, index) in album.tags">
@@ -38,13 +38,12 @@
         </span>
       </div>
 
-      <div v-if="album.description"
-          class="group-overlay-list-item group-description">
+      <div v-if="album.description" class="overlay-item">
         <i title="Description" class="fas fa-fw fa-book"></i>
         <span v-html="album.description"></span>
       </div>
 
-      <div v-if="album.parent" class="group-overlay-list-item">
+      <div v-if="album.parent" class="overlay-item">
         <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
         <router-link
           :to="{name: 'album', params: {path: album.parent.split('/')}}"
@@ -130,9 +129,7 @@
 </script>
 
 <style lang="scss" scoped>
-  $group-row-spacing: 0.75rem;
-
-  .group-overlay-container {
+  .overlay-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -143,82 +140,46 @@
     height: 100%;
   }
 
-  .group-overlay-header {
+  .overlay-section {
     position: absolute;
     left: 0;
+
+    padding: 1.8rem;
+  }
+
+  .overlay-header {
     top: 0;
-
-    padding: 1.5rem;
   }
 
-  .group-overlay-body {
-    position: absolute;
-    left: 0;
+  .overlay-body {
     bottom: 0;
-
-    padding: 1.5rem;
   }
 
-  .group-overlay-row {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  .title {
+    display: inline-block;
+    margin: 0;
 
-    margin-bottom: $group-row-spacing;
+    font-size: 3.3rem;
+    line-height: 1;
+    text-transform: none;
   }
 
-  .group-overlay-list-item, ::v-deep .group-overlay-list-item {
+  .overlay-item, ::v-deep .overlay-item {
     @include primary-font();
     font-size: 1.5rem;
-    line-height: 1;
+    line-height: 1.1;
     text-align: left;
     text-transform: none;
     text-shadow: 1px 1px 2px black;
 
-    margin-bottom: $group-row-spacing;
+    margin-bottom: 0.75rem;
 
     i {
       margin-right: 6px;
     }
 
-    &.group-description {
-      line-height: 1.15;
+    &:last-child {
+      margin-bottom: 0;
     }
-  }
-
-  .group-overlay-text {
-    @include primary-font();
-    text-shadow: 1px 1px 2px black;
-    text-align: center !important;
-    font-size: 1.5rem;
-    line-height: 1;
-
-    white-space: nowrap;
-
-    @media (min-width: 901px) {
-      text-align: left !important;
-    }
-
-    &:not(:last-child) {
-      margin-bottom: $group-row-spacing;
-    }
-  }
-
-  .group-menu-button {
-    align-self: center;
-    margin-left: 0.75rem;
-
-    background-color: rgba(20, 20, 20, 0.65);
-    color: white;
-    border: none;
-  }
-
-  .group-title {
-    display: inline-block;
-    margin: 0;
-
-    font-size: 3.0rem;
-    line-height: 1;
-    text-transform: none;
   }
 </style>
