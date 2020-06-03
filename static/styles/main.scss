@@ -1161,27 +1161,31 @@ $group-row-spacing: 0.75rem;
   background: rgb(40, 40, 40);
 }
 
-.group-inset {
-  // Spacing from the edges of the image
-  $spacing: 1.25rem;
-
+.group-inset-container {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
+  left: 0;
+  top: 0;
 
-  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  width: 100%;
+  height: 100%;
+}
+
+.group-inset-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  padding: 1.5rem;
+}
+
+.group-inset-body {
+  position: absolute;
+  left: 0;
   bottom: 0;
 
-  // Bottom-center
-  margin-bottom: $spacing;
-  left: 50%;
-  transform: translateX(-50%);
-
-  // Bottom-left
-  @media (min-width: 901px) {
-    margin-left: $spacing;
-    left: unset;
-    transform: none;
-  }
+  padding: 1.5rem;
 }
 
 .group-inset-row {
@@ -1192,18 +1196,37 @@ $group-row-spacing: 0.75rem;
   margin-bottom: $group-row-spacing;
 }
 
+.group-inset-list-item {
+  @include primary-font();
+  font-size: 1.5rem;
+  line-height: 1;
+  text-align: left;
+  text-transform: none;
+  text-shadow: 1px 1px 2px black;
+
+  margin-bottom: $group-row-spacing;
+
+  i {
+    margin-right: 6px;
+  }
+
+  &.group-description {
+    line-height: 1.15;
+  }
+}
+
 .group-inset-text {
+  @include primary-font();
   text-shadow: 1px 1px 2px black;
   text-align: center !important;
+  font-size: 1.5rem;
+  line-height: 1;
+
+  white-space: nowrap;
 
   @media (min-width: 901px) {
     text-align: left !important;
   }
-
-  @include primary-font();
-  font-size: 1.5rem;
-  line-height: 1;
-  white-space: nowrap;
 
   &:not(:last-child) {
     margin-bottom: $group-row-spacing;
@@ -1226,27 +1249,6 @@ $group-row-spacing: 0.75rem;
   font-size: 3.0rem;
   line-height: 1;
   text-transform: none;
-}
-
-.group-info {
-  margin: 1.25rem 0 $group-row-spacing 0;
-}
-
-.group-info-item {
-  @include primary-font();
-  font-size: 1.5rem;
-  line-height: 1;
-  text-align: left;
-  text-transform: none;
-  margin-bottom: $group-row-spacing;
-
-  i {
-    margin-right: 6px;
-  }
-
-  &.group-description {
-    line-height: 1.15;
-  }
 }
 
 /* Changelog */
