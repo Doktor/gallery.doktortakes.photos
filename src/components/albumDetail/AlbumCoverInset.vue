@@ -40,47 +40,45 @@
         <span v-html="album.description"></span>
       </div>
 
-      <div v-if="album.parent || userIsStaff" class="group-inset-list-item">
+      <div v-if="album.parent" class="group-inset-list-item">
+        <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
+        <router-link
+          :to="{name: 'album', params: {path: album.parent.split('/')}}"
+        ><!--
+          -->View parent album<!--
+        --></router-link>
+      </div>
+
+      <div v-if="userIsStaff" class="group-inset-list-item">
         <i title="Links" class="fas fa-fw fa-link"></i>
 
         <router-link
-            v-if="album.parent"
-            :to="{name: 'album', params: {path: album.parent.split('/')}}"
+          :to="{name: 'editAlbum', params: {path: album.path}}"
         >
-          View parent album
+          Edit
         </router-link>
 
-        <template v-if="userIsStaff">
-          <span v-if="album.parent">&middot;</span>
+        &middot;
 
-          <router-link
-            :to="{name: 'editAlbum', params: {path: album.path}}"
-          >
-            Edit
-          </router-link>
+        <a :href="album.admin_url">Admin</a>
 
-          &middot;
+        &middot;
 
-          <a :href="album.admin_url">Admin</a>
+        <a
+          :href="urlProductionSite"
+          title="View album on production site"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Production</a>
 
-          &middot;
+        &middot;
 
-          <a
-            :href="urlProductionSite"
-            title="View album on production site"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Production</a>
-
-          &middot;
-
-          <a
-            :href="urlAlphaSite"
-            title="View album on alpha site"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Alpha</a>
-        </template>
+        <a
+          :href="urlAlphaSite"
+          title="View album on alpha site"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Alpha</a>
       </div>
     </div>
   </div>
