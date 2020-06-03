@@ -16,7 +16,7 @@
         :title="album.name"
     >
 
-    <AlbumCoverInset/>
+    <AlbumCoverOverlay/>
   </figure>
 </template>
 
@@ -24,11 +24,11 @@
 <script>
   import {mapState} from 'vuex';
   import {staticFiles} from "../../store";
-  import AlbumCoverInset from "./AlbumCoverInset.vue";
+  import AlbumCoverOverlay from "./AlbumCoverOverlay.vue";
 
   export default {
     components: {
-      AlbumCoverInset,
+      AlbumCoverOverlay,
     },
 
     computed: {

@@ -1,25 +1,25 @@
 <template>
-  <div class="group-inset-container">
-    <div class="group-inset-header">
-      <div class="group-inset-row">
-        <h2 class="group-inset-text group-title">{{ album.name }}</h2>
+  <div class="group-overlay-container">
+    <div class="group-overlay-header">
+      <div class="group-overlay-row">
+        <h2 class="group-overlay-text group-title">{{ album.name }}</h2>
       </div>
 
-      <div class="group-inset-text">
+      <div class="group-overlay-text">
         <span v-html="date"></span> &middot;
         <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
       </div>
     </div>
 
-    <div class="group-inset-body">
-      <div v-if="location" class="group-inset-list-item">
+    <div class="group-overlay-body">
+      <div v-if="location" class="group-overlay-list-item">
         <i title="Location" class="fas fa-fw fa-map-marker-alt"></i>
         <span>{{ location }}</span>
       </div>
 
       <AlbumAccessInfo/>
 
-      <div v-if="album.tags.length > 0" class="group-inset-list-item">
+      <div v-if="album.tags.length > 0" class="group-overlay-list-item">
         <i title="Tags" class="fas fa-fw fa-tags"></i>
         <span>
           <template v-for="(slug, index) in album.tags">
@@ -39,12 +39,12 @@
       </div>
 
       <div v-if="album.description"
-          class="group-inset-list-item group-description">
+          class="group-overlay-list-item group-description">
         <i title="Description" class="fas fa-fw fa-book"></i>
         <span v-html="album.description"></span>
       </div>
 
-      <div v-if="album.parent" class="group-inset-list-item">
+      <div v-if="album.parent" class="group-overlay-list-item">
         <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
         <router-link
           :to="{name: 'album', params: {path: album.parent.split('/')}}"
@@ -132,7 +132,7 @@
 <style lang="scss" scoped>
   $group-row-spacing: 0.75rem;
 
-  .group-inset-container {
+  .group-overlay-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -143,7 +143,7 @@
     height: 100%;
   }
 
-  .group-inset-header {
+  .group-overlay-header {
     position: absolute;
     left: 0;
     top: 0;
@@ -151,7 +151,7 @@
     padding: 1.5rem;
   }
 
-  .group-inset-body {
+  .group-overlay-body {
     position: absolute;
     left: 0;
     bottom: 0;
@@ -159,7 +159,7 @@
     padding: 1.5rem;
   }
 
-  .group-inset-row {
+  .group-overlay-row {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -167,7 +167,7 @@
     margin-bottom: $group-row-spacing;
   }
 
-  .group-inset-list-item, ::v-deep .group-inset-list-item {
+  .group-overlay-list-item, ::v-deep .group-overlay-list-item {
     @include primary-font();
     font-size: 1.5rem;
     line-height: 1;
@@ -186,7 +186,7 @@
     }
   }
 
-  .group-inset-text {
+  .group-overlay-text {
     @include primary-font();
     text-shadow: 1px 1px 2px black;
     text-align: center !important;

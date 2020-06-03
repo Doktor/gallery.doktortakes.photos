@@ -1,16 +1,16 @@
 <template>
   <div v-if="album.access_level > 0">
-    <div v-if="!userIsStaff" class="group-inset-list-item">
+    <div v-if="!userIsStaff" class="group-overlay-list-item">
       <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
       <span>Please ask before sharing these photos.</span>
     </div>
 
-    <div v-if="userIsStaff" class="group-inset-list-item">
+    <div v-if="userIsStaff" class="group-overlay-list-item">
       <i title="Access level" class="fas fa-fw fa-lock"></i>
       <span>Access level: {{ accessLevelDisplay }}</span>
     </div>
 
-    <div v-if="album.access_code" class="group-inset-list-item">
+    <div v-if="album.access_code" class="group-overlay-list-item">
       <i title="Access code" class="fas fa-fw fa-key"></i>
       <span><!--
       -->Access code:
@@ -22,7 +22,7 @@
 
     <div
         v-if="album.users.length > 0 || album.groups.length > 0"
-        class="group-inset-list-item"
+        class="group-overlay-list-item"
     >
       <i title="Users and groups" class="fas fa-fw fa-users"></i>
       <span><!--
