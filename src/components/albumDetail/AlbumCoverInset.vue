@@ -25,11 +25,15 @@
           <template v-for="(slug, index) in album.tags">
             <router-link
               class="tag"
+              :key="slug"
               :to="{name: 'tag', params: {slug: slug}}"
               ><!--
                 -->#{{ slug }}<!--
               --></router-link>
-            <span v-if="index !== album.tags.length - 1" v-html="nbsp"></span>
+            <span
+              v-if="index !== album.tags.length - 1"
+              v-html="nbsp"
+              :key="'space-' + index.toString()"></span>
           </template>
         </span>
       </div>
