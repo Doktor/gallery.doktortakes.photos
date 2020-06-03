@@ -1,59 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:400');
 @import url('https://fonts.googleapis.com/css?family=Contrail+One:400,700');
-
-/* Mixins */
-
-@mixin clearfix() {
-  &::after {
-    content: ' ';
-    display: table;
-    clear: both;
-  }
-}
-
-@mixin fade() {
-  img {
-    filter: brightness(1.0);
-  }
-
-  &:hover img {
-    filter: brightness(0.8);
-  }
-
-  img, &:hover img {
-    transition: filter 0.2s ease-in-out;
-  }
-}
-
-@mixin fade($t: opacity 0.2s ease-in-out) {
-  -webkit-transition: $t;
-  -moz-transition: $t;
-  -o-transition: $t;
-  -ms-transition: $t;
-  transition: $t;
-}
-
-/* Primary colors */
-
-$borderColor: rgb(200, 200, 200);
-$text: rgb(220, 220, 220);
-$blue: rgb(0, 120, 255);
-
-/* Typefaces */
-
-@mixin primary-font() {
-  font-family: "Contrail One", sans-serif;
-  letter-spacing: -0.05rem;
-}
-
-@mixin secondary-font() {
-  font-family: "Roboto", sans-serif;
-}
+@import "variables";
 
 // Other
 
 $itemSpacing: 0.5rem;
-
 
 /* General */
 
