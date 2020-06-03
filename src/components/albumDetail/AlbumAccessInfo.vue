@@ -21,15 +21,16 @@
     </div>
 
     <div
-        v-if="album.users.length > 0 || album.groups.length > 0"
-        class="overlay-item"
+      v-if="hasUsers || hasGroups"
+      class="overlay-item"
     >
       <i title="Users and groups" class="fas fa-fw fa-users"></i>
-      <span><!--
-      -->{{ album.users.join(", ") }}<!--
-      --><template
-          v-if="album.users.length > 0 && album.groups.length > 0">, </template><!--
-      -->{{ album.groups.join(", ") }}
+      <span>
+        <template v-if="hasUsers">Users: {{ album.users.join(", ") }}</template>
+        <span
+          v-if="hasUsers && hasGroups"
+          class="divider"></span>
+        <template v-if="hasGroups">Groups: {{ album.groups.join(", ") }}</template>
       </span>
     </div>
   </div>
@@ -64,9 +65,31 @@
         return accessLevelsMap[this.album.access_level];
       },
 
+      hasGroups() {
+        return album.groups.length > 0;
+      },
+
+      hasUsers() {
+        return album.users.length > 0;
+      },
+
       userIsStaff() {
         return this.user.status === 'staff' || this.user.status === 'superuser';
       },
     },
   }
 </script>
+
+<style lang="scss" scoped>
+  .divider {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &::before {
+      color: rgb(220, 220, 220);
+      content: "\00a0\00b7\00a0";  // nbsp, middle dot, nbsp
+    }
+  }
+</style>
