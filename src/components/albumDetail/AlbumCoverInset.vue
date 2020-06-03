@@ -49,45 +49,15 @@
         --></router-link>
       </div>
 
-      <div v-if="userIsStaff" class="group-inset-list-item">
-        <i title="Links" class="fas fa-fw fa-link"></i>
-
-        <router-link
-          :to="{name: 'editAlbum', params: {path: album.path}}"
-        >
-          Edit
-        </router-link>
-
-        &middot;
-
-        <a :href="album.admin_url">Admin</a>
-
-        &middot;
-
-        <a
-          :href="urlProductionSite"
-          title="View album on production site"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Production</a>
-
-        &middot;
-
-        <a
-          :href="urlAlphaSite"
-          title="View album on alpha site"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Alpha</a>
-      </div>
+      <AlbumLinks v-if="userIsStaff"/>
     </div>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex';
-  import {domains} from "../../store";
   import AlbumAccessInfo from "./AlbumAccessInfo.vue";
+  import AlbumLinks from "./AlbumLinks.vue";
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -108,6 +78,7 @@
   export default {
     components: {
       AlbumAccessInfo,
+      AlbumLinks,
     },
 
     computed: {
@@ -130,14 +101,6 @@
 
       nbsp() {
         return "&nbsp;";
-      },
-
-      urlAlphaSite() {
-        return new URL(this.album.url, domains.alpha).href;
-      },
-
-      urlProductionSite() {
-        return new URL(this.album.url, domains.production).href;
       },
 
       userIsStaff() {
