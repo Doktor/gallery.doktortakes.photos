@@ -60,70 +60,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-.breadcrumbs {
-  $spacing: 0.75rem;
-
-  @include primary-font();
-  font-size: 1.3rem;
-  line-height: 1;
-  text-transform: lowercase;
-
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  // Bookmark icon
-  .breadcrumbs-icon i {
-    display: inline;
-    vertical-align: middle;
-    margin-right: 0.2rem;
-  }
-
-  // 1st breakpoint: one item per line
-  li {
-    display: inline-block;
-    margin: 0 0 $spacing 0;
-    text-align: left;
-    float: left;
-    width: 100%;
-
-    @mixin hide() {
-      content: "";
-      margin: 0;
-      visibility: hidden;
-    }
-
-    // Separator at start of item
-    &:not(:first-child)::before {
-      content: "\002192";  // Right arrow
-      color: gray;
-      position: relative;
-      margin-right: $spacing;
-    }
-    &:not(:last-child)::after {
-      @include hide();
-      color: gray;
-    }
-
-    // 2nd breakpoint: all items on one line
-    @media (min-width: 601px) {
-      width: auto;
-      margin: 0;
-
-      // Separator at end of item
-      &:not(:first-child)::before {
-        @include hide();
-      }
-      &:not(:last-child)::after {
-        content: "/";
-        margin: 0 $spacing;
-        position: relative;
-        visibility: visible;
-      }
-    }
-  }
-}
-
 /* Pagination */
 
 .pagination {
@@ -945,7 +881,7 @@ $albumWidth: 400px;
 
 /* Album edit links */
 
-ul.group-edit-links, ul.edit-links-center {
+ul.edit-links-center {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -960,15 +896,6 @@ ul.group-edit-links, ul.edit-links-center {
   }
 }
 
-ul.group-edit-links {
-  float: right;
-
-  li {
-    float: left;
-    line-height: $nav-font-size;
-  }
-}
-
 ul.edit-links-center {
   li {
     display: inline-block;
@@ -979,14 +906,6 @@ ul.edit-links-center {
 
 .group {
   margin: -1rem 0 0 0;
-}
-
-.group-nav {
-  @include clearfix();
-
-  .breadcrumbs {
-    float: left;
-  }
 }
 
 /* Changelog */
