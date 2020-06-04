@@ -1,5 +1,6 @@
 <template>
-  <ul>
+  <nav class="nav">
+  <ul class="nav-items" :class="{'nav-items-index': isIndex}">
     <template v-if="showLogo">
       <li class="nav-item">
         <h1 class="logo">
@@ -122,6 +123,7 @@
       </a>
     </li>
   </ul>
+  </nav>
 </template>
 
 <script>
@@ -155,3 +157,169 @@
     },
   }
 </script>
+
+<style lang="scss" scoped>
+  // Base font size
+  $nav-font-size: 1.5rem;
+  $nav-font-size-index: $nav-font-size * 1.25;
+  $logo-size: $nav-font-size * 1.5;
+
+  // Color of nav items (on the index page)
+  $nav-item-color: white;
+
+  // Color of nav dividers (on non-index pages)
+  $nav-divider-color: rgb(120, 120, 120);
+
+  // Spacing between nav items
+  $nav-item-spacing: 1.7rem;
+
+  .logo {
+    font-size: $logo-size;
+    line-height: 1;
+    text-align: center;
+    text-transform: capitalize;
+
+    padding: 0;
+    margin: 0 0 1rem 0;
+
+    @media (min-width: 901px) {
+      font-size: $logo-size * 1.15;
+      margin: 0;
+    }
+  }
+
+  .nav {
+    padding-bottom: 1.5rem;
+    margin-top: -0.5rem;
+  }
+
+  .nav-index {
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    @include primary-font();
+    font-size: $nav-font-size;
+    text-transform: lowercase;
+
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 ($nav-item-spacing / 2);
+
+    // Vertical alignment
+    @media (min-width: 901px) {
+      line-height: $logo-size * 1.15;
+    }
+
+    .nav-items-index & {
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  // Change color of items on hover
+  @mixin nav-item-hover($property) {
+    #{$property}: $nav-item-color;
+
+    &:hover {
+      #{$property}: $text;
+    }
+
+    &, &:hover {
+      text-decoration: none;
+      transition: #{$property} 0.25s;
+    }
+  }
+
+  .nav-item-link {
+    color: $text;
+
+    &-profile {
+      color: $blue;
+    }
+
+    &-log-out {
+      color: red;
+    }
+
+    .nav-items-index & {
+      @include nav-item-hover(color);
+
+      color: white;
+      line-height: 1;
+
+      @media (min-width: 901px) {
+        font-size: $nav-font-size-index;
+      }
+    }
+  }
+
+  // Displays a Font Awesome icon in a circle
+  // The icon element should be the only child element of a container element
+  // with this class.
+  .fa-stack {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // Background: circle
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+
+    color: rgb(20, 20, 20);
+    background-color: $text;
+
+    .nav-items-index & {
+      @include nav-item-hover(background-color);
+
+      @media (min-width: 901px) {
+        width: $nav-font-size-index;
+        height: $nav-font-size-index;
+      }
+    }
+
+    // Foreground: icon
+    i {
+      font-size: 55%;
+    }
+  }
+
+  .nav-item-fa-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .nav-divider {
+    color: $nav-divider-color;
+    margin: 0 ($nav-item-spacing / 3) !important;
+
+    &::before {
+      content: "\00b7";  // Center dot
+    }
+  }
+</style>

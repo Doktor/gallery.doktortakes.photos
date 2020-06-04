@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <nav v-if="!isIndex" class="nav">
-      <Navlinks
-          class="nav-items"
-          :showDividers="true"
-          :showLogo="true"
-      />
-    </nav>
+    <Navlinks
+      v-if="!isIndex"
+      :showDividers="true"
+      :showLogo="true"
+    />
 
     <Notifications/>
 

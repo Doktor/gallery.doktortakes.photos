@@ -8,10 +8,10 @@
     </div>
 
     <header class="index-header">
-      <h1 class="logo logo-large">Doktor Takes Photos</h1>
+      <h1 class="logo">Doktor Takes Photos</h1>
 
       <Navlinks
-        class="nav-items nav-items-index"
+        class="nav-index"
         :showDividers="false"
         :showLogo="false"
       />
@@ -110,12 +110,21 @@
 <style scoped lang="scss">
 $margin: 40px;
 
+$logo-size: 3.2rem;
+
 .logo {
+  text-align: left;
+  font-size: $logo-size;
+  line-height: 1;
+  text-transform: capitalize;
+
+  padding: 0;
   margin: 0;
   margin-bottom: 0.7rem;
 
-  text-align: left;
-  font-size: 3.2rem;
+  @media (min-width: 901px) {
+    font-size: $logo-size * 1.1;
+  }
 }
 
 .index-header, .index-footer {
