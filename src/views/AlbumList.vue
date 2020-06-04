@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="container-fixed">
+    <FixedWidthContainer>
       <h2>Albums</h2>
 
       <div class="count">
@@ -15,7 +15,7 @@
             @keyup="filterAlbums"
         >
       </div>
-    </div>
+    </FixedWidthContainer>
 
     <div>
       <Albums
@@ -28,7 +28,7 @@
       <div v-else>No albums found.</div>
     </div>
 
-    <div class="container-fixed">
+    <FixedWidthContainer>
       <h2>Special pages</h2>
       <ul>
         <li v-if="user.status !== 'anonymous'">
@@ -42,7 +42,7 @@
         <li><router-link title="Tags" :to="{name: 'tags'}">View all tags</router-link></li>
         <li><router-link title="Search" :to="{name: 'search'}">Search all photos</router-link></li>
       </ul>
-    </div>
+    </FixedWidthContainer>
   </main>
 </template>
 
@@ -50,11 +50,13 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "../components/albumList/Albums.vue";
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
 
 
   export default {
     components: {
       Albums,
+      FixedWidthContainer,
     },
 
     computed: {
@@ -87,11 +89,3 @@
     },
   }
 </script>
-
-<style scoped>
-.container-fixed {
-  max-width: 1200px;
-  text-align: left;
-  margin: 0 auto;
-}
-</style>

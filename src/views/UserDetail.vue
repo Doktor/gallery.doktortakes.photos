@@ -1,15 +1,15 @@
 <template>
   <div v-if="!loading">
-    <div>
+    <FixedWidthContainer>
       <h2>{{ user.name }}</h2>
 
       <ul>
         <li>Account created: {{ user.account_created }}</li>
         <li>Last sign in: {{ user.last_sign_in }}</li>
       </ul>
-    </div>
+    </FixedWidthContainer>
 
-    <div>
+    <FixedWidthContainer>
       <h2>User settings</h2>
 
       <ul>
@@ -19,9 +19,9 @@
           </router-link>
         </li>
       </ul>
-    </div>
+    </FixedWidthContainer>
 
-    <div>
+    <FixedWidthContainer>
       <h2>Albums</h2>
 
       <div class="album-search-container">
@@ -32,7 +32,9 @@
             @keyup="filterAlbums"
         >
       </div>
+    </FixedWidthContainer>
 
+    <div>
       <div class="count">
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
@@ -47,11 +49,13 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "../components/albumList/Albums.vue";
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
 
 
   export default {
     components: {
       Albums,
+      FixedWidthContainer,
     },
 
     computed: {

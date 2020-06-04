@@ -38,7 +38,6 @@ const browserRoutes = [
     name: 'albums',
     component: AlbumList,
     meta: {
-      body: 'small',
       title: "Albums",
     },
   },
@@ -75,7 +74,6 @@ const browserRoutes = [
     name: 'tags',
     component: TagList,
     meta: {
-      body: 'small',
       title: "Tags",
     },
   },
@@ -84,7 +82,6 @@ const browserRoutes = [
     name: 'tag',
     component: TagDetail,
     meta: {
-      body: 'small',
       title: false,
     },
   },
@@ -103,7 +100,6 @@ const browserRoutes = [
     name: 'user',
     component: UserDetail,
     meta: {
-      body: 'small',
       title: false,
     },
   },
@@ -112,7 +108,6 @@ const browserRoutes = [
     name: 'changePassword',
     component: ChangePassword,
     meta: {
-      body: 'small',
       title: "Change your password",
     },
   },
@@ -122,7 +117,6 @@ const browserRoutes = [
     name: 'about',
     component: About,
     meta: {
-      body: 'small',
       title: "About",
     },
   },
@@ -131,7 +125,6 @@ const browserRoutes = [
     name: 'copyright',
     component: Copyright,
     meta: {
-      body: 'small',
       title: "Copyright",
     },
   },
@@ -141,7 +134,6 @@ const browserRoutes = [
     name: 'recent',
     component: Recent,
     meta: {
-      body: 'small',
       title: "Recent changes",
     },
   }
@@ -162,7 +154,6 @@ const editorRoutes = [
     name: 'newAlbum',
     component: NewAlbum,
     meta: {
-      body: 'small',
       staff: true,
       title: "Create new album",
     },
@@ -172,7 +163,6 @@ const editorRoutes = [
     name: 'editAlbum',
     component: EditAlbum,
     meta: {
-      body: 'small',
       staff: true,
       title: "Edit album: {album}",
     },

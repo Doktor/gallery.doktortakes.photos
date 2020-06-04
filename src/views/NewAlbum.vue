@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <FixedWidthContainer>
     <router-link :to="{name: 'editorIndex'}">Back to editor</router-link>
     <h2>Create new album</h2>
     <AlbumForm
@@ -7,17 +7,19 @@
         :save-button-text="'Create album'"
         :update="false"
     />
-  </div>
+  </FixedWidthContainer>
 </template>
 
 <script>
   import AlbumForm from '../components/editor/AlbumForm.vue';
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
   import {mapState} from 'vuex';
 
 
   export default {
     components: {
       AlbumForm,
+      FixedWidthContainer,
     },
 
     computed: {

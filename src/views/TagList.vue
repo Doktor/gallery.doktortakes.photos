@@ -1,5 +1,5 @@
 <template>
-  <section v-if="!loading">
+  <FixedWidthContainer v-if="!loading">
     <h2>Tags</h2>
 
     <ul v-if="tags" class="tags">
@@ -10,14 +10,19 @@
       </li>
     </ul>
     <p v-else>No tags found.</p>
-  </section>
+  </FixedWidthContainer>
 </template>
 
 <script>
   import {mapState} from 'vuex';
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
 
 
   export default {
+    components: {
+      FixedWidthContainer,
+    },
+
     computed: {
       ...mapState([
         'loading',

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <FixedWidthContainer>
     <router-link :to="{name: 'editorIndex'}">Back to editor</router-link>
 
     <template v-if="!loading">
@@ -59,13 +59,14 @@
 
       <DeleteAlbum/>
     </template>
-  </div>
+  </FixedWidthContainer>
 </template>
 
 <script>
   import AlbumCard from '../components/albumList/AlbumCard.vue';
   import AlbumChildren from "../components/albumList/AlbumChildren.vue";
   import AlbumDetails from '../components/editor/AlbumDetails.vue';
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
   import DeleteAlbum from '../components/editor/DeleteAlbum.vue';
   import PhotoManager from '../components/editor/PhotoManager.vue';
   import PhotoUploader from '../components/editor/PhotoUploader.vue';
@@ -79,6 +80,7 @@
       AlbumChildren,
       AlbumDetails,
       DeleteAlbum,
+      FixedWidthContainer,
       PhotoManager,
       PhotoUploader,
     },

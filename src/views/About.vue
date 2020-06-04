@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <FixedWidthContainer>
     <h2>About me</h2>
 
     <figure class="icon">
@@ -89,14 +89,19 @@
     <p>The source code of this website is available on <a href="https://gitlab.com/Doktor/doktortakes.photos">GitLab</a>.</p>
 
     <p>Copyright notices are listed <router-link :to="{name: 'copyright'}">here</router-link>.</p>
-  </section>
+  </FixedWidthContainer>
 </template>
 
 <script>
   import {staticFiles} from "../store/index.js";
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
 
 
   export default {
+    components: {
+      FixedWidthContainer,
+    },
+
     computed: {
       placeholder() {
         return staticFiles.blueDog;

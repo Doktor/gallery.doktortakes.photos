@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <FixedWidthContainer v-if="!loading">
     <section>
       <h2>Recently updated albums</h2>
 
@@ -26,18 +26,20 @@
 
       <p>View all commits <a :href="status.commit_list">here</a>.</p>
     </section>
-  </div>
+  </FixedWidthContainer>
 </template>
 
 <script>
   import {mapState} from 'vuex';
   import Albums from "../components/albumList/Albums.vue";
   import Photos from '../components/photoList/Photos.vue';
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
 
 
   export default {
     components: {
       Albums,
+      FixedWidthContainer,
       Photos,
     },
 

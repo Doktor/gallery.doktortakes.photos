@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <FixedWidthContainer>
     <h2>Copyright</h2>
 
     <p><a href="https://doktorthehusky.com">Please get in touch</a> if you have any questions.</p>
@@ -48,8 +48,19 @@
       <li><a href="https://www.dropzonejs.com/">Dropzone</a> (MIT License), used on the content management pages</li>
       <li><a href="http://photoswipe.com/">PhotoSwipe</a> (MIT License)</li>
     </ul>
-  </section>
+  </FixedWidthContainer>
 </template>
+
+<script>
+  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+
+
+  export default {
+    components: {
+      FixedWidthContainer,
+    },
+  }
+</script>
 
 <style scoped>
 h2, h3 {
