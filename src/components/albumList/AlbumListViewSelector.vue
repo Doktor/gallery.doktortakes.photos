@@ -9,12 +9,6 @@
     </li>
     <li>
       <router-link
-          title="Detailed cards: location and date"
-          :to="{name: route.name, query: {view: 'detailed'}}"
-      >Detailed cards</router-link>
-    </li>
-    <li>
-      <router-link
           title="Simple: text only"
           :to="{name: route.name, query: {view: 'simple'}}"
       >Simple</router-link>

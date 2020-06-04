@@ -25,7 +25,6 @@
   import {mapState} from 'vuex';
   import AlbumCard from "./AlbumCard.vue";
   import AlbumListCards from "./AlbumListCards.vue";
-  import AlbumListDetailedCards from "./AlbumListDetailedCards.vue";
   import AlbumListSimple from "./AlbumListSimple.vue";
   import AlbumListViewSelector from "./AlbumListViewSelector.vue";
   import AlbumTable from "./AlbumTable.vue";
@@ -36,7 +35,6 @@
     components: {
       AlbumListCards,
       AlbumCard,
-      AlbumListDetailedCards,
       AlbumListSimple,
       AlbumListViewSelector,
       AlbumTable,
@@ -52,8 +50,6 @@
 
       albumListComponent() {
         switch (this.view) {
-          case "detailed":
-            return "AlbumListDetailedCards";
           case "simple":
             return "AlbumListSimple";
           case "table":
@@ -67,7 +63,6 @@
         return {
           "albums": this.view === undefined || this.view === "default",
           "album-list-simple": this.view === "simple",
-          "album-list-dc": this.view === "detailed",
         }
       },
 

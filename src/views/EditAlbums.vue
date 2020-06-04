@@ -30,14 +30,12 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "../components/albumList/Albums.vue";
-  import AlbumListDetailedCards from "../components/albumList/AlbumListDetailedCards.vue";
   import AlbumListSimple from "../components/albumList/AlbumListSimple.vue";
 
 
   export default {
     components: {
       Albums,
-      AlbumListDetailedCards,
       AlbumListSimple,
     },
 
