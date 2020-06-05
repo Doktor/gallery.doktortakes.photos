@@ -3,7 +3,12 @@ import VueRouter from 'vue-router';
 
 import RouterEntryPoint from "./views/RouterEntryPoint.vue";
 import {router} from "./router/main.js";
-import {store} from "./store/index.js";
+import {staticFiles, store} from "./store/index.js";
+
+
+// Preload placeholder images
+(new Image()).src = staticFiles.coverPlaceholder;
+(new Image()).src = staticFiles.squareThumbnailPlaceholder;
 
 
 Vue.config.productionTip = process.env.NODE_ENV !== 'production';
