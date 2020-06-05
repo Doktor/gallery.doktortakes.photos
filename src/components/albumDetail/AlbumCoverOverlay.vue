@@ -1,17 +1,18 @@
 <template>
-  <div class="overlay-container" :class="{'no-image': album.cover === null}">
+  <div class="overlay-container" :class="classes">
     <div class="overlay-section">
       <div class="overlay-item">
-        <h2 class="title">{{ album.name }}</h2>
+        <h2 v-if="!isSkeleton" class="title">{{ album.name }}</h2>
+        <h2 v-else class="title">Loading...</h2>
       </div>
 
-      <div class="overlay-item">
+      <div class="overlay-item" v-if="!isSkeleton">
         <span v-html="date"></span> &middot;
         <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
       </div>
     </div>
 
-    <div class="overlay-section">
+    <div class="overlay-section" v-if="!isSkeleton">
       <div v-if="location" class="overlay-item">
         <i title="Location" class="fas fa-fw fa-map-marker-alt"></i>
         <span>{{ location }}</span>
@@ -91,6 +92,13 @@
         'user',
       ]),
 
+      classes() {
+        return {
+          'no-image': this.album.cover === null,
+          'skeleton': this.isSkeleton,
+        }
+      },
+
       location() {
         let place = this.album.place;
         let location = this.album.location;
@@ -125,6 +133,13 @@
         return value === 1 ? '' : 's';
       },
     },
+
+    props: {
+      isSkeleton: {
+        type: Boolean,
+        default: false,
+      },
+    },
   }
 </script>
 
@@ -144,6 +159,10 @@
 
     &.no-image {
       position: unset;
+    }
+
+    &.skeleton {
+      background-color: unset;
     }
   }
 

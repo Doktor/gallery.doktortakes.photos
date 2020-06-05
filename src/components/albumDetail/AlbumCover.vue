@@ -1,15 +1,15 @@
 <template>
   <figure
       class="group-cover"
-      :class="{'no-image': album.cover === null}"
+      :class="classes"
   >
     <img
-        v-if="album.cover !== null"
+        v-if="!isSkeleton && album.cover !== null"
         alt="Cover photo"
         :src="album.cover.thumbnail"
         :title="album.name"
     >
-    <AlbumCoverOverlay/>
+    <AlbumCoverOverlay :isSkeleton="isSkeleton"/>
   </figure>
 </template>
 
@@ -29,8 +29,22 @@
         'album',
       ]),
 
+      classes() {
+        return {
+          'no-image': this.isSkeleton || this.album.cover === null,
+          'skeleton': this.isSkeleton,
+        }
+      },
+
       placeholder() {
         return staticFiles.coverPlaceholder;
+      },
+    },
+
+    props: {
+      isSkeleton: {
+        type: Boolean,
+        default: false,
       },
     },
   }
@@ -54,6 +68,10 @@
 
       background-color: rgb(20, 20, 20);
       border: 1px solid rgb(40, 40, 40);
+    }
+
+    &.skeleton {
+      height: 20vh;
     }
   }
 </style>
