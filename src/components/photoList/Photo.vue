@@ -6,6 +6,7 @@
   >
     <div class="photo">
       <div
+          v-if="!isSkeleton"
           :is="allowSelect ? 'div' : 'router-link'"
           :to="allowSelect ? null : photoLink"
       >
@@ -14,12 +15,24 @@
             :src="getThumbnail"
             alt="Photo thumbnail"
         >
-        <div v-else>
+        <div v-else class="photo-placeholder">
           <img
               :src="placeholder"
               alt="Photo thumbnail placeholder"
           >
           <div class="photo-no-thumbnail-note">No thumbnail</div>
+        </div>
+      </div>
+      <div v-else>
+        <div class="photo-placeholder photo-skeleton">
+          <img
+              :src="placeholder"
+              alt="Photo thumbnail placeholder"
+              title="Loading..."
+          >
+          <div class="note photo-no-thumbnail-note">
+            <i class="fas fa-spin fa-spinner"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -94,6 +107,10 @@
       isSelected: {
         type: Boolean,
         required: true,
+      },
+      isSkeleton: {
+        type: Boolean,
+        default: false
       },
       isVisible: {
         type: Boolean,

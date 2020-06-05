@@ -1,20 +1,21 @@
 <template>
   <section>
-    <PaginationPhotos/>
+    <PaginationPhotos v-if="!isSkeleton"/>
 
     <section class="photos">
       <Photo
-          v-for="photo in photos"
-          :allowSelect="allowSelect"
-          :isLoaded="loaded.includes(photo.page)"
-          :isSelected="selected.includes(photo)"
-          :isVisible="indexStart <= photo.index && photo.index <= indexEnd"
-          :key="photo.md5"
-          :photo="photo"
+        v-for="photo in photos"
+        :allowSelect="allowSelect"
+        :isLoaded="isSkeleton || loaded.includes(photo.page)"
+        :isSelected="allowSelect ? selected.includes(photo) : false"
+        :isSkeleton="isSkeleton"
+        :isVisible="isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)"
+        :key="photo.md5"
+        :photo="photo"
       />
     </section>
 
-    <PaginationPhotos/>
+    <PaginationPhotos v-if="!isSkeleton"/>
   </section>
 </template>
 
@@ -54,6 +55,11 @@
       photos: {
         type: Array,
         required: true,
+      },
+
+      isSkeleton: {
+        type: Boolean,
+        default: false,
       },
     },
   }
