@@ -10,7 +10,7 @@
       <template v-for="n in getPages()">
         <span
             v-if="n !== 'skip'"
-            class="item item-thin"
+            class="item item-condensed"
             :class="{'selected': page === n}"
             :key="n"
             @click="selectPage(n)"
@@ -31,11 +31,11 @@
       </span>
     </span>
 
-    <span v-if="itemsPerPageChoices.length > 0" class="pagination-items-per-page">
+    <span v-if="itemsPerPageChoices.length > 0">
       <span class="item item-label item-unselectable">Items per page</span>
       <span
           v-for="count in itemsPerPageChoices"
-          class="item item-thin"
+          class="item item-condensed"
           :class="{'selected': count === itemsPerPage}"
           :key="count"
           @click="setItemsPerPage(count)"
@@ -141,10 +141,76 @@
 </script>
 
 <style lang="scss" scoped>
-// Keep this control on the right when the page control is hidden
-.pagination .pagination-items-per-page {
-  &:only-child {
-    margin-left: auto;
+$itemBackgroundColor: rgb(40, 40, 40);
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+
+  @include primary-font();
+  text-align: left;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: unset;
+
+  margin: 0;
+
+  // Prevent selection
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.item {
+  display: inline-block;
+
+  color: gainsboro;
+  background-color: $itemBackgroundColor;
+  border: 1px solid rgb(80, 80, 80);
+  border-right: 0;
+  padding: 8px 12px;
+
+  line-height: 1;
+
+  &:last-child {
+    border-right: 1px solid rgb(80, 80, 80);
+  }
+
+  &:not(.item-label) {
+    &:hover {
+      background-color: rgb(80, 80, 80);
+    }
+
+    &, &:hover {
+      transition: background-color 0.25s;
+    }
+  }
+
+  &:not(.item-unselectable) {
+    cursor: pointer;
+
+    &.selected, &.selected:hover {
+      background-color: $blue;
+    }
+  }
+}
+
+.item-condensed {
+  letter-spacing: -1px;
+}
+
+.item-page-skip-inactive {
+  padding: 8px 10px;
+}
+
+.item-page-skip-active {
+  width: 80px;
+  border-radius: 0;
+
+  &, &:hover {
+    background-color: $itemBackgroundColor;
   }
 }
 </style>
