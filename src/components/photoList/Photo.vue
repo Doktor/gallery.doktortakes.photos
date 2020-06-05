@@ -5,45 +5,26 @@
       @click="onPhotoClicked"
   >
     <div class="photo">
-      <div
-          v-if="!isSkeleton"
-          :is="allowSelect ? 'div' : 'router-link'"
-          :to="allowSelect ? null : photoLink"
-      >
-        <img
-            v-if="photo.square_thumbnail"
-            :src="getThumbnail"
-            alt="Photo thumbnail"
-        >
-        <div v-else class="photo-placeholder">
-          <img
-              :src="placeholder"
-              alt="Photo thumbnail placeholder"
-          >
-          <div class="photo-no-thumbnail-note">No thumbnail</div>
-        </div>
-      </div>
-      <div v-else>
-        <div class="photo-placeholder photo-skeleton">
-          <img
-              :src="placeholder"
-              alt="Photo thumbnail placeholder"
-              title="Loading..."
-          >
-          <div class="note photo-no-thumbnail-note">
-            <i class="fas fa-spin fa-spinner"></i>
-          </div>
-        </div>
-      </div>
+      <PhotoThumbnail
+        v-if="!isSkeleton"
+        v-bind="{allowSelect, isLoaded, photo}"
+      />
+      <PhotoSkeleton v-else/>
     </div>
   </div>
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
+  import PhotoThumbnail from "./PhotoThumbnail.vue";
+  import PhotoSkeleton from "./PhotoSkeleton.vue";
 
 
   export default {
+    components: {
+      PhotoThumbnail,
+      PhotoSkeleton,
+    },
+
     computed: {
       classes() {
         return {
@@ -52,30 +33,6 @@
         }
       },
 
-      getThumbnail() {
-        return this.isLoaded
-          ? this.photo.square_thumbnail
-          : this.placeholder
-      },
-
-      photoLink() {
-        return {
-          name: 'photo',
-          params: {
-            path: this.photo.path,
-            md5: this.photo.md5,
-          },
-          query: {
-            code: this.$route.query.code,
-          },
-        }
-      },
-    },
-
-    data() {
-      return {
-        placeholder: staticFiles.squareThumbnailPlaceholder,
-      }
     },
 
     methods: {
