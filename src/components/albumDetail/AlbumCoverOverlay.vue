@@ -59,8 +59,8 @@
 
       classes() {
         return {
-          'no-image': this.album.cover === null,
-          'skeleton': this.isSkeleton,
+          'is-empty': !this.isSkeleton && this.album.cover === null,
+          'is-skeleton': this.isSkeleton,
         }
       },
 
@@ -95,11 +95,9 @@
 
 <style lang="scss" scoped>
   .overlay-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    position: relative;
+    z-index: 1;
+    min-height: 50vh;
 
     display: flex;
     flex-direction: column;
@@ -107,11 +105,8 @@
 
     background-color: rgba(0, 0, 0, 0.6);
 
-    &.no-image {
-      position: unset;
-    }
-
-    &.skeleton {
+    &.is-empty, &.is-skeleton {
+      min-height: unset;
       background-color: unset;
     }
   }

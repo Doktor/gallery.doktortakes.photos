@@ -1,15 +1,16 @@
 <template>
   <figure
-      class="group-cover"
-      :class="classes"
+    class="album-cover"
+    :class="classes"
   >
-    <img
-        v-if="!isSkeleton && album.cover !== null"
-        alt="Cover photo"
-        :src="album.cover.thumbnail"
-        :title="album.name"
-    >
     <AlbumCoverOverlay :isSkeleton="isSkeleton"/>
+    <img
+      v-if="!isSkeleton && album.cover !== null"
+      class="album-cover-image"
+      alt="Cover photo"
+      :src="album.cover.thumbnail"
+      :title="album.name"
+    >
   </figure>
 </template>
 
@@ -31,8 +32,8 @@
 
       classes() {
         return {
-          'no-image': this.isSkeleton || this.album.cover === null,
-          'skeleton': this.isSkeleton,
+          'is-empty': !this.isSkeleton && this.album.cover === null,
+          'is-skeleton': this.isSkeleton,
         }
       },
 
@@ -51,27 +52,26 @@
 </script>
 
 <style lang="scss" scoped>
-  .group-cover {
-    width: 100%;
-    height: 50vh;
-
+  .album-cover {
     position: relative;
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    width: 100%;
 
-    &.no-image {
-      height: unset;
-
-      background-color: rgb(20, 20, 20);
+    &.is-empty, &.is-skeleton {
       border: 1px solid rgb(40, 40, 40);
     }
+  }
 
-    &.skeleton {
-      height: 20vh;
-    }
+  .album-cover-image {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>
