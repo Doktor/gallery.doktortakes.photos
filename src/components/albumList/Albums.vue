@@ -1,8 +1,8 @@
 <template>
   <section>
-    <PaginationAlbums v-if="!isSkeleton"/>
-
     <AlbumListViewSelector v-if="userIsStaff"/>
+
+    <PaginationAlbums v-if="!isSkeleton"/>
 
     <section>
       <component

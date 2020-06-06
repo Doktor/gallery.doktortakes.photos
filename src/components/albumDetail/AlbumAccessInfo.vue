@@ -66,11 +66,11 @@
       },
 
       hasGroups() {
-        return album.groups.length > 0;
+        return this.album.groups.length > 0;
       },
 
       hasUsers() {
-        return album.users.length > 0;
+        return this.album.users.length > 0;
       },
 
       userIsStaff() {

@@ -34,6 +34,8 @@
 
 <style lang="scss" scoped>
   .album-views {
+    text-align: left;
+
     list-style-type: none;
     margin: 1rem 0;
     padding: 0;
