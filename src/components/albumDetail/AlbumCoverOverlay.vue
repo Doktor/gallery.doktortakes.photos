@@ -7,8 +7,12 @@
       </div>
 
       <div class="overlay-item" v-if="!loading">
-        <span v-html="date"></span> &middot;
-        <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
+        <span v-html="date"></span>
+
+        <template v-if="photos.length > 0">
+          <span> &middot; </span>
+          <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
+        </template>
       </div>
     </div>
 

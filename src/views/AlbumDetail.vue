@@ -12,7 +12,11 @@
       :allowSelect="false"
       :isSkeleton="true"
     />
-    <Photos v-else :photos="photos" :allowSelect="false"/>
+    <Photos
+      v-else-if="photos.length > 0"
+      :photos="photos"
+      :allowSelect="false"
+    />
   </div>
 </template>
 
