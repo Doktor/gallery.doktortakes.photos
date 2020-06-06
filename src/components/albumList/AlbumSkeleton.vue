@@ -1,10 +1,6 @@
 <template>
   <div class="album-skeleton">
-    <img
-      :src="placeholder"
-      alt="Album cover placeholder"
-      title="Loading..."
-    >
+    <AlbumPlaceholder title="Loading..."/>
     <div class="note album-no-cover-note">
       <i class="fas fa-spin fa-spinner"></i>
     </div>
@@ -12,14 +8,12 @@
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
+  import AlbumPlaceholder from "./AlbumPlaceholder.vue";
 
 
   export default {
-    computed: {
-      placeholder() {
-        return staticFiles.coverPlaceholder;
-      },
+    components: {
+      AlbumPlaceholder,
     },
   }
 </script>

@@ -9,11 +9,7 @@
     >
     <!-- No cover image -->
     <div v-else>
-      <img
-        :src="placeholder"
-        :title="album.name"
-        alt="Album cover placeholder"
-      >
+      <AlbumPlaceholder :title="album.name"/>
       <div class="note album-no-cover-note">No cover</div>
     </div>
 
@@ -24,15 +20,15 @@
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
+  import AlbumPlaceholder from "./AlbumPlaceholder.vue";
 
 
   export default {
-    computed: {
-      placeholder() {
-        return staticFiles.coverPlaceholder;
-      },
+    components: {
+      AlbumPlaceholder,
+    },
 
+    computed: {
       thumbnail() {
         return this.isLoaded
           ? this.album.cover.thumbnail
