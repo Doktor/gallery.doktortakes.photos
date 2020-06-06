@@ -95,11 +95,6 @@
         default: "album",
       },
 
-      index: {
-        type: Number,
-        required: true,
-      },
-
       isLoaded: {
         type: Boolean,
         default: false,

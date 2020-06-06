@@ -3,7 +3,6 @@
     <AlbumCard
         v-for="(album, index) in albums"
         :album="album"
-        :index="index"
         :isLoaded="isSkeleton ? true : album.isLoaded"
         :isSkeleton="isSkeleton"
         :isVisible="isSkeleton ? true : indexStart <= index && index <= indexEnd"
