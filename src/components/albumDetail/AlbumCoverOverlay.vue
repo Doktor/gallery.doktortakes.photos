@@ -6,54 +6,16 @@
         <h2 v-else class="title">Loading...</h2>
       </div>
 
-      <div class="overlay-item" v-if="!isSkeleton">
+      <div class="overlay-item" v-if="!loading">
         <span v-html="date"></span> &middot;
         <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
       </div>
     </div>
 
-    <div class="overlay-section" v-if="!isSkeleton">
-      <div v-if="location" class="overlay-item">
-        <i title="Location" class="fas fa-fw fa-map-marker-alt"></i>
-        <span>{{ location }}</span>
-      </div>
-
+    <div class="overlay-section" v-if="!loading">
+      <AlbumMetadata class="overlay-item"/>
       <AlbumAccessInfo class="overlay-item"/>
-
-      <div v-if="album.tags.length > 0" class="overlay-item">
-        <i title="Tags" class="fas fa-fw fa-tags"></i>
-        <span>
-          <template v-for="(slug, index) in album.tags">
-            <router-link
-              class="tag"
-              :key="slug"
-              :to="{name: 'tag', params: {slug: slug}}"
-              ><!--
-                -->#{{ slug }}<!--
-              --></router-link>
-            <span
-              v-if="index !== album.tags.length - 1"
-              v-html="nbsp"
-              :key="'space-' + index.toString()"></span>
-          </template>
-        </span>
-      </div>
-
-      <div v-if="album.description" class="overlay-item">
-        <i title="Description" class="fas fa-fw fa-book"></i>
-        <span v-html="album.description"></span>
-      </div>
-
-      <div v-if="album.parent" class="overlay-item">
-        <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
-        <router-link
-          :to="{name: 'album', params: {path: album.parent.split('/')}}"
-        ><!--
-          -->View parent album<!--
-        --></router-link>
-      </div>
-
-      <AlbumLinks v-if="userIsStaff"/>
+      <AlbumLinks class="overlay-item" v-if="userIsStaff"/>
     </div>
   </div>
 </template>
@@ -62,6 +24,7 @@
   import {mapState} from 'vuex';
   import AlbumAccessInfo from "./AlbumAccessInfo.vue";
   import AlbumLinks from "./AlbumLinks.vue";
+  import AlbumMetadata from "./AlbumMetadata.vue";
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -83,11 +46,13 @@
     components: {
       AlbumAccessInfo,
       AlbumLinks,
+      AlbumMetadata,
     },
 
     computed: {
       ...mapState([
         'album',
+        'loading',
         'photos',
         'user',
       ]),
@@ -99,25 +64,6 @@
         }
       },
 
-      location() {
-        let place = this.album.place;
-        let location = this.album.location;
-
-        if (place && location) {
-          return "{0}, {1}".format(place, location);
-        }
-
-        return place || location || "";
-      },
-
-      nbsp() {
-        return "&nbsp;";
-      },
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
-      },
-
       date() {
         let start = new Date(this.album.start);
         let end = this.album.end === null ? null : new Date(this.album.end);
@@ -125,6 +71,10 @@
         return end === null
           ? formatDate(start)
           : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
+      },
+
+      userIsStaff() {
+        return this.user.status === 'staff' || this.user.status === 'superuser';
       },
     },
 
