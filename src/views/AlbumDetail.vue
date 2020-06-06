@@ -1,12 +1,18 @@
 <template>
-  <div v-if="!loading">
+  <div>
     <section class="group">
-      <AlbumCover/>
+      <AlbumCover :isSkeleton="!!loading"/>
     </section>
 
-    <AlbumChildren/>
+    <AlbumChildren v-if="!loading"/>
 
-    <Photos :photos="photos" :allowSelect="false"/>
+    <Photos
+      v-if="loading"
+      :photos="new Array(12).fill({})"
+      :allowSelect="false"
+      :isSkeleton="true"
+    />
+    <Photos v-else :photos="photos" :allowSelect="false"/>
   </div>
 </template>
 
@@ -43,23 +49,24 @@
       },
     },
 
-    created() {
-      this.loadAlbum();
+    async created() {
+      await this.loadAlbum();
     },
 
     methods: {
-      loadAlbum() {
+      async loadAlbum() {
         this.$store.commit('clearPhotos');
-        this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode}).then(() => {
-          this.$store.commit('updateDocumentTitleForAlbum');
-          this.$store.commit('setPhotoPage', 1);
-        });
+
+        await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
+
+        this.$store.commit('updateDocumentTitleForAlbum');
+        this.$store.commit('setPhotoPage', 1);
       }
     },
 
     watch: {
-      routePath() {
-        this.loadAlbum();
+      async routePath() {
+        await this.loadAlbum();
       },
     },
   }
