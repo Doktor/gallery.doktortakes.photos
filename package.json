@@ -16,10 +16,15 @@
     "style-loader": "^1.0.0",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.39.3",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-bundle-tracker": "^0.4.2-beta",
     "webpack-cli": "^3.3.7"
   },
   "resolutions": {
     "execa": "<=2.0.0"
+  },
+  "scripts": {
+    "analyze": "webpack-bundle-analyzer stats.json ./static/bundles/",
+    "profile": "webpack --config webpack.prod.js --profile --json > stats.json"
   }
 }
