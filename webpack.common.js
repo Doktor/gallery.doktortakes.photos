@@ -7,17 +7,17 @@ module.exports = {
   context: __dirname,
 
   entry: {
-    main: path.resolve('src/main.js'),
+    main: path.resolve(__dirname, './src/main.js'),
   },
 
   output: {
-    path: path.resolve('./static/bundles/'),
+    path: path.resolve(__dirname, './static/bundles/'),
     filename: '[name].[hash].js',
   },
 
   plugins: [
     new BundleTracker({
-      filename: './src/webpack-stats.json',
+      filename: path.resolve(__dirname, './src/webpack-stats.json'),
     }),
     new VueLoaderPlugin(),
   ],
