@@ -1,6 +1,4 @@
 {
-  "name": "doktortakes.photos",
-  "version": "0",
   "private": true,
   "dependencies": {
     "vue": "^2.6.10",
