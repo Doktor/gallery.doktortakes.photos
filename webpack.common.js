@@ -50,6 +50,24 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+            ],
+            plugins: [
+              // reuse injected helper code
+              '@babel/plugin-transform-runtime',
+              // import()
+              '@babel/plugin-syntax-dynamic-import',
+            ],
+          }
+        }
+      }
     ],
   },
 
