@@ -17,7 +17,8 @@ from photos.fields import JSONField
 from photos.models.utils import DATE_FORMAT, get_modified_time_utc
 from photos.settings import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, ITEMS_IN_FILMSTRIP,
-    COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK, LONG, SHORT)
+    COLOR_CHOICES, COLOR_NONE, COLOR_WHITE, COLOR_BLACK,
+    CHECK_MINIMUM_SIZE, MINIMUM_LONG_EDGE, MINIMUM_SHORT_EDGE)
 
 import datetime
 import exifread
@@ -272,6 +273,23 @@ class Photo(models.Model):
         ordering = ('taken', 'uploaded')
 
 
+def check_dimensions(file: File) -> None:
+    """Checks the dimensions of an uploaded image and raises a ValidationError
+    if the image is too small."""
+
+    if not CHECK_MINIMUM_SIZE:
+        return
+
+    image = PIL.Image.open(file)
+    long, short = max(*image.size), min(*image.size)
+
+    if long < MINIMUM_LONG_EDGE or short < MINIMUM_SHORT_EDGE:
+        raise ValidationError(
+            "The uploaded image is too small: the minimum size is "
+            f"{MINIMUM_LONG_EDGE}x{MINIMUM_SHORT_EDGE} px, "
+            f"but the uploaded image was {long}x{short} px.")
+
+
 @receiver(pre_save, sender=Photo,
           dispatch_uid='photos.models.process_image_upload')
 def process_image_upload(sender, instance: Photo, **kwargs) -> None:
@@ -283,16 +301,7 @@ def process_image_upload(sender, instance: Photo, **kwargs) -> None:
     file = photo.get_original()
     file.seek(0)
 
-    # Check the image's dimensions and cancel the upload if it's too small
-    image = PIL.Image.open(file)
-
-    dim = image.width, image.height
-    long, short = max(*dim), min(*dim)
-
-    if not settings.TEST and (long < LONG or short < SHORT):
-        raise ValidationError(
-            f"Image too small: minimum {LONG}x{SHORT} px, "
-            f"uploaded {long}x{short} px")
+    check_dimensions(file)
 
     # Load EXIF data
     file.seek(0)
