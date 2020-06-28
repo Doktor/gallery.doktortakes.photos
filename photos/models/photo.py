@@ -314,24 +314,11 @@ def parse_exif_data(photo: Photo, file: File) -> None:
         photo.edited = modified
 
 
-@receiver(pre_save, sender=Photo,
-          dispatch_uid='photos.models.process_image_upload')
-def process_image_upload(sender, instance: Photo, **kwargs) -> None:
-    photo = instance
+def parse_xmp_data(photo: Photo, file: File) -> None:
+    """Extracts XMP data from an image and adds it to a Photo object."""
 
-    if photo.pk is not None:
-        return
-
-    file = photo.get_original()
-    file.seek(0)
-
-    check_dimensions(file)
-    parse_exif_data(photo, file)
-
-    # Load XMP data
     file.seek(0)
     data = file.read()
-
     start = data.find(XMP_START)
     end = data.find(XMP_END)
 
@@ -357,7 +344,23 @@ def process_image_upload(sender, instance: Photo, **kwargs) -> None:
             photo.watermark = \
                 (COLOR_BLACK if label == 'green' else COLOR_WHITE)
 
-    # Save the image file
+
+
+@receiver(pre_save, sender=Photo,
+          dispatch_uid='photos.models.process_image_upload')
+def process_image_upload(sender, instance: Photo, **kwargs) -> None:
+    photo = instance
+
+    if photo.pk is not None:
+        return
+
+    file = photo.get_original()
+    file.seek(0)
+
+    check_dimensions(file)
+    parse_exif_data(photo, file)
+    parse_xmp_data(photo, file)
+
     file.seek(0)
     photo.original.save(file.name, File(file), save=False)
 
