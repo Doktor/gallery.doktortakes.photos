@@ -290,6 +290,30 @@ def check_dimensions(file: File) -> None:
             f"but the uploaded image was {long}x{short} px.")
 
 
+def parse_exif_data(photo: Photo, file: File) -> None:
+    """Extracts EXIF data from an image and adds it to a Photo object."""
+
+    file.seek(0)
+    raw_exif = exifread.process_file(file, details=False, debug=False)
+    photo.exif = {k: v.printable for k, v in raw_exif.items()}
+
+    # Timestamps
+    modified = get_modified_time_utc(file)
+    tz = pytz.utc
+
+    taken = photo.exif.get('EXIF DateTimeOriginal', None)
+    if taken is not None:
+        photo.taken = strptime(taken, DATE_FORMAT).replace(tzinfo=tz)
+    else:
+        photo.taken = modified
+
+    edited = photo.exif.get('Image DateTime', None)
+    if edited is not None:
+        photo.edited = strptime(edited, DATE_FORMAT).replace(tzinfo=tz)
+    else:
+        photo.edited = modified
+
+
 @receiver(pre_save, sender=Photo,
           dispatch_uid='photos.models.process_image_upload')
 def process_image_upload(sender, instance: Photo, **kwargs) -> None:
@@ -302,11 +326,7 @@ def process_image_upload(sender, instance: Photo, **kwargs) -> None:
     file.seek(0)
 
     check_dimensions(file)
-
-    # Load EXIF data
-    file.seek(0)
-    exif = exifread.process_file(file, details=False, debug=False)
-    photo.exif = {k: v.printable for k, v in exif.items()}
+    parse_exif_data(photo, file)
 
     # Load XMP data
     file.seek(0)
@@ -336,24 +356,6 @@ def process_image_upload(sender, instance: Photo, **kwargs) -> None:
         else:
             photo.watermark = \
                 (COLOR_BLACK if label == 'green' else COLOR_WHITE)
-
-    file.seek(0)
-
-    # Timestamps
-    modified = get_modified_time_utc(file)
-    tz = pytz.utc
-
-    taken = photo.exif.get('EXIF DateTimeOriginal', None)
-    if taken is not None:
-        photo.taken = strptime(taken, DATE_FORMAT).replace(tzinfo=tz)
-    else:
-        photo.taken = modified
-
-    edited = photo.exif.get('Image DateTime', None)
-    if edited is not None:
-        photo.edited = strptime(edited, DATE_FORMAT).replace(tzinfo=tz)
-    else:
-        photo.edited = modified
 
     # Save the image file
     file.seek(0)
