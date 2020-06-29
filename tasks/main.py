@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from invoke import task
+from typing import List
 import datetime
 import django
 import hashlib
@@ -9,9 +10,12 @@ import pprint
 import pytz
 import shlex
 import subprocess
+import sys
 
 
 # Task parts
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 manage = "pipenv run python manage.py"
 
@@ -41,6 +45,60 @@ def django_setup():
 
 
 # Tasks
+
+
+def check_build_requirements(ctx) -> List[str]:
+    errors = []
+
+    # Check availability of commands
+
+    commands = ('sass', 'npm')
+
+    for name in commands:
+        if ctx.run(f"command -v {name}", hide=True).return_code != 0:
+            errors.append(f"'{name}': command not found")
+
+    return errors
+
+
+def check_django_requirements(ctx) -> List[str]:
+    errors = []
+
+    # Check presence of configuration files
+
+    files = ('allowed_hosts.txt', 'database.json', 'django.txt')
+
+    for name in files:
+        path = os.path.join(BASE_DIR, 'data', name)
+
+        if not os.path.isfile(path):
+            errors.append(f"'data/{name}': file not found")
+        elif name.endswith('json'):
+            with open(path, 'r') as f:
+                data = f.read().strip()
+
+                try:
+                    json.loads(data)
+                except json.decoder.JSONDecodeError:
+                    errors.append(f"'data/{name}': file is not in valid JSON format")
+
+    return errors
+
+
+@task
+def check(ctx):
+    print("Checking requirements")
+
+    errors = []
+    errors.extend(check_build_requirements(ctx))
+    errors.extend(check_django_requirements(ctx))
+
+    if errors:
+        print(f"Found {len(errors)} errors")
+        print('\n'.join(errors))
+        sys.exit(1)
+    else:
+        print("Successfully checked requirements")
 
 
 def collect_static_files(ctx):
@@ -90,7 +148,7 @@ def git_status(ctx):
         f.write(json.dumps(data))
 
 
-@task
+@task(pre=[check])
 def build(ctx):
     print("Compiling stylesheets")
     compile_css(ctx)
