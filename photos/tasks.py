@@ -3,10 +3,11 @@ from django.core.files import File
 from photos.models import Photo
 from photos.models.album import SIZE_3600
 from photos.models.utils import format_file_size
+from photos.models.photo.utils import (
+    apply_watermark, fit_image, fit_image_long_edge, guess_aspect_ratio)
 from photos.settings import (
     SQUARE_THUMBNAIL_SIZE, THUMBNAIL_QUALITY,  WATERMARKS_ENABLED)
-from photos.utils.image import (
-    apply_watermark, fit_image, fit_image_long_edge, guess_aspect_ratio)
+
 
 import datetime
 import PIL.Image

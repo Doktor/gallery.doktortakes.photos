@@ -1,12 +1,10 @@
 from django.db.models import QuerySet, Q
-
 from django.http import HttpRequest, Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow
-from photos.utils.image import fit_image
 
 from typing import List, Optional, Union
 
