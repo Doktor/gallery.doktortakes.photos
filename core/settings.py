@@ -1,5 +1,6 @@
 import json
 import os
+import toml
 
 
 # General settings
@@ -9,13 +10,15 @@ TEST = any('test' in argv for argv in sys.argv)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open(os.path.join(BASE_DIR, 'data', 'django.txt'), 'r') as f:
-    SECRET_KEY = f.read().strip()
+with open(os.path.join(BASE_DIR, 'data', 'config.toml')) as f:
+    raw = f.read().strip()
+    CONFIG = toml.loads(raw)
+
+SECRET_KEY = CONFIG['django']['secret_key']
 
 DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
 
-with open(os.path.join(BASE_DIR, 'data', 'allowed_hosts.txt')) as f:
-    ALLOWED_HOSTS = f.read().strip().split('\n')
+ALLOWED_HOSTS = CONFIG['django']['allowed_hosts']
 
 INTERNAL_IPS = ['127.0.0.1']
 
@@ -101,19 +104,16 @@ if DEBUG:
 
 if not TEST:
     if DEBUG:
-        filename = os.path.join(BASE_DIR, 'data', 'database_debug.json')
+        db = CONFIG['database']['debug']
     else:
-        filename = os.path.join(BASE_DIR, 'data', 'database.json')
-
-    with open(filename) as f:
-        default = json.loads(f.read())
+        db = CONFIG['database']
 else:
-    default = {
+    db = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': ':memory:'
     }
 
-DATABASES = {'default': default}
+DATABASES = {'default': db}
 
 
 # Caching
@@ -241,11 +241,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-# Toggle local/remote storage for media files
-if not TEST:
-    LOCAL_STORAGE = False
-else:
-    LOCAL_STORAGE = True
+# Local or remote storage for media files
+LOCAL_STORAGE = CONFIG['django'].get('use_local_storage', True)
 
 MEDIA_URL = '/media/'
 
@@ -255,8 +252,7 @@ if LOCAL_STORAGE:
     else:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media_test')
 else:
-    with open(os.path.join(BASE_DIR, 'data', 'aws.json')) as f:
-        aws = json.loads(f.read())
+    aws = CONFIG['aws']
 
     AWS_ACCESS_KEY_ID = aws['access']
     AWS_SECRET_ACCESS_KEY = aws['secret']

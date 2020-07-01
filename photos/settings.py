@@ -25,13 +25,7 @@ DEFAULT_PATH = 'all'
 INDEX_ALBUMS = 12
 INDEX_FEATURED_PHOTOS = 30
 
-TAGLINES_PATH = os.path.join(settings.BASE_DIR, 'data', 'taglines.txt')
-
-if os.path.isfile(TAGLINES_PATH):
-    with open(TAGLINES_PATH, encoding='utf8') as f:
-        TAGLINES = f.read().strip().split('\n')
-else:
-    TAGLINES = []
+TAGLINES = settings.CONFIG['photos'].get('taglines', [])
 
 
 # Albums
