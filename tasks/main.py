@@ -219,43 +219,6 @@ def generate_md5_hash(file):
 
 
 @task
-def local_path(ctx):
-    django_setup()
-    from django.conf import settings
-    from photos.models import Photo
-
-    with open(os.path.join(settings.BASE_DIR, 'data', 'local_path.txt')) as f:
-        base = f.read().strip()
-
-    for root, _, files in os.walk(base):
-        for file in files:
-            if not file.endswith('.jpg'):
-                continue
-
-            path = os.path.join(root, file)
-            prefix = os.path.dirname(path)
-            album = os.path.basename(prefix)
-
-            with open(path, 'rb') as f:
-                md5 = generate_md5_hash(f)
-
-            print(album, file, md5, sep=' / ', end='')
-
-            try:
-                photo = Photo.objects.get(md5=md5)
-            except Photo.DoesNotExist:
-                print(' / not found')
-            else:
-                print(f' / {photo.pk}')
-
-                if photo.local_path == path:
-                    continue
-                else:
-                    photo.local_path = path
-                    photo.save()
-
-
-@task
 def check_generated_images(ctx, file=None, fix=False):
     """Checks that every photo has a display image and square thumbnail."""
     django_setup()
