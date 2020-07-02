@@ -103,10 +103,7 @@ if DEBUG:
 # Database
 
 if not TEST:
-    if DEBUG:
-        db = CONFIG['database']['debug']
-    else:
-        db = CONFIG['database']
+    db = CONFIG['database']
 else:
     db = {
         'ENGINE': 'django.db.backends.sqlite3',
