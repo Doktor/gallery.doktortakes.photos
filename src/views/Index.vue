@@ -3,7 +3,7 @@
     <div
       class="cover-photo"
       alt="Cover photo"
-      :title="`Cover photo from ${albumTitle}`"
+      :title="`Cover photo from ${coverPhoto.title}`"
       :style="coverPhotoStyles">
     </div>
 
@@ -18,7 +18,12 @@
     </header>
 
     <footer class="index-footer">
-      <div>Cover photo from <router-link :to="{name: 'album', params: {path: albumSlug}}">{{ albumTitle }}</router-link></div>
+      <div>
+        Cover photo:
+        <router-link :to="{name: 'album', params: {path: coverPhoto.slug}}">
+          {{ coverPhoto.title }}
+        </router-link>
+      </div>
       <div>Website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor</div>
     </footer>
   </div>
@@ -31,42 +36,9 @@
   import {tagline} from "../store";
   import AlbumListCards from "../components/albumList/AlbumListCards.vue";
   import Navlinks from "../components/Navlinks.vue";
+  import {coverPhotos} from "../../data/cover_photos.json";
 
-
-  const coverPhotos = [
-    [
-      "Denver 2017",
-      "cat-party",
-      "https://s3.us-east-2.amazonaws.com/doktor/media/photos/20170610_035430_aedcf879.jpg"
-    ],
-
-    [
-      "Midwest FurFest 2018",
-      "winter-adventures",
-      "https://s3.us-east-2.amazonaws.com/doktor/media/photos/20181128_155357_a05eb910.jpg",
-    ],
-
-    [
-      "Top Secret Lacy Photoshoot",
-      "top-secret-lacy-photoshoot",
-      "https://s3.us-east-2.amazonaws.com/doktor/media/photos/20190706_224301_6ecdce63.jpg",
-    ],
-
-    [
-      "New Hampshire 2019",
-      "rocky-gorge",
-      "https://s3.us-east-2.amazonaws.com/doktor/media/photos/20191012_180146_2d10d618.jpg",
-    ],
-
-    [
-      "Anthro New England 2020",
-      "garden-animals",
-      "https://s3.us-east-2.amazonaws.com/doktor/media/photos/20200223_173940_8a5a5d66.jpg",
-    ],
-  ]
-
-  let [title, slug, photo] = randomChoice(coverPhotos);
-
+  const coverPhoto = randomChoice(coverPhotos);
 
   export default {
     components: {
@@ -80,22 +52,14 @@
         'loading',
       ]),
 
-      albumSlug() {
-        return slug;
-      },
-
-      albumTitle() {
-        return title;
-      },
-
       coverPhoto() {
-        return photo;
+        return coverPhoto;
       },
 
       coverPhotoStyles() {
         return {
-          backgroundImage: `url(${this.coverPhoto})`
-        }
+          backgroundImage: `url(${coverPhoto.link})`
+        };
       },
     },
 
