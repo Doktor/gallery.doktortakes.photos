@@ -13,15 +13,17 @@ The application itself doesn't have a name. It implements a highly-opinionated p
 
 # Commit message tags
 
-All commit messages are tagged based on the sections of the app that are affected.
+All commit messages are tagged based on the sections of the project that are affected.
 
 - `admin`: Django admin site
-- `api`: Django REST Framework API
+- `api`: Django REST API, including serializers and views
 - `doc`: documentation
-- `fe`: frontend; components (including component stylesheets), state management, and routing
+- `fe`: front-end interface, including components, state management, and routing
+- `fe/styles`: styles for frontend components
 - `models`: Django models
+- `npm`: JavaScript package dependencies, NPM scripts, and other `package.json` changes
 - `other`: Everything else
-- `packages`: frontend and backend package dependencies
+- `packages`: Python package dependencies
 - `refactor`: general refactoring (no features or fixes)
 - `settings`: Django settings
 - `styles`: site-wide stylesheets
@@ -30,9 +32,11 @@ All commit messages are tagged based on the sections of the app that are affecte
 - `tests`: backend tests
 - `urls`: Django URL patterns and routing
 - `utils`: Python utility functions
-- `views`: Django views (not API views)
+- `views`: Django views, excluding API views (see `api`)
+- `webpack`: Webpack
 
 ## Deprecated
 
-- `frontend`: use `fe` instead
-- `scripts`: static script files handled by Django
+- `frontend`: see `fe`
+- `scripts`: static script files handled by Django; entirely replaced by the Webpack bundle
+- `store`: front-end state management; see `fe`
