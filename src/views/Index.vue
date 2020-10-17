@@ -72,49 +72,64 @@
 </script>
 
 <style scoped lang="scss">
-$margin: 40px;
-
+$panel-padding: 1rem;
+$panel-margin: 40px;
 $logo-size: 3.2rem;
 
 .logo {
-  text-align: left;
   font-size: $logo-size;
-  line-height: 1;
+  text-align: center;
+  line-height: 1.1;
   text-transform: capitalize;
 
   padding: 0;
   margin: 0;
-  margin-bottom: 0.7rem;
+  margin-bottom: 1rem;
 
-  @media (min-width: 901px) {
+  @media (min-width: 1201px) {
     font-size: $logo-size * 1.1;
+    text-align: left;
+    line-height: 1;
   }
 }
 
 .index-header, .index-footer {
   position: fixed;
-  left: $margin;
+  left: $panel-margin;
 
   margin: 0;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.85);
 
-  text-align: left;
+  text-align: center;
   color: white;
+
+  @media (min-width: 1201px) {
+    text-align: left;
+  }
 }
 
 .index-header {
-  top: $margin;
+  right: $panel-margin;
+  padding: $panel-padding;
 
-  padding: 1.3rem;
+  @media (min-width: 1201px) {
+    right: initial;
+    padding: $panel-padding * 1.25;
+  }
 }
 
 .index-footer {
-  bottom: $margin;
+  display: none;
 
-  padding: 0.8rem;
+  @media (min-width: 1201px) {
+    display: block;
+    padding: 0.8rem;
 
-  font-size: 1.1rem;
-  text-transform: unset;
+    bottom: $panel-margin;
+
+    font-size: 1.1rem;
+    text-transform: unset;
+  }
 }
 
 .cover-photo {
