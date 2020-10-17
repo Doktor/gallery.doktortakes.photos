@@ -30,7 +30,7 @@
   import AlbumLinks from "./AlbumLinks.vue";
   import AlbumMetadata from "./AlbumMetadata.vue";
 
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   function twoDigitPad(n) {
     return n <= 9 ? "0" + n : n;
