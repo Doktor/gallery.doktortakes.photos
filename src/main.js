@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import RouterEntryPoint from "./views/RouterEntryPoint.vue";
+import Base from "./views/Base.vue";
 import {router} from "./router/main.js";
 import {staticFiles, store} from "./store/index.js";
 
@@ -22,10 +22,10 @@ const app = new Vue({
   store,
 
   components: {
-    RouterEntryPoint,
+    Base,
   },
 
-  template: `<RouterEntryPoint/>`,
+  template: `<Base/>`,
 });
 
 
