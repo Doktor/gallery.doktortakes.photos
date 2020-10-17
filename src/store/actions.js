@@ -256,7 +256,8 @@ export const actions = {
       return;
     }
 
-    context.commit('getAlbum', {rawPath: path});
+    context.commit('addAlbum', response);
+    context.commit('updateAlbumPhotosCache', {path: response.path, photos: []});
 
     context.commit('addTimedNotification', {
       message: "Album created successfully. Redirecting...",

@@ -104,6 +104,10 @@ export const mutations = {
     state.results = albums;
   },
 
+  addAlbum(state, album) {
+    state.allAlbums.push(album);
+  },
+
   setAlbums(state, albums) {
     state.albums = albums;
     state.results = albums;
