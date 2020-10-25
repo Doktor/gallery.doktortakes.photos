@@ -13,11 +13,18 @@ default_log_file = "dev_server.log"
 pid_file = os.path.join(log_dir, "dev_server.pid")
 
 
-def run_command(c: str, filename: str) -> subprocess.Popen:
+def create_file(path):
+    open(path, 'a').close()
+
+
+def run_command(c: str, output: str) -> subprocess.Popen:
+    path = os.path.join(log_dir, output)
+
+    if not os.path.exists(path):
+        create_file(path)
+
     return subprocess.Popen(
-        shlex.split(c),
-        stdout=open(os.path.join(log_dir, filename), 'ab'),
-        stderr=subprocess.STDOUT)
+        shlex.split(c), stdout=open(path, 'ab'), stderr=subprocess.STDOUT)
 
 
 def run_celery(log_file="celery.log"):
@@ -60,6 +67,9 @@ def stop_development_server(pid):
 @task()
 def start_server(ctx, separate_log_files=False):
     print("Starting development server.")
+
+    if not os.path.isdir(log_dir):
+        os.mkdir(log_dir)
 
     # Check if the server is already running
     with open(pid_file) as f:
