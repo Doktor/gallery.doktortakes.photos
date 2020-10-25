@@ -1,7 +1,9 @@
 import os
 import platform
 import shlex
+import signal
 import subprocess
+import traceback
 from invoke import task
 
 wsl = "microsoft" in platform.uname()[3].lower()
@@ -39,27 +41,44 @@ def run_webpack(log_file="webpack.log"):
     run_command("./node_modules/.bin/webpack --config webpack.dev.js", log_file)
 
 
+def stop_development_server(pid):
+    try:
+        os.killpg(pid, signal.SIGTERM)
+    except ProcessLookupError:
+        print("Warning: the development server is not running.")
+    except OSError as e:
+        print("An unknown error occurred when attempting to stop the development server.")
+        traceback.print_exc()
+        raise SystemExit(1)
+    else:
+        print("Successfully stopped development server.")
+    finally:
+        with open(pid_file, 'w') as f:
+            f.truncate(0)
+
+
 @task()
 def start_server(ctx, separate_log_files=False):
-    print("Starting development server")
+    print("Starting development server.")
 
+    # Check if the server is already running
     with open(pid_file) as f:
         pid = f.read().strip()
 
         if pid:
-            try:
-                os.kill(int(pid), 0)
-            except OSError:
-                pass
+            if input("Another instance of the development server is still "
+                     "running. Attempt to stop it? (Y/N) ").lower() == "y":
+                stop_development_server(int(pid))
+                print("Continuing with development server startup.")
             else:
-                print("Another instance of the development server is still running!")
-                print("Process group ID:", pid)
+                print("Development server not started.")
+                print("Existing process group ID:", pid)
                 raise SystemExit(1)
 
-    if separate_log_files:
-        kwargs = {}
-    else:
-        kwargs = {"log_file": default_log_file}
+    kwargs = {}
+
+    if not separate_log_files:
+        kwargs["log_file"] = default_log_file
 
     run_celery(**kwargs)
     run_django(**kwargs)
@@ -71,22 +90,22 @@ def start_server(ctx, separate_log_files=False):
     with open(pid_file, 'w') as f:
         f.write(pid)
 
-    print("\nStarted development server")
+    print("\nStarted development server.")
     print("Process group ID:", pid)
 
 
 @task
 def stop_server(ctx):
-    print("Stopping development server")
+    print("Stopping development server.")
 
-    with open(pid_file, 'r+') as f:
+    with open(pid_file) as f:
         pid = f.read().strip()
 
-        ctx.run(f"kill -TERM -- -{pid}")
-
-        f.truncate(0)
-
-    print("Stopped development server")
+        if pid:
+            stop_development_server(int(pid))
+        else:
+            print("Invalid process group ID:", pid)
+            raise SystemExit(1)
 
 
 @task(pre=[stop_server], post=[start_server])
