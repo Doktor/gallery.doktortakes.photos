@@ -72,14 +72,20 @@ def start_server(ctx, separate_log_files=False):
         os.mkdir(log_dir)
 
     # Check if the server is already running
-    with open(pid_file) as f:
+    with open(pid_file, 'r+') as f:
         pid = f.read().strip()
 
         if pid:
-            if input("Another instance of the development server is still "
-                     "running. Attempt to stop it? (Y/N) ").lower() == "y":
+            print("Another instance of the development server is still running.")
+
+            if input("Attempt to stop it? (Y/N) ").lower() == "y":
                 stop_development_server(int(pid))
                 print("Continuing with development server startup.")
+
+            elif input("Start the server anyway? (Y/N) ").lower() == "y":
+                f.truncate(0)
+                print("Continuing with development server startup.")
+
             else:
                 print("Development server not started.")
                 print("Existing process group ID:", pid)
