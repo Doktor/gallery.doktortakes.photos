@@ -29,6 +29,26 @@ class AlbumSerializer(serializers.ModelSerializer):
     def get_children(obj: Album):
         return AlbumPathSerializer(obj.children, many=True).data
 
+    def validate(self, data):
+        obj = self.instance
+        name = data.get('name') if obj is None else getattr(obj, 'name')
+        parent = data.get('parent') if obj is None else getattr(obj, 'parent')
+
+        try:
+            album = Album.objects.get(name=name, parent=parent)
+        except Album.DoesNotExist:
+            return data
+
+        if obj is not None and album.id == obj.id:
+            return data
+
+        if parent is None:
+            raise serializers.ValidationError(
+                detail="A top-level album with that name already exists.")
+        else:
+            raise serializers.ValidationError(
+                detail="An album with the same name and parent album already exists.")
+
     class Meta:
         model = Album
         fields = (

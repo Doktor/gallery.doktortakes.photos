@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.files.storage import DefaultStorage
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save, post_delete, m2m_changed
 from django.dispatch import receiver
 from django.http import HttpRequest
@@ -263,7 +264,18 @@ class Album(MPTTModel):
 
     class Meta:
         get_latest_by = 'start'
-        unique_together = ('name', 'parent')
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'parent'],
+                name='unique_name'
+            ),
+            models.UniqueConstraint(
+                fields=['name'],
+                condition=Q(parent=None),
+                name='unique_name_top_level',
+            ),
+        ]
 
 
 @receiver(pre_save, sender=Album,
