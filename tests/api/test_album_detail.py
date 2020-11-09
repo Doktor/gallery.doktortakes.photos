@@ -1,10 +1,12 @@
+import factory
 import json
-
 import pytest
+from datetime import date, timedelta
 from http import HTTPStatus as Status
 
+from django.utils.text import slugify
 from rest_framework.response import Response
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, APIClient
 
 from photos.api.views import AlbumDetail
 from photos.models import Album
@@ -16,6 +18,18 @@ allowed_methods = view_class().allowed_methods
 
 api_factory = APIRequestFactory()
 view = view_class.as_view()
+
+
+class AlbumFactory(factory.DjangoModelFactory):
+    name = factory.Sequence(lambda n: f"Album Name {n}")
+    slug = factory.LazyAttribute(lambda o: slugify(o.name))
+    path = factory.LazyAttribute(lambda o: o.slug)
+
+    start = factory.Faker('date_object')
+    end = factory.LazyAttribute(lambda o: o.start + timedelta(days=10))
+
+    class Meta:
+        model = Album
 
 
 def get_response(method: str, user: DjangoUser, album: Album, data: dict = None) -> Response:
@@ -204,3 +218,154 @@ class TestAlbumDetailPermissions:
     def test_method_not_allowed(self, method):
         response = get_response(method, create_user(Level.SUPERUSER), create_album(Allow.PUBLIC))
         assert response.status_code == Status.METHOD_NOT_ALLOWED
+
+
+@pytest.mark.django_db
+class TestAlbumDetail:
+    @classmethod
+    def setup_class(cls):
+        cls.factory = APIRequestFactory()
+
+    def setup_method(self):
+        self.client = APIClient()
+
+    @staticmethod
+    def create_request_body(**kwargs):
+        return {
+            'parent': None,
+
+            'tags': [],
+            'users': [],
+            'groups': [],
+
+            **kwargs,
+        }
+
+    def test_get_album_detail__not_found(self):
+        # Act
+        response = self.client.get('/api/albums/test-album/')
+
+        # Assert
+        assert response.status_code == Status.NOT_FOUND
+
+    def test_get_album_detail(self):
+        # Arrange
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1), parent=None)
+
+        # Act
+        response = self.client.get(f'/api/albums/{album.path}/')
+
+        # Assert
+        assert response.status_code == Status.OK
+
+        actual = response.data
+        assert actual['name'] == album.name
+        assert actual['start'] == '2020-01-01'
+        assert actual['parent'] == None
+
+    def test_put_album_detail__missing_name(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.SUPERUSER))
+
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
+        body = self.create_request_body(start='2020-12-31')
+
+        # Act
+        response = self.client.put(f'/api/albums/{album.path}/', data=body)
+
+        # Assert
+        assert response.status_code == Status.BAD_REQUEST
+        assert response.data == {'name': ['This field is required.']}
+
+    def test_put_album_detail__missing_start_date(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.SUPERUSER))
+
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
+        body = self.create_request_body(name='Album Name 1')
+
+        # Act
+        response = self.client.put(f'/api/albums/{album.path}/', data=body)
+
+        # Assert
+        assert response.status_code == Status.BAD_REQUEST
+        assert response.data == {'start': ['This field is required.']}
+
+    def test_put_album_detail__invalid_parent(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.SUPERUSER))
+
+        album = AlbumFactory(
+            name='Album Name 1', start=date(2020, 1, 1), parent=None)
+        body = self.create_request_body(
+            name=album.name, start=album.start, parent=album.path)
+
+        # Act
+        response = self.client.put(f'/api/albums/{album.path}/', data=body)
+
+        # Assert
+        assert response.status_code == Status.BAD_REQUEST
+        assert response.data == {
+            'non_field_errors': ['An album can\'t be its own parent.']}
+
+    def test_put_album_detail__start_date_after_end_date(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.SUPERUSER))
+
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
+        body = self.create_request_body(
+            name='Album Name 1', start='2020-01-01', end='2019-12-31', parent='album-name-1')
+
+        # Act
+        response = self.client.put(f'/api/albums/{album.path}/', data=body)
+
+        # Assert
+        assert response.status_code == Status.BAD_REQUEST
+        assert response.data == {'non_field_errors':
+            ['The end date should be later than the start date.']}
+
+    def test_put_album_detail(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.SUPERUSER))
+
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
+        body = self.create_request_body(name='Album Name 2', start='2010-12-31')
+
+        # Act
+        response = self.client.put(f'/api/albums/{album.path}/', data=body)
+
+        # Assert
+        assert response.status_code == Status.OK
+
+        actual = response.data
+        assert actual['name'] == 'Album Name 2'
+        assert actual['start'] == '2010-12-31'
+
+    def test_delete_album_detail__no_permission(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.USER))
+
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
+
+        # Act
+        response = self.client.delete(f'/api/albums/{album.path}/')
+
+        # Assert
+        assert response.status_code == Status.FORBIDDEN
+
+        content = response.content.decode('utf-8')
+        assert album.name not in content
+        assert album.path not in content
+
+    def test_delete_album_detail(self):
+        # Arrange
+        self.client.force_authenticate(user=create_user(Level.SUPERUSER))
+
+        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
+
+        # Act
+        response = self.client.delete(f'/api/albums/{album.path}/')
+
+        # Assert
+        assert response.status_code == Status.NO_CONTENT
+        assert response.data is None
