@@ -42,9 +42,7 @@ class AlbumList(APIView):
 
         if serializer.is_valid():
             album = serializer.save()
-            response = {'path': album.path}
-
-            return Response(response, status=Status.CREATED)
+            return Response(serializer.data, status=Status.CREATED)
 
         return Response(serializer.errors, status=Status.BAD_REQUEST)
 
