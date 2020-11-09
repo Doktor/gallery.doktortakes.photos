@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from rest_framework import serializers
@@ -30,24 +31,15 @@ class AlbumSerializer(serializers.ModelSerializer):
         return AlbumPathSerializer(obj.children, many=True).data
 
     def validate(self, data):
-        obj = self.instance
-        name = data.get('name') if obj is None else getattr(obj, 'name')
-        parent = data.get('parent') if obj is None else getattr(obj, 'parent')
+        if self.instance is not None:
+            data['id'] = self.instance.id
 
         try:
-            album = Album.objects.get(name=name, parent=parent)
-        except Album.DoesNotExist:
-            return data
-
-        if obj is not None and album.id == obj.id:
-            return data
-
-        if parent is None:
-            raise serializers.ValidationError(
-                detail="A top-level album with that name already exists.")
+            Album.clean_fields(data)
+        except ValidationError as e:
+            raise serializers.ValidationError(detail=e.message)
         else:
-            raise serializers.ValidationError(
-                detail="An album with the same name and parent album already exists.")
+            return data
 
     class Meta:
         model = Album

@@ -5,12 +5,12 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_delete, m2m_changed
 from django.dispatch import receiver
+from django.forms.models import model_to_dict
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
-
 from rest_framework.request import Request
 
 from core.context_processors import metadata
@@ -102,12 +102,35 @@ class Album(MPTTModel):
         return self.access_level == Allow.PUBLIC
 
     def clean(self) -> None:
-        if self.parent == self:
-            raise ValidationError("An album can't be its own parent.")
+        self.clean_fields(model_to_dict(self))
 
-        if self.end is not None and self.end < self.start:
-            raise ValidationError(
-                "The end date should be later than the start date.")
+    @staticmethod
+    def clean_fields(fields: dict) -> None:
+        has_id = 'id' in fields and fields['id'] is not None
+
+        if isinstance(fields['parent'], Album):
+            fields['parent_id'] = fields['parent'].id
+        else:
+            fields['parent_id'] = None
+
+        if 'end' in fields and fields['start'] > fields['end']:
+            raise ValidationError('The end date should be later than the start date.')
+
+        if has_id and fields['id'] == fields['parent_id']:
+            raise ValidationError('An album can\'t be its own parent.')
+
+        try:
+            album = Album.objects.get(name=fields['name'], parent__id=fields['parent_id'])
+        except Album.DoesNotExist:
+            return
+
+        if has_id and album.id == fields['id']:
+            return
+
+        if fields['parent_id'] is None:
+            raise ValidationError('A top-level album with that name already exists.')
+        else:
+            raise ValidationError('An album with that name and parent album already exists.')
 
     @property
     def count(self) -> int:
