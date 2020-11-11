@@ -1,19 +1,27 @@
-This repository contains the code that runs [doktortakes.photos](https://doktortakes.photos).
+# Doktor Takes Photos
 
-The application itself doesn't have a name. It implements a highly-opinionated photography portfolio and content management system, with a variety of features:
+This repository contains the code that runs [doktortakes.photos](https://doktortakes.photos), my photography portfolio.
 
-- Upload photos to albums
-- Store albums in other albums
-- Front-end content management system (as well as Django's built-in administration system)
+The backend is written in Python using Django and Django REST Framework, and the frontend is written in JavaScript using Vue.
+
+The website implements several features that are specifically designed for my use case.
+
+## Backend
+- REST API implemented with Django REST Framework
+- Directory-like album structure
+- Album access permissions with user and group granularity, and access tokens for guest access
 - Automatic asynchronous thumbnail generation
-- Automatic watermarking of photos
-- Album access permissions with user or group granularity
-- Search through albums
-- Lazy-loading of thumbnail images
+- Automatic watermarking of uploaded photos
+
+## Frontend
+- Responsive design
+- Lazy-loading of image thumbnails
+- Search through all photos by album attributes and common metadata, e.g. album name, image dimensions, and taken date
+- Frontend content management system, designed to supplement and eventually replace the built-in Django admin site
 
 # Commit message tags
 
-All commit messages are tagged based on the sections of the project that are affected.
+All commit messages are tagged based on the sections of the project that are affected. Commits that relate to GitLab issues are tagged with the issue number.
 
 - `admin`: Django admin site
 - `api`: Django REST API, including serializers and views
