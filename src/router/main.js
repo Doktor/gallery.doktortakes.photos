@@ -14,6 +14,8 @@ import UserList from "../views/UserList.vue";
 import UserDetail from "../views/UserDetail.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 
+import GroupList from "../views/GroupList.vue";
+
 import About from "../views/About.vue";
 import Copyright from "../views/Copyright.vue";
 import Recent from "../views/Recent.vue";
@@ -119,6 +121,16 @@ const browserRoutes = [
     component: ChangePassword,
     meta: {
       title: "Change your password",
+    },
+  },
+
+  {
+    path: '/groups/',
+    name: 'groups',
+    component: GroupList,
+    meta: {
+      staff: true,
+      title: "Groups",
     },
   },
 

@@ -54,6 +54,16 @@ export const actions = {
     .catch(console.log);
   },
 
+  async getGroups(context) {
+    context.commit('setLoading', true);
+
+    let response = await sendRequest(endpoints.groupList);
+    let groups = response.groups.sort((a, b) => a.id - b.id);
+
+    context.commit('setGroups', groups);
+    context.commit('setLoading', false);
+  },
+
   changePassword(context, data) {
     fetch(endpoints.changePassword, {
       method: 'POST',

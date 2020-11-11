@@ -184,6 +184,18 @@ def wall(request: HttpRequest) -> HttpResponse:
     return render(request, 'wall.html', context)
 
 
+# Groups
+
+
+@require_GET
+@login_required
+def view_groups(request: HttpRequest) -> HttpResponse:
+    if request.user.is_staff:
+        return render(request, "groups.html")
+    else:
+        return redirect(reverse('user', kwargs={'slug': request.user.username}))
+
+
 # Users
 
 

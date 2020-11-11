@@ -18,6 +18,7 @@ api_patterns = [
     path('tags/', views.TagList.as_view(), name='api_tags'),
 
     path('users/', views.UserList.as_view(), name='api_users'),
+    path('groups/', views.GroupList.as_view(), name='api_groups'),
 
     path('me/', views.get_current_user, name='api_current_user'),
     path('me/password/', views.change_password, name='api_change_password'),

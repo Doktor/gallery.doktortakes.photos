@@ -37,6 +37,10 @@ export const mutations = {
     state.users = users;
   },
 
+  setGroups(state, groups) {
+    state.groups = groups;
+  },
+
   setUser(state, user) {
     state.user = user;
   },
