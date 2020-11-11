@@ -33,6 +33,10 @@ export const mutations = {
     state.notifications.remove(message);
   },
 
+  setUsers(state, users) {
+    state.users = users;
+  },
+
   setUser(state, user) {
     state.user = user;
   },

@@ -8,6 +8,13 @@ async function parseResponse(response) {
 }
 
 
+async function sendRequest(url, options = {}) {
+  let response = await fetch(url, options);
+  let json = await response.json();
+  return response.ok ? json : Promise.reject(json);
+}
+
+
 function parseAlbumForAPI(album) {
   let data = {};
 
@@ -26,6 +33,16 @@ function parseAlbumForAPI(album) {
 
 
 export const actions = {
+  async getUsers(context) {
+    context.commit('setLoading', true);
+
+    let response = await sendRequest(endpoints.userList);
+    let users = response.users.sort((a, b) => a.id - b.id);
+
+    context.commit('setUsers', users);
+    context.commit('setLoading', false);
+  },
+
   getUser(context) {
     if (Object.entries(context.state.user).length !== 0) {
       return Promise.resolve();

@@ -10,6 +10,7 @@ import PhotoDetail from "../views/PhotoDetail.vue";
 import FeaturedPhotos from "../views/FeaturedPhotos.vue";
 import TagList from "../views/TagList.vue";
 import TagDetail from "../views/TagDetail.vue";
+import UserList from "../views/UserList.vue";
 import UserDetail from "../views/UserDetail.vue";
 import ChangePassword from "../views/ChangePassword.vue";
 
@@ -95,6 +96,15 @@ const browserRoutes = [
     },
   },
 
+  {
+    path: '/users/',
+    name: 'users',
+    component: UserList,
+    meta: {
+      staff: true,
+      title: "Users",
+    },
+  },
   {
     path: '/users/:slug/',
     name: 'user',

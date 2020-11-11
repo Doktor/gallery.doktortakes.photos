@@ -2,16 +2,32 @@ from datetime import datetime
 from http import HTTPStatus
 import pytz
 
-from django.contrib.auth import update_session_auth_hash
-
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from rest_framework import exceptions
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from photos.api.serializers import UserSerializer
+
+User = get_user_model()
 
 
 def get_formatted_time(dt: datetime) -> str:
     return dt.astimezone(pytz.timezone("US/Eastern")).strftime("%Y-%m-%d %H:%M:%S")
+
+
+class UserList(APIView):
+    permission_classes = [IsAdminUser]
+
+    @staticmethod
+    def get(request: Request) -> Response:
+        users = User.objects.all().prefetch_related('groups')
+        serializer = UserSerializer(users, many=True)
+
+        return Response({'users': serializer.data})
 
 
 @api_view()

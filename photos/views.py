@@ -190,7 +190,10 @@ def wall(request: HttpRequest) -> HttpResponse:
 @require_GET
 @login_required
 def view_users(request: HttpRequest) -> HttpResponse:
-    return redirect(reverse('user', kwargs={'slug': request.user.username}))
+    if request.user.is_staff:
+        return render(request, "users.html")
+    else:
+        return redirect(reverse('user', kwargs={'slug': request.user.username}))
 
 
 @require_GET

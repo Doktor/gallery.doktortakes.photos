@@ -65,6 +65,7 @@ export const endpoints = {
   currentUser: "/api/me/",
   changePassword: "/api/me/password/",
   recent: "/api/recent/",
+  userList: "/api/users/",
 };
 
 export const staticFiles = {
@@ -125,6 +126,7 @@ export const store = new Vuex.Store({
   state: {
     strict: !production,
 
+    users: [],
     user: {},
     notifications: [],
 
