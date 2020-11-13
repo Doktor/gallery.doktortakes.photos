@@ -2,8 +2,7 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, register_converter
-from django.views.generic import TemplateView
+from django.urls import path, re_path, register_converter
 
 from auth.urls import url_log_in, url_log_out
 from core.converters import MD5HashConverter
@@ -26,9 +25,9 @@ album_patterns = [
 ]
 
 editor_patterns = [
-    path('', views.editor, name='editor'),
-    path('albums/new/', views.editor, name='editor_new_album'),
-    path('albums/edit/<path:path>/', views.editor, name='editor_edit_album'),
+    path('', views.editor_entry_point, name='editor'),
+    path('albums/new/', views.editor_entry_point, name='editor_new_album'),
+    path('albums/edit/<path:path>/', views.editor_entry_point, name='editor_edit_album'),
 ]
 
 tag_patterns = [
@@ -37,9 +36,9 @@ tag_patterns = [
 ]
 
 user_patterns = [
-    path('', views.view_users, name='users'),
-    path('<slug:slug>/', views.view_user, name='user'),
-    path('<slug:slug>/password/', views.change_password, name='password'),
+    path('', views.users_entry_point, name='users'),
+    path('<slug:slug>/', views.users_entry_point, name='user'),
+    path('<slug:slug>/password/', views.users_entry_point, name='password'),
 ]
 
 urlpatterns = [
@@ -49,13 +48,14 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('404/', views.debug_404, name='debug_404'),
     path('500/', views.debug_500, name='debug_500'),
-    path('about/', TemplateView.as_view(template_name='about.html'), name='about'),
+    path('about/', views.view_about, name='about'),
     path('admin/', admin.site.urls),
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),
-    path('copyright/', TemplateView.as_view(template_name='copyright.html'), name='copyright'),
+    path('copyright/', views.view_copyright, name='copyright'),
     path('editor/', include(editor_patterns)),
     path('featured/', views.featured, name='featured'),
+    path('groups/', views.groups_entry_point, name='groups'),
     path('recent/', views.view_recent, name='recent'),
     path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),

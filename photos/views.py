@@ -1,27 +1,87 @@
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.contrib.auth.models import User
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
+from django.templatetags.static import static
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
 from core.context_processors import metadata as m
 from photos.models import Photo, Tag
 from photos.models.album import Allow
-from photos.settings import (
-    GIT_STATUS, INDEX_ALBUMS, ITEMS_PER_PAGE, TAGLINES)
-from photos.utils import get_album_for_user_or_404, get_albums_for_user, get_photo_for_user_or_404
+from photos.utils import get_album_for_user_or_404, get_photo_for_user_or_404
 
 import datetime
 import mimetypes
-import random
-from typing import Callable
+from typing import Callable, List
+
+
+FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
+
+
+# Metadata
 
 metadata = m(None)
 
-FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
+
+class Meta:
+    def __init__(self, key: str, value: str):
+        self.key = key
+        self.value = value
+
+
+class MetaProperty(Meta):
+    def __str__(self):
+        return f'  <meta property="{self.key}" content="{self.value}">'
+
+
+class MetaName(Meta):
+    def __str__(self):
+        return f'  <meta name="{self.key}" content="{self.value}">'
+
+
+def meta_to_string(items: List[Meta]) -> str:
+    return '\n'.join([str(item) for item in items])
+
+
+def get_canonical_url(relative_url: str) -> str:
+    return f"{metadata['BASE_URL']}{relative_url}"
+
+
+meta_open_graph_common = [
+    MetaProperty('og:site_name', metadata['TITLE']),
+    MetaProperty('og:description', metadata['DESCRIPTION']),
+]
+
+meta_open_graph_profile = [
+    MetaProperty('og:type', 'profile'),
+    MetaProperty('profile:first_name', 'Doktor'),
+    MetaProperty('profile:username', 'Doktor'),
+]
+
+meta_open_graph_generic_image = [
+    MetaProperty('og:image', f"{metadata['BASE_URL']}{static('images/camera.png')}"),
+    MetaProperty('og:image:type', 'image/png'),
+    MetaProperty('og:image:width', '500'),
+    MetaProperty('og:image:height', '500'),
+]
+
+def meta_open_graph_article(last_update=metadata['LAST_UPDATE']):
+    return [
+        MetaProperty('og:type', 'article'),
+        MetaProperty('article:author', metadata['NAME']),
+        MetaProperty('article:published_time', last_update.isoformat()),
+        MetaProperty('article:modified_time', last_update.isoformat()),
+    ]
+
+meta_twitter_common = [
+    MetaName('twitter:site', metadata['TWITTER']),
+    MetaName('twitter:creator', metadata['TWITTER']),
+    MetaName('twitter:description', metadata['DESCRIPTION']),
+]
+
+meta_no_robots = MetaName('robots', 'noindex, nofollow')
 
 
 # Helper functions
@@ -68,23 +128,70 @@ def debug_500(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def index(request: HttpRequest) -> HttpResponse:
-    """Renders the index page."""
-    all_albums = get_albums_for_user(request.user).select_related('cover')
-
-    count = len(all_albums)
-    albums = all_albums[:INDEX_ALBUMS]
-
     context = {
-        'albums': albums,
-        'more_albums': count > INDEX_ALBUMS,
+        'title': 'Index',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('index'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ])
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'base.html', context)
 
 
 @require_GET
 def featured(request: HttpRequest) -> HttpResponse:
-    return render(request, 'featured.html', {})
+    context = {
+        'title': 'Featured',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('featured'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ])
+    }
+
+    return render(request, 'base.html', context)
+
+
+@require_GET
+def view_copyright(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': 'Copyright',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('copyright'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ]),
+    }
+
+    return render(request, 'base.html', context)
+
+
+@require_GET
+def view_about(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': 'About',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('about'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_profile,
+        ]),
+    }
+
+    return render(request, 'base.html', context)
 
 
 # Albums
@@ -92,19 +199,66 @@ def featured(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_albums(request: HttpRequest) -> HttpResponse:
-    return render(request, "albums.html", {})
+    context = {
+        'title': 'Albums',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('albums'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ]),
+    }
+
+    return render(request, 'base.html', context)
 
 
 @require_GET
 def view_album(request: HttpRequest, path: str) -> HttpResponse:
     album = get_album_for_user_or_404(request, path)
 
+    title = f"{album.name} | {metadata['TITLE']}"
+    base_url = metadata['BASE_URL'] if settings.LOCAL_STORAGE else ''
+    cover_url = f"{base_url}{album.cover.image.url}"
+
+    meta = [
+        *meta_open_graph_common,
+        MetaProperty('og:title', title),
+        MetaProperty('og:url', get_canonical_url(album.get_absolute_url())),
+        MetaProperty('og:updated_time', album.start.isoformat()),
+
+        *meta_open_graph_article(last_update=album.start),
+    ]
+
+    if album.cover is not None:
+        meta.extend([
+            MetaProperty('og:image', cover_url),
+            MetaProperty('og:image:type', 'image/jpeg'),
+            MetaProperty('og:image:width', album.cover.width),
+            MetaProperty('og:image:height', album.cover.height),
+        ])
+    else:
+        meta.extend(meta_open_graph_generic_image)
+
+    meta.extend([
+        *meta_twitter_common,
+        MetaName('twitter:card', 'photo'),
+        MetaName('twitter:title', title),
+    ])
+
+    if album.cover is not None:
+        meta.append(MetaProperty('twitter:image', cover_url))
+
+    if album.access_level > Allow.PUBLIC:
+        meta.append(meta_no_robots)
+
     context = {
-        'album': album,
-        'local_storage': settings.LOCAL_STORAGE,
+        'title': album.name,
+        'meta': meta_to_string(meta)
     }
 
-    return render(request, 'album.html', context)
+    return render(request, 'base.html', context)
 
 
 # Tags
@@ -112,18 +266,42 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
 
 @require_GET
 def view_tags(request: HttpRequest) -> HttpResponse:
-    return render(request, 'tags.html', {})
+    context = {
+        'title': 'Tags',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('tags'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ])
+    }
+
+    return render(request, 'base.html', context)
 
 
 @require_GET
 def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
     tag = get_object_or_404(Tag, slug=slug)
 
+    title = f'Tag: #{tag.slug}'
     context = {
-        'page_title': f"Tag: #{tag.slug} | {metadata['TITLE']}",
+        'title': title,
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', title),
+            MetaProperty('og:url', get_canonical_url(tag.get_absolute_url())),
+
+            *meta_open_graph_article(),
+
+            *meta_twitter_common,
+            MetaName('twitter:card', 'photo'),
+            MetaName('twitter:title', title),
+        ]),
     }
 
-    return render(request, 'tag.html', context)
+    return render(request, 'base.html', context)
 
 
 # Editor
@@ -131,8 +309,14 @@ def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
 
 @require_GET
 @staff_only
-def editor(request: HttpRequest, path=None) -> HttpResponse:
-    return render(request, "editor.html", {})
+def editor_entry_point(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': 'Editor',
+        'meta': meta_to_string([
+            meta_no_robots,
+        ])
+    }
+    return render(request, 'base.html', context)
 
 
 # Photos
@@ -142,14 +326,37 @@ def editor(request: HttpRequest, path=None) -> HttpResponse:
 def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
     photo = get_photo_for_user_or_404(request, md5, path=path, select_album=True)
 
+    title = f"{photo.short_md5} | {photo.album.name}"
+    full_title = f"{title} | {metadata['TITLE']}"
+
+    meta = [
+        *meta_open_graph_common,
+        MetaProperty('og:title', full_title),
+        MetaProperty('og:url', get_canonical_url(photo.get_absolute_url())),
+        MetaProperty('og:updated_time', photo.taken.isoformat()),
+
+        *meta_open_graph_article(last_update=photo.taken),
+
+        MetaProperty('og:image', get_canonical_url(photo.image.url)),
+        MetaProperty('og:image:type', 'image/jpeg'),
+        MetaProperty('og:image:width', photo.width),
+        MetaProperty('og:image:height', photo.height),
+
+        *meta_twitter_common,
+        MetaName('twitter:card', 'photo'),
+        MetaName('twitter:title', full_title),
+        MetaName('twitter:image', get_canonical_url(photo.image.url)),
+    ]
+
+    if photo.access_level > Allow.PUBLIC:
+        meta.append(meta_no_robots)
+
     context = {
-        'allow_public': photo.album.allow_public,
-        'photo': photo,
-        'page_title': f"{photo.short_md5} | {photo.album.name} | {metadata['TITLE']}",
-        'local_storage': settings.LOCAL_STORAGE,
+        'title': title,
+        'meta': meta_to_string(meta),
     }
 
-    return render(request, 'photo.html', context)
+    return render(request, 'base.html', context)
 
 
 @require_GET
@@ -167,7 +374,19 @@ def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
 @require_GET
 def search_photos(request: HttpRequest) -> HttpResponse:
-    return render(request, "search.html", {})
+    context = {
+        'title': 'Search',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('search'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ])
+    }
+    return render(request, 'base.html', context)
+
 
 
 @require_GET
@@ -189,11 +408,15 @@ def wall(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 @login_required
-def view_groups(request: HttpRequest) -> HttpResponse:
-    if request.user.is_staff:
-        return render(request, "groups.html")
-    else:
-        return redirect(reverse('user', kwargs={'slug': request.user.username}))
+def groups_entry_point(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': 'Groups',
+        'meta': meta_to_string([
+            meta_no_robots,
+        ])
+    }
+
+    return render(request, 'base.html', context)
 
 
 # Users
@@ -201,48 +424,30 @@ def view_groups(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 @login_required
-def view_users(request: HttpRequest) -> HttpResponse:
-    if request.user.is_staff:
-        return render(request, "users.html")
-    else:
-        return redirect(reverse('user', kwargs={'slug': request.user.username}))
-
-
-@require_GET
-@login_required
-def view_user(request: HttpRequest, slug: str) -> HttpResponse:
-    if request.user.username == slug:
-        user = request.user
-    else:
-        if request.user.is_staff:
-            user = get_object_or_404(User, username=slug)
-        else:
-            raise Http404
-
-    albums = get_albums_for_user(user, exclude_public=True).select_related('cover')
-
+def users_entry_point(request: HttpRequest) -> HttpResponse:
     context = {
-        'user': user,
-        'albums': albums,
-        'items_per_page': ITEMS_PER_PAGE,
+        'title': 'Users',
+        'meta': meta_to_string([
+            meta_no_robots,
+        ])
     }
 
-    return render(request, "user.html", context)
-
-
-@require_GET
-@login_required
-def change_password(request: HttpRequest, slug: str) -> HttpResponse:
-    user = request.user
-
-    if user.username != slug:
-        raise Http404
-
-    return render(request, "user_password.html", {})
+    return render(request, 'base.html', context)
 
 
 # Other
 
 
 def view_recent(request: HttpRequest) -> HttpResponse:
-    return render(request, "recent.html", {})
+    context = {
+        'title': 'Recent',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('recent'))),
+
+            *meta_open_graph_article(),
+        ]),
+    }
+
+    return render(request, 'base.html', context)
