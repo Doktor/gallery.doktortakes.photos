@@ -101,6 +101,14 @@ class Photo(models.Model):
     def __str__(self) -> str:
         return self.filename
 
+    @property
+    def access_level(self):
+        if self.album is None:
+            from photos.models.album import Allow
+            return Allow.PUBLIC
+
+        return self.album.access_level
+
     def check_access(self, request: Union[HttpRequest, Request]) -> bool:
         if self.album is None:
             return True
