@@ -35,7 +35,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             data['id'] = self.instance.id
 
         try:
-            Album.clean_fields(data)
+            Album.validate_fields(data)
         except ValidationError as e:
             raise serializers.ValidationError(detail=e.message)
         else:

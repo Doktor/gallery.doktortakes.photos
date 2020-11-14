@@ -102,35 +102,7 @@ class Album(MPTTModel):
         return self.access_level == Allow.PUBLIC
 
     def clean(self) -> None:
-        self.clean_fields(model_to_dict(self))
-
-    @staticmethod
-    def clean_fields(fields: dict) -> None:
-        has_id = 'id' in fields and fields['id'] is not None
-
-        if isinstance(fields['parent'], Album):
-            fields['parent_id'] = fields['parent'].id
-        else:
-            fields['parent_id'] = None
-
-        if 'end' in fields and fields['start'] > fields['end']:
-            raise ValidationError('The end date should be later than the start date.')
-
-        if has_id and fields['id'] == fields['parent_id']:
-            raise ValidationError('An album can\'t be its own parent.')
-
-        try:
-            album = Album.objects.get(name=fields['name'], parent__id=fields['parent_id'])
-        except Album.DoesNotExist:
-            return
-
-        if has_id and album.id == fields['id']:
-            return
-
-        if fields['parent_id'] is None:
-            raise ValidationError('A top-level album with that name already exists.')
-        else:
-            raise ValidationError('An album with that name and parent album already exists.')
+        self.validate_fields(model_to_dict(self))
 
     @property
     def count(self) -> int:
@@ -284,6 +256,34 @@ class Album(MPTTModel):
         self.path = self.get_path()
 
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def validate_fields(fields: dict) -> None:
+        has_id = fields.get('id', None) is not None
+
+        if isinstance(fields['parent'], Album):
+            parent_id = fields['parent'].id
+        else:
+            parent_id = None
+
+        if fields.get('end', None) is not None and fields['start'] > fields['end']:
+            raise ValidationError('The end date should be later than the start date.')
+
+        if has_id and fields['id'] == parent_id:
+            raise ValidationError('An album can\'t be its own parent.')
+
+        try:
+            album = Album.objects.get(name=fields['name'], parent__id=parent_id)
+        except Album.DoesNotExist:
+            return
+
+        if has_id and album.id == fields['id']:
+            return
+
+        if parent_id is None:
+            raise ValidationError('A top-level album with that name already exists.')
+        else:
+            raise ValidationError('An album with that name and parent album already exists.')
 
     class Meta:
         get_latest_by = 'start'
