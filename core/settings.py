@@ -249,22 +249,29 @@ if LOCAL_STORAGE:
     else:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media_test')
 else:
-    aws = CONFIG['aws']
+    storage = CONFIG['spaces']
 
-    AWS_ACCESS_KEY_ID = aws['access']
-    AWS_SECRET_ACCESS_KEY = aws['secret']
-    AWS_STORAGE_BUCKET_NAME = aws['bucket']
-    AWS_S3_ENDPOINT_URL = aws['endpoint']
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    # Keys
+    AWS_ACCESS_KEY_ID = storage['access_key']
+    AWS_SECRET_ACCESS_KEY = storage['secret_key']
+
+    # Region
+    AWS_S3_REGION_NAME = storage['region_name']
+    AWS_S3_USE_SSL = True
+    AWS_S3_ENDPOINT_URL = storage['endpoint']
+
+    # Bucket
+    AWS_STORAGE_BUCKET_NAME = storage['bucket_name']
+    AWS_LOCATION = storage['path_prefix']
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_ADDRESSING_STYLE = 'virtual'
 
     # Cache images for up to 14 days
     CACHE_CONTROL_MAX_AGE = 60 * 60 * 24 * 14
-
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': f'max-age={CACHE_CONTROL_MAX_AGE}'}
-    AWS_LOCATION = ''
-    AWS_QUERYSTRING_AUTH = False
-    AWS_DEFAULT_ACL = 'public-read'
-
-    DEFAULT_FILE_STORAGE = 'core.storages.MediaStorage'
 
 
 WEBPACK_LOADER = {
