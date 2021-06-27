@@ -9,21 +9,18 @@
             :src="getThumbnail"
             alt="Photo thumbnail"
         >
-        <img
-            v-else
-            :src="placeholder"
-            alt="Photo thumbnail placeholder"
-        >
+        <PhotoPlaceholder v-else />
       </a>
     </div>
   </div>
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
+  import PhotoPlaceholder from "../photoList/PhotoPlaceholder.vue";
 
 
   export default {
+    components: {PhotoPlaceholder},
     computed: {
       getThumbnail() {
         return this.isLoaded
@@ -52,12 +49,6 @@
 
         return route.href;
       },
-    },
-
-    data() {
-      return {
-        placeholder: staticFiles.squareThumbnailPlaceholder,
-      }
     },
 
     methods: {

@@ -1,19 +1,12 @@
 <template>
   <img
-    :src="placeholder"
+    :src="require('../../images/square-placeholder.png').default"
     alt="Photo thumbnail placeholder"
   >
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
-
-
   export default {
-    computed: {
-      placeholder() {
-        return staticFiles.squareThumbnailPlaceholder;
-      },
-    },
+    name: "PhotoPlaceholder",
   }
 </script>

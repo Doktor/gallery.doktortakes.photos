@@ -69,12 +69,6 @@ export const endpoints = {
   groupList: "/api/groups/",
 };
 
-export const staticFiles = {
-  blueDog: api.dataset.staticBlueDog,
-  coverPlaceholder: api.dataset.staticCoverPlaceholder,
-  squareThumbnailPlaceholder: api.dataset.staticSquareThumbnailPlaceholder,
-};
-
 
 // Other constants
 

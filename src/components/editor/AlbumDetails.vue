@@ -12,12 +12,8 @@
               alt="Album cover image"
           >
         </a>
-        <template v-else="album-cover">
-          <img
-              :src="placeholder"
-              :title="album.name"
-              alt="Album cover image placeholder"
-          >
+        <template v-else>
+          <AlbumPlaceholder :title="album.name" />
           <div class="note album-no-cover-note">No cover photo</div>
         </template>
       </div>
@@ -32,11 +28,12 @@
 <script>
   import {mapState} from 'vuex';
   import AlbumForm from './AlbumForm.vue';
-  import {staticFiles} from "../../store";
+  import AlbumPlaceholder from "../albumList/AlbumPlaceholder.vue";
 
 
   export default {
     components: {
+      AlbumPlaceholder,
       AlbumForm,
     },
 
@@ -44,12 +41,6 @@
       ...mapState([
         'album',
       ]),
-    },
-
-    data() {
-      return {
-        placeholder: staticFiles.coverPlaceholder,
-      }
     },
   }
 </script>

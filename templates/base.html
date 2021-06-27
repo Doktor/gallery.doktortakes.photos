@@ -27,14 +27,7 @@
 </head>
 
 <body>
-  <div
-    id="api"
-    data-tagline="{{ TAGLINE }}"
-    data-static-blue-dog="{% static 'images/camera.png' %}"
-    data-static-cover-placeholder="{% static 'images/cover-placeholder.png' %}"
-    data-static-square-thumbnail-placeholder="{% static 'images/square-placeholder.png' %}"
-  ></div>
-
+  <div id="api" data-tagline="{{ TAGLINE }}"></div>
   <div id="app"></div>
 
   {% load render_bundle from webpack_loader %}

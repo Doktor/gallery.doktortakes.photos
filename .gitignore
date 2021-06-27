@@ -29,6 +29,7 @@ media_test/
 __pycache__/
 .sass-cache/
 static/*.js
+static/images/
 static.1/
 *.css
 *.css.map

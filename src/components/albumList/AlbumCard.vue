@@ -11,7 +11,6 @@
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
   import AlbumSkeleton from "./AlbumSkeleton.vue";
   import AlbumThumbnail from "./AlbumThumbnail.vue";
 

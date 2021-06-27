@@ -1,19 +1,12 @@
 <template>
   <img
-    :src="placeholder"
-    alt="Album cover placeholder"
+    :src="require('../../images/cover-placeholder.png').default"
+    alt="Album cover image placeholder"
   >
 </template>
 
 <script>
-  import {staticFiles} from "../../store";
-
-
   export default {
-    computed: {
-      placeholder() {
-        return staticFiles.coverPlaceholder;
-      },
-    },
+    name: "AlbumPlaceholder",
   }
 </script>

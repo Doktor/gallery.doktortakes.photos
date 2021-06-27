@@ -10,7 +10,6 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {staticFiles} from "../../store";
   import AlbumCoverImage from "./AlbumCoverImage.vue";
   import AlbumCoverOverlay from "./AlbumCoverOverlay.vue";
 
