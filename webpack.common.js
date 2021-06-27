@@ -11,7 +11,7 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, './static/bundles/'),
+    path: path.resolve(__dirname, './static/'),
     filename: '[name].[hash].js',
   },
 

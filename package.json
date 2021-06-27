@@ -28,7 +28,7 @@
     "execa": "<=2.0.0"
   },
   "scripts": {
-    "analyze": "webpack-bundle-analyzer stats.json ./static/bundles/",
+    "analyze": "webpack-bundle-analyzer stats.json ./static/",
     "profile": "webpack --config webpack.prod.js --profile --json > stats.json"
   }
 }

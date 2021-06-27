@@ -28,7 +28,7 @@ media_test/
 # Compiled files
 __pycache__/
 .sass-cache/
-static/bundles/
+static/*.js
 static.1/
 *.css
 *.css.map
