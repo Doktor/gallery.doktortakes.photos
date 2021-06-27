@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import PhotoPlaceholder from "./PhotoPlaceholder.vue";
+  import PhotoPlaceholder from "./PhotoPlaceholder";
 
 
   export default {

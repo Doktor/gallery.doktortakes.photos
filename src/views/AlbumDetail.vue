@@ -23,9 +23,9 @@
 <script>
   import {mapState} from 'vuex';
 
-  import AlbumCard from "../components/albumList/AlbumCard.vue";
-  import AlbumChildren from "../components/albumList/AlbumChildren.vue";
-  import AlbumCover from "../components/albumDetail/AlbumCover.vue";
+  import AlbumCard from "../components/albumList/AlbumCard";
+  import AlbumChildren from "../components/albumList/AlbumChildren";
+  import AlbumCover from "../components/albumDetail/AlbumCover";
   import Photos from '../components/photoList/Photos.vue';
 
 

@@ -8,7 +8,7 @@
 
 <script>
   import SearchPhotoForm from '../components/search/SearchPhotoForm.vue';
-  import SearchResults from "../components/search/SearchResults.vue";
+  import SearchResults from "../components/search/SearchResults";
 
 
   export default {

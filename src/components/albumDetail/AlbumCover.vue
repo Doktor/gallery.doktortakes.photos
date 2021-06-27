@@ -10,8 +10,8 @@
 
 <script>
   import {mapState} from 'vuex';
-  import AlbumCoverImage from "./AlbumCoverImage.vue";
-  import AlbumCoverOverlay from "./AlbumCoverOverlay.vue";
+  import AlbumCoverImage from "./AlbumCoverImage";
+  import AlbumCoverOverlay from "./AlbumCoverOverlay";
 
 
   export default {

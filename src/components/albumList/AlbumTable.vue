@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import AlbumTableRow from "./AlbumTableRow.vue";
+  import AlbumTableRow from "./AlbumTableRow";
 
 
   export default {

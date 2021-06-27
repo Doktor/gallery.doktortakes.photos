@@ -44,7 +44,7 @@
 </template>
 
 <script>
-  import PasswordFormField from "./PasswordFormField.vue";
+  import PasswordFormField from "./PasswordFormField";
 
 
   const errors = {

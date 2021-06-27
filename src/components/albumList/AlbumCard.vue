@@ -11,8 +11,8 @@
 </template>
 
 <script>
-  import AlbumSkeleton from "./AlbumSkeleton.vue";
-  import AlbumThumbnail from "./AlbumThumbnail.vue";
+  import AlbumSkeleton from "./AlbumSkeleton";
+  import AlbumThumbnail from "./AlbumThumbnail";
 
 
   export default {

@@ -13,7 +13,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import AlbumCard from "./AlbumCard.vue";
+  import AlbumCard from "./AlbumCard";
 
 
   export default {

@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+  import FixedWidthContainer from "../components/FixedWidthContainer";
 
 
   export default {

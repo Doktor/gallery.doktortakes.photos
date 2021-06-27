@@ -29,7 +29,7 @@
 
 <script>
 import {mapState} from 'vuex';
-import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+import FixedWidthContainer from "../components/FixedWidthContainer";
 import {formatDate, formatDateTime} from "../date.js";
 
 

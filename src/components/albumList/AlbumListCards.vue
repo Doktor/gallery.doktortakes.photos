@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import AlbumCard from "./AlbumCard.vue";
+  import AlbumCard from "./AlbumCard";
 
 
   export default {

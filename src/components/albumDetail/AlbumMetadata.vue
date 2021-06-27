@@ -44,9 +44,9 @@
 
 <script>
   import {mapState} from 'vuex';
-  import AlbumAccessInfo from "./AlbumAccessInfo.vue";
-  import AlbumLinks from "./AlbumLinks.vue";
-  import AlbumMetadata from "./AlbumMetadata.vue";
+  import AlbumAccessInfo from "./AlbumAccessInfo";
+  import AlbumLinks from "./AlbumLinks";
+  import AlbumMetadata from "./AlbumMetadata";
 
 
   export default {

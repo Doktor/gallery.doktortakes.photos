@@ -9,8 +9,8 @@
 </template>
 
 <script>
-  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
-  import PasswordForm from "../components/user/PasswordForm.vue";
+  import FixedWidthContainer from "../components/FixedWidthContainer";
+  import PasswordForm from "../components/user/PasswordForm";
 
   export default {
     components: {

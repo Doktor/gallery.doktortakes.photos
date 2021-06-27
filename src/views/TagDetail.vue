@@ -27,9 +27,9 @@
 <script>
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
-  import Albums from "../components/albumList/Albums.vue";
-  import AlbumListSimple from "../components/albumList/AlbumListSimple.vue";
-  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+  import Albums from "../components/albumList/Albums";
+  import AlbumListSimple from "../components/albumList/AlbumListSimple";
+  import FixedWidthContainer from "../components/FixedWidthContainer";
   import {baseTitle} from "../router/main.js";
 
 

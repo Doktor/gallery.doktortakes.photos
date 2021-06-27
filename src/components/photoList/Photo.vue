@@ -15,8 +15,8 @@
 </template>
 
 <script>
-  import PhotoThumbnail from "./PhotoThumbnail.vue";
-  import PhotoSkeleton from "./PhotoSkeleton.vue";
+  import PhotoThumbnail from "./PhotoThumbnail";
+  import PhotoSkeleton from "./PhotoSkeleton";
 
 
   export default {

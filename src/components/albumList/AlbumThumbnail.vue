@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import AlbumPlaceholder from "./AlbumPlaceholder.vue";
+  import AlbumPlaceholder from "./AlbumPlaceholder";
 
 
   export default {

@@ -23,11 +23,11 @@
 
 <script>
   import {mapState} from 'vuex';
-  import AlbumCard from "./AlbumCard.vue";
-  import AlbumListCards from "./AlbumListCards.vue";
-  import AlbumListSimple from "./AlbumListSimple.vue";
-  import AlbumListViewSelector from "./AlbumListViewSelector.vue";
-  import AlbumTable from "./AlbumTable.vue";
+  import AlbumCard from "./AlbumCard";
+  import AlbumListCards from "./AlbumListCards";
+  import AlbumListSimple from "./AlbumListSimple";
+  import AlbumListViewSelector from "./AlbumListViewSelector";
+  import AlbumTable from "./AlbumTable";
   import PaginationAlbums from '../pagination/PaginationAlbums.vue';
 
 

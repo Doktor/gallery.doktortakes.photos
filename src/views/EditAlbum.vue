@@ -64,9 +64,9 @@
 
 <script>
   import AlbumCard from '../components/albumList/AlbumCard.vue';
-  import AlbumChildren from "../components/albumList/AlbumChildren.vue";
+  import AlbumChildren from "../components/albumList/AlbumChildren";
   import AlbumDetails from '../components/editor/AlbumDetails.vue';
-  import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+  import FixedWidthContainer from "../components/FixedWidthContainer";
   import DeleteAlbum from '../components/editor/DeleteAlbum.vue';
   import PhotoManager from '../components/editor/PhotoManager.vue';
   import PhotoUploader from '../components/editor/PhotoUploader.vue';

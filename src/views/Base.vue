@@ -19,8 +19,8 @@
 </template>
 
 <script>
-  import Navlinks from "../components/Navlinks.vue";
-  import Notifications from "../components/Notifications.vue";
+  import Navlinks from "../components/Navlinks";
+  import Notifications from "../components/Notifications";
   import {tagline} from "../store";
 
 
