@@ -25,26 +25,28 @@ All commit messages are tagged based on the sections of the project that are aff
 
 - `admin`: Django admin site
 - `api`: Django REST API, including serializers and views
+- `css`: stylesheets
 - `doc`: documentation
-- `fe`: front-end interface, including components, state management, and routing
-- `fe/styles`: styles for frontend components
 - `models`: Django models
 - `npm`: JavaScript package dependencies, NPM scripts, and other `package.json` changes
 - `other`: Everything else
 - `packages`: Python package dependencies
 - `refactor`: general refactoring (no features or fixes)
 - `settings`: Django settings
-- `styles`: site-wide stylesheets
 - `tasks`: Python utilities run with Invoke
 - `templates`: Django templates
 - `tests`: backend tests
+- `ui`: frontend, including components, state management, and routing
 - `urls`: Django URL patterns and routing
 - `utils`: Python utility functions
 - `views`: Django views, excluding API views (see `api`)
 - `webpack`: Webpack
 
-## Deprecated
+## Replaced
 
-- `frontend`: see `fe`
-- `scripts`: static script files handled by Django; entirely replaced by the Webpack bundle
-- `store`: front-end state management; see `fe`
+- `fe`: `ui`
+- `fe/styles`: `css`
+- `frontend`: `ui`
+- `scripts`: static script files handled by Django; this was entirely replaced by Webpack
+- `store`: frontend state management; merged into `fe`
+- `styles`: `css`
