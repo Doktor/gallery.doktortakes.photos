@@ -36,7 +36,7 @@
   import {tagline} from "../store";
   import AlbumListCards from "../components/albumList/AlbumListCards.vue";
   import Navlinks from "../components/Navlinks.vue";
-  import {coverPhotos} from "../../data/cover_photos.json";
+  import {coverPhotos} from "../data/cover_photos.json";
 
   const coverPhoto = randomChoice(coverPhotos);
 
