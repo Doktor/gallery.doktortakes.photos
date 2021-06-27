@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import PhotoPlaceholder from "../photoList/PhotoPlaceholder";
+  import PhotoPlaceholder from "@/components/photoList/PhotoPlaceholder";
 
 
   export default {

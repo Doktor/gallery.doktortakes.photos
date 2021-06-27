@@ -131,7 +131,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {getQueryString} from "../../store";
+  import {getQueryString} from "@/store";
 
 
   export default {

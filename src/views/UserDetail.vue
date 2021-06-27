@@ -48,8 +48,8 @@
 <script>
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
-  import Albums from "../components/albumList/Albums";
-  import FixedWidthContainer from "../components/FixedWidthContainer";
+  import Albums from "@/components/albumList/Albums";
+  import FixedWidthContainer from "@/components/FixedWidthContainer";
 
 
   export default {

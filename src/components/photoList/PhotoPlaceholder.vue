@@ -1,6 +1,6 @@
 <template>
   <img
-    :src="require('../../images/square-placeholder.png').default"
+    :src="require('@/images/square-placeholder.png').default"
     alt="Photo thumbnail placeholder"
   >
 </template>

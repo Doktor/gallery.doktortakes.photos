@@ -24,16 +24,16 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {router} from "../router/main.js";
+  import {router} from "@/router/main.js";
 
-  import Exif from "../components/photoDetail/Exif";
-  import Filmstrip from "../components/photoDetail/Filmstrip";
-  import KeyboardShortcuts from '../components/photoDetail/KeyboardShortcuts.vue';
-  import Links from "../components/photoDetail/Links";
-  import Metadata from "../components/photoDetail/Metadata";
-  import PhotoSwipe from "../components/photoDetail/PhotoSwipe";
-  import PhotoViewer from "../components/photoDetail/PhotoViewer";
-  import initPhotoSwipe from "../photoswipe.js";
+  import Exif from "@/components/photoDetail/Exif";
+  import Filmstrip from "@/components/photoDetail/Filmstrip";
+  import KeyboardShortcuts from '@/components/photoDetail/KeyboardShortcuts.vue';
+  import Links from "@/components/photoDetail/Links";
+  import Metadata from "@/components/photoDetail/Metadata";
+  import PhotoSwipe from "@/components/photoDetail/PhotoSwipe";
+  import PhotoViewer from "@/components/photoDetail/PhotoViewer";
+  import initPhotoSwipe from "@/photoswipe.js";
 
 
   export default {

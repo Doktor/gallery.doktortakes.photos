@@ -19,9 +19,9 @@
 </template>
 
 <script>
-  import Navlinks from "../components/Navlinks";
-  import Notifications from "../components/Notifications";
-  import {tagline} from "../store";
+  import Navlinks from "@/components/Navlinks";
+  import Notifications from "@/components/Notifications";
+  import {tagline} from "@/store";
 
 
   export default {

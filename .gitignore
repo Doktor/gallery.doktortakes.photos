@@ -12,6 +12,7 @@ temp/
 *.bak
 *.db
 *.json
+!jsconfig.json
 !package.json
 *.log
 *.pgsql

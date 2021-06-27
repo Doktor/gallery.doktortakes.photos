@@ -28,7 +28,7 @@
   import AlbumListSimple from "./AlbumListSimple";
   import AlbumListViewSelector from "./AlbumListViewSelector";
   import AlbumTable from "./AlbumTable";
-  import PaginationAlbums from '../pagination/PaginationAlbums.vue';
+  import PaginationAlbums from '@/components/pagination/PaginationAlbums.vue';
 
 
   export default {

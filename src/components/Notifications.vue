@@ -10,7 +10,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import Notification from "../components/Notification";
+  import Notification from "@/components/Notification";
 
 
   export default {

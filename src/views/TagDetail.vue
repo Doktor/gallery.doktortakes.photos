@@ -27,10 +27,10 @@
 <script>
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
-  import Albums from "../components/albumList/Albums";
-  import AlbumListSimple from "../components/albumList/AlbumListSimple";
-  import FixedWidthContainer from "../components/FixedWidthContainer";
-  import {baseTitle} from "../router/main.js";
+  import Albums from "@/components/albumList/Albums";
+  import AlbumListSimple from "@/components/albumList/AlbumListSimple";
+  import FixedWidthContainer from "@/components/FixedWidthContainer";
+  import {baseTitle} from "@/router/main.js";
 
 
   export default {

@@ -89,7 +89,7 @@
   import {mapGetters, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import GenerateAccessCode from './GenerateAccessCode.vue';
-  import {accessLevels} from "../../store";
+  import {accessLevels} from "@/store";
 
 
   export default {

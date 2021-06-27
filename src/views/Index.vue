@@ -31,12 +31,12 @@
 
 <script>
   import {mapState} from 'vuex';
-  import {randomChoice} from '../main';
-  import {router} from "../router/main";
-  import {tagline} from "../store";
-  import AlbumListCards from "../components/albumList/AlbumListCards";
-  import Navlinks from "../components/Navlinks";
-  import {coverPhotos} from "../data/cover_photos.json";
+  import {randomChoice} from '@/main';
+  import {router} from "@/router/main";
+  import {tagline} from "@/store";
+  import AlbumListCards from "@/components/albumList/AlbumListCards";
+  import Navlinks from "@/components/Navlinks";
+  import {coverPhotos} from "@/data/cover_photos.json";
 
   const coverPhoto = randomChoice(coverPhotos);
 

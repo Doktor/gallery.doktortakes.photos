@@ -3,7 +3,7 @@
     <h2>About me</h2>
 
     <figure class="icon">
-      <img style="background: rgb(40, 40, 40)" :src="require('../images/camera.png').default" alt="A blue dog holding a camera" title="Me!">
+      <img style="background: rgb(40, 40, 40)" :src="require('@/images/camera.png').default" alt="A blue dog holding a camera" title="Me!">
     </figure>
 
     <p>I'm Doktor! I'm a professional photographer living in the greater Boston area. My primary photographic interest is portraiture, but I also enjoy event photography and nature photography.</p>
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-  import FixedWidthContainer from "../components/FixedWidthContainer";
+  import FixedWidthContainer from "@/components/FixedWidthContainer";
 
   export default {
     components: {

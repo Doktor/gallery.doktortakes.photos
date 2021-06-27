@@ -28,7 +28,7 @@
 <script>
   import {mapState} from 'vuex';
   import AlbumForm from './AlbumForm.vue';
-  import AlbumPlaceholder from "../albumList/AlbumPlaceholder";
+  import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholder";
 
 
   export default {

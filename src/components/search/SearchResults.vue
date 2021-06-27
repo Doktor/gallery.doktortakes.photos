@@ -18,7 +18,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import PaginationSearch from "../pagination/PaginationSearch";
+  import PaginationSearch from "@/components/pagination/PaginationSearch";
   import PhotoSearchResult from './PhotoSearchResult.vue';
 
 

@@ -15,7 +15,7 @@
 
 <script>
   import {mapState} from 'vuex';
-  import FixedWidthContainer from "../components/FixedWidthContainer";
+  import FixedWidthContainer from "@/components/FixedWidthContainer";
 
 
   export default {

@@ -31,9 +31,9 @@
 
 <script>
   import {mapState} from 'vuex';
-  import Albums from "../components/albumList/Albums";
-  import Photos from '../components/photoList/Photos.vue';
-  import FixedWidthContainer from "../components/FixedWidthContainer";
+  import Albums from "@/components/albumList/Albums";
+  import Photos from '@/components/photoList/Photos.vue';
+  import FixedWidthContainer from "@/components/FixedWidthContainer";
 
 
   export default {

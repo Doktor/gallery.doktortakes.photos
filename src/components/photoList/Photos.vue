@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import PaginationPhotos from '../pagination/PaginationPhotos.vue';
+  import PaginationPhotos from '@/components/pagination/PaginationPhotos.vue';
   import Photo from './Photo.vue';
   import {mapState} from 'vuex';
 

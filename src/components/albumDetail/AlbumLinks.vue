@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import {domains} from "../../store";
+  import {domains} from "@/store";
   import {mapState} from 'vuex';
 
 

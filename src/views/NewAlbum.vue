@@ -11,8 +11,8 @@
 </template>
 
 <script>
-  import AlbumForm from '../components/editor/AlbumForm.vue';
-  import FixedWidthContainer from "../components/FixedWidthContainer";
+  import AlbumForm from '@/components/editor/AlbumForm.vue';
+  import FixedWidthContainer from "@/components/FixedWidthContainer";
   import {mapState} from 'vuex';
 
 

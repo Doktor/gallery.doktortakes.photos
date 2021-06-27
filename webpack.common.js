@@ -87,6 +87,7 @@ module.exports = {
 
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, 'src'),
       vue: 'vue/dist/vue.js',
     },
     extensions: ['.js', '.json', '.vue'],
