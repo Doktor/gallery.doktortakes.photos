@@ -12,7 +12,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, './static/'),
-    filename: '[name].[hash].js',
+    filename: '[name].js',
   },
 
   plugins: [
