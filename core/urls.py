@@ -2,11 +2,10 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, re_path, register_converter
+from django.urls import path, register_converter
 
-from auth.urls import url_log_in, url_log_out
 from core.converters import MD5HashConverter
-from photos import views
+from photos import views, views_auth
 from photos.api.urls import api_patterns
 
 import debug_toolbar
@@ -42,8 +41,8 @@ user_patterns = [
 ]
 
 urlpatterns = [
-    url_log_in,
-    url_log_out,
+    path('log-in/', views_auth.LogInView.as_view(), name='log_in'),
+    path('log-out/', views_auth.log_out, name='log_out'),
 
     path('', views.index, name='index'),
     path('404/', views.debug_404, name='debug_404'),

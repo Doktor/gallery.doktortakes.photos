@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.decorators.http import require_GET
 
-from auth.forms import RegisterForm
+from photos.forms import RegisterForm
 
 
 class LogInView(View):

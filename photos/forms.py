@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from auth.fields import UsernameField, PasswordField
-from auth.utils import is_valid_username
+from photos.fields import PasswordField, UsernameField
+from photos.utils import is_valid_username
 
 
 class RegisterForm(forms.Form):

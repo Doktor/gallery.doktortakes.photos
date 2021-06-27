@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   {% load staticfiles %}
 
-  <title>{% if title %}{{ title }} | {% endif %}{{ TITLE }}</title>
+  <title>{% block title %}{% if title %}{{ title }} | {% endif %}{{ TITLE }}{% endblock %}</title>
   <meta name="author" content="{{ NAME }}">
   <meta name="description" content="{{ DESCRIPTION }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,6 +28,7 @@
 
 <body>
   <div id="api" data-tagline="{{ TAGLINE }}"></div>
+  {% block content %}{% endblock %}
   <div id="app"></div>
 
   {% load render_bundle from webpack_loader %}

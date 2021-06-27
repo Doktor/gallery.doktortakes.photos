@@ -1,3 +1,4 @@
+from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.forms import widgets
@@ -5,6 +6,8 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
 import json
+
+from photos.settings import MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH
 
 
 class JSONWidget(widgets.Textarea):
@@ -45,3 +48,15 @@ class JSONField(models.TextField):
             value = json.dumps(value, cls=DjangoJSONEncoder)
 
         return value
+
+
+class UsernameField(forms.CharField):
+    def __init__(self, **kwargs):
+        super().__init__(max_length=MAXIMUM_USERNAME_LENGTH, **kwargs)
+
+
+class PasswordField(forms.CharField):
+    def __init__(self, **kwargs):
+        super().__init__(
+            min_length=MINIMUM_PASSWORD_LENGTH,
+            widget=forms.PasswordInput(), **kwargs)
