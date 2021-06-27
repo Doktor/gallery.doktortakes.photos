@@ -9,12 +9,12 @@ from django.templatetags.static import static
 from django.test import RequestFactory
 from django.urls import reverse
 
-from core.settings import BASE_DIR, MEDIA_ROOT
+from settings_django import BASE_DIR, MEDIA_ROOT
 
 from photos import views
 from photos.models import Album, Photo, Tag
 from photos.models.utils import generate_md5_hash
-from photos.settings import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE
+from photos.settings_photos import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE
 
 import datetime
 import factory

@@ -29,7 +29,7 @@ def run_command(c: str, output: str) -> subprocess.Popen:
 
 def run_celery(log_file="celery.log"):
     print("Starting Celery worker")
-    run_command("celery -A core worker --loglevel=info", log_file)
+    run_command("celery -A photos worker --loglevel=info", log_file)
 
 
 def run_django(log_file="django.log"):

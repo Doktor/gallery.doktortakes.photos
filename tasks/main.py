@@ -40,7 +40,7 @@ def create_superuser(ctx, manual=False):
 
 
 def django_setup():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "photos.settings_django")
     django.setup()
 
 

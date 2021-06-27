@@ -16,7 +16,7 @@ from photos.fields import JSONField
 from photos.models.photo.utils import (
     check_dimensions, parse_exif_data, parse_xmp_data,
     format_f_stop, get_exif)
-from photos.settings import (
+from photos.settings_photos import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, COLOR_CHOICES, COLOR_WHITE)
 
 import os

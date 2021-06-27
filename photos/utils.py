@@ -5,7 +5,7 @@ from rest_framework.request import Request
 
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow
-from photos.settings import USERNAME_REGEX
+from photos.settings_photos import USERNAME_REGEX
 
 from typing import List, Optional, Union
 

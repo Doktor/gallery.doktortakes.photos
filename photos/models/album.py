@@ -13,8 +13,8 @@ from django.utils.text import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 from rest_framework.request import Request
 
-from core.context_processors import metadata
-from photos.settings import MEDIA_FOLDERS
+from photos.context_processors import metadata
+from photos.settings_photos import MEDIA_FOLDERS
 
 import os
 from typing import List, Union

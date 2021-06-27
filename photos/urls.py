@@ -4,9 +4,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, register_converter
 
-from core.converters import MD5HashConverter
 from photos import views, views_auth
 from photos.api.urls import api_patterns
+from photos.converters import MD5HashConverter
 
 import debug_toolbar
 

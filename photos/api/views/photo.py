@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from photos.api.serializers import PhotoSerializer, SimplePhotoSerializer
 from photos.models import Photo
 from photos.models.album import Allow
-from photos.settings import ITEMS_PER_PAGE
+from photos.settings_photos import ITEMS_PER_PAGE
 from photos.utils import get_photo_for_user_or_404
 
 import datetime

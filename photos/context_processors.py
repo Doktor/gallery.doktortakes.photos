@@ -1,7 +1,7 @@
 import datetime
 import random
 
-from photos.settings import TAGLINES
+from photos.settings_photos import TAGLINES
 
 
 def metadata(_):

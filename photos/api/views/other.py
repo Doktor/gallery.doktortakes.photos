@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from photos.api.serializers import AlbumSerializer
 from photos.models import Album
-from photos.settings import GIT_STATUS
+from photos.settings_photos import GIT_STATUS
 
 
 @api_view()

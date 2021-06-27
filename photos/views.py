@@ -7,7 +7,7 @@ from django.templatetags.static import static
 from django.urls import reverse
 from django.views.decorators.http import require_GET
 
-from core.context_processors import metadata as m
+from photos.context_processors import metadata as m
 from photos.models import Photo, Tag
 from photos.models.album import Allow
 from photos.utils import get_album_for_user_or_404, get_photo_for_user_or_404

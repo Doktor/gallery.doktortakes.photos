@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 
 from photos.models.utils import DATE_FORMAT, get_modified_time_utc
-from photos.settings import (
+from photos.settings_photos import (
     DEFAULT_WATERMARK, WATERMARK_IMAGES, WATERMARK_OFFSET,
     COLOR_NONE, COLOR_WHITE, COLOR_BLACK,
     CHECK_MINIMUM_SIZE, MINIMUM_LONG_EDGE, MINIMUM_SHORT_EDGE)

@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 
 import json
 
-from photos.settings import MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH
+from photos.settings_photos import MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH
 
 
 class JSONWidget(widgets.Textarea):

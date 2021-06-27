@@ -1,7 +1,7 @@
 from django.urls import path, register_converter
 
-from core.converters import MD5HashConverter
 from photos.api import views
+from photos.converters import MD5HashConverter
 
 register_converter(MD5HashConverter, 'md5')
 
