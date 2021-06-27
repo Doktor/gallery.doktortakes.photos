@@ -1,3 +1,0 @@
-[submodule "static/styles/shared"]
-	path = static/styles/shared
-	url = git@gitlab.com:Doktor/styles.git

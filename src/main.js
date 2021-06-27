@@ -5,6 +5,8 @@ import Base from "./views/Base.vue";
 import {router} from "./router/main.js";
 import {staticFiles, store} from "./store/index.js";
 
+import "./styles/common.scss";
+import "./styles/main.scss";
 
 // Preload placeholder images
 (new Image()).src = staticFiles.coverPlaceholder;

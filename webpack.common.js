@@ -46,7 +46,7 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              prependData: `@import "./static/styles/_variables.scss";`,
+              prependData: `@import "./src/styles/_variables.scss";`,
             },
           },
         ],
