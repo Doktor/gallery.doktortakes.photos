@@ -24,4 +24,7 @@ api_patterns = [
     path('me/password/', views.change_password, name='api_change_password'),
 
     path('recent/', views.get_recent),
+
+    path('csrf/', views.get_csrf_token, name='get_csrf_token'),
+    path('authenticate/', views.get_api_token, name='get_api_token'),
 ]

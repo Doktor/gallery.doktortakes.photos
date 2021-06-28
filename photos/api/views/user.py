@@ -3,20 +3,42 @@ from http import HTTPStatus
 import pytz
 
 from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import exceptions
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers import UserSerializer
+from photos.api.serializers import LogInSerializer, UserSerializer
 
 User = get_user_model()
 
 
 def get_formatted_time(dt: datetime) -> str:
     return dt.astimezone(pytz.timezone("US/Eastern")).strftime("%Y-%m-%d %H:%M:%S")
+
+
+@api_view()
+@ensure_csrf_cookie
+def get_csrf_token(request: Request) -> Response:
+    return Response(None, status=HTTPStatus.OK)
+
+
+@api_view(["POST"])
+def get_api_token(request: Request) -> Response:
+    serializer = LogInSerializer(data=request.data, context={'request': request})
+
+    if not serializer.is_valid():
+        raise ValidationError(serializer.errors['non_field_errors'])
+
+    user = serializer.validated_data['user']
+    token, _ = Token.objects.get_or_create(user=user)
+
+    return Response({"message": "Logged in successfully.", "token": token.key}, status=HTTPStatus.OK)
 
 
 class UserList(APIView):

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mptt',
     'rest_framework',
+    'rest_framework.authtoken',
     'storages',
     'photos',
     'webpack_loader',
@@ -44,6 +45,9 @@ if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     'DEFAULT_METADATA_CLASS': None,
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
