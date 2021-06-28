@@ -7,7 +7,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import exceptions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
-from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -33,7 +32,7 @@ def get_api_token(request: Request) -> Response:
     serializer = LogInSerializer(data=request.data, context={'request': request})
 
     if not serializer.is_valid():
-        raise ValidationError(serializer.errors['non_field_errors'])
+        return Response({"error": serializer.errors['non_field_errors'][0]}, status=HTTPStatus.BAD_REQUEST)
 
     user = serializer.validated_data['user']
     token, _ = Token.objects.get_or_create(user=user)
