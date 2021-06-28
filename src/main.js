@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import {mapActions, mapMutations} from 'vuex';
 
 import Base from "./views/Base.vue";
 import {router} from "./router/main.js";
@@ -13,34 +12,25 @@ import "./styles/main.scss";
 Vue.config.productionTip = process.env.NODE_ENV !== 'production';
 Vue.use(VueRouter);
 
+async function run() {
+  store.commit('setApiTokenFromLocalStorage');
+  await store.dispatch('getUser');
 
-const app = new Vue({
-  el: '#app',
+  new Vue({
+    el: '#app',
 
-  router,
-  store,
+    router,
+    store,
 
-  components: {
-    Base,
-  },
+    components: {
+      Base,
+    },
 
-  template: `<Base/>`,
+    template: `<Base/>`,
+  });
+}
 
-  methods: {
-    ...mapActions([
-      'getUser',
-    ]),
-    ...mapMutations([
-      'setApiTokenFromLocalStorage',
-    ]),
-  },
-
-  async created() {
-    this.setApiTokenFromLocalStorage();
-    await this.getUser();
-  },
-});
-
+run();
 
 // Utility functions
 
