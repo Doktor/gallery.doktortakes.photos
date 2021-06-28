@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import {mapActions} from 'vuex';
 
 import Base from "./views/Base.vue";
 import {router} from "./router/main.js";
@@ -24,6 +25,16 @@ const app = new Vue({
   },
 
   template: `<Base/>`,
+
+  methods: {
+    ...mapActions([
+      'getUser',
+    ]),
+  },
+
+  async created() {
+    await this.getUser();
+  },
 });
 
 
