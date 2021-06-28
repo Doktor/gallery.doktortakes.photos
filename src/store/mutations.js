@@ -13,6 +13,22 @@ export const mutations = {
   // vuex-map-fields
   updateField,
 
+  setApiTokenFromLocalStorage(state) {
+    state.token = localStorage.getItem("token");
+  },
+
+  setApiToken(state, token) {
+    state.token = token;
+    localStorage.setItem("token", token);
+  },
+
+  logOut(state) {
+    state.token = null;
+    localStorage.removeItem("token");
+
+    state.user = {status: "anonymous"};
+  },
+
   addNotification(state, message) {
     if (state.notifications.includes(message)) {
       return;

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import {mapActions} from 'vuex';
+import {mapActions, mapMutations} from 'vuex';
 
 import Base from "./views/Base.vue";
 import {router} from "./router/main.js";
@@ -30,9 +30,13 @@ const app = new Vue({
     ...mapActions([
       'getUser',
     ]),
+    ...mapMutations([
+      'setApiTokenFromLocalStorage',
+    ]),
   },
 
   async created() {
+    this.setApiTokenFromLocalStorage();
     await this.getUser();
   },
 });

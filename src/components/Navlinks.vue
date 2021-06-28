@@ -102,7 +102,7 @@
     </template>
 
     <!-- User management -->
-    <template v-if="user.status !== 'anonymous'">
+    <template v-if="isAuthenticated">
       <li class="nav-item">
         <router-link
             class="nav-item-link nav-item-link-profile"
@@ -112,26 +112,32 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <a class="nav-item-link nav-item-link-log-out" href="/log-out/">
+        <router-link
+            class="nav-item-link nav-item-link-log-out"
+            :to="{name: 'logOut'}"
+        >
           Log out
-        </a>
+        </router-link>
       </li>
     </template>
-    <li v-else-if="!isIndex" class="nav-item">
-      <a class="nav-item-link" href="/log-in/">
+    <li v-else-if="!isIndex && !isAuthenticated" class="nav-item">
+      <router-link class="nav-item-link" :to="{name: 'logIn'}">
         Log in
-      </a>
+      </router-link>
     </li>
   </ul>
   </nav>
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
 
 
   export default {
     computed: {
+      ...mapGetters([
+        'isAuthenticated',
+      ]),
       ...mapState([
         'user',
       ]),

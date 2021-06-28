@@ -67,6 +67,8 @@ export const endpoints = {
   recent: "/api/recent/",
   userList: "/api/users/",
   groupList: "/api/groups/",
+  csrf: "/api/csrf/",
+  authenticate: "/api/authenticate/",
 };
 
 
@@ -120,6 +122,8 @@ export const domains = {
 export const store = new Vuex.Store({
   state: {
     strict: !production,
+
+    token: null,
 
     users: [],
     groups: [],

@@ -26,6 +26,9 @@ import EditAlbum from "../views/EditAlbum.vue";
 import EditAlbums from "../views/EditAlbums.vue";
 import NewAlbum from "../views/NewAlbum.vue";
 
+import LogIn from "@/views/LogIn";
+import LogOut from "@/views/LogOut";
+
 
 export const baseTitle = "Doktor Takes Photos";
 
@@ -158,7 +161,24 @@ const browserRoutes = [
     meta: {
       title: "Recent changes",
     },
-  }
+  },
+
+  {
+    path: '/log-in/',
+    name: 'logIn',
+    component: LogIn,
+    meta: {
+      title: "Log in",
+    },
+  },
+  {
+    path: '/log-out/',
+    name: 'logOut',
+    component: LogOut,
+    meta: {
+      title: "Log out",
+    },
+  },
 ];
 
 const editorRoutes = [
@@ -207,7 +227,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       next({
-        path: '/log-in/',
+        path: router.resolve({name: 'logIn'}),
         query: {
           redirect: to.fullPath,
         },

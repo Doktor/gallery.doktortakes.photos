@@ -4,6 +4,10 @@ import {getField} from "vuex-map-fields";
 export const getters = {
   getField,
 
+  isAuthenticated(state) {
+    return state.token !== null;
+  },
+
   getAccessCode(state) {
     return state.album.access_code;
   },

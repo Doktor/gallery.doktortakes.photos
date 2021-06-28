@@ -1,5 +1,6 @@
 import {endpoints, fields, getCsrfToken, getQueryString} from "./index.js";
 import {router} from "../router/main.js";
+import {store} from "@/store/index";
 
 
 async function parseResponse(response) {
@@ -9,6 +10,18 @@ async function parseResponse(response) {
 
 
 async function sendRequest(url, options = {}) {
+  if (store.state.token !== null) {
+    let header = `Token ${store.state.token}`;
+
+    if (options.hasOwnProperty("headers")) {
+      options.headers['Authorization'] = header
+    } else {
+      options.headers = {
+        'Authorization': header,
+      }
+    }
+  }
+
   let response = await fetch(url, options);
   let json = await response.json();
   return response.ok ? json : Promise.reject(json);
@@ -33,6 +46,27 @@ function parseAlbumForAPI(album) {
 
 
 export const actions = {
+  async ensureCsrfToken(context) {
+    await fetch(endpoints.csrf);
+  },
+
+  async authenticate(context, {username, password}) {
+    let response = await fetch(endpoints.authenticate, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'X-CSRFToken': getCsrfToken(),
+      },
+      body: JSON.stringify({username, password}),
+    });
+
+    if (response.ok || response.status === 400) {
+      return {ok: response.ok, content: await response.json()};
+    }
+
+    return Promise.reject(response);
+  },
+
   async getUsers(context) {
     context.commit('setLoading', true);
 
@@ -43,12 +77,15 @@ export const actions = {
     context.commit('setLoading', false);
   },
 
-  getUser(context) {
-    if (Object.entries(context.state.user).length !== 0) {
-      return Promise.resolve();
+  async getUser(context) {
+    let options = {};
+    let token = context.state.token;
+
+    if (token !== null) {
+      options.headers = {'Authorization': `Token ${token}`};
     }
 
-    return fetch(endpoints.currentUser)
+    return await fetch(endpoints.currentUser, options)
     .then(parseResponse)
     .then(j => context.commit('setUser', j))
     .catch(console.log);
