@@ -421,6 +421,23 @@ def groups_entry_point(request: HttpRequest) -> HttpResponse:
 
 # Users
 
+@require_GET
+def log_in(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': "Log in",
+    }
+
+    return render(request, "base.html", context)
+
+
+@require_GET
+def log_out(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': "Log out",
+    }
+
+    return render(request, "base.html", context)
+
 
 @require_GET
 @login_required

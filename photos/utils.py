@@ -5,7 +5,6 @@ from rest_framework.request import Request
 
 from photos.models import Album, Photo, Tag
 from photos.models.album import Allow
-from photos.settings_photos import USERNAME_REGEX
 
 from typing import List, Optional, Union
 
@@ -90,7 +89,3 @@ def get_tags_for_user(user) -> QuerySet:
             .filter(albums__in=get_albums_for_user(user))
             .distinct()
             .order_by('slug'))
-
-
-def is_valid_username(username):
-    return USERNAME_REGEX.match(username)

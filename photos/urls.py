@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, register_converter
 
-from photos import views, views_auth
+from photos import views
 from photos.api.urls import api_patterns
 from photos.converters import MD5HashConverter
 
@@ -41,8 +41,8 @@ user_patterns = [
 ]
 
 urlpatterns = [
-    path('log-in/', views_auth.LogInView.as_view(), name='log_in'),
-    path('log-out/', views_auth.log_out, name='log_out'),
+    path('log-in/', views.log_in, name='log_in'),
+    path('log-out/', views.log_out, name='log_out'),
 
     path('', views.index, name='index'),
     path('404/', views.debug_404, name='debug_404'),

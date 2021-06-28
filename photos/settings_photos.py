@@ -1,12 +1,9 @@
-import re
-
 from django.conf import settings
 from django.contrib.humanize.templatetags.humanize import naturaltime
 
 import datetime
 import json
 import os
-
 import PIL.Image
 
 
@@ -94,9 +91,3 @@ if os.path.isfile(GIT_STATUS_PATH):
         GIT_STATUS = data
 else:
     GIT_STATUS = None
-
-
-# Authentication
-MINIMUM_PASSWORD_LENGTH = 8
-MAXIMUM_USERNAME_LENGTH = 200
-USERNAME_REGEX = re.compile(r'^[a-zA-Z0-9_]+$')
