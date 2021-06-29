@@ -28,6 +28,12 @@
       }
     },
 
+    computed: {
+      redirect() {
+        return this.$router.currentRoute.query?.redirect ?? null;
+      }
+    },
+
     methods: {
       async submit() {
         try {
@@ -41,7 +47,7 @@
             this.$store.commit('addTimedNotification', {message: "Logged in successfully.", hideAfter: 5000});
             await this.$store.dispatch('getUser');
 
-            router.push({name: 'albums'});
+            router.push(this.redirect ?? {name: 'albums'});
             return
           }
 

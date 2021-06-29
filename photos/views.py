@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, redirect
@@ -308,7 +308,6 @@ def view_tag(request: HttpRequest, slug: str) -> HttpResponse:
 
 
 @require_GET
-@staff_only
 def editor_entry_point(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'Editor',
@@ -390,7 +389,6 @@ def search_photos(request: HttpRequest) -> HttpResponse:
 
 
 @require_GET
-@staff_only
 def wall(request: HttpRequest) -> HttpResponse:
     today = datetime.date.today()
     start = today - datetime.timedelta(days=365 * 2)
@@ -407,7 +405,6 @@ def wall(request: HttpRequest) -> HttpResponse:
 
 
 @require_GET
-@login_required
 def groups_entry_point(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'Groups',
@@ -440,7 +437,6 @@ def log_out(request: HttpRequest) -> HttpResponse:
 
 
 @require_GET
-@login_required
 def users_entry_point(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'Users',
