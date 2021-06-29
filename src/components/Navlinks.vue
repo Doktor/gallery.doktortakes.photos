@@ -46,7 +46,7 @@
     </li>
 
     <!-- Social media links -->
-    <template v-if="!userIsStaff">
+    <template v-if="!userIsStaff && !isIndex">
       <li v-if="showDividers" class="nav-divider"></li>
 
       <!-- Twitter -->
@@ -222,6 +222,10 @@
     @media (min-width: 901px) {
       margin: 0;
     }
+  }
+
+  .nav-items-index {
+    justify-content: flex-start;
   }
 
   .nav-item {

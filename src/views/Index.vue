@@ -7,7 +7,7 @@
       :style="coverPhotoStyles">
     </div>
 
-    <header class="index-header">
+    <header class="index-container index-header">
       <h1 class="logo">Doktor Takes Photos</h1>
 
       <Navlinks
@@ -16,24 +16,12 @@
         :showLogo="false"
       />
     </header>
-
-    <footer class="index-footer">
-      <div>
-        Cover photo:
-        <router-link :to="{name: 'album', params: {path: coverPhoto.slug}}">
-          {{ coverPhoto.title }}
-        </router-link>
-      </div>
-      <div>Website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor</div>
-    </footer>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex';
   import {randomChoice} from '@/main';
-  import {router} from "@/router/main";
-  import {tagline} from "@/store";
   import AlbumListCards from "@/components/albumList/AlbumListCards";
   import Navlinks from "@/components/Navlinks";
   import {coverPhotos} from "@/data/cover_photos.json";
@@ -93,12 +81,12 @@ $logo-size: 3.2rem;
   }
 }
 
-.index-header, .index-footer {
+.index-container {
   position: fixed;
   left: $panel-margin;
 
   margin: 0;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.65);
 
   text-align: center;
   color: white;
@@ -115,20 +103,6 @@ $logo-size: 3.2rem;
   @media (min-width: 1201px) {
     right: initial;
     padding: $panel-padding * 1.25;
-  }
-}
-
-.index-footer {
-  display: none;
-
-  @media (min-width: 1201px) {
-    display: block;
-    padding: 0.8rem;
-
-    bottom: $panel-margin;
-
-    font-size: 1.1rem;
-    text-transform: unset;
   }
 }
 
