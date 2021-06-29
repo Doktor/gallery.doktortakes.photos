@@ -61,7 +61,15 @@
       async loadAlbum() {
         this.$store.commit('clearPhotos');
 
-        await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
+        let ok = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
+
+        if (!ok) {
+          this.$store.commit('addNotification', "Album not found.");
+          this.$router.push({name: 'albums'});
+
+          this.$store.commit('setLoading', false);
+          return;
+        }
 
         this.$store.commit('updateDocumentTitleForAlbum');
         this.$store.commit('setPhotoPage', 1);

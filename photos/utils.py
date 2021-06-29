@@ -20,6 +20,13 @@ def get_albums(path: str) -> List[Album]:
     return albums[::-1]
 
 
+def get_album(path: str) -> Optional[Album]:
+    try:
+        return Album.objects.get(path=path)
+    except Album.DoesNotExist:
+        return None
+
+
 def get_album_for_user_or_404(request: Union[HttpRequest, Request], path: str) -> Album:
     album = get_object_or_404(Album, path=path)
 

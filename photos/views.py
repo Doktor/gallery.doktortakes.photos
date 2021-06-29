@@ -10,7 +10,7 @@ from django.views.decorators.http import require_GET
 from photos.context_processors import metadata as m
 from photos.models import Photo, Tag
 from photos.models.album import Allow
-from photos.utils import get_album_for_user_or_404, get_photo_for_user_or_404
+from photos.utils import get_album, get_photo_for_user_or_404
 
 import datetime
 import mimetypes
@@ -216,7 +216,11 @@ def view_albums(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def view_album(request: HttpRequest, path: str) -> HttpResponse:
-    album = get_album_for_user_or_404(request, path)
+    album = get_album(path)
+
+    # If the album doesn't exist or the album isn't public, don't render meta tags
+    if album is None or album.access_level > Allow.PUBLIC:
+        return view_restricted_album(request)
 
     title = f"{album.name} | {metadata['TITLE']}"
     base_url = metadata['BASE_URL'] if settings.LOCAL_STORAGE else ''
@@ -259,6 +263,11 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
     }
 
     return render(request, 'base.html', context)
+
+
+@require_GET
+def view_restricted_album(request: HttpRequest) -> HttpResponse:
+    return render(request, 'base.html', {})
 
 
 # Tags

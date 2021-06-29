@@ -150,39 +150,40 @@ export const actions = {
       context.commit('setPhotos', context.state.albumPhotosCache[path]);
       context.commit('setAlbumByPath', path);
       context.commit('setLoading', false);
-      return;
+      return true;
     }
 
-    await Promise.all([
-      (async () => await context.dispatch('getAllAlbums'))(),
-      (async () => {
-        let {content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path));
+    await context.dispatch('getAllAlbums');
 
-        context.commit('setPhotos', content.photos);
-        context.commit('updateAlbumPhotosCache', {path: path, photos: content.photos});
-      })(),
-    ]);
+    let {ok, content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path));
 
+    if (!ok) {
+      return false;
+    }
+
+    context.commit('setPhotos', content.photos);
+    context.commit('updateAlbumPhotosCache', {path: path, photos: content.photos});
     context.commit('setAlbumByPath', path);
+
     context.commit('setLoading', false);
-    return Promise.resolve();
+    return true;
   },
 
   async getAlbumWithAccessCode(context, {path, code}) {
     let qs = getQueryString({code});
 
-    await Promise.all([
-      (async () => {
-        let {content} = await sendRequest(endpoints.albumDetail.replace(":path", path) + qs);
-        context.commit('setAlbum', content);
-      })(),
-      (async () => {
-        let {content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path) + qs);
-        context.commit('setPhotos', content.photos);
-      })(),
-    ]);
+    let {ok, content} = await sendRequest(endpoints.albumDetail.replace(":path", path) + qs);
+
+    if (!ok) {
+      return false;
+    }
+    context.commit('setAlbum', content);
+
+    let {content2} = await sendRequest(endpoints.albumPhotoList.replace(":path", path) + qs);
+    context.commit('setPhotos', content2.photos);
 
     context.commit('setLoading', false);
+    return true;
   },
 
   async getTags(context) {
