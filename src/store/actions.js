@@ -3,13 +3,7 @@ import {router} from "../router/main.js";
 import {store} from "@/store/index";
 
 
-async function parseResponse(response) {
-  let j = await response.json();
-  return response.ok ? j : Promise.reject(j);
-}
-
-
-async function sendRequest(url, options = {}) {
+function addAuthorizationHeader(options) {
   if (store.state.token !== null) {
     let header = `Token ${store.state.token}`;
 
@@ -21,10 +15,18 @@ async function sendRequest(url, options = {}) {
       }
     }
   }
+}
 
-  let response = await fetch(url, options);
-  let json = await response.json();
-  return response.ok ? json : Promise.reject(json);
+
+async function sendRequest(url, options = {}) {
+  addAuthorizationHeader(options);
+
+  try {
+    let response = await fetch(url, options);
+    return { ok: response.ok, status: response.status, content: await response.json() }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 
@@ -47,11 +49,11 @@ function parseAlbumForAPI(album) {
 
 export const actions = {
   async ensureCsrfToken(context) {
-    await fetch(endpoints.csrf);
+    await sendRequest(endpoints.csrf);
   },
 
   async authenticate(context, {username, password}) {
-    let response = await fetch(endpoints.authenticate, {
+    return await sendRequest(endpoints.authenticate, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -59,19 +61,13 @@ export const actions = {
       },
       body: JSON.stringify({username, password}),
     });
-
-    if (response.ok || response.status === 400) {
-      return {ok: response.ok, content: await response.json()};
-    }
-
-    return Promise.reject(response);
   },
 
   async getUsers(context) {
     context.commit('setLoading', true);
 
-    let response = await sendRequest(endpoints.userList);
-    let users = response.users.sort((a, b) => a.id - b.id);
+    let {content} = await sendRequest(endpoints.userList);
+    let users = content.users.sort((a, b) => a.id - b.id);
 
     context.commit('setUsers', users);
     context.commit('setLoading', false);
@@ -85,34 +81,32 @@ export const actions = {
       options.headers = {'Authorization': `Token ${token}`};
     }
 
-    return await fetch(endpoints.currentUser, options)
-    .then(parseResponse)
-    .then(j => context.commit('setUser', j))
-    .catch(console.log);
+    let {content} = await sendRequest(endpoints.currentUser, options);
+    context.commit('setUser', content);
   },
 
   async getGroups(context) {
     context.commit('setLoading', true);
 
-    let response = await sendRequest(endpoints.groupList);
-    let groups = response.groups.sort((a, b) => a.id - b.id);
+    let {content} = await sendRequest(endpoints.groupList);
+    let groups = content.groups.sort((a, b) => a.id - b.id);
 
     context.commit('setGroups', groups);
     context.commit('setLoading', false);
   },
 
-  changePassword(context, data) {
-    fetch(endpoints.changePassword, {
+  async changePassword(context, data) {
+    let {ok, content} = await sendRequest(endpoints.changePassword, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCsrfToken(),
       },
-    })
-    .then(parseResponse)
-    .then(j => {
-      context.commit('addNotification', j.message);
+    });
+
+    if (ok) {
+      context.commit('addNotification', content.message);
 
       setTimeout(() => router.push({
         name: 'user',
@@ -120,156 +114,134 @@ export const actions = {
           slug: context.state.user.name
         },
       }), 1000);
-    })
-    .catch(j => {
-      j.errors.forEach((err) => {
-        context.commit('addNotification', err)
-      });
+
+      return;
+    }
+
+    content.errors.forEach((error) => {
+      context.commit('addNotification', error);
     });
   },
 
-  getAllAlbums(context) {
+  async getAllAlbums(context) {
     if (context.state.allAlbums.length > 0) {
       return Promise.resolve();
     }
 
     context.commit('setLoading', true);
 
-    return fetch(endpoints.albumList)
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setAllAlbums', j.albums);
-      context.commit('setLoading', false);
-    })
-    .catch(console.log);
+    let {content} = await sendRequest(endpoints.albumList);
+    context.commit('setAllAlbums', content.albums);
+    context.commit('setLoading', false);
   },
 
-  getAlbum(context, {rawPath, code}) {
+  async getAlbum(context, {rawPath, code}) {
     context.commit('setLoading', true);
 
     let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
 
     if (code) {
-      return this.dispatch('getAlbumWithAccessCode', {path, code})
+      return await context.dispatch('getAlbumWithAccessCode', {path, code})
     }
 
     if (context.state.albumPhotosCache.hasOwnProperty(path)) {
-      return context.dispatch('getAllAlbums').then(() => {
-        context.commit('setPhotos', context.state.albumPhotosCache[path]);
+      await context.dispatch('getAllAlbums');
 
-        context.commit('setAlbumByPath', path);
-        context.commit('setLoading', false);
-      });
-    } else {
-      return Promise.all([
-        context.dispatch('getAllAlbums'),
-
-        fetch(endpoints.albumPhotoList.replace(":path", path))
-        .then(parseResponse)
-        .then(j => {
-          context.commit('setPhotos', j.photos);
-          context.commit('updateAlbumPhotosCache', {path: path, photos: j.photos});
-        })
-        .catch(console.log)
-      ]).then(() => {
-        context.commit('setAlbumByPath', path);
-        context.commit('setLoading', false);
-      });
+      context.commit('setPhotos', context.state.albumPhotosCache[path]);
+      context.commit('setAlbumByPath', path);
+      context.commit('setLoading', false);
+      return;
     }
+
+    await Promise.all([
+      (async () => await context.dispatch('getAllAlbums'))(),
+      (async () => {
+        let {content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path));
+
+        context.commit('setPhotos', content.photos);
+        context.commit('updateAlbumPhotosCache', {path: path, photos: content.photos});
+      })(),
+    ]);
+
+    context.commit('setAlbumByPath', path);
+    context.commit('setLoading', false);
+    return Promise.resolve();
   },
 
-  getAlbumWithAccessCode(context, {path, code}) {
+  async getAlbumWithAccessCode(context, {path, code}) {
     let qs = getQueryString({code});
 
-    return Promise.all([
-      fetch(endpoints.albumDetail.replace(":path", path) + qs)
-      .then(parseResponse)
-      .then(j => {
-        context.commit('setAlbum', j);
-      })
-      .catch(console.log),
+    await Promise.all([
+      (async () => {
+        let {content} = await sendRequest(endpoints.albumDetail.replace(":path", path) + qs);
+        context.commit('setAlbum', content);
+      })(),
+      (async () => {
+        let {content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path) + qs);
+        context.commit('setPhotos', content.photos);
+      })(),
+    ]);
 
-      fetch(endpoints.albumPhotoList.replace(":path", path) + qs)
-      .then(parseResponse)
-      .then(j => {
-        context.commit('setPhotos', j.photos);
-      })
-      .catch(console.log),
-    ]).then(() => {
-      context.commit('setLoading', false);
-    });
+    context.commit('setLoading', false);
   },
 
-  getTags(context) {
+  async getTags(context) {
     if (context.state.tags.length > 0) {
       return Promise.resolve();
     }
 
     context.commit('setLoading', true);
 
-    return fetch(endpoints.tagList)
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setLoading', false);
-      context.commit('setTags', j.tags);
-    })
-    .catch(console.log);
+    let {content} = await sendRequest(endpoints.tagList);
+    context.commit('setTags', content.tags);
+    context.commit('setLoading', false);
   },
 
-  getFeaturedPhotos(context) {
+  async getFeaturedPhotos(context) {
     context.commit('setLoading', true);
 
-    fetch(endpoints.featuredPhotos)
-    .then(parseResponse)
-    .then(j => {
-      let photos = j.photos;
+    let {content} = await sendRequest(endpoints.featuredPhotos);
+    let photos = content.photos;
 
-      photos.forEach((photo, index) => {
-        photo.index = index;
-      });
+    photos.forEach((photo, index) => {
+      photo.index = index;
+    });
 
-      context.commit('setLoading', false);
-      context.commit('setPhotos', photos);
-      context.commit('setPhoto', {index: 0, history: false});
-    })
-    .catch(console.log);
+    context.commit('setLoading', false);
+    context.commit('setPhotos', photos);
+    context.commit('setPhoto', {index: 0, history: false});
   },
 
-  searchPhotos(context, queryString) {
-    fetch(endpoints.searchPhotos + queryString)
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setSearchResults', j.photos);
-      context.commit('setSearchResultsCount', j.count);
-      context.commit('setPhotoPage', j.page);
-    })
-    .catch(console.log);
+  async searchPhotos(context, queryString) {
+    let {content} = await sendRequest(endpoints.searchPhotos + queryString);
+    context.commit('setSearchResults', content.photos);
+    context.commit('setSearchResultsCount', content.count);
+    context.commit('setPhotoPage', content.page);
   },
 
-  deleteAlbum() {
-    fetch(endpoints.replace(":path", context.state.album.path), {
+  async deleteAlbum(context) {
+    let {ok} = await sendRequest(endpoints.replace(":path", context.state.album.path), {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'X-CSRFToken': getCsrfToken(),
       },
-    })
-    .then(parseResponse)
-    .then((j) => {
+    });
+
+    if (ok) {
       context.commit('addNotification', "Album deleted successfully. Redirecting...");
       setTimeout(() => router.push({name: 'editorIndex'}), 1500);
-    })
-    .catch(console.log);
+    }
   },
 
-  deleteSelected(context) {
+  async deleteSelected(context) {
     let photos = [];
 
     for (let photo of context.state.selected) {
       photos.push(photo.md5);
     }
 
-    fetch(endpoints.albumPhotoList.replace(":path", context.state.album.path), {
+    let {ok} = await sendRequest(endpoints.albumPhotoList.replace(":path", context.state.album.path), {
       method: 'DELETE',
       body: JSON.stringify({
         'photos': photos,
@@ -278,21 +250,20 @@ export const actions = {
         'Content-Type': 'application/json; charset=utf-8',
         'X-CSRFToken': getCsrfToken(),
       },
-    })
-    .then(parseResponse)
-    .then((j) => {
+    });
+
+    if (ok) {
       for (let photo of [...context.state.selected]) {
         photos.remove(photo);
         context.state.selected.remove(photo);
       }
-    })
-    .catch(console.log);
+    }
   },
 
   async createAlbum(context) {
     let data = parseAlbumForAPI(context.state.album);
 
-    let rawResponse = await fetch(endpoints.albumList, {
+    let {ok, content} = await sendRequest(endpoints.albumList, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -301,27 +272,25 @@ export const actions = {
       },
     });
 
-    let response;
-    try {
-      response = await parseResponse(rawResponse);
-    } catch {
-      for (let [field, errors] of Object.entries(j)) {
+    if (!ok) {
+      for (let [field, errors] of Object.entries(content)) {
         for (let error of errors) {
           context.commit('addNotification', "{0}: {1}".format(field, error));
         }
       }
+
       return;
     }
 
-    let path = response.path;
+    let path = content.path;
 
     if (!path) {
       context.commit('addNotification', "An unknown API error occurred when creating the album.");
       return;
     }
 
-    context.commit('addAlbum', response);
-    context.commit('updateAlbumPhotosCache', {path: response.path, photos: []});
+    context.commit('addAlbum', content);
+    context.commit('updateAlbumPhotosCache', {path: content.path, photos: []});
 
     context.commit('addTimedNotification', {
       message: "Album created successfully. Redirecting...",
@@ -333,33 +302,38 @@ export const actions = {
       1500);
   },
 
-  saveAlbum(context) {
+  async saveAlbum(context) {
     let data = parseAlbumForAPI(context.state.album);
 
-    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
+    let {ok, status, content} = await sendRequest(endpoints.albumDetail.replace(":path", context.state.album.path), {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCsrfToken(),
       },
-    })
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setAlbum', j);
-      context.commit('updateDocumentTitleForEditAlbum');
-      context.commit('addNotification', "Album saved successfully.");
-    })
-    .catch(j => {
-      for (let [field, errors] of Object.entries(j)) {
+    });
+
+    if (!ok) {
+      if (status === 403) {
+        context.commit('addNotification', content.detail);
+        return;
+      }
+
+      for (let [field, errors] of Object.entries(content)) {
         for (let error of errors) {
           context.commit('addNotification', "{0}: {1}".format(field, error));
         }
       }
-    });
+      return;
+    }
+
+    context.commit('setAlbum', content);
+    context.commit('updateDocumentTitleForEditAlbum');
+    context.commit('addNotification', "Album saved successfully.");
   },
 
-  setAlbumCover(context) {
+  async setAlbumCover(context) {
     if (context.state.selected.length !== 1) {
       return;
     }
@@ -373,37 +347,30 @@ export const actions = {
 
     context.commit('addNotification', "Setting cover image.");
 
-    fetch(endpoints.albumDetail.replace(":path", context.state.album.path), {
+    let {content} = await sendRequest(endpoints.albumDetail.replace(":path", context.state.album.path), {
       method: 'PATCH',
       body: JSON.stringify({'cover': photo.md5}),
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCsrfToken(),
       },
-    })
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setAlbumField', {
-        key: 'cover',
-        value: j,
-      });
-      context.commit('removeNotification', "Setting cover image.");
-      context.commit('addNotification', "Cover image set successfully.");
-    })
-    .catch(console.log);
+    });
+
+    context.commit('setAlbumField', {
+      key: 'cover',
+      value: content,
+    });
+    context.commit('removeNotification', "Setting cover image.");
+    context.commit('addNotification', "Cover image set successfully.");
   },
 
-  getRecent(context) {
+  async getRecent(context) {
     context.commit('setLoading', true);
 
-    fetch(endpoints.recent)
-    .then(parseResponse)
-    .then(j => {
-      context.commit('setAlbums', j.recent_albums);
-      context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
-      context.commit('setGitStatus', j.git_status);
-      context.commit('setLoading', false);
-    })
-    .catch(console.log);
+    let {content} = await sendRequest(endpoints.recent);
+    context.commit('setAlbums', content.recent_albums);
+    context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
+    context.commit('setGitStatus', content.git_status);
+    context.commit('setLoading', false);
   }
 };

@@ -52,7 +52,7 @@
           }
 
           this.error = content.error
-        } catch (response) {
+        } catch {
           this.error = "An unspecified error occured.";
         }
       },
