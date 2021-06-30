@@ -23,21 +23,9 @@ album_patterns = [
     path('<path:path>/<md5:md5>/download/', views.download_photo, name='download'),
 ]
 
-editor_patterns = [
-    path('', views.editor_entry_point, name='editor'),
-    path('albums/new/', views.editor_entry_point, name='editor_new_album'),
-    path('albums/edit/<path:path>/', views.editor_entry_point, name='editor_edit_album'),
-]
-
 tag_patterns = [
     path('', views.view_tags, name='tags'),
     path('<slug:slug>/', views.view_tag, name='tag'),
-]
-
-user_patterns = [
-    path('', views.users_entry_point, name='users'),
-    path('<slug:slug>/', views.users_entry_point, name='user'),
-    path('<slug:slug>/password/', views.users_entry_point, name='password'),
 ]
 
 urlpatterns = [
@@ -52,13 +40,13 @@ urlpatterns = [
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),
     path('copyright/', views.view_copyright, name='copyright'),
-    path('editor/', include(editor_patterns)),
+    path('editor/', views.editor_entry_point, name='editor'),
     path('featured/', views.featured, name='featured'),
     path('groups/', views.groups_entry_point, name='groups'),
     path('recent/', views.view_recent, name='recent'),
     path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),
-    path('users/', include(user_patterns)),
+    path('users/', views.users_entry_point, name='users'),
     path('wall/', views.wall, name='wall'),
 ]
 
