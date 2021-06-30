@@ -23,7 +23,6 @@ class AlbumSerializer(serializers.ModelSerializer):
     children = serializers.SerializerMethodField(read_only=True)
 
     url = serializers.CharField(read_only=True, source='get_absolute_url')
-    edit_url = serializers.CharField(read_only=True, source='get_edit_url')
     admin_url = serializers.CharField(read_only=True, source='get_admin_url')
 
     @staticmethod
@@ -51,7 +50,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             'thumbnail_size',
             'access_level', 'access_code', 'users', 'groups',
             'parent', 'children',
-            'url', 'edit_url', 'admin_url',
+            'url', 'admin_url',
         )
 
 

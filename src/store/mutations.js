@@ -1,6 +1,7 @@
 import Vue from "vue";
 import {updateField} from "vuex-map-fields";
 import {getQueryString} from "./index.js";
+import {router} from "@/router/main.js";
 
 
 const titleTemplate = "{0} | Doktor Takes Photos";
@@ -290,7 +291,9 @@ export const mutations = {
     // Update history entry
     if (document.title !== newTitle) {
       document.title = newTitle;
-      window.history.replaceState(null, newTitle, state.album.edit_url);
+
+      let url = router.resolve({name: 'editAlbum', params: {path: state.album.path}});
+      window.history.replaceState(null, newTitle, url);
     }
   },
 

@@ -193,9 +193,6 @@ class Album(MPTTModel):
 
         return photos
 
-    def get_edit_url(self) -> str:
-        return reverse('editor_edit_album', args=[self.path])
-
     def get_full_date(self) -> str:
         template = "{date:%a} {date.year}-{date.month:02}-{date.day:02}"
 
