@@ -17,8 +17,6 @@
       <KeyboardShortcuts/>
       <Links/>
     </section>
-
-    <PhotoSwipe/>
   </div>
 </template>
 
@@ -31,9 +29,7 @@
   import KeyboardShortcuts from '@/components/photoDetail/KeyboardShortcuts.vue';
   import Links from "@/components/photoDetail/Links";
   import Metadata from "@/components/photoDetail/Metadata";
-  import PhotoSwipe from "@/components/photoDetail/PhotoSwipe";
   import PhotoViewer from "@/components/photoDetail/PhotoViewer";
-  import initPhotoSwipe from "@/photoswipe.js";
 
 
   export default {
@@ -53,7 +49,6 @@
       KeyboardShortcuts,
       Links,
       Metadata,
-      PhotoSwipe,
     },
 
     computed: {
@@ -108,17 +103,6 @@
             break;
         }
       },
-    },
-
-    mounted() {
-      let unsubscribe = this.$store.subscribe((mutation, state) => {
-        if (mutation.type !== 'setPhoto') {
-          return;
-        }
-
-        this.$nextTick(() => this.onClick = initPhotoSwipe.bind(this)());
-        unsubscribe();
-      });
     },
   }
 </script>

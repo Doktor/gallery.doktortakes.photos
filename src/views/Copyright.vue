@@ -46,7 +46,6 @@
     <ul>
       <li><a href="https://masonry.desandro.com/">Masonry</a> and <a href="https://imagesloaded.desandro.com/">imagesLoaded</a> (MIT License), used on the featured photos page</li>
       <li><a href="https://www.dropzonejs.com/">Dropzone</a> (MIT License), used on the content management pages</li>
-      <li><a href="http://photoswipe.com/">PhotoSwipe</a> (MIT License)</li>
     </ul>
   </FixedWidthContainer>
 </template>
