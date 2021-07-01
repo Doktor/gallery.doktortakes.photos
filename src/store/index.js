@@ -124,6 +124,7 @@ export const store = new Vuex.Store({
     strict: !production,
 
     token: null,
+    showNav: true,
 
     users: [],
     groups: [],

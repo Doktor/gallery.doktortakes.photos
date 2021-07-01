@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav">
+  <nav v-if="showNav" class="nav">
   <ul class="nav-items" :class="{'nav-items-index': isIndex}">
     <template v-if="showLogo">
       <li class="nav-item">
@@ -139,6 +139,7 @@
         'isAuthenticated',
       ]),
       ...mapState([
+        'showNav',
         'user',
       ]),
 

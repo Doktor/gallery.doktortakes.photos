@@ -253,12 +253,7 @@ router.afterEach((to, from) => {
       document.body.className = body;
     }
 
-    // .nav
-    let nav = document.querySelector('.nav');
-
-    if (nav !== null) {
-      nav.classList.toggle('hidden', record.meta.nav === false);
-    }
+    store.state.showNav = record.meta?.nav ?? true;
 
     // Document title
     let title = record.meta.title;
