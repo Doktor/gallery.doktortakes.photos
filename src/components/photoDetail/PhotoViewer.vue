@@ -5,14 +5,16 @@
       <img
         class="photo-image"
         ref="image"
-        @mousedown.prevent="mouseDown"
-        @mousemove.prevent="mouseMove"
-        @mouseup.prevent="mouseUp"
-        @mouseleave.prevent="mouseLeave"
+
+        @pointerdown.stop.prevent="pointerDown"
+        @pointermove.stop.prevent="pointerMove"
+        @pointerup.stop.prevent="pointerUp"
+        @pointerleave.stop.prevent="pointerLeave"
+
         :src="imageUrl"
         :style="imageStyles"
         alt=""
-        title="Click to zoom"
+        title="Click or tap to zoom"
       />
     </div>
   </div>
@@ -54,21 +56,22 @@
         translateY: 0,
 
         maxScale: 2,
+        zoomEnabled: false,
 
         transitionProperties: ['transform', 'left', 'top'],
         transitionTime: 0.6,
         transitionTimingFunction: 'ease',
 
         dragging: false,
-        lastCursorX: null,
-        lastCursorY: null,
+        lastClientX: null,
+        lastClientY: null,
         delayTranslateX: null,
         delayTranslateY: null,
 
-        // Click detection
+        // Click/tap detection
         startX: null,
         startY: null,
-        clickDelta: 10,
+        delta: 10,
       }
     },
 
@@ -90,6 +93,7 @@
           transform: `scale(${this.scale})`,
           left: `${this.translateX}px`,
           top: `${this.translateY}px`,
+          touchAction: this.zoomEnabled ? "none" : "unset",
         }
       },
       transitions() {
@@ -121,18 +125,18 @@
     },
 
     methods: {
-      eventIsClick(event) {
+      eventIsClickOrTap(event) {
         const diffX = Math.abs(this.startX - event.clientX);
         const diffY = Math.abs(this.startY - event.clientY);
 
-        return diffX < this.clickDelta && diffY < this.clickDelta;
+        return diffX < this.delta && diffY < this.delta;
       },
 
       getTransition(name) {
         return `${name} ${this.transitionTime}s ${this.transitionTimingFunction}`;
       },
 
-      mouseDown(event) {
+      pointerDown(event) {
         this.startX = event.clientX;
         this.startY = event.clientY;
 
@@ -141,27 +145,27 @@
         }
 
         this.dragging = true;
-        this.lastCursorX = event.clientX;
-        this.lastCursorY = event.clientY;
+        this.lastClientX = event.clientX;
+        this.lastClientY = event.clientY;
       },
 
-      mouseMove(event) {
+      pointerMove(event) {
         this.pan(event);
       },
 
-      mouseUp(event) {
-        this.resetMouseMovement();
+      pointerUp(event) {
+        this.resetPointerMovement();
 
-        if (this.eventIsClick(event)) {
+        if (this.eventIsClickOrTap(event)) {
           this.navigate(event);
         }
       },
 
-      mouseLeave(event) {
-        this.resetMouseMovement();
+      pointerLeave(event) {
+        this.resetPointerMovement();
       },
 
-      resetMouseMovement() {
+      resetPointerMovement() {
         this.dragging = false;
 
         if (this.delayTranslateX !== null) {
@@ -172,8 +176,8 @@
           this.delayTranslateY = null;
         }
 
-        this.lastCursorX = null;
-        this.lastCursorY = null;
+        this.lastClientX = null;
+        this.lastClientY = null;
 
         this.transitionProperties = ['transform', 'left', 'top'];
       },
@@ -196,9 +200,9 @@
       navigateInternal(event) {
         let scale = this.maxScale;
 
-        // The click location on the image, relative to the top-left corner
-        let clickX = event.offsetX;
-        let clickY = event.offsetY;
+        // The pointer location on the image, relative to the top-left corner
+        let pointerX = event.offsetX;
+        let pointerY = event.offsetY;
 
         // Important: since the image element uses "object-fit: contain",
         // its bounding box is the same size as the viewport
@@ -210,11 +214,11 @@
           // The viewport is wider than the image
           imageDisplayWidth = this.imageWidth * this.viewportHeight / this.imageHeight;
 
-          // Check if the click location is on the actual image
+          // Check if the pointer location is on the actual image
           let widthDiff = this.viewportWidth - imageDisplayWidth;
-          let clickXFromEdge = Math.min(clickX, this.viewportWidth - clickX);
+          let pointerXFromEdge = Math.min(pointerX, this.viewportWidth - pointerX);
 
-          if (clickXFromEdge <= widthDiff / 2) {
+          if (pointerXFromEdge <= widthDiff / 2) {
             return false;
           }
         }
@@ -223,9 +227,9 @@
           imageDisplayHeight = this.imageHeight * this.viewportWidth / this.imageWidth;
 
           let heightDiff = this.viewportHeight - imageDisplayHeight;
-          let clickYFromEdge = Math.min(clickY, this.viewportHeight - clickY);
+          let pointerYFromEdge = Math.min(pointerY, this.viewportHeight - pointerY);
 
-          if (clickYFromEdge <= heightDiff / 2) {
+          if (pointerYFromEdge <= heightDiff / 2) {
             return false;
           }
         }
@@ -234,20 +238,21 @@
         let centerX = this.viewportWidth / 2;
         let centerY = this.viewportHeight / 2;
 
-        let clickXDiff = clamp(
-          centerX - clickX,
+        let pointerXDiff = clamp(
+          centerX - pointerX,
           0.5 / scale * this.viewportWidth - 0.5 * imageDisplayWidth,
           -0.5 / scale * this.viewportWidth + 0.5 * imageDisplayWidth
         );
-        let clickYDiff = clamp(
-          centerY - clickY,
+        let pointerYDiff = clamp(
+          centerY - pointerY,
           0.5 / scale * this.viewportHeight - 0.5 * imageDisplayHeight,
           -0.5 / scale * this.viewportHeight + 0.5 * imageDisplayHeight
         );
 
         this.scale = scale;
-        this.translateX = clickXDiff * scale;
-        this.translateY = clickYDiff * scale;
+        this.translateX = pointerXDiff * scale;
+        this.translateY = pointerYDiff * scale;
+
         return true;
       },
 
@@ -256,19 +261,19 @@
           return;
         }
 
-        if (this.lastCursorX === null || this.lastCursorY === null) {
+        if (this.lastClientX === null || this.lastClientY === null) {
           return;
         }
 
-        if (this.eventIsClick(event)) {
+        if (this.eventIsClickOrTap(event)) {
           return;
         }
 
-        let clickX = event.clientX;
-        let clickY = event.clientY;
+        let pointerX = event.clientX;
+        let pointerY = event.clientY;
 
-        let xDiff = clickX - this.lastCursorX;
-        let yDiff = clickY - this.lastCursorY;
+        let xDiff = pointerX - this.lastClientX;
+        let yDiff = pointerY - this.lastClientY;
 
         let imageDisplayWidth = this.viewportWidth;
         let imageDisplayHeight = this.viewportHeight;
@@ -280,41 +285,41 @@
           imageDisplayHeight = this.imageHeight * this.viewportWidth / this.imageWidth;
         }
 
-        let clickXDiffUnclamped = (this.translateX + xDiff) / this.scale;
-        let clickYDiffUnclamped = (this.translateY + yDiff) / this.scale;
+        let pointerXDiffUnclamped = (this.translateX + xDiff) / this.scale;
+        let pointerYDiffUnclamped = (this.translateY + yDiff) / this.scale;
 
-        let clickXDiffMax = clamp(
-          clickXDiffUnclamped,
+        let pointerXDiffMax = clamp(
+          pointerXDiffUnclamped,
           -imageDisplayWidth / 2,
           imageDisplayWidth / 2
         );
-        let clickYDiffMax = clamp(
-          clickYDiffUnclamped,
+        let pointerYDiffMax = clamp(
+          pointerYDiffUnclamped,
           -imageDisplayHeight / 2,
           imageDisplayHeight / 2
         );
 
-        let clickXDiff = clamp(
-          clickXDiffUnclamped,
+        let pointerXDiff = clamp(
+          pointerXDiffUnclamped,
           0.5 / this.scale * this.viewportWidth - 0.5 * imageDisplayWidth,
           -0.5 / this.scale * this.viewportWidth + 0.5 * imageDisplayWidth
         );
-        let clickYDiff = clamp(
-          clickYDiffUnclamped,
+        let pointerYDiff = clamp(
+          pointerYDiffUnclamped,
           0.5 / this.scale * this.viewportHeight - 0.5 * imageDisplayHeight,
           -0.5 / this.scale * this.viewportHeight + 0.5 * imageDisplayHeight
         );
 
         this.transitionProperties = ['transform'];
 
-        this.translateX = clickXDiffMax * this.scale;
-        this.translateY = clickYDiffMax * this.scale;
+        this.translateX = pointerXDiffMax * this.scale;
+        this.translateY = pointerYDiffMax * this.scale;
 
-        this.delayTranslateX = clickXDiff * this.scale;
-        this.delayTranslateY = clickYDiff * this.scale;
+        this.delayTranslateX = pointerXDiff * this.scale;
+        this.delayTranslateY = pointerYDiff * this.scale;
 
-        this.lastCursorX = clickX;
-        this.lastCursorY = clickY;
+        this.lastClientX = pointerX;
+        this.lastClientY = pointerY;
 
         return false;
       },
@@ -359,6 +364,12 @@
         }
       });
     },
+
+    watch: {
+      zoomEnabled(enabled, _) {
+        document.body.style.overflow = enabled ? "hidden" : "unset";
+      }
+    }
   }
 </script>
 
