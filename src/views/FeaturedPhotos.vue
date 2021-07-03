@@ -1,19 +1,14 @@
 <template>
   <div v-if="!loading">
-    <h2>Featured photos</h2>
-
-    <PhotoViewer
-        :count="this.photos.length - 1"
-        :onClick="onClick"
-        :photo="photo"
-        :useHistory="false"
-    />
-
-    <Filmstrip
-        :photos="photos"
-        :position="photo.index"
-        :useHistory="false"
-    />
+    <div class="featured-photos">
+      <div class="featured-photo" v-for="photo in photos">
+        <div class="featured-photo-sizer">
+          <router-link title="" :to="photo.url">
+            <img class="featured-photo-image" :src="photo.thumbnail" alt="" />
+          </router-link>
+        </div>
+      </div>
+    </div>
 
     <section class="view-more">
       <div class="view-more-wrapper">
@@ -28,10 +23,8 @@
 
 <script>
   import {mapState} from 'vuex';
-
   import Filmstrip from "@/components/photoDetail/Filmstrip";
   import PhotoViewer from "@/components/photoDetail/PhotoViewer";
-  import {router} from "@/router/main.js";
 
 
   export default {
@@ -48,56 +41,57 @@
       ]),
     },
 
-    created() {
-      this.$store.dispatch('getFeaturedPhotos');
-    },
-
-    methods: {
-      onClick() {
-        router.push({
-          name: 'photo',
-          params: {
-            path: this.photo.path,
-            md5: this.photo.md5
-          },
-        });
-      },
+    async created() {
+      await this.$store.dispatch('getFeaturedPhotos');
     },
   }
 </script>
 
 <style lang="scss" scoped>
-  $itemSpacing: 0.5rem;
+$spacing: 0.3rem;
+$width: 600px;
 
-  @mixin fade($t: opacity 0.2s ease-in-out) {
-    -webkit-transition: $t;
-    -moz-transition: $t;
-    -o-transition: $t;
-    -ms-transition: $t;
-    transition: $t;
+.featured-photos {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  margin: 0 (-$spacing);
+}
+
+.featured-photo {
+  padding: $spacing;
+
+  @media (max-width: $width * 2) {
+    width: 100%;
   }
-
-  #featured {
-    $width: 400px;
-
-    margin: 0 (-$itemSpacing) 1rem (-$itemSpacing);
-
-    .item {
-      padding: $itemSpacing;
-      width: 100%;
-
-      @media (min-width: $width * 2 + 1) and (max-width: $width * 3) {
-        width: (100% / 2);
-      }
-      @media (min-width: $width * 3 + 1) {
-        width: (100% / 3);
-      }
-
-      @include fade();
-    }
-
-    img {
-      width: 100%;
+  @for $i from 2 through 5 {
+    @media (min-width: $width * ($i) + 1) and(max-width: $width * ($i + 1)) {
+      width: 100% / ($i + 1); // 50%, 33%, 25%, 20%
     }
   }
+  @media (min-width: $width * 6 + 1) {
+    width: (100% / 6); // 16.67%
+  }
+}
+
+.featured-photo-sizer {
+  position: relative;
+
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+}
+
+.featured-photo-image {
+  display: block;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
 </style>

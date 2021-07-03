@@ -54,7 +54,7 @@ def get_featured_photos(request: Request) -> Response:
     query = Q(album__access_level=Allow.PUBLIC, rating__gte=4, sidecar_exists=True)
     photos = Photo.objects.filter(query).order_by('-taken').select_related('album')
 
-    serializer = PhotoSerializer(photos[:30], many=True)
+    serializer = PhotoSerializer(photos, many=True)
     return Response({'photos': serializer.data})
 
 
