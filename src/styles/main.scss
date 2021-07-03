@@ -1,22 +1,33 @@
 @import "variables";
 
-// Other
+// Top-level elements
 
-$itemSpacing: 0.5rem;
-
-/* General */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 
 *::selection,
 *::-moz-selection {
   background-color: $blue;
 }
 
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+}
+
 body {
+  @include text-font();
+  color: $light-gray;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: center;
+
+  margin: 2rem auto;
+  background-color: $dark-gray;
+
   width: 90%;
   max-width: 90%;
-
-  @include text-font();
-  text-align: center;
 
   @media (min-width: 901px) {
     width: 95%;
@@ -24,9 +35,93 @@ body {
   }
 }
 
+// Headers and footers
+
+@mixin headers($scale) {
+  h1 { font-size: pow($scale, 4) * 1rem; }
+  h2 { font-size: pow($scale, 3) * 1rem; }
+  h3 { font-size: pow($scale, 2) * 1rem; }
+  h4 { font-size: pow($scale, 1) * 1rem; }
+  h5 { font-size: pow($scale, 0) * 1rem; }
+  h6 { font-size: pow($scale, -1) * 1rem; }
+}
+
+@media (max-width: 900px) {
+  @include headers(1.33);
+}
+
+@media (min-width: 901px) {
+  @include headers(1.4);
+}
+
 h1, h2, h3, h4, h5, h6 {
   @include headings-font();
+  margin: 0.5rem 0;
   text-transform: lowercase;
+}
+
+header {
+  margin-bottom: 1rem;
+}
+
+footer {
+  margin-top: 2rem;
+  color: gray;
+  clear: both;
+}
+
+header, footer {
+  text-align: center;
+}
+
+// Other elements
+
+a {
+  color: $blue;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  text-align: center;
+}
+
+hr {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid gray;
+  height: 1px;
+}
+
+img {
+  display: block;
+}
+
+nav, pre, section {
+  margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  nav {
+    text-align: center;
+  }
+}
+
+ol, ul {
+  margin: 1rem 0;
+}
+
+p {
+  margin: 1rem 0;
 }
 
 /* Generic classes */
@@ -42,13 +137,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .note {
   color: rgb(150, 150, 150);
   font-style: italic;
-}
-
-.warning {
-  font-weight: 700;
 }
 
 /* Button: "view more" */

@@ -5,7 +5,6 @@ import Base from "./views/Base.vue";
 import {router} from "./router/main.js";
 import {store} from "./store/index.js";
 
-import "./styles/common.scss";
 import "./styles/main.scss";
 
 

@@ -4,12 +4,20 @@
 
 /* Mixins */
 
-@mixin clearfix() {
-  &::after {
-    content: ' ';
-    display: table;
-    clear: both;
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $value: $value / $number;
+    }
   }
+
+  @return $value;
 }
 
 @mixin fade() {
@@ -39,6 +47,8 @@
 $borderColor: rgb(200, 200, 200);
 $text: rgb(220, 220, 220);
 $blue: rgb(0, 120, 255);
+$dark-gray: rgb(20, 20, 20);
+$light-gray: rgb(220, 220, 220);
 
 /* Typefaces */
 
@@ -66,3 +76,7 @@ $blue: rgb(0, 120, 255);
   font-style: normal;
   font-weight: 300;
 }
+
+/* Other */
+
+$itemSpacing: 0.5rem;
