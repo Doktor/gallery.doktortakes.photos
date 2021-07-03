@@ -11,7 +11,7 @@
         @pointerup.stop.prevent="pointerUp"
         @pointerleave.stop.prevent="pointerLeave"
 
-        :src="imageUrl"
+        :src="imageSrc"
         :style="imageStyles"
         alt=""
         title="Click or tap to zoom"
@@ -63,14 +63,14 @@
         transitionTimingFunction: 'ease',
 
         dragging: false,
-        lastClientX: null,
-        lastClientY: null,
         delayTranslateX: null,
         delayTranslateY: null,
+        lastClientX: null,
+        lastClientY: null,
 
         // Click/tap detection
-        startX: null,
-        startY: null,
+        pointerStartX: null,
+        pointerStartY: null,
         delta: 10,
       }
     },
@@ -79,14 +79,14 @@
       isDebug() {
         return !this.production
       },
-      imageUrl() {
+
+      imageSrc() {
         if (this.isDebug && (this.$route.query?.test ?? false)) {
           return "https://upload.wikimedia.org/wikipedia/commons/a/aa/Philips_PM5544.svg";
         }
 
         return this.photo.image;
       },
-
       imageStyles() {
         return {
           transition: this.transitions,
@@ -126,8 +126,8 @@
 
     methods: {
       eventIsClickOrTap(event) {
-        const diffX = Math.abs(this.startX - event.clientX);
-        const diffY = Math.abs(this.startY - event.clientY);
+        const diffX = Math.abs(this.pointerStartX - event.clientX);
+        const diffY = Math.abs(this.pointerStartY - event.clientY);
 
         return diffX < this.delta && diffY < this.delta;
       },
@@ -137,8 +137,8 @@
       },
 
       pointerDown(event) {
-        this.startX = event.clientX;
-        this.startY = event.clientY;
+        this.pointerStartX = event.clientX;
+        this.pointerStartY = event.clientY;
 
         if (!this.zoomEnabled) {
           return;
@@ -148,24 +148,21 @@
         this.lastClientX = event.clientX;
         this.lastClientY = event.clientY;
       },
-
       pointerMove(event) {
-        this.pan(event);
+        this.panImage(event);
       },
-
       pointerUp(event) {
-        this.resetPointerMovement();
+        this.resetPointer();
 
         if (this.eventIsClickOrTap(event)) {
-          this.navigate(event);
+          this.scaleImage(event);
         }
       },
-
       pointerLeave(event) {
-        this.resetPointerMovement();
+        this.resetPointer();
       },
 
-      resetPointerMovement() {
+      resetPointer() {
         this.dragging = false;
 
         if (this.delayTranslateX !== null) {
@@ -182,8 +179,8 @@
         this.transitionProperties = ['transform', 'left', 'top'];
       },
 
-      navigate(event) {
-        if (!this.zoomEnabled && !this.navigateInternal(event)) {
+      scaleImage(event) {
+        if (!this.zoomEnabled && !this.scaleImageInternal(event)) {
           return;
         }
 
@@ -195,24 +192,23 @@
           this.translateY = 0;
         }
       },
-
-      // Returns true if navigation was successful, or false otherwise
-      navigateInternal(event) {
+      // Returns true if scaling was successful (if the pointer is on the actual image), or false otherwise
+      scaleImageInternal(event) {
         let scale = this.maxScale;
 
-        // The pointer location on the image, relative to the top-left corner
+        // The pointer location on the viewport, relative to the top-left corner
         let pointerX = event.offsetX;
         let pointerY = event.offsetY;
 
         // Important: since the image element uses "object-fit: contain",
         // its bounding box is the same size as the viewport
-        let imageDisplayWidth = this.viewportWidth;
-        let imageDisplayHeight = this.viewportHeight;
-
         // Calculate the image's actual display size
+        let imageDisplayWidth, imageDisplayHeight;
+
         if (this.viewportRatio > this.imageRatio) {
           // The viewport is wider than the image
           imageDisplayWidth = this.imageWidth * this.viewportHeight / this.imageHeight;
+          imageDisplayHeight = this.viewportHeight;
 
           // Check if the pointer location is on the actual image
           let widthDiff = this.viewportWidth - imageDisplayWidth;
@@ -224,6 +220,7 @@
         }
         else {
           // The viewport is taller than the image
+          imageDisplayWidth = this.viewportWidth;
           imageDisplayHeight = this.imageHeight * this.viewportWidth / this.imageWidth;
 
           let heightDiff = this.viewportHeight - imageDisplayHeight;
@@ -240,13 +237,13 @@
 
         let pointerXDiff = clamp(
           centerX - pointerX,
-          0.5 / scale * this.viewportWidth - 0.5 * imageDisplayWidth,
-          -0.5 / scale * this.viewportWidth + 0.5 * imageDisplayWidth
+          centerX / scale - imageDisplayWidth / 2,
+          -centerX / scale + imageDisplayWidth / 2
         );
         let pointerYDiff = clamp(
           centerY - pointerY,
-          0.5 / scale * this.viewportHeight - 0.5 * imageDisplayHeight,
-          -0.5 / scale * this.viewportHeight + 0.5 * imageDisplayHeight
+          centerY / scale - imageDisplayHeight / 2,
+          -centerY / scale + imageDisplayHeight / 2
         );
 
         this.scale = scale;
@@ -256,7 +253,7 @@
         return true;
       },
 
-      pan(event) {
+      panImage(event) {
         if (!this.dragging) {
           return;
         }
@@ -269,54 +266,59 @@
           return;
         }
 
+        let scale = this.scale;
+
         let pointerX = event.clientX;
         let pointerY = event.clientY;
 
         let xDiff = pointerX - this.lastClientX;
         let yDiff = pointerY - this.lastClientY;
 
-        let imageDisplayWidth = this.viewportWidth;
-        let imageDisplayHeight = this.viewportHeight;
+         // Calculate the image's actual display size
+        let imageDisplayWidth, imageDisplayHeight;
 
         if (this.viewportRatio > this.imageRatio) {
           imageDisplayWidth = this.imageWidth * this.viewportHeight / this.imageHeight;
+          imageDisplayHeight = this.viewportHeight;
         }
         else {
+          imageDisplayWidth = this.viewportWidth;
           imageDisplayHeight = this.imageHeight * this.viewportWidth / this.imageWidth;
         }
 
-        let pointerXDiffUnclamped = (this.translateX + xDiff) / this.scale;
-        let pointerYDiffUnclamped = (this.translateY + yDiff) / this.scale;
+        let pointerXDiffUnclamped = (this.translateX + xDiff) / scale;
+        let pointerYDiffUnclamped = (this.translateY + yDiff) / scale;
 
-        let pointerXDiffMax = clamp(
-          pointerXDiffUnclamped,
-          -imageDisplayWidth / 2,
-          imageDisplayWidth / 2
-        );
-        let pointerYDiffMax = clamp(
-          pointerYDiffUnclamped,
-          -imageDisplayHeight / 2,
-          imageDisplayHeight / 2
-        );
+        let imageDisplayCenterX = imageDisplayWidth / 2;
+        let imageDisplayCenterY = imageDisplayHeight / 2;
 
+        // Allow the image to be dragged past the image bounds
+        let pointerXDiffStretch = clamp(pointerXDiffUnclamped, -imageDisplayCenterX, imageDisplayCenterX);
+        let pointerYDiffStretch = clamp(pointerYDiffUnclamped, -imageDisplayCenterY, imageDisplayCenterY);
+
+        let centerX = this.viewportWidth / 2;
+        let centerY = this.viewportHeight / 2;
+
+        // If the image was dragged past the image bounds,
+        // reset the image pan to these values when the pointer is released
         let pointerXDiff = clamp(
           pointerXDiffUnclamped,
-          0.5 / this.scale * this.viewportWidth - 0.5 * imageDisplayWidth,
-          -0.5 / this.scale * this.viewportWidth + 0.5 * imageDisplayWidth
+          centerX / scale - imageDisplayCenterX,
+          -centerX / scale + imageDisplayCenterX
         );
         let pointerYDiff = clamp(
           pointerYDiffUnclamped,
-          0.5 / this.scale * this.viewportHeight - 0.5 * imageDisplayHeight,
-          -0.5 / this.scale * this.viewportHeight + 0.5 * imageDisplayHeight
+          centerY / scale - imageDisplayCenterY,
+          -centerY / scale + imageDisplayCenterY
         );
 
         this.transitionProperties = ['transform'];
 
-        this.translateX = pointerXDiffMax * this.scale;
-        this.translateY = pointerYDiffMax * this.scale;
+        this.translateX = pointerXDiffStretch * scale;
+        this.translateY = pointerYDiffStretch * scale;
 
-        this.delayTranslateX = pointerXDiff * this.scale;
-        this.delayTranslateY = pointerYDiff * this.scale;
+        this.delayTranslateX = pointerXDiff * scale;
+        this.delayTranslateY = pointerYDiff * scale;
 
         this.lastClientX = pointerX;
         this.lastClientY = pointerY;
