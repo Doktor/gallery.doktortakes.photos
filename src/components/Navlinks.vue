@@ -20,15 +20,6 @@
     <li class="nav-item">
       <router-link
           class="nav-item-link"
-          title="About"
-          :to="{name: 'about'}"
-      >
-        About
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link
-          class="nav-item-link"
           title="Featured"
           :to="{name: 'featured'}"
       >
@@ -42,6 +33,15 @@
           :to="{name: 'albums'}"
       >
         Photos
+      </router-link>
+    </li>
+    <li class="nav-item">
+      <router-link
+          class="nav-item-link"
+          title="About"
+          :to="{name: 'about'}"
+      >
+        About
       </router-link>
     </li>
 
@@ -108,7 +108,7 @@
             class="nav-item-link nav-item-link-profile"
             :to="{name: 'user', params: {slug: user.name}}"
         >
-          {{ user.name }}
+          Profile
         </router-link>
       </li>
       <li class="nav-item">
