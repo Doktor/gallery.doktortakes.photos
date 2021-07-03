@@ -1,0 +1,12 @@
+{
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "endOfLine": "lf",
+  "parser": "vue",
+  "printWidth": 120,
+  "quoteProps": "consistent",
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "vueIndentScriptAndStyle": false
+}
