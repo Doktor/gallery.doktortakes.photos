@@ -47,10 +47,6 @@ Array.prototype.remove = function(item) {
   this.splice(this.indexOf(item), 1);
 };
 
-Element.prototype.remove = function() {
-  this.parentElement.removeChild(this);
-};
-
 String.prototype.format = function() {
   "use strict";
   let str = this.toString();

@@ -4,7 +4,7 @@
       <div class="featured-photo" v-for="photo in photos">
         <div class="featured-photo-sizer">
           <router-link title="" :to="photo.url">
-            <img class="featured-photo-image" :src="photo.thumbnail" alt="" />
+            <LazyImage class="featured-photo-image" :src="photo.thumbnail" alt="" :width="600" :height="600" />
           </router-link>
         </div>
       </div>
@@ -24,13 +24,15 @@
 <script>
   import {mapState} from 'vuex';
   import Filmstrip from "@/components/photoDetail/Filmstrip";
+  import LazyImage from "@/components/LazyImage";
   import PhotoViewer from "@/components/photoDetail/PhotoViewer";
 
 
   export default {
     components: {
-      PhotoViewer,
       Filmstrip,
+      LazyImage,
+      PhotoViewer,
     },
 
     computed: {
@@ -86,12 +88,18 @@ $width: 600px;
 }
 
 .featured-photo-image {
-  display: block;
-  position: absolute;
-
   width: 100%;
   height: 100%;
+  position: absolute;
 
-  object-fit: cover;
+  ::v-deep img {
+    display: block;
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
 }
 </style>
