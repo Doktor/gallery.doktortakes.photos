@@ -104,6 +104,8 @@ $panel-margin: 40px;
 $logo-size: 3.2rem;
 
 .logo {
+  @include logo-font();
+
   font-size: $logo-size;
   text-align: center;
   line-height: 1.1;

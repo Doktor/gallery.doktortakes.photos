@@ -129,7 +129,8 @@
   }
 
   .overlay-item, ::v-deep .overlay-item {
-    @include primary-font();
+    @include secondary-headings-font();
+
     font-size: 1.5rem;
     line-height: 1.1;
     text-align: left;

@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:400');
-@import url('https://fonts.googleapis.com/css?family=Contrail+One:400,700');
 @import "variables";
 
 // Other
@@ -17,7 +15,7 @@ body {
   width: 90%;
   max-width: 90%;
 
-  @include secondary-font();
+  @include text-font();
   text-align: center;
 
   @media (min-width: 901px) {
@@ -27,14 +25,14 @@ body {
 }
 
 footer {
-  @include primary-font();
+  @include secondary-headings-font();
   text-transform: lowercase;
 
   margin-top: 3rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  @include primary-font();
+  @include headings-font();
   text-transform: lowercase;
 }
 
@@ -42,7 +40,7 @@ h1, h2, h3, h4, h5, h6 {
 
 // Index page tagline
 .tagline {
-  @include primary-font();
+  @include headings-font();
   color: $text;
   font-size: 1.6rem;
   font-weight: 400;
@@ -78,7 +76,7 @@ h1, h2, h3, h4, h5, h6 {
 .view-more-link {
   display: block;
 
-  @include primary-font();
+  @include headings-font();
   line-height: 1;
 
   border: 1px solid $blue;
@@ -167,7 +165,7 @@ legend {
   margin-left: -0.5rem;
   margin-bottom: 0.5rem;
 
-  @include primary-font();
+  @include headings-font();
   text-transform: lowercase;
   text-align: center;
   line-height: 1;
@@ -545,7 +543,8 @@ $albumWidth: 400px;
 
   // Text
   div {
-    @include primary-font();
+    @include secondary-headings-font();
+
     color: $text;
     font-size: 1.35rem;
     line-height: 1;
@@ -592,7 +591,7 @@ $albumWidth: 400px;
     height: 3.2rem;
     padding: 6px 12px;
 
-    @include primary-font();
+    @include headings-font();
     color: $text;
     font-size: 1.5rem;
     line-height: 1;
@@ -604,7 +603,7 @@ $albumWidth: 400px;
 }
 
 .count {
-  @include primary-font();
+  @include headings-font();
   color: $text;
   font-size: 2rem;
   font-weight: 400;
@@ -635,7 +634,7 @@ ul.edit-links-center {
   margin: 0;
   padding: 0;
 
-  @include primary-font();
+  @include headings-font();
 
   li:not(:last-child)::after {
     color: $text;

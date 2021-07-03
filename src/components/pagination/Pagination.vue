@@ -147,7 +147,7 @@ $itemBackgroundColor: rgb(40, 40, 40);
   display: flex;
   justify-content: space-between;
 
-  @include primary-font();
+  @include secondary-headings-font();
   text-align: left;
   font-size: 1.25rem;
   line-height: 1;

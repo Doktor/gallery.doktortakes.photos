@@ -181,6 +181,8 @@
   $nav-item-spacing: 1.7rem;
 
   .logo {
+    @include logo-font();
+
     font-size: $logo-size;
     line-height: 1;
     text-align: center;
@@ -211,7 +213,7 @@
     align-items: center;
     flex-wrap: wrap;
 
-    @include primary-font();
+    @include headings-font();
     font-size: $nav-font-size;
     text-transform: lowercase;
 
