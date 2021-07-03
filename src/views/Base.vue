@@ -11,7 +11,7 @@
     <router-view/>
 
     <footer v-if="!isIndex">
-      <div v-if="tagline" class="tagline">"{{ tagline }}"</div>
+      <div v-if="tagline" class="tagline">"<span v-html="tagline"/>"</div>
 
       <p>photos are free for personal use<br/>website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor</p>
     </footer>
