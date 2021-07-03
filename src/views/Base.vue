@@ -13,7 +13,7 @@
     <footer v-if="!isIndex">
       <div v-if="tagline" class="tagline">"{{ tagline }}"</div>
 
-      <p>Photos are free for personal use<br>Website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor</p>
+      <p>photos are free for personal use<br/>website and photos <router-link :to="{name: 'copyright'}">&copy;</router-link> Doktor</p>
     </footer>
   </div>
 </template>
@@ -44,6 +44,6 @@
 
 <style>
 footer {
-  text-transform: none;
+  margin-top: 3rem;
 }
 </style>
