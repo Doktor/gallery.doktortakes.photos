@@ -198,7 +198,7 @@
   }
 
   .nav {
-    padding-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
     margin-top: -0.5rem;
   }
 

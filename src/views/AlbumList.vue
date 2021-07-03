@@ -1,30 +1,28 @@
 <template>
   <main>
-    <FixedWidthContainer>
-      <h2>Albums</h2>
-
-      <div class="count">
-        {{ results.length }} album{{ results.length|pluralize}}
-      </div>
-
-      <div class="album-search-container">
-        <input
-            type="text"
-            placeholder="Search by name..."
-            v-model="search"
-            @keyup="filterAlbums"
-        >
-      </div>
-    </FixedWidthContainer>
-
     <div>
       <Albums
         v-if="loading"
         :albums="new Array(12).fill({})"
         :albumRoute="'album'"
         :isSkeleton="true"
-      />
-      <Albums v-else-if="results.length" :albums="results" :albumRoute="'album'"/>
+      >
+        <template #footer />
+      </Albums>
+
+      <Albums v-else-if="results.length" :albums="results" :albumRoute="'album'">
+        <template #footer>
+          <div class="album-search-container">
+            <input
+              type="text"
+              placeholder="Search by name..."
+              v-model="search"
+              @keyup="filterAlbums"
+            />
+          </div>
+        </template>
+      </Albums>
+
       <div v-else>No albums found.</div>
     </div>
 

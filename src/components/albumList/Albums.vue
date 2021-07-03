@@ -2,20 +2,18 @@
   <section>
     <AlbumListViewSelector v-if="userIsStaff"/>
 
-    <PaginationAlbums v-if="!isSkeleton"/>
+    <component
+      :is="albumListComponent"
+      :class="classes"
 
-    <section>
-      <component
-          :is="albumListComponent"
-          :class="classes"
+      :albums="albums"
+      :route="albumRoute"
+      :indexStart="indexStart"
+      :indexEnd="indexEnd"
+      :isSkeleton="isSkeleton"
+    />
 
-          :albums="albums"
-          :route="albumRoute"
-          :indexStart="indexStart"
-          :indexEnd="indexEnd"
-          :isSkeleton="isSkeleton"
-      />
-    </section>
+    <slot name="footer"></slot>
 
     <PaginationAlbums v-if="!isSkeleton"/>
   </section>
