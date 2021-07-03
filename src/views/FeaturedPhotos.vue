@@ -1,24 +1,30 @@
 <template>
-  <div v-if="!loading">
-    <div class="featured-photos">
-      <div class="featured-photo" v-for="photo in photos">
-        <div class="featured-photo-sizer">
-          <router-link title="" :to="photo.url">
-            <LazyImage class="featured-photo-image" :src="photo.thumbnail" alt="" :width="600" :height="600" />
-          </router-link>
-        </div>
-      </div>
+  <transition name="fade">
+    <div v-if="loading" class="loader">
+      Loading...
     </div>
 
-    <section class="view-more">
-      <div class="view-more-wrapper">
-        <!-- TODO: query string -->
-        <router-link class="view-more-link" :to="{name: 'search'}">
-          View more featured photos
-        </router-link>
+    <div v-else>
+      <div class="featured-photos">
+        <div class="featured-photo" v-for="photo in photos">
+          <div class="featured-photo-sizer">
+            <router-link title="" :to="photo.url">
+              <LazyImage class="featured-photo-image" :src="photo.thumbnail" alt="" :width="600" :height="600" />
+            </router-link>
+          </div>
+        </div>
       </div>
-    </section>
-  </div>
+
+      <section class="view-more">
+        <div class="view-more-wrapper">
+          <!-- TODO: query string -->
+          <router-link class="view-more-link" :to="{name: 'search'}">
+            View more featured photos
+          </router-link>
+        </div>
+      </section>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -52,6 +58,16 @@
 <style lang="scss" scoped>
 $spacing: 0.3rem;
 $width: 600px;
+
+.loader {
+  @include headings-font();
+
+  font-size: 3rem;
+  line-height: 1;
+
+  width: 100%;
+  padding: 6rem 0;
+}
 
 .featured-photos {
   display: flex;
@@ -101,5 +117,24 @@ $width: 600px;
 
     object-fit: cover;
   }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-in-out;
 }
 </style>
