@@ -3,7 +3,7 @@
   "bracketSpacing": true,
   "endOfLine": "lf",
   "parser": "vue",
-  "printWidth": 120,
+  "printWidth": 80,
   "quoteProps": "consistent",
   "singleQuote": false,
   "tabWidth": 2,
