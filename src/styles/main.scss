@@ -625,26 +625,24 @@ $albumWidth: 400px;
 // Album title container
 .album-title {
   position: absolute;
-  bottom: 0;
+  bottom: 0.5rem;
+  left: 0.5rem;
+
   background-color: rgba($background-color, 0.8);
-  width: 100%;
+  border-radius: 2px;
 
   // Text
   div {
-    @include secondary-headings-font();
+    @include headings-font();
 
     color: $text-color;
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     line-height: 1;
     text-align: center;
     text-transform: lowercase;
 
-    margin: 0.8rem;
-
-    @media (min-width: 1501px) {
-      font-size: 1.45rem;
-      margin: 1rem;
-    }
+    border-radius: 5px;
+    margin: 0.55rem 0.65rem;
   }
 
   // Hidden albums
