@@ -2,140 +2,76 @@
   <nav v-if="showNav" class="nav">
     <ul class="nav-items" :class="{ 'nav-items-index': isIndex }">
       <template v-if="showLogo">
-        <li class="nav-item">
-          <h1 class="logo">
-            <router-link
-              class="nav-item-link"
-              title="Doktor Takes Photos"
-              :to="{ name: 'index' }"
-            >
-              Doktor Takes Photos
-            </router-link>
-          </h1>
-        </li>
-        <li v-if="showDividers" class="nav-divider"></li>
+        <NavlinksLogo />
+        <NavlinkDivider v-if="showDividers" />
       </template>
 
       <!-- Main links -->
-      <li class="nav-item">
-        <router-link
-          class="nav-item-link"
-          title="Featured"
-          :to="{ name: 'featured' }"
-        >
-          Featured
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-item-link"
-          title="Albums"
-          :to="{ name: 'albums' }"
-        >
-          Photos
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          class="nav-item-link"
-          title="About"
-          :to="{ name: 'about' }"
-        >
-          About
-        </router-link>
-      </li>
+      <Navlink title="Featured" route="featured" />
+      <Navlink title="Albums" display="Photos" route="albums" />
+      <Navlink title="About" route="about" />
 
       <!-- Social media links -->
       <template v-if="!userIsStaff && !isIndex">
-        <li v-if="showDividers" class="nav-divider"></li>
+        <NavlinkDivider v-if="showDividers" />
 
         <!-- Twitter -->
-        <li class="nav-item">
-          <a
-            class="nav-item-link nav-item-fa-wrapper"
-            href="https://twitter.com/DoktorTheHusky"
-            target="blank"
-            rel="noopener noreferrer"
-            title="Twitter"
-          >
-            <span class="fa-stack">
-              <i class="fab fa-twitter"></i>
-            </span>
-          </a>
-        </li>
+        <NavlinkSocial
+          href="https://twitter.com/DoktorTheHusky"
+          title="Twitter"
+        >
+          <span class="fa-stack">
+            <i class="fab fa-twitter"></i>
+          </span>
+        </NavlinkSocial>
 
         <!-- Telegram -->
-        <li class="nav-item">
-          <a
-            class="nav-item-link nav-item-fa-wrapper"
-            href="https://t.me/DoktorTakesPhotos"
-            target="blank"
-            rel="noopener noreferrer"
-            title="Telegram"
-          >
-            <i class="fab fa-telegram"></i>
-          </a>
-        </li>
+        <NavlinkSocial href="https://t.me/DoktorTakesPhotos" title="Telegram">
+          <i class="fab fa-telegram"></i>
+        </NavlinkSocial>
 
         <!-- Website -->
-        <li class="nav-item">
-          <a
-            class="nav-item-link nav-item-fa-wrapper"
-            href="https://doktorthehusky.com"
-            target="blank"
-            rel="noopener noreferrer"
-            title="Website"
-          >
-            <i class="fas fa-globe-americas"></i>
-          </a>
-        </li>
+        <NavlinkSocial href="https://doktorthehusky.com" title="Website">
+          <i class="fas fa-globe-americas"></i>
+        </NavlinkSocial>
       </template>
 
       <!-- Content management -->
-      <li v-if="showDividers" class="nav-divider"></li>
+      <NavlinkDivider v-if="showDividers" />
       <template v-if="userIsStaff">
         <li class="nav-item">
           <a class="nav-item-link" href="/admin/">Admin</a>
         </li>
-        <li class="nav-item">
-          <router-link class="nav-item-link" :to="{ name: 'editorIndex' }">
-            Edit
-          </router-link>
-        </li>
+        <Navlink title="Edit" route="editorIndex" />
       </template>
 
       <!-- User management -->
       <template v-if="isAuthenticated">
-        <li class="nav-item">
-          <router-link
-            class="nav-item-link nav-item-link-profile"
-            :to="{ name: 'user', params: { slug: user.name } }"
-          >
-            Profile
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link
-            class="nav-item-link nav-item-link-log-out"
-            :to="{ name: 'logOut' }"
-          >
-            Log out
-          </router-link>
-        </li>
+        <Navlink
+          class="nav-item-profile"
+          title="Profile"
+          :to="{ name: 'user', params: { slug: user.name } }"
+        />
+        <Navlink class="nav-item-log-out" title="Log out" route="logOut" />
       </template>
-      <li v-else-if="!isIndex && !isAuthenticated" class="nav-item">
-        <router-link class="nav-item-link" :to="{ name: 'logIn' }">
-          Log in
-        </router-link>
-      </li>
+      <Navlink
+        v-else-if="!isIndex && !isAuthenticated"
+        title="Log in"
+        route="logIn"
+      />
     </ul>
   </nav>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import Navlink from "@/components/Navlink.vue";
+import NavlinkDivider from "@/components/NavlinkDivider.vue";
+import NavlinkSocial from "@/components/NavlinkSocial.vue";
+import NavlinksLogo from "@/components/NavlinksLogo.vue";
 
 export default {
+  components: { NavlinksLogo, NavlinkSocial, NavlinkDivider, Navlink },
   computed: {
     ...mapGetters(["isAuthenticated"]),
     ...mapState(["showNav", "user"]),
@@ -162,7 +98,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // Base font size
 $nav-font-size: 1.5rem;
 $nav-font-size-index: $nav-font-size * 1.25;
@@ -171,13 +107,10 @@ $logo-size: $nav-font-size * 1.5;
 // Color of nav items (on the index page)
 $nav-item-color: $text-color;
 
-// Color of nav dividers (on non-index pages)
-$nav-divider-color: $text-color-2;
-
 // Spacing between nav items
 $nav-item-spacing: 1.7rem;
 
-.logo {
+.nav-items .logo {
   @include logo-font();
 
   color: $nav-item-color;
@@ -258,11 +191,11 @@ $nav-item-spacing: 1.7rem;
 .nav-item-link {
   color: $nav-item-color;
 
-  &-profile {
+  .nav-item-profile & {
     color: $text-blue;
   }
 
-  &-log-out {
+  .nav-item-log-out & {
     color: $text-error;
   }
 
@@ -320,15 +253,6 @@ $nav-item-spacing: 1.7rem;
 
   &:hover {
     text-decoration: none;
-  }
-}
-
-.nav-divider {
-  color: $nav-divider-color;
-  margin: 0 ($nav-item-spacing / 3) !important;
-
-  &::before {
-    content: "\00b7"; // Center dot
   }
 }
 </style>
