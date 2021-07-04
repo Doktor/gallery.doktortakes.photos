@@ -8,7 +8,7 @@
 
 *::selection,
 *::-moz-selection {
-  background-color: $blue;
+  background-color: $text-blue;
 }
 
 html {
@@ -18,13 +18,13 @@ html {
 
 body {
   @include text-font();
-  color: $light-gray;
+  color: $text-color;
   font-size: 1.4rem;
   line-height: 1.5;
   text-align: center;
 
   margin: 2rem auto;
-  background-color: $dark-gray;
+  background-color: $background-color;
 
   width: 90%;
   max-width: 90%;
@@ -66,7 +66,7 @@ header {
 
 footer {
   margin-top: 2rem;
-  color: gray;
+  color: $text-color-2;
   clear: both;
 }
 
@@ -77,7 +77,7 @@ header, footer {
 // Other elements
 
 a {
-  color: $blue;
+  color: $text-blue;
   text-decoration: none;
 
   &:hover {
@@ -129,7 +129,7 @@ p {
 // Index page tagline
 .tagline {
   @include headings-font();
-  color: $text;
+  color: $text-color;
   font-size: 1.6rem;
   font-weight: 400;
 
@@ -142,7 +142,7 @@ p {
 }
 
 .note {
-  color: rgb(150, 150, 150);
+  color: $text-color-2;
   font-style: italic;
 }
 
@@ -167,12 +167,12 @@ p {
   @include headings-font();
   line-height: 1;
 
-  border: 1px solid $blue;
+  border: 1px solid $text-blue;
   padding: 1rem;
 
   &:hover {
-    background-color: $blue;
-    color: rgb(220, 220, 220);
+    background-color: $text-blue;
+    color: $text-color;
     text-decoration: none;
   }
 
@@ -197,7 +197,7 @@ form {
   padding: 1rem;
   border-radius: $form-border-radius;
 
-  background-color: rgb(40, 40, 40);
+  background-color: $background-color-2;
 }
 
 .form--1-column {
@@ -218,7 +218,7 @@ form {
 
   fieldset {
     padding: 1rem;
-    border: 1px solid rgb(60, 60, 60);
+    border: 1px solid $background-color-3;
     border-radius: $form-border-radius;
   }
 
@@ -266,19 +266,19 @@ textarea {
 }
 
 input, textarea {
-  background-color: rgb(60, 60, 60);
-  border: 1px solid rgb(80, 80, 80);
+  background-color: $background-color-3;
+  border: 1px solid $background-color-4;
   border-radius: $form-border-radius;
-  color: $text;
+  color: $text-color;
 
   &:active, &:focus {
-    border: 1px solid $blue;
+    border: 1px solid $text-blue;
   }
 }
 
 input:disabled {
-  background-color: rgb(20, 20, 20);
-  border-color: rgb(20, 20, 20);
+  background-color: $background-color;
+  border-color: $background-color;
 
   cursor: not-allowed;
 }
@@ -328,9 +328,9 @@ label {
       padding: 12px 0;
       margin: 0;
 
-      background: rgb(60, 60, 60);
-      border: 1px solid rgb(80, 80, 80);
-      color: $text;
+      background: $background-color-3;
+      border: 1px solid $background-color-4;
+      color: $text-color;
 
       font-weight: normal;
       text-align: center;
@@ -352,8 +352,8 @@ label {
     }
 
     &:checked + label {
-      background: $blue;
-      border-color: $blue;
+      background: $text-blue;
+      border-color: $text-blue;
       color: white;
     }
   }
@@ -387,12 +387,12 @@ label {
 .form-error {
   margin-top: 5px;
 
-  color: red;
+  color: $text-error;
   font-size: 80%;
 }
 
 .field--invalid {
-  border: 1px solid red;
+  border: 1px solid $text-error;
 }
 
 // Form: buttons
@@ -412,8 +412,8 @@ label {
   border: 0;
   border-radius: $form-border-radius;
 
-  background-color: $text;
-  color: rgb(20, 20, 20);
+  background-color: $text-color;
+  color: $background-color;
 
   text-align: center;
   line-height: 1;
@@ -421,7 +421,7 @@ label {
   cursor: pointer;
 
   &:hover {
-    background-color: lighten($text, 15%);
+    background-color: lighten($text-color, 15%);
   }
 
   &, &:hover {
@@ -430,11 +430,11 @@ label {
   }
 
   &-primary {
-    background-color: $blue;
+    background-color: $text-blue;
     color: white;
 
     &:hover {
-      background-color: lighten($blue, 15%);
+      background-color: lighten($text-blue, 15%);
     }
   }
 
@@ -480,9 +480,9 @@ $separator-width: 5%;
 
   cursor: pointer;
 
-  background-color: rgb(40, 40, 40);
-  border: 1px solid rgb(220, 220, 220);
-  color: rgb(220, 220, 220);
+  background-color: $background-color-2;
+  border: 1px solid $text-color;
+  color: $text-color;
 
   opacity: 0;
 
@@ -490,21 +490,21 @@ $separator-width: 5%;
     $base: #00CB8A;
     background-color: $base;
     border-color: darken($base, 20%);
-    color: rgb(20, 20, 20);
+    color: $background-color;
   }
 
   &.warning {
     $base: #FFEA00;
     background-color: $base;
     border-color: darken($base, 20%);
-    color: rgb(20, 20, 20);
+    color: $background-color;
   }
 
   &.error {
     $base: #FF5959;
     background-color: $base;
     border-color: darken($base, 20%);
-    color: rgb(20, 20, 20);
+    color: $background-color;
   }
 
   &.visible {
@@ -569,7 +569,7 @@ $photoWidth: 300px;
 }
 
 .photo-skeleton {
-  border: 1px solid rgb(40, 40, 40);
+  border: 1px solid $background-color-2;
 }
 
 .photo-no-thumbnail-note {
@@ -626,14 +626,14 @@ $albumWidth: 400px;
 .album-title {
   position: absolute;
   bottom: 0;
-  background-color: rgba(20, 20, 20, 0.8);
+  background-color: rgba($background-color, 0.8);
   width: 100%;
 
   // Text
   div {
     @include secondary-headings-font();
 
-    color: $text;
+    color: $text-color;
     font-size: 1.35rem;
     line-height: 1;
     text-align: center;
@@ -649,12 +649,12 @@ $albumWidth: 400px;
 
   // Hidden albums
   .album-hidden & div {
-    color: red;
+    color: $text-error;
   }
 }
 
 .album-no-cover {
-  background: rgb(40, 40, 40);
+  background: $background-color-2;
 }
 
 // Placeholder text
@@ -673,14 +673,14 @@ $albumWidth: 400px;
   margin: 1rem 0;
 
   input {
-    background-color: rgb(20, 20, 20);
-    border: 1px solid $text;
+    background-color: $background-color;
+    border: 1px solid $text-color;
 
     height: 3.2rem;
     padding: 6px 12px;
 
     @include headings-font();
-    color: $text;
+    color: $text-color;
     font-size: 1.5rem;
     line-height: 1;
   }
@@ -692,7 +692,7 @@ $albumWidth: 400px;
 
 .count {
   @include headings-font();
-  color: $text;
+  color: $text-color;
   font-size: 2rem;
   font-weight: 400;
   line-height: 2.5rem;
@@ -725,7 +725,7 @@ ul.edit-links-center {
   @include headings-font();
 
   li:not(:last-child)::after {
-    color: $text;
+    color: $text-color;
     content: "/";
     margin: 0 0.75rem;
     position: relative;

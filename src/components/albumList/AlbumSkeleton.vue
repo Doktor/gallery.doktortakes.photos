@@ -20,6 +20,6 @@
 
 <style lang="scss" scoped>
   .album-skeleton {
-    border: 1px solid rgb(40, 40, 40);
+    border: 1px solid $background-color-2;
   }
 </style>

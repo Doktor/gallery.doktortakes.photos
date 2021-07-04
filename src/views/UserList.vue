@@ -66,7 +66,7 @@ table {
 }
 
 thead {
-  background-color: rgb(60, 60, 60);
+  background-color: $background-color-3;
   text-align: center;
 }
 
@@ -79,6 +79,6 @@ th, td {
 }
 
 tr:nth-child(even) {
-  background-color: rgb(40, 40, 40);
+  background-color: $background-color-2;
 }
 </style>

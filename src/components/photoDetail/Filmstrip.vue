@@ -164,7 +164,7 @@
     width: 50px;
     height: 50px;
     margin: 0 4px;
-    border: 1px solid gainsboro;
+    border: 1px solid $text-color;
 
     clear: both;
     cursor: pointer;

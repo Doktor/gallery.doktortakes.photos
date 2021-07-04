@@ -18,7 +18,7 @@
 
 <style lang="scss" scoped>
 .error {
-  color: orangered;
+  color: $text-error;
   line-height: 1;
   margin: 1rem 0;
 }

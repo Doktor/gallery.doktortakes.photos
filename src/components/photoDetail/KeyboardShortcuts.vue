@@ -51,12 +51,12 @@
   }
 
   kbd {
-    border: 2px solid rgb(100, 100, 100);
+    border: 2px solid $background-color-5;
     border-radius: 3px;
     padding: 0 5px;
 
-    background-color: rgb(60, 60, 60);
-    color: rgb(220, 220, 220);
+    background-color: $background-color-3;
+    color: $text-color;
 
     font-family: "Consolas", monospace;
     font-size: 14pt;

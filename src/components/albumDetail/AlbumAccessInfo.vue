@@ -88,7 +88,7 @@
     user-select: none;
 
     &::before {
-      color: rgb(220, 220, 220);
+      color: $text-color;
       content: "\00a0\00b7\00a0";  // nbsp, middle dot, nbsp
     }
   }

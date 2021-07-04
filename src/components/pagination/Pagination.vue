@@ -141,8 +141,6 @@
 </script>
 
 <style lang="scss" scoped>
-$itemBackgroundColor: rgb(40, 40, 40);
-
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -166,21 +164,21 @@ $itemBackgroundColor: rgb(40, 40, 40);
 .item {
   display: inline-block;
 
-  color: gainsboro;
-  background-color: $itemBackgroundColor;
-  border: 1px solid rgb(80, 80, 80);
+  color: $text-color;
+  background-color: $background-color-2;
+  border: 1px solid $background-color-4;
   border-right: 0;
   padding: 8px 12px;
 
   line-height: 1;
 
   &:last-child {
-    border-right: 1px solid rgb(80, 80, 80);
+    border-right: 1px solid $background-color-4;
   }
 
   &:not(.item-label) {
     &:hover {
-      background-color: rgb(80, 80, 80);
+      background-color: $background-color-4;
     }
 
     &, &:hover {
@@ -192,7 +190,7 @@ $itemBackgroundColor: rgb(40, 40, 40);
     cursor: pointer;
 
     &.selected, &.selected:hover {
-      background-color: $blue;
+      background-color: $text-blue;
     }
   }
 }
@@ -210,7 +208,7 @@ $itemBackgroundColor: rgb(40, 40, 40);
   border-radius: 0;
 
   &, &:hover {
-    background-color: $itemBackgroundColor;
+    background-color: $background-color-2;
   }
 }
 </style>

@@ -4,7 +4,6 @@
 
     <figure class="icon">
       <img
-        style="background: rgb(40, 40, 40)"
         :src="require('@/images/camera.png').default"
         alt="A blue dog holding a camera"
         title="Me!"
@@ -235,6 +234,7 @@ h3 {
 
   img {
     width: 100%;
+    background-color: $background-color-2;
   }
 }
 

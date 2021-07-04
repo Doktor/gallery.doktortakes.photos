@@ -175,7 +175,7 @@
   $nav-item-color: white;
 
   // Color of nav dividers (on non-index pages)
-  $nav-divider-color: rgb(120, 120, 120);
+  $nav-divider-color: $text-color-2;
 
   // Spacing between nav items
   $nav-item-spacing: 1.7rem;
@@ -262,7 +262,7 @@
     #{$property}: $nav-item-color;
 
     &:hover {
-      #{$property}: $text;
+      #{$property}: $text-color;
     }
 
     &, &:hover {
@@ -272,14 +272,14 @@
   }
 
   .nav-item-link {
-    color: $text;
+    color: $text-color;
 
     &-profile {
-      color: $blue;
+      color: $text-blue;
     }
 
     &-log-out {
-      color: red;
+      color: $text-error;
     }
 
     .nav-items-index & {
@@ -307,8 +307,8 @@
     height: 24px;
     border-radius: 100%;
 
-    color: rgb(20, 20, 20);
-    background-color: $text;
+    color: $background-color;
+    background-color: $text-color;
 
     .nav-items-index & {
       @include nav-item-hover(background-color);

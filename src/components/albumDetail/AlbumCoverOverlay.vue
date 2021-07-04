@@ -107,7 +107,7 @@
     flex-direction: column;
     justify-content: space-between;
 
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba($background-color, 0.6);
 
     &.is-empty, &.is-skeleton {
       min-height: unset;

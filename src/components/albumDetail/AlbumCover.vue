@@ -49,7 +49,7 @@
     width: 100%;
 
     &.is-empty, &.is-skeleton {
-      border: 1px solid rgb(40, 40, 40);
+      border: 1px solid $background-color-2;
     }
   }
 </style>

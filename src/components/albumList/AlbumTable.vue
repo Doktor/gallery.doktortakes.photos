@@ -60,18 +60,18 @@
 
     th {
       padding: 12px 6px;
-      background-color: rgb(0, 120, 255);
+      background-color: $text-blue;
       color: white;
       text-align: center;
     }
 
     tr {
       &:nth-child(odd) {
-        background-color: rgb(40, 40, 40);
+        background-color: $background-color-2;
       }
 
       &:nth-child(even) {
-        background-color: rgb(60, 60, 60);
+        background-color: $background-color-3;
       }
     }
 
