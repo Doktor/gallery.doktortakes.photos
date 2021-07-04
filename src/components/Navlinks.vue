@@ -172,7 +172,7 @@
   $logo-size: $nav-font-size * 1.5;
 
   // Color of nav items (on the index page)
-  $nav-item-color: white;
+  $nav-item-color: $text-color;
 
   // Color of nav dividers (on non-index pages)
   $nav-divider-color: $text-color-2;
@@ -183,6 +183,7 @@
   .logo {
     @include logo-font();
 
+    color: $nav-item-color;
     font-size: $logo-size;
     line-height: 1;
     text-align: center;
@@ -258,7 +259,7 @@
   }
 
   .nav-item-link {
-    color: $text-color;
+    color: $nav-item-color;
 
     &-profile {
       color: $text-blue;
@@ -269,7 +270,7 @@
     }
 
     .nav-items-index & {
-      color: white;
+      color: $background-color;
       line-height: 1;
 
       &:hover {

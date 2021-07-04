@@ -135,7 +135,6 @@
     line-height: 1.1;
     text-align: left;
     text-transform: none;
-    text-shadow: 1px 1px 2px black;
 
     margin-bottom: 0.75rem;
 

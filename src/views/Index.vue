@@ -123,7 +123,7 @@ $logo-size: 3.2rem;
 }
 
 .index-container {
-  background-color: rgba($background-color, 0.8);
+  background-color: rgba(black, 0.5);
   left: $panel-margin;
   margin: 0;
   position: fixed;
