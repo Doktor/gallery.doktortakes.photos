@@ -1,337 +1,334 @@
 <template>
   <nav v-if="showNav" class="nav">
-  <ul class="nav-items" :class="{'nav-items-index': isIndex}">
-    <template v-if="showLogo">
-      <li class="nav-item">
-        <h1 class="logo">
-          <router-link
+    <ul class="nav-items" :class="{ 'nav-items-index': isIndex }">
+      <template v-if="showLogo">
+        <li class="nav-item">
+          <h1 class="logo">
+            <router-link
               class="nav-item-link"
               title="Doktor Takes Photos"
-              :to="{name: 'index'}"
-          >
-            Doktor Takes Photos
-          </router-link>
-        </h1>
-      </li>
-      <li v-if="showDividers" class="nav-divider"></li>
-    </template>
+              :to="{ name: 'index' }"
+            >
+              Doktor Takes Photos
+            </router-link>
+          </h1>
+        </li>
+        <li v-if="showDividers" class="nav-divider"></li>
+      </template>
 
-    <!-- Main links -->
-    <li class="nav-item">
-      <router-link
+      <!-- Main links -->
+      <li class="nav-item">
+        <router-link
           class="nav-item-link"
           title="Featured"
-          :to="{name: 'featured'}"
-      >
-        Featured
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link
+          :to="{ name: 'featured' }"
+        >
+          Featured
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
           class="nav-item-link"
           title="Albums"
-          :to="{name: 'albums'}"
-      >
-        Photos
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link
+          :to="{ name: 'albums' }"
+        >
+          Photos
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link
           class="nav-item-link"
           title="About"
-          :to="{name: 'about'}"
-      >
-        About
-      </router-link>
-    </li>
+          :to="{ name: 'about' }"
+        >
+          About
+        </router-link>
+      </li>
 
-    <!-- Social media links -->
-    <template v-if="!userIsStaff && !isIndex">
+      <!-- Social media links -->
+      <template v-if="!userIsStaff && !isIndex">
+        <li v-if="showDividers" class="nav-divider"></li>
+
+        <!-- Twitter -->
+        <li class="nav-item">
+          <a
+            class="nav-item-link nav-item-fa-wrapper"
+            href="https://twitter.com/DoktorTheHusky"
+            target="blank"
+            rel="noopener noreferrer"
+            title="Twitter"
+          >
+            <span class="fa-stack">
+              <i class="fab fa-twitter"></i>
+            </span>
+          </a>
+        </li>
+
+        <!-- Telegram -->
+        <li class="nav-item">
+          <a
+            class="nav-item-link nav-item-fa-wrapper"
+            href="https://t.me/DoktorTakesPhotos"
+            target="blank"
+            rel="noopener noreferrer"
+            title="Telegram"
+          >
+            <i class="fab fa-telegram"></i>
+          </a>
+        </li>
+
+        <!-- Website -->
+        <li class="nav-item">
+          <a
+            class="nav-item-link nav-item-fa-wrapper"
+            href="https://doktorthehusky.com"
+            target="blank"
+            rel="noopener noreferrer"
+            title="Website"
+          >
+            <i class="fas fa-globe-americas"></i>
+          </a>
+        </li>
+      </template>
+
+      <!-- Content management -->
       <li v-if="showDividers" class="nav-divider"></li>
+      <template v-if="userIsStaff">
+        <li class="nav-item">
+          <a class="nav-item-link" href="/admin/">Admin</a>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-item-link" :to="{ name: 'editorIndex' }">
+            Edit
+          </router-link>
+        </li>
+      </template>
 
-      <!-- Twitter -->
-      <li class="nav-item">
-        <a class="nav-item-link nav-item-fa-wrapper"
-           href="https://twitter.com/DoktorTheHusky"
-           target="blank"
-           rel="noopener noreferrer"
-           title="Twitter">
-          <span class="fa-stack">
-            <i class="fab fa-twitter"></i>
-          </span>
-        </a>
-      </li>
-
-      <!-- Telegram -->
-      <li class="nav-item">
-        <a class="nav-item-link nav-item-fa-wrapper"
-           href="https://t.me/DoktorTakesPhotos"
-           target="blank"
-           rel="noopener noreferrer"
-           title="Telegram">
-          <i class="fab fa-telegram"></i>
-        </a>
-      </li>
-
-      <!-- Website -->
-      <li class="nav-item">
-        <a class="nav-item-link nav-item-fa-wrapper"
-           href="https://doktorthehusky.com"
-           target="blank"
-           rel="noopener noreferrer"
-           title="Website">
-          <i class="fas fa-globe-americas"></i>
-        </a>
-      </li>
-    </template>
-
-    <!-- Content management -->
-    <li v-if="showDividers" class="nav-divider"></li>
-    <template v-if="userIsStaff">
-      <li class="nav-item">
-        <a class="nav-item-link" href="/admin/">Admin</a>
-      </li>
-      <li class="nav-item">
-        <router-link
-            class="nav-item-link"
-            :to="{name: 'editorIndex'}"
-        >
-          Edit
-        </router-link>
-      </li>
-    </template>
-
-    <!-- User management -->
-    <template v-if="isAuthenticated">
-      <li class="nav-item">
-        <router-link
+      <!-- User management -->
+      <template v-if="isAuthenticated">
+        <li class="nav-item">
+          <router-link
             class="nav-item-link nav-item-link-profile"
-            :to="{name: 'user', params: {slug: user.name}}"
-        >
-          Profile
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
+            :to="{ name: 'user', params: { slug: user.name } }"
+          >
+            Profile
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link
             class="nav-item-link nav-item-link-log-out"
-            :to="{name: 'logOut'}"
-        >
-          Log out
+            :to="{ name: 'logOut' }"
+          >
+            Log out
+          </router-link>
+        </li>
+      </template>
+      <li v-else-if="!isIndex && !isAuthenticated" class="nav-item">
+        <router-link class="nav-item-link" :to="{ name: 'logIn' }">
+          Log in
         </router-link>
       </li>
-    </template>
-    <li v-else-if="!isIndex && !isAuthenticated" class="nav-item">
-      <router-link class="nav-item-link" :to="{name: 'logIn'}">
-        Log in
-      </router-link>
-    </li>
-  </ul>
+    </ul>
   </nav>
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState } from "vuex";
 
+export default {
+  computed: {
+    ...mapGetters(["isAuthenticated"]),
+    ...mapState(["showNav", "user"]),
 
-  export default {
-    computed: {
-      ...mapGetters([
-        'isAuthenticated',
-      ]),
-      ...mapState([
-        'showNav',
-        'user',
-      ]),
-
-      isIndex() {
-        return this.$route.name === 'index';
-      },
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
-      },
+    isIndex() {
+      return this.$route.name === "index";
     },
 
-    props: {
-      showDividers: {
-        type: Boolean,
-        default: true,
-      },
-      showLogo: {
-        type: Boolean,
-        default: false,
-      },
+    userIsStaff() {
+      return this.user.status === "staff" || this.user.status === "superuser";
     },
-  }
+  },
+
+  props: {
+    showDividers: {
+      type: Boolean,
+      default: true,
+    },
+    showLogo: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  // Base font size
-  $nav-font-size: 1.5rem;
-  $nav-font-size-index: $nav-font-size * 1.25;
-  $logo-size: $nav-font-size * 1.5;
+// Base font size
+$nav-font-size: 1.5rem;
+$nav-font-size-index: $nav-font-size * 1.25;
+$logo-size: $nav-font-size * 1.5;
 
-  // Color of nav items (on the index page)
-  $nav-item-color: $text-color;
+// Color of nav items (on the index page)
+$nav-item-color: $text-color;
 
-  // Color of nav dividers (on non-index pages)
-  $nav-divider-color: $text-color-2;
+// Color of nav dividers (on non-index pages)
+$nav-divider-color: $text-color-2;
 
-  // Spacing between nav items
-  $nav-item-spacing: 1.7rem;
+// Spacing between nav items
+$nav-item-spacing: 1.7rem;
 
-  .logo {
-    @include logo-font();
+.logo {
+  @include logo-font();
 
-    color: $nav-item-color;
-    font-size: $logo-size;
-    line-height: 1;
-    text-align: center;
-    text-transform: capitalize;
+  color: $nav-item-color;
+  font-size: $logo-size;
+  line-height: 1;
+  text-align: center;
+  text-transform: capitalize;
 
-    padding: 0;
-    margin: 0 0 1rem 0;
+  padding: 0;
+  margin: 0 0 1rem 0;
 
-    @media (min-width: 901px) {
-      font-size: $logo-size * 1.15;
-      margin: 0;
-    }
-  }
-
-  .nav {
-    padding-bottom: 0.5rem;
-    margin-top: -0.5rem;
-  }
-
-  .nav-index {
-    padding: 0;
+  @media (min-width: 901px) {
+    font-size: $logo-size * 1.15;
     margin: 0;
   }
+}
 
-  .nav-items {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+.nav {
+  padding-bottom: 0.5rem;
+  margin-top: -0.5rem;
+}
 
-    @include headings-font();
-    font-size: $nav-font-size;
-    text-transform: lowercase;
+.nav-index {
+  padding: 0;
+  margin: 0;
+}
 
-    list-style: none;
-    padding: 0;
+.nav-items {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @include headings-font();
+  font-size: $nav-font-size;
+  text-transform: lowercase;
+
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: -1rem;
+
+  @media (min-width: 901px) {
     margin: 0;
-    margin-bottom: -1rem;
-
-    @media (min-width: 901px) {
-      margin: 0;
-    }
   }
+}
 
-  .nav-items-index {
-    justify-content: flex-start;
-  }
+.nav-items-index {
+  justify-content: flex-start;
+}
 
-  .nav-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    margin: 0 ($nav-item-spacing / 3);
-    margin-bottom: 1rem;
+  margin: 0 ($nav-item-spacing / 3);
+  margin-bottom: 1rem;
 
-    @media (min-width: 901px) {
-      margin: 0 ($nav-item-spacing / 2);
+  @media (min-width: 901px) {
+    margin: 0 ($nav-item-spacing / 2);
 
-      // Vertical alignment
-      line-height: $logo-size * 1.15;
-
-      .nav-items-index & {
-        &:first-child {
-          margin-left: 0;
-        }
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-  }
-
-  .nav-item-link {
-    color: $nav-item-color;
-
-    &-profile {
-      color: $text-blue;
-    }
-
-    &-log-out {
-      color: $text-error;
-    }
+    // Vertical alignment
+    line-height: $logo-size * 1.15;
 
     .nav-items-index & {
-      color: $background-color;
-      line-height: 1;
-
-      &:hover {
-        text-decoration: underline;
+      &:first-child {
+        margin-left: 0;
       }
 
-      @media (min-width: 901px) {
-        font-size: $nav-font-size-index;
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
+}
 
-  // Displays a Font Awesome icon in a circle
-  // The icon element should be the only child element of a container element
-  // with this class.
-  .fa-stack {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.nav-item-link {
+  color: $nav-item-color;
 
-    // Background: circle
-    width: 24px;
-    height: 24px;
-    border-radius: 100%;
+  &-profile {
+    color: $text-blue;
+  }
 
+  &-log-out {
+    color: $text-error;
+  }
+
+  .nav-items-index & {
     color: $background-color;
-    background-color: $text-color;
-
-    .nav-items-index & {
-      &:hover {
-        text-decoration: underline;
-      }
-
-      @media (min-width: 901px) {
-        width: $nav-font-size-index;
-        height: $nav-font-size-index;
-      }
-    }
-
-    // Foreground: icon
-    i {
-      font-size: 55%;
-    }
-  }
-
-  .nav-item-fa-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    line-height: 1;
 
     &:hover {
-      text-decoration: none;
+      text-decoration: underline;
+    }
+
+    @media (min-width: 901px) {
+      font-size: $nav-font-size-index;
+    }
+  }
+}
+
+// Displays a Font Awesome icon in a circle
+// The icon element should be the only child element of a container element
+// with this class.
+.fa-stack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // Background: circle
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+
+  color: $background-color;
+  background-color: $text-color;
+
+  .nav-items-index & {
+    &:hover {
+      text-decoration: underline;
+    }
+
+    @media (min-width: 901px) {
+      width: $nav-font-size-index;
+      height: $nav-font-size-index;
     }
   }
 
-  .nav-divider {
-    color: $nav-divider-color;
-    margin: 0 ($nav-item-spacing / 3) !important;
-
-    &::before {
-      content: "\00b7";  // Center dot
-    }
+  // Foreground: icon
+  i {
+    font-size: 55%;
   }
+}
+
+.nav-item-fa-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.nav-divider {
+  color: $nav-divider-color;
+  margin: 0 ($nav-item-spacing / 3) !important;
+
+  &::before {
+    content: "\00b7"; // Center dot
+  }
+}
 </style>
