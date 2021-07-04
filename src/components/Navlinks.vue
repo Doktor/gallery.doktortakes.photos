@@ -257,20 +257,6 @@
     }
   }
 
-  // Change color of items on hover
-  @mixin nav-item-hover($property) {
-    #{$property}: $nav-item-color;
-
-    &:hover {
-      #{$property}: $text-color;
-    }
-
-    &, &:hover {
-      text-decoration: none;
-      transition: #{$property} 0.25s;
-    }
-  }
-
   .nav-item-link {
     color: $text-color;
 
@@ -283,10 +269,12 @@
     }
 
     .nav-items-index & {
-      @include nav-item-hover(color);
-
       color: white;
       line-height: 1;
+
+      &:hover {
+        text-decoration: underline;
+      }
 
       @media (min-width: 901px) {
         font-size: $nav-font-size-index;
@@ -311,7 +299,9 @@
     background-color: $text-color;
 
     .nav-items-index & {
-      @include nav-item-hover(background-color);
+      &:hover {
+        text-decoration: underline;
+      }
 
       @media (min-width: 901px) {
         width: $nav-font-size-index;
