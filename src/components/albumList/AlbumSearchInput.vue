@@ -1,8 +1,9 @@
 <template>
-  <div class="album-search-input">
+  <div class="album-search-container">
     <input
+      class="album-search-input"
       type="text"
-      placeholder="Search by name..."
+      placeholder="Search albums by name"
       :value="value"
       @input="$emit('input', $event.target.value)"
     />
@@ -22,21 +23,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.album-search-input {
+.album-search-container {
   width: 100%;
+  max-width: 500px;
+
   margin: 1rem 0;
+}
 
-  input {
-    background-color: $background-color;
-    border: 1px solid $text-color;
+.album-search-input {
+  background-color: $background-color;
+  border: 1px solid $background-color-3;
+  border-radius: 0;
 
-    height: 3.2rem;
-    padding: 6px 12px;
+  height: 3.2rem;
+  padding: 6px 12px;
 
-    @include headings-font();
-    color: $text-color;
-    font-size: 1.5rem;
-    line-height: 1;
+  @include secondary-headings-font();
+  color: $text-color;
+  font-size: 1.5rem;
+  line-height: 1;
+
+  &::placeholder {
+    color: $text-color-2;
   }
 }
 </style>
