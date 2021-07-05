@@ -3,14 +3,7 @@
     <FixedWidthContainer v-if="!loading && tag !== null">
       <h2>#{{ tag.slug }}</h2>
 
-      <div class="album-search-container">
-        <input
-            type="text"
-            placeholder="Search by name..."
-            v-model="search"
-            @keyup="filterAlbums"
-        >
-      </div>
+      <AlbumSearchInput v-model="search" @input="filterAlbums" />
     </FixedWidthContainer>
 
     <div>
@@ -31,10 +24,12 @@
   import AlbumListSimple from "@/components/albumList/AlbumListSimple";
   import FixedWidthContainer from "@/components/FixedWidthContainer";
   import {baseTitle} from "@/router/main.js";
+  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
 
 
   export default {
     components: {
+      AlbumSearchInput,
       Albums,
       AlbumListSimple,
       FixedWidthContainer,

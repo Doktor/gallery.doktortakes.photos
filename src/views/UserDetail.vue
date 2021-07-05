@@ -24,14 +24,7 @@
     <FixedWidthContainer>
       <h2>Albums</h2>
 
-      <div class="album-search-container">
-        <input
-            type="text"
-            placeholder="Search by name..."
-            v-model="search"
-            @keyup="filterAlbums"
-        >
-      </div>
+      <AlbumSearchInput v-model="search" @input="filterAlbums" />
     </FixedWidthContainer>
 
     <div>
@@ -50,10 +43,12 @@
   import {mapFields} from 'vuex-map-fields';
   import Albums from "@/components/albumList/Albums";
   import FixedWidthContainer from "@/components/FixedWidthContainer";
+  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
 
 
   export default {
     components: {
+      AlbumSearchInput,
       Albums,
       FixedWidthContainer,
     },

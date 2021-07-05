@@ -7,14 +7,7 @@
 
       <h2>Edit existing album</h2>
 
-      <div class="album-search-container">
-        <input
-            type="text"
-            placeholder="Search by name..."
-            v-model="search"
-            @keyup="filterAlbums"
-        >
-      </div>
+      <AlbumSearchInput v-model="search" @input="filterAlbums" />
 
       <div class="count">
         {{ results.length }} album{{ results.length|pluralize}}
@@ -31,10 +24,12 @@
   import {mapFields} from 'vuex-map-fields';
   import Albums from "@/components/albumList/Albums";
   import AlbumListSimple from "@/components/albumList/AlbumListSimple";
+  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
 
 
   export default {
     components: {
+      AlbumSearchInput,
       Albums,
       AlbumListSimple,
     },

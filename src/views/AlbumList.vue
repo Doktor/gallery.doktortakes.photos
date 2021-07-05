@@ -12,14 +12,7 @@
 
       <Albums v-else-if="results.length" :albums="results" :albumRoute="'album'">
         <template #footer>
-          <div class="album-search-container">
-            <input
-              type="text"
-              placeholder="Search by name..."
-              v-model="search"
-              @keyup="filterAlbums"
-            />
-          </div>
+          <AlbumSearchInput v-model="search" @input="filterAlbums" />
         </template>
       </Albums>
 
@@ -32,10 +25,12 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "@/components/albumList/Albums";
+  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
 
 
   export default {
     components: {
+      AlbumSearchInput,
       Albums,
     },
 

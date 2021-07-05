@@ -666,24 +666,6 @@ $albumWidth: 400px;
 
 /* Album search */
 
-.album-search-container {
-  width: 100%;
-  margin: 1rem 0;
-
-  input {
-    background-color: $background-color;
-    border: 1px solid $text-color;
-
-    height: 3.2rem;
-    padding: 6px 12px;
-
-    @include headings-font();
-    color: $text-color;
-    font-size: 1.5rem;
-    line-height: 1;
-  }
-}
-
 #no-results {
   margin: 1rem 0;
 }
