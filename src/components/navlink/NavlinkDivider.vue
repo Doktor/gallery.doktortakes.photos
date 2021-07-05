@@ -10,7 +10,10 @@ export default {
 
 <style lang="scss" scoped>
 .nav-divider {
+  @include secondary-headings-font();
   color: $text-color-2;
+  font-style: normal !important;
+
   margin: 0 0.5rem !important;
 
   &::before {
