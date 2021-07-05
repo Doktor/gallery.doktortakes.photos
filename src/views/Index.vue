@@ -30,7 +30,7 @@
 <script>
   import {mapState} from 'vuex';
   import AlbumListCards from "@/components/albumList/AlbumListCards";
-  import Navlinks from "@/components/Navlinks";
+  import Navlinks from "@/components/navlink/Navlinks";
   import {coverPhotos} from "@/data/cover_photos.json";
 
   function shuffle(array) {

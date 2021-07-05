@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import Navlinks from "@/components/Navlinks";
+  import Navlinks from "@/components/navlink/Navlinks";
   import Notifications from "@/components/Notifications";
   import {tagline} from "@/store";
 

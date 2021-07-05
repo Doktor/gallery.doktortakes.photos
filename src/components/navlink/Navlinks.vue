@@ -77,11 +77,11 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Navlink from "@/components/Navlink.vue";
-import NavlinkDivider from "@/components/NavlinkDivider.vue";
-import NavlinkSocial from "@/components/NavlinkSocial.vue";
-import NavlinksLogo from "@/components/NavlinksLogo.vue";
-import NavlinkMenu from "@/components/NavlinkMenu.vue";
+import Navlink from "@/components/navlink/Navlink.vue";
+import NavlinkDivider from "@/components/navlink/NavlinkDivider.vue";
+import NavlinkSocial from "@/components/navlink/NavlinkSocial.vue";
+import NavlinksLogo from "@/components/navlink/NavlinksLogo.vue";
+import NavlinkMenu from "@/components/navlink/NavlinkMenu.vue";
 
 export default {
   components: {
