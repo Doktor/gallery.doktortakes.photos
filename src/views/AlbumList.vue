@@ -1,6 +1,6 @@
 <template>
   <main>
-    <SearchAlbums />
+    <SearchAlbums :showCount="false" />
   </main>
 </template>
 

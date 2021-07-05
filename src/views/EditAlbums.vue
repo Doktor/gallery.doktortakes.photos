@@ -4,10 +4,6 @@
       <router-link :to="{name: 'newAlbum'}">Add new album</router-link>
     </h2>
 
-    <div class="count">
-      {{ results.length }} album{{ results.length|pluralize}}
-    </div>
-
     <SearchAlbums />
   </div>
 </template>
@@ -25,7 +21,6 @@
     computed: {
       ...mapState([
         'albums',
-        'results',
         'loading',
       ]),
     },
@@ -35,12 +30,6 @@
         this.$store.commit('setAlbumsToTopLevelAlbums');
         this.$store.commit('setAlbumPage', 1);
       })
-    },
-
-    filters: {
-      pluralize(value) {
-        return value === 1 ? '' : 's';
-      },
     },
   }
 </script>

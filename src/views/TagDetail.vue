@@ -1,11 +1,6 @@
 <template>
   <section v-if="!loading && tag !== null">
     <h2>#{{ tag.slug }}</h2>
-
-    <div class="count">
-      {{ results.length }} album{{ results.length|pluralize}}
-    </div>
-
     <SearchAlbums />
   </section>
 </template>
@@ -24,7 +19,6 @@
     computed: {
       ...mapState([
         'loading',
-        'results',
         'tag',
       ]),
 
@@ -48,12 +42,6 @@
           this.$store.commit('setAlbumPage', 1);
         });
       });
-    },
-
-    filters: {
-      pluralize(value) {
-        return value === 1 ? '' : 's';
-      },
     },
   }
 </script>

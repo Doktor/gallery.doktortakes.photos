@@ -664,24 +664,6 @@ $albumWidth: 400px;
   transform: translateX(-50%) translateY(-50%);
 }
 
-/* Album search */
-
-#no-results {
-  margin: 1rem 0;
-}
-
-.count {
-  @include headings-font();
-  color: $text-color;
-  font-size: 2rem;
-  font-weight: 400;
-  line-height: 2.5rem;
-  text-align: left;
-  text-transform: none;
-
-  margin: 1rem 0;
-}
-
 /* Album lists */
 
 .album-list-simple {

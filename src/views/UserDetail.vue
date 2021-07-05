@@ -23,11 +23,6 @@
 
     <section>
       <h2 style="text-align: left;">Albums</h2>
-
-      <div class="count">
-        {{ results.length }} album{{ results.length|pluralize}}
-      </div>
-
       <SearchAlbums />
     </section>
   </div>
@@ -47,7 +42,6 @@
 
     computed: {
       ...mapState([
-        'results',
         'loading',
         'user',
       ]),
@@ -58,12 +52,6 @@
         this.$store.commit('setAlbumsToPrivateAlbums');
         this.$store.commit('setAlbumPage', 1);
       })
-    },
-
-    filters: {
-      pluralize(value) {
-        return value === 1 ? '' : 's';
-      },
     },
   }
 </script>
