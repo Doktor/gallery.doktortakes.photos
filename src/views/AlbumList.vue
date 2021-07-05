@@ -25,22 +25,6 @@
 
       <div v-else>No albums found.</div>
     </div>
-
-    <FixedWidthContainer>
-      <h2>Special pages</h2>
-      <ul>
-        <li v-if="user.status !== 'anonymous'">
-          <router-link
-              title="User albums"
-              :to="{name: 'user', params: {slug: user.name}}"
-          >
-            View your albums
-          </router-link>
-        </li>
-        <li><router-link title="Tags" :to="{name: 'tags'}">View all tags</router-link></li>
-        <li><router-link title="Search" :to="{name: 'search'}">Search all photos</router-link></li>
-      </ul>
-    </FixedWidthContainer>
   </main>
 </template>
 
@@ -48,13 +32,11 @@
   import {mapMutations, mapState} from 'vuex';
   import {mapFields} from 'vuex-map-fields';
   import Albums from "@/components/albumList/Albums";
-  import FixedWidthContainer from "@/components/FixedWidthContainer";
 
 
   export default {
     components: {
       Albums,
-      FixedWidthContainer,
     },
 
     computed: {
@@ -64,7 +46,6 @@
       ...mapState([
         'results',
         'loading',
-        'user',
       ]),
     },
 

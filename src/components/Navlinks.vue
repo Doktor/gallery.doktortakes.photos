@@ -8,7 +8,19 @@
 
       <!-- Main links -->
       <Navlink title="Featured" route="featured" />
-      <Navlink title="Albums" display="Photos" route="albums" />
+
+      <Navlink v-if="isIndex" title="Albums" display="Photos" route="albums" />
+      <NavlinkMenu v-else title="Photos">
+        <Navlink title="Archive" display="Archive" route="albums" />
+        <Navlink
+          v-if="user.status !== 'anonymous'"
+          title="Your albums"
+          :to="{ name: 'user', params: { slug: user.name } }"
+        />
+        <Navlink title="Tags" route="tags" />
+        <Navlink title="Search" route="search" />
+      </NavlinkMenu>
+
       <Navlink title="About" route="about" />
 
       <!-- Social media links -->
@@ -69,9 +81,16 @@ import Navlink from "@/components/Navlink.vue";
 import NavlinkDivider from "@/components/NavlinkDivider.vue";
 import NavlinkSocial from "@/components/NavlinkSocial.vue";
 import NavlinksLogo from "@/components/NavlinksLogo.vue";
+import NavlinkMenu from "@/components/NavlinkMenu.vue";
 
 export default {
-  components: { NavlinksLogo, NavlinkSocial, NavlinkDivider, Navlink },
+  components: {
+    NavlinkMenu,
+    NavlinksLogo,
+    NavlinkSocial,
+    NavlinkDivider,
+    Navlink,
+  },
   computed: {
     ...mapGetters(["isAuthenticated"]),
     ...mapState(["showNav", "user"]),
