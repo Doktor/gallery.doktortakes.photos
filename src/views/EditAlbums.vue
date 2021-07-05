@@ -1,52 +1,33 @@
 <template>
-  <div>
-    <template v-if="!loading">
-      <h2>
-        <router-link :to="{name: 'newAlbum'}">Add new album</router-link>
-      </h2>
+  <div v-if="!loading">
+    <h2>
+      <router-link :to="{name: 'newAlbum'}">Add new album</router-link>
+    </h2>
 
-      <h2>Edit existing album</h2>
+    <div class="count">
+      {{ results.length }} album{{ results.length|pluralize}}
+    </div>
 
-      <AlbumSearchInput v-model="search" @input="filterAlbums" />
-
-      <div class="count">
-        {{ results.length }} album{{ results.length|pluralize}}
-      </div>
-
-      <Albums v-if="results.length" :albums="results" :albumRoute="'editAlbum'"/>
-      <div v-else>No albums found.</div>
-    </template>
+    <SearchAlbums />
   </div>
 </template>
 
 <script>
-  import {mapMutations, mapState} from 'vuex';
-  import {mapFields} from 'vuex-map-fields';
-  import Albums from "@/components/albumList/Albums";
-  import AlbumListSimple from "@/components/albumList/AlbumListSimple";
-  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
+  import {mapState} from 'vuex';
+  import SearchAlbums from "@/components/albumList/SearchAlbums";
 
 
   export default {
     components: {
-      AlbumSearchInput,
-      Albums,
-      AlbumListSimple,
+      SearchAlbums,
     },
 
     computed: {
-      ...mapFields([
-        'search',
-      ]),
       ...mapState([
         'albums',
         'results',
         'loading',
       ]),
-
-      view() {
-        return this.$route.query.view;
-      },
     },
 
     created() {
@@ -60,12 +41,6 @@
       pluralize(value) {
         return value === 1 ? '' : 's';
       },
-    },
-
-    methods: {
-      ...mapMutations([
-        'filterAlbums',
-      ]),
     },
   }
 </script>

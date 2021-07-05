@@ -21,42 +21,31 @@
       </ul>
     </FixedWidthContainer>
 
-    <FixedWidthContainer>
-      <h2>Albums</h2>
+    <section>
+      <h2 style="text-align: left;">Albums</h2>
 
-      <AlbumSearchInput v-model="search" @input="filterAlbums" />
-    </FixedWidthContainer>
-
-    <div>
       <div class="count">
         {{ results.length }} album{{ results.length|pluralize}}
       </div>
 
-      <Albums v-if="results.length" :albums="results" :albumRoute="'album'"/>
-      <div v-else>No albums found.</div>
-    </div>
+      <SearchAlbums />
+    </section>
   </div>
 </template>
 
 <script>
-  import {mapMutations, mapState} from 'vuex';
-  import {mapFields} from 'vuex-map-fields';
-  import Albums from "@/components/albumList/Albums";
+  import {mapState} from 'vuex';
   import FixedWidthContainer from "@/components/FixedWidthContainer";
-  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
+  import SearchAlbums from "@/components/albumList/SearchAlbums";
 
 
   export default {
     components: {
-      AlbumSearchInput,
-      Albums,
+      SearchAlbums,
       FixedWidthContainer,
     },
 
     computed: {
-      ...mapFields([
-        'search',
-      ]),
       ...mapState([
         'results',
         'loading',
@@ -75,12 +64,6 @@
       pluralize(value) {
         return value === 1 ? '' : 's';
       },
-    },
-
-    methods: {
-      ...mapMutations([
-        'filterAlbums',
-      ]),
     },
   }
 </script>

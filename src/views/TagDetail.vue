@@ -1,44 +1,27 @@
 <template>
-  <div>
-    <FixedWidthContainer v-if="!loading && tag !== null">
-      <h2>#{{ tag.slug }}</h2>
+  <section v-if="!loading && tag !== null">
+    <h2>#{{ tag.slug }}</h2>
 
-      <AlbumSearchInput v-model="search" @input="filterAlbums" />
-    </FixedWidthContainer>
-
-    <div>
-      <div class="count">
-        {{ results.length }} album{{ results.length|pluralize}}
-      </div>
-
-      <Albums v-if="results.length" :albums="results" :albumRoute="'album'"/>
-      <div v-else>No albums found.</div>
+    <div class="count">
+      {{ results.length }} album{{ results.length|pluralize}}
     </div>
-  </div>
+
+    <SearchAlbums />
+  </section>
 </template>
 
 <script>
-  import {mapMutations, mapState} from 'vuex';
-  import {mapFields} from 'vuex-map-fields';
-  import Albums from "@/components/albumList/Albums";
-  import AlbumListSimple from "@/components/albumList/AlbumListSimple";
-  import FixedWidthContainer from "@/components/FixedWidthContainer";
+  import {mapState} from 'vuex';
   import {baseTitle} from "@/router/main.js";
-  import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
+  import SearchAlbums from "@/components/albumList/SearchAlbums";
 
 
   export default {
     components: {
-      AlbumSearchInput,
-      Albums,
-      AlbumListSimple,
-      FixedWidthContainer,
+      SearchAlbums,
     },
 
     computed: {
-      ...mapFields([
-        'search',
-      ]),
       ...mapState([
         'loading',
         'results',
@@ -51,10 +34,6 @@
 
       slug() {
         return this.$route.params.slug;
-      },
-
-      view() {
-        return this.$route.query.view;
       },
     },
 
@@ -75,12 +54,6 @@
       pluralize(value) {
         return value === 1 ? '' : 's';
       },
-    },
-
-    methods: {
-      ...mapMutations([
-        'filterAlbums',
-      ]),
     },
   }
 </script>
