@@ -177,8 +177,12 @@ $nav-item-spacing: 1.7rem;
   }
 }
 
-.nav-items-index {
-  justify-content: flex-start;
+.nav-index .nav-items {
+  justify-content: center;
+
+  @media (min-width: 601px) {
+    justify-content: flex-start;
+  }
 }
 
 .nav-item {
