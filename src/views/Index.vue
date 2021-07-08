@@ -99,51 +99,46 @@
 </script>
 
 <style scoped lang="scss">
-$panel-padding: 1rem;
-$panel-margin: 40px;
+$panel-padding: 1.2rem;
+$panel-margin: 2rem;
 $logo-size: 3.2rem;
+
+$break: 901px;
 
 .logo {
   @include logo-font();
 
   font-size: $logo-size;
+  line-height: 1;
   text-align: center;
-  line-height: 1.1;
   text-transform: capitalize;
 
   padding: 0;
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 
-  @media (min-width: 1201px) {
-    font-size: $logo-size * 1.1;
+  @media (min-width: $break) {
+    font-size: $logo-size * 1.2;
     text-align: left;
-    line-height: 1;
   }
 }
 
 .index-container {
-  background-color: rgba(black, 0.5);
-  left: $panel-margin;
-  margin: 0;
+  left: 0;
+  top: 0;
   position: fixed;
 
+  margin: $panel-margin;
+  padding: $panel-padding;
+
+  background-color: rgba(black, 0.5);
   color: white;
   text-align: center;
   user-select: none;
 
-  @media (min-width: 1201px) {
-    text-align: left;
-  }
-}
-
-.index-header {
-  right: $panel-margin;
-  padding: $panel-padding;
-
-  @media (min-width: 1201px) {
-    right: initial;
+  @media (min-width: $break) {
     padding: $panel-padding * 1.25;
+    text-align: left;
   }
 }
 

@@ -194,16 +194,16 @@ $nav-item-spacing: 1.7rem;
 
     // Vertical alignment
     line-height: $logo-size * 1.15;
+  }
+}
 
-    .nav-items-index & {
-      &:first-child {
-        margin-left: 0;
-      }
+.nav-index .nav-item {
+  &:first-child {
+    margin-left: 0;
+  }
 
-      &:last-child {
-        margin-right: 0;
-      }
-    }
+  &:last-child {
+    margin-right: 0;
   }
 }
 
