@@ -4,7 +4,7 @@
       <router-link :to="{name: 'newAlbum'}">Add new album</router-link>
     </h2>
 
-    <SearchAlbums />
+    <SearchAlbums albumRoute="editAlbum" />
   </div>
 </template>
 

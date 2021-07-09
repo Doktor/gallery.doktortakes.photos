@@ -9,13 +9,13 @@
     <Albums
       v-if="loading"
       :albums="new Array(12).fill({})"
-      :albumRoute="'album'"
+      :albumRoute="albumRoute"
       :isSkeleton="true"
     />
     <Albums
       v-else-if="results.length"
       :albums="results"
-      :albumRoute="'album'"
+      :albumRoute="albumRoute"
     />
     <div v-else>No albums found.</div>
   </div>
@@ -34,6 +34,10 @@ export default {
   },
 
   props: {
+    albumRoute: {
+      type: String,
+      default: "album",
+    },
     showCount: {
       type: Boolean,
       default: true,
