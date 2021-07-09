@@ -218,7 +218,8 @@ export default {
 <style lang="scss" scoped>
 h2,
 h3 {
-  margin-top: 1.5rem;
+  margin-top: 1.35rem;
+  margin-bottom: 0;
 }
 
 .icon {
