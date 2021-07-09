@@ -17,3 +17,15 @@ export default {
   inheritAttrs: false,
 };
 </script>
+
+<style lang="scss" scoped>
+.nav-item-fa-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+</style>

@@ -118,35 +118,6 @@ export default {
 </script>
 
 <style lang="scss">
-// Base font size
-$nav-font-size: 1.5rem;
-$nav-font-size-index: $nav-font-size * 1.25;
-$logo-size: $nav-font-size * 1.5;
-
-// Color of nav items (on the index page)
-$nav-item-color: $text-color;
-
-// Spacing between nav items
-$nav-item-spacing: 1.7rem;
-
-.nav-items .logo {
-  @include logo-font();
-
-  color: $nav-item-color;
-  font-size: $logo-size;
-  line-height: 1;
-  text-align: center;
-  text-transform: capitalize;
-
-  padding: 0;
-  margin: 0 0 1rem 0;
-
-  @media (min-width: 901px) {
-    font-size: $logo-size * 1.15;
-    margin: 0;
-  }
-}
-
 .nav {
   padding-bottom: 0.5rem;
   margin-top: -0.5rem;
@@ -197,7 +168,7 @@ $nav-item-spacing: 1.7rem;
     margin: 0 ($nav-item-spacing / 2);
 
     // Vertical alignment
-    line-height: $logo-size * 1.15;
+    line-height: $nav-logo-size * 1.15;
   }
 }
 
@@ -212,7 +183,7 @@ $nav-item-spacing: 1.7rem;
 }
 
 .nav-item-link {
-  color: $nav-item-color;
+  color: $text-color;
 
   .nav-item-profile & {
     color: $text-blue;
@@ -233,16 +204,6 @@ $nav-item-spacing: 1.7rem;
     @media (min-width: 901px) {
       font-size: $nav-font-size-index;
     }
-  }
-}
-
-.nav-item-fa-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    text-decoration: none;
   }
 }
 </style>
