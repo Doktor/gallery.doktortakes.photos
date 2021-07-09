@@ -28,6 +28,9 @@ export const mutations = {
     localStorage.removeItem("token");
 
     state.user = {status: "anonymous"};
+
+    this.commit('setAllAlbums', []);
+    this.commit('setAlbums', []);
   },
 
   addNotification(state, message) {
