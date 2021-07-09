@@ -147,7 +147,8 @@
 <style lang="scss" scoped>
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
 
   @include secondary-headings-font();
   text-align: left;
@@ -163,6 +164,10 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  @media (min-width: 901px) {
+    justify-content: space-between;
+  }
 }
 
 .pagination-controls {
