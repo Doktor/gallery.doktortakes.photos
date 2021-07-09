@@ -10,7 +10,7 @@
       <span>Access level: {{ accessLevelDisplay }}</span>
     </div>
 
-    <div v-if="album.access_code" class="overlay-item">
+    <div v-if="isStaff && album.access_code" class="overlay-item">
       <i title="Access code" class="fas fa-fw fa-key"></i>
       <span><!--
       -->Access code:
@@ -21,7 +21,7 @@
     </div>
 
     <div
-      v-if="hasUsers || hasGroups"
+      v-if="isStaff && (hasUsers || hasGroups)"
       class="overlay-item"
     >
       <i title="Users and groups" class="fas fa-fw fa-users"></i>
@@ -34,7 +34,6 @@
       </span>
     </div>
   </div>
-
 </template>
 
 <script>
