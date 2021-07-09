@@ -76,12 +76,11 @@ export default {
   z-index: 1000;
 
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -0.75rem);
 }
 
 .nav-menu {
   border: 1px solid $text-color;
-  margin-top: 0.5rem;
   padding: 0.5rem;
 
   background-color: $background-color;
