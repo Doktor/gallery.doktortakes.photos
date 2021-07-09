@@ -61,6 +61,7 @@
       coverPhotoStyles() {
         let styles = {
           backgroundImage: `url(${this.coverPhoto.link})`,
+          backgroundPositionX: this.coverPhoto.x ?? 'center',
         };
 
         if (!this.initialImageLoaded) {
