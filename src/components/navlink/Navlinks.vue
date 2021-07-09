@@ -1,6 +1,6 @@
 <template>
   <nav v-if="showNav" class="nav">
-    <ul class="nav-items" :class="{ 'nav-items-index': isIndex }">
+    <ul class="nav-items">
       <template v-if="showLogo">
         <NavlinksLogo />
         <NavlinkDivider v-if="showDividers" />
@@ -9,8 +9,7 @@
       <!-- Main links -->
       <Navlink title="Featured" route="featured" />
 
-      <Navlink v-if="isIndex" title="Albums" display="Photos" route="albums" />
-      <NavlinkMenu v-else title="Photos">
+      <NavlinkMenu title="Photos">
         <Navlink title="Archive" display="Archive" route="albums" />
         <Navlink
           v-if="user.status !== 'anonymous'"
@@ -24,7 +23,7 @@
       <Navlink title="About" route="about" />
 
       <!-- Social media links -->
-      <template v-if="!userIsStaff && !isIndex">
+      <template v-if="!userIsStaff">
         <NavlinkDivider v-if="showDividers" />
 
         <!-- Twitter -->
@@ -65,7 +64,7 @@
         <Navlink class="nav-item-log-out" title="Log out" route="logOut" />
       </template>
       <Navlink
-        v-else-if="!isIndex && !isAuthenticated"
+        v-else-if="!isAuthenticated"
         title="Log in"
         route="logIn"
       />
@@ -95,10 +94,6 @@ export default {
     ...mapGetters(["isAuthenticated"]),
     ...mapState(["showNav", "user"]),
 
-    isIndex() {
-      return this.$route.name === "index";
-    },
-
     userIsStaff() {
       return this.user.status === "staff" || this.user.status === "superuser";
     },
@@ -123,11 +118,6 @@ export default {
   margin-top: -0.5rem;
 }
 
-.nav-index {
-  padding: 0;
-  margin: 0;
-}
-
 .nav-items {
   display: flex;
   justify-content: center;
@@ -149,8 +139,6 @@ export default {
 }
 
 .nav-index .nav-items {
-  justify-content: center;
-
   @media (min-width: 601px) {
     justify-content: flex-start;
   }
@@ -191,19 +179,6 @@ export default {
 
   .nav-item-log-out & {
     color: $text-error;
-  }
-
-  .nav-items-index & {
-    color: $background-color;
-    line-height: 1;
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    @media (min-width: 901px) {
-      font-size: $nav-font-size-index;
-    }
   }
 }
 </style>

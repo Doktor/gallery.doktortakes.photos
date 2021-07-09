@@ -18,11 +18,7 @@
     <header class="index-container index-header">
       <h1 class="logo">Doktor Takes Photos</h1>
 
-      <Navlinks
-        class="nav-index"
-        :showDividers="false"
-        :showLogo="false"
-      />
+      <IndexNavlinks />
     </header>
   </div>
 </template>
@@ -30,8 +26,8 @@
 <script>
   import {mapState} from 'vuex';
   import AlbumListCards from "@/components/albumList/AlbumListCards";
-  import Navlinks from "@/components/navlink/Navlinks";
   import {coverPhotos} from "@/data/cover_photos.json";
+  import IndexNavlinks from "@/components/navlink/IndexNavlinks";
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -42,8 +38,8 @@
 
   export default {
     components: {
+      IndexNavlinks,
       AlbumListCards,
-      Navlinks,
     },
 
     data() {
