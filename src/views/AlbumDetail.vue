@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="group">
+    <section class="album-cover-container">
       <AlbumCover :isSkeleton="!!loading"/>
     </section>
 
@@ -83,3 +83,9 @@
     },
   }
 </script>
+
+<style scoped>
+.album-cover-container {
+  margin: 0;
+}
+</style>

@@ -45,7 +45,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .album-details {
     display: flex;
     justify-content: center;
