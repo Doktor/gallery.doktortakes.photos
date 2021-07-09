@@ -1,20 +1,22 @@
 <template>
   <div class="pagination">
-    <span>
-      <span
+    <div class="pagination-controls">
+      <div
           class="item"
           @click="selectPreviousPage">
         Prev
-      </span>
+      </div>
 
       <template v-for="n in getPages()">
-        <span
+        <div
             v-if="n !== 'skip'"
             class="item item-condensed"
             :class="{'selected': page === n}"
             :key="n"
             @click="selectPage(n)"
-        >{{ n }}</span>
+        >
+          <span class="item-text">{{ n }}</span>
+        </div>
         <PageSkipInput
             v-else
             :key="n"
@@ -24,25 +26,27 @@
         />
       </template>
 
-      <span
+      <div
           class="item"
           @click="selectNextPage">
         Next
-      </span>
-    </span>
+      </div>
+    </div>
 
-    <span v-if="itemsPerPageChoices.length > 0">
-      <span class="item item-label item-unselectable">Items per page</span>
-      <span
+    <div class="pagination-controls" v-if="itemsPerPageChoices.length > 0">
+      <div class="item item-label item-unselectable">
+        <span class="item-text">Items per page</span>
+      </div>
+      <div
           v-for="count in itemsPerPageChoices"
           class="item item-condensed"
           :class="{'selected': count === itemsPerPage}"
           :key="count"
           @click="setItemsPerPage(count)"
       >
-        {{ count }}
-      </span>
-    </span>
+        <span class="item-text">{{ count }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -161,16 +165,26 @@
   user-select: none;
 }
 
+.pagination-controls {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0;
+
+  margin: 0 auto;
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 901px) {
+    margin: 0;
+  }
+}
+
 .item {
   display: inline-block;
 
-  color: $text-color;
   background-color: $background-color-2;
   border: 1px solid $background-color-4;
   border-right: 0;
   padding: 8px 12px;
-
-  line-height: 1;
 
   &:last-child {
     border-right: 1px solid $background-color-4;
@@ -201,7 +215,12 @@
   }
 }
 
-.item-condensed {
+.item-text, .item-icon {
+  color: $text-color;
+  line-height: 1;
+}
+
+.item-condensed .item-text {
   letter-spacing: -1px;
 }
 
