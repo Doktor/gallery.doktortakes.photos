@@ -16,8 +16,7 @@
     </transition>
 
     <header class="index-container index-header">
-      <h1 class="logo">Doktor Takes Photos</h1>
-
+      <IndexLogo />
       <IndexNavlinks />
     </header>
   </div>
@@ -28,6 +27,7 @@
   import AlbumListCards from "@/components/albumList/AlbumListCards";
   import {coverPhotos} from "@/data/cover_photos.json";
   import IndexNavlinks from "@/components/navlink/IndexNavlinks";
+  import IndexLogo from "@/components/index/IndexLogo";
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -38,6 +38,7 @@
 
   export default {
     components: {
+      IndexLogo,
       IndexNavlinks,
       AlbumListCards,
     },
@@ -97,27 +98,6 @@
 <style scoped lang="scss">
 $panel-padding: 1.2rem;
 $panel-margin: 2rem;
-$logo-size: 3.2rem;
-
-$break: 901px;
-
-.logo {
-  @include logo-font();
-
-  font-size: $logo-size;
-  line-height: 1;
-  text-align: center;
-  text-transform: capitalize;
-
-  padding: 0;
-  margin: 0;
-  margin-bottom: 1.2rem;
-
-  @media (min-width: $break) {
-    font-size: $logo-size * 1.2;
-    text-align: left;
-  }
-}
 
 .index-container {
   left: 0;
@@ -132,7 +112,7 @@ $break: 901px;
   text-align: center;
   user-select: none;
 
-  @media (min-width: $break) {
+  @media (min-width: 901px) {
     padding: $panel-padding * 1.25;
     text-align: left;
   }
