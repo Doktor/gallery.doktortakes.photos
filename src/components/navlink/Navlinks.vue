@@ -32,9 +32,7 @@
           href="https://twitter.com/DoktorTheHusky"
           title="Twitter"
         >
-          <span class="fa-stack">
-            <i class="fab fa-twitter"></i>
-          </span>
+          <FontAwesomeCircleIcon iconClass="fab fa-twitter"/>
         </NavlinkSocial>
 
         <!-- Telegram -->
@@ -82,9 +80,11 @@ import NavlinkDivider from "@/components/navlink/NavlinkDivider.vue";
 import NavlinkSocial from "@/components/navlink/NavlinkSocial.vue";
 import NavlinksLogo from "@/components/navlink/NavlinksLogo.vue";
 import NavlinkMenu from "@/components/navlink/NavlinkMenu.vue";
+import FontAwesomeCircleIcon from "@/components/navlink/FontAwesomeCircleIcon.vue";
 
 export default {
   components: {
+    FontAwesomeCircleIcon,
     NavlinkMenu,
     NavlinksLogo,
     NavlinkSocial,
@@ -233,39 +233,6 @@ $nav-item-spacing: 1.7rem;
     @media (min-width: 901px) {
       font-size: $nav-font-size-index;
     }
-  }
-}
-
-// Displays a Font Awesome icon in a circle
-// The icon element should be the only child element of a container element
-// with this class.
-.fa-stack {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  // Background: circle
-  width: 24px;
-  height: 24px;
-  border-radius: 100%;
-
-  color: $background-color;
-  background-color: $text-color;
-
-  .nav-items-index & {
-    &:hover {
-      text-decoration: underline;
-    }
-
-    @media (min-width: 901px) {
-      width: $nav-font-size-index;
-      height: $nav-font-size-index;
-    }
-  }
-
-  // Foreground: icon
-  i {
-    font-size: 55%;
   }
 }
 
