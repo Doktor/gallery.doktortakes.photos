@@ -35,16 +35,16 @@
     <h3>Assets</h3>
 
     <ul>
-      <li><a href="https://fonts.google.com/specimen/Contrail+One">Contrail One</a> (Open Font License), used as the primary font</li>
-      <li><a href="https://fonts.google.com/specimen/Roboto">Roboto</a> (Apache 2.0 License), used as the secondary font</li>
+      <li><a href="https://fonts.google.com/specimen/Playfair+Display">Playfair Display</a> (Open Font License), used for the logo and primary headings</li>
+      <li><a href="https://fonts.google.com/specimen/Roboto Condensed">Roboto Condensed</a> (Apache License 2.0), used for secondary headings</li>
+      <li><a href="https://fonts.google.com/specimen/Roboto">Roboto</a> (Apache License 2.0), used for general text</li>
       <li><a href="https://necolas.github.io/normalize.css/">Normalize.css</a> (MIT License)</li>
-      <li><a href="http://fontawesome.io/">Font Awesome</a> Free (Open Font License, MIT License), used on photo pages</li>
+      <li><a href="http://fontawesome.io/">Font Awesome 5 Free</a> (Open Font License, MIT License), used on photo pages</li>
     </ul>
 
     <h3>Libraries</h3>
 
     <ul>
-      <li><a href="https://masonry.desandro.com/">Masonry</a> and <a href="https://imagesloaded.desandro.com/">imagesLoaded</a> (MIT License), used on the featured photos page</li>
       <li><a href="https://www.dropzonejs.com/">Dropzone</a> (MIT License), used on the content management pages</li>
     </ul>
   </FixedWidthContainer>
