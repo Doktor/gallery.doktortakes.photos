@@ -191,6 +191,12 @@
 
     &.selected, &.selected:hover {
       background-color: $text-blue;
+      border-color: darken($text-blue, 10%);
+
+      & + .item {
+        border-left: 0;
+        box-shadow: -1px 0 0 darken($text-blue, 10%);
+      }
     }
   }
 }
