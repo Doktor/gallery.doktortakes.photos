@@ -30,11 +30,9 @@ export default {
 
   padding: 0;
   margin: 0;
-  margin-bottom: 1rem;
 
   @media (min-width: 901px) {
     font-size: $nav-logo-size * 1.15;
-    margin: 0;
   }
 }
 </style>

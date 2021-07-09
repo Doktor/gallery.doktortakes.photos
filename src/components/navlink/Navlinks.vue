@@ -110,8 +110,9 @@ export default {
 
 <style lang="scss">
 .nav {
-  padding-bottom: 0.5rem;
-  margin-top: -0.5rem;
+  margin: 0;
+  margin-top: 1.5rem;
+  padding: 0;
 }
 
 .nav-items {
@@ -124,14 +125,10 @@ export default {
   font-size: $nav-font-size;
   text-transform: lowercase;
 
-  list-style: none;
   padding: 0;
   margin: 0;
-  margin-bottom: -1rem;
 
-  @media (min-width: 901px) {
-    margin: 0;
-  }
+  list-style: none;
 }
 
 .nav-index .nav-items {
@@ -141,22 +138,20 @@ export default {
 }
 
 .nav-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
 
-  margin: 0 ($nav-item-spacing / 3);
+  margin: 0 ($nav-item-spacing / 2);
   margin-bottom: 1rem;
 
   @media (min-width: 901px) {
-    margin: 0 ($nav-item-spacing / 2);
-
-    // Vertical alignment
     line-height: $nav-logo-size * 1.15;
   }
 }
 
 .nav-index .nav-item {
+  line-height: 1;
+  margin-bottom: 0;
+
   &:first-child {
     margin-left: 0;
   }
