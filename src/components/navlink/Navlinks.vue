@@ -23,7 +23,7 @@
       <Navlink title="About" route="about" />
 
       <!-- Social media links -->
-      <template v-if="!userIsStaff">
+      <template v-if="!isStaff">
         <NavlinkDivider v-if="showDividers" />
 
         <!-- Twitter -->
@@ -47,7 +47,7 @@
 
       <!-- Content management -->
       <NavlinkDivider v-if="showDividers" />
-      <template v-if="userIsStaff">
+      <template v-if="isStaff">
         <li class="nav-item">
           <a class="nav-item-link" href="/admin/">Admin</a>
         </li>
@@ -91,12 +91,8 @@ export default {
     Navlink,
   },
   computed: {
-    ...mapGetters(["isAuthenticated"]),
+    ...mapGetters(["isAuthenticated", "isStaff"]),
     ...mapState(["showNav", "user"]),
-
-    userIsStaff() {
-      return this.user.status === "staff" || this.user.status === "superuser";
-    },
   },
 
   props: {

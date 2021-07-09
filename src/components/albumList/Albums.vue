@@ -1,6 +1,6 @@
 <template>
   <section>
-    <AlbumListViewSelector v-if="userIsStaff"/>
+    <AlbumListViewSelector v-if="isStaff"/>
 
     <component
       :is="albumListComponent"
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
   import AlbumCard from "./AlbumCard";
   import AlbumListCards from "./AlbumListCards";
   import AlbumListSimple from "./AlbumListSimple";
@@ -40,6 +40,7 @@
     },
 
     computed: {
+      ...mapGetters(["isStaff"]),
       ...mapState([
         'albumsPerPage',
         'page',
@@ -51,7 +52,7 @@
           case "simple":
             return "AlbumListSimple";
           case "table":
-            return this.userIsStaff ? "AlbumTable" : "AlbumListCards";
+            return this.isStaff ? "AlbumTable" : "AlbumListCards";
           default:
             return "AlbumListCards";
         }
@@ -69,10 +70,6 @@
       },
       indexEnd() {
         return this.indexStart + this.albumsPerPage - 1;
-      },
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
       },
 
       view() {

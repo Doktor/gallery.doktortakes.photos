@@ -19,13 +19,13 @@
     <div class="overlay-section" v-if="!loading">
       <AlbumMetadata class="overlay-item"/>
       <AlbumAccessInfo class="overlay-item"/>
-      <AlbumLinks class="overlay-item" v-if="userIsStaff"/>
+      <AlbumLinks class="overlay-item" v-if="isStaff"/>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
   import AlbumAccessInfo from "./AlbumAccessInfo";
   import AlbumLinks from "./AlbumLinks";
   import AlbumMetadata from "./AlbumMetadata";
@@ -54,6 +54,7 @@
     },
 
     computed: {
+      ...mapGetters(["isStaff"]),
       ...mapState([
         'album',
         'loading',
@@ -75,10 +76,6 @@
         return end === null
           ? formatDate(start)
           : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
-      },
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
       },
     },
 

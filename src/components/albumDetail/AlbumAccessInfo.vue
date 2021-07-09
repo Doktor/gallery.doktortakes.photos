@@ -1,11 +1,11 @@
 <template>
   <div v-if="album.access_level > 0">
-    <div v-if="!userIsStaff" class="overlay-item">
+    <div v-if="!isStaff" class="overlay-item">
       <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
       <span>Please ask before sharing these photos.</span>
     </div>
 
-    <div v-if="userIsStaff" class="overlay-item">
+    <div v-if="isStaff" class="overlay-item">
       <i title="Access level" class="fas fa-fw fa-lock"></i>
       <span>Access level: {{ accessLevelDisplay }}</span>
     </div>
@@ -38,12 +38,13 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
   import {accessLevelsMap} from "@/store/index.js";
 
 
   export default {
     computed: {
+      ...mapGetters(["isStaff"]),
       ...mapState([
         'album',
         'user',
@@ -71,10 +72,6 @@
 
       hasUsers() {
         return this.album.users.length > 0;
-      },
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
       },
     },
   }

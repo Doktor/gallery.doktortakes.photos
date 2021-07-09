@@ -34,7 +34,7 @@
         <dd><a :href="photo.download" title="Download photo">Download</a></dd>
       </div>
 
-      <div v-if="userIsStaff">
+      <div v-if="isStaff">
         <dt><i title="Admin" class="fas fa-fw fa-toolbox"></i></dt>
         <dd><a :href="photo.admin" title="Open in admin site">Admin</a></dd>
       </div>
@@ -43,20 +43,17 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
+  import {mapGetters, mapState} from 'vuex';
 
 
   export default {
     computed: {
+      ...mapGetters(["isStaff"]),
       ...mapState([
         'album',
         'photos',
         'user',
       ]),
-
-      userIsStaff() {
-        return this.user.status === 'staff' || this.user.status === 'superuser';
-      },
     },
 
     props: {

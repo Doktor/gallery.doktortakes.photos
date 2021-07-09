@@ -7,7 +7,7 @@
       <Navlink title="About" route="about" />
 
       <!-- Content management -->
-      <Navlink v-if="userIsStaff" title="Edit" route="editorIndex" />
+      <Navlink v-if="isStaff" title="Edit" route="editorIndex" />
 
       <!-- User management -->
       <Navlink
@@ -31,12 +31,8 @@ export default {
     Navlink,
   },
   computed: {
-    ...mapGetters(["isAuthenticated"]),
+    ...mapGetters(["isAuthenticated", "isStaff"]),
     ...mapState(["user"]),
-
-    userIsStaff() {
-      return this.user.status === "staff" || this.user.status === "superuser";
-    },
   },
 };
 </script>
