@@ -22,8 +22,22 @@ async function sendRequest(url, options = {}) {
   addAuthorizationHeader(options);
 
   try {
-    let response = await fetch(url, options);
-    return { ok: response.ok, status: response.status, content: await response.json() }
+    const response = await fetch(url, options);
+
+    const text = await response.text();
+    let content = null;
+
+    if (text.length > 0) {
+      const contentType = response.headers.get('content-type');
+
+      if (contentType.includes('application/json')) {
+        content = JSON.parse(text);
+      } else {
+        content = text;
+      }
+    }
+
+    return { ok: response.ok, status: response.status, content: content }
   } catch (error) {
     console.error(error);
   }
