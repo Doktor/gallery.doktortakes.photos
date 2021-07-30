@@ -68,7 +68,7 @@ def get_current_user(request: Request) -> Response:
         "name": user.username,
         "status": status,
         "account_created": get_formatted_time(user.date_joined),
-        "last_sign_in": get_formatted_time(user.last_login),
+        "last_sign_in": get_formatted_time(user.last_login) if user.last_login is not None else "never",
     })
 
 
