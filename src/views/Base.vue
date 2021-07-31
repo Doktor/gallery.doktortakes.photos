@@ -41,9 +41,3 @@
     },
   }
 </script>
-
-<style>
-footer {
-  margin-top: 3rem;
-}
-</style>
