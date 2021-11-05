@@ -317,20 +317,16 @@
       },
 
       first() {
-        this.$store.commit(
-          'setPhoto', {index: 0, history: this.useHistory});
+        this.$emit('changePhoto', 0);
       },
       previous() {
-        this.$store.commit(
-          'setPhoto', {index: this.photo.index - 1, history: this.useHistory});
+        this.$emit('changePhoto', this.photo.index - 1);
       },
       next() {
-        this.$store.commit(
-          'setPhoto', {index: this.photo.index + 1, history: this.useHistory});
+        this.$emit('changePhoto', this.photo.index + 1);
       },
       last() {
-        this.$store.commit(
-          'setPhoto', {index: this.count, history: this.useHistory});
+        this.$emit('changePhoto', this.count);
       },
     },
 

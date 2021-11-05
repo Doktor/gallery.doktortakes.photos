@@ -1,13 +1,10 @@
 import Vue from "vue";
 import {updateField} from "vuex-map-fields";
-import {getQueryString} from "./index.js";
 import {router} from "@/router/main.js";
 
 
 const titleTemplate = "{0} | Doktor Takes Photos";
 const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
-
-const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
 
 export const mutations = {
@@ -229,59 +226,6 @@ export const mutations = {
 
   clearPhotos(state) {
     state.photos = [];
-  },
-
-  setPhotoInitial(state, {md5, code = ""}) {
-    let photo = state.photos.filter((photo) => photo.md5 === md5)[0];
-    this.commit('setPhoto', {index: photo.index, code: code});
-  },
-
-  setPhoto(state, {index, history = true, code = ""}) {
-    if (index === state.photo.index) {
-      return;
-    }
-
-    // Wrap around
-    if (index < 0) {
-      index = state.photos.length - 1;
-    } else if (index > state.photos.length - 1) {
-      index = 0;
-    }
-
-    let photo = state.photos[index];
-    photo.loaded = true;
-
-    state.photo = photo;
-
-    let length = state.photos.length;
-
-    // Preload previous 2 and next 2 photos
-    let prev = (photo.index - 2 + length) % length;
-
-    for (let i = prev; i < prev + 5; i++) {
-      let photo = state.photos[i % length];
-
-      if (!photo.loaded) {
-        this.commit('preloadPhoto', photo);
-      }
-    }
-
-    if (history) {
-      let title = photoTitleTemplate.format(photo.md5.substring(0, 8), state.album.name);
-      document.title = title;
-
-      let qs = code ? getQueryString({code: code}) : "";
-      window.history.pushState(null, title, photo.url + qs);
-    }
-  },
-
-  preloadPhoto(state, photo) {
-    if (!photo.loaded) {
-      let image = new Image();
-      image.src = photo.image;
-
-      photo.loaded = true;
-    }
   },
 
   updateDocumentTitleForAlbum(state) {

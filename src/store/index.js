@@ -154,9 +154,6 @@ export const store = new Vuex.Store({
     count: 0,
     selected: [],
 
-    // Photo
-    photo: {},
-
     // Photo search
     searchResults: {
       page: 1,

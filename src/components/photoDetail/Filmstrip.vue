@@ -14,9 +14,6 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex';
-
-
   const settings = {
     items: 9,
     half: 4,
@@ -38,10 +35,6 @@
     },
 
     methods: {
-      ...mapMutations([
-        'setPhoto',
-      ]),
-
       classes(index) {
         this.updateRange();
 
@@ -53,8 +46,7 @@
       },
 
       onClick(index) {
-        this.$store.commit('setPhoto',
-          {index: index, history: this.useHistory, code: this.routeAccessCode});
+        this.$emit('changePhoto', index);
       },
 
       updateRange() {

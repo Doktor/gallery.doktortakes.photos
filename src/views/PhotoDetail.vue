@@ -4,11 +4,13 @@
         :count="this.photos.length - 1"
         :onClick="onClick"
         :photo="photo"
+        @changePhoto="changePhoto"
     />
 
     <Filmstrip
         :photos="photos"
         :position="photo.index"
+        @changePhoto="changePhoto"
     />
 
     <section class="info">
@@ -30,6 +32,9 @@
   import Links from "@/components/photoDetail/Links";
   import Metadata from "@/components/photoDetail/Metadata";
   import PhotoViewer from "@/components/photoDetail/PhotoViewer";
+  import { getQueryString } from "@/store";
+
+  const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
 
   export default {
@@ -51,11 +56,17 @@
       Metadata,
     },
 
+    data() {
+      return {
+        onClick: () => {},
+        photo: {},
+      }
+    },
+
     computed: {
       ...mapState([
         'album',
         'loading',
-        'photo',
         'photos',
       ]),
 
@@ -74,17 +85,57 @@
 
     created() {
       this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode}).then(() => {
-        this.$store.commit('setPhotoInitial', {md5: this.md5, code: this.routeAccessCode});
+        let photo = this.photos.find(photo => photo.md5 === this.md5);
+        this.setPhoto(photo, this.routeAccessCode);
       });
     },
 
-    data() {
-      return {
-        onClick: () => {},
-      }
-    },
-
     methods: {
+      changePhoto(index) {
+        if (index === this.photo.index) {
+          return;
+        }
+
+        // Wrap around
+        if (index < 0) {
+          index = this.photos.length - 1;
+        } else if (index > this.photos.length - 1) {
+          index = 0;
+        }
+
+        this.setPhoto(this.photos[index]);
+      },
+
+      preloadPhoto(photo) {
+        if (!photo.loaded) {
+          let image = new Image();
+          image.src = photo.image;
+
+          photo.loaded = true;
+        }
+      },
+
+      setPhoto(photo, code) {
+        this.photo = photo;
+        this.photo.loaded = true;
+
+        // Preload previous 2 and next 2 photos
+        let length = this.photos.length;
+        let prev = (photo.index - 2 + length) % length;
+
+        for (let i = prev; i < prev + 5; i++) {
+          let photo = this.photos[i % length];
+          this.preloadPhoto(photo);
+        }
+
+        // Add browser history entry
+        let title = photoTitleTemplate.format(photo.md5.substring(0, 8), this.album.name);
+        document.title = title;
+
+        let qs = code ? getQueryString({code: code}) : "";
+        window.history.pushState(null, title, photo.url + qs);
+      },
+
       handleKey(event) {
         if (event.ctrlKey || event.metaKey) {
           return;
