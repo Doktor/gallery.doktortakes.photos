@@ -29,23 +29,18 @@
 
 <script>
   import {mapState} from 'vuex';
-  import Filmstrip from "@/components/photoDetail/Filmstrip";
   import LazyImage from "@/components/LazyImage";
-  import PhotoViewer from "@/components/photoDetail/PhotoViewer";
 
 
   export default {
     components: {
-      Filmstrip,
       LazyImage,
-      PhotoViewer,
     },
 
     computed: {
       ...mapState([
         'loading',
         'photos',
-        'photo',
       ]),
     },
 
