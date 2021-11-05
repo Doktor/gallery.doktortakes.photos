@@ -137,6 +137,11 @@
       },
 
       pointerDown(event) {
+        // Allow primary button only
+        if (event.button !== 0) {
+          return;
+        }
+
         this.pointerStartX = event.clientX;
         this.pointerStartY = event.clientY;
 
