@@ -11,19 +11,16 @@
     </figure>
 
     <p>
-      I'm Doktor! I'm a professional photographer living in the greater Boston
-      area. My primary photographic interest is portraiture, but I also enjoy
-      event photography and nature photography.
+      I'm Doktor! I'm a photographer based in the greater Boston area. I'm
+      primarily interested in portraits, but I also enjoy photographing events,
+      landscapes, and wildlife.
     </p>
 
     <p>
       I have a
-      <a href="https://t.me/DoktorTakesPhotos">Telegram channel</a> where I post
-      works in progress, new photos and albums, website news, and other
-      announcements. You can also find me on
-      <a href="https://twitter.com/DoktorTheHusky">Twitter</a> and
-      <a href="https://www.instagram.com/doktorthehusky/">Instagram</a>, but I
-      use those less frequently.
+      <a href="https://t.me/DoktorTakesPhotos">Telegram channel</a> where I
+      share random photos, website updates, and commission info. You can also
+      find me on <a href="https://twitter.com/DoktorTheHusky">Twitter</a>.
     </p>
 
     <p>
@@ -31,14 +28,22 @@
       <a href="https://ko-fi.com/doktor">Ko-fi</a> page. Thanks!
     </p>
 
+    <p>
+      <a href="https://t.me/DoktorTakesPhotos"
+        >Did I mention that I have a cool Telegram channel</a
+      >?
+    </p>
+
     <h2>Commercial work</h2>
 
     <p>
       Due to work and time constraints, I'm usually unavailable for contract
-      work, but you're welcome to contact me with business inquiries.
+      work, but I am open to inquiries for contract/commercial work.
     </p>
 
     <h2>Contact info</h2>
+
+    <p>You can reach me via email or direct message on Twitter.</p>
 
     <ul>
       <li>
@@ -49,24 +54,9 @@
         Twitter:
         <a href="https://twitter.com/DoktorTheHusky">@DoktorTheHusky</a>
       </li>
-      <li>
-        Instagram:
-        <a href="https://www.instagram.com/doktorthehusky/">@doktorthehusky</a>
-      </li>
     </ul>
 
     <h2>Photography</h2>
-
-    <p>
-      I'm self-taught: I haven't had any formal training in photography. I learn
-      about photography primarily from other camera-inclined friends, online
-      resources, and taking thousands of photos. I've provided a list of online
-      resources that I recommend at the bottom of this page. Regardless of what
-      your background is, the most important thing you can do to learn is to
-      take a lot of photos!
-    </p>
-
-    <h3>Background</h3>
 
     <p>
       In 2015, my last year of high school, I picked up a DSLR for the first
@@ -106,17 +96,28 @@
     <h2>Equipment</h2>
 
     <p>
-      Here's a short list of the camera equipment I use frequently. You can find
-      the specific camera and lens model I used for a specific photo on that
-      photo's page.
+      Here's a short list of the equipment I use frequently. You can find the
+      specific camera and lens model I used for a specific photo on that photo's
+      page.
     </p>
 
+    <h3>Camera</h3>
+
     <ul>
-      <li>Canon EOS 5D Mark IV</li>
+      <li>Canon EOS R5</li>
       <li>Canon EF 16-35mm f/4L IS USM</li>
       <li>Canon EF 70-200mm f/2.8L IS II USM</li>
+      <li>Canon RF 100-500mm f/4.5-7.1L IS USM</li>
       <li>Tamron SP 35mm f/1.4 Di USD</li>
+    </ul>
+
+    <h3>Lighting</h3>
+
+    <ul>
+      <li>Flashpoint R2 Pro Mark II</li>
+      <li>Flashpoint Zoom TTL</li>
       <li>Flashpoint eVOLV 200 Pro TTL</li>
+      <li>Flashpoint XPLOR 600 Pro TTL</li>
     </ul>
 
     <h2>Software</h2>
@@ -143,53 +144,6 @@
       </li>
     </ul>
 
-    <h2>Resources</h2>
-
-    <p>
-      Here's a list of photography resources that I frequently browse or refer
-      to.
-    </p>
-
-    <ul>
-      <li><a href="https://www.reddit.com/r/canon/">/r/canon</a></li>
-      <li><a href="https://www.reddit.com/r/Lightroom/">/r/Lightroom</a></li>
-      <li>
-        <a href="https://www.reddit.com/r/photocritique/">/r/photocritique</a>
-      </li>
-      <li>
-        <a href="https://www.reddit.com/r/photography/">/r/photography</a>
-      </li>
-      <li>
-        <a href="https://www.reddit.com/r/postprocessing/">/r/postprocessing</a>
-      </li>
-      <li>
-        <a href="https://photo.stackexchange.com/"
-          >Photography Stack Exchange</a
-        >
-      </li>
-      <li>
-        <a href="https://strobist.blogspot.com/">Strobist</a> (off-camera
-        lighting tutorials)
-      </li>
-      <li>
-        <a href="https://en.wikipedia.org/wiki/Canon_EOS_5D_Mark_IV"
-          >Wikipedia</a
-        >
-        (camera summaries)
-      </li>
-    </ul>
-
-    <h3>Retailers</h3>
-
-    <ul>
-      <li><a href="https://www.adorama.com/">Adorama</a></li>
-      <li><a href="https://www.bhphotovideo.com/">B&H</a></li>
-      <li>
-        <a href="https://www.lensrentals.com/">LensRentals</a> (equipment
-        rentals)
-      </li>
-    </ul>
-
     <h2>Website</h2>
 
     <p>
@@ -198,9 +152,8 @@
     </p>
 
     <p>
-      Copyright notices are listed
-      <router-link :to="{ name: 'copyright' }">here</router-link>
-      .
+      Copyright details are available
+      <router-link :to="{ name: 'copyright' }">here</router-link>.
     </p>
   </FixedWidthContainer>
 </template>
