@@ -55,8 +55,7 @@
         translateX: 0,
         translateY: 0,
 
-        maxScale: 2,
-        zoomEnabled: false,
+        scaleLevels: [1, 2, 4],
 
         transitionProperties: ['transform', 'left', 'top'],
         transitionTime: 0.6,
@@ -93,7 +92,7 @@
           transform: `scale(${this.scale})`,
           left: `${this.translateX}px`,
           top: `${this.translateY}px`,
-          touchAction: this.zoomEnabled ? "none" : "unset",
+          touchAction: "none",
         }
       },
       transitions() {
@@ -122,6 +121,11 @@
       viewportRatio() {
         return this.viewportWidth / this.viewportHeight;
       },
+
+      nextScale() {
+        const index = this.scaleLevels.indexOf(this.scale);
+        return this.scaleLevels[(index + 1) % this.scaleLevels.length];
+      },
     },
 
     methods: {
@@ -144,10 +148,6 @@
 
         this.pointerStartX = event.clientX;
         this.pointerStartY = event.clientY;
-
-        if (!this.zoomEnabled) {
-          return;
-        }
 
         this.dragging = true;
         this.lastClientX = event.clientX;
@@ -184,22 +184,9 @@
         this.transitionProperties = ['transform', 'left', 'top'];
       },
 
+      // Exits early if scaling is unsuccessful (if the pointer isn't on the actual image)
       scaleImage(event) {
-        if (!this.zoomEnabled && !this.scaleImageInternal(event)) {
-          return;
-        }
-
-        this.zoomEnabled = !this.zoomEnabled;
-
-        if (!this.zoomEnabled) {
-          this.scale = 1;
-          this.translateX = 0;
-          this.translateY = 0;
-        }
-      },
-      // Returns true if scaling was successful (if the pointer is on the actual image), or false otherwise
-      scaleImageInternal(event) {
-        let scale = this.maxScale;
+        let scale = this.nextScale;
 
         // The pointer location on the viewport, relative to the top-left corner
         let pointerX = event.offsetX;
@@ -220,7 +207,7 @@
           let pointerXFromEdge = Math.min(pointerX, this.viewportWidth - pointerX);
 
           if (pointerXFromEdge <= widthDiff / 2) {
-            return false;
+            return;
           }
         }
         else {
@@ -232,7 +219,7 @@
           let pointerYFromEdge = Math.min(pointerY, this.viewportHeight - pointerY);
 
           if (pointerYFromEdge <= heightDiff / 2) {
-            return false;
+            return;
           }
         }
 
@@ -243,19 +230,17 @@
         let pointerXDiff = clamp(
           centerX - pointerX,
           centerX / scale - imageDisplayWidth / 2,
-          -centerX / scale + imageDisplayWidth / 2
+          -centerX / scale + imageDisplayWidth / 2,
         );
         let pointerYDiff = clamp(
           centerY - pointerY,
           centerY / scale - imageDisplayHeight / 2,
-          -centerY / scale + imageDisplayHeight / 2
+          -centerY / scale + imageDisplayHeight / 2,
         );
 
         this.scale = scale;
         this.translateX = pointerXDiff * scale;
         this.translateY = pointerYDiff * scale;
-
-        return true;
       },
 
       panImage(event) {
