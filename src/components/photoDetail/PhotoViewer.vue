@@ -371,12 +371,6 @@
         }
       });
     },
-
-    watch: {
-      zoomEnabled(enabled, _) {
-        document.body.style.overflow = enabled ? "hidden" : "unset";
-      }
-    }
   }
 </script>
 
