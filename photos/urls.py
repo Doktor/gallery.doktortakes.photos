@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, register_converter
+from django.urls import path, re_path, register_converter
 
 from photos import views
 from photos.api.urls import api_patterns
@@ -40,13 +40,13 @@ urlpatterns = [
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),
     path('copyright/', views.view_copyright, name='copyright'),
-    path('editor/', views.editor_entry_point, name='editor'),
+    re_path(r'^editor/', views.editor_entry_point, name='editor'),
     path('featured/', views.featured, name='featured'),
     path('groups/', views.groups_entry_point, name='groups'),
     path('recent/', views.view_recent, name='recent'),
     path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),
-    path('users/', views.users_entry_point, name='users'),
+    re_path(r'^users/', views.users_entry_point, name='users'),
     path('wall/', views.wall, name='wall'),
 ]
 
