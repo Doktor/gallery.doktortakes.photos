@@ -38,6 +38,9 @@
       const dropzone = new Dropzone("#dropzone", {
         paramName: 'files',
         parallelUploads: 3,
+        headers: {
+          "Authorization": 'Token ' + this.$store.state.token,
+        },
       });
     },
 
