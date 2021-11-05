@@ -18,9 +18,9 @@ register_converter(MD5HashConverter, 'md5')
 album_patterns = [
     path('', views.view_albums, name='albums'),
 
-    path('<path:path>/', views.view_album, name='album'),
-    path('<path:path>/<md5:md5>', views.view_photo, name='photo'),
     path('<path:path>/<md5:md5>/download/', views.download_photo, name='download'),
+    path('<path:path>/<md5:md5>/', views.view_photo, name='photo'),
+    path('<path:path>/', views.view_album, name='album'),
 ]
 
 tag_patterns = [

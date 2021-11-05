@@ -40,14 +40,16 @@ const browserRoutes = [
   },
 
   {
-    path: '/albums/',
-    name: 'albums',
-    component: AlbumList,
+    path: '/albums/:path+/:md5/',
+    name: 'photo',
+    component: PhotoDetail,
     meta: {
-      title: "Albums",
+      body: 'photo-viewer',
+      nav: false,
+      title: false,
     },
   },
-  {
+    {
     path: '/albums/:path+/',
     name: 'album',
     component: AlbumDetail,
@@ -56,13 +58,11 @@ const browserRoutes = [
     },
   },
   {
-    path: '/albums/:path+/:md5',
-    name: 'photo',
-    component: PhotoDetail,
+    path: '/albums/',
+    name: 'albums',
+    component: AlbumList,
     meta: {
-      body: 'photo-viewer',
-      nav: false,
-      title: false,
+      title: "Albums",
     },
   },
 
