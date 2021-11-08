@@ -1,7 +1,7 @@
 import json
 import os
 import toml
-
+from django.core.management.utils import get_random_secret_key
 
 # General settings
 import sys
@@ -14,13 +14,20 @@ with open(os.path.join(BASE_DIR, 'data', 'config.toml')) as f:
     raw = f.read().strip()
     CONFIG = toml.loads(raw)
 
-SECRET_KEY = CONFIG['django']['secret_key']
-
-DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
-
-ALLOWED_HOSTS = CONFIG['django']['allowed_hosts']
+# SECRET_KEY = CONFIG['django']['secret_key']
+# DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
+# ALLOWED_HOSTS = CONFIG['django']['allowed_hosts']
 
 INTERNAL_IPS = ['127.0.0.1']
+
+SECRET_KEY = os.environ.get("SECRET_KEY", default=get_random_secret_key())
+DEBUG = int(os.environ.get("DEBUG", default=0)) and not os.path.isfile(os.path.join(BASE_DIR, 'production'))
+
+allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS")
+if allowed_hosts is None:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = allowed_hosts.split(" ")
 
 
 # Application definition
@@ -289,8 +296,8 @@ WEBPACK_LOADER = {
 
 # Task queue
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
