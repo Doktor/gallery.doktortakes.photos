@@ -7,32 +7,27 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
-    command: poetry run python manage.py runserver 0.0.0.0:8000
+      target: production
+    command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
+    expose:
+      - 1337
     env_file:
-      - ./.env.dev
-    ports:
-      - 8000:8000
+      - ./.env.prod
     volumes:
-      - ./src/:/app/src/
-      - ./node_modules/:/app/node_modules/
-      - static_volume:/app/static/
+      - static_volume:/app/static.1/
     depends_on:
       - redis
 
-  frontend:
-    image: photos_frontend
-    container_name: frontend
-    build:
-      context: .
-      dockerfile: ./build/webpack/Dockerfile
+  nginx:
+    image: photos_nginx
+    container_name: nginx
+    build: ./build/nginx/
+    ports:
+      - 443:443
     depends_on:
       - backend
     volumes:
-      - ./src/:/app/src/
-      - ./node_modules/:/app/node_modules/
-      - static_volume:/app/static/
-    command: ./node_modules/webpack/bin/webpack.js --config webpack.dev.js
+      - static_volume:/app/static.1/
 
   redis:
     image: redis:6.2-alpine
@@ -44,7 +39,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
+      target: production
     command: poetry run celery -A photos worker --loglevel=INFO
     env_file:
       - ./.env.dev
