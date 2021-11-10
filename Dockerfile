@@ -31,10 +31,16 @@ RUN npm ci
 RUN /app/node_modules/webpack/bin/webpack.js --config webpack.prod.js
 
 
-FROM development as production
+FROM development as staging
 
+COPY ./data/config.staging.toml /app/data/config.toml
 COPY --from=node /app/static/ /app/static/
 
 RUN echo "Collecting static files" \
     && poetry run python manage.py collectstatic --no-input --clear \
     && echo "Successfully collected static files"
+
+
+FROM staging as production
+
+COPY ./data/config.production.toml /app/data/config.toml

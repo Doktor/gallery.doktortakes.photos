@@ -7,12 +7,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: staging
     command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
     expose:
       - 1337
-    env_file:
-      - ./.env.prod
     volumes:
       - static_volume:/app/static.1/
     depends_on:
@@ -39,9 +37,7 @@ services:
       file: docker-services.yml
       service: celery
     build:
-      target: production
-    env_file:
-      - ./.env.prod
+      target: staging
     depends_on:
       - backend
       - redis

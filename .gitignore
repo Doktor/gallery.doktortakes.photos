@@ -17,7 +17,6 @@ temp/
 *.log
 *.pgsql
 *.rdb
-.env.*
 
 # Media files
 media/

@@ -14,20 +14,12 @@ with open(os.path.join(BASE_DIR, 'data', 'config.toml')) as f:
     raw = f.read().strip()
     CONFIG = toml.loads(raw)
 
-# SECRET_KEY = CONFIG['django']['secret_key']
-# DEBUG = not os.path.isfile(os.path.join(BASE_DIR, 'production'))
-# ALLOWED_HOSTS = CONFIG['django']['allowed_hosts']
+internal_ips = ('127.0.0.1', 'localhost')
 
-INTERNAL_IPS = ['127.0.0.1']
-
-SECRET_KEY = os.environ.get("SECRET_KEY", default=get_random_secret_key())
-DEBUG = int(os.environ.get("DEBUG", default=0)) and not os.path.isfile(os.path.join(BASE_DIR, 'production'))
-
-allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS")
-if allowed_hosts is None:
-    ALLOWED_HOSTS = []
-else:
-    ALLOWED_HOSTS = allowed_hosts.split(" ")
+ALLOWED_HOSTS = CONFIG['django'].get('allowed_hosts', internal_ips)
+DEBUG = CONFIG['django'].get('debug', False)
+INTERNAL_IPS = internal_ips
+SECRET_KEY = CONFIG['django'].get('secret_key', get_random_secret_key())
 
 
 # Application definition

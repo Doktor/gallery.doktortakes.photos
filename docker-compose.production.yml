@@ -11,8 +11,6 @@ services:
     command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
     ports:
       - 1337:1337
-    env_file:
-      - ./.env.prod
     volumes:
       - ./static.1/:/app/static.1/
     depends_on:
@@ -29,8 +27,6 @@ services:
       service: celery
     build:
       target: production
-    env_file:
-      - ./.env.prod
     depends_on:
       - backend
       - redis
