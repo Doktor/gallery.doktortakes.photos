@@ -27,6 +27,7 @@ All commit messages are tagged based on the sections of the project that are aff
 - `api`: Django REST API, including serializers and views
 - `css`: stylesheets
 - `doc`: documentation
+- `docker`: Docker containers for development, staging, and production
 - `models`: Django models
 - `npm`: JavaScript package dependencies, NPM scripts, and other `package.json` changes
 - `other`: Everything else
