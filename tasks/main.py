@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from invoke import task
-from typing import List
 import datetime
 import django
 import hashlib
@@ -10,7 +9,6 @@ import pprint
 import pytz
 import shlex
 import subprocess
-import sys
 
 
 # Task parts
@@ -47,77 +45,6 @@ def django_setup():
 # Tasks
 
 
-def check_build_requirements(ctx) -> List[str]:
-    errors = []
-
-    # Check availability of commands
-
-    commands = ('sass', 'npm')
-
-    for name in commands:
-        if ctx.run(f"command -v {name}", hide=True).return_code != 0:
-            errors.append(f"'{name}': command not found")
-
-    return errors
-
-
-def check_django_requirements(ctx) -> List[str]:
-    errors = []
-
-    # Check presence of configuration files
-
-    files = ('allowed_hosts.txt', 'database.json', 'django.txt')
-
-    for name in files:
-        path = os.path.join(BASE_DIR, 'data', name)
-
-        if not os.path.isfile(path):
-            errors.append(f"'data/{name}': file not found")
-        elif name.endswith('json'):
-            with open(path, 'r') as f:
-                data = f.read().strip()
-
-                try:
-                    json.loads(data)
-                except json.decoder.JSONDecodeError:
-                    errors.append(f"'data/{name}': file is not in valid JSON format")
-
-    return errors
-
-
-@task
-def check(ctx):
-    print("Checking requirements")
-
-    errors = []
-    errors.extend(check_build_requirements(ctx))
-    errors.extend(check_django_requirements(ctx))
-
-    if errors:
-        print(f"Found {len(errors)} errors")
-        print('\n'.join(errors))
-        sys.exit(1)
-    else:
-        print("Successfully checked requirements")
-
-
-def collect_static_files(ctx):
-    ctx.run(f"{manage} collectstatic --no-input")
-
-
-def compile_css(ctx):
-    with ctx.cd(os.path.join('static', 'styles')):
-        ctx.run("sass --quiet --update --no-source-map --style=compressed .:.")
-
-
-def npm_install(ctx):
-    ctx.run("npm install")
-
-
-def compile_js(ctx):
-    ctx.run("./node_modules/.bin/webpack --config webpack.prod.js")
-
-
 @task
 def git_status(ctx):
     def get_last_commit_datetime():
@@ -148,21 +75,8 @@ def git_status(ctx):
         f.write(json.dumps(data))
 
 
-@task(pre=[check])
+@task
 def build(ctx):
-    print("Compiling stylesheets")
-    compile_css(ctx)
-
-    if input("Update NPM packages? (Y/N) ").upper().startswith('Y'):
-        print("Updating packages")
-        npm_install(ctx)
-
-    print("Compiling scripts")
-    compile_js(ctx)
-
-    print("Collecting static files")
-    collect_static_files(ctx)
-
     print("Generating Git status file")
     git_status(ctx)
 
