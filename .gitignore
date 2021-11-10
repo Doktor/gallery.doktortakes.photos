@@ -1,14 +1,11 @@
 # IDE files
 .idea/
-.vscode/
-workspace.code-workspace
 
 # Sensitive data
 cache/
 data/
 logs/
 src/data/
-temp/
 *.bak
 *.db
 *.json
@@ -20,22 +17,15 @@ temp/
 
 # Media files
 media/
-media_test/
 *.psd
-
-# macOS metadata
-.DS_Store
 
 # Compiled files
 __pycache__/
+.pytest_cache/
 .sass-cache/
 static/*.js
 static/images/
 static.1/
-*.css
-*.css.map
 
 # Libraries
 node_modules/
-static/lib/
-static/*/debug/
