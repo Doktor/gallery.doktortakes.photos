@@ -183,7 +183,7 @@ const browserRoutes = [
 
 const editorRoutes = [
   {
-    path: '/editor/',
+    path: '/manage/',
     name: 'editorIndex',
     component: EditAlbums,
     meta: {
@@ -192,7 +192,7 @@ const editorRoutes = [
     },
   },
   {
-    path: '/editor/albums/new/',
+    path: '/manage/albums/new/',
     name: 'newAlbum',
     component: NewAlbum,
     meta: {
@@ -201,7 +201,7 @@ const editorRoutes = [
     },
   },
   {
-    path: '/editor/albums/edit/:path+/',
+    path: '/manage/albums/edit/:path+/',
     name: 'editAlbum',
     component: EditAlbum,
     meta: {
