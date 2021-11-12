@@ -1,6 +1,6 @@
 <template>
   <div class="photo-viewer">
-    <div v-if="isDebug" class="crosshair" />
+    <div v-if="showCrosshair" class="crosshair" />
     <div class="photo-image-container">
       <img
         class="photo-image"
@@ -75,12 +75,12 @@
     },
 
     computed: {
-      isDebug() {
-        return !this.production
+      showCrosshair() {
+        return this.$route.query?.crosshair ?? false
       },
 
       imageSrc() {
-        if (this.isDebug && (this.$route.query?.test ?? false)) {
+        if (this.$route.query?.test ?? false) {
           return "https://upload.wikimedia.org/wikipedia/commons/a/aa/Philips_PM5544.svg";
         }
 
