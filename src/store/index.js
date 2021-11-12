@@ -133,7 +133,6 @@ export const store = new Vuex.Store({
 
     // Cache
     albumDetailCache: {},
-    albumPhotosCache: {},
 
     // Albums
     allAlbums: [],

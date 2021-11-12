@@ -158,15 +158,6 @@ export const actions = {
       return await context.dispatch('getAlbumWithAccessCode', {path, code})
     }
 
-    if (context.state.albumPhotosCache.hasOwnProperty(path)) {
-      await context.dispatch('getAllAlbums');
-
-      context.commit('setPhotos', context.state.albumPhotosCache[path]);
-      context.commit('setAlbumByPath', path);
-      context.commit('setLoading', false);
-      return true;
-    }
-
     await context.dispatch('getAllAlbums');
 
     let {ok, content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path));
@@ -176,7 +167,6 @@ export const actions = {
     }
 
     context.commit('setPhotos', content.photos);
-    context.commit('updateAlbumPhotosCache', {path: path, photos: content.photos});
     context.commit('setAlbumByPath', path);
 
     context.commit('setLoading', false);
@@ -305,7 +295,6 @@ export const actions = {
     }
 
     context.commit('addAlbum', content);
-    context.commit('updateAlbumPhotosCache', {path: content.path, photos: []});
 
     context.commit('addTimedNotification', {
       message: "Album created successfully. Redirecting...",

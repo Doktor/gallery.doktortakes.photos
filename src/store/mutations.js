@@ -241,10 +241,6 @@ export const mutations = {
     state.gitStatus = status;
   },
 
-  updateAlbumPhotosCache(state, {path, photos}) {
-    Vue.set(state.albumPhotosCache, path, photos);
-  },
-
   setAlbumsPerPage(state, count) {
     state.albumsPerPage = count;
     this.commit('setAlbumPage', 1);
