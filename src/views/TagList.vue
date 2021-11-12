@@ -26,12 +26,17 @@
     computed: {
       ...mapState([
         'loading',
-        'tags',
       ]),
     },
 
-    created() {
-      this.$store.dispatch('getTags');
+    data() {
+      return {
+        tags: [],
+      }
+    },
+
+    async created() {
+      this.tags = await this.$store.dispatch('getTags');
     },
   }
 </script>

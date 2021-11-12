@@ -191,15 +191,19 @@ export const actions = {
   },
 
   async getTags(context) {
-    if (context.state.tags.length > 0) {
-      return Promise.resolve();
-    }
-
     context.commit('setLoading', true);
-
     let {content} = await sendRequest(endpoints.tagList);
-    context.commit('setTags', content.tags);
     context.commit('setLoading', false);
+
+    return content.tags;
+  },
+
+  async getTag(context, slug) {
+    context.commit('setLoading', true);
+    let tags = await context.dispatch('getTags');
+    context.commit('setLoading', false);
+
+    return tags.find(tag => tag.slug === slug);
   },
 
   async getFeaturedPhotos(context) {

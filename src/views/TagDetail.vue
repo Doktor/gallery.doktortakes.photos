@@ -16,10 +16,15 @@
       SearchAlbums,
     },
 
+    data() {
+      return {
+        tag: {},
+      }
+    },
+
     computed: {
       ...mapState([
         'loading',
-        'tag',
       ]),
 
       route() {
@@ -31,16 +36,14 @@
       },
     },
 
-    created() {
+    async created() {
       document.title = "Tag: #{0} | {1}".format(this.slug, baseTitle);
 
-      this.$store.dispatch('getTags').then(() => {
-        this.$store.commit('setTag', this.slug);
+      this.tag = await this.$store.dispatch('getTag', this.slug);
 
-        this.$store.dispatch('getAllAlbums').then(() => {
-          this.$store.commit('setAlbumsByTag', this.slug);
-          this.$store.commit('setAlbumPage', 1);
-        });
+      this.$store.dispatch('getAllAlbums').then(() => {
+        this.$store.commit('setAlbumsByTag', this.slug);
+        this.$store.commit('setAlbumPage', 1);
       });
     },
   }

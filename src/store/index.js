@@ -141,10 +141,6 @@ export const store = new Vuex.Store({
     search: '',
     pagesLoaded: [],
 
-    // Tags
-    tags: [],
-    tag: null,
-
     // Album
     album: {},
     photos: [],
