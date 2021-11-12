@@ -1,0 +1,32 @@
+# IDE files
+.idea/
+
+# Sensitive data
+cache/
+!data/
+logs/
+!src/data/
+*.bak
+*.db
+*.json
+!jsconfig.json
+!package.json
+!package-lock.json
+*.log
+*.pgsql
+*.rdb
+
+# Media files
+media/
+*.psd
+
+# Compiled files
+__pycache__/
+.pytest_cache/
+.sass-cache/
+static/*.js
+static/images/
+static.1/
+
+# Libraries
+node_modules/
