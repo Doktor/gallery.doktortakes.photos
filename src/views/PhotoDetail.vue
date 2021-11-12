@@ -132,8 +132,15 @@
         let title = photoTitleTemplate.format(photo.md5.substring(0, 8), this.album.name);
         document.title = title;
 
-        let qs = code ? getQueryString({code: code}) : "";
-        window.history.pushState(null, title, photo.url + qs);
+        let resolved = router.resolve({
+          name: 'photo',
+          params: {
+            path: this.album.pathSplit,
+            md5: this.md5,
+          },
+          query: this.$route.query,
+        });
+        window.history.pushState(null, title, resolved.href);
       },
 
       handleKey(event) {
