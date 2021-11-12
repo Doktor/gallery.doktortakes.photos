@@ -7,7 +7,7 @@
       <Navlink title="About" route="about" />
 
       <!-- Content management -->
-      <Navlink v-if="isStaff" title="Edit" route="editorIndex" />
+      <Navlink v-if="isStaff" title="Edit" route="manage" />
 
       <!-- User management -->
       <Navlink

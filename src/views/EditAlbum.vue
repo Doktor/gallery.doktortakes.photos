@@ -1,6 +1,6 @@
 <template>
   <FixedWidthContainer>
-    <router-link :to="{name: 'editorIndex'}">Back to editor</router-link>
+    <router-link :to="{name: 'manage'}">Back to editor</router-link>
 
     <template v-if="!loading">
       <header>

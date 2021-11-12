@@ -245,7 +245,7 @@ export const actions = {
 
     if (ok) {
       context.commit('addNotification', "Album deleted successfully. Redirecting...");
-      setTimeout(() => router.push({name: 'editorIndex'}), 1500);
+      setTimeout(() => router.push({name: 'manage'}), 1500);
     }
   },
 

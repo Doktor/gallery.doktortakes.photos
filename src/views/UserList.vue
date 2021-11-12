@@ -1,6 +1,6 @@
 <template>
   <FixedWidthContainer>
-    <router-link :to="{name: 'editorIndex'}">Back to editor</router-link>
+    <router-link :to="{name: 'manage'}">Back to editor</router-link>
 
     <h2>Users</h2>
 

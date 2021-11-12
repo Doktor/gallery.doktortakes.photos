@@ -23,7 +23,7 @@ import Recent from "../views/Recent.vue";
 import SearchPhotos from "../views/SearchPhotos.vue";
 
 import EditAlbum from "../views/EditAlbum.vue";
-import EditAlbums from "../views/EditAlbums.vue";
+import Manage from "../views/Manage.vue";
 import NewAlbum from "../views/NewAlbum.vue";
 
 import LogIn from "@/views/LogIn";
@@ -181,14 +181,14 @@ const browserRoutes = [
   },
 ];
 
-const editorRoutes = [
+const manageRoutes = [
   {
     path: '/manage/',
-    name: 'editorIndex',
-    component: EditAlbums,
+    name: 'manage',
+    component: Manage,
     meta: {
       staff: true,
-      title: "Edit albums",
+      title: "Manage",
     },
   },
   {
@@ -211,7 +211,7 @@ const editorRoutes = [
   },
 ];
 
-const routes = browserRoutes.concat(editorRoutes);
+const routes = browserRoutes.concat(manageRoutes);
 routes.forEach((route) => route.pathToRegexpOptions = {strict: true});
 
 const router = new VueRouter({

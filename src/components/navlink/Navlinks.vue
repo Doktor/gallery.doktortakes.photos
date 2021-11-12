@@ -51,7 +51,7 @@
         <li class="nav-item">
           <a class="nav-item-link" href="/admin/">Admin</a>
         </li>
-        <Navlink title="Edit" route="editorIndex" />
+        <Navlink title="Edit" route="manage" />
       </template>
 
       <!-- User management -->
