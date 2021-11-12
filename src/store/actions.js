@@ -83,8 +83,8 @@ export const actions = {
     let {content} = await sendRequest(endpoints.userList);
     let users = content.users.sort((a, b) => a.id - b.id);
 
-    context.commit('setUsers', users);
     context.commit('setLoading', false);
+    return users;
   },
 
   async getUser(context) {

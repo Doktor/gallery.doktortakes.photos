@@ -126,7 +126,6 @@ export const store = new Vuex.Store({
     token: null,
     showNav: true,
 
-    users: [],
     user: {},
     notifications: [],
 

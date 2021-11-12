@@ -1,5 +1,7 @@
 <template>
   <FixedWidthContainer>
+    <h2>Users</h2>
+
     <table v-if="!loading">
       <thead>
         <tr>
@@ -41,12 +43,17 @@ export default {
   computed: {
     ...mapState([
       'loading',
-      'users',
     ]),
   },
 
-  created() {
-    this.$store.dispatch('getUsers');
+  data() {
+    return {
+      users: [],
+    }
+  },
+
+  async created() {
+    this.users = await this.$store.dispatch('getUsers');
   },
 
   methods: {
@@ -60,7 +67,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 table {
   margin: 0 auto;
 }
