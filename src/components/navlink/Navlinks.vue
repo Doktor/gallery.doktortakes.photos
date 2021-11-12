@@ -47,12 +47,14 @@
 
       <!-- Content management -->
       <NavlinkDivider v-if="showDividers" />
-      <template v-if="isStaff">
+      <NavlinkMenu v-if="isStaff" title="Manage">
+        <Navlink title="Dashboard" route="manage" />
         <li class="nav-item">
           <a class="nav-item-link" href="/admin/">Admin</a>
         </li>
-        <Navlink title="Manage" route="manage" />
-      </template>
+        <Navlink title="Groups" route="groups" />
+        <Navlink title="Users" route="users" />
+      </NavlinkMenu>
 
       <!-- User management -->
       <template v-if="isAuthenticated">
