@@ -105,8 +105,8 @@ export const actions = {
     let {content} = await sendRequest(endpoints.groupList);
     let groups = content.groups.sort((a, b) => a.id - b.id);
 
-    context.commit('setGroups', groups);
     context.commit('setLoading', false);
+    return groups;
   },
 
   async changePassword(context, data) {

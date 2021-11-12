@@ -1,5 +1,7 @@
 <template>
   <FixedWidthContainer>
+    <h2>Groups</h2>
+
     <table v-if="!loading">
       <thead>
         <tr>
@@ -34,12 +36,17 @@ export default {
   computed: {
     ...mapState([
       'loading',
-      'groups',
     ]),
   },
 
-  created() {
-    this.$store.dispatch('getGroups');
+  data() {
+    return {
+      groups: [],
+    }
+  },
+
+  async created() {
+    this.groups = await this.$store.dispatch('getGroups');
   },
 
   methods: {
