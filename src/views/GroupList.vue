@@ -1,5 +1,7 @@
 <template>
   <FixedWidthContainer>
+    <router-link :to="{name: 'editorIndex'}">Back to editor</router-link>
+
     <h2>Groups</h2>
 
     <table v-if="!loading">
