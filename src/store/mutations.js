@@ -239,8 +239,9 @@ export const mutations = {
     if (document.title !== newTitle) {
       document.title = newTitle;
 
-      let url = router.resolve({name: 'editAlbum', params: {path: state.album.path}});
-      window.history.replaceState(null, newTitle, url);
+      let route = {name: 'editAlbum', params: {path: state.album.path.split('/')}};
+      let resolved = router.resolve(route);
+      window.history.replaceState(null, newTitle, resolved.href);
     }
   },
 
