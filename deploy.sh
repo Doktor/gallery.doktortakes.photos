@@ -32,14 +32,6 @@ fi
 
 echo "starting deployment"
 
-if [[ -d ./static.1/ ]]
-then
-  echo "removing old static files"
-  rm -rf ./static.1/
-fi
-
-mkdir ./static.1/
-
 echo "building Docker images" && \
   sudo docker-compose -f docker-compose.production.yml build && \
   echo "starting Docker container" && \

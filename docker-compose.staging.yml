@@ -11,8 +11,6 @@ services:
     command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
     expose:
       - 1337
-    volumes:
-      - static_volume:/app/static.1/
     depends_on:
       - redis
 
@@ -24,8 +22,6 @@ services:
       - 443:443
     depends_on:
       - backend
-    volumes:
-      - static_volume:/app/static.1/
 
   redis:
     extends:
@@ -41,6 +37,3 @@ services:
     depends_on:
       - backend
       - redis
-
-volumes:
-  static_volume:

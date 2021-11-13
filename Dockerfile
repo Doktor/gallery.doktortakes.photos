@@ -12,7 +12,6 @@ RUN pip install "poetry==1.1.7"
 COPY . /app/
 RUN poetry install --no-interaction
 
-RUN mkdir /app/static.1/
 RUN mkdir -p /app/logs/
 
 

@@ -11,8 +11,6 @@ services:
     command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
     ports:
       - 1337:1337
-    volumes:
-      - ./static.1/:/app/static.1/
     depends_on:
       - redis
 
