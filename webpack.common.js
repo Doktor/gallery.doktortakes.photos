@@ -36,19 +36,33 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+        ],
       },
       {
         test: /\.s[ac]ss$/,
+        exclude: [
+          path.resolve(__dirname, './src/styles/main.scss'),
+        ],
         use: [
           'style-loader',
           'css-loader',
           {
             loader: 'sass-loader',
             options: {
-              prependData: `@import "./src/styles/_variables.scss";`,
+              prependData: `@use "sass:math";\n@import "./src/styles/_variables.scss";`,
             },
           },
+        ],
+      },
+      {
+        resource: path.resolve(__dirname, './src/styles/main.scss'),
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
         ],
       },
       {

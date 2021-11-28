@@ -142,7 +142,7 @@ export default {
 .nav-item {
   display: block;
 
-  margin: 0 ($nav-item-spacing / 2);
+  margin: 0 math.div($nav-item-spacing, 2);
   margin-bottom: 1rem;
 
   @media (min-width: 901px) {

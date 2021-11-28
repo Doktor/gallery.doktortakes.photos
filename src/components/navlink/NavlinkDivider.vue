@@ -16,7 +16,7 @@ export default {
   color: $text-color-2;
   font-style: normal;
 
-  margin: 0 ($nav-item-spacing / 3);
+  margin: 0 math.div($nav-item-spacing, 3);
   margin-bottom: 1rem;
 
   &::before {

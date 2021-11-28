@@ -82,11 +82,11 @@ $width: 600px;
   }
   @for $i from 2 through 5 {
     @media (min-width: $width * ($i) + 1) and(max-width: $width * ($i + 1)) {
-      width: 100% / ($i + 1); // 50%, 33%, 25%, 20%
+      width: math.div(100%, ($i + 1)); // 50%, 33%, 25%, 20%
     }
   }
   @media (min-width: $width * 6 + 1) {
-    width: (100% / 6); // 16.67%
+    width: math.div(100%, 6); // 16.67%
   }
 }
 

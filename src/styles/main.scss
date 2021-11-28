@@ -1,3 +1,4 @@
+@use "sass:math";
 @import "variables";
 
 // Top-level elements
@@ -156,8 +157,8 @@ p {
   padding: $itemSpacing;
 
   @media (min-width: 901px) {
-    width: (100% / 3);
-    margin-left: (100% / 3);
+    width: math.div(100%, 3);
+    margin-left: math.div(100%, 3);
   }
 }
 
@@ -451,7 +452,7 @@ $separator-width: 5%;
   display: flex;
 
   input, select, textarea {
-    width: (100% - $separator-width) / 2;
+    width: math.div(100% - $separator-width, 2);
   }
 }
 
@@ -540,11 +541,11 @@ $photoWidth: 300px;
   @for $i from 1 through 4 {
     @media (min-width: $photoWidth * ($i) + 1) and
            (max-width: $photoWidth * ($i + 1)) {
-      width: 100% / ($i + 1);  // 50%, 33%, 25%, 20%
+      width: math.div(100%, $i + 1);  // 50%, 33%, 25%, 20%
     }
   }
   @media (min-width: $photoWidth * 5 + 1) {
-    width: (100% / 6);
+    width: math.div(100%, 6);
   }
 
   &.empty {
@@ -598,16 +599,16 @@ $albumWidth: 400px;
     width: 100%;
   }
   @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
-    width: (100% / 2);  // 50%
+    width: math.div(100%, 2);  // 50%
   }
   @media (min-width: $albumWidth * 3 + 1) and (max-width: $albumWidth * 4) {
-    width: (100% / 3);  // 33%
+    width: math.div(100%, 3);  // 33%
   }
   @media (min-width: $albumWidth * 4 + 1) and (max-width: $albumWidth * 6) {
-    width: (100% / 4);  // 25%
+    width: math.div(100%, 4);  // 25%
   }
   @media (min-width: $albumWidth * 6 + 1) {
-    width: (100% / 6);  // 16.67%
+    width: math.div(100%, 6);  // 16.67%
   }
 
   @include fade();
@@ -715,13 +716,13 @@ ul.edit-links-center {
 }
 
 .photo-wall-item {
-  width: (100% / 5);
+  width: math.div(100%, 5);
 
   @media (min-width: 901px) and (max-width: 1500px) {
-    width: (100% / 8);
+    width: math.div(100%, 8);
   }
   @media (min-width: 1501px) {
-    width: (100% / 10);
+    width: math.div(100%, 10);
   }
 
   filter: brightness(1.0);
