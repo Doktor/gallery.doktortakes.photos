@@ -27,7 +27,7 @@ COPY \
 COPY ./src/ /app/src/
 
 RUN npm ci
-RUN /app/node_modules/webpack/bin/webpack.js --config webpack.prod.js
+RUN npx webpack --config webpack.prod.js
 
 
 FROM development as staging

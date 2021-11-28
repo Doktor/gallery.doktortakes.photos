@@ -30,7 +30,7 @@ services:
       - ./src/:/app/src/
       - ./node_modules/:/app/node_modules/
       - static_volume:/app/static/
-    command: ./node_modules/webpack/bin/webpack.js --config webpack.dev.js
+    command: npx webpack --config webpack.dev.js
 
   redis:
     extends:
