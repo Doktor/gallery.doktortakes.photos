@@ -8,4 +8,4 @@ COPY \
   webpack.*.js \
   /app/
 
-RUN npm ci
+RUN npm install
