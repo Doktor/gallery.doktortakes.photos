@@ -70,9 +70,6 @@
       shuffle(this.heroPhotos);
       this.loadNextHeroPhoto();
 
-      await this.$store.dispatch('getAllAlbums');
-      this.$store.commit('setAlbumsToTopLevelAlbums');
-      this.$store.commit('setAlbumPage', 1);
       this.$store.commit('setLoading', false);
     },
   }
