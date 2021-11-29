@@ -1,5 +1,5 @@
 <template>
-  <FadeTransition :duration="1000" mode="in-out">
+  <FadeTransition appear :duration="1000" mode="in-out">
     <div
         class="hero-photo"
         :key="photo.image"

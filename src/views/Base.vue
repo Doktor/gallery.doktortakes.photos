@@ -8,7 +8,7 @@
 
     <Notifications/>
 
-    <FadeTransition :duration="200" mode="out-in">
+    <FadeTransition appear :duration="200" mode="out-in">
       <router-view id="content" />
     </FadeTransition>
 

@@ -1,5 +1,5 @@
 <template>
-  <FadeTransition :duration="500" mode="out-in">
+  <FadeTransition appear :duration="500" mode="out-in">
     <div v-if="loading" key="loading" class="index-loading-container">
       <h2 class="loading-text">Loading</h2>
       <span class="loading-text loading-1">.</span>
