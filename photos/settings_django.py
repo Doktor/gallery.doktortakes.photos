@@ -14,7 +14,7 @@ with open(os.path.join(BASE_DIR, 'data', 'config.toml')) as f:
     raw = f.read().strip()
     CONFIG = toml.loads(raw)
 
-internal_ips = ('127.0.0.1', 'localhost')
+internal_ips = ['127.0.0.1', 'localhost']
 
 ALLOWED_HOSTS = CONFIG['django'].get('allowed_hosts', internal_ips)
 DEBUG = CONFIG['django'].get('debug', False)
@@ -42,6 +42,10 @@ INSTALLED_APPS = [
 ]
 
 if DEBUG:
+    import socket
+    _, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
+
     INSTALLED_APPS.append('debug_toolbar')
 
 REST_FRAMEWORK = {
