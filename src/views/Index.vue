@@ -7,20 +7,7 @@
       <span class="loading-text loading-3">.</span>
     </div>
     <div v-else key="done-loading" class="index-main-container" @click="loadNextHeroPhoto">
-      <FadeTransition :duration="1000" mode="in-out">
-        <div
-          class="hero-photo"
-          :key="heroPhoto.image"
-          :style="heroPhotoStyles"
-        >
-          <img
-            class="hero-photo-loader"
-            :src="heroPhoto.image"
-            @load.once="onInitialImageLoad"
-            alt=""
-          />
-        </div>
-      </FadeTransition>
+      <HeroPhoto :photo="heroPhoto" />
 
       <header class="index-container index-header">
         <IndexLogo />
@@ -36,6 +23,7 @@
   import IndexNavlinks from "@/components/navlink/IndexNavlinks";
   import IndexLogo from "@/components/index/IndexLogo";
   import FadeTransition from "@/transitions/FadeTransition";
+  import HeroPhoto from "@/components/index/HeroPhoto";
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -46,6 +34,7 @@
 
   export default {
     components: {
+      HeroPhoto,
       FadeTransition,
       IndexLogo,
       IndexNavlinks,
@@ -56,8 +45,7 @@
       return {
         heroPhotos: [],
         heroPhoto: undefined,
-        index: 0,
-        initialImageLoaded: false,
+        heroPhotoIndex: 0,
       }
     },
 
@@ -66,37 +54,20 @@
         'albums',
         'loading',
       ]),
-
-      heroPhotoStyles() {
-        let styles = {
-          backgroundImage: `url(${this.heroPhoto.image})`,
-          backgroundPositionX: this.heroPhoto.x_position ?? 'center',
-        };
-
-        if (!this.initialImageLoaded) {
-          styles.visibility = 'hidden';
-          styles.opacity = 0;
-        }
-
-        return styles;
-      },
     },
 
     methods: {
-      onInitialImageLoad() {
-        this.initialImageLoaded = true;
-      },
       loadNextHeroPhoto() {
-        this.heroPhoto = this.heroPhotos[this.index];
-        this.index = (this.index + 1) % this.heroPhotos.length;
+        this.heroPhoto = this.heroPhotos[this.heroPhotoIndex];
+        this.heroPhotoIndex = (this.heroPhotoIndex + 1) % this.heroPhotos.length;
       },
     },
 
     async created() {
       this.$store.commit('setLoading', true);
+
       this.heroPhotos = await this.$store.dispatch('getHeroPhotos');
       shuffle(this.heroPhotos);
-
       this.loadNextHeroPhoto();
 
       await this.$store.dispatch('getAllAlbums');
@@ -177,29 +148,5 @@ $panel-margin: 2rem;
     padding: $panel-padding * 1.25;
     text-align: left;
   }
-}
-
-.hero-photo {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-
-  transform: scale(1.2);
-
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: fixed;
-  background-size: cover;
-
-  opacity: 1;
-  transition: opacity 1.0s ease-in-out;
-
-  cursor: pointer;
-}
-.hero-photo-loader {
-  display: none;
 }
 </style>
