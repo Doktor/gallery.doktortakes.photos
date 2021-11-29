@@ -23,6 +23,8 @@ api_patterns = [
     path('me/', views.get_current_user, name='api_current_user'),
     path('me/password/', views.change_password, name='api_change_password'),
 
+    path('heroPhotos/', views.get_hero_photos, name='api_hero_photos'),
+
     path('recent/', views.get_recent),
 
     path('csrf/', views.get_csrf_token, name='get_csrf_token'),

@@ -178,5 +178,10 @@ export const actions = {
     context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
     context.commit('setGitStatus', content.git_status);
     context.commit('setLoading', false);
-  }
+  },
+
+  async getHeroPhotos(context) {
+    let {content} = await sendRequest(endpoints.heroPhotoList);
+    return content;
+  },
 };

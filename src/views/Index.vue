@@ -1,14 +1,14 @@
 <template>
-  <div v-if="!loading" @click="loadNextCoverPhoto">
+  <div v-if="!loading" @click="loadNextHeroPhoto">
     <transition name="fade" mode="in-out">
       <div
-        class="cover-photo"
-        :key="coverPhoto.link"
-        :style="coverPhotoStyles"
+        class="hero-photo"
+        :key="heroPhoto.image"
+        :style="heroPhotoStyles"
       >
         <img
-          class="cover-photo-loader"
-          :src="coverPhoto.link"
+          class="hero-photo-loader"
+          :src="heroPhoto.image"
           @load.once="onInitialImageLoad"
           alt=""
         />
@@ -25,7 +25,6 @@
 <script>
   import {mapState} from 'vuex';
   import AlbumListCards from "@/components/albumList/AlbumListCards";
-  import {coverPhotos} from "@/data/cover_photos.json";
   import IndexNavlinks from "@/components/navlink/IndexNavlinks";
   import IndexLogo from "@/components/index/IndexLogo";
 
@@ -45,8 +44,8 @@
 
     data() {
       return {
-        coverPhotos: [],
-        coverPhoto: undefined,
+        heroPhotos: [],
+        heroPhoto: undefined,
         index: 0,
         initialImageLoaded: false,
       }
@@ -58,10 +57,10 @@
         'loading',
       ]),
 
-      coverPhotoStyles() {
+      heroPhotoStyles() {
         let styles = {
-          backgroundImage: `url(${this.coverPhoto.link})`,
-          backgroundPositionX: this.coverPhoto.x ?? 'center',
+          backgroundImage: `url(${this.heroPhoto.image})`,
+          backgroundPositionX: this.heroPhoto.x_position ?? 'center',
         };
 
         if (!this.initialImageLoaded) {
@@ -77,21 +76,23 @@
       onInitialImageLoad() {
         this.initialImageLoaded = true;
       },
-      loadNextCoverPhoto() {
-        this.coverPhoto = this.coverPhotos[this.index];
-        this.index = (this.index + 1) % this.coverPhotos.length;
-      }
+      loadNextHeroPhoto() {
+        this.heroPhoto = this.heroPhotos[this.index];
+        this.index = (this.index + 1) % this.heroPhotos.length;
+      },
     },
 
     async created() {
-      this.coverPhotos = coverPhotos.filter(photo => photo.include !== false);
-      shuffle(this.coverPhotos);
+      this.$store.commit('setLoading', true);
+      this.heroPhotos = await this.$store.dispatch('getHeroPhotos');
+      shuffle(this.heroPhotos);
 
-      this.loadNextCoverPhoto();
+      this.loadNextHeroPhoto();
 
       await this.$store.dispatch('getAllAlbums');
       this.$store.commit('setAlbumsToTopLevelAlbums');
       this.$store.commit('setAlbumPage', 1);
+      this.$store.commit('setLoading', false);
     },
   }
 </script>
@@ -119,7 +120,7 @@ $panel-margin: 2rem;
   }
 }
 
-.cover-photo {
+.hero-photo {
   position: fixed;
   top: 0;
   right: 0;
@@ -139,7 +140,7 @@ $panel-margin: 2rem;
 
   cursor: pointer;
 }
-.cover-photo-loader {
+.hero-photo-loader {
   display: none;
 }
 

@@ -70,6 +70,7 @@ export const endpoints = {
   groupList: "/api/groups/",
   csrf: "/api/csrf/",
   authenticate: "/api/authenticate/",
+  heroPhotoList: "/api/heroPhotos/",
 };
 
 

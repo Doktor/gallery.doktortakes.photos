@@ -3,3 +3,4 @@ from .album import AlbumSerializer, AlbumCoverSerializer
 from .tag import TagSerializer
 from .user import LogInSerializer, UserSerializer
 from .group import GroupSerializer
+from .hero_photo import HeroPhotoSerializer

@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
 
 from photos.fields import JSONField, JSONWidget
-from photos.models import Album, Photo, Tag
+from photos.models import Album, HeroPhoto, Photo, Tag
 
 
 class AlbumForm(forms.ModelForm):
@@ -91,6 +91,26 @@ class PhotoAdmin(admin.ModelAdmin):
                            photo.image.url, photo.image.url)
 
 
+class HeroPhotoAdmin(admin.ModelAdmin):
+    fields = (
+        'image', 'preview', 'title', 'description', 'x_position',
+        'created_date', 'updated_date',
+    )
+    list_display = (
+        'pk', 'image', 'title', 'description', 'x_position',
+        'created_date', 'updated_date',
+    )
+    readonly_fields = (
+        'preview',
+        'created_date', 'updated_date',
+    )
+
+    def preview(self, photo):
+        url = photo.image.url
+        return format_html('<a href="{}"><img height="300" src="{}"></a>', url, url)
+
+
 admin.site.register(Album, AlbumAdmin)
+admin.site.register(HeroPhoto, HeroPhotoAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Photo, PhotoAdmin)
