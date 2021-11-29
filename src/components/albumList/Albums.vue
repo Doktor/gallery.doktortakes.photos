@@ -15,13 +15,13 @@
 
     <slot name="footer"></slot>
 
-    <PaginationAlbums
-        v-if="!isSkeleton"
-        :albumsPerPage="albumsPerPage"
+    <Pagination
+        :itemsPerPage="albumsPerPage"
+        :itemsPerPageChoices="itemsPerPageChoices"
+        @setPage="setAlbumPage"
+        @setItemsPerPage="setAlbumsPerPage"
         :page="page"
         :pages="albumPages"
-        @setAlbumPage="setAlbumPage"
-        @setAlbumsPerPage="setAlbumsPerPage"
     />
   </section>
 </template>
@@ -33,17 +33,17 @@
   import AlbumListSimple from "./AlbumListSimple";
   import AlbumListViewSelector from "./AlbumListViewSelector";
   import AlbumTable from "./AlbumTable";
-  import PaginationAlbums from '@/components/pagination/PaginationAlbums.vue';
+  import Pagination from "@/components/pagination/Pagination";
 
 
   export default {
     components: {
+      Pagination,
       AlbumListCards,
       AlbumCard,
       AlbumListSimple,
       AlbumListViewSelector,
       AlbumTable,
-      PaginationAlbums,
     },
 
     computed: {
@@ -80,6 +80,10 @@
       },
       indexEnd() {
         return this.indexStart + this.albumsPerPage - 1;
+      },
+
+      itemsPerPageChoices() {
+        return [6, 12, 24, 48];
       },
 
       view() {

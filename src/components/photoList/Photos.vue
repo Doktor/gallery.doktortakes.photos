@@ -1,12 +1,12 @@
 <template>
   <section>
-    <PaginationPhotos
-        v-if="!isSkeleton"
-        :photosPerPage="photosPerPage"
+    <Pagination
+        :itemsPerPage="photosPerPage"
+        :itemsPerPageChoices="itemsPerPageChoices"
+        @setPage="setPhotoPage"
+        @setItemsPerPage="setPhotosPerPage"
         :page="page"
         :pages="photoPages"
-        @setPhotoPage="setPhotoPage"
-        @setPhotosPerPage="setPhotosPerPage"
     />
 
     <section class="photos">
@@ -22,26 +22,26 @@
       />
     </section>
 
-    <PaginationPhotos
-        v-if="!isSkeleton"
-        :photosPerPage="photosPerPage"
+    <Pagination
+        :itemsPerPage="photosPerPage"
+        :itemsPerPageChoices="itemsPerPageChoices"
+        @setPage="setPhotoPage"
+        @setItemsPerPage="setPhotosPerPage"
         :page="page"
         :pages="photoPages"
-        @setPhotoPage="setPhotoPage"
-        @setPhotosPerPage="setPhotosPerPage"
     />
   </section>
 </template>
 
 <script>
-  import PaginationPhotos from '@/components/pagination/PaginationPhotos.vue';
   import Photo from './Photo.vue';
   import {mapState, mapGetters} from 'vuex';
+  import Pagination from "@/components/pagination/Pagination";
 
 
   export default {
     components: {
-      PaginationPhotos,
+      Pagination,
       Photo,
     },
 
@@ -62,6 +62,10 @@
       },
       indexEnd() {
         return this.indexStart + this.photosPerPage - 1;
+      },
+
+      itemsPerPageChoices() {
+        return [10, 30, 60, 120];
       },
     },
 
