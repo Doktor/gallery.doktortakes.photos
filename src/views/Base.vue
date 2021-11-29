@@ -8,7 +8,9 @@
 
     <Notifications/>
 
-    <router-view id="content" />
+    <transition name="fade" mode="out-in">
+      <router-view id="content" />
+    </transition>
 
     <footer v-if="!isIndex">
       <div v-if="tagline" class="tagline">"<span v-html="tagline"/>"</div>
@@ -53,5 +55,24 @@
 
 #content {
   flex: 1;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
 }
 </style>
