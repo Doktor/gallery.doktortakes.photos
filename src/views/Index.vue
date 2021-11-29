@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!loading" @click="loadNextHeroPhoto">
+  <div v-if="loading" class="index-loading-container">
+    <h2 class="loading-text">Loading</h2>
+    <span class="loading-text loading-1">.</span>
+    <span class="loading-text loading-2">.</span>
+    <span class="loading-text loading-3">.</span>
+  </div>
+  <div v-else @click="loadNextHeroPhoto">
     <transition name="fade" mode="in-out">
       <div
         class="hero-photo"
@@ -100,6 +106,55 @@
 <style scoped lang="scss">
 $panel-padding: 1.2rem;
 $panel-margin: 2rem;
+
+.index-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.loading-text {
+  color: $text-color-2;
+  font-size: 50px;
+}
+
+.loading-1, .loading-2, .loading-3 {
+  font-weight: 700;
+
+  opacity: 0;
+  animation: dot 1200ms infinite;
+}
+
+.loading-1 {
+  animation-delay: 0ms;
+}
+.loading-2 {
+  animation-delay: 200ms;
+}
+.loading-3 {
+  animation-delay: 400ms;
+}
+
+@keyframes dot {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 .index-container {
   left: 0;
