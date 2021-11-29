@@ -8,9 +8,9 @@
 
     <Notifications/>
 
-    <transition name="fade" mode="out-in">
+    <FadeTransition :duration="200" mode="out-in">
       <router-view id="content" />
-    </transition>
+    </FadeTransition>
 
     <footer v-if="!isIndex">
       <div v-if="tagline" class="tagline">"<span v-html="tagline"/>"</div>
@@ -24,10 +24,12 @@
   import Navlinks from "@/components/navlink/Navlinks";
   import Notifications from "@/components/Notifications";
   import {tagline} from "@/store";
+  import FadeTransition from "@/transitions/FadeTransition";
 
 
   export default {
     components: {
+      FadeTransition,
       Navlinks,
       Notifications,
     },
@@ -55,24 +57,5 @@
 
 #content {
   flex: 1;
-}
-
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-to {
-  opacity: 1;
-}
-
-.fade-leave {
-  opacity: 1;
-}
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease-in-out;
 }
 </style>

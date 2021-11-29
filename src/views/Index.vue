@@ -1,12 +1,5 @@
 <template>
-  <transition
-    name="fast-fade"
-    mode="out-in"
-    enter-class="fade-enter"
-    enter-to-class="fade-enter-to"
-    leave-class="fade-leave"
-    leave-to-class="fade-leave-to"
-  >
+  <FadeTransition :duration="500" mode="out-in">
     <div v-if="loading" key="loading" class="index-loading-container">
       <h2 class="loading-text">Loading</h2>
       <span class="loading-text loading-1">.</span>
@@ -14,14 +7,7 @@
       <span class="loading-text loading-3">.</span>
     </div>
     <div v-else key="done-loading" class="index-main-container" @click="loadNextHeroPhoto">
-      <transition
-        name="slow-fade"
-        mode="in-out"
-        enter-class="fade-enter"
-        enter-to-class="fade-enter-to"
-        leave-class="fade-leave"
-        leave-to-class="fade-leave-to"
-      >
+      <FadeTransition :duration="1000" mode="in-out">
         <div
           class="hero-photo"
           :key="heroPhoto.image"
@@ -34,14 +20,14 @@
             alt=""
           />
         </div>
-      </transition>
+      </FadeTransition>
 
       <header class="index-container index-header">
         <IndexLogo />
         <IndexNavlinks />
       </header>
     </div>
-  </transition>
+  </FadeTransition>
 </template>
 
 <script>
@@ -49,6 +35,7 @@
   import AlbumListCards from "@/components/albumList/AlbumListCards";
   import IndexNavlinks from "@/components/navlink/IndexNavlinks";
   import IndexLogo from "@/components/index/IndexLogo";
+  import FadeTransition from "@/transitions/FadeTransition";
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -59,6 +46,7 @@
 
   export default {
     components: {
+      FadeTransition,
       IndexLogo,
       IndexNavlinks,
       AlbumListCards,
@@ -213,29 +201,5 @@ $panel-margin: 2rem;
 }
 .hero-photo-loader {
   display: none;
-}
-
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-to {
-  opacity: 1;
-}
-
-.fade-leave {
-  opacity: 1;
-}
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fast-fade-enter-active,
-.fast-fade-leave-active {
-  transition: opacity 0.2s ease-in-out;
-}
-
-.slow-fade-enter-active,
-.slow-fade-leave-active {
-  transition: opacity 1.0s ease-in-out;
 }
 </style>
