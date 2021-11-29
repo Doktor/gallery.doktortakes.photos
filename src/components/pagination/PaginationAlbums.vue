@@ -2,15 +2,14 @@
   <Pagination
       :itemsPerPage="albumsPerPage"
       :itemsPerPageChoices="itemsPerPageChoices"
-      :setItemsPerPage="setItemsPerPage"
-      :setPage="setPage"
+      @setPage="setAlbumPage"
+      @setItemsPerPage="setAlbumsPerPage"
       :page="page"
-      :pages="albumPages"
+      :pages="pages"
   />
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
   import Pagination from './Pagination.vue';
 
 
@@ -19,26 +18,33 @@
       Pagination,
     },
 
-    computed: {
-      ...mapGetters([
-        'albumPages',
-      ]),
-      ...mapState([
-        'albumsPerPage',
-        'page',
-      ]),
+    props: {
+      albumsPerPage: {
+        type: Number,
+        required: true,
+      },
+      page: {
+        type: Number,
+        required: true,
+      },
+      pages: {
+        type: Number,
+        required: true,
+      },
+    },
 
+    computed: {
       itemsPerPageChoices() {
         return [6, 12, 24, 48];
       },
     },
 
     methods: {
-      setPage(page) {
-        this.$store.commit('setAlbumPage', page);
+      setAlbumPage(page) {
+        this.$emit('setAlbumPage', page);
       },
-      setItemsPerPage(count) {
-        this.$store.commit('setAlbumsPerPage', count);
+      setAlbumsPerPage(count) {
+        this.$emit('setAlbumsPerPage', count);
       },
     },
   }

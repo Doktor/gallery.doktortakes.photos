@@ -15,7 +15,14 @@
 
     <slot name="footer"></slot>
 
-    <PaginationAlbums v-if="!isSkeleton"/>
+    <PaginationAlbums
+        v-if="!isSkeleton"
+        :albumsPerPage="albumsPerPage"
+        :page="page"
+        :pages="albumPages"
+        @setAlbumPage="setAlbumPage"
+        @setAlbumsPerPage="setAlbumsPerPage"
+    />
   </section>
 </template>
 
@@ -40,7 +47,10 @@
     },
 
     computed: {
-      ...mapGetters(["isStaff"]),
+      ...mapGetters([
+        "isStaff",
+        "albumPages",
+      ]),
       ...mapState([
         'albumsPerPage',
         'page',
@@ -91,6 +101,15 @@
         type: Boolean,
         default: false,
       },
-    }
+    },
+
+    methods: {
+      setAlbumPage(page) {
+        this.$store.commit('setAlbumPage', page);
+      },
+      setAlbumsPerPage(count) {
+        this.$store.commit('setAlbumsPerPage', count);
+      },
+    },
   }
 </script>

@@ -1,6 +1,13 @@
 <template>
   <section>
-    <PaginationPhotos v-if="!isSkeleton"/>
+    <PaginationPhotos
+        v-if="!isSkeleton"
+        :photosPerPage="photosPerPage"
+        :page="page"
+        :pages="photoPages"
+        @setPhotoPage="setPhotoPage"
+        @setPhotosPerPage="setPhotosPerPage"
+    />
 
     <section class="photos">
       <Photo
@@ -15,14 +22,21 @@
       />
     </section>
 
-    <PaginationPhotos v-if="!isSkeleton"/>
+    <PaginationPhotos
+        v-if="!isSkeleton"
+        :photosPerPage="photosPerPage"
+        :page="page"
+        :pages="photoPages"
+        @setPhotoPage="setPhotoPage"
+        @setPhotosPerPage="setPhotosPerPage"
+    />
   </section>
 </template>
 
 <script>
   import PaginationPhotos from '@/components/pagination/PaginationPhotos.vue';
   import Photo from './Photo.vue';
-  import {mapState} from 'vuex';
+  import {mapState, mapGetters} from 'vuex';
 
 
   export default {
@@ -32,6 +46,10 @@
     },
 
     computed: {
+      ...mapGetters([
+        'photoPages',
+      ]),
+
       ...mapState([
         'page',
         'photosPerPage',
@@ -60,6 +78,15 @@
       isSkeleton: {
         type: Boolean,
         default: false,
+      },
+    },
+
+    methods: {
+      setPhotoPage(page) {
+        this.$store.commit('setPhotoPage', page);
+      },
+      setPhotosPerPage(count) {
+        this.$store.commit('setPhotosPerPage', count);
       },
     },
   }

@@ -20,7 +20,7 @@
         <PageSkipInput
             v-else
             :key="n"
-            :setPage="setPage"
+            @setPage="setPage"
             :page="page"
             :pages="pages"
         />
@@ -42,7 +42,7 @@
           class="item item-condensed"
           :class="{'selected': count === itemsPerPage}"
           :key="count"
-          @click="setItemsPerPage(count)"
+          @click="$emit('setItemsPerPage', count)"
       >
         <span class="item-text">{{ count }}</span>
       </div>
@@ -99,28 +99,28 @@
         ]
       },
 
+      setPage(page) {
+        this.$emit('setPage', page);
+      },
       selectPage(page) {
         if (page === this.page || page < 1 || page > this.pages) {
           return;
         }
 
-        this.setPage(page);
+        this.$emit('setPage', page);
       },
       selectNextPage() {
         this.selectPage(this.page + 1);
       },
       selectPreviousPage() {
         this.selectPage(this.page - 1);
-      }
+      },
     },
 
     props: {
       itemsPerPage: {
         type: Number,
         required: true,
-      },
-      setItemsPerPage: {
-        type: Function,
       },
       itemsPerPageChoices: {
         type: Array,
@@ -131,11 +131,6 @@
         type: Number,
         required: true,
       },
-      setPage: {
-        type: Function,
-        required: true,
-      },
-
       pages: {
         type: Number,
         required: true,

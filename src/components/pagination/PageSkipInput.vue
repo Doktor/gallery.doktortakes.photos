@@ -42,7 +42,7 @@
           return;
         }
 
-        this.setPage(page);
+        this.$emit('setPage', page);
         this.active = false;
       },
 
@@ -56,11 +56,6 @@
     },
 
     props: {
-      setPage: {
-        type: Function,
-        required: true,
-      },
-
       page: {
         type: Number,
         required: true,
@@ -69,6 +64,6 @@
         type: Number,
         required: true,
       },
-    }
+    },
   }
 </script>
