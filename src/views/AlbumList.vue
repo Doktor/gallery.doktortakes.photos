@@ -15,7 +15,6 @@ export default {
   async created() {
     await this.$store.dispatch("getAllAlbums");
     this.$store.commit("setAlbumsToTopLevelAlbums");
-    this.$store.commit("setAlbumPage", 1);
   },
 };
 </script>

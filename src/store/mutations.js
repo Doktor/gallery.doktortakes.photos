@@ -54,15 +54,6 @@ export const mutations = {
     state.user = user;
   },
 
-  setAlbumPage(state, page) {
-    state.page = page;
-    state.results.filter((album) => !album.loaded).forEach((album, index) => {
-      if (page === Math.floor(index / state.albumsPerPage) + 1) {
-        album.isLoaded = true;
-      }
-    });
-  },
-
   setPhotoPage(state, page) {
     state.page = page;
     state.loaded.push(page);
@@ -98,7 +89,6 @@ export const mutations = {
 
     state.results = state.albums.filter(
       (album) => album.name.match(new RegExp(term, "i")));
-    this.commit('setAlbumPage', 1);
   },
 
   setAllAlbums(state, albums) {
@@ -239,11 +229,6 @@ export const mutations = {
 
   setGitStatus(state, status) {
     state.gitStatus = status;
-  },
-
-  setAlbumsPerPage(state, count) {
-    state.albumsPerPage = count;
-    this.commit('setAlbumPage', 1);
   },
 
   setPhotosPerPage(state, count) {

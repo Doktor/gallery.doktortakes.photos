@@ -50,7 +50,6 @@
     created() {
       this.$store.dispatch('getAllAlbums').then(() => {
         this.$store.commit('setAlbumsToPrivateAlbums');
-        this.$store.commit('setAlbumPage', 1);
       })
     },
   }

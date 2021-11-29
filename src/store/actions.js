@@ -175,7 +175,6 @@ export const actions = {
 
     let {content} = await sendRequest(endpoints.recent);
     context.commit('setAlbums', content.recent_albums);
-    context.commit('setPage', {page: 1, mutation: 'setAlbumPage'});
     context.commit('setGitStatus', content.git_status);
     context.commit('setLoading', false);
   },

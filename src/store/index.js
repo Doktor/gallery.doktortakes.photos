@@ -160,7 +160,6 @@ export const store = new Vuex.Store({
     gitStatus: {},
 
     // Settings
-    albumsPerPage: 12,
     photosPerPage: 30,
   },
 
