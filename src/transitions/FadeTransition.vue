@@ -57,6 +57,7 @@ export default {
 
 .fade-in {
   animation-name: fade-in;
+  animation-timing-function: ease-in-out;
 }
 
 @keyframes fade-out {
@@ -70,5 +71,6 @@ export default {
 
 .fade-out {
   animation-name: fade-out;
+  animation-timing-function: ease-in-out;
 }
 </style>
