@@ -1,31 +1,47 @@
 <template>
-  <div v-if="loading" class="index-loading-container">
-    <h2 class="loading-text">Loading</h2>
-    <span class="loading-text loading-1">.</span>
-    <span class="loading-text loading-2">.</span>
-    <span class="loading-text loading-3">.</span>
-  </div>
-  <div v-else @click="loadNextHeroPhoto">
-    <transition name="fade" mode="in-out">
-      <div
-        class="hero-photo"
-        :key="heroPhoto.image"
-        :style="heroPhotoStyles"
+  <transition
+    name="fast-fade"
+    mode="out-in"
+    enter-class="fade-enter"
+    enter-to-class="fade-enter-to"
+    leave-class="fade-leave"
+    leave-to-class="fade-leave-to"
+  >
+    <div v-if="loading" key="loading" class="index-loading-container">
+      <h2 class="loading-text">Loading</h2>
+      <span class="loading-text loading-1">.</span>
+      <span class="loading-text loading-2">.</span>
+      <span class="loading-text loading-3">.</span>
+    </div>
+    <div v-else key="done-loading" class="index-main-container" @click="loadNextHeroPhoto">
+      <transition
+        name="slow-fade"
+        mode="in-out"
+        enter-class="fade-enter"
+        enter-to-class="fade-enter-to"
+        leave-class="fade-leave"
+        leave-to-class="fade-leave-to"
       >
-        <img
-          class="hero-photo-loader"
-          :src="heroPhoto.image"
-          @load.once="onInitialImageLoad"
-          alt=""
-        />
-      </div>
-    </transition>
+        <div
+          class="hero-photo"
+          :key="heroPhoto.image"
+          :style="heroPhotoStyles"
+        >
+          <img
+            class="hero-photo-loader"
+            :src="heroPhoto.image"
+            @load.once="onInitialImageLoad"
+            alt=""
+          />
+        </div>
+      </transition>
 
-    <header class="index-container index-header">
-      <IndexLogo />
-      <IndexNavlinks />
-    </header>
-  </div>
+      <header class="index-container index-header">
+        <IndexLogo />
+        <IndexNavlinks />
+      </header>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -191,7 +207,7 @@ $panel-margin: 2rem;
   background-size: cover;
 
   opacity: 1;
-  transition: opacity 1.2s ease-in-out;
+  transition: opacity 1.0s ease-in-out;
 
   cursor: pointer;
 }
@@ -213,8 +229,13 @@ $panel-margin: 2rem;
   opacity: 0;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 1.2s ease-in-out;
+.fast-fade-enter-active,
+.fast-fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.slow-fade-enter-active,
+.slow-fade-leave-active {
+  transition: opacity 1.0s ease-in-out;
 }
 </style>
