@@ -5,7 +5,7 @@
     <dl title="Metadata">
       <div>
         <dt><i title="Sequence number" class="fas fa-fw fa-list-ol"></i></dt>
-        <dd>{{ photo.index + 1 }} / {{ photos.length }}</dd>
+        <dd>{{ photo.index + 1 }} / {{ count }}</dd>
       </div>
 
       <div>
@@ -50,8 +50,6 @@
     computed: {
       ...mapGetters(["isStaff"]),
       ...mapState([
-        'album',
-        'photos',
         'user',
       ]),
     },
@@ -59,6 +57,10 @@
     props: {
       photo: {
         type: Object,
+        required: true,
+      },
+      count: {
+        type: Number,
         required: true,
       },
     },

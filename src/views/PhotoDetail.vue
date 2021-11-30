@@ -14,10 +14,10 @@
     />
 
     <section class="info">
-      <Metadata :photo="photo" />
+      <Metadata :photo="photo" :count="photos.length" />
       <Exif :exif="photo.exif" />
       <KeyboardShortcuts />
-      <Links />
+      <Links :album="album" />
     </section>
   </div>
 </template>
@@ -32,7 +32,6 @@ import KeyboardShortcuts from '@/components/photoDetail/KeyboardShortcuts.vue';
 import Links from "@/components/photoDetail/Links";
 import Metadata from "@/components/photoDetail/Metadata";
 import PhotoViewer from "@/components/photoDetail/PhotoViewer";
-import {getQueryString} from "@/store";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
@@ -58,6 +57,9 @@ export default {
 
   data() {
     return {
+      album: {},
+      photos: [],
+
       onClick: () => {
       },
       photo: {},
@@ -66,9 +68,7 @@ export default {
 
   computed: {
     ...mapState([
-      'album',
       'loading',
-      'photos',
     ]),
 
     md5() {
@@ -84,11 +84,21 @@ export default {
     },
   },
 
-  created() {
-    this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode}).then(() => {
-      let photo = this.photos.find(photo => photo.md5 === this.md5);
-      this.setPhoto(photo, this.routeAccessCode);
-    });
+  async created() {
+    let {ok, album, photos} = await this.$store.dispatch('getAlbumNew', {rawPath: this.routePath, code: this.routeAccessCode});
+
+    if (!ok) {
+      this.$store.commit('addNotification', "Album not found.");
+      await this.$router.push({name: 'albums'});
+
+      return;
+    }
+
+    this.album = album;
+    this.photos = photos;
+
+    let photo = this.photos.find(photo => photo.md5 === this.md5);
+    this.setPhoto(photo, this.routeAccessCode);
   },
 
   methods: {

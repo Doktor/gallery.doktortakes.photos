@@ -26,15 +26,15 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-
-
   export default {
-    computed: {
-      ...mapState([
-        'album',
-      ]),
+    props: {
+      album: {
+        type: Object,
+        required: true,
+      },
+    },
 
+    computed: {
       albumRoute() {
         return {
           name: 'album',
