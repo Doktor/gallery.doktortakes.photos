@@ -8,14 +8,12 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-
-
 export default {
-  computed: {
-    ...mapState([
-      'album',
-    ]),
+  props: {
+    album: {
+      type: Object,
+      required: true,
+    },
   },
 }
 </script>

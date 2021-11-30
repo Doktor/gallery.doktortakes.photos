@@ -4,7 +4,7 @@
       :class="classes"
   >
     <AlbumCoverOverlay :album="album" :isSkeleton="isSkeleton" />
-    <AlbumCoverImage v-if="!isSkeleton && album.cover !== null" />
+    <AlbumCoverImage v-if="!isSkeleton && album.cover !== null" :album="album" />
   </figure>
 </template>
 
