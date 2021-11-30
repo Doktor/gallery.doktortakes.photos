@@ -37,11 +37,16 @@
       Photos,
     },
 
+    data() {
+      return {
+        album: {},
+        photos: [],
+      }
+    },
+
     computed: {
       ...mapState([
-        'album',
         'loading',
-        'photos',
       ]),
 
       routeAccessCode() {
@@ -59,19 +64,22 @@
 
     methods: {
       async loadAlbum() {
-        this.$store.commit('clearPhotos');
+        this.$store.commit('setLoading', true);
 
-        let ok = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
+        let {ok, album, photos} = await this.$store.dispatch('getAlbumNew', {rawPath: this.routePath, code: this.routeAccessCode});
 
         if (!ok) {
           this.$store.commit('addNotification', "Album not found.");
-          this.$router.push({name: 'albums'});
+          await this.$router.push({name: 'albums'});
 
-          this.$store.commit('setLoading', false);
           return;
         }
 
+        this.album = album;
+        this.photos = photos;
+
         this.$store.commit('updateDocumentTitleForAlbum');
+        this.$store.commit('setLoading', false);
       },
     },
 

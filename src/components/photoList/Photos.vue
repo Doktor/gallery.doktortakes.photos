@@ -109,9 +109,17 @@
 
     watch: {
       photos(newPhotos) {
-        if (newPhotos.length) {
-          this.setPage(1);
+        if (newPhotos.length === 0) {
+          return;
         }
+
+        for (let [index, photo] of newPhotos.entries()) {
+          photo.index = index;
+          photo.page = Math.floor(index / this.photosPerPage) + 1;
+          photo.loaded = false;
+        }
+
+        this.setPage(1);
       },
     },
   }
