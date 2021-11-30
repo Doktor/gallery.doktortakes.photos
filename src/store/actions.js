@@ -118,47 +118,6 @@ export const actions = {
     return {ok, album, photos};
   },
 
-  async getAlbum(context, {rawPath, code}) {
-    context.commit('setLoading', true);
-
-    let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
-
-    if (code) {
-      return await context.dispatch('getAlbumWithAccessCode', {path, code})
-    }
-
-    await context.dispatch('getAllAlbums');
-
-    let {ok, content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path));
-
-    if (!ok) {
-      return false;
-    }
-
-    context.commit('setPhotos', content.photos);
-    context.commit('setAlbumByPath', path);
-
-    context.commit('setLoading', false);
-    return true;
-  },
-
-  async getAlbumWithAccessCode(context, {path, code}) {
-    let qs = getQueryString({code});
-
-    let {ok, content} = await sendRequest(endpoints.albumDetail.replace(":path", path) + qs);
-
-    if (!ok) {
-      return false;
-    }
-    context.commit('setAlbum', content);
-
-    let {content2} = await sendRequest(endpoints.albumPhotoList.replace(":path", path) + qs);
-    context.commit('setPhotos', content2.photos);
-
-    context.commit('setLoading', false);
-    return true;
-  },
-
   async getTags(context) {
     context.commit('setLoading', true);
     let {content} = await sendRequest(endpoints.tagList);
