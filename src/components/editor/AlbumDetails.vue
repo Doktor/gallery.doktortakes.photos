@@ -28,10 +28,8 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
 import AlbumForm from './AlbumForm.vue';
 import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholder";
-
 
 export default {
   components: {
@@ -39,10 +37,11 @@ export default {
     AlbumForm,
   },
 
-  computed: {
-    ...mapState([
-      'album',
-    ]),
+  props: {
+    album: {
+      type: Object,
+      required: true,
+    },
   },
 
   methods: {

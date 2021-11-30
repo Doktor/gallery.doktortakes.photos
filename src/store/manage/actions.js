@@ -89,7 +89,7 @@ export const actions = {
   async saveAlbum(context, album) {
     let data = parseAlbumForAPI(album);
 
-    let {ok, status, content} = await sendRequest(endpoints.albumDetail.replace(":path", context.rootState.album.path), {
+    let {ok, status, content} = await sendRequest(endpoints.albumDetail.replace(":path", album.path), {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
@@ -112,7 +112,6 @@ export const actions = {
       return;
     }
 
-    context.commit('setAlbum', content);
     context.commit('addNotification', "Album saved successfully.");
   },
 

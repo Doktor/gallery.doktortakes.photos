@@ -60,10 +60,15 @@ export default {
     Photos,
   },
 
+  props: {
+    photos: {
+      type: Array,
+      required: true,
+    },
+  },
+
   computed: {
     ...mapState([
-      'album',
-      'photos',
       'selected',
     ]),
   },

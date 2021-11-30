@@ -40,7 +40,7 @@
       </header>
 
       <h2>Album details</h2>
-      <AlbumDetails @save="updateDocumentTitle" />
+      <AlbumDetails v-if="!loading" :album="album" @save="updateDocumentTitle" />
 
       <template v-if="album.parent || album.children.length > 0">
         <h2>Related albums</h2>
@@ -55,7 +55,7 @@
       </template>
 
       <PhotoUploader :path="album.path"/>
-      <PhotoManager/>
+      <PhotoManager :photos="photos" />
 
       <DeleteAlbum/>
     </template>
@@ -87,9 +87,15 @@
       PhotoUploader,
     },
 
+    data() {
+      return {
+        album: {},
+        photos: [],
+      }
+    },
+
     computed: {
       ...mapState([
-        'album',
         'loading',
       ]),
 
@@ -112,8 +118,22 @@
 
     methods: {
       async loadAlbum() {
-        await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: ""});
+        this.$store.commit('setLoading', true);
+
+        let {ok, album, photos} = await this.$store.dispatch('getAlbumNew', {rawPath: this.routePath, code: ""});
+
+        if (!ok) {
+          this.$store.commit('addNotification', "Album not found.");
+          await this.$router.push({name: 'albums'});
+
+          return;
+        }
+
+        this.album = album;
+        this.photos = photos;
+
         this.updateDocumentTitle();
+        this.$store.commit('setLoading', false);
       },
 
       updateDocumentTitle() {
