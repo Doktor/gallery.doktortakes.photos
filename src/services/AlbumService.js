@@ -2,13 +2,17 @@ import {sendRequest} from "@/store/utils";
 import {endpoints, getQueryString} from "@/store";
 
 export const AlbumService = {
-  async getAllAlbums() {
-    let {content} = await sendRequest(endpoints.albumList);
+  async getAllAlbums(full = false) {
+    full = full ?? false;
+    let query = full ? getQueryString({full}) : "";
+
+    let url = endpoints.albumList + query;
+    let {content} = await sendRequest(url);
     let albums = content.albums;
 
     for (let album of albums) {
       album.pathSplit = album.path.split('/');
-      album.tags.sort();
+      album.tags?.sort();
     }
 
     return albums;

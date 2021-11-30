@@ -22,10 +22,7 @@ export default {
 
   async created() {
     this.loading = true;
-
-    let albums = await AlbumService.getAllAlbums();
-    this.albums = albums.filter(album => album.parent === null);
-
+    this.albums = await AlbumService.getAllAlbums();
     this.loading = false;
   },
 };

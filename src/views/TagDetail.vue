@@ -45,7 +45,7 @@
 
       this.$store.commit('setLoading', true);
 
-      let albums = await AlbumService.getAllAlbums();
+      let albums = await AlbumService.getAllAlbums(true);
       this.albums = albums.filter(album => album.tags.includes(this.tag.slug));
 
       this.$store.commit('setLoading', false);

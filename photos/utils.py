@@ -60,9 +60,9 @@ def get_photo_for_user_or_404(request: Union[HttpRequest, Request], md5: str,
     return photo
 
 
-def get_albums_for_user(user, exclude_public=False, include_children=False) -> QuerySet:
+def get_albums_for_user(user, exclude_public=False, top_level_only=True) -> QuerySet:
     """Returns a QuerySet of the albums that a user has access to."""
-    q = Q() if include_children else Q(parent__isnull=True)
+    q = Q(parent__isnull=True) if top_level_only else Q()
 
     if user.is_superuser:
         q &= Q(access_level__lte=Allow.SUPERUSER)

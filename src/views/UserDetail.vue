@@ -57,7 +57,7 @@
     async created() {
       this.loading = true;
 
-      let albums = await AlbumService.getAllAlbums();
+      let albums = await AlbumService.getAllAlbums(true);
       this.albums = albums.filter(album => album.access_level > 0);
 
       this.loading = false;
