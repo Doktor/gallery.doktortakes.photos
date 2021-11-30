@@ -27,6 +27,7 @@
   import AlbumChildren from "@/components/albumList/AlbumChildren";
   import AlbumCover from "@/components/albumDetail/AlbumCover";
   import Photos from '@/components/photoList/Photos.vue';
+  import {titleTemplate} from "@/store/mutations";
 
 
   export default {
@@ -78,7 +79,7 @@
         this.album = album;
         this.photos = photos;
 
-        this.$store.commit('updateDocumentTitleForAlbum');
+        document.title = titleTemplate.format(album.name);
         this.$store.commit('setLoading', false);
       },
     },

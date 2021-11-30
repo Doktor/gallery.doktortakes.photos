@@ -3,7 +3,7 @@ import {updateField} from "vuex-map-fields";
 import {router} from "@/router/main.js";
 
 
-const titleTemplate = "{0} | Doktor Takes Photos";
+export const titleTemplate = "{0} | Doktor Takes Photos";
 const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
 
 
@@ -203,10 +203,6 @@ export const mutations = {
 
   clearPhotos(state) {
     state.photos = [];
-  },
-
-  updateDocumentTitleForAlbum(state) {
-    document.title = titleTemplate.format(state.album.name);
   },
 
   updateDocumentTitleForEditAlbum(state) {
