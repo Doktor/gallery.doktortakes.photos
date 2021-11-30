@@ -40,7 +40,7 @@
       </header>
 
       <h2>Album details</h2>
-      <AlbumDetails/>
+      <AlbumDetails @save="updateDocumentTitle" />
 
       <template v-if="album.parent || album.children.length > 0">
         <h2>Related albums</h2>
@@ -72,6 +72,8 @@
   import PhotoUploader from '@/components/editor/PhotoUploader.vue';
   import {mapState} from 'vuex';
   import {domains} from '@/store';
+  import {router} from "@/router/main";
+  import {editorTitleTemplate} from "@/store/mutations";
 
 
   export default {
@@ -111,7 +113,20 @@
     methods: {
       async loadAlbum() {
         await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: ""});
-        this.$store.commit('updateDocumentTitleForEditAlbum');
+        this.updateDocumentTitle();
+      },
+
+      updateDocumentTitle() {
+        let newTitle = editorTitleTemplate.format(this.album.name);
+
+        // Update history entry
+        if (document.title !== newTitle) {
+          document.title = newTitle;
+
+          let route = {name: 'editAlbum', params: {path: this.album.path.split('/')}};
+          let resolved = router.resolve(route);
+          window.history.replaceState(null, newTitle, resolved.href);
+        }
       },
     },
 

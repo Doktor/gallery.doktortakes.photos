@@ -113,7 +113,6 @@ export const actions = {
     }
 
     context.commit('setAlbum', content);
-    context.commit('updateDocumentTitleForEditAlbum');
     context.commit('addNotification', "Album saved successfully.");
   },
 

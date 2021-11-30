@@ -4,7 +4,7 @@ import {router} from "@/router/main.js";
 
 
 export const titleTemplate = "{0} | Doktor Takes Photos";
-const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
+export const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
 
 
 export const mutations = {
@@ -203,19 +203,6 @@ export const mutations = {
 
   clearPhotos(state) {
     state.photos = [];
-  },
-
-  updateDocumentTitleForEditAlbum(state) {
-    let newTitle = editorTitleTemplate.format(state.album.name);
-
-    // Update history entry
-    if (document.title !== newTitle) {
-      document.title = newTitle;
-
-      let route = {name: 'editAlbum', params: {path: state.album.path.split('/')}};
-      let resolved = router.resolve(route);
-      window.history.replaceState(null, newTitle, resolved.href);
-    }
   },
 
   setGitStatus(state, status) {
