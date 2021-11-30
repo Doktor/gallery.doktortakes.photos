@@ -47,8 +47,6 @@
             this.$store.commit('addTimedNotification', {message: "Logged in successfully.", hideAfter: 5000});
             await this.$store.dispatch('getUser');
 
-            this.$store.commit('setAllAlbums', []);
-            this.$store.commit('setAlbums', []);
             router.push(this.redirect ?? {name: 'albums'});
             return
           }

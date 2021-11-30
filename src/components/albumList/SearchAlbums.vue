@@ -1,29 +1,29 @@
 <template>
   <div>
     <div v-if="showCount" class="album-results-count">
-      {{ results.length }} album{{ results.length | pluralize }}
+      {{ searchResults.length }} album{{ searchResults.length | pluralize }}
     </div>
 
-    <AlbumSearchInput v-model="search" @input="filterAlbums" />
+    <AlbumSearchInput v-model="searchTerm" @input="filterAlbums" />
 
     <Albums
-      v-if="loading"
-      :albums="new Array(12).fill({})"
-      :albumRoute="albumRoute"
-      :isSkeleton="true"
+        v-if="loading"
+        :albums="new Array(12).fill({})"
+        :albumRoute="albumRoute"
+        :isSkeleton="true"
+        :loading="loading"
     />
     <Albums
-      v-else-if="results.length"
-      :albums="results"
-      :albumRoute="albumRoute"
+        v-else-if="searchResults.length"
+        :albums="searchResults"
+        :albumRoute="albumRoute"
+        :loading="loading"
     />
     <div v-else>No albums found.</div>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
-import { mapFields } from "vuex-map-fields";
 import Albums from "@/components/albumList/Albums";
 import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
 
@@ -34,6 +34,16 @@ export default {
   },
 
   props: {
+    loading: {
+      type: Boolean,
+      required: true,
+    },
+
+    albums: {
+      type: Array,
+      required: true,
+    },
+
     albumRoute: {
       type: String,
       default: "album",
@@ -44,13 +54,41 @@ export default {
     },
   },
 
+  data() {
+    return {
+      searchTerm: "",
+      searchResults: [],
+    }
+  },
+
   computed: {
-    ...mapFields(["search"]),
-    ...mapState(["results", "loading"]),
+    searchTermRegex() {
+      return new RegExp(this.searchTerm, "i");
+    },
   },
 
   methods: {
-    ...mapMutations(["filterAlbums"]),
+    filterAlbums() {
+      this.searchResults = this.searchTerm ? this.albums.filter(this.matchAlbum) : this.albums;
+    },
+
+    loadAlbums(albums) {
+      this.searchResults = [...albums];
+    },
+
+    matchAlbum(album) {
+      return album.name.match(this.searchTermRegex);
+    },
+  },
+
+  mounted() {
+    this.loadAlbums(this.albums)
+  },
+
+  watch: {
+    albums(newAlbums) {
+      this.loadAlbums(newAlbums);
+    },
   },
 
   filters: {

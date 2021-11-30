@@ -1,6 +1,6 @@
 <template>
   <main>
-    <SearchAlbums :showCount="false" />
+    <SearchAlbums :albums="albums" :showCount="false" :loading="loading" />
   </main>
 </template>
 
@@ -12,9 +12,20 @@ export default {
     SearchAlbums,
   },
 
+  data() {
+    return {
+      albums: [],
+      loading: true,
+    }
+  },
+
   async created() {
-    await this.$store.dispatch("getAllAlbums");
-    this.$store.commit("setAlbumsToTopLevelAlbums");
+    this.loading = true;
+
+    let albums = await this.$store.dispatch("getAllAlbums");
+    this.albums = albums.filter(album => album.parent === null);
+
+    this.loading = false;
   },
 };
 </script>

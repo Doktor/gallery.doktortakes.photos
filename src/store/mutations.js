@@ -25,9 +25,6 @@ export const mutations = {
     localStorage.removeItem("token");
 
     state.user = {status: "anonymous"};
-
-    this.commit('setAllAlbums', []);
-    this.commit('setAlbums', []);
   },
 
   addNotification(state, message) {
@@ -74,59 +71,6 @@ export const mutations = {
     state.searchResults.count = count;
   },
 
-  filterAlbums(state) {
-    let term = state.search;
-
-    if (!term) {
-      state.results = state.albums;
-      return;
-    }
-
-    state.results = state.albums.filter(
-      (album) => album.name.match(new RegExp(term, "i")));
-  },
-
-  setAllAlbums(state, albums) {
-    albums.map((album) => {
-      album.isLoaded = false;
-      album.pathSplit = album.path.split('/');
-      album.tags.sort();
-      return album;
-    });
-
-    albums.map((album) => {
-      // Child albums are sent in this format: [{path: "..."}, {path: "..."}, ...]
-      let childPaths = album.children.map((item) => item.path);
-      album.children = [...albums.filter((album) => childPaths.includes(album.path))];
-      return album;
-    });
-
-    state.allAlbums = albums;
-    state.albums = albums;
-    state.results = albums;
-  },
-
-  addAlbum(state, album) {
-    state.allAlbums.push(album);
-  },
-
-  setAlbums(state, albums) {
-    state.albums = albums;
-    state.results = albums;
-  },
-
-  setAlbumsByTag(state, tag) {
-    this.commit('setAlbums', state.allAlbums.filter((album) => album.tags.includes(tag)));
-  },
-
-  setAlbumsToTopLevelAlbums(state) {
-    this.commit('setAlbums', state.allAlbums.filter((album) => album.parent === null));
-  },
-
-  setAlbumsToPrivateAlbums(state) {
-    this.commit('setAlbums', state.allAlbums.filter((album) => album.access_level > 0));
-  },
-
   setTags(state, tags) {
     state.tags = tags;
   },
@@ -162,31 +106,6 @@ export const mutations = {
     state.selected.clear();
   },
 
-  clearAlbum(state) {
-    state.album = {
-      name: '',
-      place: '',
-      location: '',
-      description: '',
-      start: null,
-      end: null,
-      access_level: 0,
-      access_code: '',
-      users: [],
-      groups: [],
-      tags: [],
-      parent: '',
-    };
-  },
-
-  setAlbumByPath(state, path) {
-    state.album = state.allAlbums.filter((album) => album.path === path)[0];
-  },
-
-  setAlbum(state, album) {
-    state.album = album;
-  },
-
   setAlbumField(state, data) {
     Vue.set(state.album, data.key, data.value);
   },
@@ -199,10 +118,6 @@ export const mutations = {
     }
 
     state.photos = photos;
-  },
-
-  clearPhotos(state) {
-    state.photos = [];
   },
 
   setGitStatus(state, status) {

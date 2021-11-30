@@ -74,8 +74,6 @@ export const actions = {
       return;
     }
 
-    context.commit('addAlbum', content);
-
     context.commit('addTimedNotification', {
       message: "Album created successfully. Redirecting...",
       hideAfter: 2500,

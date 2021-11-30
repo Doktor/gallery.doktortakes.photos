@@ -80,15 +80,8 @@ export const actions = {
   },
 
   async getAllAlbums(context) {
-    if (context.state.allAlbums.length > 0) {
-      return Promise.resolve();
-    }
-
-    context.commit('setLoading', true);
-
     let {content} = await sendRequest(endpoints.albumList);
-    context.commit('setAllAlbums', content.albums);
-    context.commit('setLoading', false);
+    return content.albums;
   },
 
   async getAlbumNew(context, {rawPath, code}) {
@@ -159,7 +152,6 @@ export const actions = {
     context.commit('setLoading', true);
 
     let {content} = await sendRequest(endpoints.recent);
-    context.commit('setAlbums', content.recent_albums);
     context.commit('setGitStatus', content.git_status);
     context.commit('setLoading', false);
   },

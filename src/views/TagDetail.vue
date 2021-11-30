@@ -1,7 +1,7 @@
 <template>
   <section v-if="!loading && tag !== null">
     <h2>#{{ tag.slug }}</h2>
-    <SearchAlbums />
+    <SearchAlbums :albums="albums" :loading="false" />
   </section>
 </template>
 
@@ -18,6 +18,7 @@
 
     data() {
       return {
+        albums: [],
         tag: {},
       }
     },
@@ -41,9 +42,12 @@
 
       this.tag = await this.$store.dispatch('getTag', this.slug);
 
-      this.$store.dispatch('getAllAlbums').then(() => {
-        this.$store.commit('setAlbumsByTag', this.slug);
-      });
+      this.$store.commit('setLoading', true);
+
+      let albums = await this.$store.dispatch("getAllAlbums");
+      this.albums = albums.filter(album => album.tags.includes(this.tag.slug));
+
+      this.$store.commit('setLoading', false);
     },
   }
 </script>

@@ -10,12 +10,11 @@
       </ul>
     </FixedWidthContainer>
 
-    <SearchAlbums albumRoute="editAlbum" />
+    <SearchAlbums :albums="albums" :loading="loading" albumRoute="editAlbum" />
   </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex';
   import SearchAlbums from "@/components/albumList/SearchAlbums";
   import FixedWidthContainer from "@/components/FixedWidthContainer";
 
@@ -26,17 +25,20 @@
       SearchAlbums,
     },
 
-    computed: {
-      ...mapState([
-        'albums',
-        'loading',
-      ]),
+    data() {
+      return {
+        albums: [],
+        loading: true,
+      }
     },
 
-    created() {
-      this.$store.dispatch('getAllAlbums').then(() => {
-        this.$store.commit('setAlbumsToTopLevelAlbums');
-      })
+    async created() {
+      this.loading = true;
+
+      let albums = await this.$store.dispatch("getAllAlbums");
+      this.albums = albums.filter(album => album.parent === null);
+
+      this.loading = false;
     },
   }
 </script>

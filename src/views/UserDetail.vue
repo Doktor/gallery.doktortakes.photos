@@ -23,7 +23,7 @@
 
     <section>
       <h2 style="text-align: left;">Albums</h2>
-      <SearchAlbums />
+      <SearchAlbums :albums="albums" :loading="loading" />
     </section>
   </div>
 </template>
@@ -42,15 +42,24 @@
 
     computed: {
       ...mapState([
-        'loading',
         'user',
       ]),
     },
 
-    created() {
-      this.$store.dispatch('getAllAlbums').then(() => {
-        this.$store.commit('setAlbumsToPrivateAlbums');
-      })
+    data() {
+      return {
+        albums: [],
+        loading: true,
+      }
+    },
+
+    async created() {
+      this.loading = true;
+
+      let albums = await this.$store.dispatch("getAllAlbums");
+      this.albums = albums.filter(album => album.access_level > 0);
+
+      this.loading = false;
     },
   }
 </script>

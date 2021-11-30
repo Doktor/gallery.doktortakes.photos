@@ -6,7 +6,7 @@
         :is="albumListComponent"
         :class="classes"
 
-        :albums="albums"
+        :albums="albumsCopy"
         :route="albumRoute"
         :indexStart="indexStart"
         :indexEnd="indexEnd"
@@ -18,7 +18,7 @@
     <Pagination
         :itemsPerPage="albumsPerPage"
         :itemsPerPageChoices="itemsPerPageChoices"
-        @setPage="setAlbumPage"
+        @setPage="setPage"
         @setItemsPerPage="setAlbumsPerPage"
         :page="page"
         :pages="pages"
@@ -46,10 +46,33 @@ export default {
     AlbumTable,
   },
 
+   props: {
+    loading: {
+      type: Boolean,
+      required: true,
+    },
+
+    albums: {
+      type: Array,
+      required: true,
+    },
+
+    albumRoute: {
+      type: String,
+      default: "album",
+    },
+    isSkeleton: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data() {
     return {
       albumsPerPage: 12,
       page: 1,
+
+      albumsCopy: [],
     }
   },
 
@@ -58,7 +81,6 @@ export default {
       "isStaff",
     ]),
     ...mapState([
-      'results',
       'user',
     ]),
 
@@ -92,7 +114,7 @@ export default {
     },
 
     pages() {
-      return Math.ceil(this.results.length / this.albumsPerPage);
+      return Math.ceil(this.albumsCopy.length / this.albumsPerPage);
     },
 
     view() {
@@ -100,44 +122,42 @@ export default {
     },
   },
 
-  props: {
-    albums: {
-      type: Array,
-      required: true,
-    },
-    albumRoute: {
-      type: String,
-      default: "album",
-    },
-
-    isSkeleton: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
   methods: {
-    setAlbumPage(page) {
+    setPage(page) {
       this.page = page;
 
-      this.results.filter((album) => !album.loaded).forEach((album, index) => {
+      this.albumsCopy.filter((album) => !album.loaded).forEach((album, index) => {
         if (page === Math.floor(index / this.albumsPerPage) + 1) {
-          album.isLoaded = true;
+          this.$set(album, 'isLoaded', true);
         }
       });
     },
 
     setAlbumsPerPage(count) {
       this.albumsPerPage = count;
-      this.setAlbumPage(1);
+      this.setPage(1);
+    },
+
+    copyObjectArray(array) {
+      return [...array].map(object => {return {...object}});
+    },
+
+    loadAlbums(albums) {
+      this.albumsCopy = this.copyObjectArray(albums);
+
+      if (!this.loading) {
+        this.setPage(1);
+      }
     },
   },
 
+  mounted() {
+    this.loadAlbums(this.albums);
+  },
+
   watch: {
-    results(newResults) {
-      if (newResults.length) {
-        this.setAlbumPage(1);
-      }
+    albums(newAlbums) {
+      this.loadAlbums(newAlbums);
     },
   },
 }
