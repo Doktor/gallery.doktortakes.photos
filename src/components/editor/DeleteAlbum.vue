@@ -20,13 +20,13 @@
 </template>
 
 <script>
-  export default {
-    methods: {
-      deleteAlbum() {
-        if (this.$refs.albumName.value === this.$store.state.album.name) {
-          this.$store.dispatch('deleteAlbum');
-        }
-      },
+export default {
+  methods: {
+    deleteAlbum() {
+      if (this.$refs.albumName.value === this.$store.state.album.name) {
+        this.$store.dispatch('deleteAlbum');
+      }
     },
-  }
+  },
+}
 </script>

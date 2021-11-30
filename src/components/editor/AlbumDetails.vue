@@ -2,10 +2,12 @@
   <section class="album-details">
     <div class="album-cover-container">
       <div class="album" :class="{'album-no-cover': !album.cover}">
-        <a v-if="album.cover"
-           :href="album.cover.image"
-           target="_blank"
-           title="Full size">
+        <a
+            v-if="album.cover"
+            :href="album.cover.image"
+            target="_blank"
+            title="Full size"
+        >
           <img
               :src="album.cover.thumbnail"
               :title="album.name"
@@ -26,79 +28,79 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import AlbumForm from './AlbumForm.vue';
-  import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholder";
+import {mapState} from 'vuex';
+import AlbumForm from './AlbumForm.vue';
+import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholder";
 
 
-  export default {
-    components: {
-      AlbumPlaceholder,
-      AlbumForm,
+export default {
+  components: {
+    AlbumPlaceholder,
+    AlbumForm,
+  },
+
+  computed: {
+    ...mapState([
+      'album',
+    ]),
+  },
+
+  methods: {
+    saveAlbum(album) {
+      this.$store.dispatch('saveAlbum', album);
     },
-
-    computed: {
-      ...mapState([
-        'album',
-      ]),
-    },
-
-    methods: {
-      saveAlbum(album) {
-        this.$store.dispatch('saveAlbum', album);
-      },
-    },
-  }
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  .album-details {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+.album-details {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 
-    margin-top: 1rem;
+  margin-top: 1rem;
+}
+
+.album-form-container, .album-cover-container {
+  width: 100%;
+
+  @media (min-width: 1201px) {
+    width: 50%;
+  }
+}
+
+.album-cover-container {
+  order: 1;
+
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  .album {
+    max-width: 600px;
   }
 
-  .album-form-container, .album-cover-container {
-    width: 100%;
-
-    @media (min-width: 1201px) {
-      width: 50%;
-    }
-  }
-
-  .album-cover-container {
-    order: 1;
-
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-
-    .album {
-      max-width: 600px;
-    }
-
-    @media (min-width: 1201px) {
-      order: 2;
-
-      display: block;
-      margin-bottom: 0;
-      padding-left: 0.5rem;
-
-      .album {
-        max-width: unset;
-        width: 100%;
-      }
-    }
-  }
-
-  .album-form-container {
+  @media (min-width: 1201px) {
     order: 2;
 
-    @media (min-width: 1201px) {
-      order: 1;
-      padding-right: 0.5rem;
+    display: block;
+    margin-bottom: 0;
+    padding-left: 0.5rem;
+
+    .album {
+      max-width: unset;
+      width: 100%;
     }
   }
+}
+
+.album-form-container {
+  order: 2;
+
+  @media (min-width: 1201px) {
+    order: 1;
+    padding-right: 0.5rem;
+  }
+}
 </style>

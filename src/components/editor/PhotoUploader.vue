@@ -21,34 +21,34 @@
 </template>
 
 <script>
-  import {endpoints, getCsrfToken} from "@/store";
+import {endpoints, getCsrfToken} from "@/store";
 
 
-  export default {
-    data() {
-      return {
-        action: endpoints.albumPhotoList.replace(":path", this.path),
-        csrfToken: getCsrfToken(),
-      }
-    },
+export default {
+  data() {
+    return {
+      action: endpoints.albumPhotoList.replace(":path", this.path),
+      csrfToken: getCsrfToken(),
+    }
+  },
 
-    mounted() {
-      Dropzone.autoDiscover = false;
+  mounted() {
+    Dropzone.autoDiscover = false;
 
-      const dropzone = new Dropzone("#dropzone", {
-        paramName: 'files',
-        parallelUploads: 3,
-        headers: {
-          "Authorization": 'Token ' + this.$store.state.token,
-        },
-      });
-    },
+    const dropzone = new Dropzone("#dropzone", {
+      paramName: 'files',
+      parallelUploads: 3,
+      headers: {
+        "Authorization": 'Token ' + this.$store.state.token,
+      },
+    });
+  },
 
-    props: {
-      path: {
-        type: String,
-        required: true,
-      }
+  props: {
+    path: {
+      type: String,
+      required: true,
     }
   }
+}
 </script>

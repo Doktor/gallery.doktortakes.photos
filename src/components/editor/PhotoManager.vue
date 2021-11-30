@@ -10,17 +10,20 @@
     <div>
       <button
           @click="selectAll"
-          type="button">
+          type="button"
+      >
         Select all
       </button>
       <button
           @click="selectNone"
-          type="button">
+          type="button"
+      >
         Select none
       </button>
       <button
           @click="selectInvert"
-          type="button">
+          type="button"
+      >
         Invert selection
       </button>
     </div>
@@ -33,7 +36,8 @@
       <div>
         <button
             @click="deleteSelected"
-            type="button">
+            type="button"
+        >
           Delete
         </button>
       </div>
@@ -42,44 +46,44 @@
     <p v-if="!photos.length">
       This album does not contain any photos.
     </p>
-    <Photos v-else :photos="photos" :allowSelect="true"/>
+    <Photos v-else :photos="photos" :allowSelect="true" />
   </section>
 </template>
 
 <script>
-  import Photos from '@/components/photoList/Photos.vue';
-  import {mapActions, mapMutations, mapState} from 'vuex';
+import Photos from '@/components/photoList/Photos.vue';
+import {mapActions, mapMutations, mapState} from 'vuex';
 
 
-  export default {
-    components: {
-      Photos,
+export default {
+  components: {
+    Photos,
+  },
+
+  computed: {
+    ...mapState([
+      'album',
+      'photos',
+      'selected',
+    ]),
+  },
+
+  filters: {
+    pluralize(value) {
+      return value === 1 ? '' : 's';
     },
+  },
 
-    computed: {
-      ...mapState([
-        'album',
-        'photos',
-        'selected',
-      ]),
-    },
-
-    filters: {
-      pluralize(value) {
-        return value === 1 ? '' : 's';
-      },
-    },
-
-    methods: {
-      ...mapActions([
-        'deleteSelected',
-        'setAlbumCover',
-      ]),
-      ...mapMutations([
-        'selectAll',
-        'selectInvert',
-        'selectNone',
-      ]),
-    },
-  }
+  methods: {
+    ...mapActions([
+      'deleteSelected',
+      'setAlbumCover',
+    ]),
+    ...mapMutations([
+      'selectAll',
+      'selectInvert',
+      'selectNone',
+    ]),
+  },
+}
 </script>
