@@ -9,6 +9,7 @@
   import {mapState} from 'vuex';
   import {baseTitle} from "@/router/main.js";
   import SearchAlbums from "@/components/albumList/SearchAlbums";
+  import {AlbumService} from "@/services/AlbumService";
 
 
   export default {
@@ -44,7 +45,7 @@
 
       this.$store.commit('setLoading', true);
 
-      let albums = await this.$store.dispatch("getAllAlbums");
+      let albums = await AlbumService.getAllAlbums();
       this.albums = albums.filter(album => album.tags.includes(this.tag.slug));
 
       this.$store.commit('setLoading', false);

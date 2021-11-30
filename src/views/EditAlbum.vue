@@ -42,6 +42,7 @@ import {mapState} from 'vuex';
 import {router} from "@/router/main";
 import {editorTitleTemplate} from "@/store/mutations";
 import AlbumLinks from "@/components/editor/AlbumLinks";
+import {AlbumService} from "@/services/AlbumService";
 
 
   export default {
@@ -80,7 +81,7 @@ import AlbumLinks from "@/components/editor/AlbumLinks";
       async loadAlbum() {
         this.$store.commit('setLoading', true);
 
-        let {ok, album, photos} = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: ""});
+        let {ok, album, photos} = await AlbumService.getAlbum({rawPath: this.routePath, code: ""});
 
         if (!ok) {
           this.$store.commit('addNotification', "Album not found.");

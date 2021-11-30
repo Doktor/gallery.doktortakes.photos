@@ -32,6 +32,7 @@ import KeyboardShortcuts from '@/components/photoDetail/KeyboardShortcuts.vue';
 import Links from "@/components/photoDetail/Links";
 import Metadata from "@/components/photoDetail/Metadata";
 import PhotoViewer from "@/components/photoDetail/PhotoViewer";
+import {AlbumService} from "@/services/AlbumService";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
@@ -85,7 +86,7 @@ export default {
   },
 
   async created() {
-    let {ok, album, photos} = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
+    let {ok, album, photos} = await AlbumService.getAlbum({rawPath: this.routePath, code: this.routeAccessCode});
 
     if (!ok) {
       this.$store.commit('addNotification', "Album not found.");

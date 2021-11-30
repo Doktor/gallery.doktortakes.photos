@@ -32,6 +32,7 @@
   import {mapState} from 'vuex';
   import FixedWidthContainer from "@/components/FixedWidthContainer";
   import SearchAlbums from "@/components/albumList/SearchAlbums";
+  import {AlbumService} from "@/services/AlbumService";
 
 
   export default {
@@ -56,7 +57,7 @@
     async created() {
       this.loading = true;
 
-      let albums = await this.$store.dispatch("getAllAlbums");
+      let albums = await AlbumService.getAllAlbums();
       this.albums = albums.filter(album => album.access_level > 0);
 
       this.loading = false;

@@ -28,6 +28,7 @@
   import AlbumCover from "@/components/albumDetail/AlbumCover";
   import Photos from '@/components/photoList/Photos.vue';
   import {titleTemplate} from "@/store/mutations";
+  import {AlbumService} from "@/services/AlbumService";
 
 
   export default {
@@ -67,7 +68,7 @@
       async loadAlbum() {
         this.$store.commit('setLoading', true);
 
-        let {ok, album, photos} = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
+        let {ok, album, photos} = await AlbumService.getAlbum({rawPath: this.routePath, code: this.routeAccessCode});
 
         if (!ok) {
           this.$store.commit('addNotification', "Album not found.");
