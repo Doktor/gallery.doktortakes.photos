@@ -12,7 +12,6 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
   import AlbumCard from "./AlbumCard";
 
 
@@ -21,13 +20,11 @@
       AlbumCard,
     },
 
-    computed: {
-      ...mapState([
-        'album',
-      ]),
-    },
-
     props: {
+      album: {
+        type: Object,
+        required: true,
+      },
       route: {
         type: String,
         default: 'album',

@@ -4,7 +4,7 @@
       <AlbumCover :isSkeleton="!!loading"/>
     </section>
 
-    <AlbumChildren v-if="!loading"/>
+    <AlbumChildren v-if="!loading" :album="album" />
 
     <Photos
       v-if="loading"

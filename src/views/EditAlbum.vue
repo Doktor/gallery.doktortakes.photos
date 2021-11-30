@@ -51,7 +51,7 @@
           Edit parent album
         </router-link>
 
-        <AlbumChildren :route="'editAlbum'"/>
+        <AlbumChildren :album="album" :route="'editAlbum'"/>
       </template>
 
       <PhotoUploader :path="album.path"/>
