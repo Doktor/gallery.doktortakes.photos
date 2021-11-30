@@ -111,7 +111,6 @@
     methods: {
       async loadAlbum() {
         await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: ""});
-        this.$store.commit('setPhotoPage', 1);
         this.$store.commit('updateDocumentTitleForEditAlbum');
       },
     },

@@ -72,8 +72,7 @@
         }
 
         this.$store.commit('updateDocumentTitleForAlbum');
-        this.$store.commit('setPhotoPage', 1);
-      }
+      },
     },
 
     watch: {

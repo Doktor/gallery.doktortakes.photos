@@ -54,11 +54,6 @@ export const mutations = {
     state.user = user;
   },
 
-  setPhotoPage(state, page) {
-    state.page = page;
-    state.loaded.push(page);
-  },
-
   setSearchResults(state, photos) {
     state.searchResults.photos = photos;
   },
@@ -229,15 +224,5 @@ export const mutations = {
 
   setGitStatus(state, status) {
     state.gitStatus = status;
-  },
-
-  setPhotosPerPage(state, count) {
-    state.photosPerPage = count;
-
-    state.photos.forEach((photo, index) => {
-      photo.page = Math.floor(index / state.photosPerPage) + 1;
-    });
-
-    this.commit('setPhotoPage', 1);
   },
 };

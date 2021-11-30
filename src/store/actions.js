@@ -167,7 +167,6 @@ export const actions = {
     let {content} = await sendRequest(endpoints.searchPhotos + queryString);
     context.commit('setSearchResults', content.photos);
     context.commit('setSearchResultsCount', content.count);
-    context.commit('setPhotoPage', content.page);
   },
 
   async getRecent(context) {

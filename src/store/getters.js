@@ -14,8 +14,4 @@ export const getters = {
   getAccessCode(state) {
     return state.album.access_code;
   },
-
-  photoPages(state) {
-    return Math.ceil(state.photos.length / state.photosPerPage);
-  },
 };

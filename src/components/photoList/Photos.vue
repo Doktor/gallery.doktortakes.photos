@@ -3,10 +3,10 @@
     <Pagination
         :itemsPerPage="photosPerPage"
         :itemsPerPageChoices="itemsPerPageChoices"
-        @setPage="setPhotoPage"
+        @setPage="setPage"
         @setItemsPerPage="setPhotosPerPage"
         :page="page"
-        :pages="photoPages"
+        :pages="pages"
     />
 
     <section class="photos">
@@ -25,17 +25,17 @@
     <Pagination
         :itemsPerPage="photosPerPage"
         :itemsPerPageChoices="itemsPerPageChoices"
-        @setPage="setPhotoPage"
+        @setPage="setPage"
         @setItemsPerPage="setPhotosPerPage"
         :page="page"
-        :pages="photoPages"
+        :pages="pages"
     />
   </section>
 </template>
 
 <script>
   import Photo from './Photo.vue';
-  import {mapState, mapGetters} from 'vuex';
+  import {mapState} from 'vuex';
   import Pagination from "@/components/pagination/Pagination";
 
 
@@ -45,14 +45,15 @@
       Photo,
     },
 
-    computed: {
-      ...mapGetters([
-        'photoPages',
-      ]),
+    data() {
+      return {
+        photosPerPage: 10,
+        page: 1,
+      }
+    },
 
+    computed: {
       ...mapState([
-        'page',
-        'photosPerPage',
         'loaded',
         'selected',
       ]),
@@ -67,18 +68,22 @@
       itemsPerPageChoices() {
         return [10, 30, 60, 120];
       },
+
+      pages() {
+        return Math.ceil(this.photos.length / this.photosPerPage);
+      },
     },
 
     props: {
-      allowSelect: {
-        type: Boolean,
-        default: false,
-      },
       photos: {
         type: Array,
         required: true,
       },
 
+      allowSelect: {
+        type: Boolean,
+        default: false,
+      },
       isSkeleton: {
         type: Boolean,
         default: false,
@@ -86,11 +91,27 @@
     },
 
     methods: {
-      setPhotoPage(page) {
-        this.$store.commit('setPhotoPage', page);
+      setPage(page) {
+        this.page = page;
+        this.loaded.push(page);
       },
+
       setPhotosPerPage(count) {
-        this.$store.commit('setPhotosPerPage', count);
+        this.photosPerPage = count;
+
+        this.photos.forEach((photo, index) => {
+          photo.page = Math.floor(index / this.photosPerPage) + 1;
+        });
+
+        this.setPage(1);
+      },
+    },
+
+    watch: {
+      photos(newPhotos) {
+        if (newPhotos.length) {
+          this.setPage(1);
+        }
       },
     },
   }
