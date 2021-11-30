@@ -80,7 +80,7 @@ import AlbumLinks from "@/components/editor/AlbumLinks";
       async loadAlbum() {
         this.$store.commit('setLoading', true);
 
-        let {ok, album, photos} = await this.$store.dispatch('getAlbumNew', {rawPath: this.routePath, code: ""});
+        let {ok, album, photos} = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: ""});
 
         if (!ok) {
           this.$store.commit('addNotification', "Album not found.");

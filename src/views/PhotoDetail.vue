@@ -85,7 +85,7 @@ export default {
   },
 
   async created() {
-    let {ok, album, photos} = await this.$store.dispatch('getAlbumNew', {rawPath: this.routePath, code: this.routeAccessCode});
+    let {ok, album, photos} = await this.$store.dispatch('getAlbum', {rawPath: this.routePath, code: this.routeAccessCode});
 
     if (!ok) {
       this.$store.commit('addNotification', "Album not found.");

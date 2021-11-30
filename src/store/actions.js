@@ -91,7 +91,7 @@ export const actions = {
     return albums;
   },
 
-  async getAlbumNew(context, {rawPath, code}) {
+  async getAlbum(context, {rawPath, code}) {
     let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
     let query = code ? getQueryString({code}) : "";
 
