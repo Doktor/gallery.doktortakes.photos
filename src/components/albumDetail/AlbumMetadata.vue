@@ -56,9 +56,15 @@
       AlbumMetadata,
     },
 
+    props: {
+      album: {
+        type: Object,
+        required: true,
+      },
+    },
+
     computed: {
       ...mapState([
-        'album',
         'photos',
         'user',
       ]),

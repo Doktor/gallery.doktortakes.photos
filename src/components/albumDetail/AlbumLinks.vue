@@ -39,15 +39,17 @@
 
 <script>
   import {domains} from "@/store";
-  import {mapState} from 'vuex';
 
 
   export default {
-    computed: {
-      ...mapState([
-        'album',
-      ]),
+    props: {
+      album: {
+        type: Object,
+        required: true,
+      },
+    },
 
+    computed: {
       urlAlphaSite() {
         return new URL(this.album.url, domains.alpha).href;
       },

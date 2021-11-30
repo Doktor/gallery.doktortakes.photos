@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="album-cover-container">
-      <AlbumCover :isSkeleton="!!loading"/>
+      <AlbumCover :album="album" :isSkeleton="!!loading"/>
     </section>
 
     <AlbumChildren v-if="!loading" :album="album" />

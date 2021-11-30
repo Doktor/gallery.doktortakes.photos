@@ -3,13 +3,12 @@
     class="album-cover"
     :class="classes"
   >
-    <AlbumCoverOverlay :isSkeleton="isSkeleton"/>
+    <AlbumCoverOverlay :album="album" :isSkeleton="isSkeleton"/>
     <AlbumCoverImage v-if="!isSkeleton && album.cover !== null"/>
   </figure>
 </template>
 
 <script>
-  import {mapState} from 'vuex';
   import AlbumCoverImage from "./AlbumCoverImage";
   import AlbumCoverOverlay from "./AlbumCoverOverlay";
 
@@ -21,10 +20,6 @@
     },
 
     computed: {
-      ...mapState([
-        'album',
-      ]),
-
       classes() {
         return {
           'is-empty': !this.isSkeleton && this.album.cover === null,
@@ -34,6 +29,11 @@
     },
 
     props: {
+      album: {
+        type: Object,
+        required: true,
+      },
+
       isSkeleton: {
         type: Boolean,
         default: false,

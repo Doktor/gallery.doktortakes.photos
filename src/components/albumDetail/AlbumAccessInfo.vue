@@ -42,10 +42,16 @@
 
 
   export default {
+    props: {
+      album: {
+        type: Object,
+        required: true,
+      },
+    },
+
     computed: {
       ...mapGetters(["isStaff"]),
       ...mapState([
-        'album',
         'user',
       ]),
 

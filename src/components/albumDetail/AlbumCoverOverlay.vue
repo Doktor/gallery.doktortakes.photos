@@ -17,9 +17,9 @@
     </div>
 
     <div class="overlay-section" v-if="!loading">
-      <AlbumMetadata class="overlay-item"/>
-      <AlbumAccessInfo class="overlay-item"/>
-      <AlbumLinks class="overlay-item" v-if="isStaff"/>
+      <AlbumMetadata class="overlay-item" :album="album" />
+      <AlbumAccessInfo class="overlay-item" :album="album" />
+      <AlbumLinks class="overlay-item" v-if="isStaff" :album="album" />
     </div>
   </div>
 </template>
@@ -56,7 +56,6 @@
     computed: {
       ...mapGetters(["isStaff"]),
       ...mapState([
-        'album',
         'loading',
         'photos',
         'user',
@@ -86,6 +85,10 @@
     },
 
     props: {
+      album: {
+        type: Object,
+        required: true,
+      },
       isSkeleton: {
         type: Boolean,
         default: false,
