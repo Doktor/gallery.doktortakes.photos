@@ -20,7 +20,7 @@
     </div>
 
     <div class="album-form-container">
-      <AlbumForm :update="true"/>
+      <AlbumForm :album="album" @save="saveAlbum" :isUpdate="true" />
     </div>
   </section>
 </template>
@@ -41,6 +41,12 @@
       ...mapState([
         'album',
       ]),
+    },
+
+    methods: {
+      saveAlbum(album) {
+        this.$store.dispatch('saveAlbum', album);
+      },
     },
   }
 </script>

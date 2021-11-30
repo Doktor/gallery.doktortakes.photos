@@ -45,8 +45,8 @@ export const actions = {
     }
   },
 
-  async createAlbum(context) {
-    let data = parseAlbumForAPI(context.rootState.album);
+  async createAlbum(context, album) {
+    let data = parseAlbumForAPI(album);
 
     let {ok, content} = await sendRequest(endpoints.albumList, {
       method: 'POST',
@@ -86,8 +86,8 @@ export const actions = {
       1500);
   },
 
-  async saveAlbum(context) {
-    let data = parseAlbumForAPI(context.rootState.album);
+  async saveAlbum(context, album) {
+    let data = parseAlbumForAPI(album);
 
     let {ok, status, content} = await sendRequest(endpoints.albumDetail.replace(":path", context.rootState.album.path), {
       method: 'PUT',
