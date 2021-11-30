@@ -81,7 +81,14 @@ export const actions = {
 
   async getAllAlbums(context) {
     let {content} = await sendRequest(endpoints.albumList);
-    return content.albums;
+    let albums = content.albums;
+
+    for (let album of albums) {
+      album.pathSplit = album.path.split('/');
+      album.tags.sort();
+    }
+
+    return albums;
   },
 
   async getAlbumNew(context, {rawPath, code}) {
