@@ -21,15 +21,16 @@
     </div>
 
     <div
-      v-if="isStaff && (hasUsers || hasGroups)"
-      class="overlay-item"
+        v-if="isStaff && (hasUsers || hasGroups)"
+        class="overlay-item"
     >
       <i title="Users and groups" class="fas fa-fw fa-users"></i>
       <span>
         <template v-if="hasUsers">Users: {{ album.users.join(", ") }}</template>
         <span
-          v-if="hasUsers && hasGroups"
-          class="divider"></span>
+            v-if="hasUsers && hasGroups"
+            class="divider"
+        ></span>
         <template v-if="hasGroups">Groups: {{ album.groups.join(", ") }}</template>
       </span>
     </div>
@@ -37,61 +38,61 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
-  import {accessLevelsMap} from "@/store/index.js";
+import {mapGetters, mapState} from 'vuex';
+import {accessLevelsMap} from "@/store/index.js";
 
 
-  export default {
-    props: {
-      album: {
-        type: Object,
-        required: true,
-      },
+export default {
+  props: {
+    album: {
+      type: Object,
+      required: true,
     },
+  },
 
-    computed: {
-      ...mapGetters(["isStaff"]),
-      ...mapState([
-        'user',
-      ]),
+  computed: {
+    ...mapGetters(["isStaff"]),
+    ...mapState([
+      'user',
+    ]),
 
-      accessCodeRoute() {
-        return {
-          name: 'album',
-          params: {
-            path: this.album.pathSplit,
-          },
-          query: {
-            code: this.album.access_code,
-          }
+    accessCodeRoute() {
+      return {
+        name: 'album',
+        params: {
+          path: this.album.pathSplit,
+        },
+        query: {
+          code: this.album.access_code,
         }
-      },
-
-      accessLevelDisplay() {
-        return accessLevelsMap[this.album.access_level];
-      },
-
-      hasGroups() {
-        return this.album.groups.length > 0;
-      },
-
-      hasUsers() {
-        return this.album.users.length > 0;
-      },
+      }
     },
-  }
+
+    accessLevelDisplay() {
+      return accessLevelsMap[this.album.access_level];
+    },
+
+    hasGroups() {
+      return this.album.groups.length > 0;
+    },
+
+    hasUsers() {
+      return this.album.users.length > 0;
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-  .divider {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.divider {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
-    &::before {
-      color: $text-color;
-      content: "\00a0\00b7\00a0";  // nbsp, middle dot, nbsp
-    }
+  &::before {
+    color: $text-color;
+    content: "\00a0\00b7\00a0"; // nbsp, middle dot, nbsp
   }
+}
 </style>

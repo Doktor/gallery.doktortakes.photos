@@ -10,16 +10,16 @@
       <span>
         <template v-for="(slug, index) in album.tags">
           <router-link
-            class="tag"
-            :key="slug"
-            :to="{name: 'tag', params: {slug: slug}}"
-            ><!--
+              class="tag"
+              :key="slug"
+              :to="{name: 'tag', params: {slug: slug}}"
+          ><!--
               -->#{{ slug }}<!--
             --></router-link>
           <span
-            v-if="index !== album.tags.length - 1"
-            v-html="nbsp"
-            :key="'space-' + index.toString()"
+              v-if="index !== album.tags.length - 1"
+              v-html="nbsp"
+              :key="'space-' + index.toString()"
           ></span>
         </template>
       </span>
@@ -33,7 +33,7 @@
     <div v-if="album.parent" class="overlay-item">
       <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
       <router-link
-        :to="{name: 'album', params: {path: album.parent.split('/')}}"
+          :to="{name: 'album', params: {path: album.parent.split('/')}}"
       ><!--
         -->View parent album<!--
       --></router-link>
@@ -41,48 +41,38 @@
   </div>
 </template>
 
-
 <script>
-  import {mapState} from 'vuex';
-  import AlbumAccessInfo from "./AlbumAccessInfo";
-  import AlbumLinks from "./AlbumLinks";
-  import AlbumMetadata from "./AlbumMetadata";
+import {mapState} from 'vuex';
 
 
-  export default {
-    components: {
-      AlbumAccessInfo,
-      AlbumLinks,
-      AlbumMetadata,
+export default {
+  props: {
+    album: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  computed: {
+    ...mapState([
+      'photos',
+      'user',
+    ]),
+
+    location() {
+      let place = this.album.place;
+      let location = this.album.location;
+
+      if (place && location) {
+        return "{0}, {1}".format(place, location);
+      }
+
+      return place || location || "";
     },
 
-    props: {
-      album: {
-        type: Object,
-        required: true,
-      },
+    nbsp() {
+      return "&nbsp;";
     },
-
-    computed: {
-      ...mapState([
-        'photos',
-        'user',
-      ]),
-
-      location() {
-        let place = this.album.place;
-        let location = this.album.location;
-
-        if (place && location) {
-          return "{0}, {1}".format(place, location);
-        }
-
-        return place || location || "";
-      },
-
-      nbsp() {
-        return "&nbsp;";
-      },
-    },
-  }
+  },
+}
 </script>
