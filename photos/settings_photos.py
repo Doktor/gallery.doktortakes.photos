@@ -24,8 +24,6 @@ DEFAULT_PATH = 'all'
 INDEX_ALBUMS = 12
 INDEX_FEATURED_PHOTOS = 30
 
-TAGLINES = settings.CONFIG['photos'].get('taglines', [])
-
 
 # Albums
 

@@ -23,8 +23,8 @@
 <script>
   import Navlinks from "@/components/navlink/Navlinks";
   import Notifications from "@/components/Notifications";
-  import {tagline} from "@/store";
   import FadeTransition from "@/transitions/FadeTransition";
+  import {TaglineService} from "@/services/TaglineService";
 
 
   export default {
@@ -34,14 +34,20 @@
       Notifications,
     },
 
+    data() {
+      return {
+        tagline: "",
+      }
+    },
+
     computed: {
       isIndex() {
         return this.$route.name === 'index';
       },
+    },
 
-      tagline() {
-        return tagline;
-      },
+    async created() {
+      this.tagline = await TaglineService.getTagline();
     },
   }
 </script>

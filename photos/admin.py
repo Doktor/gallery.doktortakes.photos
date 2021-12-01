@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin
 
 from photos.fields import JSONField, JSONWidget
-from photos.models import Album, HeroPhoto, Photo, Tag
+from photos.models import Album, HeroPhoto, Photo, Tag, Tagline
 
 
 class AlbumForm(forms.ModelForm):
@@ -110,7 +110,13 @@ class HeroPhotoAdmin(admin.ModelAdmin):
         return format_html('<a href="{}"><img height="300" src="{}"></a>', url, url)
 
 
+class TaglineAdmin(admin.ModelAdmin):
+    fields = ('text',)
+    list_display = ('pk', 'text', 'created_date', 'updated_date')
+
+
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(HeroPhoto, HeroPhotoAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(Tagline, TaglineAdmin)
 admin.site.register(Photo, PhotoAdmin)

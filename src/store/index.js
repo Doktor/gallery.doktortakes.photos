@@ -71,6 +71,7 @@ export const endpoints = {
   csrf: "/api/csrf/",
   authenticate: "/api/authenticate/",
   heroPhotoList: "/api/heroPhotos/",
+  randomTagline: "/api/taglines/random/",
 };
 
 
@@ -110,8 +111,6 @@ export const fields = {
     'url', 'admin_url',
   ],
 };
-
-export const tagline = api.dataset.tagline;
 
 export const domains = {
   production: "https://doktortakes.photos",
