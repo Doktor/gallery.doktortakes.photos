@@ -115,7 +115,7 @@ class AlbumPhotoList(APIView):
         album = self.get_album(request, path)
 
         response = []
-        photos = album.photos.filter(sidecar_exists=True).order_by('taken')
+        photos = album.photos.filter(sidecar_exists=True).order_by('taken').prefetch_related('thumbnails')
 
         for index, photo in enumerate(photos):
             context = {

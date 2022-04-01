@@ -1,17 +1,28 @@
 from django.urls import reverse
-
 from rest_framework import serializers
 
+from photos.api.serializers.thumbnail import ThumbnailSerializer
+from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
 from photos.models import Photo
 
+import itertools
 from collections import OrderedDict
 
 
+def serialize_thumbnail(thumbnail: "Thumbnail"):
+    return ThumbnailSerializer(thumbnail).data
+
+
+THUMBNAIL_TYPES = (
+    # (property name, internal name)
+    ("display", THUMBNAIL_DISPLAY),
+    ("square", THUMBNAIL_SMALL_SQUARE),
+    ("cover", THUMBNAIL_COVER),
+)
+
+
 class PhotoSerializer(serializers.ModelSerializer):
-    # Image links
-    image = serializers.ImageField(use_url=True, read_only=True)
-    square_thumbnail = serializers.ImageField(use_url=True, read_only=True)
-    thumbnail = serializers.ImageField(use_url=True, read_only=True, allow_null=True)
+    images = serializers.SerializerMethodField(read_only=True)
 
     # Links
     url = serializers.CharField(read_only=True, source='get_absolute_url')
@@ -24,6 +35,18 @@ class PhotoSerializer(serializers.ModelSerializer):
     index = serializers.IntegerField(
         read_only=True, allow_null=True, default=None)
     exif = serializers.DictField(read_only=True, source='get_exif')
+
+    @staticmethod
+    def get_images(obj: Photo) -> dict:
+        thumbnails = {}
+
+        for key, group in itertools.groupby(obj.thumbnails.all(), lambda t: t.type):
+            thumbnails[key] = next(group)
+
+        return {
+            name: serialize_thumbnail(thumbnails[key]) if key in thumbnails else None
+            for (name, key) in THUMBNAIL_TYPES
+        }
 
     def get_admin(self, obj: Photo):
         if self.context.get('is_staff', False):
@@ -43,7 +66,7 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = (
-            'image', 'square_thumbnail', 'thumbnail',
+            'images',
             'url', 'download', 'admin',
             'taken',
             'width', 'height', 'md5', 'index',
