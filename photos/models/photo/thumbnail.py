@@ -28,7 +28,11 @@ class Thumbnail(models.Model):
 
     image = models.ImageField(
         upload_to=get_filename,
-        blank=True, null=True, editable=False)
+        width_field='width',
+        height_field='height',
+        blank=True,
+        null=True,
+        editable=False)
     is_watermarked = models.BooleanField(default=False)
 
     width = models.PositiveIntegerField(default=0, editable=False)
@@ -37,8 +41,8 @@ class Thumbnail(models.Model):
 
     # Bookkeeping
 
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_date = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self) -> str:
         return f'Thumbnail for photo {self.photo.id} ({self.width}x{self.height})'
