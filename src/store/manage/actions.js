@@ -19,32 +19,6 @@ export const actions = {
     }
   },
 
-  async deleteSelected(context) {
-    let photos = [];
-
-    for (let photo of context.rootState.selected) {
-      photos.push(photo.md5);
-    }
-
-    let {ok} = await sendRequest(endpoints.albumPhotoList.replace(":path", context.rootState.album.path), {
-      method: 'DELETE',
-      body: JSON.stringify({
-        'photos': photos,
-      }),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'X-CSRFToken': getCsrfToken(),
-      },
-    });
-
-    if (ok) {
-      for (let photo of [...context.rootState.selected]) {
-        photos.remove(photo);
-        context.rootState.selected.remove(photo);
-      }
-    }
-  },
-
   async createAlbum(context, album) {
     let data = parseAlbumForAPI(album);
 

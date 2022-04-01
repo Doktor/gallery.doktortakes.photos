@@ -24,7 +24,7 @@
       </template>
 
       <PhotoUploader :path="album.path"/>
-      <PhotoManager :photos="photos" />
+      <PhotoManager :album="album" :photos="photos" @update="loadAlbum" />
 
       <DeleteAlbum/>
     </template>

@@ -14,7 +14,8 @@
         v-for="photo in photos"
         :allowSelect="allowSelect"
         :isLoaded="isSkeleton || loadedPages.includes(photo.page)"
-        :isSelected="allowSelect ? selected.includes(photo) : false"
+        :isSelected="allowSelect ? selectedPhotoHashes.includes(photo.md5) : false"
+        @select="select"
         :isSkeleton="isSkeleton"
         :isVisible="isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)"
         :key="photo.md5"
@@ -35,9 +36,7 @@
 
 <script>
   import Photo from './Photo.vue';
-  import {mapState} from 'vuex';
   import Pagination from "@/components/pagination/Pagination";
-
 
   export default {
     components: {
@@ -54,10 +53,6 @@
     },
 
     computed: {
-      ...mapState([
-        'selected',
-      ]),
-
       indexStart() {
         return this.photosPerPage * (this.page - 1);
       },
@@ -79,6 +74,10 @@
         type: Array,
         required: true,
       },
+      selectedPhotoHashes: {
+        type: Array,
+        default: () => [],
+      },
 
       allowSelect: {
         type: Boolean,
@@ -95,6 +94,10 @@
     },
 
     methods: {
+      select(md5) {
+        this.$emit('select', md5)
+      },
+
       processPhotos(photos) {
         for (let [index, photo] of photos.entries()) {
           photo.index = index;

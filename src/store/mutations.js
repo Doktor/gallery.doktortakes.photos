@@ -83,29 +83,6 @@ export const mutations = {
     loading ? state.loading += 1 : state.loading -= 1;
   },
 
-  selectPhoto(state, photo) {
-    state.selected.push(photo);
-  },
-  deselectPhoto(state, photo) {
-    state.selected.remove(photo);
-  },
-
-  selectAll(state) {
-    state.selected = [...state.photos];
-  },
-  selectInvert(state) {
-    state.photos.forEach((photo) => {
-      if (state.selected.includes(photo)) {
-        state.selected.remove(photo)
-      } else {
-        state.selected.push(photo);
-      }
-    });
-  },
-  selectNone(state) {
-    state.selected.clear();
-  },
-
   setAlbumField(state, data) {
     Vue.set(state.album, data.key, data.value);
   },

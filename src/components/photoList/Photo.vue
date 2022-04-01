@@ -41,8 +41,7 @@
           return;
         }
 
-        let action = this.isSelected ? 'deselectPhoto' : 'selectPhoto';
-        this.$store.commit(action, this.photo);
+        this.$emit('select', this.photo.md5);
       },
     },
 
