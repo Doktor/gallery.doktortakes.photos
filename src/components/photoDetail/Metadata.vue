@@ -26,7 +26,7 @@
       <div>
         <dt><i title="Open in new tab"
                class="fas fa-fw fa-external-link-square-alt"></i></dt>
-        <dd><a :href="photo.image" title="Open in new tab">Open in new tab</a></dd>
+        <dd><a :href="photo.images.display.url" title="Open in new tab">Open in new tab</a></dd>
       </div>
 
       <div>

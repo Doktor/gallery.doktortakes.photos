@@ -4,8 +4,8 @@
     :to="allowSelect ? null : photoLink"
   >
     <img
-      v-if="photo.square_thumbnail"
-      :src="getThumbnail"
+      v-if="hasThumbnail"
+      :src="thumbnail"
       alt="Photo thumbnail"
     >
     <div v-else class="photo-placeholder">
@@ -25,9 +25,12 @@
     },
 
     computed: {
-      getThumbnail() {
+      hasThumbnail() {
+        return this.photo.images.square?.url ?? false
+      },
+      thumbnail() {
         return this.isLoaded
-          ? this.photo.square_thumbnail
+          ? this.photo.images.square.url
           : this.placeholder
       },
 

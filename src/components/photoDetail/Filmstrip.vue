@@ -4,7 +4,7 @@
       <div v-for="photo in photos" :class="classes(photo.index)">
         <img
             class="filmstrip-image"
-            :src="photo.square_thumbnail"
+            :src="photo.images.square.url"
             @click="onClick(photo.index)"
         >
         <div class="filmstrip-index">{{ photo.index + 1 }}</div>

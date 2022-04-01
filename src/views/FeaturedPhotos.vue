@@ -9,7 +9,7 @@
         <div class="featured-photo" v-for="photo in photos">
           <div class="featured-photo-sizer">
             <router-link title="" :to="photo.url">
-              <LazyImage class="featured-photo-image" :src="photo.thumbnail" alt="" :width="600" :height="600" />
+              <LazyImage class="featured-photo-image" :src="photo.images.cover.url" alt="" :width="600" :height="600" />
             </router-link>
           </div>
         </div>
