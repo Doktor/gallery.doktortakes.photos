@@ -15,11 +15,12 @@
         :allowSelect="allowSelect"
         :isLoaded="isSkeleton || loadedPages.includes(photo.page)"
         :isSelected="allowSelect ? selectedPhotoHashes.includes(photo.md5) : false"
-        @select="select"
         :isSkeleton="isSkeleton"
         :isVisible="isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)"
         :key="photo.md5"
         :photo="photo"
+        :route="route"
+        @select="select"
       />
     </section>
 
@@ -77,6 +78,10 @@
       selectedPhotoHashes: {
         type: Array,
         default: () => [],
+      },
+      route: {
+        type: String,
+        default: "photo"
       },
 
       allowSelect: {

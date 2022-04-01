@@ -1,15 +1,20 @@
 <template>
   <div
-      class="photo-wrapper"
-      :class="classes"
-      @click="onPhotoClicked"
+    class="photo-wrapper"
+    :class="classes"
   >
     <div class="photo">
-      <PhotoThumbnail
-        v-if="!isSkeleton"
-        v-bind="{allowSelect, isLoaded, photo}"
-      />
-      <PhotoSkeleton v-else/>
+      <div
+        :is="allowSelect ? 'div' : 'router-link'"
+        :to="allowSelect ? null : photoLink"
+        @click="allowSelect ? select : () => {}"
+      >
+        <PhotoThumbnail
+          v-if="!isSkeleton"
+          v-bind="{isLoaded, photo}"
+        />
+        <PhotoSkeleton v-else/>
+      </div>
     </div>
   </div>
 </template>
@@ -33,14 +38,22 @@
         }
       },
 
+      photoLink() {
+        return {
+          name: this.route,
+          params: {
+            path: this.photo.path,
+            md5: this.photo.md5,
+          },
+          query: {
+            code: this.$route.query.code,
+          },
+        }
+      },
     },
 
     methods: {
-      onPhotoClicked() {
-        if (!this.allowSelect) {
-          return;
-        }
-
+      select() {
         this.$emit('select', this.photo.md5);
       },
     },
@@ -53,6 +66,10 @@
 
       allowSelect: {
         type: Boolean,
+        required: true,
+      },
+      route: {
+        type: String,
         required: true,
       },
 
