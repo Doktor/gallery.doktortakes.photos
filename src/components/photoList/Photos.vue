@@ -13,7 +13,7 @@
       <Photo
         v-for="photo in photos"
         :allowSelect="allowSelect"
-        :isLoaded="isSkeleton || loaded.includes(photo.page)"
+        :isLoaded="isSkeleton || loadedPages.includes(photo.page)"
         :isSelected="allowSelect ? selected.includes(photo) : false"
         :isSkeleton="isSkeleton"
         :isVisible="isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)"
@@ -49,12 +49,12 @@
       return {
         photosPerPage: 10,
         page: 1,
+        loadedPages: [],
       }
     },
 
     computed: {
       ...mapState([
-        'loaded',
         'selected',
       ]),
 
@@ -90,10 +90,24 @@
       },
     },
 
+    mounted() {
+      this.processPhotos(this.photos)
+    },
+
     methods: {
+      processPhotos(photos) {
+        for (let [index, photo] of photos.entries()) {
+          photo.index = index;
+          photo.page = Math.floor(index / this.photosPerPage) + 1;
+          photo.loaded = false;
+        }
+
+        this.setPage(1);
+      },
+
       setPage(page) {
         this.page = page;
-        this.loaded.push(page);
+        this.loadedPages.push(page);
       },
 
       setPhotosPerPage(count) {
@@ -113,13 +127,7 @@
           return;
         }
 
-        for (let [index, photo] of newPhotos.entries()) {
-          photo.index = index;
-          photo.page = Math.floor(index / this.photosPerPage) + 1;
-          photo.loaded = false;
-        }
-
-        this.setPage(1);
+        this.processPhotos(newPhotos);
       },
     },
   }
