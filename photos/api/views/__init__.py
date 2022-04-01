@@ -1,6 +1,6 @@
 from .album import AlbumList, AlbumDetail, AlbumPhotoList
 from .hero_photo import get_hero_photos
-from .photo import PhotoDetail, get_featured_photos, search_photos
+from .photo import PhotoDetail, search_photos
 from .other import get_recent
 from .tag import TagList
 from .tagline import get_tagline

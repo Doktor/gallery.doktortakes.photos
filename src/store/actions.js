@@ -95,21 +95,6 @@ export const actions = {
     return tags.find(tag => tag.slug === slug);
   },
 
-  async getFeaturedPhotos(context) {
-    context.commit('setLoading', true);
-
-    let {content} = await sendRequest(endpoints.featuredPhotos);
-    let photos = content.photos;
-
-    photos.forEach((photo, index) => {
-      photo.index = index;
-    });
-
-    context.commit('setLoading', false);
-    context.commit('setPhotos', photos);
-    context.commit('setPhoto', {index: 0, history: false});
-  },
-
   async searchPhotos(context, queryString) {
     let {content} = await sendRequest(endpoints.searchPhotos + queryString);
     context.commit('setSearchResults', content.photos);

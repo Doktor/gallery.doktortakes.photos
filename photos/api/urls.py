@@ -7,7 +7,6 @@ register_converter(MD5HashConverter, 'md5')
 
 
 api_patterns = [
-    path('photos/featured/', views.get_featured_photos, name='api_featured_photos'),
     path('photos/search/', views.search_photos, name='search_photos'),
     path('photos/<md5:md5>/', views.PhotoDetail.as_view(), name='api_photo'),
 

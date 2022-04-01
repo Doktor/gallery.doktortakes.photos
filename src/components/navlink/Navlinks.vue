@@ -7,8 +7,6 @@
       </template>
 
       <!-- Main links -->
-      <Navlink title="Featured" route="featured" />
-
       <NavlinkMenu title="Photos">
         <Navlink title="Archive" display="Archive" route="albums" />
         <Navlink

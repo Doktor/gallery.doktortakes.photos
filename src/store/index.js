@@ -61,7 +61,6 @@ export const endpoints = {
   albumDetail: "/api/albums/:path/",
   albumPhotoList: "/api/albums/:path/photos/",
   tagList: "/api/tags/",
-  featuredPhotos: "/api/photos/featured/",
   searchPhotos: "/api/photos/search/",
   currentUser: "/api/me/",
   changePassword: "/api/me/password/",

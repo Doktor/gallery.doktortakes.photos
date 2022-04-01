@@ -2,7 +2,6 @@
   <nav class="nav nav-index">
     <ul class="nav-items">
       <!-- Main links -->
-      <Navlink title="Featured" route="featured" />
       <Navlink title="Albums" display="Photos" route="albums" />
       <Navlink title="About" route="about" />
 

@@ -17,9 +17,6 @@ import mimetypes
 from typing import Callable, List
 
 
-FEATURED_QUERY = "?order=taken&direction=new&rating=4&rating=5"
-
-
 # Metadata
 
 metadata = m(None)
@@ -134,23 +131,6 @@ def index(request: HttpRequest) -> HttpResponse:
             *meta_open_graph_common,
             MetaProperty('og:title', metadata['TITLE']),
             MetaProperty('og:url', get_canonical_url(reverse('index'))),
-            *meta_open_graph_generic_image,
-
-            *meta_open_graph_article(),
-        ])
-    }
-
-    return render(request, 'base.html', context)
-
-
-@require_GET
-def featured(request: HttpRequest) -> HttpResponse:
-    context = {
-        'title': 'Featured',
-        'meta': meta_to_string([
-            *meta_open_graph_common,
-            MetaProperty('og:title', metadata['TITLE']),
-            MetaProperty('og:url', get_canonical_url(reverse('featured'))),
             *meta_open_graph_generic_image,
 
             *meta_open_graph_article(),

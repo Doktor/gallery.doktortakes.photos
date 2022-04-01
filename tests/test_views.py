@@ -14,7 +14,7 @@ from settings_django import BASE_DIR, MEDIA_ROOT
 from photos import views
 from photos.models import Album, Photo, Tag
 from photos.models.utils import generate_md5_hash
-from photos.settings_photos import INDEX_ALBUMS, INDEX_FEATURED_PHOTOS, ITEMS_PER_PAGE
+from photos.settings_photos import INDEX_ALBUMS, ITEMS_PER_PAGE
 
 import datetime
 import factory
@@ -196,54 +196,6 @@ class TestIndex:
         assert "View more albums" in content
         assert album.name not in content
         assert last.name in content
-
-
-@pytest.mark.django_db
-class TestFeatured:
-    featured = dict(rating=5, sidecar_exists=True)
-
-    def test_allowed_methods(self):
-        test_allowed_methods(views.featured, 'index', ('get',))
-
-    def test_no_featured_photos_exist(self, rf):
-        request = rf.get(reverse('featured'))
-        request.user = AnonymousUser()
-
-        response = views.featured(request)
-        content = response.content.decode('utf-8')
-        assert "No featured photos found" in content
-
-    def test_some_featured_photos_exist(self, rf):
-        request = rf.get(reverse('featured'))
-        request.user = AnonymousUser()
-
-        album = AlbumFactory(hidden=False)
-
-        for _ in range(INDEX_FEATURED_PHOTOS // 2):
-            last = PhotoFactory(album=album, **self.featured)
-
-        response = views.featured(request)
-        content = response.content.decode('utf-8')
-        assert "No featured photos found" not in content
-        assert last.thumbnail.url in content
-
-    def test_many_featured_photos_exist(self, rf):
-        request = rf.get(reverse('featured'))
-        request.user = AnonymousUser()
-
-        album = AlbumFactory(hidden=False)
-        taken = datetime.datetime(2018, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
-
-        first = PhotoFactory(album=album, taken=taken, **self.featured)
-
-        for _ in range(INDEX_FEATURED_PHOTOS):
-            taken = taken + datetime.timedelta(seconds=1)
-            last = PhotoFactory(album=album, taken=taken, **self.featured)
-
-        response = views.featured(request)
-        content = response.content.decode('utf-8')
-        assert first.thumbnail.url not in content
-        assert last.thumbnail.url in content
 
 
 @pytest.mark.django_db

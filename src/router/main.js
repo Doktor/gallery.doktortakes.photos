@@ -7,7 +7,6 @@ import Index from "../views/Index.vue";
 import AlbumList from "../views/AlbumList.vue";
 import AlbumDetail from "../views/AlbumDetail.vue";
 import PhotoDetail from "../views/PhotoDetail.vue";
-import FeaturedPhotos from "../views/FeaturedPhotos.vue";
 import TagList from "../views/TagList.vue";
 import TagDetail from "../views/TagDetail.vue";
 import UserList from "../views/UserList.vue";
@@ -63,15 +62,6 @@ const browserRoutes = [
     component: AlbumList,
     meta: {
       title: "Albums",
-    },
-  },
-
-  {
-    path: '/featured/',
-    name: 'featured',
-    component: FeaturedPhotos,
-    meta: {
-      title: "Featured",
     },
   },
 
