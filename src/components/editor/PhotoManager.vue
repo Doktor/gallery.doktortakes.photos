@@ -10,19 +10,20 @@
     </div>
 
     <div>
-      <button @click="selectAll" type="button">Select all</button>
-      <button @click="selectNone" type="button">Select none</button>
-      <button @click="selectInvert" type="button">Invert selection</button>
-    </div>
+      <button @click="toggleSelecting">{{ toggleSelectButtonText }}</button>
 
-    <div class="photo-actions">
-      <div>
-        <button @click="setAlbumCover">Set cover</button>
-      </div>
+      <template v-if="isSelecting">
+        <div>
+          <button @click="selectAll" type="button">Select all</button>
+          <button @click="selectNone" type="button">Select none</button>
+          <button @click="selectInvert" type="button">Invert selection</button>
+        </div>
 
-      <div>
-        <button @click="deleteSelected" type="button">Delete</button>
-      </div>
+        <div>
+          <button @click="setAlbumCover" type="button">Set cover</button>
+          <button @click="deleteSelected" type="button">Delete</button>
+        </div>
+      </template>
     </div>
 
     <p v-if="!photos.length">This album does not contain any photos.</p>
@@ -30,7 +31,7 @@
       v-else
       :photos="photos"
       :selectedPhotoHashes="selectedPhotoHashes"
-      :allowSelect="true"
+      :allowSelect="isSelecting"
       @select="select"
     />
   </section>
@@ -60,6 +61,7 @@ export default {
 
   data() {
     return {
+      isSelecting: false,
       selectedPhotoHashes: [],
     };
   },
@@ -67,6 +69,9 @@ export default {
   computed: {
     hashes() {
       return this.photos.map((photo) => photo.md5);
+    },
+    toggleSelectButtonText() {
+      return `${this.isSelecting ? "Disable" : "Enable"} selection mode`
     },
   },
 
@@ -78,6 +83,10 @@ export default {
 
   methods: {
     ...mapActions(["setAlbumCover"]),
+
+    toggleSelecting() {
+      this.isSelecting = !this.isSelecting;
+    },
 
     select(md5) {
       if (this.selectedPhotoHashes.includes(md5)) {
