@@ -60,6 +60,8 @@ export const endpoints = {
   albumList: "/api/albums/",
   albumDetail: "/api/albums/:path/",
   albumPhotoList: "/api/albums/:path/photos/",
+  photoDetail: "/api/photos/:md5/",
+  thumbnailList: "/api/photos/:md5/thumbnails/",
   tagList: "/api/tags/",
   searchPhotos: "/api/photos/search/",
   currentUser: "/api/me/",

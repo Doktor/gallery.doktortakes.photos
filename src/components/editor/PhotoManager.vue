@@ -30,6 +30,7 @@
     <Photos
       v-else
       :photos="photos"
+      route="editPhoto"
       :selectedPhotoHashes="selectedPhotoHashes"
       :allowSelect="isSelecting"
       @select="select"

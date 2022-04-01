@@ -27,6 +27,7 @@ import NewAlbum from "../views/NewAlbum.vue";
 
 import LogIn from "@/views/LogIn";
 import LogOut from "@/views/LogOut";
+import EditPhoto from "@/views/EditPhoto";
 
 
 export const baseTitle = "Doktor Takes Photos";
@@ -197,6 +198,15 @@ const manageRoutes = [
     meta: {
       staff: true,
       title: "Edit album: {album}",
+    },
+  },
+  {
+    path: '/manage/albums/edit/:path+/photos/:md5',
+    name: 'editPhoto',
+    component: EditPhoto,
+    meta: {
+      staff: true,
+      title: "Edit photo: {md5}",
     },
   },
 ];

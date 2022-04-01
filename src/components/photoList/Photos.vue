@@ -81,7 +81,7 @@
       },
       route: {
         type: String,
-        default: "photo"
+        default: "photo",
       },
 
       allowSelect: {
