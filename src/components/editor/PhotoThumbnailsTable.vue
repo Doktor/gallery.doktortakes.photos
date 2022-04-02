@@ -12,7 +12,7 @@
         <td>{{ thumbnail.type }}</td>
         <td>{{ thumbnail.width }}x{{ thumbnail.height }}</td>
         <td>
-          <a :href="thumbnail.url">{{ thumbnail.url }}</a>
+          <a :href="thumbnail.url">{{ thumbnail.name }}</a>
         </td>
       </tr>
     </tbody>
