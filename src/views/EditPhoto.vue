@@ -99,9 +99,10 @@ export default {
 
   methods: {
     async loadAlbum() {
-      let { ok, album, photos } = await AlbumService.getAlbum({
+      let { ok, album } = await AlbumService.getAlbum({
         rawPath: this.routePath,
         code: "",
+        getPhotos: false,
       });
 
       if (!ok) {
@@ -111,7 +112,6 @@ export default {
       }
 
       this.album = album;
-      this.photos = photos;
     },
 
     async loadPhoto() {

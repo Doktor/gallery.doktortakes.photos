@@ -18,7 +18,7 @@ export const AlbumService = {
     return albums;
   },
 
-  async getAlbum({rawPath, code}) {
+  async getAlbum({rawPath, code, getPhotos = true}) {
     let path = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
     let query = code ? getQueryString({code}) : "";
 
@@ -29,6 +29,10 @@ export const AlbumService = {
     }
 
     let album = content;
+
+    if (!getPhotos) {
+      return {ok, album}
+    }
 
     ({ok, content} = await sendRequest(endpoints.albumPhotoList.replace(":path", path) + query));
 
