@@ -15,7 +15,9 @@ THUMBNAIL_TYPES = (
 def get_filename(thumbnail: 'Thumbnail', filename: str) -> str:
     photo = thumbnail.photo
     datetime = photo.taken.strftime("%Y%m%d_%H%M%S")
-    dimensions = f"{photo.width}x{photo.height}"
+
+    image = thumbnail.image
+    dimensions = f"{image.width}x{image.height}"
 
     return f"images/{datetime}_{photo.short_md5}_{dimensions}.jpg"
 
