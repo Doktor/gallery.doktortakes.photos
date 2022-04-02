@@ -9,7 +9,10 @@
     </thead>
     <tbody>
       <tr v-for="(thumbnail, index) in thumbnails" :key="index">
-        <td>{{ thumbnail.type }}</td>
+        <td>
+          <span v-if="thumbnail.type">{{ thumbnail.type }}</span>
+          <i v-else>(untitled)</i>
+        </td>
         <td>{{ thumbnail.width }}x{{ thumbnail.height }}</td>
         <td>
           <a :href="thumbnail.url">{{ thumbnail.name }}</a>
