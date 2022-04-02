@@ -45,4 +45,4 @@ class Thumbnail(models.Model):
     updated_date = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self) -> str:
-        return f'Thumbnail for photo {self.photo.id} ({self.width}x{self.height})'
+        return f'Thumbnail for photo {self.photo_id} ({self.width}x{self.height})'
