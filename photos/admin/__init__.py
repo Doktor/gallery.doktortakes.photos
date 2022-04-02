@@ -6,9 +6,10 @@ from .hero_photo import HeroPhotoAdmin
 from .photo import PhotoAdmin
 from .tag import TagAdmin
 from .tagline import TaglineAdmin
+from .thumbnail import ThumbnailAdmin
 from .watermark import WatermarkAdmin
 
-from photos.models import Album, File, HeroPhoto, Photo, Tag, Tagline, Watermark
+from photos.models import Album, File, HeroPhoto, Photo, Tag, Tagline, Thumbnail, Watermark
 
 
 admin.site.register(Album, AlbumAdmin)
@@ -17,4 +18,5 @@ admin.site.register(HeroPhoto, HeroPhotoAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Tagline, TaglineAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(Thumbnail, ThumbnailAdmin)
 admin.site.register(Watermark, WatermarkAdmin)
