@@ -5,9 +5,14 @@ from photos.models import Thumbnail
 
 class ThumbnailSerializer(serializers.ModelSerializer):
     url = serializers.ImageField(source='image')
+    name = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_name(obj: Thumbnail):
+        return obj.image.name
 
     class Meta:
         model = Thumbnail
         fields = (
-            'url', 'type', 'width', 'height',
+            'url', 'name', 'type', 'width', 'height',
         )
