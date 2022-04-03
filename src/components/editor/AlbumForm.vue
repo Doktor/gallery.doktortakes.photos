@@ -20,17 +20,7 @@
       <CustomInput label="Start" type="date" v-model="albumEdits.start" required />
       <CustomInput label="End" type="date" v-model="albumEdits.end" />
 
-      <div class="form-control">
-        <label for="f-level">Access level</label>
-        <select
-            class="field" name="level" id="f-level"
-            v-model="albumEdits.access_level"
-        >
-          <option v-for="item in accessLevels" :value="item.level">
-            {{ item.name }}
-          </option>
-        </select>
-      </div>
+      <CustomSelect label="Access level" :options="accessLevels" v-model="albumEdits.access_level" />
 
       <div class="form-control">
         <label for="f-access-code">Access code</label>
@@ -56,10 +46,12 @@
 import GenerateAccessCode from './GenerateAccessCode.vue';
 import {accessLevels} from "@/store";
 import CustomInput from "@/components/form/CustomInput";
+import CustomSelect from "@/components/form/CustomSelect";
 
 
 export default {
   components: {
+    CustomSelect,
     CustomInput,
     GenerateAccessCode,
   },
