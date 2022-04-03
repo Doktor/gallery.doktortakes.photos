@@ -1,30 +1,13 @@
 <template>
   <form class="form--1-column" v-on:submit.prevent="submit">
     <fieldset>
-      <div class="form-control">
-        <label for="f-name">Name</label>
-        <input class="field" name="name" maxlength="256" id="f-name" type="text" v-model="albumEdits.name" required />
-      </div>
+      <CustomInput label="Name" :value="albumEdits.name" required maxlength="256"  />
 
-      <div v-if="isUpdate" class="form-control">
-        <label for="f-slug">Slug</label>
-        <input class="field" name="slug" id="f-slug" type="text" :value="album.slug" disabled readonly />
-      </div>
+      <CustomInput v-if="isUpdate" label="Slug" :value="album.slug" disabled readonly />
+      <CustomInput v-if="isUpdate" label="Path" :value="album.path" disabled readonly />
 
-      <div v-if="isUpdate" class="form-control">
-        <label for="f-path">Path</label>
-        <input class="field" name="path" id="f-path" type="text" :value="album.path" disabled />
-      </div>
-
-      <div class="form-control">
-        <label for="f-place">Place</label>
-        <input class="field" name="place" maxlength="128" id="f-place" type="text" v-model="albumEdits.place" />
-      </div>
-
-      <div class="form-control">
-        <label for="f-location">Location</label>
-        <input class="field" name="location" maxlength="128" id="f-location" type="text" v-model="albumEdits.location" />
-      </div>
+      <CustomInput label="Place" v-model="albumEdits.place" maxlength="128" />
+      <CustomInput label="Location" v-model="albumEdits.location" maxlength="128" />
 
       <div class="form-control">
         <label for="f-description">Description</label>
@@ -34,15 +17,8 @@
         ></textarea>
       </div>
 
-      <div class="form-control">
-        <label for="f-start">Start</label>
-        <input class="field" name="start" id="f-start" type="date" v-model="albumEdits.start" required />
-      </div>
-
-      <div class="form-control">
-        <label for="f-end">End</label>
-        <input class="field" name="end" id="f-end" type="date" v-model="albumEdits.end" />
-      </div>
+      <CustomInput label="Start" type="date" v-model="albumEdits.start" required />
+      <CustomInput label="End" type="date" v-model="albumEdits.end" />
 
       <div class="form-control">
         <label for="f-level">Access level</label>
@@ -65,25 +41,11 @@
         />
       </div>
 
-      <div class="form-control">
-        <label for="f-users">Users</label>
-        <input class="field" name="users" id="f-users" type="text" v-model="users" />
-      </div>
+      <CustomInput label="Users" v-model="users" />
+      <CustomInput label="Groups" v-model="groups" />
+      <CustomInput label="Tags" v-model="tags" />
 
-      <div class="form-control">
-        <label for="f-groups">Groups</label>
-        <input class="field" name="groups" id="f-groups" type="text" v-model="groups" />
-      </div>
-
-      <div class="form-control">
-        <label for="f-tags">Tags</label>
-        <input class="field" name="tags" id="f-tags" type="text" v-model="tags" />
-      </div>
-
-      <div class="form-control">
-        <label for="f-parent">Parent</label>
-        <input class="field" name="parent" id="f-parent" type="text" v-model="albumEdits.parent" />
-      </div>
+      <CustomInput label="Parent" v-model="albumEdits.parent" />
     </fieldset>
 
     <button id="album-form-save" type="submit">{{ saveButtonText }}</button>
@@ -93,10 +55,12 @@
 <script>
 import GenerateAccessCode from './GenerateAccessCode.vue';
 import {accessLevels} from "@/store";
+import CustomInput from "@/components/form/CustomInput";
 
 
 export default {
   components: {
+    CustomInput,
     GenerateAccessCode,
   },
 
