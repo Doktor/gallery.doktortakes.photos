@@ -33,6 +33,58 @@ def int_all(*nums: float) -> Iterator[int]:
     return (int(n) for n in nums)
 
 
+def create_thumbnail(
+        pk: int,
+        width: int,
+        height: int,
+        name: str,
+        add_watermark: bool = False,
+        watermark_color: str = None) -> "Thumbnail":
+
+    from photos.models import Photo, Thumbnail
+
+    photo = Photo.objects.get(pk=pk)
+    original_file = photo.get_original()
+    original_image = PIL.Image.open(original_file)
+
+    try:
+        exif = original_image.info['exif']
+    except KeyError:
+        exif = None
+
+    print(photo, width, height)
+
+    try:
+        thumbnail = Thumbnail.objects.get(photo=photo, width=width, height=height, is_watermarked=add_watermark)
+        print("thumbnail exists")
+        thumbnail.image.delete(save=False)
+    except Thumbnail.DoesNotExist:
+        print("making new thumbnail")
+        thumbnail = Thumbnail()
+
+    ret_image = fit_image(original_image, (width, height))
+
+    if add_watermark:
+        ret_image = apply_watermark(ret_image, watermark_color)
+
+    ret_data = BytesIO()
+
+    if exif is not None:
+        ret_image.save(ret_data, 'JPEG', quality=90, exif=exif)
+    else:
+        ret_image.save(ret_data, 'JPEG', quality=90)
+
+    assert ret_image.width == width
+    assert ret_image.height == height
+
+    thumbnail.photo = photo
+    thumbnail.name = name
+
+    thumbnail.image.save('', File(ret_data), save=False)
+    thumbnail.save()
+    return thumbnail
+
+
 def fit_image(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
     """Resizes an image so that it fits within the given size, without
     distorting the image and cropping the sides as necessary."""
