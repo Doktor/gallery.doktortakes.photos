@@ -82,29 +82,29 @@ export const production = process.env.NODE_ENV === 'production';
 
 export const accessLevels = [
   {
-    level: 0,
-    name: 'Public',
+    value: 0,
+    display: 'Public',
   },
   {
-    level: 10,
-    name: 'Signed in',
+    value: 10,
+    display: 'Signed in',
   },
   {
-    level: 20,
-    name: 'Owners',
+    value: 20,
+    display: 'Owners',
   },
   {
-    level: 30,
-    name: 'Staff',
+    value: 30,
+    display: 'Staff',
   },
   {
-    level: 100,
-    name: 'Superusers',
+    value: 100,
+    display: 'Superusers',
   },
 ];
 
 export const accessLevelsMap = Object.assign({},
-  ...accessLevels.map(({level, name}) => {return {[level]: name}}));
+  ...accessLevels.map(({value, display}) => {return {[value]: display}}));
 
 export const fields = {
   readonly: [
