@@ -1,23 +1,29 @@
 <template>
   <form class="form--1-column form--small">
     <fieldset>
-      <PasswordFormField
-        :name="'Current'"
+      <CustomInput
+        label="Current"
+        type="password"
+        autocomplete="off"
         v-model="current.value"
         @input="onEdit('current')"
         :errors="current.errors"
       />
 
-      <PasswordFormField
-        :name="'New password'"
+      <CustomInput
+        label="New password"
+        type="password"
+        autocomplete="off"
         v-model="password1.value"
         @input="onEdit('password1')"
         :errors="password1.errors"
-        :help-text="'Your password must contain at least 8 characters.'"
+        description="Your password must contain at least 8 characters."
       />
 
-      <PasswordFormField
-        :name="'Repeat'"
+      <CustomInput
+        label="Repeat password"
+        type="password"
+        autocomplete="off"
         v-model="password2.value"
         @input="onEdit('password2')"
         :errors="password2.errors"
@@ -44,7 +50,7 @@
 </template>
 
 <script>
-import PasswordFormField from "./PasswordFormField";
+import CustomInput from "@/components/form/CustomInput";
 
 const errors = {
   empty: "This field can't be empty.",
@@ -55,7 +61,7 @@ const errors = {
 
 export default {
   components: {
-    PasswordFormField,
+    CustomInput,
   },
 
   data() {

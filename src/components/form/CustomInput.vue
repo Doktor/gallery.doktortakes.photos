@@ -4,7 +4,7 @@
 
     <textarea
       v-if="type === 'textarea'"
-      class="field"
+      :class="classes"
       :id="id"
       :name="name"
       v-bind="$attrs"
@@ -12,13 +12,23 @@
     />
     <input
       v-else
-      class="field"
+      :class="classes"
       :id="id"
       :name="name"
       :type="type"
       v-bind="$attrs"
       v-model="model"
     />
+
+    <div v-if="description" class="form-note">
+      {{ description }}
+    </div>
+
+    <div v-if="errors.length > 0">
+      <div v-for="(error, index) in errors" :key="index" class="form-error">
+        {{ error }}
+      </div>
+    </div>
 
     <slot></slot>
   </div>
@@ -28,6 +38,14 @@
 export default {
   name: "CustomInput",
   props: {
+    description: {
+      type: String,
+      required: false,
+    },
+    errors: {
+      type: Array,
+      default: () => [],
+    },
     label: {
       type: String,
       required: true,
@@ -42,6 +60,12 @@ export default {
     },
   },
   computed: {
+    classes() {
+      return {
+        "field": true,
+        "field-invalid": this.errors.length > 0,
+      };
+    },
     id() {
       return `f-${this.name}`;
     },
