@@ -19,6 +19,8 @@
       v-bind="$attrs"
       v-model="model"
     />
+
+    <slot></slot>
   </div>
 </template>
 

@@ -16,14 +16,9 @@
 
       <CustomSelect label="Access level" :options="accessLevels" v-model="albumEdits.access_level" />
 
-      <div class="form-control">
-        <label for="f-access-code">Access code</label>
-        <input class="field" name="access-code" id="f-access-code" type="text" v-model="albumEdits.access_code" />
-
-        <GenerateAccessCode
-            v-on:set-access-code="setAccessCode"
-        />
-      </div>
+      <CustomInput label="Access code" v-model="albumEdits.access_code">
+        <GenerateAccessCode @setAccessCode="setAccessCode" />
+      </CustomInput>
 
       <CustomInput label="Users" v-model="users" />
       <CustomInput label="Groups" v-model="groups" />
