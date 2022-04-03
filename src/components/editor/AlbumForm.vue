@@ -9,13 +9,7 @@
       <CustomInput label="Place" v-model="albumEdits.place" maxlength="128" />
       <CustomInput label="Location" v-model="albumEdits.location" maxlength="128" />
 
-      <div class="form-control">
-        <label for="f-description">Description</label>
-        <textarea
-            class="field" name="description" maxlength="1000"
-            id="f-description" rows="5" v-model="albumEdits.description"
-        ></textarea>
-      </div>
+      <CustomInput label="Description" type="textarea" v-model="albumEdits.description" rows="5" maxlength="1000" />
 
       <CustomInput label="Start" type="date" v-model="albumEdits.start" required />
       <CustomInput label="End" type="date" v-model="albumEdits.end" />

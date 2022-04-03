@@ -1,7 +1,17 @@
 <template>
   <div class="form-control">
     <label :for="id">{{ label }}</label>
+
+    <textarea
+      v-if="type === 'textarea'"
+      class="field"
+      :id="id"
+      :name="name"
+      v-bind="$attrs"
+      v-model="model"
+    />
     <input
+      v-else
       class="field"
       :id="id"
       :name="name"
