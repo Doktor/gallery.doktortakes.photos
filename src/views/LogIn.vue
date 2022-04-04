@@ -1,14 +1,7 @@
 <template>
   <form class="form--1-column" v-on:submit.prevent="submit">
-    <div class="form-control">
-      <label for="f-username">Username</label>
-      <input class="field" name="username" maxlength="150" id="f-username" type="text" v-model="username" required>
-    </div>
-
-    <div class="form-control">
-      <label for="f-password">Password</label>
-      <input class="field" name="password" maxlength="150" id="f-password" type="password" v-model="password" required>
-    </div>
+    <CustomInput label="Username" v-model="username" maxlength="150" required />
+    <CustomInput label="Password" type="password" v-model="password" maxlength="150" required />
 
     <div v-if="error" class="error">{{ error }}</div>
 
@@ -18,8 +11,10 @@
 
 <script>
   import {router} from "@/router/main";
+  import CustomInput from "@/components/form/CustomInput";
 
   export default {
+    components: { CustomInput },
     data() {
       return {
         username: "",
