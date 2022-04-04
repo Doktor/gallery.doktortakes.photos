@@ -1,6 +1,6 @@
 <template>
   <div class="form-control">
-    <label :for="id">{{ label }}</label>
+    <label v-if="type !== 'checkbox'" :for="id">{{ label }}</label>
 
     <textarea
       v-if="type === 'textarea'"
@@ -19,6 +19,8 @@
       v-bind="$attrs"
       v-model="model"
     />
+
+    <label v-if="type === 'checkbox'" :for="id">{{ label }}</label>
 
     <div v-if="description" class="form-note">
       {{ description }}
@@ -55,9 +57,7 @@ export default {
       default: "text",
     },
 
-    value: {
-      type: String,
-    },
+    value: {},
   },
   computed: {
     classes() {
@@ -83,3 +83,19 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.field[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+
+  margin-right: 8px;
+
+  vertical-align: 2px;
+
+  & + label {
+    display: inline;
+    width: auto;
+  }
+}
+</style>
