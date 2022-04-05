@@ -1,6 +1,6 @@
 <template>
   <div class="album-skeleton">
-    <AlbumPlaceholder title="Loading..."/>
+    <AlbumPlaceholder title="Loading..." />
     <div class="note album-no-cover-note">
       <i class="fas fa-spin fa-spinner"></i>
     </div>
@@ -8,18 +8,17 @@
 </template>
 
 <script>
-  import AlbumPlaceholder from "./AlbumPlaceholder";
+import AlbumPlaceholder from "./AlbumPlaceholder";
 
-
-  export default {
-    components: {
-      AlbumPlaceholder,
-    },
-  }
+export default {
+  components: {
+    AlbumPlaceholder,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .album-skeleton {
-    border: 1px solid $background-color-2;
-  }
+.album-skeleton {
+  border: 1px solid $background-color-2;
+}
 </style>

@@ -13,7 +13,9 @@
       <div>
         <dt title="Album list"><i class="fas fa-fw fa-list"></i></dt>
         <dd>
-          <router-link :to="{name: 'albums'}">Return to album list</router-link>
+          <router-link :to="{ name: 'albums' }"
+            >Return to album list</router-link
+          >
         </dd>
       </div>
 
@@ -26,32 +28,32 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      album: {
-        type: Object,
-        required: true,
-      },
+export default {
+  props: {
+    album: {
+      type: Object,
+      required: true,
     },
+  },
 
-    computed: {
-      albumRoute() {
-        return {
-          name: 'album',
-          params: {
-            path: this.album.path,
-          },
-          query: {
-            code: this.$route.query.code,
-          },
-        }
-      }
+  computed: {
+    albumRoute() {
+      return {
+        name: "album",
+        params: {
+          path: this.album.path,
+        },
+        query: {
+          code: this.$route.query.code,
+        },
+      };
     },
-  }
+  },
+};
 </script>
 
 <style scoped>
-  i {
-    margin-right: 6px;
-  }
+i {
+  margin-right: 6px;
+}
 </style>

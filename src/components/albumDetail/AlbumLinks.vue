@@ -3,44 +3,46 @@
     <i title="Links" class="fas fa-fw fa-link"></i>
 
     <router-link
-        class="album-link"
-        :to="{name: 'editAlbum', params: {path: album.path}}"
-    >Edit
+      class="album-link"
+      :to="{ name: 'editAlbum', params: { path: album.path } }"
+      >Edit
     </router-link>
 
     <span class="divider"></span>
 
     <a
-        :href="album.admin_url"
-        class="album-link"
-        title="View album on admin site"
-    >Admin</a>
+      :href="album.admin_url"
+      class="album-link"
+      title="View album on admin site"
+      >Admin</a
+    >
 
     <span class="divider"></span>
 
     <a
-        :href="urlProductionSite"
-        class="album-link"
-        title="View album on production site (new tab)"
-        target="_blank"
-        rel="noopener noreferrer"
-    >Production</a>
+      :href="urlProductionSite"
+      class="album-link"
+      title="View album on production site (new tab)"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Production</a
+    >
 
     <span class="divider"></span>
 
     <a
-        :href="urlAlphaSite"
-        class="album-link"
-        title="View album on alpha site (new tab)"
-        target="_blank"
-        rel="noopener noreferrer"
-    >Alpha</a>
+      :href="urlAlphaSite"
+      class="album-link"
+      title="View album on alpha site (new tab)"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Alpha</a
+    >
   </div>
 </template>
 
 <script>
-import {domains} from "@/store";
-
+import { domains } from "@/store";
 
 export default {
   props: {
@@ -59,7 +61,7 @@ export default {
       return new URL(this.album.url, domains.production).href;
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">

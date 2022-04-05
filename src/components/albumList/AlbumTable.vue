@@ -12,76 +12,75 @@
     </thead>
     <tbody>
       <AlbumTableRow
-          v-for="(album, index) in albums"
-          :album="album"
-          :isVisible="indexStart <= index && index <= indexEnd"
-          :key="album.path"
-          :route="route"
+        v-for="(album, index) in albums"
+        :album="album"
+        :isVisible="indexStart <= index && index <= indexEnd"
+        :key="album.path"
+        :route="route"
       />
     </tbody>
   </table>
 </template>
 
 <script>
-  import AlbumTableRow from "./AlbumTableRow";
+import AlbumTableRow from "./AlbumTableRow";
 
+export default {
+  components: {
+    AlbumTableRow,
+  },
 
-  export default {
-    components: {
-      AlbumTableRow,
+  props: {
+    albums: {
+      type: Array,
+      required: true,
+    },
+    route: {
+      type: String,
+      default: "album",
     },
 
-    props: {
-      albums: {
-        type: Array,
-        required: true,
-      },
-      route: {
-        type: String,
-        default: "album",
-      },
-
-      indexStart: {
-        type: Number,
-        required: true,
-      },
-      indexEnd: {
-        type: Number,
-        required: true,
-      },
+    indexStart: {
+      type: Number,
+      required: true,
     },
-  }
+    indexEnd: {
+      type: Number,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-  .album-table {
-    border-collapse: collapse;
-    width: 100%;
+.album-table {
+  border-collapse: collapse;
+  width: 100%;
 
-    th {
-      padding: 12px 6px;
-      background-color: $text-blue;
-      color: white;
-      text-align: center;
+  th {
+    padding: 12px 6px;
+    background-color: $text-blue;
+    color: white;
+    text-align: center;
+  }
+
+  tr {
+    &:nth-child(odd) {
+      background-color: $background-color-2;
     }
 
-    tr {
-      &:nth-child(odd) {
-        background-color: $background-color-2;
-      }
-
-      &:nth-child(even) {
-        background-color: $background-color-3;
-      }
-    }
-
-    td {
-      padding: 6px 12px;
+    &:nth-child(even) {
+      background-color: $background-color-3;
     }
   }
 
-  .album-table-tags {
-    max-width: 300px;
-    word-wrap: break-spaces;
+  td {
+    padding: 6px 12px;
   }
+}
+
+.album-table-tags {
+  max-width: 300px;
+  word-wrap: break-spaces;
+}
 </style>

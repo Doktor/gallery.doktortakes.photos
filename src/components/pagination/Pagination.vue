@@ -1,36 +1,28 @@
 <template>
   <div class="pagination">
     <div class="pagination-controls">
-      <div
-          class="item"
-          @click="selectPreviousPage">
-        Prev
-      </div>
+      <div class="item" @click="selectPreviousPage">Prev</div>
 
       <template v-for="n in getPages()">
         <div
-            v-if="n !== 'skip'"
-            class="item item-condensed"
-            :class="{'selected': page === n}"
-            :key="n"
-            @click="selectPage(n)"
+          v-if="n !== 'skip'"
+          class="item item-condensed"
+          :class="{ selected: page === n }"
+          :key="n"
+          @click="selectPage(n)"
         >
           <span class="item-text">{{ n }}</span>
         </div>
         <PageSkipInput
-            v-else
-            :key="n"
-            @setPage="setPage"
-            :page="page"
-            :pages="pages"
+          v-else
+          :key="n"
+          @setPage="setPage"
+          :page="page"
+          :pages="pages"
         />
       </template>
 
-      <div
-          class="item"
-          @click="selectNextPage">
-        Next
-      </div>
+      <div class="item" @click="selectNextPage">Next</div>
     </div>
 
     <div class="pagination-controls" v-if="itemsPerPageChoices.length > 0">
@@ -38,11 +30,11 @@
         <span class="item-text">Items per page</span>
       </div>
       <div
-          v-for="count in itemsPerPageChoices"
-          class="item item-condensed"
-          :class="{'selected': count === itemsPerPage}"
-          :key="count"
-          @click="$emit('setItemsPerPage', count)"
+        v-for="count in itemsPerPageChoices"
+        class="item item-condensed"
+        :class="{ selected: count === itemsPerPage }"
+        :key="count"
+        @click="$emit('setItemsPerPage', count)"
       >
         <span class="item-text">{{ count }}</span>
       </div>
@@ -51,92 +43,93 @@
 </template>
 
 <script>
-  import PageSkipInput from './PageSkipInput.vue';
+import PageSkipInput from "./PageSkipInput.vue";
 
+const skip = "skip";
 
-  const skip = 'skip';
+export default {
+  components: {
+    PageSkipInput,
+  },
 
-  export default {
-    components: {
-      PageSkipInput,
+  data() {
+    return {
+      half: 2,
+      margin: 5,
+    };
+  },
+
+  methods: {
+    range(start, end) {
+      return Array.from(new Array(end - start + 1), (x, i) => i + start);
     },
 
-    data() {
-      return {
-        half: 2,
-        margin: 5,
+    getPages() {
+      let first = 1;
+      let last = this.pages;
+
+      if (this.pages <= this.margin + this.half) {
+        return this.range(first, last);
       }
+
+      // Left
+      if (Math.abs(this.page - first) <= this.half + 1) {
+        return [...this.range(first, this.margin), skip, last];
+      }
+
+      // Right
+      if (Math.abs(this.page - last) <= this.half + 1) {
+        return [first, skip, ...this.range(last - this.margin, last)];
+      }
+
+      // Middle
+      return [
+        first,
+        skip,
+        ...this.range(this.page - this.half, this.page + this.half),
+        skip,
+        last,
+      ];
     },
 
-    methods: {
-      range(start, end) {
-        return Array.from(new Array(end - start + 1), (x, i) => i + start);
-      },
+    setPage(page) {
+      this.$emit("setPage", page);
+    },
+    selectPage(page) {
+      if (page === this.page || page < 1 || page > this.pages) {
+        return;
+      }
 
-      getPages() {
-        let first = 1;
-        let last = this.pages;
+      this.$emit("setPage", page);
+    },
+    selectNextPage() {
+      this.selectPage(this.page + 1);
+    },
+    selectPreviousPage() {
+      this.selectPage(this.page - 1);
+    },
+  },
 
-        if (this.pages <= this.margin + this.half) {
-          return this.range(first, last);
-        }
-
-        // Left
-        if (Math.abs(this.page - first) <= this.half + 1) {
-          return [...this.range(first, this.margin), skip, last]
-        }
-
-        // Right
-        if (Math.abs(this.page - last) <= this.half + 1) {
-          return [first, skip, ...this.range(last - this.margin, last)]
-        }
-
-        // Middle
-        return [
-          first, skip,
-          ...this.range(this.page - this.half, this.page + this.half),
-          skip, last
-        ]
-      },
-
-      setPage(page) {
-        this.$emit('setPage', page);
-      },
-      selectPage(page) {
-        if (page === this.page || page < 1 || page > this.pages) {
-          return;
-        }
-
-        this.$emit('setPage', page);
-      },
-      selectNextPage() {
-        this.selectPage(this.page + 1);
-      },
-      selectPreviousPage() {
-        this.selectPage(this.page - 1);
-      },
+  props: {
+    itemsPerPage: {
+      type: Number,
+      required: true,
+    },
+    itemsPerPageChoices: {
+      type: Array,
+      default: () => [],
     },
 
-    props: {
-      itemsPerPage: {
-        type: Number,
-        required: true,
-      },
-      itemsPerPageChoices: {
-        type: Array,
-        default: () => [],
-      },
-
-      page: {
-        type: Number,
-        required: true,
-      },
-      pages: {
-        type: Number,
-        required: true,
-      },
-    }
-  }
+    page: {
+      type: Number,
+      required: true,
+    },
+    pages: {
+      type: Number,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -195,7 +188,8 @@
       background-color: $background-color-4;
     }
 
-    &, &:hover {
+    &,
+    &:hover {
       transition: background-color 0.25s;
     }
   }
@@ -203,7 +197,8 @@
   &:not(.item-unselectable) {
     cursor: pointer;
 
-    &.selected, &.selected:hover {
+    &.selected,
+    &.selected:hover {
       background-color: $text-blue;
       border-color: darken($text-blue, 10%);
 
@@ -215,7 +210,8 @@
   }
 }
 
-.item-text, .item-icon {
+.item-text,
+.item-icon {
   color: $text-color;
   line-height: 1;
 }
@@ -232,7 +228,8 @@
   width: 80px;
   border-radius: 0;
 
-  &, &:hover {
+  &,
+  &:hover {
     background-color: $background-color-2;
   }
 }

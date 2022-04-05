@@ -1,18 +1,18 @@
 <template>
   <section class="album-details">
     <div class="album-cover-container">
-      <div class="album" :class="{'album-no-cover': !album.cover}">
+      <div class="album" :class="{ 'album-no-cover': !album.cover }">
         <a
-            v-if="album.cover"
-            :href="album.cover.image"
-            target="_blank"
-            title="Full size"
+          v-if="album.cover"
+          :href="album.cover.image"
+          target="_blank"
+          title="Full size"
         >
           <img
-              :src="album.cover.thumbnail"
-              :title="album.name"
-              alt="Album cover image"
-          >
+            :src="album.cover.thumbnail"
+            :title="album.name"
+            alt="Album cover image"
+          />
         </a>
         <template v-else>
           <AlbumPlaceholder :title="album.name" />
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import AlbumForm from './AlbumForm.vue';
+import AlbumForm from "./AlbumForm.vue";
 import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholder";
 
 export default {
@@ -46,11 +46,11 @@ export default {
 
   methods: {
     saveAlbum(album) {
-      this.$store.dispatch('saveAlbum', album);
-      this.$emit('save');
+      this.$store.dispatch("saveAlbum", album);
+      this.$emit("save");
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -62,7 +62,8 @@ export default {
   margin-top: 1rem;
 }
 
-.album-form-container, .album-cover-container {
+.album-form-container,
+.album-cover-container {
   width: 100%;
 
   @media (min-width: 1201px) {

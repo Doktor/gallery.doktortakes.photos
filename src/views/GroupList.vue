@@ -1,6 +1,6 @@
 <template>
   <FixedWidthContainer>
-    <router-link :to="{name: 'manage'}">Back to editor</router-link>
+    <router-link :to="{ name: 'manage' }">Back to editor</router-link>
 
     <h2>Groups</h2>
 
@@ -26,9 +26,8 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-
 
 export default {
   components: {
@@ -36,27 +35,28 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'loading',
-    ]),
+    ...mapState(["loading"]),
   },
 
   data() {
     return {
       groups: [],
-    }
+    };
   },
 
   async created() {
-    this.groups = await this.$store.dispatch('getGroups');
+    this.groups = await this.$store.dispatch("getGroups");
   },
 
   methods: {
     formatUsers(users) {
-      return users.slice().sort((a, b) => a.localeCompare(b)).join(', ');
+      return users
+        .slice()
+        .sort((a, b) => a.localeCompare(b))
+        .join(", ");
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -69,7 +69,8 @@ thead {
   text-align: center;
 }
 
-th, td {
+th,
+td {
   padding: 4px 8px;
 }
 

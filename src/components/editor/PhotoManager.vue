@@ -3,7 +3,8 @@
     <h2>Manage photos</h2>
 
     <div>
-      {{ photos.length }} photos in album, {{ selectedPhotoHashes.length }} photo{{
+      {{ photos.length }} photos in album,
+      {{ selectedPhotoHashes.length }} photo{{
         selectedPhotoHashes.length | pluralize
       }}
       selected
@@ -72,7 +73,7 @@ export default {
       return this.photos.map((photo) => photo.md5);
     },
     toggleSelectButtonText() {
-      return `${this.isSelecting ? "Disable" : "Enable"} selection mode`
+      return `${this.isSelecting ? "Disable" : "Enable"} selection mode`;
     },
   },
 
@@ -91,7 +92,10 @@ export default {
 
     select(md5) {
       if (this.selectedPhotoHashes.includes(md5)) {
-        this.selectedPhotoHashes.splice(this.selectedPhotoHashes.indexOf(md5), 1);
+        this.selectedPhotoHashes.splice(
+          this.selectedPhotoHashes.indexOf(md5),
+          1
+        );
       } else {
         this.selectedPhotoHashes.push(md5);
       }
@@ -126,13 +130,13 @@ export default {
             "Content-Type": "application/json; charset=utf-8",
             "X-CSRFToken": getCsrfToken(),
           },
-        },
+        }
       );
 
       if (ok) {
         this.selectedPhotoHashes = [];
 
-        this.$emit('update')
+        this.$emit("update");
       }
     },
   },

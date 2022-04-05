@@ -1,15 +1,15 @@
 <template>
-  <router-link :to="{name: route, params: {path: album.pathSplit}}">
+  <router-link :to="{ name: route, params: { path: album.pathSplit } }">
     <!-- Cover image exists -->
     <img
       v-if="album.cover"
       :src="thumbnail"
       :title="album.name"
       alt="Album cover"
-    >
+    />
     <!-- No cover image -->
     <div v-else>
-      <AlbumPlaceholder :title="album.name"/>
+      <AlbumPlaceholder :title="album.name" />
       <div class="note album-no-cover-note">No cover</div>
     </div>
 
@@ -20,45 +20,42 @@
 </template>
 
 <script>
-  import AlbumPlaceholder from "./AlbumPlaceholder";
+import AlbumPlaceholder from "./AlbumPlaceholder";
 
+export default {
+  components: {
+    AlbumPlaceholder,
+  },
 
-  export default {
-    components: {
-      AlbumPlaceholder,
+  computed: {
+    thumbnail() {
+      return this.isLoaded ? this.album.cover.thumbnail : this.placeholder;
+    },
+  },
+
+  props: {
+    album: {
+      type: Object,
+      required: true,
     },
 
-    computed: {
-      thumbnail() {
-        return this.isLoaded
-          ? this.album.cover.thumbnail
-          : this.placeholder;
-      },
+    route: {
+      type: String,
+      default: "album",
     },
 
-    props: {
-      album: {
-        type: Object,
-        required: true,
-      },
-
-      route: {
-        type: String,
-        default: "album",
-      },
-
-      isLoaded: {
-        type: Boolean,
-        default: false,
-      },
+    isLoaded: {
+      type: Boolean,
+      default: false,
     },
-  }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .album-title-text {
-    &:hover {
-      text-decoration: none;
-    }
+.album-title-text {
+  &:hover {
+    text-decoration: none;
   }
+}
 </style>

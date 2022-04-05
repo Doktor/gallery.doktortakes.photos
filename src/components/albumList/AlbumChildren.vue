@@ -12,23 +12,22 @@
 </template>
 
 <script>
-  import AlbumCard from "./AlbumCard";
+import AlbumCard from "./AlbumCard";
 
+export default {
+  components: {
+    AlbumCard,
+  },
 
-  export default {
-    components: {
-      AlbumCard,
+  props: {
+    album: {
+      type: Object,
+      required: true,
     },
-
-    props: {
-      album: {
-        type: Object,
-        required: true,
-      },
-      route: {
-        type: String,
-        default: 'album',
-      },
+    route: {
+      type: String,
+      default: "album",
     },
-  }
+  },
+};
 </script>

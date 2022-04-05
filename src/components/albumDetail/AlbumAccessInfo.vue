@@ -12,7 +12,8 @@
 
     <div v-if="isStaff && album.access_code" class="overlay-item">
       <i title="Access code" class="fas fa-fw fa-key"></i>
-      <span><!--
+      <span
+        ><!--
       -->Access code:
         <router-link :to="accessCodeRoute">
           {{ album.access_code }}
@@ -20,27 +21,22 @@
       </span>
     </div>
 
-    <div
-        v-if="isStaff && (hasUsers || hasGroups)"
-        class="overlay-item"
-    >
+    <div v-if="isStaff && (hasUsers || hasGroups)" class="overlay-item">
       <i title="Users and groups" class="fas fa-fw fa-users"></i>
       <span>
         <template v-if="hasUsers">Users: {{ album.users.join(", ") }}</template>
-        <span
-            v-if="hasUsers && hasGroups"
-            class="divider"
-        ></span>
-        <template v-if="hasGroups">Groups: {{ album.groups.join(", ") }}</template>
+        <span v-if="hasUsers && hasGroups" class="divider"></span>
+        <template v-if="hasGroups"
+          >Groups: {{ album.groups.join(", ") }}</template
+        >
       </span>
     </div>
   </div>
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex';
-import {accessLevelsMap} from "@/store/index.js";
-
+import { mapGetters, mapState } from "vuex";
+import { accessLevelsMap } from "@/store/index.js";
 
 export default {
   props: {
@@ -52,20 +48,18 @@ export default {
 
   computed: {
     ...mapGetters(["isStaff"]),
-    ...mapState([
-      'user',
-    ]),
+    ...mapState(["user"]),
 
     accessCodeRoute() {
       return {
-        name: 'album',
+        name: "album",
         params: {
           path: this.album.pathSplit,
         },
         query: {
           code: this.album.access_code,
-        }
-      }
+        },
+      };
     },
 
     accessLevelDisplay() {
@@ -80,7 +74,7 @@ export default {
       return this.album.users.length > 0;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

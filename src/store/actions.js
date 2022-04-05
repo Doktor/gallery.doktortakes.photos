@@ -1,31 +1,30 @@
-import {endpoints, getCsrfToken} from "./index.js";
-import {router} from "@/router/main.js";
-import {sendRequest} from "@/store/utils";
-
+import { endpoints, getCsrfToken } from "./index.js";
+import { router } from "@/router/main.js";
+import { sendRequest } from "@/store/utils";
 
 export const actions = {
   async ensureCsrfToken(context) {
     await sendRequest(endpoints.csrf);
   },
 
-  async authenticate(context, {username, password}) {
+  async authenticate(context, { username, password }) {
     return await sendRequest(endpoints.authenticate, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'X-CSRFToken': getCsrfToken(),
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRFToken": getCsrfToken(),
       },
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({ username, password }),
     });
   },
 
   async getUsers(context) {
-    context.commit('setLoading', true);
+    context.commit("setLoading", true);
 
-    let {content} = await sendRequest(endpoints.userList);
+    let { content } = await sendRequest(endpoints.userList);
     let users = content.users.sort((a, b) => a.id - b.id);
 
-    context.commit('setLoading', false);
+    context.commit("setLoading", false);
     return users;
   },
 
@@ -34,83 +33,87 @@ export const actions = {
     let token = context.state.token;
 
     if (token !== null) {
-      options.headers = {'Authorization': `Token ${token}`};
+      options.headers = { Authorization: `Token ${token}` };
     }
 
-    let {content} = await sendRequest(endpoints.currentUser, options);
-    context.commit('setUser', content);
+    let { content } = await sendRequest(endpoints.currentUser, options);
+    context.commit("setUser", content);
   },
 
   async getGroups(context) {
-    context.commit('setLoading', true);
+    context.commit("setLoading", true);
 
-    let {content} = await sendRequest(endpoints.groupList);
+    let { content } = await sendRequest(endpoints.groupList);
     let groups = content.groups.sort((a, b) => a.id - b.id);
 
-    context.commit('setLoading', false);
+    context.commit("setLoading", false);
     return groups;
   },
 
   async changePassword(context, data) {
-    let {ok, content} = await sendRequest(endpoints.changePassword, {
-      method: 'POST',
+    let { ok, content } = await sendRequest(endpoints.changePassword, {
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': getCsrfToken(),
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCsrfToken(),
       },
     });
 
     if (ok) {
-      context.commit('addNotification', content.message);
+      context.commit("addNotification", content.message);
 
-      setTimeout(() => router.push({
-        name: 'user',
-        params: {
-          slug: context.state.user.name
-        },
-      }), 1000);
+      setTimeout(
+        () =>
+          router.push({
+            name: "user",
+            params: {
+              slug: context.state.user.name,
+            },
+          }),
+        1000
+      );
 
       return;
     }
 
     content.errors.forEach((error) => {
-      context.commit('addNotification', error);
+      context.commit("addNotification", error);
     });
   },
 
   async getTags(context) {
-    context.commit('setLoading', true);
-    let {content} = await sendRequest(endpoints.tagList);
-    context.commit('setLoading', false);
+    context.commit("setLoading", true);
+    let { content } = await sendRequest(endpoints.tagList);
+    context.commit("setLoading", false);
 
     return content.tags;
   },
 
   async getTag(context, slug) {
-    context.commit('setLoading', true);
-    let tags = await context.dispatch('getTags');
-    context.commit('setLoading', false);
+    context.commit("setLoading", true);
+    let tags = await context.dispatch("getTags");
+    context.commit("setLoading", false);
 
-    return tags.find(tag => tag.slug === slug);
+    return tags.find((tag) => tag.slug === slug);
   },
 
   async searchPhotos(context, queryString) {
-    let {content} = await sendRequest(endpoints.searchPhotos + queryString);
-    context.commit('setSearchResults', content.photos);
-    context.commit('setSearchResultsCount', content.count);
+    let { content } = await sendRequest(endpoints.searchPhotos + queryString);
+    context.commit("setSearchResults", content.photos);
+    context.commit("setSearchResultsCount", content.count);
   },
 
   async getRecent(context) {
-    context.commit('setLoading', true);
+    context.commit("setLoading", true);
 
-    let {content} = await sendRequest(endpoints.recent);
-    context.commit('setGitStatus', content.git_status);
-    context.commit('setLoading', false);
+    let { content } = await sendRequest(endpoints.recent);
+    context.commit("setGitStatus", content.git_status);
+    context.commit("setLoading", false);
   },
 
   async getHeroPhotos(context) {
-    let {content} = await sendRequest(endpoints.heroPhotoList);
+    let { content } = await sendRequest(endpoints.heroPhotoList);
     return content;
   },
 };

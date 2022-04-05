@@ -6,7 +6,12 @@
       <span class="loading-text loading-2">.</span>
       <span class="loading-text loading-3">.</span>
     </div>
-    <div v-else key="done-loading" class="index-main-container" @click="loadNextHeroPhoto">
+    <div
+      v-else
+      key="done-loading"
+      class="index-main-container"
+      @click="loadNextHeroPhoto"
+    >
       <HeroPhoto :photo="heroPhoto" />
 
       <header class="index-container index-header">
@@ -18,61 +23,58 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import AlbumListCards from "@/components/albumList/AlbumListCards";
-  import IndexNavlinks from "@/components/navlink/IndexNavlinks";
-  import IndexLogo from "@/components/index/IndexLogo";
-  import FadeTransition from "@/transitions/FadeTransition";
-  import HeroPhoto from "@/components/index/HeroPhoto";
+import { mapState } from "vuex";
+import AlbumListCards from "@/components/albumList/AlbumListCards";
+import IndexNavlinks from "@/components/navlink/IndexNavlinks";
+import IndexLogo from "@/components/index/IndexLogo";
+import FadeTransition from "@/transitions/FadeTransition";
+import HeroPhoto from "@/components/index/HeroPhoto";
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
- }
-
-  export default {
-    components: {
-      HeroPhoto,
-      FadeTransition,
-      IndexLogo,
-      IndexNavlinks,
-      AlbumListCards,
-    },
-
-    data() {
-      return {
-        heroPhotos: [],
-        heroPhoto: undefined,
-        heroPhotoIndex: 0,
-      }
-    },
-
-    computed: {
-      ...mapState([
-        'albums',
-        'loading',
-      ]),
-    },
-
-    methods: {
-      loadNextHeroPhoto() {
-        this.heroPhoto = this.heroPhotos[this.heroPhotoIndex];
-        this.heroPhotoIndex = (this.heroPhotoIndex + 1) % this.heroPhotos.length;
-      },
-    },
-
-    async created() {
-      this.$store.commit('setLoading', true);
-
-      this.heroPhotos = await this.$store.dispatch('getHeroPhotos');
-      shuffle(this.heroPhotos);
-      this.loadNextHeroPhoto();
-
-      this.$store.commit('setLoading', false);
-    },
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
+}
+
+export default {
+  components: {
+    HeroPhoto,
+    FadeTransition,
+    IndexLogo,
+    IndexNavlinks,
+    AlbumListCards,
+  },
+
+  data() {
+    return {
+      heroPhotos: [],
+      heroPhoto: undefined,
+      heroPhotoIndex: 0,
+    };
+  },
+
+  computed: {
+    ...mapState(["albums", "loading"]),
+  },
+
+  methods: {
+    loadNextHeroPhoto() {
+      this.heroPhoto = this.heroPhotos[this.heroPhotoIndex];
+      this.heroPhotoIndex = (this.heroPhotoIndex + 1) % this.heroPhotos.length;
+    },
+  },
+
+  async created() {
+    this.$store.commit("setLoading", true);
+
+    this.heroPhotos = await this.$store.dispatch("getHeroPhotos");
+    shuffle(this.heroPhotos);
+    this.loadNextHeroPhoto();
+
+    this.$store.commit("setLoading", false);
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -99,7 +101,9 @@ $panel-margin: 2rem;
   font-size: 50px;
 }
 
-.loading-1, .loading-2, .loading-3 {
+.loading-1,
+.loading-2,
+.loading-3 {
   font-weight: 700;
 
   opacity: 0;

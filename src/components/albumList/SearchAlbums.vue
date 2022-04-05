@@ -7,17 +7,17 @@
     <AlbumSearchInput v-model="searchTerm" @input="filterAlbums" />
 
     <Albums
-        v-if="loading"
-        :albums="new Array(12).fill({})"
-        :albumRoute="albumRoute"
-        :isSkeleton="true"
-        :loading="loading"
+      v-if="loading"
+      :albums="new Array(12).fill({})"
+      :albumRoute="albumRoute"
+      :isSkeleton="true"
+      :loading="loading"
     />
     <Albums
-        v-else-if="searchResults.length"
-        :albums="searchResults"
-        :albumRoute="albumRoute"
-        :loading="loading"
+      v-else-if="searchResults.length"
+      :albums="searchResults"
+      :albumRoute="albumRoute"
+      :loading="loading"
     />
     <div v-else>No albums found.</div>
   </div>
@@ -58,7 +58,7 @@ export default {
     return {
       searchTerm: "",
       searchResults: [],
-    }
+    };
   },
 
   computed: {
@@ -69,7 +69,9 @@ export default {
 
   methods: {
     filterAlbums() {
-      this.searchResults = this.searchTerm ? this.albums.filter(this.matchAlbum) : this.albums;
+      this.searchResults = this.searchTerm
+        ? this.albums.filter(this.matchAlbum)
+        : this.albums;
     },
 
     loadAlbums(albums) {
@@ -82,7 +84,7 @@ export default {
   },
 
   mounted() {
-    this.loadAlbums(this.albums)
+    this.loadAlbums(this.albums);
   },
 
   watch: {

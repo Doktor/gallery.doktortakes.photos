@@ -6,7 +6,7 @@
 
 <script>
 import SearchAlbums from "@/components/albumList/SearchAlbums";
-import {AlbumService} from "@/services/AlbumService";
+import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {
@@ -17,7 +17,7 @@ export default {
     return {
       albums: [],
       loading: true,
-    }
+    };
   },
 
   async created() {

@@ -1,15 +1,11 @@
 <template>
   <FadeTransition appear :duration="1000" mode="in-out">
-    <div
-        class="hero-photo"
-        :key="photo.image"
-        :style="heroPhotoStyles"
-    >
+    <div class="hero-photo" :key="photo.image" :style="heroPhotoStyles">
       <img
-          class="hero-photo-loader"
-          :src="photo.image"
-          @load.once="onInitialImageLoad"
-          alt=""
+        class="hero-photo-loader"
+        :src="photo.image"
+        @load.once="onInitialImageLoad"
+        alt=""
       />
     </div>
   </FadeTransition>
@@ -33,18 +29,18 @@ export default {
   data() {
     return {
       initialImageLoaded: false,
-    }
+    };
   },
 
   computed: {
     heroPhotoStyles() {
       let styles = {
         backgroundImage: `url(${this.photo.image})`,
-        backgroundPositionX: this.photo.x_position ?? 'center',
+        backgroundPositionX: this.photo.x_position ?? "center",
       };
 
       if (!this.initialImageLoaded) {
-        styles.visibility = 'hidden';
+        styles.visibility = "hidden";
         styles.opacity = 0;
       }
 
@@ -57,7 +53,7 @@ export default {
       this.initialImageLoaded = true;
     },
   },
-}
+};
 </script>
 
 <style scoped>

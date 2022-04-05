@@ -1,16 +1,16 @@
 <template>
   <div v-if="!loading && Object.keys(photo).length !== 0">
     <PhotoViewer
-        :count="this.photos.length - 1"
-        :onClick="onClick"
-        :photo="photo"
-        @changePhoto="changePhoto"
+      :count="this.photos.length - 1"
+      :onClick="onClick"
+      :photo="photo"
+      @changePhoto="changePhoto"
     />
 
     <Filmstrip
-        :photos="photos"
-        :position="photo.index"
-        @changePhoto="changePhoto"
+      :photos="photos"
+      :position="photo.index"
+      @changePhoto="changePhoto"
     />
 
     <section class="info">
@@ -23,27 +23,26 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-import {router} from "@/router/main.js";
+import { mapState } from "vuex";
+import { router } from "@/router/main.js";
 
 import Exif from "@/components/photoDetail/Exif";
 import Filmstrip from "@/components/photoDetail/Filmstrip";
-import KeyboardShortcuts from '@/components/photoDetail/KeyboardShortcuts.vue';
+import KeyboardShortcuts from "@/components/photoDetail/KeyboardShortcuts.vue";
 import Links from "@/components/photoDetail/Links";
 import Metadata from "@/components/photoDetail/Metadata";
 import PhotoViewer from "@/components/photoDetail/PhotoViewer";
-import {AlbumService} from "@/services/AlbumService";
+import { AlbumService } from "@/services/AlbumService";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
-
 export default {
   beforeRouteEnter(to, from, next) {
-    next(view => document.addEventListener('keyup', view.handleKey));
+    next((view) => document.addEventListener("keyup", view.handleKey));
   },
 
   beforeRouteLeave(to, from, next) {
-    document.removeEventListener('keyup', this.handleKey);
+    document.removeEventListener("keyup", this.handleKey);
     next();
   },
 
@@ -61,16 +60,13 @@ export default {
       album: {},
       photos: [],
 
-      onClick: () => {
-      },
+      onClick: () => {},
       photo: {},
-    }
+    };
   },
 
   computed: {
-    ...mapState([
-      'loading',
-    ]),
+    ...mapState(["loading"]),
 
     md5() {
       return this.$route.params.md5;
@@ -86,11 +82,14 @@ export default {
   },
 
   async created() {
-    let {ok, album, photos} = await AlbumService.getAlbum({rawPath: this.routePath, code: this.routeAccessCode});
+    let { ok, album, photos } = await AlbumService.getAlbum({
+      rawPath: this.routePath,
+      code: this.routeAccessCode,
+    });
 
     if (!ok) {
-      this.$store.commit('addNotification', "Album not found.");
-      await this.$router.push({name: 'albums'});
+      this.$store.commit("addNotification", "Album not found.");
+      await this.$router.push({ name: "albums" });
 
       return;
     }
@@ -98,7 +97,7 @@ export default {
     this.album = album;
     this.photos = photos;
 
-    let photo = this.photos.find(photo => photo.md5 === this.md5);
+    let photo = this.photos.find((photo) => photo.md5 === this.md5);
     this.setPhoto(photo, this.routeAccessCode);
   },
 
@@ -141,11 +140,14 @@ export default {
       }
 
       // Add browser history entry
-      let title = photoTitleTemplate.format(photo.md5.substring(0, 8), this.album.name);
+      let title = photoTitleTemplate.format(
+        photo.md5.substring(0, 8),
+        this.album.name
+      );
       document.title = title;
 
       let resolved = router.resolve({
-        name: 'photo',
+        name: "photo",
         params: {
           path: this.album.pathSplit,
           md5: this.md5,
@@ -162,9 +164,12 @@ export default {
 
       switch (event.key.toLowerCase()) {
         case "a":
-          return router.push({name: "album", params: {path: this.album.pathSplit}});
+          return router.push({
+            name: "album",
+            params: { path: this.album.pathSplit },
+          });
         case "l":
-          return router.push({name: "albums"});
+          return router.push({ name: "albums" });
         case "d":
           window.location.href = this.photo.download;
           break;
@@ -174,7 +179,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
 <style>
@@ -186,7 +191,8 @@ body.photo-viewer {
 </style>
 
 <style lang="scss" scoped>
-.info, footer {
+.info,
+footer {
   margin: 0 auto;
   width: 90%;
 }
@@ -213,13 +219,15 @@ body.photo-viewer {
 }
 
 .info::v-deep {
-  dl, dt, dd {
+  dl,
+  dt,
+  dd {
     margin: 0;
   }
 
-  dt, dd {
+  dt,
+  dd {
     display: inline;
   }
 }
-
 </style>

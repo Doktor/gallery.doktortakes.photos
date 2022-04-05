@@ -1,5 +1,4 @@
-import {getField} from "vuex-map-fields";
-
+import { getField } from "vuex-map-fields";
 
 export const getters = {
   getField,

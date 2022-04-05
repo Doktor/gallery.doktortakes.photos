@@ -5,15 +5,18 @@
 </template>
 
 <script>
-  import {router} from "@/router/main";
+import { router } from "@/router/main";
 
-  export default {
-    async mounted() {
-      await this.$store.commit('logOut');
-      await this.$store.commit('addTimedNotification', {message: "Logged out successfully.", hideAfter: 5000});
-      router.push({name: 'index'})
-    },
-  }
+export default {
+  async mounted() {
+    await this.$store.commit("logOut");
+    await this.$store.commit("addTimedNotification", {
+      message: "Logged out successfully.",
+      hideAfter: 5000,
+    });
+    router.push({ name: "index" });
+  },
+};
 </script>
 
 <style lang="scss" scoped>

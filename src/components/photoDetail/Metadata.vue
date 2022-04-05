@@ -24,9 +24,17 @@
       </div>
 
       <div>
-        <dt><i title="Open in new tab"
-               class="fas fa-fw fa-external-link-square-alt"></i></dt>
-        <dd><a :href="photo.images.display.url" title="Open in new tab">Open in new tab</a></dd>
+        <dt>
+          <i
+            title="Open in new tab"
+            class="fas fa-fw fa-external-link-square-alt"
+          ></i>
+        </dt>
+        <dd>
+          <a :href="photo.images.display.url" title="Open in new tab"
+            >Open in new tab</a
+          >
+        </dd>
       </div>
 
       <div>
@@ -43,38 +51,35 @@
 </template>
 
 <script>
-  import {mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState } from "vuex";
 
+export default {
+  computed: {
+    ...mapGetters(["isStaff"]),
+    ...mapState(["user"]),
+  },
 
-  export default {
-    computed: {
-      ...mapGetters(["isStaff"]),
-      ...mapState([
-        'user',
-      ]),
+  props: {
+    photo: {
+      type: Object,
+      required: true,
     },
-
-    props: {
-      photo: {
-        type: Object,
-        required: true,
-      },
-      count: {
-        type: Number,
-        required: true,
-      },
+    count: {
+      type: Number,
+      required: true,
     },
-  }
+  },
+};
 </script>
 
 <style scoped>
-  i {
-    margin-right: 6px;
-  }
+i {
+  margin-right: 6px;
+}
 
-  .md5 {
-    font-family: "Consolas", monospace;
-    line-height: 1;
-    word-break: break-all;
-  }
+.md5 {
+  font-family: "Consolas", monospace;
+  line-height: 1;
+  word-break: break-all;
+}
 </style>

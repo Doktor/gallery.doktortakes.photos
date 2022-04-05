@@ -3,10 +3,10 @@
     <div class="filmstrip">
       <div v-for="photo in photos" :class="classes(photo.index)">
         <img
-            class="filmstrip-image"
-            :src="photo.images.square.url"
-            @click="onClick(photo.index)"
-        >
+          class="filmstrip-image"
+          :src="photo.images.square.url"
+          @click="onClick(photo.index)"
+        />
         <div class="filmstrip-index">{{ photo.index + 1 }}</div>
       </div>
     </div>
@@ -14,156 +14,158 @@
 </template>
 
 <script>
-  const settings = {
-    items: 9,
-    half: 4,
-  };
+const settings = {
+  items: 9,
+  half: 4,
+};
 
-
-  export default {
-    computed: {
-      routeAccessCode() {
-        return this.$route.query.code || "";
-      }
+export default {
+  computed: {
+    routeAccessCode() {
+      return this.$route.query.code || "";
     },
+  },
 
-    data() {
-      return {
-        start: 0,
-        end: 0,
-      }
-    },
+  data() {
+    return {
+      start: 0,
+      end: 0,
+    };
+  },
 
-    methods: {
-      classes(index) {
-        this.updateRange();
-
-        return {
-          "filmstrip-item": true,
-          hidden: !(this.start <= index && index < this.end),
-          selected: this.position === index,
-        }
-      },
-
-      onClick(index) {
-        this.$emit('changePhoto', index);
-      },
-
-      updateRange() {
-        let start;
-        let end;
-
-        let length = this.photos.length;
-
-        // Fewer items than filmstrip length
-        if (length < settings.items) {
-          start = 0;
-          end = length;
-        }
-        // Start
-        else if (this.position < settings.half) {
-          start = 0;
-          end = settings.items;
-        }
-        // End
-        else if (this.position >= length - settings.half) {
-          start = length - settings.items;
-          end = length;
-        }
-        // Middle
-        else {
-          start = this.position - settings.half;
-          end = this.position + settings.half + 1;
-        }
-
-        this.start = start;
-        this.end = end;
-      }
-    },
-
-    mounted() {
+  methods: {
+    classes(index) {
       this.updateRange();
+
+      return {
+        "filmstrip-item": true,
+        "hidden": !(this.start <= index && index < this.end),
+        "selected": this.position === index,
+      };
     },
 
-    props: {
-      photos: {
-        type: Array,
-        required: true,
-      },
-      position: {
-        type: Number,
-        required: true,
-      },
-
-      useHistory: {
-        type: Boolean,
-        default: true,
-      },
+    onClick(index) {
+      this.$emit("changePhoto", index);
     },
-  }
+
+    updateRange() {
+      let start;
+      let end;
+
+      let length = this.photos.length;
+
+      // Fewer items than filmstrip length
+      if (length < settings.items) {
+        start = 0;
+        end = length;
+      }
+      // Start
+      else if (this.position < settings.half) {
+        start = 0;
+        end = settings.items;
+      }
+      // End
+      else if (this.position >= length - settings.half) {
+        start = length - settings.items;
+        end = length;
+      }
+      // Middle
+      else {
+        start = this.position - settings.half;
+        end = this.position + settings.half + 1;
+      }
+
+      this.start = start;
+      this.end = end;
+    },
+  },
+
+  mounted() {
+    this.updateRange();
+  },
+
+  props: {
+    photos: {
+      type: Array,
+      required: true,
+    },
+    position: {
+      type: Number,
+      required: true,
+    },
+
+    useHistory: {
+      type: Boolean,
+      default: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-  .filmstrip-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.filmstrip-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  $fadeTime: 0.2s;
+$fadeTime: 0.2s;
 
-  .filmstrip-item {
-    $step: 0.35;
+.filmstrip-item {
+  $step: 0.35;
 
-    display: inline-block;
-
-    .filmstrip-image {
-      opacity: 1 - $step * 2;
-    }
-
-    &:hover .filmstrip-image {
-      opacity: 1 - $step;
-    }
-
-    .filmstrip-image, &:hover .filmstrip-image {
-      transition: opacity $fadeTime ease-in-out;
-    }
-
-    &.selected .filmstrip-image, &.selected:hover .filmstrip-image {
-      opacity: 1;
-    }
-
-    .filmstrip-index {
-      font-size: 0.8rem;
-      font-family: "Consolas", monospace;
-      line-height: 1;
-
-      margin-top: 0.45rem;
-      opacity: 0;
-    }
-
-    &:hover .filmstrip-index {
-      transition: opacity $fadeTime ease-in-out;
-    }
-
-    &.selected .filmstrip-index, &:hover .filmstrip-index {
-      opacity: 1 !important;
-    }
-  }
+  display: inline-block;
 
   .filmstrip-image {
-    display: block;
-    width: 50px;
-    height: 50px;
-    margin: 0 4px;
-    border: 1px solid $text-color;
-
-    clear: both;
-    cursor: pointer;
-
-    @media (min-width: 901px) {
-      width: 80px;
-      height: 80px;
-    }
+    opacity: 1 - $step * 2;
   }
+
+  &:hover .filmstrip-image {
+    opacity: 1 - $step;
+  }
+
+  .filmstrip-image,
+  &:hover .filmstrip-image {
+    transition: opacity $fadeTime ease-in-out;
+  }
+
+  &.selected .filmstrip-image,
+  &.selected:hover .filmstrip-image {
+    opacity: 1;
+  }
+
+  .filmstrip-index {
+    font-size: 0.8rem;
+    font-family: "Consolas", monospace;
+    line-height: 1;
+
+    margin-top: 0.45rem;
+    opacity: 0;
+  }
+
+  &:hover .filmstrip-index {
+    transition: opacity $fadeTime ease-in-out;
+  }
+
+  &.selected .filmstrip-index,
+  &:hover .filmstrip-index {
+    opacity: 1 !important;
+  }
+}
+
+.filmstrip-image {
+  display: block;
+  width: 50px;
+  height: 50px;
+  margin: 0 4px;
+  border: 1px solid $text-color;
+
+  clear: both;
+  cursor: pointer;
+
+  @media (min-width: 901px) {
+    width: 80px;
+    height: 80px;
+  }
+}
 </style>

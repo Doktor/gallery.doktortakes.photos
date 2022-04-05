@@ -1,20 +1,56 @@
 <template>
   <form class="form--1-column" v-on:submit.prevent="submit">
     <fieldset>
-      <CustomInput label="Name" :value="albumEdits.name" required maxlength="256"  />
+      <CustomInput
+        label="Name"
+        :value="albumEdits.name"
+        required
+        maxlength="256"
+      />
 
-      <CustomInput v-if="isUpdate" label="Slug" :value="album.slug" disabled readonly />
-      <CustomInput v-if="isUpdate" label="Path" :value="album.path" disabled readonly />
+      <CustomInput
+        v-if="isUpdate"
+        label="Slug"
+        :value="album.slug"
+        disabled
+        readonly
+      />
+      <CustomInput
+        v-if="isUpdate"
+        label="Path"
+        :value="album.path"
+        disabled
+        readonly
+      />
 
       <CustomInput label="Place" v-model="albumEdits.place" maxlength="128" />
-      <CustomInput label="Location" v-model="albumEdits.location" maxlength="128" />
+      <CustomInput
+        label="Location"
+        v-model="albumEdits.location"
+        maxlength="128"
+      />
 
-      <CustomInput label="Description" type="textarea" v-model="albumEdits.description" rows="5" maxlength="1000" />
+      <CustomInput
+        label="Description"
+        type="textarea"
+        v-model="albumEdits.description"
+        rows="5"
+        maxlength="1000"
+      />
 
-      <CustomInput label="Start" type="date" v-model="albumEdits.start" required />
+      <CustomInput
+        label="Start"
+        type="date"
+        v-model="albumEdits.start"
+        required
+      />
       <CustomInput label="End" type="date" v-model="albumEdits.end" />
 
-      <CustomSelect label="Access level" :options="accessLevels" v-model="albumEdits.access_level" />
+      <CustomSelect
+        label="Access level"
+        :options="accessLevels"
+        v-model="albumEdits.access_level"
+      />
 
       <CustomInput label="Access code" v-model="albumEdits.access_code">
         <GenerateAccessCode @setAccessCode="setAccessCode" />
@@ -32,11 +68,10 @@
 </template>
 
 <script>
-import GenerateAccessCode from './GenerateAccessCode.vue';
-import {accessLevels} from "@/store";
+import GenerateAccessCode from "./GenerateAccessCode.vue";
+import { accessLevels } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
-
 
 export default {
   components: {
@@ -63,13 +98,13 @@ export default {
 
   data() {
     return {
-      albumEdits: {...this.album},
+      albumEdits: { ...this.album },
 
       accessLevels,
       users: "",
       groups: "",
       tags: "",
-    }
+    };
   },
 
   methods: {
@@ -79,10 +114,13 @@ export default {
 
     submit() {
       for (let key of ["users", "groups", "tags"]) {
-        this.albumEdits[key] = this.$data[key].split(',').map(v => v.trim()).filter(v => v.length > 0);
+        this.albumEdits[key] = this.$data[key]
+          .split(",")
+          .map((v) => v.trim())
+          .filter((v) => v.length > 0);
       }
 
-      this.$emit('save', this.albumEdits);
+      this.$emit("save", this.albumEdits);
     },
   },
 
@@ -91,5 +129,5 @@ export default {
     this.groups = this.album.groups.join(", ");
     this.tags = this.album.tags.join(", ");
   },
-}
+};
 </script>

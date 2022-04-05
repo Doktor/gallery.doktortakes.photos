@@ -11,7 +11,7 @@
 
         <template v-if="photos.length > 0">
           <span> &middot; </span>
-          <span>{{ photos.length }} photo{{ photos.length|pluralize }}</span>
+          <span>{{ photos.length }} photo{{ photos.length | pluralize }}</span>
         </template>
       </div>
     </div>
@@ -25,12 +25,20 @@
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState } from "vuex";
 import AlbumAccessInfo from "./AlbumAccessInfo";
 import AlbumLinks from "./AlbumLinks";
 import AlbumMetadata from "./AlbumMetadata";
 
-const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 function twoDigitPad(n) {
   return n <= 9 ? "0" + n : n;
@@ -38,13 +46,12 @@ function twoDigitPad(n) {
 
 function formatDate(date) {
   return "{0} {1}-{2}-{3}".format(
-      days[date.getDay()],
-      date.getFullYear(),
-      twoDigitPad(date.getMonth() + 1),
-      twoDigitPad(date.getDate())
-  )
+    days[date.getDay()],
+    date.getFullYear(),
+    twoDigitPad(date.getMonth() + 1),
+    twoDigitPad(date.getDate())
+  );
 }
-
 
 export default {
   components: {
@@ -55,17 +62,13 @@ export default {
 
   computed: {
     ...mapGetters(["isStaff"]),
-    ...mapState([
-      'loading',
-      'photos',
-      'user',
-    ]),
+    ...mapState(["loading", "photos", "user"]),
 
     classes() {
       return {
-        'is-empty': !this.isSkeleton && this.album.cover === null,
-        'is-skeleton': this.isSkeleton,
-      }
+        "is-empty": !this.isSkeleton && this.album.cover === null,
+        "is-skeleton": this.isSkeleton,
+      };
     },
 
     date() {
@@ -73,14 +76,14 @@ export default {
       let end = this.album.end === null ? null : new Date(this.album.end);
 
       return end === null
-          ? formatDate(start)
-          : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
+        ? formatDate(start)
+        : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
     },
   },
 
   filters: {
     pluralize(value) {
-      return value === 1 ? '' : 's';
+      return value === 1 ? "" : "s";
     },
   },
 
@@ -94,7 +97,7 @@ export default {
       default: false,
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -109,7 +112,8 @@ export default {
 
   background-color: rgba($background-color, 0.6);
 
-  &.is-empty, &.is-skeleton {
+  &.is-empty,
+  &.is-skeleton {
     min-height: unset;
     background-color: unset;
   }
@@ -128,7 +132,8 @@ export default {
   text-transform: none;
 }
 
-.overlay-item, ::v-deep .overlay-item {
+.overlay-item,
+::v-deep .overlay-item {
   @include secondary-headings-font();
 
   font-size: 1.5rem;

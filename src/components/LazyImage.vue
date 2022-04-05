@@ -1,10 +1,10 @@
 <template>
-  <div class="lazy-image" :class="{'lazy-image-loaded': loaded}">
+  <div class="lazy-image" :class="{ 'lazy-image-loaded': loaded }">
     <div
       v-if="placeholder"
       ref="placeholder"
       class="lazy-image-placeholder"
-      :style="{background}"
+      :style="{ background }"
     >
       <img :src="placeholder" alt="" v-bind="$attrs" />
     </div>
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       loaded: false,
-    }
+    };
   },
 
   props: {
@@ -40,7 +40,7 @@ export default {
 
   computed: {
     placeholder() {
-      const {width, height} = this.$attrs;
+      const { width, height } = this.$attrs;
 
       if (!width || !height) {
         return "";
@@ -56,7 +56,7 @@ export default {
       context.fillStyle = "#606060";
       context.fillRect(0, 0, canvas.width, canvas.height);
 
-      return canvas.toDataURL()
+      return canvas.toDataURL();
     },
   },
 
@@ -67,12 +67,12 @@ export default {
       const image = this.$refs.image;
       const placeholder = this.$refs.placeholder;
 
-      image.addEventListener('load', () => {
+      image.addEventListener("load", () => {
         delete image.onload;
         this.loaded = true;
 
         if (placeholder) {
-          timeout = setTimeout(() => placeholder.remove(), 400)
+          timeout = setTimeout(() => placeholder.remove(), 400);
         }
       });
 
@@ -90,9 +90,9 @@ export default {
       if (timeout) {
         clearTimeout(timeout);
       }
-    })
+    });
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

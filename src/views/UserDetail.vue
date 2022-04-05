@@ -14,7 +14,9 @@
 
       <ul>
         <li>
-          <router-link :to="{name: 'changePassword', params: {slug: user.name}}">
+          <router-link
+            :to="{ name: 'changePassword', params: { slug: user.name } }"
+          >
             Change your password
           </router-link>
         </li>
@@ -22,45 +24,42 @@
     </FixedWidthContainer>
 
     <section>
-      <h2 style="text-align: left;">Albums</h2>
+      <h2 style="text-align: left">Albums</h2>
       <SearchAlbums :albums="albums" :loading="loading" />
     </section>
   </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import FixedWidthContainer from "@/components/FixedWidthContainer";
-  import SearchAlbums from "@/components/albumList/SearchAlbums";
-  import {AlbumService} from "@/services/AlbumService";
+import { mapState } from "vuex";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import SearchAlbums from "@/components/albumList/SearchAlbums";
+import { AlbumService } from "@/services/AlbumService";
 
+export default {
+  components: {
+    SearchAlbums,
+    FixedWidthContainer,
+  },
 
-  export default {
-    components: {
-      SearchAlbums,
-      FixedWidthContainer,
-    },
+  computed: {
+    ...mapState(["user"]),
+  },
 
-    computed: {
-      ...mapState([
-        'user',
-      ]),
-    },
+  data() {
+    return {
+      albums: [],
+      loading: true,
+    };
+  },
 
-    data() {
-      return {
-        albums: [],
-        loading: true,
-      }
-    },
+  async created() {
+    this.loading = true;
 
-    async created() {
-      this.loading = true;
+    let albums = await AlbumService.getAllAlbums(true);
+    this.albums = albums.filter((album) => album.access_level > 0);
 
-      let albums = await AlbumService.getAllAlbums(true);
-      this.albums = albums.filter(album => album.access_level > 0);
-
-      this.loading = false;
-    },
-  }
+    this.loading = false;
+  },
+};
 </script>

@@ -1,12 +1,12 @@
 <template>
   <section>
     <Pagination
-        :itemsPerPage="photosPerPage"
-        :itemsPerPageChoices="itemsPerPageChoices"
-        @setPage="setPage"
-        @setItemsPerPage="setPhotosPerPage"
-        :page="page"
-        :pages="pages"
+      :itemsPerPage="photosPerPage"
+      :itemsPerPageChoices="itemsPerPageChoices"
+      @setPage="setPage"
+      @setItemsPerPage="setPhotosPerPage"
+      :page="page"
+      :pages="pages"
     />
 
     <section class="photos">
@@ -14,9 +14,13 @@
         v-for="photo in photos"
         :allowSelect="allowSelect"
         :isLoaded="isSkeleton || loadedPages.includes(photo.page)"
-        :isSelected="allowSelect ? selectedPhotoHashes.includes(photo.md5) : false"
+        :isSelected="
+          allowSelect ? selectedPhotoHashes.includes(photo.md5) : false
+        "
         :isSkeleton="isSkeleton"
-        :isVisible="isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)"
+        :isVisible="
+          isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)
+        "
         :key="photo.md5"
         :photo="photo"
         :route="route"
@@ -25,118 +29,118 @@
     </section>
 
     <Pagination
-        :itemsPerPage="photosPerPage"
-        :itemsPerPageChoices="itemsPerPageChoices"
-        @setPage="setPage"
-        @setItemsPerPage="setPhotosPerPage"
-        :page="page"
-        :pages="pages"
+      :itemsPerPage="photosPerPage"
+      :itemsPerPageChoices="itemsPerPageChoices"
+      @setPage="setPage"
+      @setItemsPerPage="setPhotosPerPage"
+      :page="page"
+      :pages="pages"
     />
   </section>
 </template>
 
 <script>
-  import Photo from './Photo.vue';
-  import Pagination from "@/components/pagination/Pagination";
+import Photo from "./Photo.vue";
+import Pagination from "@/components/pagination/Pagination";
 
-  export default {
-    components: {
-      Pagination,
-      Photo,
+export default {
+  components: {
+    Pagination,
+    Photo,
+  },
+
+  data() {
+    return {
+      photosPerPage: 10,
+      page: 1,
+      loadedPages: [],
+    };
+  },
+
+  computed: {
+    indexStart() {
+      return this.photosPerPage * (this.page - 1);
+    },
+    indexEnd() {
+      return this.indexStart + this.photosPerPage - 1;
     },
 
-    data() {
-      return {
-        photosPerPage: 10,
-        page: 1,
-        loadedPages: [],
+    itemsPerPageChoices() {
+      return [10, 30, 60, 120];
+    },
+
+    pages() {
+      return Math.ceil(this.photos.length / this.photosPerPage);
+    },
+  },
+
+  props: {
+    photos: {
+      type: Array,
+      required: true,
+    },
+    selectedPhotoHashes: {
+      type: Array,
+      default: () => [],
+    },
+    route: {
+      type: String,
+      default: "photo",
+    },
+
+    allowSelect: {
+      type: Boolean,
+      default: false,
+    },
+    isSkeleton: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  mounted() {
+    this.processPhotos(this.photos);
+  },
+
+  methods: {
+    select(md5) {
+      this.$emit("select", md5);
+    },
+
+    processPhotos(photos) {
+      for (let [index, photo] of photos.entries()) {
+        photo.index = index;
+        photo.page = Math.floor(index / this.photosPerPage) + 1;
+        photo.loaded = false;
       }
+
+      this.setPage(1);
     },
 
-    computed: {
-      indexStart() {
-        return this.photosPerPage * (this.page - 1);
-      },
-      indexEnd() {
-        return this.indexStart + this.photosPerPage - 1;
-      },
-
-      itemsPerPageChoices() {
-        return [10, 30, 60, 120];
-      },
-
-      pages() {
-        return Math.ceil(this.photos.length / this.photosPerPage);
-      },
+    setPage(page) {
+      this.page = page;
+      this.loadedPages.push(page);
     },
 
-    props: {
-      photos: {
-        type: Array,
-        required: true,
-      },
-      selectedPhotoHashes: {
-        type: Array,
-        default: () => [],
-      },
-      route: {
-        type: String,
-        default: "photo",
-      },
+    setPhotosPerPage(count) {
+      this.photosPerPage = count;
 
-      allowSelect: {
-        type: Boolean,
-        default: false,
-      },
-      isSkeleton: {
-        type: Boolean,
-        default: false,
-      },
+      this.photos.forEach((photo, index) => {
+        photo.page = Math.floor(index / this.photosPerPage) + 1;
+      });
+
+      this.setPage(1);
     },
+  },
 
-    mounted() {
-      this.processPhotos(this.photos)
+  watch: {
+    photos(newPhotos) {
+      if (newPhotos.length === 0) {
+        return;
+      }
+
+      this.processPhotos(newPhotos);
     },
-
-    methods: {
-      select(md5) {
-        this.$emit('select', md5)
-      },
-
-      processPhotos(photos) {
-        for (let [index, photo] of photos.entries()) {
-          photo.index = index;
-          photo.page = Math.floor(index / this.photosPerPage) + 1;
-          photo.loaded = false;
-        }
-
-        this.setPage(1);
-      },
-
-      setPage(page) {
-        this.page = page;
-        this.loadedPages.push(page);
-      },
-
-      setPhotosPerPage(count) {
-        this.photosPerPage = count;
-
-        this.photos.forEach((photo, index) => {
-          photo.page = Math.floor(index / this.photosPerPage) + 1;
-        });
-
-        this.setPage(1);
-      },
-    },
-
-    watch: {
-      photos(newPhotos) {
-        if (newPhotos.length === 0) {
-          return;
-        }
-
-        this.processPhotos(newPhotos);
-      },
-    },
-  }
+  },
+};
 </script>

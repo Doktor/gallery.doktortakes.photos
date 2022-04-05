@@ -17,10 +17,10 @@ export default {
     styles() {
       return {
         "max-width": `${this.width}px`,
-      }
+      };
     },
   },
-}
+};
 </script>
 
 <style scoped>

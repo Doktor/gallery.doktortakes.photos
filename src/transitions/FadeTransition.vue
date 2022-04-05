@@ -1,10 +1,10 @@
 <template>
   <transition
-      name="fade"
-      enter-active-class="fade-in"
-      leave-active-class="fade-out"
-      v-bind="$attrs"
-      v-on="hooks"
+    name="fade"
+    enter-active-class="fade-in"
+    leave-active-class="fade-out"
+    v-bind="$attrs"
+    v-on="hooks"
   >
     <slot></slot>
   </transition>
@@ -28,21 +28,21 @@ export default {
           el.style.animationDuration = `${component.duration}ms`;
         },
         afterEnter(el) {
-          el.style.animationDuration = '';
+          el.style.animationDuration = "";
         },
 
         beforeLeave(el) {
           el.style.animationDuration = `${component.duration}ms`;
         },
         afterLeave(el) {
-          el.style.animationDuration = '';
+          el.style.animationDuration = "";
         },
 
         ...component.$listeners,
       };
     },
   },
-}
+};
 </script>
 
 <style scoped>

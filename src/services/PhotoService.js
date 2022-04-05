@@ -14,10 +14,10 @@ export const PhotoService = {
     return await sendRequest(endpoints.thumbnailList.replace(":md5", md5), {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'X-CSRFToken': getCsrfToken(),
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRFToken": getCsrfToken(),
       },
       body: JSON.stringify(options),
-    })
+    });
   },
 };

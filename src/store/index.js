@@ -1,25 +1,24 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {actions} from "./actions";
-import {getters} from "./getters";
-import {mutations} from "./mutations";
-import {module as manageModule} from "./manage";
+import { actions } from "./actions";
+import { getters } from "./getters";
+import { mutations } from "./mutations";
+import { module as manageModule } from "./manage";
 
 Vue.use(Vuex);
-
 
 // Helper functions
 
 function getCookie(name) {
   let value = null;
 
-  if (document.cookie && document.cookie !== '') {
-    let cookies = document.cookie.split(';');
+  if (document.cookie && document.cookie !== "") {
+    let cookies = document.cookie.split(";");
 
     for (let i = 0; i < cookies.length; i++) {
       let cookie = cookies[i].trim();
       // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+      if (cookie.substring(0, name.length + 1) === name + "=") {
         value = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }
@@ -30,31 +29,30 @@ function getCookie(name) {
 }
 
 export function getCsrfToken() {
-  return getCookie('csrftoken');
+  return getCookie("csrftoken");
 }
 
 export function getQueryString(params) {
   let esc = encodeURIComponent;
 
   let query = Object.entries(params)
-  .map(([key, value]) => {
-    if (Array.isArray(value)) {
-      if (value.length > 0) {
-        return esc(key) + "=" + esc(value.join(","));
+    .map(([key, value]) => {
+      if (Array.isArray(value)) {
+        if (value.length > 0) {
+          return esc(key) + "=" + esc(value.join(","));
+        }
+      } else if (value !== null && value !== "") {
+        return esc(key) + "=" + esc(value);
       }
-    } else if (value !== null && value !== "") {
-      return esc(key) + "=" + esc(value);
-    }
-  })
-  .filter(item => item !== undefined);
+    })
+    .filter((item) => item !== undefined);
 
   return "?" + query.join("&");
 }
 
-
 // API endpoints and static files
 
-const api = document.getElementById('api');
+const api = document.getElementById("api");
 
 export const endpoints = {
   albumList: "/api/albums/",
@@ -75,49 +73,48 @@ export const endpoints = {
   randomTagline: "/api/taglines/random/",
 };
 
-
 // Other constants
 
-export const production = process.env.NODE_ENV === 'production';
+export const production = process.env.NODE_ENV === "production";
 
 export const accessLevels = [
   {
     value: 0,
-    display: 'Public',
+    display: "Public",
   },
   {
     value: 10,
-    display: 'Signed in',
+    display: "Signed in",
   },
   {
     value: 20,
-    display: 'Owners',
+    display: "Owners",
   },
   {
     value: 30,
-    display: 'Staff',
+    display: "Staff",
   },
   {
     value: 100,
-    display: 'Superusers',
+    display: "Superusers",
   },
 ];
 
-export const accessLevelsMap = Object.assign({},
-  ...accessLevels.map(({value, display}) => {return {[value]: display}}));
+export const accessLevelsMap = Object.assign(
+  {},
+  ...accessLevels.map(({ value, display }) => {
+    return { [value]: display };
+  })
+);
 
 export const fields = {
-  readonly: [
-    'slug', 'path', 'cover', 'children',
-    'url', 'admin_url',
-  ],
+  readonly: ["slug", "path", "cover", "children", "url", "admin_url"],
 };
 
 export const domains = {
   production: "https://doktortakes.photos",
   alpha: "https://alpha.doktortakes.photos",
-}
-
+};
 
 // Store
 

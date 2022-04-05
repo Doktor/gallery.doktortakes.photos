@@ -2,46 +2,45 @@
   <section>
     <h2>{{ searchResults.count }} results</h2>
 
-    <PaginationSearch/>
+    <PaginationSearch />
 
     <section class="photos">
       <PhotoSearchResult
-          v-for="(photo, index) in searchResults.photos"
-          :key="index"
-          :photo="photo"
+        v-for="(photo, index) in searchResults.photos"
+        :key="index"
+        :photo="photo"
       />
     </section>
 
-    <PaginationSearch/>
+    <PaginationSearch />
   </section>
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import PaginationSearch from "@/components/pagination/PaginationSearch";
-  import PhotoSearchResult from './PhotoSearchResult.vue';
+import { mapState } from "vuex";
+import PaginationSearch from "@/components/pagination/PaginationSearch";
+import PhotoSearchResult from "./PhotoSearchResult.vue";
 
+export default {
+  components: {
+    PaginationSearch,
+    PhotoSearchResult,
+  },
 
-  export default {
-    components: {
-      PaginationSearch,
-      PhotoSearchResult,
+  computed: {
+    ...mapState(["searchResults"]),
+
+    pages() {
+      return Math.ceil(
+        this.searchResults.count / this.searchResults.itemsPerPage
+      );
     },
-
-    computed: {
-      ...mapState([
-        'searchResults',
-      ]),
-
-      pages() {
-        return Math.ceil(this.searchResults.count / this.searchResults.itemsPerPage);
-      }
-    },
-  }
+  },
+};
 </script>
 
 <style scoped>
-  h2 {
-    text-align: left;
-  }
+h2 {
+  text-align: left;
+}
 </style>

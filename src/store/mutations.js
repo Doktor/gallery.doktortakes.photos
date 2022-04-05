@@ -1,11 +1,9 @@
 import Vue from "vue";
-import {updateField} from "vuex-map-fields";
-import {router} from "@/router/main.js";
-
+import { updateField } from "vuex-map-fields";
+import { router } from "@/router/main.js";
 
 export const titleTemplate = "{0} | Doktor Takes Photos";
 export const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
-
 
 export const mutations = {
   // vuex-map-fields
@@ -24,7 +22,7 @@ export const mutations = {
     state.token = null;
     localStorage.removeItem("token");
 
-    state.user = {status: "anonymous"};
+    state.user = { status: "anonymous" };
   },
 
   addNotification(state, message) {
@@ -35,11 +33,11 @@ export const mutations = {
     state.notifications.push(message);
   },
 
-  addTimedNotification(state, {message, hideAfter = 0}) {
-    this.commit('addNotification', message);
+  addTimedNotification(state, { message, hideAfter = 0 }) {
+    this.commit("addNotification", message);
 
     if (hideAfter > 0) {
-      setTimeout(() => this.commit('removeNotification', message), hideAfter);
+      setTimeout(() => this.commit("removeNotification", message), hideAfter);
     }
   },
 
@@ -56,7 +54,9 @@ export const mutations = {
   },
 
   clearSearchResults(state) {
-    state.searchResults.photos = Array(state.searchResults.itemsPerPage).fill({});
+    state.searchResults.photos = Array(state.searchResults.itemsPerPage).fill(
+      {}
+    );
   },
 
   setSearchResultsItemsPerPage(state, itemsPerPage) {
@@ -80,7 +80,7 @@ export const mutations = {
   },
 
   setLoading(state, loading) {
-    loading ? state.loading += 1 : state.loading -= 1;
+    loading ? (state.loading += 1) : (state.loading -= 1);
   },
 
   setAlbumField(state, data) {

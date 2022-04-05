@@ -1,6 +1,6 @@
-import VueRouter from 'vue-router';
+import VueRouter from "vue-router";
 
-import {store} from "../store/index.js";
+import { store } from "../store/index.js";
 
 import Index from "../views/Index.vue";
 
@@ -29,37 +29,36 @@ import LogIn from "@/views/LogIn";
 import LogOut from "@/views/LogOut";
 import EditPhoto from "@/views/EditPhoto";
 
-
 export const baseTitle = "Doktor Takes Photos";
 
 const browserRoutes = [
   {
-    path: '/',
-    name: 'index',
+    path: "/",
+    name: "index",
     component: Index,
   },
 
   {
-    path: '/albums/:path+/:md5/',
-    name: 'photo',
+    path: "/albums/:path+/:md5/",
+    name: "photo",
     component: PhotoDetail,
     meta: {
-      body: 'photo-viewer',
+      body: "photo-viewer",
       nav: false,
       title: false,
     },
   },
-    {
-    path: '/albums/:path+/',
-    name: 'album',
+  {
+    path: "/albums/:path+/",
+    name: "album",
     component: AlbumDetail,
     meta: {
       title: false,
     },
   },
   {
-    path: '/albums/',
-    name: 'albums',
+    path: "/albums/",
+    name: "albums",
     component: AlbumList,
     meta: {
       title: "Albums",
@@ -67,16 +66,16 @@ const browserRoutes = [
   },
 
   {
-    path: '/tags/',
-    name: 'tags',
+    path: "/tags/",
+    name: "tags",
     component: TagList,
     meta: {
       title: "Tags",
     },
   },
   {
-    path: '/tags/:slug/',
-    name: 'tag',
+    path: "/tags/:slug/",
+    name: "tag",
     component: TagDetail,
     meta: {
       title: false,
@@ -84,8 +83,8 @@ const browserRoutes = [
   },
 
   {
-    path: '/search/',
-    name: 'search',
+    path: "/search/",
+    name: "search",
     component: SearchPhotos,
     meta: {
       title: "Search",
@@ -93,8 +92,8 @@ const browserRoutes = [
   },
 
   {
-    path: '/users/',
-    name: 'users',
+    path: "/users/",
+    name: "users",
     component: UserList,
     meta: {
       staff: true,
@@ -102,16 +101,16 @@ const browserRoutes = [
     },
   },
   {
-    path: '/users/:slug/',
-    name: 'user',
+    path: "/users/:slug/",
+    name: "user",
     component: UserDetail,
     meta: {
       title: false,
     },
   },
   {
-    path: '/users/:slug/password/',
-    name: 'changePassword',
+    path: "/users/:slug/password/",
+    name: "changePassword",
     component: ChangePassword,
     meta: {
       title: "Change your password",
@@ -119,8 +118,8 @@ const browserRoutes = [
   },
 
   {
-    path: '/groups/',
-    name: 'groups',
+    path: "/groups/",
+    name: "groups",
     component: GroupList,
     meta: {
       staff: true,
@@ -129,16 +128,16 @@ const browserRoutes = [
   },
 
   {
-    path: '/about/',
-    name: 'about',
+    path: "/about/",
+    name: "about",
     component: About,
     meta: {
       title: "About",
     },
   },
   {
-    path: '/copyright/',
-    name: 'copyright',
+    path: "/copyright/",
+    name: "copyright",
     component: Copyright,
     meta: {
       title: "Copyright",
@@ -146,8 +145,8 @@ const browserRoutes = [
   },
 
   {
-    path: '/recent/',
-    name: 'recent',
+    path: "/recent/",
+    name: "recent",
     component: Recent,
     meta: {
       title: "Recent changes",
@@ -155,16 +154,16 @@ const browserRoutes = [
   },
 
   {
-    path: '/log-in/',
-    name: 'logIn',
+    path: "/log-in/",
+    name: "logIn",
     component: LogIn,
     meta: {
       title: "Log in",
     },
   },
   {
-    path: '/log-out/',
-    name: 'logOut',
+    path: "/log-out/",
+    name: "logOut",
     component: LogOut,
     meta: {
       title: "Log out",
@@ -174,8 +173,8 @@ const browserRoutes = [
 
 const manageRoutes = [
   {
-    path: '/manage/',
-    name: 'manage',
+    path: "/manage/",
+    name: "manage",
     component: Manage,
     meta: {
       staff: true,
@@ -183,8 +182,8 @@ const manageRoutes = [
     },
   },
   {
-    path: '/manage/albums/new/',
-    name: 'newAlbum',
+    path: "/manage/albums/new/",
+    name: "newAlbum",
     component: NewAlbum,
     meta: {
       staff: true,
@@ -192,8 +191,8 @@ const manageRoutes = [
     },
   },
   {
-    path: '/manage/albums/edit/:path+/',
-    name: 'editAlbum',
+    path: "/manage/albums/edit/:path+/",
+    name: "editAlbum",
     component: EditAlbum,
     meta: {
       staff: true,
@@ -201,8 +200,8 @@ const manageRoutes = [
     },
   },
   {
-    path: '/manage/albums/edit/:path+/photos/:md5',
-    name: 'editPhoto',
+    path: "/manage/albums/edit/:path+/photos/:md5",
+    name: "editPhoto",
     component: EditPhoto,
     meta: {
       staff: true,
@@ -212,22 +211,22 @@ const manageRoutes = [
 ];
 
 const routes = browserRoutes.concat(manageRoutes);
-routes.forEach((route) => route.pathToRegexpOptions = {strict: true});
+routes.forEach((route) => (route.pathToRegexpOptions = { strict: true }));
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   routes,
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.staff)) {
+  if (to.matched.some((record) => record.meta.staff)) {
     let user = store.state.user;
 
-    if (user.status === 'staff' || user.status === 'superuser') {
+    if (user.status === "staff" || user.status === "superuser") {
       next();
     } else {
       next({
-        name: 'logIn',
+        name: "logIn",
         query: {
           redirect: to.fullPath,
         },
@@ -268,5 +267,4 @@ router.afterEach((to, from) => {
   }
 });
 
-
-export {router};
+export { router };

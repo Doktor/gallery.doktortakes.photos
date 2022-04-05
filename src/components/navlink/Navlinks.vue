@@ -29,7 +29,7 @@
           href="https://twitter.com/DoktorTheHusky"
           title="Twitter"
         >
-          <FontAwesomeCircleIcon iconClass="fab fa-twitter"/>
+          <FontAwesomeCircleIcon iconClass="fab fa-twitter" />
         </NavlinkSocial>
 
         <!-- Telegram -->
@@ -63,11 +63,7 @@
         />
         <Navlink class="nav-item-log-out" title="Log out" route="logOut" />
       </template>
-      <Navlink
-        v-else-if="!isAuthenticated"
-        title="Log in"
-        route="logIn"
-      />
+      <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
     </ul>
   </nav>
 </template>

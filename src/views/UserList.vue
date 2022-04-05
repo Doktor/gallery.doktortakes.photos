@@ -1,6 +1,6 @@
 <template>
   <FixedWidthContainer>
-    <router-link :to="{name: 'manage'}">Back to editor</router-link>
+    <router-link :to="{ name: 'manage' }">Back to editor</router-link>
 
     <h2>Users</h2>
 
@@ -21,7 +21,7 @@
           <td>{{ user.id }}</td>
           <td>{{ user.username }}<span v-if="user.is_staff">*</span></td>
           <td>{{ user.email }}</td>
-          <td>{{ formatGroups(user.groups) }}
+          <td>{{ formatGroups(user.groups) }}</td>
           <td class="user-log-in">{{ formatDateTime(user.last_login) }}</td>
           <td class="user-date-joined">{{ formatDate(user.date_joined) }}</td>
         </tr>
@@ -32,10 +32,9 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import {formatDate, formatDateTime} from "@/date.js";
-
+import { formatDate, formatDateTime } from "@/date.js";
 
 export default {
   components: {
@@ -43,19 +42,17 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'loading',
-    ]),
+    ...mapState(["loading"]),
   },
 
   data() {
     return {
       users: [],
-    }
+    };
   },
 
   async created() {
-    this.users = await this.$store.dispatch('getUsers');
+    this.users = await this.$store.dispatch("getUsers");
   },
 
   methods: {
@@ -63,10 +60,13 @@ export default {
     formatDateTime: formatDateTime,
 
     formatGroups(groups) {
-      return groups.slice().sort((a, b) => a.localeCompare(b)).join(', ');
+      return groups
+        .slice()
+        .sort((a, b) => a.localeCompare(b))
+        .join(", ");
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -79,11 +79,13 @@ thead {
   text-align: center;
 }
 
-th, td {
+th,
+td {
   padding: 4px 8px;
 }
 
-.user-log-in, .user-date-joined {
+.user-log-in,
+.user-date-joined {
   white-space: nowrap;
 }
 

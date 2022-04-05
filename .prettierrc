@@ -1,8 +1,8 @@
 {
   "arrowParens": "always",
+  "bracketSameLine": false,
   "bracketSpacing": true,
   "endOfLine": "lf",
-  "parser": "vue",
   "printWidth": 80,
   "quoteProps": "consistent",
   "singleQuote": false,

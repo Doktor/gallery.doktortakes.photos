@@ -10,16 +10,18 @@
       <span>
         <template v-for="(slug, index) in album.tags">
           <router-link
-              class="tag"
-              :key="slug"
-              :to="{name: 'tag', params: {slug: slug}}"
-          ><!--
-              -->#{{ slug }}<!--
-            --></router-link>
+            class="tag"
+            :key="slug"
+            :to="{ name: 'tag', params: { slug: slug } }"
+            ><!--
+              -->#{{ slug
+            }}<!--
+            --></router-link
+          >
           <span
-              v-if="index !== album.tags.length - 1"
-              v-html="nbsp"
-              :key="'space-' + index.toString()"
+            v-if="index !== album.tags.length - 1"
+            v-html="nbsp"
+            :key="'space-' + index.toString()"
           ></span>
         </template>
       </span>
@@ -33,8 +35,8 @@
     <div v-if="album.parent" class="overlay-item">
       <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
       <router-link
-          :to="{name: 'album', params: {path: album.parent.split('/')}}"
-      ><!--
+        :to="{ name: 'album', params: { path: album.parent.split('/') } }"
+        ><!--
         -->View parent album<!--
       --></router-link>
     </div>
@@ -42,8 +44,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -54,10 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'photos',
-      'user',
-    ]),
+    ...mapState(["photos", "user"]),
 
     location() {
       let place = this.album.place;
@@ -74,5 +72,5 @@ export default {
       return "&nbsp;";
     },
   },
-}
+};
 </script>

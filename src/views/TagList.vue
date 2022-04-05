@@ -4,7 +4,7 @@
 
     <ul v-if="tags" class="tags">
       <li v-for="tag in tags">
-        <router-link :to="{name: 'tag', params: {slug: tag.slug}}">
+        <router-link :to="{ name: 'tag', params: { slug: tag.slug } }">
           #{{ tag.slug }}
         </router-link>
       </li>
@@ -14,36 +14,33 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex';
-  import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { mapState } from "vuex";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
 
+export default {
+  components: {
+    FixedWidthContainer,
+  },
 
-  export default {
-    components: {
-      FixedWidthContainer,
-    },
+  computed: {
+    ...mapState(["loading"]),
+  },
 
-    computed: {
-      ...mapState([
-        'loading',
-      ]),
-    },
+  data() {
+    return {
+      tags: [],
+    };
+  },
 
-    data() {
-      return {
-        tags: [],
-      }
-    },
-
-    async created() {
-      this.tags = await this.$store.dispatch('getTags');
-    },
-  }
+  async created() {
+    this.tags = await this.$store.dispatch("getTags");
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .tags {
-    text-align: left;
-    column-width: 250px;
-  }
+.tags {
+  text-align: left;
+  column-width: 250px;
+}
 </style>

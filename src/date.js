@@ -4,20 +4,20 @@ export function twoDigitPad(n) {
 
 export function formatDate(str) {
   if (str === null) {
-    return "N/A"
+    return "N/A";
   }
 
   let date = new Date(Date.parse(str));
   return "{0}-{1}-{2}".format(
     date.getFullYear(),
     twoDigitPad(date.getMonth() + 1),
-    twoDigitPad(date.getDate()),
+    twoDigitPad(date.getDate())
   );
 }
 
 export function formatDateTime(str) {
   if (str === null) {
-    return "N/A"
+    return "N/A";
   }
 
   let date = new Date(Date.parse(str));
@@ -26,6 +26,6 @@ export function formatDateTime(str) {
 
     twoDigitPad(date.getHours()),
     twoDigitPad(date.getMinutes()),
-    twoDigitPad(date.getSeconds()),
+    twoDigitPad(date.getSeconds())
   );
 }

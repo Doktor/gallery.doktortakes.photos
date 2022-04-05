@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="photo-placeholder photo-skeleton">
-      <PhotoPlaceholder title="Loading..."/>
+      <PhotoPlaceholder title="Loading..." />
       <div class="note photo-no-thumbnail-note">
         <i class="fas fa-spin fa-spinner"></i>
       </div>
@@ -10,12 +10,11 @@
 </template>
 
 <script>
-  import PhotoPlaceholder from "./PhotoPlaceholder";
+import PhotoPlaceholder from "./PhotoPlaceholder";
 
-
-  export default {
-    components: {
-      PhotoPlaceholder,
-    },
-  }
+export default {
+  components: {
+    PhotoPlaceholder,
+  },
+};
 </script>

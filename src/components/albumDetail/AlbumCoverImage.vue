@@ -1,10 +1,10 @@
 <template>
   <img
-      class="album-cover-image"
-      alt="Cover photo"
-      :src="album.cover.thumbnail"
-      :title="album.name"
-  >
+    class="album-cover-image"
+    alt="Cover photo"
+    :src="album.cover.thumbnail"
+    :title="album.name"
+  />
 </template>
 
 <script>
@@ -15,7 +15,7 @@ export default {
       required: true,
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

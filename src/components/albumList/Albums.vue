@@ -3,38 +3,36 @@
     <AlbumListViewSelector v-if="isStaff" />
 
     <component
-        :is="albumListComponent"
-        :class="classes"
-
-        :albums="albumsCopy"
-        :route="albumRoute"
-        :indexStart="indexStart"
-        :indexEnd="indexEnd"
-        :isSkeleton="isSkeleton"
+      :is="albumListComponent"
+      :class="classes"
+      :albums="albumsCopy"
+      :route="albumRoute"
+      :indexStart="indexStart"
+      :indexEnd="indexEnd"
+      :isSkeleton="isSkeleton"
     />
 
     <slot name="footer"></slot>
 
     <Pagination
-        :itemsPerPage="albumsPerPage"
-        :itemsPerPageChoices="itemsPerPageChoices"
-        @setPage="setPage"
-        @setItemsPerPage="setAlbumsPerPage"
-        :page="page"
-        :pages="pages"
+      :itemsPerPage="albumsPerPage"
+      :itemsPerPageChoices="itemsPerPageChoices"
+      @setPage="setPage"
+      @setItemsPerPage="setAlbumsPerPage"
+      :page="page"
+      :pages="pages"
     />
   </section>
 </template>
 
 <script>
-import {mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState } from "vuex";
 import AlbumCard from "./AlbumCard";
 import AlbumListCards from "./AlbumListCards";
 import AlbumListSimple from "./AlbumListSimple";
 import AlbumListViewSelector from "./AlbumListViewSelector";
 import AlbumTable from "./AlbumTable";
 import Pagination from "@/components/pagination/Pagination";
-
 
 export default {
   components: {
@@ -46,7 +44,7 @@ export default {
     AlbumTable,
   },
 
-   props: {
+  props: {
     loading: {
       type: Boolean,
       required: true,
@@ -73,16 +71,12 @@ export default {
       page: 1,
 
       albumsCopy: [],
-    }
+    };
   },
 
   computed: {
-    ...mapGetters([
-      "isStaff",
-    ]),
-    ...mapState([
-      'user',
-    ]),
+    ...mapGetters(["isStaff"]),
+    ...mapState(["user"]),
 
     albumListComponent() {
       switch (this.view) {
@@ -99,7 +93,7 @@ export default {
       return {
         "albums": this.view === undefined || this.view === "default",
         "album-list-simple": this.view === "simple",
-      }
+      };
     },
 
     indexStart() {
@@ -126,11 +120,13 @@ export default {
     setPage(page) {
       this.page = page;
 
-      this.albumsCopy.filter((album) => !album.loaded).forEach((album, index) => {
-        if (page === Math.floor(index / this.albumsPerPage) + 1) {
-          this.$set(album, 'isLoaded', true);
-        }
-      });
+      this.albumsCopy
+        .filter((album) => !album.loaded)
+        .forEach((album, index) => {
+          if (page === Math.floor(index / this.albumsPerPage) + 1) {
+            this.$set(album, "isLoaded", true);
+          }
+        });
     },
 
     setAlbumsPerPage(count) {
@@ -139,7 +135,9 @@ export default {
     },
 
     copyObjectArray(array) {
-      return [...array].map(object => {return {...object}});
+      return [...array].map((object) => {
+        return { ...object };
+      });
     },
 
     loadAlbums(albums) {
@@ -160,5 +158,5 @@ export default {
       this.loadAlbums(newAlbums);
     },
   },
-}
+};
 </script>

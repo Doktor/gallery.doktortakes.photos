@@ -1,17 +1,16 @@
 <template>
-  <figure
-      class="album-cover"
-      :class="classes"
-  >
+  <figure class="album-cover" :class="classes">
     <AlbumCoverOverlay :album="album" :isSkeleton="isSkeleton" />
-    <AlbumCoverImage v-if="!isSkeleton && album.cover !== null" :album="album" />
+    <AlbumCoverImage
+      v-if="!isSkeleton && album.cover !== null"
+      :album="album"
+    />
   </figure>
 </template>
 
 <script>
 import AlbumCoverImage from "./AlbumCoverImage";
 import AlbumCoverOverlay from "./AlbumCoverOverlay";
-
 
 export default {
   components: {
@@ -22,9 +21,9 @@ export default {
   computed: {
     classes() {
       return {
-        'is-empty': !this.isSkeleton && this.album.cover === null,
-        'is-skeleton': this.isSkeleton,
-      }
+        "is-empty": !this.isSkeleton && this.album.cover === null,
+        "is-skeleton": this.isSkeleton,
+      };
     },
   },
 
@@ -39,7 +38,7 @@ export default {
       default: false,
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -48,7 +47,8 @@ export default {
 
   width: 100%;
 
-  &.is-empty, &.is-skeleton {
+  &.is-empty,
+  &.is-skeleton {
     border: 1px solid $background-color-2;
   }
 }

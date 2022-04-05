@@ -5,7 +5,7 @@
 <script>
 export default {
   name: "IndexLogo",
-}
+};
 </script>
 
 <style lang="scss" scoped>
