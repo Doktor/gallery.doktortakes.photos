@@ -3,7 +3,9 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>Dimensions</th>
+        <th>Width</th>
+        <th>Height</th>
+        <th>Watermark</th>
         <th>Link</th>
       </tr>
     </thead>
@@ -13,7 +15,9 @@
           <span v-if="thumbnail.type">{{ thumbnail.type }}</span>
           <i v-else>(untitled)</i>
         </td>
-        <td>{{ thumbnail.width }}x{{ thumbnail.height }}</td>
+        <td>{{ thumbnail.width }}</td>
+        <td>{{ thumbnail.height }}</td>
+        <td>{{ thumbnail.is_watermarked ? "yes" : "no" }}</td>
         <td>
           <a :href="thumbnail.url">{{ thumbnail.name }}</a>
         </td>

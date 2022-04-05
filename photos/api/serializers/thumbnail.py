@@ -14,5 +14,5 @@ class ThumbnailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thumbnail
         fields = (
-            'url', 'name', 'type', 'width', 'height',
+            'url', 'name', 'type', 'width', 'height', 'is_watermarked',
         )
