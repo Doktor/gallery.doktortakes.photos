@@ -1,4 +1,4 @@
-FROM python:3.10 as development
+FROM python:3.10 as base
 
 WORKDIR /app/
 
@@ -17,6 +17,11 @@ RUN poetry install --no-interaction
 COPY . /app/
 
 RUN mkdir -p /app/logs/
+
+
+FROM base as development
+
+RUN poetry run python manage.py migrate
 
 
 FROM node:15.12.0 AS node
