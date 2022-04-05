@@ -41,30 +41,35 @@ python-versions = "*"
 
 [[package]]
 name = "boto3"
-version = "1.9.5"
+version = "1.21.33"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.12.5,<1.13.0"
-jmespath = ">=0.7.1,<1.0.0"
-s3transfer = ">=0.1.10,<0.2.0"
+botocore = ">=1.24.33,<1.25.0"
+jmespath = ">=0.7.1,<2.0.0"
+s3transfer = ">=0.5.0,<0.6.0"
+
+[package.extras]
+crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.12.253"
+version = "1.24.33"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">= 3.6"
 
 [package.dependencies]
-docutils = ">=0.10,<0.16"
-jmespath = ">=0.7.1,<1.0.0"
-python-dateutil = {version = ">=2.1,<3.0.0", markers = "python_version >= \"2.7\""}
-urllib3 = {version = ">=1.20,<1.26", markers = "python_version >= \"3.4\""}
+jmespath = ">=0.7.1,<2.0.0"
+python-dateutil = ">=2.1,<3.0.0"
+urllib3 = ">=1.25.4,<1.27"
+
+[package.extras]
+crt = ["awscrt (==0.13.8)"]
 
 [[package]]
 name = "brotli"
@@ -238,21 +243,20 @@ django-js-asset = "*"
 
 [[package]]
 name = "django-storages"
-version = "1.7.1"
+version = "1.12.3"
 description = "Support for many storage backends in Django"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = ">=3.5"
 
 [package.dependencies]
-Django = ">=1.11"
+Django = ">=2.2"
 
 [package.extras]
-azure = ["azure (>=3.0.0)", "azure-storage-blob (>=1.3.1)"]
-boto = ["boto (>=2.32.0)"]
+azure = ["azure-storage-blob (>=12.0.0)"]
 boto3 = ["boto3 (>=1.4.4)"]
 dropbox = ["dropbox (>=7.2.1)"]
-google = ["google-cloud-storage (>=0.22.0)"]
+google = ["google-cloud-storage (>=1.27.0)"]
 libcloud = ["apache-libcloud"]
 sftp = ["paramiko"]
 
@@ -271,14 +275,6 @@ description = "Web APIs for Django, made easy."
 category = "main"
 optional = false
 python-versions = ">=3.5"
-
-[[package]]
-name = "docutils"
-version = "0.15.2"
-description = "Docutils -- Python Documentation Utilities"
-category = "main"
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "exifread"
@@ -548,14 +544,17 @@ hiredis = ["hiredis (>=0.1.3)"]
 
 [[package]]
 name = "s3transfer"
-version = "0.1.13"
+version = "0.5.2"
 description = "An Amazon S3 Transfer Manager"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.3.0,<2.0.0"
+botocore = ">=1.12.36,<2.0a.0"
+
+[package.extras]
+crt = ["botocore[crt] (>=1.20.29,<2.0a.0)"]
 
 [[package]]
 name = "six"
@@ -655,7 +654,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.6"
-content-hash = "9bd661176e7b665405e1ab4ae3a1fe02927285504e077f2bf71daee54ae9a50b"
+content-hash = "e56f02b2433030e5ec4b5eb18e136aca6457cf74274b04d81af5a2925e05de4c"
 
 [metadata.files]
 amqp = [
@@ -675,12 +674,12 @@ billiard = [
     {file = "billiard-3.6.4.0.tar.gz", hash = "sha256:299de5a8da28a783d51b197d496bef4f1595dd023a93a4f59dde1886ae905547"},
 ]
 boto3 = [
-    {file = "boto3-1.9.5-py2.py3-none-any.whl", hash = "sha256:8d3bdfd7405b32040b2323522404f8198c9b5f88edd781a568f995d10c656922"},
-    {file = "boto3-1.9.5.tar.gz", hash = "sha256:9dd7aec0e5abbf16a64d2bf1a2f346aac0534c7d145737608d534de7a57ca8f6"},
+    {file = "boto3-1.21.33-py3-none-any.whl", hash = "sha256:9d8ddfefe0c4a993423e2c40831034c78fcb7b3425bf3610cf0087301dd9098b"},
+    {file = "boto3-1.21.33.tar.gz", hash = "sha256:c06b9b29f80da8cf6d9fac8f41d74a74d0f5347927acf11b15428b295fcbdd31"},
 ]
 botocore = [
-    {file = "botocore-1.12.253-py2.py3-none-any.whl", hash = "sha256:dc080aed4f9b220a9e916ca29ca97a9d37e8e1d296fe89cbaeef929bf0c8066b"},
-    {file = "botocore-1.12.253.tar.gz", hash = "sha256:3baf129118575602ada9926f5166d82d02273c250d0feb313fc270944b27c48b"},
+    {file = "botocore-1.24.33-py3-none-any.whl", hash = "sha256:16ca4a2b72fef8caaf0eeb423dbf6cd64938442c4b9f96deb672468229e5e3f9"},
+    {file = "botocore-1.24.33.tar.gz", hash = "sha256:ea5fd180082030a6c33fa19bf011d72970f3ed23cfff1b41413069e325768103"},
 ]
 brotli = [
     {file = "Brotli-1.0.9-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:268fe94547ba25b58ebc724680609c8ee3e5a843202e9a381f6f9c5e8bdb5c70"},
@@ -775,8 +774,8 @@ django-mptt = [
     {file = "django_mptt-0.11.0-py2.py3-none-any.whl", hash = "sha256:90eb236eb4f1a92124bd7c37852bbe09c0d21158477cc237556d59842a91c509"},
 ]
 django-storages = [
-    {file = "django-storages-1.7.1.tar.gz", hash = "sha256:8e35d2c7baeda5dc6f0b4f9a0fc142d25f9a1bf72b8cebfcbc5db4863abc552d"},
-    {file = "django_storages-1.7.1-py2.py3-none-any.whl", hash = "sha256:b1a63cd5ea286ee5a9fb45de6c3c5c0ae132d58308d06f1ce9865cfcd5e470a7"},
+    {file = "django-storages-1.12.3.tar.gz", hash = "sha256:a475edb2f0f04c4f7e548919a751ecd50117270833956ed5bd585c0575d2a5e7"},
+    {file = "django_storages-1.12.3-py3-none-any.whl", hash = "sha256:204a99f218b747c46edbfeeb1310d357f83f90fa6a6024d8d0a3f422570cee84"},
 ]
 django-webpack-loader = [
     {file = "django-webpack-loader-0.7.0.tar.gz", hash = "sha256:7a3c88201aa54481f9399465615cbe7b9aece8081496a6d0287b7cb8e232f447"},
@@ -785,11 +784,6 @@ django-webpack-loader = [
 djangorestframework = [
     {file = "djangorestframework-3.10.2-py3-none-any.whl", hash = "sha256:42979bd5441bb4d8fd69d0f385024a114c3cae7df0f110600b718751250f6929"},
     {file = "djangorestframework-3.10.2.tar.gz", hash = "sha256:aedb48010ebfab9651aaab1df5fd3b4848eb4182afc909852a2110c24f89a359"},
-]
-docutils = [
-    {file = "docutils-0.15.2-py2-none-any.whl", hash = "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827"},
-    {file = "docutils-0.15.2-py3-none-any.whl", hash = "sha256:6c4f696463b79f1fb8ba0c594b63840ebd41f059e92b31957c46b74a4599b6d0"},
-    {file = "docutils-0.15.2.tar.gz", hash = "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"},
 ]
 exifread = [
     {file = "ExifRead-2.3.1-py3-none-any.whl", hash = "sha256:6693de2537bbd1a1184b6d85c6a36b1113e230498c6957cac1485d06c8fa8a60"},
@@ -972,8 +966,8 @@ redis = [
     {file = "redis-3.5.3.tar.gz", hash = "sha256:0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2"},
 ]
 s3transfer = [
-    {file = "s3transfer-0.1.13-py2.py3-none-any.whl", hash = "sha256:c7a9ec356982d5e9ab2d4b46391a7d6a950e2b04c472419f5fdec70cc0ada72f"},
-    {file = "s3transfer-0.1.13.tar.gz", hash = "sha256:90dc18e028989c609146e241ea153250be451e05ecc0c2832565231dacdf59c1"},
+    {file = "s3transfer-0.5.2-py3-none-any.whl", hash = "sha256:7a6f4c4d1fdb9a2b640244008e142cbc2cd3ae34b386584ef044dd0f27101971"},
+    {file = "s3transfer-0.5.2.tar.gz", hash = "sha256:95c58c194ce657a5f4fb0b9e60a84968c808888aed628cd98ab8771fe1db98ed"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
