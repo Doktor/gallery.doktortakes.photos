@@ -1,5 +1,7 @@
 from django.db import models
 
+import uuid
+
 
 THUMBNAIL_DISPLAY = 'display'
 THUMBNAIL_COVER = 'cover'
@@ -13,13 +15,11 @@ THUMBNAIL_TYPES = (
 
 
 def get_filename(thumbnail: 'Thumbnail', filename: str) -> str:
-    photo = thumbnail.photo
-    datetime = photo.taken.strftime("%Y%m%d_%H%M%S")
+    datetime = thumbnail.photo.taken.strftime("%Y%m%d_%H%M%S")
+    identifier = thumbnail.photo.short_md5
+    suffix = uuid.uuid4().hex[0:8]
 
-    image = thumbnail.image
-    dimensions = f"{image.width}x{image.height}"
-
-    return f"images/{datetime}_{photo.short_md5}_{dimensions}.jpg"
+    return f"images/{datetime}_{identifier}_{suffix}.jpg"
 
 
 class Thumbnail(models.Model):
