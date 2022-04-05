@@ -9,7 +9,10 @@ from random import randint
 
 @api_view()
 def get_tagline(request: Request) -> Response:
-    count = Tagline.objects.count()
-    tagline = Tagline.objects.all()[randint(0, count - 1)]
+    taglines = Tagline.objects.all()
 
+    if not taglines:
+        return Response()
+
+    tagline = Tagline.objects.all()[randint(0, len(taglines) - 1)]
     return Response(tagline.text)
