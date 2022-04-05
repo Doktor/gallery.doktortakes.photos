@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN pip install --upgrade pip
-RUN pip install "poetry==1.1.7"
+RUN pip install "poetry==1.1.13"
 
 COPY . /app/
 RUN poetry install --no-interaction
