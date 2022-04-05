@@ -24,21 +24,6 @@ FROM base as development
 RUN poetry run python manage.py migrate
 
 
-FROM node:15.12.0 AS node
-
-WORKDIR /app/
-
-COPY \
-  package.json \
-  package-lock.json \
-  webpack.*.js \
-  /app/
-COPY ./src/ /app/src/
-
-RUN npm ci
-RUN npx webpack --config webpack.prod.js
-
-
 FROM development as staging
 
 COPY ./data/config.staging.toml /app/data/config.toml
@@ -52,3 +37,18 @@ RUN echo "Collecting static files" \
 FROM staging as production
 
 COPY ./data/config.production.toml /app/data/config.toml
+
+
+FROM node:15.12.0 AS node
+
+WORKDIR /app/
+
+COPY \
+  package.json \
+  package-lock.json \
+  webpack.*.js \
+  /app/
+COPY ./src/ /app/src/
+
+RUN npm ci
+RUN npx webpack --config webpack.prod.js
