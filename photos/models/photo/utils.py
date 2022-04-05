@@ -53,20 +53,23 @@ def create_thumbnail(
     except KeyError:
         exif = None
 
-    print(photo, width, height)
-
     try:
         thumbnail = Thumbnail.objects.get(photo=photo, width=width, height=height, is_watermarked=add_watermark)
-        print("thumbnail exists")
         thumbnail.image.delete(save=False)
     except Thumbnail.DoesNotExist:
-        print("making new thumbnail")
         thumbnail = Thumbnail()
+
+    thumbnail.photo = photo
+    thumbnail.name = name
 
     ret_image = fit_image(original_image, (width, height))
 
     if add_watermark:
+        thumbnail.is_watermarked = True
         ret_image = apply_watermark(ret_image, watermark_color)
+
+    assert ret_image.width == width
+    assert ret_image.height == height
 
     ret_data = BytesIO()
 
@@ -74,12 +77,6 @@ def create_thumbnail(
         ret_image.save(ret_data, 'JPEG', quality=90, exif=exif)
     else:
         ret_image.save(ret_data, 'JPEG', quality=90)
-
-    assert ret_image.width == width
-    assert ret_image.height == height
-
-    thumbnail.photo = photo
-    thumbnail.name = name
 
     thumbnail.image.save('', File(ret_data), save=False)
     thumbnail.save()
