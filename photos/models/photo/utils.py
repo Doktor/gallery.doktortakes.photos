@@ -11,6 +11,7 @@ import datetime
 import exifread
 import PIL.Image
 import pytz
+from io import BytesIO
 from lxml import etree
 from typing import Tuple, Iterator
 

@@ -45,6 +45,12 @@
           :thumbnails="thumbnails"
         />
       </section>
+
+      <section>
+        <h2>Create thumbnail</h2>
+
+        <ThumbnailForm :photo="photo" @update="loadThumbnails" />
+      </section>
     </template>
   </FixedWidthContainer>
 </template>
@@ -57,9 +63,11 @@ import { PhotoService } from "@/services/PhotoService";
 import PhotoMetadataTable from "@/components/editor/PhotoMetadataTable";
 import PhotoExifTable from "@/components/editor/PhotoExifTable";
 import PhotoThumbnailsTable from "@/components/editor/PhotoThumbnailsTable";
+import ThumbnailForm from "@/components/editor/ThumbnailForm";
 
 export default {
   components: {
+    ThumbnailForm,
     PhotoThumbnailsTable,
     PhotoExifTable,
     PhotoMetadataTable,
