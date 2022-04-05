@@ -1,4 +1,4 @@
-FROM python:3.6 as development
+FROM python:3.10 as development
 
 WORKDIR /app/
 
