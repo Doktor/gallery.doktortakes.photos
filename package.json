@@ -11,7 +11,7 @@
     "eslint": "^7.30.0",
     "eslint-plugin-vue": "^7.12.1",
     "file-loader": "^6.2.0",
-    "prettier": "^2.2.1",
+    "prettier": "2.6.2",
     "sass": "^1.43.5",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
