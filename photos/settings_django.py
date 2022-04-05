@@ -120,6 +120,8 @@ else:
 
 DATABASES = {'default': db}
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Caching
 
