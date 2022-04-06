@@ -21,7 +21,8 @@ RUN mkdir -p /app/logs/
 
 FROM base as development
 
-RUN poetry run python manage.py migrate
+RUN poetry run python manage.py migrate --no-input && \
+  poetry run inv create-default-superuser
 
 
 FROM development as staging

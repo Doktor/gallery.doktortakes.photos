@@ -1,3 +1,5 @@
+import sys
+
 from django.contrib.auth import get_user_model
 from invoke import task
 import datetime
@@ -23,18 +25,31 @@ def check_output(command: str) -> str:
         shlex.split(command), stdout=subprocess.PIPE, universal_newlines=True).stdout
 
 
-def create_superuser(ctx, manual=False):
-    if manual:
-        ctx.run(f"{manage} createsuperuser")
-    else:
-        django_setup()
-        User = get_user_model()
+@task
+def create_default_superuser(ctx):
+    django_setup()
+    User = get_user_model()
 
-        with open(os.path.join('data', 'superuser.json')) as f:
+    from django.conf import settings
+
+    if not settings.DEBUG:
+        print("error: this script can only be used in debug mode", file=sys.stderr)
+        sys.exit(1)
+
+    credentials_path = os.path.join(BASE_DIR, 'data', 'superuser.json')
+
+    try:
+        with open(credentials_path) as f:
             user = json.loads(f.read())
+    except FileNotFoundError:
+        print("error: credentials file not found", file=sys.stderr)
+        sys.exit(1)
+    except json.JSONDecodeError:
+        print("error: failed to decode credentials file")
+        sys.exit(1)
 
-        User.objects.create_superuser(
-            user['username'], user['email'], user['password'])
+    User.objects.create_superuser(
+        user['username'], user['email'], user['password'])
 
 
 def django_setup():
@@ -84,7 +99,7 @@ def build(ctx):
 
 
 @task(post=[build])
-def full_build(ctx, manual=False):
+def full_build(ctx):
     prompt = "Rebuilding database: are you sure? (Y/N) "
 
     if not input(prompt).upper().startswith('Y'):
@@ -94,9 +109,6 @@ def full_build(ctx, manual=False):
     print("Creating migrations and rebuilding database")
     ctx.run(f"{manage} makemigrations --no-input photos")
     ctx.run(f"{manage} migrate --no-input")
-
-    print("Creating superuser account")
-    create_superuser(ctx, manual=manual)
 
 
 @task
