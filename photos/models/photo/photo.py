@@ -257,25 +257,6 @@ class Photo(models.Model):
         ordering = ('taken', 'uploaded')
 
 
-@receiver(pre_save, sender=Photo,
-          dispatch_uid='photos.models.process_image_upload')
-def process_image_upload(sender, instance: Photo, **kwargs) -> None:
-    photo = instance
-
-    if photo.pk is not None:
-        return
-
-    file = photo.get_original()
-    file.seek(0)
-
-    check_dimensions(file)
-    parse_exif_data(photo, file)
-    parse_xmp_data(photo, file)
-
-    file.seek(0)
-    photo.original.save(file.name, File(file), save=False)
-
-
 @receiver(post_save, sender=Photo,
           dispatch_uid='photos.models.create_sidecar_images')
 def create_sidecar_images(sender, instance: Photo, created: bool, **kwargs) -> None:

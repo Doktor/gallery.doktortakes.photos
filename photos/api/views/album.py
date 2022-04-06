@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.core.files import File
 from django.http import Http404
 
 from rest_framework import exceptions, permissions
@@ -6,6 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from photos.models.photo.utils import check_dimensions, parse_exif_data, parse_xmp_data
 from photos.api.serializers import (
     AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer, PhotoSerializer)
 from photos.models import Album, Photo
@@ -167,6 +169,14 @@ class AlbumPhotoList(APIView):
 
         # Expires after 24 hours
         cache.set(md5, data, 60 * 60 * 24)
+
+        file.seek(0)
+        check_dimensions(file)
+        parse_exif_data(photo, file)
+        parse_xmp_data(photo, file)
+
+        file.seek(0)
+        photo.original.save(file.name, File(file), save=False)
 
         photo.save()
 
