@@ -130,52 +130,48 @@ class AlbumPhotoList(APIView):
         if not request.user.is_staff:
             raise AlbumNotFound
 
-        files = request.FILES.getlist('files')
+        file = request.FILES.get('file')
         album = self.get_album(request, path)
 
-        photos = []
+        photo = Photo()
+        photo.album = album
 
-        for file in files:
-            photo = Photo()
-            photo.album = album
+        # Check if this image already exists
+        md5 = generate_md5_hash(file)
 
-            # Check if this image already exists
-            md5 = generate_md5_hash(file)
+        try:
+            Photo.objects.get(md5=md5)
+        except Photo.DoesNotExist:
+            pass
+        else:
+            raise exceptions.ValidationError(f"Duplicate file: {md5}")
 
-            try:
-                Photo.objects.get(md5=md5)
-            except Photo.DoesNotExist:
-                pass
-            else:
-                raise exceptions.ValidationError(f"Duplicate file: {md5}")
+        photo.md5 = md5
 
-            photo.md5 = md5
+        filename = file.name
 
-            filename = file.name
+        try:
+            original = Photo.objects.get(album=album, original_filename=filename)
+        except Photo.DoesNotExist:
+            pass
+        else:
+            original.delete()
 
-            try:
-                original = Photo.objects.get(album=album,
-                                             original_filename=filename)
-            except Photo.DoesNotExist:
-                pass
-            else:
-                original.delete()
+        data = BytesIO()
+        data.name = filename
 
-            data = BytesIO()
-            data.name = filename
+        photo.original_filename = filename
 
-            photo.original_filename = filename
+        for chunk in file.chunks(chunk_size=CHUNK_SIZE):
+            data.write(chunk)
 
-            for chunk in file.chunks(chunk_size=CHUNK_SIZE):
-                data.write(chunk)
+        # Expires after 24 hours
+        cache.set(md5, data, 60 * 60 * 24)
 
-            # Expires after 24 hours
-            cache.set(md5, data, 60 * 60 * 24)
+        photo.save()
 
-            photo.save()
-            photos.append(PhotoSerializer(photo).data)
-
-        return Response({'photos': photos}, status=Status.OK)
+        serializer = PhotoSerializer(photo)
+        return Response(serializer.data, status=Status.OK)
 
     def delete(self, request: Request, path: str) -> Response:
         if not request.user.is_staff:

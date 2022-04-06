@@ -12,7 +12,7 @@
       >
         <input type="hidden" name="csrfmiddlewaretoken" :value="csrfToken" />
         <div class="fallback">
-          <input type="file" name="files" multiple />
+          <input type="file" name="file" />
           <input type="submit" value="Upload" />
         </div>
       </form>
@@ -35,8 +35,9 @@ export default {
     Dropzone.autoDiscover = false;
 
     const dropzone = new Dropzone("#dropzone", {
-      paramName: "files",
-      parallelUploads: 3,
+      paramName: "file",
+      uploadMultiple: false,
+      parallelUploads: 2,
       headers: {
         Authorization: "Token " + this.$store.state.token,
       },
