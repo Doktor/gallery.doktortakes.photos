@@ -3,7 +3,7 @@
     <fieldset>
       <CustomInput
         label="Name"
-        :value="albumEdits.name"
+        v-model="changes.name"
         required
         maxlength="256"
       />
@@ -23,44 +23,41 @@
         readonly
       />
 
-      <CustomInput label="Place" v-model="albumEdits.place" maxlength="128" />
+      <CustomInput label="Place" v-model="changes.place" maxlength="128" />
       <CustomInput
         label="Location"
-        v-model="albumEdits.location"
+        v-model="changes.location"
         maxlength="128"
       />
 
       <CustomInput
         label="Description"
         type="textarea"
-        v-model="albumEdits.description"
+        v-model="changes.description"
         rows="5"
         maxlength="1000"
       />
 
-      <CustomInput
-        label="Start"
-        type="date"
-        v-model="albumEdits.start"
-        required
-      />
-      <CustomInput label="End" type="date" v-model="albumEdits.end" />
+      <CustomInput label="Start" type="date" v-model="changes.start" required />
+      <CustomInput label="End" type="date" v-model="changes.end" />
 
       <CustomSelect
         label="Access level"
         :options="accessLevels"
-        v-model="albumEdits.access_level"
+        v-model="changes.access_level"
       />
 
-      <CustomInput label="Access code" v-model="albumEdits.access_code">
+      <CustomInput label="Access code" v-model="changes.access_code">
         <GenerateAccessCode @setAccessCode="setAccessCode" />
       </CustomInput>
 
-      <CustomInput label="Users" v-model="users" />
-      <CustomInput label="Groups" v-model="groups" />
-      <CustomInput label="Tags" v-model="tags" />
+      <template v-if="isUpdate">
+        <CustomInput label="Users" v-model="users" />
+        <CustomInput label="Groups" v-model="groups" />
+        <CustomInput label="Tags" v-model="tags" />
 
-      <CustomInput label="Parent" v-model="albumEdits.parent" />
+        <CustomInput label="Parent" v-model="changes.parent" />
+      </template>
     </fieldset>
 
     <button id="album-form-save" type="submit">{{ saveButtonText }}</button>
@@ -98,7 +95,7 @@ export default {
 
   data() {
     return {
-      albumEdits: { ...this.album },
+      changes: { ...this.album },
 
       accessLevels,
       users: "",
@@ -109,25 +106,35 @@ export default {
 
   methods: {
     setAccessCode(value) {
-      this.albumEdits.access_code = value;
+      this.changes.access_code = value;
     },
 
     submit() {
-      for (let key of ["users", "groups", "tags"]) {
-        this.albumEdits[key] = this.$data[key]
-          .split(",")
-          .map((v) => v.trim())
-          .filter((v) => v.length > 0);
+      let changes = { ...this.changes };
+
+      if (this.isUpdate) {
+        for (let key of ["users", "groups", "tags"]) {
+          changes[key] = this.$data[key]
+            .split(",")
+            .map((v) => v.trim())
+            .filter((v) => v.length > 0);
+        }
       }
 
-      this.$emit("save", this.albumEdits);
+      if (!changes.end) {
+        changes.end = null;
+      }
+
+      this.$emit("save", changes);
     },
   },
 
   mounted() {
-    this.users = this.album.users.join(", ");
-    this.groups = this.album.groups.join(", ");
-    this.tags = this.album.tags.join(", ");
+    if (this.isUpdate) {
+      this.users = this.album.users.join(", ");
+      this.groups = this.album.groups.join(", ");
+      this.tags = this.album.tags.join(", ");
+    }
   },
 };
 </script>
