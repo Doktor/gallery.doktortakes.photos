@@ -191,7 +191,7 @@ const manageRoutes = [
     },
   },
   {
-    path: "/manage/albums/edit/:path+/",
+    path: "/manage/albums/:path+/",
     name: "editAlbum",
     component: EditAlbum,
     meta: {
@@ -200,7 +200,7 @@ const manageRoutes = [
     },
   },
   {
-    path: "/manage/albums/edit/:path+/photos/:md5",
+    path: "/manage/albums/:path+/photos/:md5",
     name: "editPhoto",
     component: EditPhoto,
     meta: {
