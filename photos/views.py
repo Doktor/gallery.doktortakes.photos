@@ -204,7 +204,11 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
 
     title = f"{album.name} | {metadata['TITLE']}"
     base_url = metadata['BASE_URL'] if settings.LOCAL_STORAGE else ''
-    cover_url = f"{base_url}{album.cover.image.url}"
+
+    if album.cover is not None:
+        cover_url = f"{base_url}{album.cover.image.url}"
+    else:
+        cover_url = None
 
     meta = [
         *meta_open_graph_common,
