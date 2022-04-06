@@ -1,8 +1,9 @@
 from django.core.files import File
 
-from photos.models import Photo
+from photos.models import Photo, Thumbnail
 from photos.models.album import SIZE_3600
 from photos.models.utils import format_file_size
+from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
 from photos.models.photo.utils import (
     apply_watermark, fit_image, fit_image_long_edge, guess_aspect_ratio)
 from photos.settings_photos import (
@@ -23,13 +24,13 @@ def create_sidecar_images(pk: int) -> None:
     photo = Photo.objects.get(pk=pk)
     file = photo.get_original()
 
-    update_display_image(photo, file)
+    size = update_display_image(photo, file)
     update_square_thumbnail(photo, file)
 
     if photo.rating >= 4:
         update_thumbnail(photo, file)
 
-    photo.file_size = format_file_size(photo.image.size)
+    photo.file_size = format_file_size(size)
     photo.sidecar_exists = True
     photo.save()
 
@@ -40,16 +41,20 @@ def create_sidecar_images(pk: int) -> None:
 # Update
 
 
-def update_display_image(photo: Photo, file: File) -> None:
+def update_display_image(photo: Photo, file: File) -> int:
     edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
     image, (w, h) = create_display_image(file, edge, photo.watermark)
+    new_file = File(image)
+    size = new_file.size
 
-    if photo.image:
-        photo.image.delete(save=False)
+    thumbnail = Thumbnail()
+    thumbnail.photo = photo
+    thumbnail.type = THUMBNAIL_DISPLAY
+    thumbnail.is_watermarked = True
+    thumbnail.image.save(photo.filename, new_file, save=False)
+    thumbnail.save()
 
-    photo.width = w
-    photo.height = h
-    photo.image.save(photo.filename, File(image), save=False)
+    return size
 
 
 def update_square_thumbnail(photo: Photo, file: File) -> None:
@@ -59,10 +64,12 @@ def update_square_thumbnail(photo: Photo, file: File) -> None:
     new_file = BytesIO()
     generated.save(new_file, 'JPEG', quality=THUMBNAIL_QUALITY, optimize=True)
 
-    if photo.square_thumbnail:
-        photo.square_thumbnail.delete(save=False)
-
-    photo.square_thumbnail.save(photo.filename, File(new_file), save=False)
+    thumbnail = Thumbnail()
+    thumbnail.photo = photo
+    thumbnail.type = THUMBNAIL_SMALL_SQUARE
+    thumbnail.is_watermarked = False
+    thumbnail.image.save(photo.filename, File(new_file), save=False)
+    thumbnail.save()
 
 
 def update_thumbnail(photo: Photo, file: File) -> None:
@@ -72,10 +79,12 @@ def update_thumbnail(photo: Photo, file: File) -> None:
     new_file = BytesIO()
     generated.save(new_file, 'JPEG', quality=THUMBNAIL_QUALITY, optimize=True)
 
-    if photo.thumbnail:
-        photo.thumbnail.delete(save=False)
-
-    photo.thumbnail.save(photo.filename, File(new_file), save=False)
+    thumbnail = Thumbnail()
+    thumbnail.photo = photo
+    thumbnail.type = THUMBNAIL_COVER
+    thumbnail.is_watermarked = False
+    thumbnail.image.save(photo.filename, File(new_file), save=False)
+    thumbnail.save()
 
 
 # Helper functions

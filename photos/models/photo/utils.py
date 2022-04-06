@@ -13,7 +13,7 @@ import PIL.Image
 import pytz
 from io import BytesIO
 from lxml import etree
-from typing import Tuple, Iterator
+from typing import List, Tuple
 
 
 strptime = datetime.datetime.strptime
@@ -30,8 +30,8 @@ NS = {
 IMAGE_TYPES = ['original', 'display_image', 'square_thumbnail', 'thumbnail']
 
 
-def int_all(*nums: float) -> Iterator[int]:
-    return (int(n) for n in nums)
+def int_all(*nums: float) -> List[int]:
+    return [int(n) for n in nums]
 
 
 def create_thumbnail(
