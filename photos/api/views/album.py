@@ -17,6 +17,7 @@ from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
 
 from http import HTTPStatus as Status
 from io import BytesIO
+import PIL.Image
 
 
 class AlbumNotFound(exceptions.APIException):
@@ -175,6 +176,11 @@ class AlbumPhotoList(APIView):
         check_dimensions(file)
         parse_exif_data(photo, file)
         parse_xmp_data(photo, file)
+
+        file.seek(0)
+        image = PIL.Image.open(file)
+        photo.width = image.width
+        photo.height = image.height
 
         file.seek(0)
         photo.original.save(file.name, File(file), save=False)
