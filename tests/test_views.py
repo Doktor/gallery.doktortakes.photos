@@ -13,8 +13,8 @@ from settings_django import BASE_DIR, MEDIA_ROOT
 
 from photos import views
 from photos.models import Album, Photo, Tag
-from photos.models.utils import generate_md5_hash
 from photos.settings_photos import INDEX_ALBUMS, ITEMS_PER_PAGE
+from photos.utils.models import generate_md5_hash
 
 import datetime
 import factory

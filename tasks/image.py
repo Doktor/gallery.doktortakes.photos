@@ -16,7 +16,7 @@ def rename(ctx, dry_run=False, image_type=None, file='tasks/move_errors.json', p
     if dry_run:
         print("Running in 'dry run' mode -- no changes will be made.")
 
-    if image_type not in mp.IMAGE_TYPES:
+    if image_type not in ['original', 'display_image', 'square_thumbnail', 'thumbnail']:
         print("Invalid image type.")
         raise SystemExit(1)
 

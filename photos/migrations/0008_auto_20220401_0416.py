@@ -3,7 +3,7 @@
 from django.db import migrations, transaction
 
 from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
-from photos.models.utils import format_file_size
+from photos.utils.models import format_file_size
 
 
 def combine_names(apps, schema_editor):

@@ -7,7 +7,6 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from photos.models import Photo, Tag, Album
-from photos.utils import get_album_for_user_or_404
 
 from http import HTTPStatus as Status
 from typing import Optional

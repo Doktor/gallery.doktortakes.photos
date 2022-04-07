@@ -10,7 +10,7 @@ from photos.api.serializers import ThumbnailSerializer
 from photos.api.views.photo import PhotoNotFound
 from photos.api.views.validation import validate_multiple, validate_is_positive_number, validate_is_not_none
 from photos.models import Photo
-from photos.models.photo.utils import create_thumbnail
+from photos.utils.image import create_thumbnail
 
 
 def get_photo(request, md5) -> Optional[Photo]:

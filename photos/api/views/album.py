@@ -7,12 +7,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.models.photo.utils import check_dimensions, parse_exif_data, parse_xmp_data
 from photos.api.serializers import (
     AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer, PhotoSerializer)
 from photos.models import Album, Photo
-from photos.models.utils import generate_md5_hash, CHUNK_SIZE
 from photos.utils import get_album_for_user_or_404, get_albums_for_user
+from photos.utils.image import check_dimensions
+from photos.utils.metadata import parse_exif_data, parse_xmp_data
+from photos.utils.models import generate_md5_hash, CHUNK_SIZE
 
 from http import HTTPStatus as Status
 from io import BytesIO

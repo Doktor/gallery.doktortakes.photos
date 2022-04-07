@@ -2,10 +2,10 @@ from django.core.files import File
 
 from photos.models import Photo
 from photos.models.album import SIZE_3600
-from photos.models.utils import format_file_size
 from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
-from photos.models.photo.utils import create_thumbnail, guess_aspect_ratio
 from photos.settings_photos import SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
+from photos.utils.image import create_thumbnail, guess_aspect_ratio
+from photos.utils.models import format_file_size
 
 import datetime
 import PIL.Image

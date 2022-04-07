@@ -4,7 +4,7 @@ from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.http import HttpRequest
@@ -13,9 +13,6 @@ from django.urls import reverse
 from rest_framework.request import Request
 
 from photos.fields import JSONField
-from photos.models.photo.utils import (
-    check_dimensions, parse_exif_data, parse_xmp_data,
-    format_f_stop, get_exif)
 from photos.settings_photos import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, COLOR_CHOICES, COLOR_WHITE)
 
@@ -163,6 +160,7 @@ class Photo(models.Model):
         return reverse('download', kwargs={'path': self.path, 'md5': self.md5})
 
     def get_exif(self) -> dict:
+        from photos.utils.metadata import get_exif
         return get_exif(self)
 
     def get_image_file(self, image_type: str) -> Optional[ImageFieldFile]:
