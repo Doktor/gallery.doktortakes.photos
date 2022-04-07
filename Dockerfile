@@ -24,20 +24,6 @@ FROM base as development
 RUN chmod +x /app/run.dev.sh
 
 
-FROM base as staging
-
-COPY ./data/config.staging.toml /app/data/config.toml
-COPY --from=node /app/static/ /app/static/
-
-RUN chmod +x /app/run.staging.sh && \
-    chmod +x /app/run-celery.staging.sh
-
-
-FROM staging as production
-
-COPY ./data/config.production.toml /app/data/config.toml
-
-
 FROM node:15.12.0 AS node
 
 WORKDIR /app/
@@ -51,3 +37,17 @@ COPY ./src/ /app/src/
 
 RUN npm ci
 RUN npx webpack --config webpack.prod.js
+
+
+FROM base as staging
+
+COPY ./data/config.staging.toml /app/data/config.toml
+COPY --from=node /app/static/ /app/static/
+
+RUN chmod +x /app/run.staging.sh && \
+    chmod +x /app/run-celery.staging.sh
+
+
+FROM staging as production
+
+COPY ./data/config.production.toml /app/data/config.toml
