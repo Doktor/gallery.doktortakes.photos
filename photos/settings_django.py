@@ -1,25 +1,49 @@
 import json
 import os
+import socket
+import sys
 import toml
+import warnings
 from django.core.management.utils import get_random_secret_key
 
-# General settings
-import sys
-
-TEST = any('test' in argv for argv in sys.argv)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open(os.path.join(BASE_DIR, 'data', 'config.toml')) as f:
-    raw = f.read().strip()
-    CONFIG = toml.loads(raw)
+
+# Load configuration files
+with open(os.path.join(BASE_DIR, 'config', 'config.toml')) as f:
+    CONFIG = toml.loads(f.read().strip())
+
+with open(os.path.join(BASE_DIR, 'config', 'secrets.toml')) as f:
+    secrets = toml.loads(f.read().strip())
+
+# Shallow merge
+for category, contents in secrets.items():
+    if category in CONFIG:
+        CONFIG[category] |= contents
+    else:
+        CONFIG[category] = contents
+
+
+# General settings
+TEST = any('test' in argv for argv in sys.argv)
+DEBUG = CONFIG['django'].get('debug', False)
+
+secret_key = CONFIG['django'].get('secret_key', None)
+
+if secret_key is None:
+    if DEBUG:
+        secret_key = get_random_secret_key()
+        warnings.warn("secret key not specified, creating a temporary key")
+    else:
+        print("secret key not specified, exiting", file=sys.stderr)
+        sys.exit(1)
+
+SECRET_KEY = secret_key
 
 internal_ips = ['127.0.0.1', 'localhost']
-
 ALLOWED_HOSTS = CONFIG['django'].get('allowed_hosts', internal_ips)
-DEBUG = CONFIG['django'].get('debug', False)
 INTERNAL_IPS = internal_ips
-SECRET_KEY = CONFIG['django'].get('secret_key', get_random_secret_key())
 
 
 # Application definition
@@ -41,12 +65,13 @@ INSTALLED_APPS = [
     'webpack_loader',
 ]
 
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#configure-internal-ips
 if DEBUG:
-    import socket
+    INSTALLED_APPS.append('debug_toolbar')
+
     _, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
 
-    INSTALLED_APPS.append('debug_toolbar')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -111,21 +136,23 @@ if DEBUG:
 # Database
 
 if TEST:
-    db = {
+    default = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': ':memory:'
     }
 else:
-    db = {
-        'ENGINE': os.environ['DATABASE_ENGINE'],
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DATABASE_USER'],
-        'PASSWORD': os.environ['DATABASE_PASSWORD'],
-        'HOST': os.environ['DATABASE_HOST'],
-        'PORT': os.environ['DATABASE_PORT'],
+    database = CONFIG['database']
+
+    default = {
+        'ENGINE': database['ENGINE'],
+        'HOST': database['HOST'],
+        'PORT': database['PORT'],
+        'NAME': database['NAME'],
+        'USER': database['USER'],
+        'PASSWORD': database['PASSWORD'],
     }
 
-DATABASES = {"default": db}
+DATABASES = {"default": default}
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

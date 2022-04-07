@@ -1,0 +1,6 @@
+*
+
+!.gitignore
+!config.toml
+!config.staging.toml
+!config.production.toml

@@ -11,13 +11,6 @@ services:
     command: /app/run.staging.sh
     expose:
       - 1337
-    environment:
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_ENGINE=django.db.backends.postgresql
-      - DATABASE_USER=photos
-      - DATABASE_PASSWORD=photos
-      - DATABASE_NAME=photos
     depends_on:
       - db
       - redis
@@ -46,13 +39,6 @@ services:
       - backend
       - db
       - redis
-    environment:
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_ENGINE=django.db.backends.postgresql
-      - DATABASE_USER=photos
-      - DATABASE_PASSWORD=photos
-      - DATABASE_NAME=photos
     command: /app/run-celery.staging.sh
 
   db:

@@ -41,7 +41,9 @@ RUN npx webpack --config webpack.prod.js
 
 FROM base as staging
 
-COPY ./data/config.staging.toml /app/data/config.toml
+COPY ./config/config.staging.toml /app/config/config.toml
+COPY ./config/secrets.staging.toml /app/config/secrets.toml
+
 COPY --from=node /app/static/ /app/static/
 
 RUN chmod +x /app/run.staging.sh && \
@@ -50,4 +52,5 @@ RUN chmod +x /app/run.staging.sh && \
 
 FROM staging as production
 
-COPY ./data/config.production.toml /app/data/config.toml
+COPY ./config/config.production.toml /app/config/config.toml
+COPY ./config/secrets.production.toml /app/config/secrets.toml

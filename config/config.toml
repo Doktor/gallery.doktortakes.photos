@@ -1,0 +1,15 @@
+[django]
+allowed_hosts = [
+    "localhost",
+    "127.0.0.1",
+]
+debug = true
+use_local_storage = false
+
+[database]
+ENGINE = "django.db.backends.postgresql"
+HOST = "db"
+PORT = "5432"
+NAME = "photos"
+USER = "photos"
+PASSWORD = "photos"

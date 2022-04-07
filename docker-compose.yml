@@ -14,13 +14,6 @@ services:
     volumes:
       - ./photos/:/app/photos/
       - static_volume:/app/static/
-    environment:
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_ENGINE=django.db.backends.postgresql
-      - DATABASE_USER=photos
-      - DATABASE_PASSWORD=photos
-      - DATABASE_NAME=photos
     depends_on:
       - db
       - redis
@@ -50,13 +43,6 @@ services:
       service: celery
     build:
       target: development
-    environment:
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
-      - DATABASE_ENGINE=django.db.backends.postgresql
-      - DATABASE_USER=photos
-      - DATABASE_PASSWORD=photos
-      - DATABASE_NAME=photos
     depends_on:
       - backend
       - db
