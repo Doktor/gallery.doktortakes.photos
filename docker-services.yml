@@ -12,3 +12,12 @@ services:
       context: .
       dockerfile: Dockerfile
     command: poetry run celery -A photos worker --loglevel=INFO
+
+  database:
+    image: postgres:10.20-alpine
+    container_name: database
+    # https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables
+    environment:
+      - POSTGRES_USER=photos
+      - POSTGRES_PASSWORD=photos
+      - POSTGRES_DB=photos

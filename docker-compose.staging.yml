@@ -12,7 +12,7 @@ services:
     expose:
       - 1337
     depends_on:
-      - db
+      - database
       - redis
 
   nginx:
@@ -37,20 +37,17 @@ services:
       target: staging
     depends_on:
       - backend
-      - db
+      - database
       - redis
     command: /app/run-celery.staging.sh
 
-  db:
-    image: postgres:10.20-alpine
-    container_name: db
+  database:
+    extends:
+      file: docker-services.yml
+      service: database
     volumes:
       - postgres_data_staging:/var/lib/postgresql/data/
-    # https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables
-    environment:
-      - POSTGRES_USER=photos
-      - POSTGRES_PASSWORD=photos
-      - POSTGRES_DB=photos
+
 
 volumes:
   postgres_data_staging:

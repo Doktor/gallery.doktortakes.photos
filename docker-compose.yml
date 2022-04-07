@@ -15,7 +15,7 @@ services:
       - ./photos/:/app/photos/
       - static_volume:/app/static/
     depends_on:
-      - db
+      - database
       - redis
 
   frontend:
@@ -45,19 +45,15 @@ services:
       target: development
     depends_on:
       - backend
-      - db
+      - database
       - redis
 
-  db:
-    image: postgres:10.20-alpine
-    container_name: db
+  database:
+    extends:
+      file: docker-services.yml
+      service: database
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    # https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables
-    environment:
-      - POSTGRES_USER=photos
-      - POSTGRES_PASSWORD=photos
-      - POSTGRES_DB=photos
 
 volumes:
   postgres_data:
