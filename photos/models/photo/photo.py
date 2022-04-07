@@ -256,12 +256,12 @@ class Photo(models.Model):
 
 
 @receiver(post_save, sender=Photo,
-          dispatch_uid='photos.models.create_sidecar_images')
-def create_sidecar_images(sender, instance: Photo, created: bool, **kwargs) -> None:
+          dispatch_uid='photos.models.receiver_create_thumbnails')
+def receiver_create_thumbnails(sender, instance: Photo, created: bool, **kwargs) -> None:
     if not created:
         return
 
     photo = instance
 
-    from photos.tasks import create_sidecar_images
-    create_sidecar_images.delay(photo.pk)
+    from photos.tasks import create_thumbnails
+    create_thumbnails.delay(photo.pk)

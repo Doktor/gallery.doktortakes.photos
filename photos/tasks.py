@@ -16,7 +16,7 @@ strptime = datetime.datetime.strptime
 
 
 @shared_task
-def create_sidecar_images(pk: int) -> None:
+def create_thumbnails(pk: int) -> None:
     photo = Photo.objects.get(pk=pk)
     file = photo.get_original()
 
