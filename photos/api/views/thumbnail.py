@@ -61,6 +61,9 @@ class ThumbnailList(APIView):
         add_watermark = request.data.get("addWatermark", False)
         watermark_color = request.data.get("watermarkColor", None)
 
-        thumbnail = create_thumbnail(photo.pk, None, width, height, name, add_watermark, watermark_color)
+        thumbnail = create_thumbnail(
+            photo.pk, None,
+            width, height, name,
+            add_watermark=add_watermark, watermark_color=watermark_color)
         serializer = ThumbnailSerializer(thumbnail)
         return Response(serializer.data)
