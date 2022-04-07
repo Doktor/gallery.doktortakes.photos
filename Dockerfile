@@ -24,14 +24,13 @@ FROM base as development
 RUN chmod +x /app/run.dev.sh
 
 
-FROM development as staging
+FROM base as staging
 
 COPY ./data/config.staging.toml /app/data/config.toml
 COPY --from=node /app/static/ /app/static/
 
-RUN echo "Collecting static files" \
-    && poetry run python manage.py collectstatic --no-input --clear \
-    && echo "Successfully collected static files"
+RUN chmod +x /app/run.staging.sh && \
+    chmod +x /app/run-celery.staging.sh
 
 
 FROM staging as production
