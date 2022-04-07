@@ -1,19 +1,15 @@
 from django.core.files import File
 
-from photos.models import Photo, Thumbnail
+from photos.models import Photo
 from photos.models.album import SIZE_3600
 from photos.models.utils import format_file_size
 from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
-from photos.models.photo.utils import (
-    apply_watermark, fit_image, fit_image_long_edge, guess_aspect_ratio)
-from photos.settings_photos import (
-    SQUARE_THUMBNAIL_SIZE, THUMBNAIL_QUALITY,  WATERMARKS_ENABLED)
-
+from photos.models.photo.utils import create_thumbnail, guess_aspect_ratio
+from photos.settings_photos import SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
 
 import datetime
 import PIL.Image
 from celery import shared_task
-from io import BytesIO
 from typing import Tuple
 
 strptime = datetime.datetime.strptime
@@ -42,86 +38,42 @@ def create_sidecar_images(pk: int) -> None:
 
 
 def update_display_image(photo: Photo, file: File) -> int:
-    edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
-    image, (w, h) = create_display_image(file, edge, photo.watermark)
-    new_file = File(image)
-    size = new_file.size
+    long_edge = 3600 if photo.album.thumbnail_size == SIZE_3600 else 2400
+    width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
-    thumbnail = Thumbnail()
-    thumbnail.photo = photo
-    thumbnail.type = THUMBNAIL_DISPLAY
-    thumbnail.is_watermarked = True
-    thumbnail.image.save(photo.filename, new_file, save=False)
-    thumbnail.save()
+    thumbnail = create_thumbnail(
+        photo.pk, width, height, THUMBNAIL_DISPLAY,
+        quality=90, add_watermark=True, watermark_color=photo.watermark)
 
-    return size
+    return thumbnail.image.size
 
 
 def update_square_thumbnail(photo: Photo, file: File) -> None:
-    image = PIL.Image.open(file)
-    generated = fit_image(image, SQUARE_THUMBNAIL_SIZE)
-
-    new_file = BytesIO()
-    generated.save(new_file, 'JPEG', quality=THUMBNAIL_QUALITY, optimize=True)
-
-    thumbnail = Thumbnail()
-    thumbnail.photo = photo
-    thumbnail.type = THUMBNAIL_SMALL_SQUARE
-    thumbnail.is_watermarked = False
-    thumbnail.image.save(photo.filename, File(new_file), save=False)
-    thumbnail.save()
+    create_thumbnail(
+        photo.pk, SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_SMALL_SQUARE,
+        quality=THUMBNAIL_QUALITY)
 
 
 def update_thumbnail(photo: Photo, file: File) -> None:
-    image = PIL.Image.open(file)
-    generated = fit_image_long_edge(image, 1200)
+    long_edge = 1200
+    width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
-    new_file = BytesIO()
-    generated.save(new_file, 'JPEG', quality=THUMBNAIL_QUALITY, optimize=True)
-
-    thumbnail = Thumbnail()
-    thumbnail.photo = photo
-    thumbnail.type = THUMBNAIL_COVER
-    thumbnail.is_watermarked = False
-    thumbnail.image.save(photo.filename, File(new_file), save=False)
-    thumbnail.save()
+    create_thumbnail(
+        photo.pk, width, height, THUMBNAIL_COVER,
+        quality=THUMBNAIL_QUALITY)
 
 
 # Helper functions
 
 
-def create_display_image(data: File, long_edge: int, watermark_color: str) -> (BytesIO, Tuple[int, int]):
+def get_thumbnail_size_preserve_ratio(data: File, long_edge: int) -> Tuple[int, int]:
     image = PIL.Image.open(data)
     w, h = image.size
-
-    # Save EXIF metadata for later
-    try:
-        exif = image.info['exif']
-    except KeyError:
-        exif = None
 
     # Resize the image
     ratio = guess_aspect_ratio(w, h)
 
     if w > h:
-        long, short = long_edge, int(long_edge / ratio)
-        size = long, short
+        return long_edge, int(long_edge / ratio)
     else:
-        long, short = long_edge, int(long_edge / (1 / ratio))
-        size = short, long
-
-    image = fit_image(image, size)
-
-    # Add watermark
-    if WATERMARKS_ENABLED:
-        image = apply_watermark(image, watermark_color)
-
-    # Save image data and re-add EXIF metadata
-    data = BytesIO()
-
-    if exif is not None:
-        image.save(data, 'JPEG', quality=90, exif=exif)
-    else:
-        image.save(data, 'JPEG', quality=90)
-
-    return data, image.size
+        return int(long_edge / (1 / ratio)), long_edge

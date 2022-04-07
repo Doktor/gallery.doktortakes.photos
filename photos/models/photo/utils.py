@@ -39,6 +39,7 @@ def create_thumbnail(
         width: int,
         height: int,
         name: str,
+        quality: int = 90,
         add_watermark: bool = False,
         watermark_color: str = None) -> "Thumbnail":
 
@@ -60,7 +61,7 @@ def create_thumbnail(
         thumbnail = Thumbnail()
 
     thumbnail.photo = photo
-    thumbnail.name = name
+    thumbnail.type = name
 
     ret_image = fit_image(original_image, (width, height))
 
@@ -74,11 +75,11 @@ def create_thumbnail(
     ret_data = BytesIO()
 
     if exif is not None:
-        ret_image.save(ret_data, 'JPEG', quality=90, exif=exif)
+        ret_image.save(ret_data, 'JPEG', quality=quality, exif=exif)
     else:
-        ret_image.save(ret_data, 'JPEG', quality=90)
+        ret_image.save(ret_data, 'JPEG', quality=quality)
 
-    thumbnail.image.save('', File(ret_data), save=False)
+    thumbnail.image.save(photo.filename, File(ret_data), save=False)
     thumbnail.save()
     return thumbnail
 
@@ -118,21 +119,6 @@ def fit_image(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
         image = image.crop(int_all(left, 0, right, old_h))
 
     return image.resize(size, PIL.Image.LANCZOS)
-
-
-def fit_image_long_edge(image: PIL.Image, new_long: int) -> PIL.Image:
-    """Creates a thumbnail of an image given the size of the long edge."""
-    w, h = image.size
-
-    long, short = max(w, h), min(w, h)
-    new_short = int(short / long * new_long)
-
-    if w >= h:
-        size = (new_long, new_short)
-    else:
-        size = (new_short, new_long)
-
-    return fit_image(image, size)
 
 
 def apply_watermark(image: PIL.Image, color: str) -> PIL.Image:
