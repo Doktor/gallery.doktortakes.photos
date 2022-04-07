@@ -16,9 +16,15 @@ then
   error=1
 fi
 
-if [[ ! -f ./data/config.toml ]]
+if [[ ! -f ./config/config.toml ]]
 then
-  echo "error: config.toml is missing"
+  echo "error: configuration file \"config.toml\" is missing"
+  error=1
+fi
+
+if [[ ! -f ./config/secrets.toml ]]
+then
+  echo "error: secrets configuration file \"secrets.toml\" is missing"
   error=1
 fi
 
