@@ -4,7 +4,7 @@
       <div
         :is="allowSelect ? 'div' : 'router-link'"
         :to="allowSelect ? null : photoLink"
-        @click="allowSelect ? select : () => {}"
+        @click="select"
       >
         <PhotoThumbnail v-if="!isSkeleton" v-bind="{ isLoaded, photo }" />
         <PhotoSkeleton v-else />
@@ -47,6 +47,10 @@ export default {
 
   methods: {
     select() {
+      if (!this.allowSelect) {
+        return;
+      }
+
       this.$emit("select", this.photo.md5);
     },
   },
