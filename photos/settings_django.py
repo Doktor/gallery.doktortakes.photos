@@ -110,15 +110,23 @@ if DEBUG:
 
 # Database
 
-if not TEST:
-    db = CONFIG['database']
-else:
+if TEST:
     db = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': ':memory:'
     }
+else:
+    db = {
+        'ENGINE': os.environ['DATABASE_ENGINE'],
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
+    }
 
-DATABASES = {'default': db}
+DATABASES = {"default": db}
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

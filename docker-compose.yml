@@ -14,7 +14,15 @@ services:
     volumes:
       - ./photos/:/app/photos/
       - static_volume:/app/static/
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_ENGINE=django.db.backends.postgresql
+      - DATABASE_USER=photos
+      - DATABASE_PASSWORD=photos
+      - DATABASE_NAME=photos
     depends_on:
+      - db
       - redis
 
   frontend:
@@ -42,9 +50,29 @@ services:
       service: celery
     build:
       target: development
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_ENGINE=django.db.backends.postgresql
+      - DATABASE_USER=photos
+      - DATABASE_PASSWORD=photos
+      - DATABASE_NAME=photos
     depends_on:
       - backend
+      - db
       - redis
 
+  db:
+    image: postgres:10.20-alpine
+    container_name: db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    # https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables
+    environment:
+      - POSTGRES_USER=photos
+      - POSTGRES_PASSWORD=photos
+      - POSTGRES_DB=photos
+
 volumes:
+  postgres_data:
   static_volume:
