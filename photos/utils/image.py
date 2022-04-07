@@ -6,7 +6,7 @@ from photos.settings_photos import (
     WATERMARK_IMAGES, WATERMARK_OFFSET)
 
 from io import BytesIO
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 import PIL.Image
 
 
@@ -16,6 +16,7 @@ def int_all(*nums: float) -> List[int]:
 
 def create_thumbnail(
         pk: int,
+        file: Optional[File],
         width: int,
         height: int,
         name: str,
@@ -26,8 +27,11 @@ def create_thumbnail(
     from photos.models import Photo, Thumbnail
 
     photo = Photo.objects.get(pk=pk)
-    original_file = photo.get_original()
-    original_image = PIL.Image.open(original_file)
+
+    if file is None:
+        file = photo.get_original()
+
+    original_image = PIL.Image.open(file)
 
     try:
         exif = original_image.info['exif']

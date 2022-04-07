@@ -42,7 +42,8 @@ def update_display_image(photo: Photo, file: File) -> int:
     width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
     thumbnail = create_thumbnail(
-        photo.pk, width, height, THUMBNAIL_DISPLAY,
+        photo.pk, file,
+        width, height, THUMBNAIL_DISPLAY,
         quality=90, add_watermark=True, watermark_color=photo.watermark)
 
     return thumbnail.image.size
@@ -50,7 +51,8 @@ def update_display_image(photo: Photo, file: File) -> int:
 
 def update_square_thumbnail(photo: Photo, file: File) -> None:
     create_thumbnail(
-        photo.pk, SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_SMALL_SQUARE,
+        photo.pk, file,
+        SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_SMALL_SQUARE,
         quality=THUMBNAIL_QUALITY)
 
 
@@ -59,7 +61,8 @@ def update_thumbnail(photo: Photo, file: File) -> None:
     width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
     create_thumbnail(
-        photo.pk, width, height, THUMBNAIL_COVER,
+        photo.pk, file,
+        width, height, THUMBNAIL_COVER,
         quality=THUMBNAIL_QUALITY)
 
 
