@@ -4,25 +4,33 @@ All commit messages are tagged based on the sections of the project that are aff
 
 ## Current
 
+### Backend (API)
+
 - `admin`: Django admin site
 - `api`: Django REST API, including serializers and views
-- `css`: stylesheets
-- `docs`: documentation
-- `docker`: Docker containers for development, staging, and production
 - `models`: Django models
-- `npm`: JavaScript package dependencies, NPM scripts, and other `package.json` changes
-- `other`: Everything else
 - `packages`: Python package dependencies
-- `refactor`: general refactoring (no features or fixes)
 - `settings`: Django settings
 - `tasks`: Python utilities run with Invoke
 - `templates`: Django templates
 - `tests`: backend tests
-- `ui`: frontend, including components, state management, and routing
 - `urls`: Django URL patterns and routing
 - `utils`: Python utility functions
 - `views`: Django views, excluding API views (see `api`)
+
+### Frontend (UI)
+
+- `css`: stylesheets
+- `npm`: JavaScript package dependencies, NPM scripts, and other `package.json` changes
+- `ui`: frontend, including components, state management, and routing
 - `webpack`: Webpack
+
+### Other
+
+- `docs`: documentation
+- `docker`: Docker containers for development, staging, and production
+- `other`: Everything else
+- `refactor`: general refactoring (no features or fixes)
 
 ## Replaced
 
