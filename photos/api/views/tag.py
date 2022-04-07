@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.serializers import TagSerializer
-from photos.utils import get_tags_for_user
+from photos.utils.query import get_tags_for_user
 
 
 class TagList(APIView):

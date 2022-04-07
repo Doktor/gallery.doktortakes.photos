@@ -10,7 +10,7 @@ from django.views.decorators.http import require_GET
 from photos.context_processors import metadata as m
 from photos.models import Photo, Tag
 from photos.models.album import Allow
-from photos.utils import get_album, get_photo_for_user_or_404
+from photos.utils.query import get_album, get_photo_for_user_or_404
 
 import datetime
 import mimetypes
