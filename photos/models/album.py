@@ -1,9 +1,8 @@
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
-from django.core.files.storage import DefaultStorage
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import pre_save, post_delete, m2m_changed
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.forms.models import model_to_dict
 from django.http import HttpRequest
@@ -14,9 +13,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from rest_framework.request import Request
 
 from photos.context_processors import metadata
-from photos.settings_photos import MEDIA_FOLDERS
 
-import os
 from typing import List, Union
 
 m = metadata(None)
@@ -325,16 +322,3 @@ def create_album_cover(sender, instance: Album, **kwargs) -> None:
     from photos.tasks import update_thumbnail
     update_thumbnail(album.cover, album.cover.get_original())
     album.cover.save()
-
-
-@receiver(post_delete, sender=Album,
-          dispatch_uid="photos.models.delete_album_folders")
-def delete_album_folders(sender, instance: Album, **kwargs) -> None:
-    album = instance
-    storage = DefaultStorage()
-
-    for name in MEDIA_FOLDERS.values():
-        folder_path = os.path.join(name, album.path)
-
-        if storage.exists(folder_path):
-            storage.delete(folder_path)
