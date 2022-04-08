@@ -1,12 +1,13 @@
 <template>
-  <img
-    :src="require('@/images/square-placeholder.png').default"
-    alt="Photo thumbnail placeholder"
-  />
+  <PlaceholderImage :width="1" :height="1" alt="Photo thumbnail placeholder" />
 </template>
 
 <script>
+import PlaceholderImage from "@/components/PlaceholderImage";
+
 export default {
-  name: "PhotoPlaceholder",
+  components: {
+    PlaceholderImage,
+  },
 };
 </script>

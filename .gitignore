@@ -18,7 +18,6 @@ src/data/
 
 # Media files
 media/
-*.psd
 
 # Compiled files
 __pycache__/

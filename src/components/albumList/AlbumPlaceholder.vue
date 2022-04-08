@@ -1,12 +1,17 @@
 <template>
-  <img
-    :src="require('@/images/cover-placeholder.png').default"
+  <PlaceholderImage
+    :width="3"
+    :height="2"
     alt="Album cover image placeholder"
   />
 </template>
 
 <script>
+import PlaceholderImage from "@/components/PlaceholderImage";
+
 export default {
-  name: "AlbumPlaceholder",
+  components: {
+    PlaceholderImage,
+  },
 };
 </script>
