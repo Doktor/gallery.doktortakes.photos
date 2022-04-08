@@ -16,6 +16,6 @@ class HeroPhotoAdmin(admin.ModelAdmin):
         'created_date', 'updated_date',
     )
 
-    def preview(self, photo):
-        url = photo.image.url
+    def preview(self, hero_photo):
+        url = hero_photo.image.url
         return format_html('<a href="{}"><img height="300" src="{}"></a>', url, url)

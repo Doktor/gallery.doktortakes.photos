@@ -12,6 +12,7 @@ import pytz
 import shlex
 import subprocess
 
+from models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
 from .utils import generate_image
 
 
@@ -152,18 +153,18 @@ def check_generated_images(ctx, file=None, fix=False):
     django_setup()
     from photos.models import Photo
 
-    photos = Photo.objects.all().only('image', 'thumbnail', 'square_thumbnail')
+    photos = Photo.objects.all()
 
     issues = []
 
     for photo in photos:
         if fix:
-            if not photo.image.name:
+            if not photo.get_thumbnail(THUMBNAIL_DISPLAY):
                 print(f"Generating new display image for photo {photo.pk}")
                 generate_image(photo, 'display_image')
                 photo.save()
 
-            if not photo.square_thumbnail.name:
+            if not photo.get_thumbnail(THUMBNAIL_SMALL_SQUARE):
                 print(f"Generating new square thumbnail for photo {photo.pk}")
                 generate_image(photo, 'square_thumbnail')
                 photo.save()
@@ -171,10 +172,10 @@ def check_generated_images(ctx, file=None, fix=False):
         else:
             missing = []
 
-            if not photo.image.name:
+            if not photo.get_thumbnail(THUMBNAIL_DISPLAY):
                 missing.append('display image')
 
-            if not photo.square_thumbnail.name:
+            if not photo.get_thumbnail(THUMBNAIL_SMALL_SQUARE):
                 missing.append('square thumbnail')
 
             if missing:

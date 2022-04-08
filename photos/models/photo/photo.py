@@ -64,23 +64,11 @@ class Photo(models.Model):
 
     watermark = models.CharField(
         max_length=1, choices=COLOR_CHOICES, default=COLOR_WHITE, blank=True)
-    image = models.ImageField(
-        upload_to=get_display_path,
-        blank=True, null=True, editable=False,
-        verbose_name="Display image",
-        help_text="Smaller image with watermark applied")
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
     file_size = models.CharField(
         max_length=50, editable=False, blank=True)
-
-    # Thumbnails
-
-    thumbnail = models.ImageField(
-        upload_to=get_thumbnail_path, blank=True, null=True, editable=False)
-    square_thumbnail = models.ImageField(
-        upload_to=get_square_thumbnail_path, blank=True, null=True, editable=False)
 
     # Metadata
 

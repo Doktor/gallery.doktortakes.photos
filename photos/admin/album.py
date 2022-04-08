@@ -35,5 +35,7 @@ class AlbumAdmin(MPTTModelAdmin):
     def preview(self, album):
         """Creates a HTML element to preview the cover photo."""
         if album.cover:
+            thumbnail = album.cover.get_display_image()
+
             return format_html('<a href="{}"><img height="300" src="{}"></a>',
-                               album.cover.image.url, album.cover.thumbnail.url)
+                               thumbnail.image.url, thumbnail.image.url)
