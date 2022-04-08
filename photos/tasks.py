@@ -1,8 +1,9 @@
 from django.core.files import File
 
 from photos.models import Photo
-from photos.models.album import SIZE_3600
+from photos.models.photo.photo import COLOR_WHITE
 from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
+from photos.models.photo.watermark import WATERMARK_COLOR_BLACK, WATERMARK_COLOR_WHITE
 from photos.settings_photos import SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
 from photos.utils.image import create_thumbnail, guess_aspect_ratio
 from photos.utils.models import format_file_size
@@ -41,10 +42,12 @@ def update_display_image(photo: Photo, file: File) -> int:
     long_edge = int(photo.album.display_image_size)
     width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
+    watermark_color = WATERMARK_COLOR_WHITE if photo.watermark == COLOR_WHITE else WATERMARK_COLOR_BLACK
+
     thumbnail = create_thumbnail(
         photo.pk, file,
         width, height, THUMBNAIL_DISPLAY,
-        quality=90, add_watermark=True, watermark_color=photo.watermark)
+        quality=90, add_watermark=True, watermark_color=watermark_color)
 
     return thumbnail.image.size
 
