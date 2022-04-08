@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 error=0
 
 echo "running pre-deployment checks"
