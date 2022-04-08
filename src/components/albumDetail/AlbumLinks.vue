@@ -5,8 +5,8 @@
     <router-link
       class="album-link"
       :to="{ name: 'editAlbum', params: { path: album.path } }"
-      >Edit
-    </router-link>
+      >Edit</router-link
+    >
 
     <span class="divider"></span>
 
