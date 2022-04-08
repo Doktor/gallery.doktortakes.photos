@@ -14,10 +14,10 @@
     />
 
     <section class="info">
-      <Metadata :photo="photo" :count="photos.length" />
-      <Exif :exif="photo.exif" />
+      <PhotoMetadata :photo="photo" :count="photos.length" />
+      <PhotoExif :exif="photo.exif" />
       <KeyboardShortcuts />
-      <Links :album="album" />
+      <PhotoLinks :album="album" />
     </section>
   </div>
 </template>
@@ -26,11 +26,11 @@
 import { mapState } from "vuex";
 import { router } from "@/router/main.js";
 
-import Exif from "@/components/photoDetail/Exif";
+import PhotoExif from "@/components/photoDetail/PhotoExif";
 import Filmstrip from "@/components/photoDetail/Filmstrip";
 import KeyboardShortcuts from "@/components/photoDetail/KeyboardShortcuts.vue";
-import Links from "@/components/photoDetail/Links";
-import Metadata from "@/components/photoDetail/Metadata";
+import PhotoLinks from "@/components/photoDetail/PhotoLinks";
+import PhotoMetadata from "@/components/photoDetail/PhotoMetadata";
 import PhotoViewer from "@/components/photoDetail/PhotoViewer";
 import { AlbumService } from "@/services/AlbumService";
 
@@ -48,11 +48,11 @@ export default {
 
   components: {
     PhotoViewer,
-    Exif,
+    PhotoExif,
     Filmstrip,
     KeyboardShortcuts,
-    Links,
-    Metadata,
+    PhotoLinks,
+    PhotoMetadata,
   },
 
   data() {
