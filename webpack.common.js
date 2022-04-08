@@ -1,24 +1,23 @@
-const path = require('path');
-const BundleTracker = require('webpack-bundle-tracker');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-
+const path = require("path");
+const BundleTracker = require("webpack-bundle-tracker");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = {
   context: __dirname,
 
   entry: {
-    main: path.resolve(__dirname, './src/main.js'),
+    main: path.resolve(__dirname, "./src/main.js"),
   },
 
   output: {
-    path: path.resolve(__dirname, './static/'),
-    filename: '[name].js',
+    path: path.resolve(__dirname, "./static/"),
+    filename: "[name].js",
   },
 
   plugins: [
     new BundleTracker({
       path: __dirname,
-      filename: './src/webpack-stats.json',
+      filename: "./src/webpack-stats.json",
     }),
     new VueLoaderPlugin(),
   ],
@@ -27,30 +26,25 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        loader: "vue-loader",
         options: {
           compilerOptions: {
-            whitespace: 'condense',
+            whitespace: "condense",
           },
         },
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.s[ac]ss$/,
-        exclude: [
-          path.resolve(__dirname, './src/styles/main.scss'),
-        ],
+        exclude: [path.resolve(__dirname, "./src/styles/main.scss")],
         use: [
-          'style-loader',
-          'css-loader',
+          "style-loader",
+          "css-loader",
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
               prependData: `@use "sass:math";\n@import "./src/styles/_variables.scss";`,
             },
@@ -58,40 +52,34 @@ module.exports = {
         ],
       },
       {
-        resource: path.resolve(__dirname, './src/styles/main.scss'),
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        resource: path.resolve(__dirname, "./src/styles/main.scss"),
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: [
-              '@babel/preset-env',
-            ],
+            presets: ["@babel/preset-env"],
             plugins: [
               // reuse injected helper code
-              '@babel/plugin-transform-runtime',
+              "@babel/plugin-transform-runtime",
               // import()
-              '@babel/plugin-syntax-dynamic-import',
+              "@babel/plugin-syntax-dynamic-import",
             ],
-          }
-        }
+          },
+        },
       },
       {
         test: /\.(png)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              name: '[name].[ext]',
-              outputPath: 'images/',
-              publicPath: '/static/images/',
+              name: "[name].[ext]",
+              outputPath: "images/",
+              publicPath: "/static/images/",
             },
           },
         ],
@@ -101,9 +89,9 @@ module.exports = {
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
-      vue: 'vue/dist/vue.js',
+      "@": path.resolve(__dirname, "src"),
+      "vue": "vue/dist/vue.js",
     },
-    extensions: ['.js', '.json', '.vue'],
+    extensions: [".js", ".json", ".vue"],
   },
 };

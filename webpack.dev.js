@@ -1,11 +1,10 @@
-const config = require('./webpack.common.js');
-const merge = require('webpack-merge');
-
+const config = require("./webpack.common.js");
+const merge = require("webpack-merge");
 
 module.exports = merge(config, {
-  mode: 'development',
+  mode: "development",
 
-  devtool: 'eval-source-map',
+  devtool: "eval-source-map",
 
   stats: {
     colors: true,
@@ -14,6 +13,6 @@ module.exports = merge(config, {
   watch: true,
   watchOptions: {
     aggregateTimeout: 300,
-    poll: 1000
+    poll: 1000,
   },
 });
