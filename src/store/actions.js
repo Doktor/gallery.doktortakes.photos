@@ -108,7 +108,6 @@ export const actions = {
     context.commit("setLoading", true);
 
     let { content } = await sendRequest(endpoints.recent);
-    context.commit("setGitStatus", content.git_status);
     context.commit("setLoading", false);
   },
 

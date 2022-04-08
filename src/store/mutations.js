@@ -96,8 +96,4 @@ export const mutations = {
 
     state.photos = photos;
   },
-
-  setGitStatus(state, status) {
-    state.gitStatus = status;
-  },
 };

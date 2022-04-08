@@ -5,7 +5,6 @@ from rest_framework.response import Response
 
 from photos.api.serializers import AlbumSerializer
 from photos.models import Album
-from photos.settings_photos import GIT_STATUS
 
 
 @api_view()
@@ -21,5 +20,4 @@ def get_recent(request: Request) -> Response:
 
     return Response({
         "recent_albums": AlbumSerializer(recent_albums, many=True).data,
-        "git_status": GIT_STATUS,
     })

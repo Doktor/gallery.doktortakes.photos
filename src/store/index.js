@@ -147,8 +147,6 @@ export const store = new Vuex.Store({
     page: 1,
     loaded: [],
 
-    gitStatus: {},
-
     // Settings
     photosPerPage: 30,
   },
