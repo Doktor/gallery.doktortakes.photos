@@ -31,6 +31,7 @@ export default {
         description: "",
         start: "",
         end: "",
+        display_image_size: "3840",
         access_level: 0,
         access_code: "",
         parent: "",

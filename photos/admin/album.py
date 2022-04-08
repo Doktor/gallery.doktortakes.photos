@@ -17,7 +17,7 @@ class AlbumAdmin(MPTTModelAdmin):
     fieldsets = (
         ('Main', {
             'fields': ('name', 'slug', 'location', 'description',
-                       'start', 'end', 'parent', 'tags', 'thumbnail_size'),
+                       'start', 'end', 'parent', 'tags', 'display_image_size'),
         }),
         ('Visibility', {
             'fields': ('access_level', 'access_code', 'users', 'groups'),

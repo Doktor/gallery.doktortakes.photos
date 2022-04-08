@@ -38,7 +38,7 @@ def create_thumbnails(pk: int) -> None:
 
 
 def update_display_image(photo: Photo, file: File) -> int:
-    long_edge = 3600 if photo.album.display_image_size == SIZE_3600 else 2400
+    long_edge = int(photo.album.display_image_size)
     width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
     thumbnail = create_thumbnail(

@@ -42,6 +42,12 @@
       <CustomInput label="End" type="date" v-model="changes.end" />
 
       <CustomSelect
+        label="Display image size"
+        :options="displayImageSizes"
+        v-model="changes.display_image_size"
+      />
+
+      <CustomSelect
         label="Access level"
         :options="accessLevels"
         v-model="changes.access_level"
@@ -69,6 +75,33 @@ import GenerateAccessCode from "./GenerateAccessCode.vue";
 import { accessLevels } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
+
+const displayImageSizes = [
+  {
+    value: "2400",
+    display: "2400 x 1600",
+  },
+  {
+    value: "3000",
+    display: "3000 x 2000",
+  },
+  {
+    value: "3600",
+    display: "3600 x 2400",
+  },
+  {
+    value: "3840",
+    display: "3840 x 2560",
+  },
+  {
+    value: "4800",
+    display: "4800 x 3200",
+  },
+  {
+    value: "6000",
+    display: "6000 x 4000",
+  },
+];
 
 export default {
   components: {
@@ -98,6 +131,8 @@ export default {
       changes: { ...this.album },
 
       accessLevels,
+      displayImageSizes,
+
       users: "",
       groups: "",
       tags: "",
