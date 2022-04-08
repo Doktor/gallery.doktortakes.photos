@@ -170,9 +170,6 @@ export default {
           });
         case "l":
           return router.push({ name: "albums" });
-        case "d":
-          window.location.href = this.photo.download;
-          break;
         case "h":
           window.location.href = "/";
           break;

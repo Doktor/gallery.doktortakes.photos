@@ -35,11 +35,6 @@
         </dd>
       </div>
 
-      <div>
-        <dt><i title="Download" class="fas fa-fw fa-download"></i></dt>
-        <dd><a :href="photo.download" title="Download photo">Download</a></dd>
-      </div>
-
       <div v-if="isStaff">
         <dt><i title="Admin" class="fas fa-fw fa-toolbox"></i></dt>
         <dd><a :href="photo.admin" title="Open in admin site">Admin</a></dd>

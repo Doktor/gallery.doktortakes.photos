@@ -359,19 +359,6 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
 
 
 @require_GET
-def download_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
-    photo = get_photo_for_user_or_404(request, md5, path=path)
-    photo.image.open()
-
-    filename = photo.filename
-    mime = mimetypes.guess_type(photo.image.url)
-    response = HttpResponse(photo.image.file, content_type=mime)
-    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
-    return response
-
-
-@require_GET
 def search_photos(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'Search',

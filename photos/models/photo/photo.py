@@ -162,9 +162,6 @@ class Photo(models.Model):
     def get_access_code_url(self) -> str:
         return self.get_absolute_url() + self.album.get_access_code_query()
 
-    def get_download_url(self) -> str:
-        return reverse('download', kwargs={'path': self.path, 'md5': self.md5})
-
     def get_exif(self) -> dict:
         from photos.utils.metadata import get_exif
         return get_exif(self)

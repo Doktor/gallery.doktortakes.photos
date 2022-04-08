@@ -4,11 +4,6 @@
 
     <dl title="Keyboard shortcuts">
       <div>
-        <dt><kbd>D</kbd></dt>
-        <dd>Download this photo</dd>
-      </div>
-
-      <div>
         <dt>
           <kbd><i class="fas fa-fw fa-arrow-left"></i></kbd>
           <kbd><i class="fas fa-fw fa-arrow-right"></i></kbd>

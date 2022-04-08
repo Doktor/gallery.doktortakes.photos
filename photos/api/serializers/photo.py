@@ -26,7 +26,6 @@ class PhotoSerializer(serializers.ModelSerializer):
 
     # Links
     url = serializers.CharField(read_only=True, source='get_absolute_url')
-    download = serializers.CharField(read_only=True, source='get_download_url')
     admin = serializers.SerializerMethodField(read_only=True, allow_null=True)
 
     # Metadata
@@ -67,7 +66,7 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = (
             'images',
-            'url', 'download', 'admin',
+            'url', 'admin',
             'taken',
             'width', 'height', 'md5', 'index',
             'path', 'exif',
