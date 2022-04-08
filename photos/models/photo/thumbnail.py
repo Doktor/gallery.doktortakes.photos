@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 import uuid
 
@@ -48,3 +50,9 @@ class Thumbnail(models.Model):
 
     def __str__(self) -> str:
         return f'Thumbnail for photo {self.photo_id} ({self.width}x{self.height})'
+
+
+@receiver(post_delete, sender=Thumbnail,
+          dispatch_uid='receiver_delete_thumbnail_image')
+def receiver_delete_thumbnail_image(sender, instance: Thumbnail, **kwargs) -> None:
+    instance.image.delete(save=False)
