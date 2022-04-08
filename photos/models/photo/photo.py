@@ -4,7 +4,7 @@ from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
-from django.db.models.signals import post_save
+from django.db.models.signals import post_delete, post_save
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.http import HttpRequest
@@ -120,14 +120,6 @@ class Photo(models.Model):
 
         super().clean()
 
-    def delete(self, using=None, keep_parents=False) -> None:
-        self.original.delete(save=False)
-        self.image.delete(save=False)
-        self.thumbnail.delete(save=False)
-        self.square_thumbnail.delete(save=False)
-
-        super().delete(using=using, keep_parents=keep_parents)
-
     @property
     def filename(self) -> str:
         return os.path.basename(self.original.name)
@@ -220,3 +212,12 @@ def receiver_create_thumbnails(sender, instance: Photo, created: bool, **kwargs)
 
     from photos.tasks import create_thumbnails
     create_thumbnails.delay(photo.pk)
+
+
+@receiver(post_delete, sender=Photo,
+          dispatch_uid='receiver_delete_photo_thumbnails')
+def receiver_delete_photo_thumbnails(sender, instance: Photo, **kwargs) -> None:
+    instance.original.delete(save=False)
+
+    for thumbnail in instance.thumbnails.all():
+        thumbnail.delete()
