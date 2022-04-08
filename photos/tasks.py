@@ -2,9 +2,11 @@ from django.core.files import File
 
 from photos.models import Photo
 from photos.models.photo.photo import COLOR_WHITE
-from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
+from photos.models.photo.thumbnail import (
+    THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_LARGE_SQUARE,
+    THUMBNAIL_SMALL_SQUARE)
 from photos.models.photo.watermark import WATERMARK_COLOR_BLACK, WATERMARK_COLOR_WHITE
-from photos.settings_photos import SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
+from photos.settings_photos import LARGE_SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
 from photos.utils.image import create_thumbnail, guess_aspect_ratio
 from photos.utils.models import format_file_size
 
@@ -56,6 +58,13 @@ def update_square_thumbnail(photo: Photo, file: File) -> None:
     create_thumbnail(
         photo.pk, file,
         SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_SMALL_SQUARE,
+        quality=THUMBNAIL_QUALITY)
+
+
+def update_large_square_thumbnail(photo: Photo, file: File) -> None:
+    create_thumbnail(
+        photo.pk, file,
+        LARGE_SQUARE_THUMBNAIL_WIDTH, LARGE_SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_LARGE_SQUARE,
         quality=THUMBNAIL_QUALITY)
 
 
