@@ -14,11 +14,21 @@ from rest_framework.request import Request
 
 from photos.fields import JSONField
 from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY
-from photos.settings_photos import (
-    MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, COLOR_CHOICES, COLOR_WHITE)
+from photos.settings_photos import MEDIA_FOLDERS as MEDIA, DEFAULT_PATH
 
 import os
 from typing import Optional, Union
+
+
+COLOR_NONE = ''
+COLOR_WHITE = 'w'
+COLOR_BLACK = 'b'
+
+COLOR_CHOICES = (
+    (COLOR_NONE, 'None'),
+    (COLOR_WHITE, 'White'),
+    (COLOR_BLACK, 'Black'),
+)
 
 
 def get_filename(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:

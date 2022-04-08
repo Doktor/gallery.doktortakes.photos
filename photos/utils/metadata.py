@@ -1,7 +1,6 @@
 from django.core.files import File
 
-from photos.settings_photos import (
-    COLOR_NONE, COLOR_WHITE, COLOR_BLACK)
+from photos.models.photo.photo import COLOR_NONE, COLOR_WHITE, COLOR_BLACK
 from photos.utils.models import DATE_FORMAT, get_modified_time_utc
 
 import datetime
@@ -72,8 +71,7 @@ def parse_xmp_data(photo: 'Photo', file: File) -> None:
         except IndexError:
             photo.watermark = COLOR_NONE
         else:
-            photo.watermark = \
-                (COLOR_BLACK if label == 'green' else COLOR_WHITE)
+            photo.watermark = COLOR_BLACK if label == 'green' else COLOR_WHITE
 
 
 def format_f_stop(f: str) -> float:

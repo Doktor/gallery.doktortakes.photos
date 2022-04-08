@@ -1,6 +1,7 @@
 from django.core.files import File
 
-from photos.settings_photos import DEFAULT_WATERMARK, WATERMARK_IMAGES, WATERMARK_OFFSET
+from photos.models import Watermark
+from photos.settings_photos import WATERMARK_OFFSET_PERCENT
 
 from io import BytesIO
 from typing import List, Optional, Tuple
@@ -105,16 +106,22 @@ def fit_image(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
 def apply_watermark(image: PIL.Image, color: str) -> PIL.Image:
     """Applies a watermark to an image."""
     w, h = image.size
-    size = max(w, h)
+    image_size = max(w, h)
 
-    watermark = WATERMARK_IMAGES.get((size, color), DEFAULT_WATERMARK)
-    offset = int(WATERMARK_OFFSET * (size / 2400))
+    try:
+        watermark = Watermark.objects.get(apply_to_size=image_size, color=color)
+    except Watermark.DoesNotExist:
+        raise RuntimeError(f"no watermark found for parameters: size = {image_size}, color = {color}")
 
-    x = w - watermark.size[0] - offset
-    y = h - watermark.size[1] - offset
+    watermark_image = PIL.Image.open(watermark.image)
+
+    offset = int(image_size * (WATERMARK_OFFSET_PERCENT / 100))
+
+    x = w - watermark_image.width - offset
+    y = h - watermark_image.height - offset
     coords = (x, y)
 
-    image.paste(watermark, coords, mask=watermark.split()[3])
+    image.paste(watermark_image, coords, mask=watermark_image.split()[3])
     return image
 
 

@@ -4,7 +4,6 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 import datetime
 import json
 import os
-import PIL.Image
 
 
 # Media files
@@ -36,35 +35,7 @@ THUMBNAIL_QUALITY = 80
 
 
 # Watermarks
-
-WATERMARKS_ENABLED = getattr(settings, 'WATERMARKS_ENABLED', True)
-
-COLOR_NONE = ''
-COLOR_WHITE = 'w'
-COLOR_BLACK = 'b'
-
-COLOR_CHOICES = (
-    (COLOR_NONE, 'None'),
-    (COLOR_WHITE, 'White'),
-    (COLOR_BLACK, 'Black'),
-)
-
-WATERMARKS_PATH = os.path.join(settings.BASE_DIR, 'data', 'watermarks')
-
-WATERMARK_IMAGES = {}
-
-if WATERMARKS_ENABLED:
-    for size in (2400, 3600):
-        for color in ('black', 'white'):
-            path = os.path.join(WATERMARKS_PATH, str(size), color + '.png')
-
-            image = PIL.Image.open(path, 'r').convert('RGBA')
-            key = (size, color[0])
-            WATERMARK_IMAGES[key] = image
-
-    DEFAULT_WATERMARK = WATERMARK_IMAGES[(2400, 'w')]
-
-WATERMARK_OFFSET = 30
+WATERMARK_OFFSET_PERCENT = 5 / 6
 
 
 # Changelog
