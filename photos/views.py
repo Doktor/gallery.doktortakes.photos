@@ -46,6 +46,13 @@ def get_canonical_url(relative_url: str) -> str:
     return f"{metadata['BASE_URL']}{relative_url}"
 
 
+def get_media_url(image_url: str) -> str:
+    if settings.LOCAL_STORAGE:
+        return f"{metadata['BASE_URL']}{image_url}"
+
+    return image_url
+
+
 meta_open_graph_common = [
     MetaProperty('og:site_name', metadata['TITLE']),
     MetaProperty('og:description', metadata['DESCRIPTION']),
@@ -58,7 +65,7 @@ meta_open_graph_profile = [
 ]
 
 meta_open_graph_generic_image = [
-    MetaProperty('og:image', f"{metadata['BASE_URL']}{static('images/camera.png')}"),
+    MetaProperty('og:image', get_canonical_url(static('images/camera.png'))),
     MetaProperty('og:image:type', 'image/png'),
     MetaProperty('og:image:width', '500'),
     MetaProperty('og:image:height', '500'),
@@ -203,12 +210,6 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
         return view_restricted_album(request)
 
     title = f"{album.name} | {metadata['TITLE']}"
-    base_url = metadata['BASE_URL'] if settings.LOCAL_STORAGE else ''
-
-    if album.cover is not None:
-        cover_url = f"{base_url}{album.cover.image.url}"
-    else:
-        cover_url = None
 
     meta = [
         *meta_open_graph_common,
@@ -219,24 +220,23 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
         *meta_open_graph_article(last_update=album.start),
     ]
 
-    if album.cover is not None:
+    if album.cover:
+        thumbnail = album.cover.get_display_image()
+        cover_url = get_media_url(thumbnail.image.url)
+
         meta.extend([
             MetaProperty('og:image', cover_url),
             MetaProperty('og:image:type', 'image/jpeg'),
             MetaProperty('og:image:width', album.cover.width),
             MetaProperty('og:image:height', album.cover.height),
+
+            *meta_twitter_common,
+            MetaName('twitter:card', 'photo'),
+            MetaName('twitter:title', title),
+            MetaProperty('twitter:image', cover_url),
         ])
     else:
         meta.extend(meta_open_graph_generic_image)
-
-    meta.extend([
-        *meta_twitter_common,
-        MetaName('twitter:card', 'photo'),
-        MetaName('twitter:title', title),
-    ])
-
-    if album.cover is not None:
-        meta.append(MetaProperty('twitter:image', cover_url))
 
     if album.access_level > Allow.PUBLIC:
         meta.append(meta_no_robots)
@@ -328,17 +328,24 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
         MetaProperty('og:updated_time', photo.taken.isoformat()),
 
         *meta_open_graph_article(last_update=photo.taken),
-
-        MetaProperty('og:image', get_canonical_url(photo.image.url)),
-        MetaProperty('og:image:type', 'image/jpeg'),
-        MetaProperty('og:image:width', photo.width),
-        MetaProperty('og:image:height', photo.height),
-
-        *meta_twitter_common,
-        MetaName('twitter:card', 'photo'),
-        MetaName('twitter:title', full_title),
-        MetaName('twitter:image', get_canonical_url(photo.image.url)),
     ]
+
+    thumbnail = photo.get_display_image()
+
+    if thumbnail:
+        image_url = get_media_url(thumbnail.image.url)
+
+        meta.extend([
+            MetaProperty('og:image', image_url),
+            MetaProperty('og:image:type', 'image/jpeg'),
+            MetaProperty('og:image:width', photo.width),
+            MetaProperty('og:image:height', photo.height),
+
+            *meta_twitter_common,
+            MetaName('twitter:card', 'photo'),
+            MetaName('twitter:title', full_title),
+            MetaName('twitter:image', image_url),
+        ])
 
     if photo.access_level > Allow.PUBLIC:
         meta.append(meta_no_robots)

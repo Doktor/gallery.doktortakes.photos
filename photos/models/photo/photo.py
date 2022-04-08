@@ -13,6 +13,7 @@ from django.urls import reverse
 from rest_framework.request import Request
 
 from photos.fields import JSONField
+from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY
 from photos.settings_photos import (
     MEDIA_FOLDERS as MEDIA, DEFAULT_PATH, COLOR_CHOICES, COLOR_WHITE)
 
@@ -130,6 +131,10 @@ class Photo(models.Model):
     @property
     def filename(self) -> str:
         return os.path.basename(self.original.name)
+
+    def get_display_image(self) -> Optional['Thumbnail']:
+        thumbnails = self.thumbnails.all()
+        return next(filter(lambda t: t.type == THUMBNAIL_DISPLAY, thumbnails), None)
 
     def generate_image(self, image_type: str, save: bool = False) -> None:
         file = self.get_original()
