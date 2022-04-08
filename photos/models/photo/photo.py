@@ -56,19 +56,17 @@ class Photo(models.Model):
         help_text="Original image with no modifications")
     md5 = models.CharField(
         max_length=32, editable=False, unique=True, verbose_name="MD5")
-
-    sidecar_exists = models.BooleanField(default=False)
     original_filename = models.CharField(max_length=1000, blank=True)
-
-    # Display image
-
-    watermark = models.CharField(
-        max_length=1, choices=COLOR_CHOICES, default=COLOR_WHITE, blank=True)
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
     file_size = models.CharField(
         max_length=50, editable=False, blank=True)
+
+    sidecar_exists = models.BooleanField(default=False)
+
+    watermark = models.CharField(
+        max_length=1, choices=COLOR_CHOICES, default=COLOR_WHITE, blank=True)
 
     # Metadata
 
@@ -78,12 +76,14 @@ class Photo(models.Model):
 
     taken = models.DateTimeField(editable=False)
     edited = models.DateTimeField(editable=False)
-    uploaded = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Created date')
-    updated_date = models.DateTimeField(auto_now=True, editable=False)
 
     exif = JSONField(blank=True, verbose_name="EXIF")
-
     rating = models.PositiveSmallIntegerField(default=0)
+
+    # Bookkeeping
+
+    uploaded = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Created date')
+    updated_date = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self) -> str:
         return self.filename
