@@ -50,7 +50,11 @@ RUN chmod +x /app/run.staging.sh && \
     chmod +x /app/run-celery.staging.sh
 
 
-FROM staging as production
+FROM base as production
 
 COPY ./config/config.production.toml /app/config/config.toml
 COPY ./config/secrets.production.toml /app/config/secrets.toml
+
+COPY --from=node /app/static/ /app/static/
+
+RUN poetry run python manage.py collectstatic --no-input --clear
