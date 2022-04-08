@@ -132,9 +132,12 @@ class Photo(models.Model):
     def filename(self) -> str:
         return os.path.basename(self.original.name)
 
-    def get_display_image(self) -> Optional['Thumbnail']:
+    def get_thumbnail(self, type: str) -> Optional['Thumbnail']:
         thumbnails = self.thumbnails.all()
-        return next(filter(lambda t: t.type == THUMBNAIL_DISPLAY, thumbnails), None)
+        return next(filter(lambda t: t.type == type, thumbnails), None)
+
+    def get_display_image(self) -> Optional['Thumbnail']:
+        return self.get_thumbnail(THUMBNAIL_DISPLAY)
 
     def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.path, self.md5])

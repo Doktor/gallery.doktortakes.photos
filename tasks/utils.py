@@ -3,6 +3,7 @@ from typing import Optional
 from django.db.models.fields.files import ImageFieldFile
 
 from photos.models.photo import Photo, get_display_path, get_original_path, get_square_thumbnail_path, get_thumbnail_path
+from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
 
 
 def generate_image(photo: Photo, image_type: str, save: bool = False) -> None:
@@ -30,13 +31,15 @@ def get_image_file(photo: Photo, image_type: str) -> Optional[ImageFieldFile]:
     if image_type == 'original':
         return photo.original
     elif image_type == 'display_image':
-        return photo.image
+        thumbnail = photo.get_thumbnail(THUMBNAIL_DISPLAY)
     elif image_type == 'square_thumbnail':
-        return photo.square_thumbnail
+        thumbnail = photo.get_thumbnail(THUMBNAIL_SMALL_SQUARE)
     elif image_type == 'thumbnail':
-        return photo.thumbnail
+        thumbnail = photo.get_thumbnail(THUMBNAIL_COVER)
     else:
         raise ValueError
+
+    return thumbnail.image if thumbnail else None
 
 
 def get_image_filename(photo: Photo, image_type: str) -> Optional[str]:
