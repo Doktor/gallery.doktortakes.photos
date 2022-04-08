@@ -326,7 +326,7 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': '',
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
-        'STATS_FILE': os.path.join(BASE_DIR, 'src', 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'static', 'webpack-stats.json'),
     }
 }
 
