@@ -1,9 +1,6 @@
-from django.core.exceptions import ValidationError
 from django.core.files import File
 
-from photos.settings_photos import (
-    CHECK_MINIMUM_SIZE, DEFAULT_WATERMARK, MINIMUM_LONG_EDGE, MINIMUM_SHORT_EDGE,
-    WATERMARK_IMAGES, WATERMARK_OFFSET)
+from photos.settings_photos import DEFAULT_WATERMARK, WATERMARK_IMAGES, WATERMARK_OFFSET
 
 from io import BytesIO
 from typing import List, Optional, Tuple
@@ -138,20 +135,3 @@ def guess_aspect_ratio(w: int, h: int) -> float:
                 return 1 / ratio
     else:
         return w / h
-
-
-def check_dimensions(file: File) -> None:
-    """Checks the dimensions of an uploaded image and raises a ValidationError
-    if the image is too small."""
-
-    if not CHECK_MINIMUM_SIZE:
-        return
-
-    image = PIL.Image.open(file)
-    long, short = max(*image.size), min(*image.size)
-
-    if long < MINIMUM_LONG_EDGE or short < MINIMUM_SHORT_EDGE:
-        raise ValidationError(
-            "The uploaded image is too small: the minimum size is "
-            f"{MINIMUM_LONG_EDGE}x{MINIMUM_SHORT_EDGE} px, "
-            f"but the uploaded image was {long}x{short} px.")

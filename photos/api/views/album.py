@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from photos.api.serializers import (
     AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer, PhotoSerializer)
 from photos.models import Album, Photo
-from photos.utils.image import check_dimensions
 from photos.utils.metadata import parse_exif_data, parse_xmp_data
 from photos.utils.models import generate_md5_hash, CHUNK_SIZE
 from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
@@ -173,7 +172,6 @@ class AlbumPhotoList(APIView):
         cache.set(md5, data, 60 * 60 * 24)
 
         file.seek(0)
-        check_dimensions(file)
         parse_exif_data(photo, file)
         parse_xmp_data(photo, file)
 
