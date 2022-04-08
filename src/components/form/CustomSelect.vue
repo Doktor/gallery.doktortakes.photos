@@ -6,6 +6,12 @@
         {{ item.display }}
       </option>
     </select>
+
+    <div v-if="errors.length > 0">
+      <div v-for="(error, index) in errors" :key="index" class="form-error">
+        {{ error }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,6 +19,10 @@
 export default {
   name: "CustomSelect",
   props: {
+    errors: {
+      type: Array,
+      default: () => [],
+    },
     label: {
       type: String,
       required: true,

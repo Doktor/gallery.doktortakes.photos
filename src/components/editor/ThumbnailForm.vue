@@ -26,6 +26,7 @@
         label="Watermark color"
         v-model="request.watermarkColor"
         :options="watermarkColors"
+        :errors="errors.watermarkColor"
       />
     </fieldset>
 
@@ -64,6 +65,7 @@ export default {
       errors: {
         width: [],
         height: [],
+        watermarkColor: [],
       },
       request: {
         width: this.photo.width.toString(),
@@ -92,12 +94,20 @@ export default {
         hasErrors = true;
       }
 
+      if (this.request.addWatermark && !this.request.watermarkColor) {
+        this.errors.watermarkColor.push(
+          "watermark color should be set if adding watermark"
+        );
+        hasErrors = true;
+      }
+
       if (hasErrors) {
         return null;
       }
 
       this.errors.width = [];
       this.errors.height = [];
+      this.errors.watermarkColor = [];
 
       return {
         ...this.request,
