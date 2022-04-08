@@ -16,14 +16,13 @@ def get_filename(watermark: 'Watermark', filename: str) -> str:
     _, ext = os.path.splitext(filename)
     ext = ext.strip('.')
 
-    return f"watermarks/{watermark.color}_{watermark.width}x{watermark.height}.{ext}"
+    return f"watermarks/{watermark.color}_{watermark.apply_to_size}.{ext}"
 
 
 class Watermark(models.Model):
-    image = models.ImageField(upload_to=get_filename, width_field='width', height_field='height')
+    image = models.ImageField(upload_to=get_filename)
 
-    width = models.PositiveIntegerField(default=0, editable=False)
-    height = models.PositiveIntegerField(default=0, editable=False)
+    apply_to_size = models.PositiveIntegerField()
     color = models.CharField(max_length=10, choices=WATERMARK_COLORS)
 
     # Bookkeeping
@@ -31,4 +30,12 @@ class Watermark(models.Model):
     updated_date = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self) -> str:
-        return f'Watermark ({self.color}, {self.width}x{self.height})'
+        return f'Watermark ({self.color}, {self.apply_to_size}px)'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['apply_to_size', 'color'],
+                name='unique_size_color',
+            ),
+        ]
