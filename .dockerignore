@@ -1,9 +1,13 @@
 # IDE files
 .idea/
 
-# Sensitive data
+# Unnecessary data
+.git/
 cache/
+docs/
 logs/
+
+# Sensitive data
 *.bak
 *.db
 *.json
