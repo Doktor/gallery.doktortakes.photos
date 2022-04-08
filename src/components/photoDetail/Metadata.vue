@@ -15,7 +15,7 @@
 
       <div>
         <dt><i title="Dimensions" class="fas fa-fw fa-image"></i></dt>
-        <dd>{{ photo.width }} &times; {{ photo.height }}</dd>
+        <dd>{{ image.width }} &times; {{ image.height }}</dd>
       </div>
 
       <div>
@@ -31,9 +31,7 @@
           ></i>
         </dt>
         <dd>
-          <a :href="photo.images.display.url" title="Open in new tab"
-            >Open in new tab</a
-          >
+          <a :href="image.url" title="Open in new tab">Open in new tab</a>
         </dd>
       </div>
 
@@ -54,11 +52,6 @@
 import { mapGetters, mapState } from "vuex";
 
 export default {
-  computed: {
-    ...mapGetters(["isStaff"]),
-    ...mapState(["user"]),
-  },
-
   props: {
     photo: {
       type: Object,
@@ -67,6 +60,15 @@ export default {
     count: {
       type: Number,
       required: true,
+    },
+  },
+
+  computed: {
+    ...mapGetters(["isStaff"]),
+    ...mapState(["user"]),
+
+    image() {
+      return this.photo.images.display;
     },
   },
 };
