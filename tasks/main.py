@@ -39,7 +39,7 @@ def create_default_superuser(ctx):
         print("error: this script can only be used in debug mode", file=sys.stderr)
         sys.exit(1)
 
-    credentials_path = os.path.join(BASE_DIR, 'data', 'superuser.json')
+    credentials_path = os.path.join(BASE_DIR, 'config', 'superuser.json')
 
     try:
         with open(credentials_path) as f:

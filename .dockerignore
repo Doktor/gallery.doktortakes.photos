@@ -3,9 +3,7 @@
 
 # Sensitive data
 cache/
-!data/
 logs/
-!src/data/
 *.bak
 *.db
 *.json
