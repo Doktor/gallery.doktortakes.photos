@@ -17,6 +17,9 @@
       :photos="photos"
       :allowSelect="false"
     />
+    <div class="album-empty-text" v-else>
+      There are no photos in this album.
+    </div>
   </div>
 </template>
 
@@ -96,5 +99,9 @@ export default {
 <style scoped>
 .album-cover-container {
   margin: 0;
+}
+
+.album-empty-text {
+  margin-top: 3rem;
 }
 </style>
