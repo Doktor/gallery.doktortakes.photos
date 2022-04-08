@@ -1,5 +1,6 @@
 from django.core.cache import cache
 from django.core.files import File
+from django.db import transaction
 from django.http import Http404
 
 from rest_framework import exceptions, permissions
@@ -134,44 +135,30 @@ class AlbumPhotoList(APIView):
             raise AlbumNotFound
 
         file = request.FILES.get('file')
-        album = self.get_album(request, path)
-
-        photo = Photo()
-        photo.album = album
 
         # Check if this image already exists
         md5 = generate_md5_hash(file)
 
-        try:
-            Photo.objects.get(md5=md5)
-        except Photo.DoesNotExist:
-            pass
-        else:
+        if Photo.objects.filter(md5=md5).exists():
             raise exceptions.ValidationError(f"Duplicate file: {md5}")
 
-        photo.md5 = md5
+        album = self.get_album(request, path)
 
-        filename = file.name
-
-        try:
-            original = Photo.objects.get(album=album, original_filename=filename)
-        except Photo.DoesNotExist:
-            pass
-        else:
-            original.delete()
-
+        # Cache the image for generating thumbnails
         data = BytesIO()
-        data.name = filename
-
-        photo.original_filename = filename
+        data.name = file.name
 
         for chunk in file.chunks(chunk_size=CHUNK_SIZE):
             data.write(chunk)
 
-        # Expires after 24 hours
-        cache.set(md5, data, 60 * 60 * 24)
+        cache.set(md5, data, 60 * 60 * 24)  # 24 hours
 
-        file.seek(0)
+        # Parse metadata
+        photo = Photo()
+        photo.album = album
+        photo.md5 = md5
+        photo.original_filename = file.name
+
         parse_exif_data(photo, file)
         parse_xmp_data(photo, file)
 
@@ -180,10 +167,20 @@ class AlbumPhotoList(APIView):
         photo.width = image.width
         photo.height = image.height
 
+        # Save
         file.seek(0)
         photo.original.save(file.name, File(file), save=False)
 
-        photo.save()
+        with transaction.atomic():
+            # If an existing photo has the same file name, replace it
+            try:
+                original = Photo.objects.get(album=album, original_filename=file.name)
+            except Photo.DoesNotExist:
+                pass
+            else:
+                original.delete()
+
+            photo.save()
 
         serializer = PhotoSerializer(photo)
         return Response(serializer.data, status=Status.OK)
