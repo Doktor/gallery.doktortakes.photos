@@ -67,7 +67,7 @@ class Album(MPTTModel):
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
-    thumbnail_size = models.CharField(
+    display_image_size = models.CharField(
         max_length=4, choices=SIZES, default=SIZE_2400)
 
     cover = models.OneToOneField(

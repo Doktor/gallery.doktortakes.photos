@@ -47,7 +47,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             'place', 'location', 'description', 'tags',
             'start', 'end',
             'cover',
-            'thumbnail_size',
+            'display_image_size',
             'access_level', 'access_code', 'users', 'groups',
             'parent', 'children',
             'url', 'admin_url',
