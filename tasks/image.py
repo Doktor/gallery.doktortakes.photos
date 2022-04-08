@@ -4,6 +4,7 @@ import json
 import pprint
 from invoke import task
 from .main import django_setup
+from .utils import get_image_file, get_image_filename, get_image_filename_candidate
 
 
 @task
@@ -38,14 +39,14 @@ def rename(ctx, dry_run=False, image_type=None, file='tasks/move_errors.json', p
     errors = {}
 
     for photo in Photo.objects.all().iterator():
-        image_file = photo.get_image_file(image_type)
+        image_file = get_image_file(photo, image_type)
 
         if not image_file:
             print(f"SKIP {photo.pk}")
             continue
 
-        old_name = photo.get_image_filename(image_type)
-        new_name = photo.get_image_filename_candidate(image_type)
+        old_name = get_image_filename(photo, image_type)
+        new_name = get_image_filename_candidate(photo, image_type)
         assert old_name is not None and new_name is not None
 
         old_key = media_prefix + '/' + old_name
@@ -81,7 +82,7 @@ def rename(ctx, dry_run=False, image_type=None, file='tasks/move_errors.json', p
             bucket.copy(source, new_key, extra_args)
         except botocore.exceptions.ClientError as e:
             if '404' in str(e):
-                image_field = photo.get_image_file(image_type)
+                image_field = get_image_file(photo, image_type)
                 image_field.name = new_name
                 photo.save()
 
@@ -91,7 +92,7 @@ def rename(ctx, dry_run=False, image_type=None, file='tasks/move_errors.json', p
                 raise RuntimeError("Unknown error") from e
 
         # Set and save the new filename
-        image_field = photo.get_image_file(image_type)
+        image_field = get_image_file(photo, image_type)
         image_field.name = new_name
         photo.save()
 

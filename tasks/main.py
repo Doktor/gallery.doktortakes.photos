@@ -12,6 +12,8 @@ import pytz
 import shlex
 import subprocess
 
+from .utils import generate_image
+
 
 # Task parts
 
@@ -158,12 +160,12 @@ def check_generated_images(ctx, file=None, fix=False):
         if fix:
             if not photo.image.name:
                 print(f"Generating new display image for photo {photo.pk}")
-                photo.generate_image('display_image')
+                generate_image(photo, 'display_image')
                 photo.save()
 
             if not photo.square_thumbnail.name:
                 print(f"Generating new square thumbnail for photo {photo.pk}")
-                photo.generate_image('square_thumbnail')
+                generate_image(photo, 'square_thumbnail')
                 photo.save()
 
         else:
