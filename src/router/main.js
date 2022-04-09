@@ -2,32 +2,32 @@ import VueRouter from "vue-router";
 
 import { store } from "../store/index.js";
 
-import Index from "../views/Index.vue";
+import Index from "../pages/Index.vue";
 
-import AlbumList from "../views/AlbumList.vue";
-import AlbumDetail from "../views/AlbumDetail.vue";
-import PhotoDetail from "../views/PhotoDetail.vue";
-import TagList from "../views/TagList.vue";
-import TagDetail from "../views/TagDetail.vue";
-import UserList from "../views/UserList.vue";
-import UserDetail from "../views/UserDetail.vue";
-import ChangePassword from "../views/ChangePassword.vue";
+import AlbumList from "../pages/AlbumList.vue";
+import AlbumDetail from "../pages/AlbumDetail.vue";
+import PhotoDetail from "../pages/PhotoDetail.vue";
+import TagList from "../pages/TagList.vue";
+import TagDetail from "../pages/TagDetail.vue";
+import UserList from "../pages/UserList.vue";
+import UserDetail from "../pages/UserDetail.vue";
+import ChangePassword from "../pages/ChangePassword.vue";
 
-import GroupList from "../views/GroupList.vue";
+import GroupList from "../pages/GroupList.vue";
 
-import About from "../views/About.vue";
-import Copyright from "../views/Copyright.vue";
-import Recent from "../views/Recent.vue";
+import About from "../pages/About.vue";
+import Copyright from "../pages/Copyright.vue";
+import Recent from "../pages/Recent.vue";
 
-import SearchPhotos from "../views/SearchPhotos.vue";
+import SearchPhotos from "../pages/SearchPhotos.vue";
 
-import EditAlbum from "../views/EditAlbum.vue";
-import Manage from "../views/Manage.vue";
-import NewAlbum from "../views/NewAlbum.vue";
+import EditAlbum from "../pages/EditAlbum.vue";
+import Manage from "../pages/Manage.vue";
+import NewAlbum from "../pages/NewAlbum.vue";
 
-import LogIn from "@/views/LogIn";
-import LogOut from "@/views/LogOut";
-import EditPhoto from "@/views/EditPhoto";
+import LogIn from "@/pages/LogIn";
+import LogOut from "@/pages/LogOut";
+import EditPhoto from "@/pages/EditPhoto";
 
 export const baseTitle = "Doktor Takes Photos";
 
