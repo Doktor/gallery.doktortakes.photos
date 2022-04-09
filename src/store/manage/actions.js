@@ -98,38 +98,4 @@ export const actions = {
 
     context.commit("addNotification", "Album saved successfully.");
   },
-
-  async setAlbumCover(context) {
-    if (context.rootState.selected.length !== 1) {
-      return;
-    }
-
-    let photo = context.rootState.selected[0];
-    let current = context.rootState.album.cover;
-
-    if (current !== null && photo.md5 === current.md5) {
-      return;
-    }
-
-    context.commit("addNotification", "Setting cover image.");
-
-    let { content } = await sendRequest(
-      endpoints.albumDetail.replace(":path", context.rootState.album.path),
-      {
-        method: "PATCH",
-        body: JSON.stringify({ cover: photo.md5 }),
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCsrfToken(),
-        },
-      }
-    );
-
-    context.commit("setAlbumField", {
-      key: "cover",
-      value: content,
-    });
-    context.commit("removeNotification", "Setting cover image.");
-    context.commit("addNotification", "Cover image set successfully.");
-  },
 };

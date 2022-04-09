@@ -41,7 +41,6 @@
 
 <script>
 import Photos from "@/components/photoList/Photos.vue";
-import { mapActions } from "vuex";
 import { sendRequest } from "@/store/utils";
 import { endpoints, getCsrfToken } from "@/store";
 
@@ -84,7 +83,48 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setAlbumCover"]),
+    async setAlbumCover() {
+      if (this.selectedPhotoHashes.length !== 1) {
+        return;
+      }
+
+      let selectedHash = this.selectedPhotoHashes[0];
+      let currentHash = this.album.cover.md5;
+
+      if (currentHash !== null && selectedHash === currentHash) {
+        this.$store.commit(
+          "addNotification",
+          "That photo is already set as the cover photo."
+        );
+        return;
+      }
+
+      this.$store.commit("addNotification", "Setting cover photo.");
+
+      let { ok } = await sendRequest(
+        endpoints.albumDetail.replace(":path", this.album.path),
+        {
+          method: "PATCH",
+          body: JSON.stringify({ cover: selectedHash }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCsrfToken(),
+          },
+        }
+      );
+
+      if (!ok) {
+        this.$store.commit(
+          "addNotification",
+          "An error occurred when setting the cover photo."
+        );
+        return;
+      }
+
+      this.$store.commit("removeNotification", "Setting cover photo.");
+      this.$store.commit("addNotification", "Cover photo set successfully.");
+      this.$emit("update");
+    },
 
     toggleSelecting() {
       this.isSelecting = !this.isSelecting;
