@@ -319,6 +319,6 @@ def create_album_cover(sender, instance: Album, **kwargs) -> None:
         if album.cover is None:
             return
 
-    from photos.tasks import update_thumbnail
-    update_thumbnail(album.cover, album.cover.get_original())
+    from photos.tasks import update_large_square_thumbnail
+    update_large_square_thumbnail(album.cover, album.cover.get_original())
     album.cover.save()

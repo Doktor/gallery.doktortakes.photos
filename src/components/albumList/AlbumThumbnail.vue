@@ -29,7 +29,7 @@ export default {
 
   computed: {
     thumbnail() {
-      return this.isLoaded ? this.album.cover.thumbnail : this.placeholder;
+      return this.isLoaded ? this.album.cover.thumbnail.url : this.placeholder;
     },
   },
 

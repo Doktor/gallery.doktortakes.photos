@@ -4,12 +4,12 @@
       <div class="album" :class="{ 'album-no-cover': !album.cover }">
         <a
           v-if="album.cover"
-          :href="album.cover.image"
+          :href="album.cover.thumbnail.url"
           target="_blank"
           title="Full size"
         >
           <img
-            :src="album.cover.thumbnail"
+            :src="album.cover.thumbnail.url"
             :title="album.name"
             alt="Album cover image"
           />

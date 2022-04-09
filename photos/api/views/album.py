@@ -33,11 +33,12 @@ class AlbumList(APIView):
         if request.GET.get('full', False):
             albums = get_albums_for_user(request.user, top_level_only=True) \
                 .select_related('cover', 'parent') \
-                .prefetch_related('children', 'tags', 'users', 'groups')
+                .prefetch_related('children', 'tags', 'users', 'groups', 'cover__thumbnails')
             serializer_type = AlbumSerializer
         else:
             albums = get_albums_for_user(request.user, top_level_only=True) \
-                .select_related('cover', 'parent')
+                .select_related('cover', 'parent') \
+                .prefetch_related('cover__thumbnails')
             serializer_type = SimpleAlbumSerializer
 
         serializer = serializer_type(albums, many=True)

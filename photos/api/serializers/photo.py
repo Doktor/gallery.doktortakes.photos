@@ -84,7 +84,13 @@ class SimplePhotoSerializer(serializers.ModelSerializer):
 
 
 class PhotoThumbnailSerializer(serializers.ModelSerializer):
-    thumbnail = serializers.ImageField(use_url=True)
+    thumbnail = serializers.SerializerMethodField(read_only=True, allow_null=True)
+
+    @staticmethod
+    def get_thumbnail(obj: Photo):
+        thumbnail = obj.get_large_square_thumbnail()
+        serializer = ThumbnailSerializer(thumbnail)
+        return serializer.data
 
     class Meta:
         model = Photo

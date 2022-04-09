@@ -1,7 +1,7 @@
 <template>
   <PlaceholderImage
-    :width="3"
-    :height="2"
+    :width="1"
+    :height="1"
     alt="Album cover image placeholder"
   />
 </template>
