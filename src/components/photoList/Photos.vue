@@ -51,7 +51,7 @@ export default {
 
   data() {
     return {
-      photosPerPage: 10,
+      photosPerPage: 24,
       page: 1,
       loadedPages: [],
     };
@@ -66,7 +66,7 @@ export default {
     },
 
     itemsPerPageChoices() {
-      return [10, 30, 60, 120];
+      return [12, 24, 48, 96];
     },
 
     pages() {
