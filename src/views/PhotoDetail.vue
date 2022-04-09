@@ -98,7 +98,7 @@ export default {
     this.photos = photos;
 
     let photo = this.photos.find((photo) => photo.md5 === this.md5);
-    this.setPhoto(photo, this.routeAccessCode);
+    this.setPhoto(photo, true);
   },
 
   methods: {
@@ -117,16 +117,7 @@ export default {
       this.setPhoto(this.photos[index]);
     },
 
-    preloadPhoto(photo) {
-      if (!photo.loaded) {
-        let image = new Image();
-        image.src = photo.images.display.url;
-
-        photo.loaded = true;
-      }
-    },
-
-    setPhoto(photo, code) {
+    setPhoto(photo, replaceHistory = false) {
       this.photo = photo;
       this.photo.loaded = true;
 
@@ -139,22 +130,36 @@ export default {
         this.preloadPhoto(photo);
       }
 
-      // Add browser history entry
-      let title = photoTitleTemplate.format(
-        photo.md5.substring(0, 8),
-        this.album.name
-      );
-      document.title = title;
+      this.updateHistory(replaceHistory);
+    },
 
+    preloadPhoto(photo) {
+      if (!photo.loaded) {
+        let image = new Image();
+        image.src = photo.images.display.url;
+
+        photo.loaded = true;
+      }
+    },
+
+    updateHistory(replace = false) {
       let resolved = router.resolve({
         name: "photo",
         params: {
           path: this.album.pathSplit,
-          md5: this.md5,
+          md5: this.photo.md5,
         },
         query: this.$route.query,
       });
-      window.history.pushState(null, title, resolved.href);
+
+      replace
+        ? window.history.replaceState(null, null, resolved.href)
+        : window.history.pushState(null, null, resolved.href);
+
+      document.title = photoTitleTemplate.format(
+        this.photo.md5.substring(0, 8),
+        this.album.name
+      );
     },
 
     handleKey(event) {
@@ -174,6 +179,13 @@ export default {
           window.location.href = "/";
           break;
       }
+    },
+  },
+
+  watch: {
+    md5(newHash) {
+      let photo = this.photos.find((photo) => photo.md5 === newHash);
+      this.setPhoto(photo);
     },
   },
 };
