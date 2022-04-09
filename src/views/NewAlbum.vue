@@ -35,6 +35,9 @@ export default {
         access_level: 0,
         access_code: "",
         parent: "",
+        users: [],
+        groups: [],
+        tags: [],
       },
     };
   },

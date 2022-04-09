@@ -59,13 +59,11 @@
         </template>
       </CustomInput>
 
-      <template v-if="isUpdate">
-        <CustomInput label="Users" v-model="users" />
-        <CustomInput label="Groups" v-model="groups" />
-        <CustomInput label="Tags" v-model="tags" />
+      <ListInput label="Users" v-model="changes.users" />
+      <ListInput label="Groups" v-model="changes.groups" />
+      <ListInput label="Tags" v-model="changes.tags" />
 
-        <CustomInput label="Parent" v-model="changes.parent" />
-      </template>
+      <CustomInput label="Parent" v-model="changes.parent" />
     </fieldset>
 
     <button id="album-form-save" type="submit">{{ saveButtonText }}</button>
@@ -77,6 +75,7 @@ import GenerateAccessCode from "./GenerateAccessCode.vue";
 import { accessLevels } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
+import ListInput from "@/components/form/ListInput";
 
 const displayImageSizes = [
   {
@@ -107,6 +106,7 @@ const displayImageSizes = [
 
 export default {
   components: {
+    ListInput,
     CustomSelect,
     CustomInput,
     GenerateAccessCode,
@@ -134,10 +134,6 @@ export default {
 
       accessLevels,
       displayImageSizes,
-
-      users: "",
-      groups: "",
-      tags: "",
     };
   },
 
@@ -149,29 +145,12 @@ export default {
     submit() {
       let changes = { ...this.changes };
 
-      if (this.isUpdate) {
-        for (let key of ["users", "groups", "tags"]) {
-          changes[key] = this.$data[key]
-            .split(",")
-            .map((v) => v.trim())
-            .filter((v) => v.length > 0);
-        }
-      }
-
       if (!changes.end) {
         changes.end = null;
       }
 
       this.$emit("save", changes);
     },
-  },
-
-  mounted() {
-    if (this.isUpdate) {
-      this.users = this.album.users.join(", ");
-      this.groups = this.album.groups.join(", ");
-      this.tags = this.album.tags.join(", ");
-    }
   },
 };
 </script>
