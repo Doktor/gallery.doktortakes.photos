@@ -1,6 +1,8 @@
 <template>
   <div class="form-link-action">
-    <a @click.prevent="generateCode">Generate access code</a>
+    <a class="generate-access-code" @click.prevent="generateCode"
+      >Generate access code</a
+    >
   </div>
 </template>
 
@@ -21,8 +23,18 @@ export default {
         arr.push(hex.charAt(randomInt(0, hex.length - 1)));
       }
 
-      this.$emit("set-access-code", arr.join(""));
+      this.$emit("setAccessCode", arr.join(""));
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.generate-access-code {
+  user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+</style>
