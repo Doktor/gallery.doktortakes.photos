@@ -89,7 +89,7 @@ export default {
       }
 
       let selectedHash = this.selectedPhotoHashes[0];
-      let currentHash = this.album.cover.md5;
+      let currentHash = this.album.cover?.md5;
 
       if (currentHash !== null && selectedHash === currentHash) {
         this.$store.commit(
