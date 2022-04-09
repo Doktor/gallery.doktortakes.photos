@@ -1,24 +1,29 @@
 <template>
-  <div class="form-control">
+  <InputWrapper :description="description" :errors="errors">
     <label :for="id">{{ label }}</label>
+
     <select class="field" :id="id" :name="name" v-model="model">
       <option v-for="item in options" :value="item.value" :key="item.value">
         {{ item.display }}
       </option>
     </select>
 
-    <div v-if="errors.length > 0">
-      <div v-for="(error, index) in errors" :key="index" class="form-error">
-        {{ error }}
-      </div>
-    </div>
-  </div>
+    <template v-for="(_, name) in $scopedSlots" :slot="name">
+      <slot :name="name" />
+    </template>
+  </InputWrapper>
 </template>
 
 <script>
+import InputWrapper from "@/components/form/InputWrapper";
+
 export default {
-  name: "CustomSelect",
+  components: { InputWrapper },
   props: {
+    description: {
+      type: String,
+      required: false,
+    },
     errors: {
       type: Array,
       default: () => [],

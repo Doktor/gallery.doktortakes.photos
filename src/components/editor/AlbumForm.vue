@@ -54,7 +54,9 @@
       />
 
       <CustomInput label="Access code" v-model="changes.access_code">
-        <GenerateAccessCode @setAccessCode="setAccessCode" />
+        <template #footer>
+          <GenerateAccessCode @setAccessCode="setAccessCode" />
+        </template>
       </CustomInput>
 
       <template v-if="isUpdate">

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-control">
+  <InputWrapper :description="description" :errors="errors">
     <label v-if="type !== 'checkbox'" :for="id">{{ label }}</label>
 
     <textarea
@@ -22,23 +22,17 @@
 
     <label v-if="type === 'checkbox'" :for="id">{{ label }}</label>
 
-    <div v-if="description" class="form-note">
-      {{ description }}
-    </div>
-
-    <div v-if="errors.length > 0">
-      <div v-for="(error, index) in errors" :key="index" class="form-error">
-        {{ error }}
-      </div>
-    </div>
-
-    <slot></slot>
-  </div>
+    <template v-for="(_, name) in $scopedSlots" :slot="name">
+      <slot :name="name" />
+    </template>
+  </InputWrapper>
 </template>
 
 <script>
+import InputWrapper from "@/components/form/InputWrapper";
+
 export default {
-  name: "CustomInput",
+  components: { InputWrapper },
   props: {
     description: {
       type: String,
