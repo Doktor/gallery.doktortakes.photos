@@ -52,3 +52,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.dropzone {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+.dz-preview {
+  margin: 8px !important;
+}
+
+.dz-image {
+  border-radius: 0 !important;
+}
+</style>
