@@ -2,7 +2,7 @@
   <img
     class="album-cover-image"
     alt="Cover photo"
-    :src="album.cover.thumbnail"
+    :src="album.cover.thumbnail.url"
     :title="album.name"
   />
 </template>
