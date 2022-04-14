@@ -30,10 +30,10 @@ def create_thumbnail(
     if file is None:
         file = photo.get_original()
 
-    original_image = PIL.Image.open(file)
+    image = PIL.Image.open(file)
 
     try:
-        exif = original_image.info['exif']
+        exif = image.info['exif']
     except KeyError:
         exif = None
 
@@ -46,23 +46,24 @@ def create_thumbnail(
     thumbnail.photo = photo
     thumbnail.type = name
 
-    ret_image = fit_image(original_image, (width, height))
+    if image.size != (width, height):
+        image = fit_image(image, (width, height))
 
     if add_watermark:
         thumbnail.is_watermarked = True
-        ret_image = apply_watermark(ret_image, watermark_color)
+        image = apply_watermark(image, watermark_color)
 
-    assert ret_image.width == width
-    assert ret_image.height == height
+    assert image.width == width
+    assert image.height == height
 
-    ret_data = BytesIO()
+    data = BytesIO()
 
     if exif is not None:
-        ret_image.save(ret_data, 'JPEG', quality=quality, exif=exif)
+        image.save(data, 'JPEG', quality=quality, exif=exif)
     else:
-        ret_image.save(ret_data, 'JPEG', quality=quality)
+        image.save(data, 'JPEG', quality=quality)
 
-    new_file = File(ret_data)
+    new_file = File(data)
 
     thumbnail.file_size = format_file_size(new_file.size)
 
