@@ -8,7 +8,6 @@ from photos.models.photo.thumbnail import (
 from photos.models.photo.watermark import WATERMARK_COLOR_BLACK, WATERMARK_COLOR_WHITE
 from photos.settings_photos import LARGE_SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
 from photos.utils.image import create_thumbnail, guess_aspect_ratio
-from photos.utils.models import format_file_size
 
 import datetime
 import PIL.Image
@@ -23,13 +22,12 @@ def create_thumbnails(pk: int) -> None:
     photo = Photo.objects.get(pk=pk)
     file = photo.get_original()
 
-    size = update_display_image(photo, file)
+    update_display_image(photo, file)
     update_square_thumbnail(photo, file)
 
     if photo.rating >= 4:
         update_thumbnail(photo, file)
 
-    photo.file_size = format_file_size(size)
     photo.sidecar_exists = True
     photo.save()
 
@@ -40,18 +38,16 @@ def create_thumbnails(pk: int) -> None:
 # Update
 
 
-def update_display_image(photo: Photo, file: File) -> int:
+def update_display_image(photo: Photo, file: File) -> None:
     long_edge = int(photo.album.display_image_size)
     width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
     watermark_color = WATERMARK_COLOR_WHITE if photo.watermark == COLOR_WHITE else WATERMARK_COLOR_BLACK
 
-    thumbnail = create_thumbnail(
+    create_thumbnail(
         photo.pk, file,
         width, height, THUMBNAIL_DISPLAY,
         quality=90, add_watermark=True, watermark_color=watermark_color)
-
-    return thumbnail.image.size
 
 
 def update_square_thumbnail(photo: Photo, file: File) -> None:

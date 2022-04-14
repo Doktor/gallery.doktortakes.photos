@@ -2,6 +2,7 @@ from django.core.files import File
 
 from photos.models import Watermark
 from photos.settings_photos import WATERMARK_OFFSET_PERCENT
+from photos.utils.models import format_file_size
 
 from io import BytesIO
 from typing import List, Optional, Tuple
@@ -61,7 +62,11 @@ def create_thumbnail(
     else:
         ret_image.save(ret_data, 'JPEG', quality=quality)
 
-    thumbnail.image.save(photo.filename, File(ret_data), save=False)
+    new_file = File(ret_data)
+
+    thumbnail.file_size = format_file_size(new_file.size)
+
+    thumbnail.image.save(photo.filename, new_file, save=False)
     thumbnail.save()
     return thumbnail
 
