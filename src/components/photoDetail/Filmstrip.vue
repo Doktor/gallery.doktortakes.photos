@@ -5,8 +5,8 @@
         class="filmstrip-image"
         :src="photo.images.square.url"
         @click="onClick(photo.index)"
+        :title="`${photo.index + 1} of ${photos.length}`"
       />
-      <div class="filmstrip-index">{{ photo.index + 1 }}</div>
     </div>
   </section>
 </template>
@@ -124,24 +124,6 @@ $fadeTime: 0.2s;
   &.selected .filmstrip-image,
   &.selected:hover .filmstrip-image {
     opacity: 1;
-  }
-
-  .filmstrip-index {
-    font-size: 0.8rem;
-    font-family: "Consolas", monospace;
-    line-height: 1;
-
-    margin-top: 0.45rem;
-    opacity: 0;
-  }
-
-  &:hover .filmstrip-index {
-    transition: opacity $fadeTime ease-in-out;
-  }
-
-  &.selected .filmstrip-index,
-  &:hover .filmstrip-index {
-    opacity: 1 !important;
   }
 }
 
