@@ -33,7 +33,7 @@ export default {
 
   computed: {
     count() {
-      return 9;
+      return 7;
     },
   },
 

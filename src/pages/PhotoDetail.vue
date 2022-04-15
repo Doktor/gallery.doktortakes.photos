@@ -225,6 +225,7 @@ body.photo-viewer {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
   margin: 0;
   margin-top: auto;
