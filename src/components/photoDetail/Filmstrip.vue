@@ -12,15 +12,15 @@
 </template>
 
 <script>
-const settings = {
-  items: 9,
-  half: 4,
-};
-
 export default {
-  computed: {
-    routeAccessCode() {
-      return this.$route.query.code || "";
+  props: {
+    photos: {
+      type: Array,
+      required: true,
+    },
+    position: {
+      type: Number,
+      required: true,
     },
   },
 
@@ -29,6 +29,12 @@ export default {
       start: 0,
       end: 0,
     };
+  },
+
+  computed: {
+    count() {
+      return 9;
+    },
   },
 
   methods: {
@@ -51,26 +57,27 @@ export default {
       let end;
 
       let length = this.photos.length;
+      let half = Math.trunc(this.count / 2);
 
       // Fewer items than filmstrip length
-      if (length < settings.items) {
+      if (length < this.count) {
         start = 0;
         end = length;
       }
       // Start
-      else if (this.position < settings.half) {
+      else if (this.position < half) {
         start = 0;
-        end = settings.items;
+        end = this.count;
       }
       // End
-      else if (this.position >= length - settings.half) {
-        start = length - settings.items;
+      else if (this.position >= length - half) {
+        start = length - this.count;
         end = length;
       }
       // Middle
       else {
-        start = this.position - settings.half;
-        end = this.position + settings.half + 1;
+        start = this.position - half;
+        end = this.position + half + 1;
       }
 
       this.start = start;
@@ -80,22 +87,6 @@ export default {
 
   mounted() {
     this.updateRange();
-  },
-
-  props: {
-    photos: {
-      type: Array,
-      required: true,
-    },
-    position: {
-      type: Number,
-      required: true,
-    },
-
-    useHistory: {
-      type: Boolean,
-      default: true,
-    },
   },
 };
 </script>
