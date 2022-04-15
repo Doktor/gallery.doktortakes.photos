@@ -67,6 +67,9 @@ export default {
       pointerStartX: null,
       pointerStartY: null,
       delta: 10,
+
+      viewportWidth: 0,
+      viewportHeight: 0,
     };
   },
 
@@ -113,12 +116,6 @@ export default {
       return this.imageWidth / this.imageHeight;
     },
 
-    viewportWidth() {
-      return this.image?.offsetWidth ?? 0;
-    },
-    viewportHeight() {
-      return this.image?.offsetHeight ?? 0;
-    },
     viewportRatio() {
       return this.viewportWidth / this.viewportHeight;
     },
@@ -349,6 +346,11 @@ export default {
     last() {
       this.$emit("changePhoto", this.count);
     },
+
+    calculateViewportSize() {
+      this.viewportWidth = this.image?.offsetWidth ?? 0;
+      this.viewportHeight = this.image?.offsetHeight ?? 0;
+    },
   },
 
   mounted() {
@@ -372,6 +374,15 @@ export default {
         }
       }
     });
+
+    this.calculateViewportSize();
+  },
+
+  created() {
+    window.addEventListener("resize", this.calculateViewportSize);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.calculateViewportSize);
   },
 };
 </script>
