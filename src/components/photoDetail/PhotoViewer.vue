@@ -2,14 +2,14 @@
   <div>
     <div v-if="showCrosshair" class="crosshair"></div>
     <img
-      class="photo-image"
-      ref="image"
+      class="photo-container"
+      ref="container"
       @pointerdown.stop.prevent="pointerDown"
       @pointermove.stop.prevent="pointerMove"
       @pointerup.stop.prevent="pointerUp"
       @pointerleave.stop.prevent="pointerLeave"
-      :src="imageSrc"
-      :style="imageStyles"
+      :src="src"
+      :style="containerStyles"
       alt=""
       title="Click or tap to zoom"
     />
@@ -68,8 +68,8 @@ export default {
       pointerStartY: null,
       delta: 10,
 
-      viewportWidth: 0,
-      viewportHeight: 0,
+      containerWidth: 0,
+      containerHeight: 0,
     };
   },
 
@@ -78,14 +78,14 @@ export default {
       return this.$route.query?.crosshair ?? false;
     },
 
-    imageSrc() {
+    src() {
       if (this.$route.query?.test ?? false) {
         return "https://upload.wikimedia.org/wikipedia/commons/a/aa/Philips_PM5544.svg";
       }
 
       return this.photo.images.display.url;
     },
-    imageStyles() {
+    containerStyles() {
       let styles = {
         transition: this.transitions,
         transform: `scale(${this.scale})`,
@@ -103,21 +103,21 @@ export default {
       return this.transitionProperties.map(this.getTransition).join(", ");
     },
 
-    image() {
-      return this.$refs.image;
-    },
     imageWidth() {
-      return this.image.naturalWidth;
+      return this.photo.width;
     },
     imageHeight() {
-      return this.image.naturalHeight;
+      return this.photo.height;
     },
     imageRatio() {
       return this.imageWidth / this.imageHeight;
     },
 
-    viewportRatio() {
-      return this.viewportWidth / this.viewportHeight;
+    container() {
+      return this.$refs.container;
+    },
+    containerRatio() {
+      return this.containerWidth / this.containerHeight;
     },
 
     nextScale() {
@@ -186,41 +186,41 @@ export default {
     scaleImage(event) {
       let scale = this.nextScale;
 
-      // The pointer location on the viewport, relative to the top-left corner
+      // The pointer location on the container, relative to the top-left corner
       let pointerX = event.offsetX;
       let pointerY = event.offsetY;
 
       // Important: since the image element uses "object-fit: contain",
-      // its bounding box is the same size as the viewport
+      // its bounding box is the same size as the container
       // Calculate the image's actual display size
       let imageDisplayWidth, imageDisplayHeight;
 
-      if (this.viewportRatio > this.imageRatio) {
-        // The viewport is wider than the image
+      if (this.containerRatio > this.imageRatio) {
+        // The container is wider than the image
         imageDisplayWidth =
-          (this.imageWidth * this.viewportHeight) / this.imageHeight;
-        imageDisplayHeight = this.viewportHeight;
+          (this.imageWidth * this.containerHeight) / this.imageHeight;
+        imageDisplayHeight = this.containerHeight;
 
         // Check if the pointer location is on the actual image
-        let widthDiff = this.viewportWidth - imageDisplayWidth;
+        let widthDiff = this.containerWidth - imageDisplayWidth;
         let pointerXFromEdge = Math.min(
           pointerX,
-          this.viewportWidth - pointerX
+          this.containerWidth - pointerX
         );
 
         if (pointerXFromEdge <= widthDiff / 2) {
           return;
         }
       } else {
-        // The viewport is taller than the image
-        imageDisplayWidth = this.viewportWidth;
+        // The container is taller than the image
+        imageDisplayWidth = this.containerWidth;
         imageDisplayHeight =
-          (this.imageHeight * this.viewportWidth) / this.imageWidth;
+          (this.imageHeight * this.containerWidth) / this.imageWidth;
 
-        let heightDiff = this.viewportHeight - imageDisplayHeight;
+        let heightDiff = this.containerHeight - imageDisplayHeight;
         let pointerYFromEdge = Math.min(
           pointerY,
-          this.viewportHeight - pointerY
+          this.containerHeight - pointerY
         );
 
         if (pointerYFromEdge <= heightDiff / 2) {
@@ -229,8 +229,8 @@ export default {
       }
 
       // The center of the image
-      let centerX = this.viewportWidth / 2;
-      let centerY = this.viewportHeight / 2;
+      let centerX = this.containerWidth / 2;
+      let centerY = this.containerHeight / 2;
 
       let pointerXDiff = clamp(
         centerX - pointerX,
@@ -276,14 +276,14 @@ export default {
       // Calculate the image's actual display size
       let imageDisplayWidth, imageDisplayHeight;
 
-      if (this.viewportRatio > this.imageRatio) {
+      if (this.containerRatio > this.imageRatio) {
         imageDisplayWidth =
-          (this.imageWidth * this.viewportHeight) / this.imageHeight;
-        imageDisplayHeight = this.viewportHeight;
+          (this.imageWidth * this.containerHeight) / this.imageHeight;
+        imageDisplayHeight = this.containerHeight;
       } else {
-        imageDisplayWidth = this.viewportWidth;
+        imageDisplayWidth = this.containerWidth;
         imageDisplayHeight =
-          (this.imageHeight * this.viewportWidth) / this.imageWidth;
+          (this.imageHeight * this.containerWidth) / this.imageWidth;
       }
 
       let pointerXDiffUnclamped = (this.translateX + xDiff) / scale;
@@ -304,8 +304,8 @@ export default {
         imageDisplayCenterY
       );
 
-      let centerX = this.viewportWidth / 2;
-      let centerY = this.viewportHeight / 2;
+      let centerX = this.containerWidth / 2;
+      let centerY = this.containerHeight / 2;
 
       // If the image was dragged past the image bounds,
       // reset the image pan to these values when the pointer is released
@@ -347,9 +347,9 @@ export default {
       this.$emit("changePhoto", this.count);
     },
 
-    calculateViewportSize() {
-      this.viewportWidth = this.image?.offsetWidth ?? 0;
-      this.viewportHeight = this.image?.offsetHeight ?? 0;
+    calculateContainerSize() {
+      this.containerWidth = this.container?.offsetWidth ?? 0;
+      this.containerHeight = this.container?.offsetHeight ?? 0;
     },
   },
 
@@ -375,20 +375,19 @@ export default {
       }
     });
 
-    this.calculateViewportSize();
+    this.calculateContainerSize();
   },
-
   created() {
-    window.addEventListener("resize", this.calculateViewportSize);
+    window.addEventListener("resize", this.calculateContainerSize);
   },
   unmounted() {
-    window.removeEventListener("resize", this.calculateViewportSize);
+    window.removeEventListener("resize", this.calculateContainerSize);
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.photo-image {
+.photo-container {
   display: block;
   overflow: hidden;
   position: absolute;
