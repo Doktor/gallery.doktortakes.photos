@@ -297,7 +297,7 @@ if LOCAL_STORAGE:
 else:
     storage = CONFIG['spaces']
 
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DEFAULT_FILE_STORAGE = 'photos.storage_backends.CustomS3Boto3Storage'
 
     # Keys
     AWS_ACCESS_KEY_ID = storage['access_key']
@@ -318,6 +318,9 @@ else:
     # Cache images for up to 14 days
     CACHE_CONTROL_MAX_AGE = 60 * 60 * 24 * 14
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': f'max-age={CACHE_CONTROL_MAX_AGE}'}
+
+    S3_NETWORK_TIMEOUT_SECONDS = 5
+    S3_NETWORK_RETRY_COUNT = 2
 
 
 WEBPACK_LOADER = {
