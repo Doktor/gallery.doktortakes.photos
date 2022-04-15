@@ -1,20 +1,18 @@
 <template>
-  <div class="photo-viewer">
+  <div>
     <div v-if="showCrosshair" class="crosshair"></div>
-    <div class="photo-image-container">
-      <img
-        class="photo-image"
-        ref="image"
-        @pointerdown.stop.prevent="pointerDown"
-        @pointermove.stop.prevent="pointerMove"
-        @pointerup.stop.prevent="pointerUp"
-        @pointerleave.stop.prevent="pointerLeave"
-        :src="imageSrc"
-        :style="imageStyles"
-        alt=""
-        title="Click or tap to zoom"
-      />
-    </div>
+    <img
+      class="photo-image"
+      ref="image"
+      @pointerdown.stop.prevent="pointerDown"
+      @pointermove.stop.prevent="pointerMove"
+      @pointerup.stop.prevent="pointerUp"
+      @pointerleave.stop.prevent="pointerLeave"
+      :src="imageSrc"
+      :style="imageStyles"
+      alt=""
+      title="Click or tap to zoom"
+    />
   </div>
 </template>
 
@@ -370,19 +368,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.photo-viewer {
-  width: 100%;
-  height: 100vh;
-}
-
-.photo-image-container {
-  overflow: hidden;
-  position: absolute;
-
-  width: 100%;
-  height: 100%;
-}
-
 .photo-image {
   display: block;
   overflow: hidden;

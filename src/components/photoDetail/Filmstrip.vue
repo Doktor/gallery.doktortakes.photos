@@ -1,14 +1,12 @@
 <template>
-  <section class="filmstrip-container">
-    <div class="filmstrip">
-      <div v-for="photo in photos" :class="classes(photo.index)">
-        <img
-          class="filmstrip-image"
-          :src="photo.images.square.url"
-          @click="onClick(photo.index)"
-        />
-        <div class="filmstrip-index">{{ photo.index + 1 }}</div>
-      </div>
+  <section>
+    <div v-for="photo in photos" :class="classes(photo.index)">
+      <img
+        class="filmstrip-image"
+        :src="photo.images.square.url"
+        @click="onClick(photo.index)"
+      />
+      <div class="filmstrip-index">{{ photo.index + 1 }}</div>
     </div>
   </section>
 </template>
@@ -103,12 +101,6 @@ export default {
 </script>
 
 <style lang="scss">
-.filmstrip-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 $fadeTime: 0.2s;
 
 .filmstrip-item {

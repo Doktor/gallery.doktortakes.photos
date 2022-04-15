@@ -1,17 +1,21 @@
 <template>
   <div v-if="!loading && Object.keys(photo).length !== 0">
-    <PhotoViewer
-      :count="this.photos.length - 1"
-      :onClick="onClick"
-      :photo="photo"
-      @changePhoto="changePhoto"
-    />
+    <div class="photo-navigation">
+      <PhotoViewer
+        class="photo-viewer"
+        :count="this.photos.length - 1"
+        :onClick="onClick"
+        :photo="photo"
+        @changePhoto="changePhoto"
+      />
 
-    <Filmstrip
-      :photos="photos"
-      :position="photo.index"
-      @changePhoto="changePhoto"
-    />
+      <Filmstrip
+        class="filmstrip"
+        :photos="photos"
+        :position="photo.index"
+        @changePhoto="changePhoto"
+      />
+    </div>
 
     <section class="info">
       <PhotoMetadata :photo="photo" :count="photos.length" />
@@ -200,6 +204,33 @@ body.photo-viewer {
 </style>
 
 <style lang="scss" scoped>
+.photo-navigation {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100vh;
+}
+
+.photo-viewer {
+  flex-grow: 1;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.filmstrip {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  margin-top: auto;
+  padding: 1rem;
+}
+
 .info,
 footer {
   margin: 0 auto;
