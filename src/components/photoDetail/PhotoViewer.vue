@@ -70,6 +70,8 @@ export default {
 
       containerWidth: 0,
       containerHeight: 0,
+
+      pointerUpCallback: null,
     };
   },
 
@@ -156,6 +158,11 @@ export default {
     },
     pointerUp(event) {
       this.resetPointer();
+
+      if (this.pointerUpCallback) {
+        this.pointerUpCallback();
+        this.pointerUpCallback = null;
+      }
 
       if (this.eventIsClickOrTap(event)) {
         this.scaleImage(event);
@@ -269,10 +276,6 @@ export default {
       let xDiff = pointerX - this.lastClientX;
       let yDiff = pointerY - this.lastClientY;
 
-      if (scale === 1) {
-        return;
-      }
-
       // Calculate the image's actual display size
       let imageDisplayWidth, imageDisplayHeight;
 
@@ -284,6 +287,21 @@ export default {
         imageDisplayWidth = this.containerWidth;
         imageDisplayHeight =
           (this.imageHeight * this.containerWidth) / this.imageWidth;
+      }
+
+      let pointerXDiffFromStart = pointerX - this.pointerStartX;
+      let pointerYDiffFromStart = pointerY - this.pointerStartY;
+
+      if (scale === 1) {
+        if (Math.abs(pointerXDiffFromStart) >= this.containerWidth / 10) {
+          if (pointerXDiffFromStart > 0) {
+            this.pointerUpCallback = () => this.next();
+          } else {
+            this.pointerUpCallback = () => this.previous();
+          }
+        }
+
+        return;
       }
 
       let pointerXDiffUnclamped = (this.translateX + xDiff) / scale;
