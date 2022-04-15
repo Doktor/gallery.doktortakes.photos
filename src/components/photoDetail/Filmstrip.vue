@@ -131,15 +131,10 @@ $fadeTime: 0.2s;
   display: block;
   width: 50px;
   height: 50px;
-  margin: 0 4px;
+
   border: 1px solid $text-color;
+  margin: 0 4px;
 
-  clear: both;
   cursor: pointer;
-
-  @media (min-width: 901px) {
-    width: 80px;
-    height: 80px;
-  }
 }
 </style>
