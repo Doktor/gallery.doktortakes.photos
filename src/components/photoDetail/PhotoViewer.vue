@@ -83,13 +83,18 @@ export default {
       return this.photo.images.display.url;
     },
     imageStyles() {
-      return {
+      let styles = {
         transition: this.transitions,
         transform: `scale(${this.scale})`,
         left: `${this.translateX}px`,
         top: `${this.translateY}px`,
-        touchAction: "none",
       };
+
+      if (this.scale > 1) {
+        styles.touchAction = "none";
+      }
+
+      return styles;
     },
     transitions() {
       return this.transitionProperties.map(this.getTransition).join(", ");
@@ -266,6 +271,10 @@ export default {
 
       let xDiff = pointerX - this.lastClientX;
       let yDiff = pointerY - this.lastClientY;
+
+      if (scale === 1) {
+        return;
+      }
 
       // Calculate the image's actual display size
       let imageDisplayWidth, imageDisplayHeight;
