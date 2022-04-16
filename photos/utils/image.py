@@ -32,10 +32,8 @@ def create_thumbnail(
 
     image = PIL.Image.open(file)
 
-    try:
-        exif = image.info['exif']
-    except KeyError:
-        exif = None
+    exif = image.info.get('exif', None)
+    icc_profile = image.info.get('icc_profile', None)
 
     try:
         thumbnail = Thumbnail.objects.get(photo=photo, width=width, height=height, is_watermarked=add_watermark)
@@ -57,11 +55,7 @@ def create_thumbnail(
     assert image.height == height
 
     data = BytesIO()
-
-    if exif is not None:
-        image.save(data, 'JPEG', quality=quality, exif=exif)
-    else:
-        image.save(data, 'JPEG', quality=quality)
+    image.save(data, 'JPEG', quality=quality, exif=exif, icc_profile=icc_profile)
 
     new_file = File(data)
 
