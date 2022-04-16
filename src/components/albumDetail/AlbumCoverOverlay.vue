@@ -45,12 +45,12 @@ function twoDigitPad(n) {
 }
 
 function formatDate(date) {
-  return "{0} {1}-{2}-{3}".format(
-    days[date.getDay()],
-    date.getFullYear(),
-    twoDigitPad(date.getMonth() + 1),
-    twoDigitPad(date.getDate())
-  );
+  let weekday = days[date.getDay()];
+  let year = date.getFullYear();
+  let month = twoDigitPad(date.getMonth() + 1);
+  let day = twoDigitPad(date.getDate());
+
+  return `${weekday} ${year}/${month}/${day}`;
 }
 
 export default {
