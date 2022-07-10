@@ -68,14 +68,6 @@ export default {
     name() {
       return this.label.toLowerCase().replaceAll(" ", "-");
     },
-    model: {
-      get() {
-        return this.value;
-      },
-      set(value) {
-        this.$emit("input", value);
-      },
-    },
   },
 
   methods: {
@@ -91,13 +83,17 @@ export default {
 
       this.items.push(this.current);
       this.current = "";
+
+      this.$emit("input", this.items);
     },
     removeItem(index) {
       this.items.splice(index, 1);
+      this.$emit("input", this.items);
     },
     removeLastItem() {
       if (!this.current.trim()) {
         this.removeItem(this.items.length - 1);
+        this.$emit("input", this.items);
       }
     },
   },
