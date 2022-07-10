@@ -50,6 +50,10 @@ export const AlbumService = {
     album.pathSplit = album.path.split("/");
     album.tags.sort();
 
+    for (let child of album.children) {
+      child.pathSplit = child.path.split("/");
+    }
+
     return { ok, album, photos };
   },
 };

@@ -27,7 +27,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_children(obj: Album):
-        return AlbumPathSerializer(obj.children, many=True).data
+        return ChildAlbumSerializer(obj.children, many=True).data
 
     def validate(self, data):
         if self.instance is not None:
@@ -70,10 +70,10 @@ class SimpleAlbumSerializer(serializers.ModelSerializer):
         read_only_fields = ('slug', 'path')
 
 
-class AlbumPathSerializer(serializers.ModelSerializer):
+class ChildAlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
-        fields = ('path',)
+        fields = ('name', 'path')
 
 
 class AlbumCoverSerializer(serializers.ModelSerializer):
