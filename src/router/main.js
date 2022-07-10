@@ -39,7 +39,8 @@ const browserRoutes = [
   },
 
   {
-    path: "/albums/:path+/:md5/",
+    path: "/albums/:path+/:md5",
+    strict: true,
     name: "photo",
     component: PhotoDetail,
     meta: {
@@ -50,6 +51,7 @@ const browserRoutes = [
   },
   {
     path: "/albums/:path+/",
+    strict: true,
     name: "album",
     component: AlbumDetail,
     meta: {
