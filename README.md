@@ -1,6 +1,6 @@
 # Doktor Takes Photos
 
-This repository contains the code that runs [doktortakes.photos](https://doktortakes.photos), my photography portfolio.
+This repository contains the code that runs [gallery.doktortakes.photos](https://gallery.doktortakes.photos), my photography portfolio.
 
 The backend is written in Python using Django and Django REST Framework, and the frontend is written in JavaScript using Vue.
 

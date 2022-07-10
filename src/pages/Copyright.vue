@@ -50,10 +50,13 @@
 
     <p>
       The
-      <a href="https://gitlab.com/Doktor/doktortakes.photos">source code</a> for
-      this website is available on GitLab.<br />
+      <a href="https://gitlab.com/Doktor/gallery.doktortakes.photos"
+        >source code</a
+      >
+      for this website is available on GitLab.<br />
       It's available under the
-      <a href="https://gitlab.com/Doktor/doktortakes.photos/blob/master/LICENSE"
+      <a
+        href="https://gitlab.com/Doktor/gallery.doktortakes.photos/blob/master/LICENSE"
         >MIT License</a
       >.
     </p>

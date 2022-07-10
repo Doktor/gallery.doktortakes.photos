@@ -46,7 +46,7 @@ echo "building Docker images" && \
   sudo docker-compose -f docker-compose.production.yml up -d
 
 echo "copying Nginx config file" && \
-  sudo cp ./build/nginx/nginx.production.conf /etc/nginx/sites-enabled/doktortakes.photos.conf
+  sudo cp ./build/nginx/nginx.production.conf /etc/nginx/sites-enabled/gallery.doktortakes.photos.conf
 
 echo "reloading Nginx" && \
   service nginx reload

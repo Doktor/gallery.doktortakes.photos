@@ -148,7 +148,7 @@
 
     <p>
       The source code of this website is available on
-      <a href="https://gitlab.com/Doktor/doktortakes.photos">GitLab</a>.
+      <a href="https://gitlab.com/Doktor/gallery.doktortakes.photos">GitLab</a>.
     </p>
 
     <p>

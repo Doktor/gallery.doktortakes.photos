@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "doktortakes.photos"
+name = "gallery.doktortakes.photos"
 version = "0.1.0"
 description = ""
 authors = ["Doktor <doktorthehusky@gmail.com>"]
