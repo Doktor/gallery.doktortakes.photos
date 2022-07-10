@@ -71,14 +71,6 @@ export const mutations = {
     state.searchResults.count = count;
   },
 
-  setTags(state, tags) {
-    state.tags = tags;
-  },
-
-  setTag(state, slug) {
-    state.tag = state.tags.filter((tag) => tag.slug === slug)[0];
-  },
-
   setLoading(state, loading) {
     loading ? (state.loading += 1) : (state.loading -= 1);
   },

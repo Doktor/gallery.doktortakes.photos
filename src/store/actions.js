@@ -82,22 +82,6 @@ export const actions = {
     });
   },
 
-  async getTags(context) {
-    context.commit("setLoading", true);
-    let { content } = await sendRequest(endpoints.tagList);
-    context.commit("setLoading", false);
-
-    return content.tags;
-  },
-
-  async getTag(context, slug) {
-    context.commit("setLoading", true);
-    let tags = await context.dispatch("getTags");
-    context.commit("setLoading", false);
-
-    return tags.find((tag) => tag.slug === slug);
-  },
-
   async searchPhotos(context, queryString) {
     let { content } = await sendRequest(endpoints.searchPhotos + queryString);
     context.commit("setSearchResults", content.photos);

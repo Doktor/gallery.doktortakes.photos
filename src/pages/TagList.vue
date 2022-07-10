@@ -16,6 +16,7 @@
 <script>
 import { mapState } from "vuex";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { TagService } from "@/services/TagService";
 
 export default {
   components: {
@@ -33,7 +34,9 @@ export default {
   },
 
   async created() {
-    this.tags = await this.$store.dispatch("getTags");
+    this.$store.commit("setLoading", true);
+    this.tags = await TagService.getTags();
+    this.$store.commit("setLoading", false);
   },
 };
 </script>

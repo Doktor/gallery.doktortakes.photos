@@ -10,6 +10,7 @@ import { mapState } from "vuex";
 import { baseTitle } from "@/router/main.js";
 import SearchAlbums from "@/components/albumList/SearchAlbums";
 import { AlbumService } from "@/services/AlbumService";
+import { TagService } from "@/services/TagService";
 
 export default {
   components: {
@@ -38,9 +39,9 @@ export default {
   async created() {
     document.title = "Tag: #{0} | {1}".format(this.slug, baseTitle);
 
-    this.tag = await this.$store.dispatch("getTag", this.slug);
-
     this.$store.commit("setLoading", true);
+
+    this.tag = await TagService.getTag(this.slug);
 
     let albums = await AlbumService.getAllAlbums(true);
     this.albums = albums.filter((album) => album.tags.includes(this.tag.slug));
