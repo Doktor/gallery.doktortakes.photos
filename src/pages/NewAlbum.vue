@@ -15,6 +15,7 @@
 <script>
 import AlbumForm from "@/components/editor/AlbumForm.vue";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 
 export default {
   components: {
@@ -43,8 +44,8 @@ export default {
   },
 
   methods: {
-    createAlbum(album) {
-      this.$store.dispatch("createAlbum", album);
+    async createAlbum(album) {
+      await ManageAlbumService.createAlbum(album);
     },
   },
 };

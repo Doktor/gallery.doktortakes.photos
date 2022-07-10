@@ -9,11 +9,7 @@
       </header>
 
       <h2>Album details</h2>
-      <AlbumDetails
-        v-if="!loading"
-        :album="album"
-        @save="updateDocumentTitle"
-      />
+      <AlbumDetails v-if="!loading" :album="album" @save="saveAlbum" />
 
       <template v-if="album.parent || album.children.length > 0">
         <h2>Related albums</h2>
@@ -31,7 +27,7 @@
       <PhotoUploader :path="album.path" />
       <PhotoManager :album="album" :photos="photos" @update="loadAlbum" />
 
-      <DeleteAlbum />
+      <DeleteAlbumForm :album="album" @delete="deleteAlbum" />
     </template>
   </FixedWidthContainer>
 </template>
@@ -40,7 +36,7 @@
 import AlbumChildren from "@/components/albumList/AlbumChildren";
 import AlbumDetails from "@/components/editor/AlbumDetails.vue";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import DeleteAlbum from "@/components/editor/DeleteAlbum.vue";
+import DeleteAlbumForm from "@/components/editor/DeleteAlbumForm.vue";
 import PhotoManager from "@/components/editor/PhotoManager.vue";
 import PhotoUploader from "@/components/editor/PhotoUploader.vue";
 import { mapState } from "vuex";
@@ -48,13 +44,14 @@ import { router } from "@/router/main";
 import { editorTitleTemplate } from "@/store/mutations";
 import AlbumLinks from "@/components/editor/AlbumLinks";
 import { AlbumService } from "@/services/AlbumService";
+import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 
 export default {
   components: {
     AlbumLinks,
     AlbumChildren,
     AlbumDetails,
-    DeleteAlbum,
+    DeleteAlbumForm,
     FixedWidthContainer,
     PhotoManager,
     PhotoUploader,
@@ -102,6 +99,11 @@ export default {
       this.$store.commit("setLoading", false);
     },
 
+    async saveAlbum(album) {
+      await ManageAlbumService.saveAlbum(album);
+      this.updateDocumentTitle();
+    },
+
     updateDocumentTitle() {
       let newTitle = editorTitleTemplate.format(this.album.name);
 
@@ -116,6 +118,10 @@ export default {
         let resolved = router.resolve(route);
         window.history.replaceState(null, newTitle, resolved.href);
       }
+    },
+
+    async deleteAlbum() {
+      await ManageAlbumService.deleteAlbum(this.album.path);
     },
   },
 

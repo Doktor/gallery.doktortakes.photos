@@ -9,7 +9,7 @@
     </p>
 
     <div class="delete-album">
-      <input ref="albumName" title="Name" type="text" />
+      <input v-model="name" title="Name" type="text" />
       <button type="button" @click="deleteAlbum">Delete</button>
     </div>
   </section>
@@ -17,10 +17,23 @@
 
 <script>
 export default {
+  props: {
+    album: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      name: "",
+    };
+  },
   methods: {
     deleteAlbum() {
-      if (this.$refs.albumName.value === this.$store.state.album.name) {
-        this.$store.dispatch("deleteAlbum");
+      if (this.name === this.album.name) {
+        this.$emit("delete");
+      } else {
+        this.$store.commit("addNotification", "Incorrect album name.");
       }
     },
   },

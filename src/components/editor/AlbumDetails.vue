@@ -46,8 +46,7 @@ export default {
 
   methods: {
     saveAlbum(album) {
-      this.$store.dispatch("saveAlbum", album);
-      this.$emit("save");
+      this.$emit("save", album);
     },
   },
 };
