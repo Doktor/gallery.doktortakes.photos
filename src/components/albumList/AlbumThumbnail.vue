@@ -8,7 +8,7 @@
       alt="Album cover"
     />
     <!-- No cover image -->
-    <div v-else>
+    <div v-else class="album-no-cover">
       <AlbumPlaceholder :title="album.name" />
       <div class="note album-no-cover-note">No cover</div>
     </div>
@@ -53,6 +53,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.album-no-cover {
+  border: 1px solid $background-color-2;
+}
+
 .album-title-text {
   &:hover {
     text-decoration: none;
