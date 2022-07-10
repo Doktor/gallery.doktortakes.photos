@@ -1,33 +1,33 @@
 import VueRouter from "vue-router";
 
-import { store } from "../store/index.js";
+import { store } from "@/store";
 
-import Index from "../pages/Index.vue";
+import Index from "@/pages/Index";
 
-import AlbumList from "../pages/AlbumList.vue";
-import AlbumDetail from "../pages/AlbumDetail.vue";
-import PhotoDetail from "../pages/PhotoDetail.vue";
-import TagList from "../pages/TagList.vue";
-import TagDetail from "../pages/TagDetail.vue";
-import UserList from "../pages/UserList.vue";
-import UserDetail from "../pages/UserDetail.vue";
-import ChangePassword from "../pages/ChangePassword.vue";
+import AlbumList from "@/pages/AlbumList";
+import AlbumDetail from "@/pages/AlbumDetail";
+import PhotoDetail from "@/pages/PhotoDetail";
+import TagList from "@/pages/TagList";
+import TagDetail from "@/pages/TagDetail";
+import UserList from "@/pages/manage/UserList";
+import UserDetail from "@/pages/user/UserDetail";
+import ChangePassword from "@/pages/user/ChangePassword";
 
-import GroupList from "../pages/GroupList.vue";
+import GroupList from "@/pages/manage/GroupList";
 
-import About from "../pages/About.vue";
-import Copyright from "../pages/Copyright.vue";
-import Recent from "../pages/Recent.vue";
+import About from "@/pages/About";
+import Copyright from "@/pages/Copyright";
+import Recent from "@/pages/Recent";
 
-import SearchPhotos from "../pages/SearchPhotos.vue";
+import SearchPhotos from "@/pages/SearchPhotos";
 
-import EditAlbum from "../pages/EditAlbum.vue";
-import Manage from "../pages/Manage.vue";
-import NewAlbum from "../pages/NewAlbum.vue";
+import EditAlbum from "@/pages/manage/EditAlbum";
+import Manage from "@/pages/manage/Manage";
+import NewAlbum from "@/pages/manage/NewAlbum";
 
-import LogIn from "@/pages/LogIn";
-import LogOut from "@/pages/LogOut";
-import EditPhoto from "@/pages/EditPhoto";
+import LogIn from "@/pages/user/LogIn";
+import LogOut from "@/pages/user/LogOut";
+import EditPhoto from "@/pages/manage/EditPhoto";
 
 export const baseTitle = "Doktor Takes Photos";
 
