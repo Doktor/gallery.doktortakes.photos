@@ -41,6 +41,7 @@ export default {
 <style lang="scss" scoped>
 .tags {
   text-align: left;
+  column-count: 3;
   column-width: 250px;
 }
 </style>
