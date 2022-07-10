@@ -1,6 +1,6 @@
-import { endpoints, getCsrfToken } from "./index.js";
 import { router } from "@/router/main.js";
-import { sendRequest } from "@/store/utils";
+import { getCsrfToken, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export const actions = {
   async ensureCsrfToken(context) {

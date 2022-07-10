@@ -41,8 +41,8 @@
 
 <script>
 import Photos from "@/components/photoList/Photos.vue";
-import { sendRequest } from "@/store/utils";
-import { endpoints, getCsrfToken } from "@/store";
+import { getCsrfToken, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export default {
   components: {

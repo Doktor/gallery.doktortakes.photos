@@ -1,6 +1,7 @@
-import { parseAlbumForAPI, sendRequest } from "@/store/utils";
-import { endpoints, getCsrfToken, store } from "@/store";
+import { getCsrfToken, parseAlbumForAPI, sendRequest } from "@/utils";
+import { store } from "@/store";
 import { router } from "@/router/main";
+import { endpoints } from "@/constants";
 
 export const ManageAlbumService = {
   async createAlbum(album) {

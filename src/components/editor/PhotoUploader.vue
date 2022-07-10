@@ -21,7 +21,8 @@
 </template>
 
 <script>
-import { endpoints, getCsrfToken } from "@/store";
+import { getCsrfToken } from "@/utils";
+import { endpoints } from "@/constants";
 
 export default {
   data() {

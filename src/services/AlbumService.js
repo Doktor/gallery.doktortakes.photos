@@ -1,5 +1,5 @@
-import { sendRequest } from "@/store/utils";
-import { endpoints, getQueryString } from "@/store";
+import { getQueryString, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export const AlbumService = {
   async getAllAlbums(full = false) {

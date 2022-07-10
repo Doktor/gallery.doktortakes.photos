@@ -72,10 +72,10 @@
 
 <script>
 import GenerateAccessCode from "./GenerateAccessCode.vue";
-import { accessLevels } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
 import ListInput from "@/components/form/ListInput";
+import { accessLevels } from "@/constants";
 
 const displayImageSizes = [
   {

@@ -10,7 +10,7 @@ import "./styles/main.scss";
 Vue.config.productionTip = process.env.NODE_ENV !== "production";
 Vue.use(VueRouter);
 
-async function run() {
+(async function () {
   store.commit("setApiTokenFromLocalStorage");
   await store.dispatch("getUser");
 
@@ -26,40 +26,4 @@ async function run() {
 
     template: `<Base/>`,
   });
-}
-
-run();
-
-// Utility functions
-
-export function randomChoice(items) {
-  let index = Math.floor(Math.random() * items.length);
-  return items[index];
-}
-
-Array.prototype.clear = function () {
-  this.splice(0, this.length);
-};
-
-Array.prototype.remove = function (item) {
-  this.splice(this.indexOf(item), 1);
-};
-
-String.prototype.format = function () {
-  "use strict";
-  let str = this.toString();
-  if (arguments.length) {
-    let t = typeof arguments[0];
-    let key;
-    let args =
-      "string" === t || "number" === t
-        ? Array.prototype.slice.call(arguments)
-        : arguments[0];
-
-    for (key in args) {
-      str = str.replace(new RegExp("\\{" + key + "\\}", "gi"), args[key]);
-    }
-  }
-
-  return str;
-};
+})();

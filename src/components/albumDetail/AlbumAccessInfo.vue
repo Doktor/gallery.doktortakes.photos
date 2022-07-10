@@ -36,7 +36,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { accessLevelsMap } from "@/store/index.js";
+import { accessLevelsMap } from "@/constants";
 
 export default {
   props: {

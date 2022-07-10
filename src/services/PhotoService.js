@@ -1,5 +1,5 @@
-import { endpoints, getCsrfToken } from "@/store";
-import { sendRequest } from "@/store/utils";
+import { getCsrfToken, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export const PhotoService = {
   async get(md5) {

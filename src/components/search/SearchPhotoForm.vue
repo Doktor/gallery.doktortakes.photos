@@ -209,7 +209,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { getQueryString } from "@/store";
+import { getQueryString } from "@/utils";
 
 export default {
   computed: {

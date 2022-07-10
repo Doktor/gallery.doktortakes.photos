@@ -1,5 +1,5 @@
-import { sendRequest } from "@/store/utils";
-import { endpoints } from "@/store";
+import { sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export const TaglineService = {
   async getTagline() {
