@@ -41,7 +41,7 @@ export default {
       return {
         name: "album",
         params: {
-          path: this.album.path,
+          path: this.album.pathSplit,
         },
         query: {
           code: this.$route.query.code,

@@ -2,7 +2,7 @@
   <div class="photo-wrapper" :class="classes">
     <div class="photo">
       <div
-        :is="allowSelect ? 'div' : 'router-link'"
+        :is="allowSelect || photo.path === undefined ? 'div' : 'router-link'"
         :to="allowSelect ? null : photoLink"
         @click="select"
       >
@@ -35,7 +35,7 @@ export default {
       return {
         name: this.route,
         params: {
-          path: this.photo.path,
+          path: this.photo.path?.split("/") ?? "",
           md5: this.photo.md5,
         },
         query: {
