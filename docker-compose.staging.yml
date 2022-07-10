@@ -3,7 +3,6 @@ version: '3.8'
 services:
   backend:
     image: photos_backend
-    container_name: backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,7 +16,6 @@ services:
 
   nginx:
     image: photos_nginx
-    container_name: nginx
     build: ./build/nginx/
     ports:
       - 443:443
