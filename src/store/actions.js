@@ -18,16 +18,6 @@ export const actions = {
     });
   },
 
-  async getUsers(context) {
-    context.commit("setLoading", true);
-
-    let { content } = await sendRequest(endpoints.userList);
-    let users = content.users.sort((a, b) => a.id - b.id);
-
-    context.commit("setLoading", false);
-    return users;
-  },
-
   async getUser(context) {
     let options = {};
     let token = context.state.token;
@@ -38,16 +28,6 @@ export const actions = {
 
     let { content } = await sendRequest(endpoints.currentUser, options);
     context.commit("setUser", content);
-  },
-
-  async getGroups(context) {
-    context.commit("setLoading", true);
-
-    let { content } = await sendRequest(endpoints.groupList);
-    let groups = content.groups.sort((a, b) => a.id - b.id);
-
-    context.commit("setLoading", false);
-    return groups;
   },
 
   async changePassword(context, data) {

@@ -35,6 +35,7 @@
 import { mapState } from "vuex";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { formatDate, formatDateTime } from "@/date.js";
+import { ManageUserService } from "@/services/manage/ManageUserService";
 
 export default {
   components: {
@@ -52,7 +53,9 @@ export default {
   },
 
   async created() {
-    this.users = await this.$store.dispatch("getUsers");
+    this.$store.commit("setLoading", true);
+    this.users = await ManageUserService.listUsers();
+    this.$store.commit("setLoading", false);
   },
 
   methods: {

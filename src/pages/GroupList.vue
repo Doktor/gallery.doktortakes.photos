@@ -28,6 +28,7 @@
 <script>
 import { mapState } from "vuex";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { ManageUserService } from "@/services/manage/ManageUserService";
 
 export default {
   components: {
@@ -45,7 +46,9 @@ export default {
   },
 
   async created() {
-    this.groups = await this.$store.dispatch("getGroups");
+    this.$store.commit("setLoading", true);
+    this.groups = await ManageUserService.listGroups();
+    this.$store.commit("setLoading", false);
   },
 
   methods: {
