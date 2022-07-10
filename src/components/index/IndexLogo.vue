@@ -15,7 +15,7 @@ export default {
   font-size: $index-logo-size;
   line-height: 1;
   text-align: center;
-  text-transform: capitalize;
+  text-transform: uppercase;
 
   padding: 0;
   margin: 0;

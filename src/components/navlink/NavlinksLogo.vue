@@ -20,19 +20,20 @@ export default {
 
 <style lang="scss" scoped>
 .nav-logo {
-  @include logo-font();
+  .nav-item-link {
+    @include logo-font();
 
-  color: $text-color;
-  font-size: $nav-logo-size;
-  line-height: 1;
-  text-align: center;
-  text-transform: capitalize;
+    color: $text-blue;
+    font-size: $nav-logo-size;
+    line-height: 1;
+    text-align: center;
+
+    @media (min-width: 901px) {
+      font-size: $nav-logo-size * 1.15;
+    }
+  }
 
   padding: 0;
   margin: 0;
-
-  @media (min-width: 901px) {
-    font-size: $nav-logo-size * 1.15;
-  }
 }
 </style>
