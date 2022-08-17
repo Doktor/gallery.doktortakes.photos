@@ -2,33 +2,33 @@ import VueRouter from "vue-router";
 
 import { store } from "@/store";
 
-import Index from "@/pages/Index";
+import IndexPage from "@/pages/IndexPage";
 
-import AlbumList from "@/pages/AlbumList";
-import AlbumDetail from "@/pages/AlbumDetail";
-import PhotoDetail from "@/pages/PhotoDetail";
-import TagList from "@/pages/TagList";
-import TagDetail from "@/pages/TagDetail";
-import UserList from "@/pages/manage/UserList";
-import UserDetail from "@/pages/user/UserDetail";
-import ChangePassword from "@/pages/user/ChangePassword";
+import AlbumListPage from "@/pages/AlbumListPage";
+import AlbumDetailPage from "@/pages/AlbumDetailPage";
+import PhotoDetailPage from "@/pages/PhotoDetailPage";
+import TagListPage from "@/pages/TagListPage";
+import TagDetailPage from "@/pages/TagDetailPage";
+import UserListPage from "@/pages/manage/UserListPage";
+import UserDetailPage from "@/pages/user/UserDetailPage";
+import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
 
-import GroupList from "@/pages/manage/GroupList";
+import GroupListPage from "@/pages/manage/GroupListPage";
 
-import About from "@/pages/About";
-import Copyright from "@/pages/Copyright";
-import Recent from "@/pages/Recent";
+import AboutPage from "@/pages/AboutPage";
+import CopyrightPage from "@/pages/CopyrightPage";
+import RecentPage from "@/pages/RecentPage";
 
-import SearchPhotos from "@/pages/SearchPhotos";
+import SearchPhotosPage from "@/pages/SearchPhotosPage";
 
-import EditAlbum from "@/pages/manage/EditAlbum";
-import Manage from "@/pages/manage/Manage";
-import NewAlbum from "@/pages/manage/NewAlbum";
+import EditAlbumPage from "@/pages/manage/EditAlbumPage";
+import ManagePage from "@/pages/manage/ManagePage";
+import NewAlbumPage from "@/pages/manage/NewAlbumPage";
 
-import LogIn from "@/pages/user/LogIn";
-import LogOut from "@/pages/user/LogOut";
-import EditPhoto from "@/pages/manage/EditPhoto";
-import DebugNotifications from "@/pages/debug/DebugNotifications";
+import LogInPage from "@/pages/user/LogInPage";
+import LogOutPage from "@/pages/user/LogOutPage";
+import EditPhotoPage from "@/pages/manage/EditPhotoPage";
+import DebugNotificationsPage from "@/pages/debug/DebugNotificationsPage";
 
 export const baseTitle = "Doktor Takes Photos";
 
@@ -36,14 +36,14 @@ const browserRoutes = [
   {
     path: "/",
     name: "index",
-    component: Index,
+    component: IndexPage,
   },
 
   {
     path: "/albums/:path+/:md5",
     strict: true,
     name: "photo",
-    component: PhotoDetail,
+    component: PhotoDetailPage,
     meta: {
       body: "photo-viewer",
       nav: false,
@@ -54,7 +54,7 @@ const browserRoutes = [
     path: "/albums/:path+/",
     strict: true,
     name: "album",
-    component: AlbumDetail,
+    component: AlbumDetailPage,
     meta: {
       title: false,
     },
@@ -62,7 +62,7 @@ const browserRoutes = [
   {
     path: "/albums/",
     name: "albums",
-    component: AlbumList,
+    component: AlbumListPage,
     meta: {
       title: "Albums",
     },
@@ -71,7 +71,7 @@ const browserRoutes = [
   {
     path: "/tags/",
     name: "tags",
-    component: TagList,
+    component: TagListPage,
     meta: {
       title: "Tags",
     },
@@ -79,7 +79,7 @@ const browserRoutes = [
   {
     path: "/tags/:slug/",
     name: "tag",
-    component: TagDetail,
+    component: TagDetailPage,
     meta: {
       title: false,
     },
@@ -88,7 +88,7 @@ const browserRoutes = [
   {
     path: "/search/",
     name: "search",
-    component: SearchPhotos,
+    component: SearchPhotosPage,
     meta: {
       title: "Search",
     },
@@ -97,7 +97,7 @@ const browserRoutes = [
   {
     path: "/users/",
     name: "users",
-    component: UserList,
+    component: UserListPage,
     meta: {
       staff: true,
       title: "Users",
@@ -106,7 +106,7 @@ const browserRoutes = [
   {
     path: "/users/:slug/",
     name: "user",
-    component: UserDetail,
+    component: UserDetailPage,
     meta: {
       title: false,
     },
@@ -114,7 +114,7 @@ const browserRoutes = [
   {
     path: "/users/:slug/password/",
     name: "changePassword",
-    component: ChangePassword,
+    component: ChangePasswordPage,
     meta: {
       title: "Change your password",
     },
@@ -123,7 +123,7 @@ const browserRoutes = [
   {
     path: "/groups/",
     name: "groups",
-    component: GroupList,
+    component: GroupListPage,
     meta: {
       staff: true,
       title: "Groups",
@@ -133,7 +133,7 @@ const browserRoutes = [
   {
     path: "/about/",
     name: "about",
-    component: About,
+    component: AboutPage,
     meta: {
       title: "About",
     },
@@ -141,7 +141,7 @@ const browserRoutes = [
   {
     path: "/copyright/",
     name: "copyright",
-    component: Copyright,
+    component: CopyrightPage,
     meta: {
       title: "Copyright",
     },
@@ -150,7 +150,7 @@ const browserRoutes = [
   {
     path: "/recent/",
     name: "recent",
-    component: Recent,
+    component: RecentPage,
     meta: {
       title: "Recent changes",
     },
@@ -159,7 +159,7 @@ const browserRoutes = [
   {
     path: "/log-in/",
     name: "logIn",
-    component: LogIn,
+    component: LogInPage,
     meta: {
       title: "Log in",
     },
@@ -167,7 +167,7 @@ const browserRoutes = [
   {
     path: "/log-out/",
     name: "logOut",
-    component: LogOut,
+    component: LogOutPage,
     meta: {
       title: "Log out",
     },
@@ -178,7 +178,7 @@ const manageRoutes = [
   {
     path: "/manage/",
     name: "manage",
-    component: Manage,
+    component: ManagePage,
     meta: {
       staff: true,
       title: "Manage",
@@ -187,7 +187,7 @@ const manageRoutes = [
   {
     path: "/manage/albums/new/",
     name: "newAlbum",
-    component: NewAlbum,
+    component: NewAlbumPage,
     meta: {
       staff: true,
       title: "Create new album",
@@ -196,7 +196,7 @@ const manageRoutes = [
   {
     path: "/manage/albums/:path+/",
     name: "editAlbum",
-    component: EditAlbum,
+    component: EditAlbumPage,
     meta: {
       staff: true,
       title: "Edit album: {album}",
@@ -205,7 +205,7 @@ const manageRoutes = [
   {
     path: "/manage/albums/:path+/photos/:md5",
     name: "editPhoto",
-    component: EditPhoto,
+    component: EditPhotoPage,
     meta: {
       staff: true,
       title: "Edit photo: {md5}",
@@ -217,7 +217,7 @@ const debugRoutes = [
   {
     path: "/debug/notifications",
     name: "debugNotifications",
-    component: DebugNotifications,
+    component: DebugNotificationsPage,
     meta: {
       staff: true,
       title: "Debug | Notifications",
