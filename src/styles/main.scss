@@ -611,29 +611,6 @@ $albumWidth: 400px;
   }
 }
 
-/* Album edit links */
-
-ul.edit-links-center {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  @include headings-font();
-
-  li:not(:last-child)::after {
-    color: $text-color;
-    content: "/";
-    margin: 0 0.75rem;
-    position: relative;
-  }
-}
-
-ul.edit-links-center {
-  li {
-    display: inline-block;
-  }
-}
-
 /* Photo wall */
 .photo-wall {
   display: flex;

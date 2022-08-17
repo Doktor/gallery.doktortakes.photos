@@ -1,5 +1,5 @@
 <template>
-  <ul class="edit-links-center">
+  <ul class="album-edit-links">
     <li>
       <a :href="album.url" title="View album" target="_blank">View</a>
     </li>
@@ -50,3 +50,24 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.album-edit-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    @include headings-font();
+
+    display: inline-block;
+  }
+
+  li:not(:last-child)::after {
+    color: $text-color;
+    content: "/";
+    margin: 0 0.75rem;
+    position: relative;
+  }
+}
+</style>
