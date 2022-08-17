@@ -26,7 +26,6 @@ services:
       - backend
     volumes:
       - ./src/:/app/src/
-      - ./node_modules/:/app/node_modules/
       - static_volume:/app/static/
     command: npx webpack --config webpack.dev.js
 
