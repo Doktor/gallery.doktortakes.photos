@@ -9,7 +9,7 @@
     </FadeTransition>
 
     <footer v-if="!isIndex">
-      <div v-if="tagline" class="tagline">"<span v-html="tagline" />"</div>
+      <div v-if="tagline" class="tagline">"<span v-html="tagline"></span>"</div>
 
       <p>
         photos are free for personal use<br />website and photos
@@ -50,7 +50,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   display: flex;
   flex-direction: column;
@@ -61,5 +61,15 @@ export default {
 
 #content {
   flex: 1;
+}
+
+.tagline {
+  @include headings-font();
+  color: $text-color;
+  font-size: 1.6rem;
+  font-weight: 400;
+
+  margin: 1rem 0;
+  width: 100%;
 }
 </style>

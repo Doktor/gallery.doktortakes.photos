@@ -150,17 +150,6 @@ p {
 
 /* Generic classes */
 
-// Index page tagline
-.tagline {
-  @include headings-font();
-  color: $text-color;
-  font-size: 1.6rem;
-  font-weight: 400;
-
-  margin: 1rem 0;
-  width: 100%;
-}
-
 .hidden {
   display: none !important;
 }
