@@ -7,11 +7,11 @@ services:
       context: .
       dockerfile: Dockerfile
       target: staging
-    command: /app/run.staging.sh
     expose:
       - 1337
     depends_on:
       - database
+    command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
 
   nginx:
     image: photos_nginx
