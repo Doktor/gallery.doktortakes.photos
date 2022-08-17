@@ -12,7 +12,6 @@ services:
       - 1337
     depends_on:
       - database
-      - redis
 
   nginx:
     image: photos_nginx
@@ -21,23 +20,6 @@ services:
       - 443:443
     depends_on:
       - backend
-
-  redis:
-    extends:
-      file: docker-services.yml
-      service: redis
-
-  celery:
-    extends:
-      file: docker-services.yml
-      service: celery
-    build:
-      target: staging
-    depends_on:
-      - backend
-      - database
-      - redis
-    command: /app/run-celery.staging.sh
 
   database:
     extends:

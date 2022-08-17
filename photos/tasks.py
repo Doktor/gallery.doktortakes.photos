@@ -11,13 +11,11 @@ from photos.utils.image import create_thumbnail, guess_aspect_ratio
 
 import datetime
 import PIL.Image
-from celery import shared_task
 from typing import Tuple
 
 strptime = datetime.datetime.strptime
 
 
-@shared_task
 def create_thumbnails(pk: int) -> None:
     photo = Photo.objects.get(pk=pk)
     file = photo.get_original()

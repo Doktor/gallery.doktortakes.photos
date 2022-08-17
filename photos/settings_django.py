@@ -332,12 +332,3 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'static', 'webpack-stats.json'),
     }
 }
-
-# Task queue
-
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'US/Eastern'

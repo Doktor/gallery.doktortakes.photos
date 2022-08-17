@@ -10,20 +10,3 @@ services:
     command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
     ports:
       - 1337:1337
-    depends_on:
-      - redis
-
-  redis:
-    extends:
-      file: docker-services.yml
-      service: redis
-
-  celery:
-    extends:
-      file: docker-services.yml
-      service: celery
-    build:
-      target: production
-    depends_on:
-      - backend
-      - redis

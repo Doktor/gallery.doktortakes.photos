@@ -1,16 +1,6 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:6.2-alpine
-
-  celery:
-    image: photos_celery
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: poetry run celery -A photos worker --loglevel=INFO
-
   database:
     image: postgres:10.20-alpine
     # https://github.com/docker-library/docs/blob/master/postgres/README.md#environment-variables

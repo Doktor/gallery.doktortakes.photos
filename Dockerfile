@@ -45,8 +45,7 @@ COPY ./config/secrets.staging.toml /app/config/secrets.toml
 
 COPY --from=node /app/static/ /app/static/
 
-RUN chmod +x /app/run.staging.sh && \
-    chmod +x /app/run-celery.staging.sh
+RUN chmod +x /app/run.staging.sh
 
 
 FROM base as production

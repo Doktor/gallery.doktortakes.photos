@@ -212,7 +212,7 @@ def receiver_create_thumbnails(sender, instance: Photo, created: bool, **kwargs)
     photo = instance
 
     from photos.tasks import create_thumbnails
-    create_thumbnails.delay(photo.pk)
+    create_thumbnails(photo.pk)
 
 
 @receiver(post_delete, sender=Photo,

@@ -15,7 +15,6 @@ services:
       - static_volume:/app/static/
     depends_on:
       - database
-      - redis
 
   frontend:
     image: photos_frontend
@@ -28,22 +27,6 @@ services:
       - ./src/:/app/src/
       - static_volume:/app/static/
     command: npx webpack --config webpack.dev.js
-
-  redis:
-    extends:
-      file: docker-services.yml
-      service: redis
-
-  celery:
-    extends:
-      file: docker-services.yml
-      service: celery
-    build:
-      target: development
-    depends_on:
-      - backend
-      - database
-      - redis
 
   database:
     extends:
