@@ -28,6 +28,7 @@ import NewAlbum from "@/pages/manage/NewAlbum";
 import LogIn from "@/pages/user/LogIn";
 import LogOut from "@/pages/user/LogOut";
 import EditPhoto from "@/pages/manage/EditPhoto";
+import DebugNotifications from "@/pages/debug/DebugNotifications";
 
 export const baseTitle = "Doktor Takes Photos";
 
@@ -212,7 +213,19 @@ const manageRoutes = [
   },
 ];
 
-const routes = browserRoutes.concat(manageRoutes);
+const debugRoutes = [
+  {
+    path: "/debug/notifications",
+    name: "debugNotifications",
+    component: DebugNotifications,
+    meta: {
+      staff: true,
+      title: "Debug | Notifications",
+    },
+  },
+];
+
+const routes = [...browserRoutes, ...manageRoutes, ...debugRoutes];
 routes.forEach((route) => (route.pathToRegexpOptions = { strict: true }));
 
 const router = new VueRouter({

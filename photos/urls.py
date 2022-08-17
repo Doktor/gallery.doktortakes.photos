@@ -39,6 +39,7 @@ urlpatterns = [
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),
     path('copyright/', views.view_copyright, name='copyright'),
+    re_path(r'^debug/', views.index, name='debug'),
     path('groups/', views.groups_entry_point, name='groups'),
     re_path(r'^manage/', views.editor_entry_point, name='editor'),
     path('recent/', views.view_recent, name='recent'),
