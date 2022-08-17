@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
 
     user: {},
     notifications: [],
+    notificationId: 0,
 
     loading: 0,
 

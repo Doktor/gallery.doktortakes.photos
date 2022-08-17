@@ -1,9 +1,9 @@
 <template>
-  <div id="messages">
+  <div class="notifications">
     <Notification
-      v-for="message in notifications"
-      :key="message"
-      :message="message"
+      v-for="notification in notifications"
+      :key="notification.id"
+      :notification="notification"
     />
   </div>
 </template>
@@ -22,3 +22,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.notifications {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  z-index: 100;
+
+  margin: 1rem;
+}
+</style>

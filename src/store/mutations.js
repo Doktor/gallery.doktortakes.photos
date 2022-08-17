@@ -25,24 +25,26 @@ export const mutations = {
     state.user = { status: "anonymous" };
   },
 
-  addNotification(state, message) {
-    if (state.notifications.includes(message)) {
-      return;
-    }
+  addNotification(state, { message, status = "note" }) {
+    state.notificationId += 1;
 
-    state.notifications.push(message);
+    let notification = { id: state.notificationId, message, status };
+    state.notifications.push(notification);
+
+    return notification.id;
   },
 
-  addTimedNotification(state, { message, hideAfter = 0 }) {
-    this.commit("addNotification", message);
+  addTimedNotification(state, { message, status = "note", hideAfter = 0 }) {
+    let id = this.commit("addNotification", { message, status });
 
     if (hideAfter > 0) {
-      setTimeout(() => this.commit("removeNotification", message), hideAfter);
+      setTimeout(() => this.commit("removeNotification", id), hideAfter);
     }
   },
 
-  removeNotification(state, message) {
-    state.notifications.remove(message);
+  removeNotification(state, id) {
+    let index = state.notifications.findIndex((n) => n.id === id);
+    state.notifications.splice(index, 1);
   },
 
   setUser(state, user) {

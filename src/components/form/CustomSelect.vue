@@ -3,13 +3,17 @@
     <label :for="id">{{ label }}</label>
 
     <select class="field" :id="id" :name="name" v-model="model">
-      <option v-for="item in options" :value="item.value" :key="item.value">
-        {{ item.display }}
+      <option
+        v-for="item in options"
+        :value="item.value || item"
+        :key="item.value || item"
+      >
+        {{ item.display || item }}
       </option>
     </select>
 
     <template v-for="(_, name) in $scopedSlots" :slot="name">
-      <slot :name="name" />
+      <slot :name="name"></slot>
     </template>
   </InputWrapper>
 </template>

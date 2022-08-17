@@ -97,6 +97,10 @@ export function getQueryString(params) {
   return "?" + query.join("&");
 }
 
+export function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 Array.prototype.remove = function (item) {
   this.splice(this.indexOf(item), 1);
 };

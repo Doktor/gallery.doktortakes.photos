@@ -4,6 +4,11 @@
       <section>
         <h2>Add notification</h2>
         <CustomInput label="Text" v-model="message" />
+        <CustomSelect
+          label="Status"
+          :options="statusOptions"
+          v-model="status"
+        />
 
         <button type="button" @click="addNotification">Submit</button>
       </section>
@@ -13,6 +18,11 @@
 
         <CustomInput label="Text" v-model="message" />
         <CustomInput label="Time (ms)" type="number" v-model="timeMs" />
+        <CustomSelect
+          label="Status"
+          :options="statusOptions"
+          v-model="status"
+        />
 
         <button type="button" @click="addTimedNotification">Submit</button>
       </section>
@@ -23,25 +33,37 @@
 <script>
 import CustomInput from "@/components/form/CustomInput";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
+import CustomSelect from "@/components/form/CustomSelect";
 
 export default {
-  components: { FixedWidthContainer, CustomInput },
+  components: { CustomSelect, FixedWidthContainer, CustomInput },
 
   data() {
     return {
       message: "",
       timeMs: 0,
+      status: "",
     };
+  },
+
+  computed: {
+    statusOptions() {
+      return ["default", "success", "warning", "error"];
+    },
   },
 
   methods: {
     addNotification() {
-      this.$store.commit("addNotification", this.message);
+      this.$store.commit("addNotification", {
+        message: this.message,
+        status: this.status,
+      });
     },
 
     addTimedNotification() {
       this.$store.commit("addTimedNotification", {
         message: this.message,
+        status: this.status,
         hideAfter: this.timeMs,
       });
     },
