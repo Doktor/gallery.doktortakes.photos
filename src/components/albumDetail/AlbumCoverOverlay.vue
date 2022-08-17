@@ -9,9 +9,9 @@
       <div class="overlay-item" v-if="!loading">
         <span v-html="date"></span>
 
-        <template v-if="photos.length > 0">
+        <template v-if="count > 0">
           <span> &middot; </span>
-          <span>{{ photos.length }} photo{{ photos.length | pluralize }}</span>
+          <span>{{ count }} photo{{ count | pluralize }}</span>
         </template>
       </div>
     </div>
@@ -62,7 +62,7 @@ export default {
 
   computed: {
     ...mapGetters(["isStaff"]),
-    ...mapState(["loading", "photos", "user"]),
+    ...mapState(["loading", "user"]),
 
     classes() {
       return {
@@ -90,6 +90,10 @@ export default {
   props: {
     album: {
       type: Object,
+      required: true,
+    },
+    count: {
+      type: Number,
       required: true,
     },
     isSkeleton: {

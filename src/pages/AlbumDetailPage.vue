@@ -1,7 +1,11 @@
 <template>
   <div>
     <section class="album-cover-container">
-      <AlbumCover :album="album" :isSkeleton="!!loading" />
+      <AlbumCover
+        :album="album"
+        :count="photos.length"
+        :isSkeleton="!!loading"
+      />
     </section>
 
     <AlbumChildren v-if="!loading" :album="album" />
