@@ -158,16 +158,6 @@ DATABASES = {"default": default}
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
-# Caching
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache/')
-    }
-}
-
-
 # Logging
 
 LOGGING = {

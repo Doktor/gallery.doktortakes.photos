@@ -2,7 +2,6 @@
 .idea/
 
 # Sensitive data
-cache/
 logs/
 *.bak
 *.db

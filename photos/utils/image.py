@@ -1,6 +1,6 @@
 from django.core.files import File
 
-from photos.models import Watermark
+from photos.models import Photo, Thumbnail, Watermark
 from photos.settings_photos import WATERMARK_OFFSET_PERCENT
 from photos.utils.models import format_file_size
 
@@ -14,21 +14,14 @@ def int_all(*nums: float) -> List[int]:
 
 
 def create_thumbnail(
-        pk: int,
-        file: Optional[File],
+        photo: Photo,
+        file: File,
         width: int,
         height: int,
         name: str,
         quality: int = 90,
         add_watermark: bool = False,
         watermark_color: str = None) -> "Thumbnail":
-
-    from photos.models import Photo, Thumbnail
-
-    photo = Photo.objects.get(pk=pk)
-
-    if file is None:
-        file = photo.get_original()
 
     image = PIL.Image.open(file)
 

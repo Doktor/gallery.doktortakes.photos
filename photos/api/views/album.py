@@ -1,4 +1,3 @@
-from django.core.cache import cache
 from django.core.files import File
 from django.db import transaction
 from django.http import Http404
@@ -11,6 +10,7 @@ from rest_framework.views import APIView
 from photos.api.serializers import (
     AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer, PhotoSerializer)
 from photos.models import Album, Photo
+from photos.tasks import create_thumbnails
 from photos.utils.metadata import parse_exif_data, parse_xmp_data
 from photos.utils.models import format_file_size, generate_md5_hash, CHUNK_SIZE
 from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
@@ -145,14 +145,12 @@ class AlbumPhotoList(APIView):
 
         album = self.get_album(request, path)
 
-        # Cache the image for generating thumbnails
-        data = BytesIO()
-        data.name = file.name
+        # Make a copy of the file to generate thumbnails later
+        copy = BytesIO()
+        copy.name = file.name
 
         for chunk in file.chunks(chunk_size=CHUNK_SIZE):
-            data.write(chunk)
-
-        cache.set(md5, data, 60 * 60 * 24)  # 24 hours
+            copy.write(chunk)
 
         # Parse metadata
         photo = Photo()
@@ -184,6 +182,11 @@ class AlbumPhotoList(APIView):
                 original.delete()
 
             photo.save()
+
+            # It looks like the storage backend closes the file after saving it,
+            # so we need to operate on a copy of the file here: the file can't be
+            # reopened because it's an in-memory file.
+            create_thumbnails(photo, File(copy))
 
         serializer = PhotoSerializer(photo)
         return Response(serializer.data, status=Status.OK)

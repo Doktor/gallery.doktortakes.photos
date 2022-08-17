@@ -3,7 +3,6 @@
 
 # Unnecessary data
 .git/
-cache/
 docs/
 logs/
 

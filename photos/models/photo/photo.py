@@ -1,4 +1,3 @@
-from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
@@ -143,12 +142,7 @@ class Photo(models.Model):
         return get_exif(self)
 
     def get_original(self) -> File:
-        file = cache.get(self.md5)
-
-        if file is None:
-            file = self.original.file
-
-        return file
+        return self.original.file
 
     @property
     def path(self) -> str:
@@ -201,18 +195,6 @@ class Photo(models.Model):
     class Meta:
         get_latest_by = 'taken'
         ordering = ('taken', 'uploaded')
-
-
-@receiver(post_save, sender=Photo,
-          dispatch_uid='photos.models.receiver_create_thumbnails')
-def receiver_create_thumbnails(sender, instance: Photo, created: bool, **kwargs) -> None:
-    if not created:
-        return
-
-    photo = instance
-
-    from photos.tasks import create_thumbnails
-    create_thumbnails(photo.pk)
 
 
 @receiver(post_delete, sender=Photo,
