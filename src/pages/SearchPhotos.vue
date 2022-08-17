@@ -1,19 +1,19 @@
 <template>
   <section>
     <h2>Search all photos</h2>
-    <SearchPhotoForm :results="results" @setResults="setResults" />
-    <SearchResults :results="results" @setPage="setPage" />
+    <PhotoSearchForm :results="results" @setResults="setResults" />
+    <PhotoSearchResults :results="results" @setPage="setPage" />
   </section>
 </template>
 
 <script>
-import SearchPhotoForm from "@/components/search/SearchPhotoForm.vue";
-import SearchResults from "@/components/search/SearchResults";
+import PhotoSearchForm from "@/components/search/PhotoSearchForm";
+import PhotoSearchResults from "@/components/search/PhotoSearchResults";
 
 export default {
   components: {
-    SearchPhotoForm,
-    SearchResults,
+    PhotoSearchForm,
+    PhotoSearchResults,
   },
 
   data() {

@@ -2,7 +2,12 @@
   <section>
     <h2>{{ results.count }} results</h2>
 
-    <PaginationSearch :results="results" @setPage="setPage" />
+    <Pagination
+      :itemsPerPage="results.itemsPerPage"
+      :page="results.page"
+      :pages="pages"
+      @setPage="setPage"
+    />
 
     <section class="photos">
       <PhotoSearchResult
@@ -12,17 +17,22 @@
       />
     </section>
 
-    <PaginationSearch :results="results" @setPage="setPage" />
+    <Pagination
+      :itemsPerPage="results.itemsPerPage"
+      :page="results.page"
+      :pages="pages"
+      @setPage="setPage"
+    />
   </section>
 </template>
 
 <script>
-import PaginationSearch from "@/components/search/PaginationSearch";
 import PhotoSearchResult from "./PhotoSearchResult.vue";
+import Pagination from "@/components/pagination/Pagination";
 
 export default {
   components: {
-    PaginationSearch,
+    Pagination,
     PhotoSearchResult,
   },
 
@@ -30,6 +40,12 @@ export default {
     results: {
       type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    pages() {
+      return Math.ceil(this.results.count / this.results.itemsPerPage);
     },
   },
 
