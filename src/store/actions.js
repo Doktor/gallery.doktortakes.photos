@@ -1,4 +1,3 @@
-import { router } from "@/router/main.js";
 import { getCsrfToken, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
 
@@ -28,12 +27,6 @@ export const actions = {
 
     let { content } = await sendRequest(endpoints.currentUser, options);
     context.commit("setUser", content);
-  },
-
-  async searchPhotos(context, queryString) {
-    let { content } = await sendRequest(endpoints.searchPhotos + queryString);
-    context.commit("setSearchResults", content.photos);
-    context.commit("setSearchResultsCount", content.count);
   },
 
   async getRecent(context) {

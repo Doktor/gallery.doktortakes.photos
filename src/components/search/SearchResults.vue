@@ -1,24 +1,23 @@
 <template>
   <section>
-    <h2>{{ searchResults.count }} results</h2>
+    <h2>{{ results.count }} results</h2>
 
-    <PaginationSearch />
+    <PaginationSearch :results="results" @setPage="setPage" />
 
     <section class="photos">
       <PhotoSearchResult
-        v-for="(photo, index) in searchResults.photos"
+        v-for="(photo, index) in results.photos"
         :key="index"
         :photo="photo"
       />
     </section>
 
-    <PaginationSearch />
+    <PaginationSearch :results="results" @setPage="setPage" />
   </section>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import PaginationSearch from "@/components/pagination/PaginationSearch";
+import PaginationSearch from "@/components/search/PaginationSearch";
 import PhotoSearchResult from "./PhotoSearchResult.vue";
 
 export default {
@@ -27,13 +26,16 @@ export default {
     PhotoSearchResult,
   },
 
-  computed: {
-    ...mapState(["searchResults"]),
+  props: {
+    results: {
+      type: Object,
+      required: true,
+    },
+  },
 
-    pages() {
-      return Math.ceil(
-        this.searchResults.count / this.searchResults.itemsPerPage
-      );
+  methods: {
+    setPage(page) {
+      this.$emit("setPage", page);
     },
   },
 };

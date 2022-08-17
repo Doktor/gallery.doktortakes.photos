@@ -44,28 +44,6 @@ export const mutations = {
     state.user = user;
   },
 
-  setSearchResults(state, photos) {
-    state.searchResults.photos = photos;
-  },
-
-  clearSearchResults(state) {
-    state.searchResults.photos = Array(state.searchResults.itemsPerPage).fill(
-      {}
-    );
-  },
-
-  setSearchResultsItemsPerPage(state, itemsPerPage) {
-    state.searchResults.itemsPerPage = itemsPerPage;
-  },
-
-  setSearchResultsPage(state, page) {
-    state.searchResults.page = page;
-  },
-
-  setSearchResultsCount(state, count) {
-    state.searchResults.count = count;
-  },
-
   setLoading(state, loading) {
     loading ? (state.loading += 1) : (state.loading -= 1);
   },

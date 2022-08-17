@@ -19,14 +19,6 @@ export const store = new Vuex.Store({
     notificationId: 0,
 
     loading: 0,
-
-    // Photo search
-    searchResults: {
-      page: 1,
-      itemsPerPage: 10,
-      photos: [],
-      count: 0,
-    },
   },
 
   actions,

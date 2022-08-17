@@ -208,19 +208,14 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { getQueryString } from "@/utils";
+import { getQueryString, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export default {
-  computed: {
-    ...mapState(["searchResults"]),
-
-    allRatings() {
-      return [0, 1, 2, 3, 4, 5];
-    },
-
-    countChoices() {
-      return [10, 30, 60, 120];
+  props: {
+    results: {
+      type: Object,
+      required: true,
     },
   },
 
@@ -228,7 +223,7 @@ export default {
     return {
       order: "taken",
       direction: "new",
-      itemsPerPage: 10,
+      itemsPerPage: 24,
 
       ratings: [],
 
@@ -244,28 +239,47 @@ export default {
     };
   },
 
+  computed: {
+    allRatings() {
+      return [0, 1, 2, 3, 4, 5];
+    },
+
+    countChoices() {
+      return [24, 48, 96];
+    },
+  },
+
   methods: {
-    search(resetPage = true) {
+    async search(resetPage = true) {
+      let results = { ...this.results };
+
       if (resetPage) {
-        this.$store.commit("setSearchResultsPage", 1);
-        this.$store.commit("setSearchResultsItemsPerPage", this.itemsPerPage);
+        results.page = 1;
+        results.itemsPerPage = this.itemsPerPage;
       }
 
-      this.$store.commit("clearSearchResults");
-      this.$store.dispatch(
-        "searchPhotos",
-        getQueryString({
-          ...this.$data,
+      results.photos = Array(this.itemsPerPage).fill({ isLoaded: false });
+      this.$emit("setResults", results);
 
-          page: this.searchResults.page,
-          itemsPerPage: this.itemsPerPage,
-        })
-      );
+      let query = getQueryString({
+        ...this.$data,
+        page: this.results.page,
+        itemsPerPage: this.itemsPerPage,
+      });
+
+      let { content } = await sendRequest(endpoints.searchPhotos + query);
+
+      results.photos = content.photos.map((photo) => {
+        return { ...photo, isLoaded: true };
+      });
+      results.count = content.count;
+
+      this.$emit("setResults", results);
     },
   },
 
   watch: {
-    "searchResults.page": function () {
+    "results.page": function () {
       this.search(false);
     },
   },
