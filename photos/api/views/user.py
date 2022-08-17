@@ -106,4 +106,4 @@ def change_password(request: Request) -> Response:
     user.save()
     update_session_auth_hash(request, user)
 
-    return Response({"message": "Your password was changed successfully."})
+    return Response(status=HTTPStatus.OK)

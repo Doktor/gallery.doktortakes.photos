@@ -30,38 +30,6 @@ export const actions = {
     context.commit("setUser", content);
   },
 
-  async changePassword(context, data) {
-    let { ok, content } = await sendRequest(endpoints.changePassword, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCsrfToken(),
-      },
-    });
-
-    if (ok) {
-      context.commit("addNotification", content.message);
-
-      setTimeout(
-        () =>
-          router.push({
-            name: "user",
-            params: {
-              slug: context.state.user.name,
-            },
-          }),
-        1000
-      );
-
-      return;
-    }
-
-    content.errors.forEach((error) => {
-      context.commit("addNotification", error);
-    });
-  },
-
   async searchPhotos(context, queryString) {
     let { content } = await sendRequest(endpoints.searchPhotos + queryString);
     context.commit("setSearchResults", content.photos);

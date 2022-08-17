@@ -1,5 +1,5 @@
 <template>
-  <form class="form--1-column form--small">
+  <form class="password-form form--1-column form--small">
     <fieldset>
       <CustomInput
         label="Current"
@@ -51,6 +51,7 @@
 
 <script>
 import CustomInput from "@/components/form/CustomInput";
+import { UserService } from "@/services/UserService";
 
 const errors = {
   empty: "This field can't be empty.",
@@ -67,23 +68,14 @@ export default {
   data() {
     return {
       current: {
-        edited: false,
-        maxTyped: 0,
-
         errors: [],
         value: "",
       },
       password1: {
-        edited: false,
-        maxTyped: 0,
-
         errors: [],
         value: "",
       },
       password2: {
-        edited: false,
-        maxTyped: 0,
-
         errors: [],
         value: "",
       },
@@ -91,19 +83,19 @@ export default {
   },
 
   methods: {
-    validate(force = false) {
+    validate() {
       this.current.errors = [];
       this.password1.errors = [];
       this.password2.errors = [];
 
       // Empty fields
-      if ((force || this.current.edited) && !this.current.value) {
+      if (!this.current.value) {
         this.current.errors.push(errors.empty);
       }
-      if ((force || this.password1.edited) && !this.password1.value) {
+      if (!this.password1.value) {
         this.password1.errors.push(errors.empty);
       }
-      if ((force || this.password2.edited) && !this.password2.value) {
+      if (!this.password2.value) {
         this.password2.errors.push(errors.empty);
       }
 
@@ -114,10 +106,7 @@ export default {
         }
 
         // New password is too short
-        if (
-          this.password1.value.length < 8 &&
-          (force || this.password1.maxTyped >= 8)
-        ) {
+        if (this.password1.value.length < 8) {
           this.password1.errors.push(errors.tooShort);
         }
 
@@ -141,27 +130,44 @@ export default {
       let field = this[fieldName];
       field.edited = true;
       field.maxLength = Math.max(field.maxTyped, field.value.length);
-
-      this.validate();
     },
 
-    submit() {
-      if (this.validate(true)) {
-        this.$store.dispatch("changePassword", {
-          current: this.current.value,
-          password1: this.password1.value,
-          password2: this.password2.value,
-        });
+    async submit() {
+      if (!this.validate()) {
+        return;
       }
+
+      let { ok, content } = await UserService.changePassword({
+        current: this.current.value,
+        password1: this.password1.value,
+        password2: this.password2.value,
+      });
+
+      if (!ok) {
+        for (let error of content.errors) {
+          this.$store.commit("addNotification", {
+            message: error,
+            status: "error",
+          });
+        }
+
+        return;
+      }
+
+      this.$store.commit("addNotification", {
+        message: "Your password was changed successfully.",
+        status: "success",
+      });
+
+      this.$emit("success");
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-form {
-  width: 50%;
-  margin: 0 auto;
+.password-form {
+  width: 100%;
 }
 
 .form-buttons {
