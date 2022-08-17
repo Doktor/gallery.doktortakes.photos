@@ -48,7 +48,9 @@ export default {
 
   computed: {
     statusOptions() {
-      return ["default", "success", "warning", "error"];
+      return ["default", "success", "warning", "error"].map((status) => {
+        return { value: status, display: status };
+      });
     },
   },
 
