@@ -31,7 +31,13 @@
           ></i>
         </dt>
         <dd>
-          <a :href="image.url" title="Open in new tab">Open in new tab</a>
+          <a
+            :href="image.url"
+            title="Open in new tab"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            >Open in new tab</a
+          >
         </dd>
       </div>
 
