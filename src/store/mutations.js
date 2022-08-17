@@ -1,14 +1,7 @@
-import Vue from "vue";
-import { updateField } from "vuex-map-fields";
-import { router } from "@/router/main.js";
-
 export const titleTemplate = "{0} | Doktor Takes Photos";
 export const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
 
 export const mutations = {
-  // vuex-map-fields
-  updateField,
-
   setApiTokenFromLocalStorage(state) {
     state.token = localStorage.getItem("token");
   },
@@ -75,19 +68,5 @@ export const mutations = {
 
   setLoading(state, loading) {
     loading ? (state.loading += 1) : (state.loading -= 1);
-  },
-
-  setAlbumField(state, data) {
-    Vue.set(state.album, data.key, data.value);
-  },
-
-  setPhotos(state, photos) {
-    for (let [index, photo] of photos.entries()) {
-      photo.index = index;
-      photo.page = Math.floor(index / state.photosPerPage) + 1;
-      photo.loaded = false;
-    }
-
-    state.photos = photos;
   },
 };

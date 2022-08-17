@@ -20,12 +20,6 @@ export const store = new Vuex.Store({
 
     loading: 0,
 
-    // Album
-    album: {},
-    photos: [],
-    count: 0,
-    selected: [],
-
     // Photo search
     searchResults: {
       page: 1,
@@ -33,12 +27,6 @@ export const store = new Vuex.Store({
       photos: [],
       count: 0,
     },
-
-    page: 1,
-    loaded: [],
-
-    // Settings
-    photosPerPage: 30,
   },
 
   actions,
