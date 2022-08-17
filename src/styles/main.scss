@@ -170,42 +170,6 @@ p {
   font-style: italic;
 }
 
-/* Button: "view more" */
-
-.view-more {
-  margin: 1rem (-$itemSpacing);
-}
-
-.view-more-wrapper {
-  padding: $itemSpacing;
-
-  @media (min-width: 901px) {
-    width: math.div(100%, 3);
-    margin-left: math.div(100%, 3);
-  }
-}
-
-.view-more-link {
-  display: block;
-
-  @include headings-font();
-  line-height: 1;
-
-  border: 1px solid $text-blue;
-  padding: 1rem;
-
-  &:hover {
-    background-color: $text-blue;
-    color: $text-color;
-    text-decoration: none;
-  }
-
-  &,
-  &:hover {
-    transition: 0.2s background-color, 0.2s color;
-  }
-}
-
 /* Forms */
 
 $form-border-radius: 4px;
@@ -668,11 +632,6 @@ ul.edit-links-center {
   li {
     display: inline-block;
   }
-}
-
-/* Changelog */
-.commit-hash {
-  font-family: Consolas, monospace;
 }
 
 /* Photo wall */
