@@ -36,7 +36,6 @@ COPY \
 COPY ./src/ /app/src/
 
 RUN npm ci
-RUN npx webpack --config webpack.prod.js
 
 
 FROM base as staging
