@@ -6,6 +6,7 @@ import { router } from "./router/main.js";
 import { store } from "./store/index.js";
 
 import "./styles/main.scss";
+import "./styles/forms.scss";
 
 Vue.config.productionTip = process.env.NODE_ENV !== "production";
 Vue.use(VueRouter);

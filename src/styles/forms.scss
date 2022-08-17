@@ -1,0 +1,285 @@
+@use "sass:math";
+@import "variables";
+
+$form-border-radius: 4px;
+$form-font-size: 1.3rem;
+
+// Margin above/below input elements
+$inputMargin: 5px;
+
+form {
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+  padding: 1rem;
+  border-radius: $form-border-radius;
+
+  background-color: $background-color-2;
+}
+
+.form--1-column {
+  flex-direction: column;
+  align-items: center;
+}
+
+.form--2-columns {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+
+  .form-column {
+    width: 100%;
+    margin: 0;
+  }
+
+  fieldset {
+    padding: 1rem;
+    border: 1px solid $background-color-3;
+    border-radius: $form-border-radius;
+  }
+
+  @media (min-width: 901px) {
+    .form-column {
+      width: 50%;
+    }
+
+    .form-column-1 {
+      padding-right: 0.5rem;
+    }
+
+    .form-column-2 {
+      padding-left: 0.5rem;
+    }
+  }
+}
+
+fieldset {
+  display: block;
+
+  width: 100%;
+
+  padding: 0;
+  border: 0;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+legend {
+  padding: 0 0.5rem;
+  margin-left: -0.5rem;
+  margin-bottom: 0.5rem;
+
+  @include headings-font();
+  text-transform: lowercase;
+  text-align: center;
+  line-height: 1;
+  font-size: 150%;
+  font-weight: 700;
+}
+
+textarea {
+  display: block;
+}
+
+input,
+textarea {
+  background-color: $background-color-3;
+  border: 1px solid $background-color-4;
+  border-radius: $form-border-radius;
+  color: $text-color;
+
+  &:active,
+  &:focus {
+    border: 1px solid $text-blue;
+  }
+}
+
+input:disabled {
+  background-color: $background-color;
+  border-color: $background-color;
+
+  cursor: not-allowed;
+}
+
+input[type="date"],
+input[type="number"],
+input[type="password"],
+input[type="text"],
+select,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+
+  font-size: $form-font-size;
+  line-height: 1;
+}
+
+label {
+  display: block;
+
+  width: 100%;
+  margin-bottom: 0.5rem;
+
+  font-size: $form-font-size;
+  line-height: 1;
+  font-weight: bold;
+  text-align: left;
+}
+
+.field-wrapper {
+  display: flex;
+  justify-content: start;
+}
+
+.form-control-options {
+  display: flex;
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    display: none;
+    visibility: hidden;
+
+    // Change the appearance of the label to a button
+    & + label {
+      flex-basis: 100%;
+
+      padding: 12px 0;
+      margin: 0;
+
+      background: $background-color-3;
+      border: 1px solid $background-color-4;
+      color: $text-color;
+
+      font-weight: normal;
+      text-align: center;
+
+      // First choice
+      &:first-of-type {
+        border-radius: $form-border-radius 0 0 $form-border-radius;
+      }
+
+      // Middle choices
+      &:not(:last-child) {
+        border-right: 0;
+      }
+
+      // Last choice
+      &:last-of-type {
+        border-radius: 0 $form-border-radius $form-border-radius 0;
+      }
+    }
+
+    &:checked + label {
+      background: $text-blue;
+      border-color: $text-blue;
+      color: white;
+    }
+  }
+}
+
+.form--small {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-control {
+  margin-bottom: 1.2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-link-action {
+  text-align: right;
+  margin-top: 0.2rem;
+}
+
+.form-note {
+  width: 100%;
+  margin-top: $inputMargin;
+
+  font-size: 80%;
+}
+
+.form-error {
+  margin-top: 5px;
+
+  color: $text-error;
+  font-size: 80%;
+}
+
+.field--invalid {
+  border: 1px solid $text-error;
+}
+
+// Form: buttons
+
+.form-buttons {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+}
+
+.form-button {
+  display: block;
+
+  width: 110px;
+  padding: 12px 0;
+  border: 0;
+  border-radius: $form-border-radius;
+
+  background-color: $text-color;
+  color: $background-color;
+
+  text-align: center;
+  line-height: 1;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($text-color, 15%);
+  }
+
+  &,
+  &:hover {
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+
+  &-primary {
+    background-color: $text-blue;
+    color: white;
+
+    &:hover {
+      background-color: lighten($text-blue, 15%);
+    }
+  }
+
+  &-secondary {
+    //
+  }
+}
+
+// Form: range inputs
+
+$separator-width: 5%;
+
+.form-control-range-input {
+  display: flex;
+
+  input,
+  select,
+  textarea {
+    width: math.div(100% - $separator-width, 2);
+  }
+}
+
+.form-control-range-input-separator {
+  width: $separator-width;
+
+  text-align: center;
+}
