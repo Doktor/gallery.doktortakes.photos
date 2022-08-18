@@ -80,6 +80,10 @@ export function getCsrfToken() {
 }
 
 export function getQueryString(params) {
+  if (Object.keys(params).length === 0) {
+    return "";
+  }
+
   let esc = encodeURIComponent;
 
   let query = Object.entries(params)

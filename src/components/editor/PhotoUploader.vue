@@ -2,7 +2,9 @@
   <section>
     <h2>Upload photos</h2>
 
-    <div id="upload">
+    <CustomInput label="Add watermark" type="checkbox" v-model="addWatermark" />
+
+    <div>
       <form
         id="dropzone"
         class="dropzone"
@@ -11,6 +13,7 @@
         :action="action"
       >
         <input type="hidden" name="csrfmiddlewaretoken" :value="csrfToken" />
+
         <div class="fallback">
           <input type="file" name="file" />
           <input type="submit" value="Upload" />
@@ -21,15 +24,31 @@
 </template>
 
 <script>
-import { getCsrfToken } from "@/utils";
+import { getCsrfToken, getQueryString } from "@/utils";
 import { endpoints } from "@/constants";
+import CustomInput from "@/components/form/CustomInput";
 
 export default {
+  components: { CustomInput },
+
   data() {
     return {
-      action: endpoints.albumPhotoList.replace(":path", this.path),
+      addWatermark: true,
       csrfToken: getCsrfToken(),
     };
+  },
+
+  computed: {
+    action() {
+      let base = endpoints.albumPhotoList.replace(":path", this.path);
+      let options = {};
+
+      if (this.addWatermark) {
+        options.addWatermark = true;
+      }
+
+      return base + getQueryString(options);
+    },
   },
 
   mounted() {

@@ -168,6 +168,10 @@ class AlbumPhotoList(APIView):
 
         photo.file_size = format_file_size(file.size)
 
+        # Process upload settings
+        if not request.GET.get('add_watermark', True):
+            photo.watermark = None
+
         # Save
         file.seek(0)
         photo.original.save(file.name, File(file), save=False)
