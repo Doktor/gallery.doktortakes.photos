@@ -1,10 +1,17 @@
-from django.urls import path, register_converter
+from django.urls import include, path, register_converter
 
 from photos.api import views
+from photos.api.views import manage
 from photos.converters import MD5HashConverter
 
 register_converter(MD5HashConverter, 'md5')
 
+
+manage_patterns = [
+    path('albums/<path:path>/photos/', manage.ManageAlbumPhotoList.as_view(), name='api_manage_album_photos'),
+    path('albums/<path:path>/', manage.ManageAlbumDetail.as_view(), name='api_manage_album'),
+    path('albums/', manage.ManageAlbumList.as_view(), name='api_manage_albums'),
+]
 
 api_patterns = [
     path('photos/search/', views.search_photos, name='search_photos'),
@@ -30,4 +37,6 @@ api_patterns = [
 
     path('csrf/', views.get_csrf_token, name='get_csrf_token'),
     path('authenticate/', views.get_api_token, name='get_api_token'),
+
+    path('manage/', include(manage_patterns)),
 ]

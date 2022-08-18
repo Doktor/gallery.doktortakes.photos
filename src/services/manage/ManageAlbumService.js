@@ -7,7 +7,7 @@ export const ManageAlbumService = {
   async createAlbum(album) {
     let data = parseAlbumForAPI(album);
 
-    let { ok, content } = await sendRequest(endpoints.albumList, {
+    let { ok, content } = await sendRequest(endpoints.manageAlbumList, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -55,7 +55,7 @@ export const ManageAlbumService = {
     let data = parseAlbumForAPI(album);
 
     let { ok, status, content } = await sendRequest(
-      endpoints.albumDetail.replace(":path", album.path),
+      endpoints.manageAlbumDetail.replace(":path", album.path),
       {
         method: "PUT",
         body: JSON.stringify(data),
@@ -94,7 +94,7 @@ export const ManageAlbumService = {
 
   async deleteAlbum(path) {
     let { ok } = await sendRequest(
-      endpoints.albumDetail.replace(":path", path),
+      endpoints.manageAlbumDetail.replace(":path", path),
       {
         method: "DELETE",
         headers: {
