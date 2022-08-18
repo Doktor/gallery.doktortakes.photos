@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import { PhotoService } from "@/services/PhotoService";
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
+import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 
 const watermarkColors = [
   {
@@ -122,7 +122,10 @@ export default {
         return;
       }
 
-      let { ok } = await PhotoService.createThumbnail(this.photo.md5, data);
+      let { ok } = await ManagePhotoService.createThumbnail(
+        this.photo.md5,
+        data
+      );
 
       if (!ok) {
         this.$store.commit("addNotification", {

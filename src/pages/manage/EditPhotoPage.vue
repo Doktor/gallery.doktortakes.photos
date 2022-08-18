@@ -64,6 +64,7 @@ import PhotoMetadataTable from "@/components/editor/PhotoMetadataTable";
 import PhotoExifTable from "@/components/editor/PhotoExifTable";
 import PhotoThumbnailsTable from "@/components/editor/PhotoThumbnailsTable";
 import ThumbnailForm from "@/components/editor/ThumbnailForm";
+import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 
 export default {
   components: {
@@ -141,7 +142,9 @@ export default {
     },
 
     async loadThumbnails() {
-      let { ok, content } = await PhotoService.getThumbnails(this.routeMd5);
+      let { ok, content } = await ManagePhotoService.getThumbnails(
+        this.routeMd5
+      );
 
       if (!ok) {
         this.$store.commit("addNotification", {

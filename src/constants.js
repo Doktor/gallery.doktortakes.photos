@@ -10,8 +10,8 @@ export const endpoints = {
   photoDetail: "/api/photos/:md5/",
 
   managePhotoDetail: "/api/manage/photos/:md5/",
+  managePhotoThumbnailList: "/api/manage/photos/:md5/thumbnails/",
 
-  thumbnailList: "/api/photos/:md5/thumbnails/",
   tagList: "/api/tags/",
   searchPhotos: "/api/photos/search/",
   currentUser: "/api/me/",

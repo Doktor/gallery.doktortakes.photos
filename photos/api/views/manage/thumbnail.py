@@ -2,6 +2,7 @@ from http import HTTPStatus as Status
 from typing import Optional
 
 from rest_framework import exceptions
+from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,7 +24,9 @@ def get_photo(request, md5) -> Optional[Photo]:
         return None
 
 
-class ThumbnailList(APIView):
+class ManageThumbnailList(APIView):
+    permission_classes = [IsAdminUser]
+
     @staticmethod
     def get(request: Request, md5: str) -> Response:
         photo = get_photo(request, md5)
