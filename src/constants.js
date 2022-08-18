@@ -17,12 +17,13 @@ export const endpoints = {
   currentUser: "/api/me/",
   changePassword: "/api/me/password/",
   recent: "/api/recent/",
-  userList: "/api/users/",
-  groupList: "/api/groups/",
   csrf: "/api/csrf/",
   authenticate: "/api/authenticate/",
   heroPhotoList: "/api/heroPhotos/",
   randomTagline: "/api/taglines/random/",
+
+  userList: "/api/manage/users/",
+  groupList: "/api/manage/groups/",
 };
 
 export const production = process.env.NODE_ENV === "production";

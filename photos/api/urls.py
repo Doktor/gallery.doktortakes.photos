@@ -13,6 +13,9 @@ manage_patterns = [
     path('albums/', manage.ManageAlbumList.as_view(), name='api_manage_albums'),
 
     path('photos/<md5:md5>/', manage.ManagePhotoDetail.as_view(), name='api_manage_photo'),
+
+    path('users/', manage.UserList.as_view(), name='api_users'),
+    path('groups/', manage.GroupList.as_view(), name='api_groups'),
 ]
 
 api_patterns = [
@@ -26,9 +29,6 @@ api_patterns = [
     path('albums/', views.AlbumList.as_view(), name='api_albums'),
 
     path('tags/', views.TagList.as_view(), name='api_tags'),
-
-    path('users/', views.UserList.as_view(), name='api_users'),
-    path('groups/', views.GroupList.as_view(), name='api_groups'),
 
     path('me/', views.get_current_user, name='api_current_user'),
     path('me/password/', views.change_password, name='api_change_password'),

@@ -7,12 +7,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import exceptions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from photos.api.serializers import LogInSerializer, UserSerializer
+from photos.api.serializers import LogInSerializer
 
 User = get_user_model()
 
@@ -38,17 +36,6 @@ def get_api_token(request: Request) -> Response:
     token, _ = Token.objects.get_or_create(user=user)
 
     return Response({"message": "Logged in successfully.", "token": token.key}, status=HTTPStatus.OK)
-
-
-class UserList(APIView):
-    permission_classes = [IsAdminUser]
-
-    @staticmethod
-    def get(request: Request) -> Response:
-        users = User.objects.all().prefetch_related('groups')
-        serializer = UserSerializer(users, many=True)
-
-        return Response({'users': serializer.data})
 
 
 @api_view()
