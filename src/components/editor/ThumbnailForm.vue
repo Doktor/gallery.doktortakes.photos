@@ -125,11 +125,17 @@ export default {
       let { ok } = await PhotoService.createThumbnail(this.photo.md5, data);
 
       if (!ok) {
-        this.$store.commit("addNotification", "An unknown error occurred.");
+        this.$store.commit("addNotification", {
+          message: "An unknown error occurred.",
+          status: "error",
+        });
         return;
       }
 
-      this.$store.commit("addNotification", "Successfully created thumbnail.");
+      this.$store.commit("addNotification", {
+        message: "Successfully created thumbnail.",
+        status: "success",
+      });
       this.$emit("update");
     },
   },

@@ -78,7 +78,10 @@ export default {
       });
 
       if (!ok) {
-        this.$store.commit("addNotification", "Album not found.");
+        this.$store.commit("addNotification", {
+          message: "Album not found.",
+          status: "error",
+        });
         await this.$router.push({ name: "albums" });
 
         return;

@@ -33,7 +33,10 @@ export default {
       if (this.name === this.album.name) {
         this.$emit("delete");
       } else {
-        this.$store.commit("addNotification", "Incorrect album name.");
+        this.$store.commit("addNotification", {
+          message: "Incorrect album name.",
+          status: "error",
+        });
       }
     },
   },

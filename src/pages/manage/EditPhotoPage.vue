@@ -114,7 +114,10 @@ export default {
       });
 
       if (!ok) {
-        this.$store.commit("addNotification", "Album not found.");
+        this.$store.commit("addNotification", {
+          message: "Album not found.",
+          status: "error",
+        });
         await this.$router.push({ name: "albums" });
         return;
       }
@@ -126,7 +129,10 @@ export default {
       let { ok, content } = await PhotoService.get(this.routeMd5);
 
       if (!ok) {
-        this.$store.commit("addNotification", "Photo not found.");
+        this.$store.commit("addNotification", {
+          message: "Photo not found.",
+          status: "error",
+        });
         await this.$router.push({ name: "albums" });
         return;
       }
@@ -138,7 +144,10 @@ export default {
       let { ok, content } = await PhotoService.getThumbnails(this.routeMd5);
 
       if (!ok) {
-        this.$store.commit("addNotification", "Photo not found.");
+        this.$store.commit("addNotification", {
+          message: "Photo not found.",
+          status: "error",
+        });
         await this.$router.push({ name: "albums" });
         return;
       }

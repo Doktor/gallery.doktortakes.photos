@@ -92,14 +92,17 @@ export default {
       let currentHash = this.album.cover?.md5;
 
       if (currentHash !== null && selectedHash === currentHash) {
-        this.$store.commit(
-          "addNotification",
-          "That photo is already set as the cover photo."
-        );
+        this.$store.commit("addNotification", {
+          message: "That photo is already set as the cover photo.",
+          status: "error",
+        });
         return;
       }
 
-      this.$store.commit("addNotification", "Setting cover photo.");
+      let id = this.$store.commit("addNotification", {
+        message: "Setting cover photo.",
+        status: "default",
+      });
 
       let { ok } = await sendRequest(
         endpoints.albumDetail.replace(":path", this.album.path),
@@ -114,15 +117,18 @@ export default {
       );
 
       if (!ok) {
-        this.$store.commit(
-          "addNotification",
-          "An error occurred when setting the cover photo."
-        );
+        this.$store.commit("addNotification", {
+          message: "An error occurred when setting the cover photo.",
+          status: "error",
+        });
         return;
       }
 
-      this.$store.commit("removeNotification", "Setting cover photo.");
-      this.$store.commit("addNotification", "Cover photo set successfully.");
+      this.$store.commit("removeNotification", id);
+      this.$store.commit("addNotification", {
+        message: "Cover photo set successfully.",
+        status: "success",
+      });
       this.$emit("update");
     },
 

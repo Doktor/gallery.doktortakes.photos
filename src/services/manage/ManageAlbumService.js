@@ -19,7 +19,10 @@ export const ManageAlbumService = {
     if (!ok) {
       for (let [field, errors] of Object.entries(content)) {
         for (let error of errors) {
-          store.commit("addNotification", "{0}: {1}".format(field, error));
+          store.commit("addNotification", {
+            message: "{0}: {1}".format(field, error),
+            status: "error",
+          });
         }
       }
 
@@ -29,15 +32,16 @@ export const ManageAlbumService = {
     let path = content.path;
 
     if (!path) {
-      store.commit(
-        "addNotification",
-        "An unknown API error occurred when creating the album."
-      );
+      store.commit("addNotification", {
+        message: "An unknown API error occurred when creating the album.",
+        status: "error",
+      });
       return;
     }
 
     store.commit("addTimedNotification", {
       message: "Album created successfully. Redirecting...",
+      status: "success",
       hideAfter: 2500,
     });
 
@@ -64,19 +68,28 @@ export const ManageAlbumService = {
 
     if (!ok) {
       if (status === 403) {
-        store.commit("addNotification", content.detail);
+        store.commit("addNotification", {
+          message: content.detail,
+          status: "error",
+        });
         return;
       }
 
       for (let [field, errors] of Object.entries(content)) {
         for (let error of errors) {
-          store.commit("addNotification", "{0}: {1}".format(field, error));
+          store.commit("addNotification", {
+            message: "{0}: {1}".format(field, error),
+            status: "error",
+          });
         }
       }
       return;
     }
 
-    store.commit("addNotification", "Album saved successfully.");
+    store.commit("addNotification", {
+      message: "Album saved successfully.",
+      status: "success",
+    });
   },
 
   async deleteAlbum(path) {
@@ -92,10 +105,10 @@ export const ManageAlbumService = {
     );
 
     if (ok) {
-      store.commit(
-        "addNotification",
-        "Album deleted successfully. Redirecting..."
-      );
+      store.commit("addNotification", {
+        message: "Album deleted successfully. Redirecting...",
+        status: "success",
+      });
       setTimeout(() => router.push({ name: "manage" }), 1500);
     }
   },
