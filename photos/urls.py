@@ -42,7 +42,6 @@ urlpatterns = [
     re_path(r'^debug/', views.index, name='debug'),
     path('groups/', views.groups_entry_point, name='groups'),
     re_path(r'^manage/', views.editor_entry_point, name='editor'),
-    path('recent/', views.view_recent, name='recent'),
     path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),
     re_path(r'^users/', views.users_entry_point, name='users'),

@@ -17,7 +17,6 @@ import GroupListPage from "@/pages/manage/GroupListPage";
 
 import AboutPage from "@/pages/AboutPage";
 import CopyrightPage from "@/pages/CopyrightPage";
-import RecentPage from "@/pages/RecentPage";
 
 import SearchPhotosPage from "@/pages/SearchPhotosPage";
 
@@ -144,15 +143,6 @@ const browserRoutes = [
     component: CopyrightPage,
     meta: {
       title: "Copyright",
-    },
-  },
-
-  {
-    path: "/recent/",
-    name: "recent",
-    component: RecentPage,
-    meta: {
-      title: "Recent changes",
     },
   },
 

@@ -29,13 +29,6 @@ export const actions = {
     context.commit("setUser", content);
   },
 
-  async getRecent(context) {
-    context.commit("setLoading", true);
-
-    let { content } = await sendRequest(endpoints.recent);
-    context.commit("setLoading", false);
-  },
-
   async getHeroPhotos(context) {
     let { content } = await sendRequest(endpoints.heroPhotoList);
     return content;

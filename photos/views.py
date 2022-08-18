@@ -433,21 +433,3 @@ def users_entry_point(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request, 'base.html', context)
-
-
-# Other
-
-
-def view_recent(request: HttpRequest) -> HttpResponse:
-    context = {
-        'title': 'Recent',
-        'meta': meta_to_string([
-            *meta_open_graph_common,
-            MetaProperty('og:title', metadata['TITLE']),
-            MetaProperty('og:url', get_canonical_url(reverse('recent'))),
-
-            *meta_open_graph_article(),
-        ]),
-    }
-
-    return render(request, 'base.html', context)

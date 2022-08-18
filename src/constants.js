@@ -16,7 +16,6 @@ export const endpoints = {
   searchPhotos: "/api/photos/search/",
   currentUser: "/api/me/",
   changePassword: "/api/me/password/",
-  recent: "/api/recent/",
   csrf: "/api/csrf/",
   authenticate: "/api/authenticate/",
   heroPhotoList: "/api/heroPhotos/",

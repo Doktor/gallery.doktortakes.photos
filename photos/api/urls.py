@@ -36,8 +36,6 @@ api_patterns = [
     path('heroPhotos/', views.get_hero_photos, name='api_hero_photos'),
     path('taglines/random/', views.get_tagline, name='api_tagline'),
 
-    path('recent/', views.get_recent),
-
     path('csrf/', views.get_csrf_token, name='get_csrf_token'),
     path('authenticate/', views.get_api_token, name='get_api_token'),
 
