@@ -43,6 +43,7 @@
 import Photos from "@/components/photoList/Photos.vue";
 import { getCsrfToken, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
+import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 
 export default {
   components: {
@@ -165,18 +166,9 @@ export default {
     },
 
     async deleteSelected() {
-      let { ok } = await sendRequest(
-        endpoints.albumPhotoList.replace(":path", this.album.path),
-        {
-          method: "DELETE",
-          body: JSON.stringify({
-            photos: this.selectedPhotoHashes,
-          }),
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            "X-CSRFToken": getCsrfToken(),
-          },
-        }
+      let { ok } = await ManageAlbumService.deletePhotos(
+        this.album.path,
+        this.selectedPhotoHashes
       );
 
       if (ok) {

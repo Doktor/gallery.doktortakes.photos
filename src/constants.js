@@ -8,6 +8,9 @@ export const endpoints = {
   manageAlbumPhotoList: "/api/manage/albums/:path/photos/",
 
   photoDetail: "/api/photos/:md5/",
+
+  managePhotoDetail: "/api/manage/photos/:md5/",
+
   thumbnailList: "/api/photos/:md5/thumbnails/",
   tagList: "/api/tags/",
   searchPhotos: "/api/photos/search/",

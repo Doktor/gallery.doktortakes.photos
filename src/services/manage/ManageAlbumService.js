@@ -112,4 +112,17 @@ export const ManageAlbumService = {
       setTimeout(() => router.push({ name: "manage" }), 1500);
     }
   },
+
+  async deletePhotos(path, photoHashes) {
+    return await sendRequest(endpoints.albumPhotoList.replace(":path", path), {
+      method: "DELETE",
+      body: JSON.stringify({
+        photos: photoHashes,
+      }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "X-CSRFToken": getCsrfToken(),
+      },
+    });
+  },
 };

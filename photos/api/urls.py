@@ -11,10 +11,13 @@ manage_patterns = [
     path('albums/<path:path>/photos/', manage.ManageAlbumPhotoList.as_view(), name='api_manage_album_photos'),
     path('albums/<path:path>/', manage.ManageAlbumDetail.as_view(), name='api_manage_album'),
     path('albums/', manage.ManageAlbumList.as_view(), name='api_manage_albums'),
+
+    path('photos/<md5:md5>/', manage.ManagePhotoDetail.as_view(), name='api_manage_photo'),
 ]
 
 api_patterns = [
     path('photos/search/', views.search_photos, name='search_photos'),
+
     path('photos/<md5:md5>/', views.PhotoDetail.as_view(), name='api_photo'),
     path('photos/<md5:md5>/thumbnails/', views.ThumbnailList.as_view(), name='api_thumbnail'),
 

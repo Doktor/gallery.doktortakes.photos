@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers import PhotoSerializer, SimplePhotoSerializer
+from photos.api.serializers import PhotoSerializer
 from photos.models import Photo
 from photos.models.album import Allow
 from photos.settings_photos import ITEMS_PER_PAGE
@@ -25,28 +25,20 @@ class PhotoNotFound(exceptions.APIException):
         super().__init__("Photo not found.")
 
 
+def get_photo(request, md5) -> Photo:
+    try:
+        return get_photo_for_user_or_404(request, md5)
+    except Http404:
+        raise PhotoNotFound
+
+
 class PhotoDetail(APIView):
     @staticmethod
-    def get_photo(request, md5) -> Photo:
-        try:
-            return get_photo_for_user_or_404(request, md5)
-        except Http404:
-            raise PhotoNotFound
-
-    def get(self, request: Request, md5: str) -> Response:
-        photo = self.get_photo(request, md5)
+    def get(request: Request, md5: str) -> Response:
+        photo = get_photo(request, md5)
         serializer = PhotoSerializer(photo)
 
         return Response(serializer.data)
-
-    def delete(self, request: Request, md5: str) -> Response:
-        if not request.user.is_staff:
-            raise exceptions.PermissionDenied("Not authorized.")
-
-        photo = self.get_photo(request, md5)
-        photo.delete()
-
-        return Response(status=Status.NO_CONTENT)
 
 
 def date_query(start: str, end: str) -> Q:
