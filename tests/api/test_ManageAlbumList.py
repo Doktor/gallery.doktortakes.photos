@@ -36,7 +36,7 @@ class TestManageAlbumList:
         # Assert
         assert response.status_code == Status.FORBIDDEN
 
-    def test_post__album_list__top_level_album_name_unavailable__bad_request(self):
+    def test_post__top_level_album_name_unavailable__bad_request(self):
         # Arrange
         user = create_user(Level.SUPERUSER)
         self.client.force_authenticate(user=user)
@@ -59,7 +59,7 @@ class TestManageAlbumList:
         # Assert
         assert response.status_code == Status.BAD_REQUEST
 
-    def test_post__album_list__album_name_unavailable__bad_request(self):
+    def test_post__album_name_unavailable__bad_request(self):
         # Arrange
         user = create_user(Level.SUPERUSER)
         self.client.force_authenticate(user=user)
@@ -87,7 +87,7 @@ class TestManageAlbumList:
         Level.STAFF,
         Level.SUPERUSER,
     ])
-    def test_post__album_list__created(self, level: Level):
+    def test_post__created(self, level: Level):
         # Arrange
         user = create_user(level)
         self.client.force_authenticate(user=user)

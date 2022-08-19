@@ -16,7 +16,7 @@ class TestAlbumList:
     def setup_method(self):
         self.client = APIClient()
 
-    def test__get_album_list__no_albums(self):
+    def test_get__no_albums(self):
         # Act
         response = self.client.get(URL)
 
@@ -24,7 +24,7 @@ class TestAlbumList:
         albums = response.data['albums']
         assert albums == []
 
-    def test__get_album_list(self):
+    def test_get__ok(self):
         # Arrange
         AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
         AlbumFactory(name='Album Name 2', start=date(2020, 12, 31))
