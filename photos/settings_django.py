@@ -7,6 +7,10 @@ import warnings
 from django.core.management.utils import get_random_secret_key
 
 
+def filter_none(list):
+    return [item for item in list if item is not None]
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -34,7 +38,9 @@ secret_key = CONFIG['django'].get('secret_key', None)
 if secret_key is None:
     if DEBUG:
         secret_key = get_random_secret_key()
-        warnings.warn("secret key not specified, creating a temporary key")
+
+        if not TEST:
+            warnings.warn("secret key not specified, creating a temporary key")
     else:
         print("secret key not specified, exiting", file=sys.stderr)
         sys.exit(1)
@@ -48,8 +54,8 @@ INTERNAL_IPS = internal_ips
 
 # Application definition
 
-INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
+INSTALLED_APPS = filter_none([
+    'whitenoise.runserver_nostatic' if not TEST else None,
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,10 +69,10 @@ INSTALLED_APPS = [
     'storages',
     'photos',
     'webpack_loader',
-]
+])
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#configure-internal-ips
-if DEBUG:
+if DEBUG and not TEST:
     INSTALLED_APPS.append('debug_toolbar')
 
     _, _, ips = socket.gethostbyname_ex(socket.gethostname())
@@ -89,17 +95,17 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
-MIDDLEWARE = [
+MIDDLEWARE = filter_none([
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware' if not TEST else None,
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+])
 
 ROOT_URLCONF = 'photos.urls'
 
@@ -272,7 +278,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static.1')
 STATIC_URL = '/static/'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if not TEST:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Local or remote storage for media files
 LOCAL_STORAGE = CONFIG['django'].get('use_local_storage', True)
