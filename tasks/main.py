@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from invoke import task
 import django
-import hashlib
 import json
 import os
 import pprint
@@ -13,8 +12,6 @@ import sys
 # Task parts
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-manage = "pipenv run python manage.py"
 
 
 def check_output(command: str) -> str:
@@ -58,52 +55,6 @@ def django_setup():
 
 
 # Tasks
-
-
-@task()
-def full_build(ctx):
-    prompt = "Rebuilding database: are you sure? (Y/N) "
-
-    if not input(prompt).upper().startswith('Y'):
-        print("Exiting.")
-        return
-
-    print("Creating migrations and rebuilding database")
-    ctx.run(f"{manage} makemigrations --no-input photos")
-    ctx.run(f"{manage} migrate --no-input")
-
-
-@task
-def clean(ctx):
-    prompt = "Removing files: are you sure? (Y/N) "
-
-    if not input(prompt).upper().startswith('Y'):
-        print("Exiting.")
-        return
-
-    ctx.run("rm -f photos.db")
-    ctx.run("rm -rf media/")
-    ctx.run("rm -rf temp/")
-    ctx.run("rm -rf photos/migrations/")
-
-    with ctx.cd(os.path.join('static', 'styles')):
-        ctx.run("rm -rf .sass-cache/")
-        ctx.run("rm -f *.css")
-        ctx.run("rm -f *.css.map")
-
-    print("Done!")
-
-
-def generate_md5_hash(file):
-    hasher = hashlib.md5()
-
-    while True:
-        data = file.read(1024 ** 2)
-        if not data:
-            break
-        hasher.update(data)
-
-    return hasher.hexdigest()
 
 
 @task
