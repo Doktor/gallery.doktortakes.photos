@@ -1,19 +1,13 @@
-import sys
-
 from django.contrib.auth import get_user_model
 from invoke import task
-import datetime
 import django
 import hashlib
 import json
 import os
 import pprint
-import pytz
 import shlex
 import subprocess
-
-from models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
-from .utils import generate_image
+import sys
 
 
 # Task parts
@@ -51,6 +45,9 @@ def create_default_superuser(ctx):
         print("error: failed to decode credentials file")
         sys.exit(1)
 
+    if User.objects.filter(is_superuser=True).exists():
+        print("warning: a default superuser already exists")
+        sys.exit(0)
     User.objects.create_superuser(
         user['username'], user['email'], user['password'])
 
@@ -113,7 +110,10 @@ def generate_md5_hash(file):
 def check_generated_images(ctx, file=None, fix=False):
     """Checks that every photo has a display image and square thumbnail."""
     django_setup()
+
     from photos.models import Photo
+    from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
+    from .utils import generate_image
 
     photos = Photo.objects.all()
 

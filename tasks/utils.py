@@ -2,21 +2,17 @@ from typing import Optional
 
 from django.db.models.fields.files import ImageFieldFile
 
-from photos.models.photo import Photo, get_display_path, get_original_path, get_square_thumbnail_path, get_thumbnail_path
-from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
 
+def generate_image(photo: "Photo", image_type: str, save: bool = False) -> None:
+    from photos.tasks import update_display_image, update_thumbnail, update_square_thumbnail
 
-def generate_image(photo: Photo, image_type: str, save: bool = False) -> None:
     file = photo.get_original()
 
     if image_type == 'display_image':
-        from photos.tasks import update_display_image
         function = update_display_image
     elif image_type == 'thumbnail':
-        from photos.tasks import update_thumbnail
         function = update_thumbnail
     elif image_type == 'square_thumbnail':
-        from photos.tasks import update_square_thumbnail
         function = update_square_thumbnail
     else:
         return
@@ -27,7 +23,9 @@ def generate_image(photo: Photo, image_type: str, save: bool = False) -> None:
         photo.save()
 
 
-def get_image_file(photo: Photo, image_type: str) -> Optional[ImageFieldFile]:
+def get_image_file(photo: "Photo", image_type: str) -> Optional[ImageFieldFile]:
+    from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
+
     if image_type == 'original':
         return photo.original
     elif image_type == 'display_image':
@@ -42,12 +40,14 @@ def get_image_file(photo: Photo, image_type: str) -> Optional[ImageFieldFile]:
     return thumbnail.image if thumbnail else None
 
 
-def get_image_filename(photo: Photo, image_type: str) -> Optional[str]:
+def get_image_filename(photo: "Photo", image_type: str) -> Optional[str]:
     file = get_image_file(photo, image_type)
     return file.name if file is not None else None
 
 
-def get_image_filename_candidate(photo: Photo, image_type: str) -> Optional[str]:
+def get_image_filename_candidate(photo: "Photo", image_type: str) -> Optional[str]:
+    from photos.models.photo import get_display_path, get_original_path, get_square_thumbnail_path, get_thumbnail_path
+
     if image_type == 'original':
         function = get_original_path
     elif image_type == 'display_image':
