@@ -5,7 +5,7 @@ from http import HTTPStatus as Status
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from tests.api.album import AlbumFactory
+from photos.tests.api.album import AlbumFactory
 
 
 URL = reverse('api_albums')

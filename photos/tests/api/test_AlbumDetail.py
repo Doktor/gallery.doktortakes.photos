@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from photos.models.album import Allow
-from tests.api.utils import AlbumFactory, Level, create_album, create_user
+from photos.tests.api.utils import AlbumFactory, Level, create_album, create_user
 
 URL = lambda path: reverse('api_album', kwargs={'path': path})
 

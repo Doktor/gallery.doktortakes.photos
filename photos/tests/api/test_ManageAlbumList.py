@@ -4,7 +4,7 @@ from http import HTTPStatus as Status
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from tests.api.utils import AlbumFactory, create_user, Level
+from photos.tests.api.utils import AlbumFactory, create_user, Level
 
 
 URL = reverse('api_manage_albums')
