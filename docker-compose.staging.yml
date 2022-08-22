@@ -11,7 +11,7 @@ services:
       - 1337
     depends_on:
       - database
-    command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
+    entrypoint: /app/run.dev.sh
 
   nginx:
     image: photos_nginx

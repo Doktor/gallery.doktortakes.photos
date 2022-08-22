@@ -14,7 +14,7 @@ services:
       - static_volume:/app/static/
     depends_on:
       - database
-    command: poetry run python manage.py runserver 0.0.0.0:8000
+    entrypoint: /app/run.dev.sh
 
   frontend:
     image: photos_frontend
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./src/:/app/src/
       - static_volume:/app/static/
-    command: npx webpack --config webpack.dev.js
+    entrypoint: npx webpack --config webpack.dev.js
 
   database:
     extends:

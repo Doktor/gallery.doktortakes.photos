@@ -21,8 +21,7 @@ RUN mkdir -p /app/logs/
 
 FROM base as development
 
-RUN poetry run python manage.py migrate --no-input
-RUN poetry run inv create-default-superuser
+RUN chmod +x /app/run.dev.sh
 
 
 FROM node:15.12.0 AS node
@@ -46,12 +45,7 @@ COPY ./config/secrets.staging.toml /app/config/secrets.toml
 
 COPY --from=node /app/static/ /app/static/
 
-RUN poetry run python manage.py migrate --no-input
-RUN poetry run inv create-default-superuser
-
-RUN echo "Collecting static files" && \
-  poetry run python manage.py collectstatic --no-input --clear && \
-  echo "Successfully collected static files"
+RUN chmod +x /app/run.staging.sh
 
 
 FROM base as production
