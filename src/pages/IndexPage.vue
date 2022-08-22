@@ -29,6 +29,7 @@ import IndexNavlinks from "@/components/navlink/IndexNavlinks";
 import IndexLogo from "@/components/index/IndexLogo";
 import FadeTransition from "@/transitions/FadeTransition";
 import HeroPhoto from "@/components/index/HeroPhoto";
+import {HeroPhotoService} from "@/services/HeroPhotoService";
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -68,7 +69,7 @@ export default {
   async created() {
     this.$store.commit("setLoading", true);
 
-    this.heroPhotos = await this.$store.dispatch("getHeroPhotos");
+    this.heroPhotos = await HeroPhotoService.list();
     shuffle(this.heroPhotos);
     this.loadNextHeroPhoto();
 

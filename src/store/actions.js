@@ -28,9 +28,4 @@ export const actions = {
     let { content } = await sendRequest(endpoints.currentUser, options);
     context.commit("setUser", content);
   },
-
-  async getHeroPhotos(context) {
-    let { content } = await sendRequest(endpoints.heroPhotoList);
-    return content;
-  },
 };
