@@ -119,9 +119,6 @@ class Album(MPTTModel):
         album = self
         user = request.user
 
-        if user.is_superuser:
-            return True
-
         try:
             code = request.GET['code']
         except KeyError:
@@ -131,11 +128,11 @@ class Album(MPTTModel):
         if album.access_code and code and album.access_code == code:
             return True
 
-        elif album.access_level == Allow.PUBLIC:
-            return True
+        if album.access_level == Allow.SUPERUSER:
+            return user.is_superuser
 
-        elif album.access_level == Allow.SIGNED_IN:
-            return user.is_authenticated
+        elif album.access_level == Allow.STAFF:
+            return user.is_staff
 
         elif album.access_level == Allow.OWNERS:
             if user in album.users.all():
@@ -143,13 +140,15 @@ class Album(MPTTModel):
             elif any(group in user.groups.all() for group in album.groups.all()):
                 return True
             else:
-                return False
+                return user.is_staff
 
-        elif album.access_level == Allow.STAFF:
-            return user.is_staff
+        elif album.access_level == Allow.SIGNED_IN:
+            return user.is_authenticated
 
-        elif album.access_level == Allow.SUPERUSER:
-            return user.is_superuser
+        elif album.access_level == Allow.PUBLIC:
+            return True
+
+        return False
 
     def delete(self, using=None, keep_parents=False) -> None:
         for photo in self.photos.all():

@@ -50,9 +50,7 @@ parameters = [
 
     (Level.STAFF, Allow.PUBLIC, True),
     (Level.STAFF, Allow.SIGNED_IN, True),
-    pytest.param(
-        Level.STAFF, Allow.OWNERS, True,
-        marks=pytest.mark.skip("currently broken due to a bug: see issue #163")),
+    (Level.STAFF, Allow.OWNERS, True),
     (Level.STAFF, Allow.STAFF, True),
     pytest.param(
         Level.STAFF, Allow.SUPERUSER, False,
