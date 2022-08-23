@@ -10,10 +10,14 @@
     />
 
     <section class="photos">
-      <PhotoSearchResult
+      <Photo
         v-for="(photo, index) in results.photos"
+        :allowSelect="false"
         :key="index"
         :photo="photo"
+        routeName="photo"
+        :isLoading="false"
+        :isVisible="true"
       />
     </section>
 
@@ -27,13 +31,13 @@
 </template>
 
 <script>
-import PhotoSearchResult from "./PhotoSearchResult.vue";
 import Pagination from "@/components/pagination/Pagination";
+import Photo from "@/components/photoList/Photo";
 
 export default {
   components: {
+    Photo,
     Pagination,
-    PhotoSearchResult,
   },
 
   props: {

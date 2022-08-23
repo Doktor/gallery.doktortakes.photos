@@ -161,61 +161,11 @@ p {
 
 /* Photos */
 
-$photoWidth: 300px;
-
 .photos {
   display: flex;
   flex-wrap: wrap;
 
   margin: $itemSpacing (-$itemSpacing);
-}
-
-.photo-wrapper {
-  padding: $itemSpacing;
-
-  @media (max-width: $photoWidth * 1) {
-    width: 100%;
-  }
-  @for $i from 1 through 4 {
-    @media (min-width: $photoWidth * ($i) + 1) and (max-width: $photoWidth * ($i + 1)) {
-      width: math.div(100%, $i + 1); // 50%, 33%, 25%, 20%
-    }
-  }
-  @media (min-width: $photoWidth * 5 + 1) {
-    width: math.div(100%, 6);
-  }
-
-  &.empty {
-    padding: 0;
-  }
-
-  &.selected img {
-    filter: brightness(0.3);
-  }
-
-  @include fade();
-}
-
-.photo {
-  img {
-    width: 100%;
-  }
-}
-
-.photo-placeholder {
-  position: relative;
-}
-
-.photo-skeleton {
-  border: 1px solid $background-color-2;
-}
-
-.photo-no-thumbnail-note {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  transform: translateX(-50%) translateY(-50%);
 }
 
 /* Albums */

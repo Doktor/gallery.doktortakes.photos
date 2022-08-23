@@ -14,7 +14,7 @@
       v-if="loading"
       :photos="new Array(12).fill({})"
       :allowSelect="false"
-      :isSkeleton="true"
+      :isLoading="true"
     />
     <Photos
       v-else-if="photos.length > 0"

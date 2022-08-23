@@ -1,26 +1,22 @@
 <template>
-  <img v-if="isLoaded && hasThumbnail" :src="thumbnail" alt="Photo thumbnail" />
-  <div v-else class="photo-placeholder">
-    <PhotoPlaceholder />
-    <div v-if="isLoaded" class="photo-no-thumbnail-note">No thumbnail</div>
-  </div>
+  <PhotoThumbnailLoading v-if="isLoading" />
+  <img
+    v-else-if="thumbnail !== null"
+    class="photo-thumbnail"
+    :src="thumbnail"
+    alt="Photo thumbnail"
+  />
+  <PhotoThumbnailPlaceholder v-else />
 </template>
 
 <script>
-import PhotoPlaceholder from "./PhotoPlaceholder";
+import PhotoThumbnailLoading from "@/components/photoList/PhotoThumbnailLoading";
+import PhotoThumbnailPlaceholder from "@/components/photoList/PhotoThumbnailPlaceholder";
 
 export default {
   components: {
-    PhotoPlaceholder,
-  },
-
-  computed: {
-    hasThumbnail() {
-      return this.photo.images.square?.url ?? false;
-    },
-    thumbnail() {
-      return this.photo.images.square?.url ?? this.placeholder;
-    },
+    PhotoThumbnailPlaceholder,
+    PhotoThumbnailLoading,
   },
 
   props: {
@@ -29,10 +25,22 @@ export default {
       required: true,
     },
 
-    isLoaded: {
+    isLoading: {
       type: Boolean,
-      required: true,
+      default: true,
+    },
+  },
+
+  computed: {
+    thumbnail() {
+      return this.photo.images?.square?.url ?? null;
     },
   },
 };
 </script>
+
+<style lang="scss">
+.photo-thumbnail {
+  width: 100%;
+}
+</style>

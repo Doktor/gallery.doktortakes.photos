@@ -13,17 +13,16 @@
       <Photo
         v-for="photo in photos"
         :allowSelect="allowSelect"
-        :isLoaded="isSkeleton || loadedPages.includes(photo.page)"
         :isSelected="
           allowSelect ? selectedPhotoHashes.includes(photo.md5) : false
         "
-        :isSkeleton="isSkeleton"
+        :isLoading="isLoading || !loadedPages.includes(photo.page)"
         :isVisible="
-          isSkeleton || (indexStart <= photo.index && photo.index <= indexEnd)
+          isLoading || (indexStart <= photo.index && photo.index <= indexEnd)
         "
         :key="photo.md5"
         :photo="photo"
-        :route="route"
+        :routeName="routeName"
         @select="select"
       />
     </section>
@@ -83,7 +82,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    route: {
+    routeName: {
       type: String,
       default: "photo",
     },
@@ -92,7 +91,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    isSkeleton: {
+    isLoading: {
       type: Boolean,
       default: false,
     },

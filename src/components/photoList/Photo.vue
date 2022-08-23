@@ -1,26 +1,52 @@
 <template>
   <div class="photo-wrapper" :class="classes">
     <div class="photo">
-      <div
+      <component
         :is="allowSelect || photo.path === undefined ? 'div' : 'router-link'"
         :to="allowSelect ? null : photoLink"
         @click="select"
       >
-        <PhotoThumbnail v-if="!isSkeleton" v-bind="{ isLoaded, photo }" />
-        <PhotoSkeleton v-else />
-      </div>
+        <PhotoThumbnail :isLoading="isLoading" :photo="photo" />
+      </component>
     </div>
   </div>
 </template>
 
 <script>
 import PhotoThumbnail from "./PhotoThumbnail";
-import PhotoSkeleton from "./PhotoSkeleton";
 
 export default {
   components: {
     PhotoThumbnail,
-    PhotoSkeleton,
+  },
+
+  props: {
+    photo: {
+      type: Object,
+      required: true,
+    },
+
+    allowSelect: {
+      type: Boolean,
+      required: true,
+    },
+    routeName: {
+      type: String,
+      required: true,
+    },
+
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isVisible: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   computed: {
@@ -33,7 +59,7 @@ export default {
 
     photoLink() {
       return {
-        name: this.route,
+        name: this.routeName,
         params: {
           path: this.photo.path?.split("/") ?? "",
           md5: this.photo.md5,
@@ -54,38 +80,35 @@ export default {
       this.$emit("select", this.photo.md5);
     },
   },
-
-  props: {
-    photo: {
-      type: Object,
-      required: true,
-    },
-
-    allowSelect: {
-      type: Boolean,
-      required: true,
-    },
-    route: {
-      type: String,
-      required: true,
-    },
-
-    isLoaded: {
-      type: Boolean,
-      required: true,
-    },
-    isSelected: {
-      type: Boolean,
-      required: true,
-    },
-    isSkeleton: {
-      type: Boolean,
-      default: false,
-    },
-    isVisible: {
-      type: Boolean,
-      required: true,
-    },
-  },
 };
 </script>
+
+<style lang="scss">
+$photoWidth: 300px;
+
+.photo-wrapper {
+  padding: $itemSpacing;
+
+  @media (max-width: $photoWidth * 1) {
+    width: 100%;
+  }
+  @for $i from 1 through 4 {
+    @media (min-width: $photoWidth * ($i) + 1) and (max-width: $photoWidth * ($i + 1)) {
+      width: math.div(100%, $i + 1); // 50%, 33%, 25%, 20%
+    }
+  }
+  @media (min-width: $photoWidth * 5 + 1) {
+    width: math.div(100%, 6);
+  }
+
+  &.empty {
+    padding: 0;
+  }
+
+  &.selected img {
+    filter: brightness(0.3);
+  }
+
+  @include fade();
+}
+</style>
