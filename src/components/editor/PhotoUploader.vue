@@ -40,7 +40,7 @@ export default {
 
   computed: {
     action() {
-      let base = endpoints.albumPhotoList.replace(":path", this.path);
+      let base = endpoints.manageAlbumPhotoList.replace(":path", this.path);
       let options = {};
 
       if (this.addWatermark) {
