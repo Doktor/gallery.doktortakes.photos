@@ -186,19 +186,6 @@ p {
   transform: translateX(-50%) translateY(-50%);
 }
 
-/* Album lists */
-
-.album-list-simple {
-  //
-}
-
-.album-list-simple-items {
-  & & {
-    padding: 0;
-    margin: 0 0 0 2rem;
-  }
-}
-
 /* Photo wall */
 .photo-wall {
   display: flex;

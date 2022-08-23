@@ -11,7 +11,7 @@
         </router-link>
 
         <AlbumListSimple
-          v-if="album.children.length > 0"
+          v-if="album.children?.length > 0 ?? false"
           class="album-list-simple-children"
           :albums="album.children"
           :indexStart="0"
