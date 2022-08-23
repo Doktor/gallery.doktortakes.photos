@@ -10,14 +10,13 @@
       v-if="loading"
       :albums="new Array(12).fill({})"
       :albumRoute="albumRoute"
-      :isSkeleton="true"
-      :loading="loading"
+      :isLoading="loading"
     />
     <Albums
       v-else-if="searchResults.length"
       :albums="searchResults"
       :albumRoute="albumRoute"
-      :loading="loading"
+      :isLoading="loading"
     />
     <div v-else>No albums found.</div>
   </div>

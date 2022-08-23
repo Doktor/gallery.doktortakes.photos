@@ -1,19 +1,21 @@
 <template>
-  <div class="album-wrapper" :class="{ hidden: !isSkeleton && !isVisible }">
+  <div class="album-wrapper" :class="wrapperClasses">
     <div class="album" :class="classes">
-      <AlbumThumbnail v-if="!isSkeleton" v-bind="{ album, route, isLoaded }" />
-      <AlbumSkeleton v-else />
+      <component
+        :is="isLoading ? 'div' : 'router-link'"
+        :to="isLoading ? null : albumLink"
+      >
+        <AlbumThumbnail :isLoading="isLoading" :album="album" />
+      </component>
     </div>
   </div>
 </template>
 
 <script>
-import AlbumSkeleton from "./AlbumSkeleton";
 import AlbumThumbnail from "./AlbumThumbnail";
 
 export default {
   components: {
-    AlbumSkeleton,
     AlbumThumbnail,
   },
 
@@ -24,6 +26,20 @@ export default {
         "album-no-cover": this.album.cover === null,
       };
     },
+    wrapperClasses() {
+      return {
+        hidden: !this.isSkeleton && !this.isVisible,
+      };
+    },
+
+    albumLink() {
+      return {
+        name: this.routeName,
+        params: {
+          path: this.album.pathSplit,
+        },
+      };
+    },
   },
 
   props: {
@@ -32,18 +48,14 @@ export default {
       required: true,
     },
 
-    route: {
+    routeName: {
       type: String,
       default: "album",
     },
 
-    isLoaded: {
+    isLoading: {
       type: Boolean,
-      default: false,
-    },
-    isSkeleton: {
-      type: Boolean,
-      default: false,
+      required: true,
     },
     isVisible: {
       type: Boolean,
@@ -52,3 +64,33 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+$albumWidth: 400px;
+
+.album-wrapper {
+  padding: $itemSpacing;
+
+  @media (max-width: $albumWidth * 2) {
+    width: 100%;
+  }
+  @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
+    width: math.div(100%, 2); // 50%
+  }
+  @media (min-width: $albumWidth * 3 + 1) and (max-width: $albumWidth * 4) {
+    width: math.div(100%, 3); // 33%
+  }
+  @media (min-width: $albumWidth * 4 + 1) and (max-width: $albumWidth * 6) {
+    width: math.div(100%, 4); // 25%
+  }
+  @media (min-width: $albumWidth * 6 + 1) {
+    width: math.div(100%, 6); // 16.67%
+  }
+
+  @include fade();
+}
+
+.album {
+  position: relative;
+}
+</style>

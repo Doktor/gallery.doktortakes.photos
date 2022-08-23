@@ -1,35 +1,35 @@
 <template>
-  <router-link :to="{ name: route, params: { path: album.pathSplit } }">
-    <!-- Cover image exists -->
+  <AlbumThumbnailLoading v-if="isLoading" />
+
+  <div v-else>
     <img
-      v-if="album.cover"
+      v-if="thumbnail !== null"
+      class="album-thumbnail"
       :src="thumbnail"
       :title="album.name"
-      alt="Album cover"
+      alt="Album thumbnail"
     />
-    <!-- No cover image -->
-    <div v-else class="album-no-cover">
-      <AlbumPlaceholder :title="album.name" />
-      <div class="note album-no-cover-note">No cover</div>
-    </div>
+    <AlbumThumbnailPlaceholder v-else :album="album" />
 
-    <div class="album-title">
-      <div class="album-title-text">{{ album.name }}</div>
-    </div>
-  </router-link>
+    <AlbumThumbnailTitle :album="album" />
+  </div>
 </template>
 
 <script>
-import AlbumPlaceholder from "./AlbumPlaceholder";
+import AlbumThumbnailLoading from "@/components/albumList/AlbumThumbnailLoading";
+import AlbumThumbnailPlaceholder from "@/components/albumList/AlbumThumbnailPlaceholder";
+import AlbumThumbnailTitle from "@/components/albumList/AlbumThumbnailTitle";
 
 export default {
   components: {
-    AlbumPlaceholder,
+    AlbumThumbnailTitle,
+    AlbumThumbnailPlaceholder,
+    AlbumThumbnailLoading,
   },
 
   computed: {
     thumbnail() {
-      return this.isLoaded ? this.album.cover.thumbnail.url : this.placeholder;
+      return this.album.cover?.thumbnail?.url ?? null;
     },
   },
 
@@ -39,27 +39,17 @@ export default {
       required: true,
     },
 
-    route: {
-      type: String,
-      default: "album",
-    },
-
-    isLoaded: {
+    isLoading: {
       type: Boolean,
-      default: false,
+      required: true,
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.album-no-cover {
-  border: 1px solid $background-color-2;
-}
-
-.album-title-text {
-  &:hover {
-    text-decoration: none;
-  }
+<style lang="scss">
+.album-thumbnail {
+  width: 100%;
+  object-fit: cover;
 }
 </style>

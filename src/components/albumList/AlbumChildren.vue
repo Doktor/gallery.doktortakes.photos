@@ -3,7 +3,7 @@
     <AlbumCard
       v-for="child in album.children"
       :album="child"
-      :isLoaded="true"
+      :isLoading="false"
       :isVisible="true"
       :key="child.path"
       :route="route"

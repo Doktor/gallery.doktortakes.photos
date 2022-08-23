@@ -3,11 +3,10 @@
     <AlbumCard
       v-for="(album, index) in albums"
       :album="album"
-      :isLoaded="isSkeleton ? true : album.isLoaded"
-      :isSkeleton="isSkeleton"
-      :isVisible="isSkeleton ? true : indexStart <= index && index <= indexEnd"
-      :key="isSkeleton ? index : album.path"
-      :route="route"
+      :isLoading="isLoading || !album.isLoaded"
+      :isVisible="isLoading ? true : indexStart <= index && index <= indexEnd"
+      :key="isLoading ? index : album.path"
+      :routeName="routeName"
     />
   </div>
 </template>
@@ -25,7 +24,7 @@ export default {
       type: Array,
       required: true,
     },
-    route: {
+    routeName: {
       type: String,
       default: "album",
     },
@@ -39,9 +38,9 @@ export default {
       required: true,
     },
 
-    isSkeleton: {
+    isLoading: {
       type: Boolean,
-      default: false,
+      required: true,
     },
   },
 };

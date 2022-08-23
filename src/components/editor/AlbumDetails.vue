@@ -29,7 +29,7 @@
 
 <script>
 import AlbumForm from "./AlbumForm.vue";
-import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholder";
+import AlbumPlaceholder from "@/components/albumList/AlbumPlaceholderImage";
 
 export default {
   components: {

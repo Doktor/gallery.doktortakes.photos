@@ -170,77 +170,11 @@ p {
 
 /* Albums */
 
-$albumWidth: 400px;
-
 .albums {
   display: flex;
   flex-wrap: wrap;
 
   margin: $itemSpacing (-$itemSpacing);
-}
-
-.album-wrapper {
-  padding: $itemSpacing;
-
-  @media (max-width: $albumWidth * 2) {
-    width: 100%;
-  }
-  @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
-    width: math.div(100%, 2); // 50%
-  }
-  @media (min-width: $albumWidth * 3 + 1) and (max-width: $albumWidth * 4) {
-    width: math.div(100%, 3); // 33%
-  }
-  @media (min-width: $albumWidth * 4 + 1) and (max-width: $albumWidth * 6) {
-    width: math.div(100%, 4); // 25%
-  }
-  @media (min-width: $albumWidth * 6 + 1) {
-    width: math.div(100%, 6); // 16.67%
-  }
-
-  @include fade();
-}
-
-.album {
-  position: relative;
-
-  img {
-    width: 100%;
-    object-fit: cover;
-  }
-}
-
-// Album title container
-.album-title {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 0.5rem;
-
-  background-color: rgba($background-color, 0.8);
-  border-radius: 2px;
-
-  // Text
-  div {
-    @include headings-font();
-
-    color: $text-color;
-    font-size: 1.3rem;
-    line-height: 1;
-    text-align: center;
-    text-transform: lowercase;
-
-    border-radius: 5px;
-    margin: 0.55rem 0.65rem;
-  }
-
-  // Hidden albums
-  .album-hidden & div {
-    color: $text-error;
-  }
-}
-
-.album-no-cover {
-  background: $background-color-2;
 }
 
 // Placeholder text

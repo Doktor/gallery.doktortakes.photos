@@ -6,10 +6,10 @@
       :is="albumListComponent"
       :class="classes"
       :albums="albumsCopy"
-      :route="albumRoute"
+      :routeName="albumRoute"
       :indexStart="indexStart"
       :indexEnd="indexEnd"
-      :isSkeleton="isSkeleton"
+      :isLoading="isLoading"
     />
 
     <slot name="footer"></slot>
@@ -45,11 +45,6 @@ export default {
   },
 
   props: {
-    loading: {
-      type: Boolean,
-      required: true,
-    },
-
     albums: {
       type: Array,
       required: true,
@@ -59,9 +54,10 @@ export default {
       type: String,
       default: "album",
     },
-    isSkeleton: {
+
+    isLoading: {
       type: Boolean,
-      default: false,
+      required: true,
     },
   },
 

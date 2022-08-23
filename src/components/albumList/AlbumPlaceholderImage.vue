@@ -1,9 +1,5 @@
 <template>
-  <PlaceholderImage
-    :width="1"
-    :height="1"
-    alt="Album cover image placeholder"
-  />
+  <PlaceholderImage :width="1" :height="1" alt="Album thumbnail placeholder" />
 </template>
 
 <script>
