@@ -28,6 +28,7 @@ module.exports = {
         test: /\.vue$/,
         loader: "vue-loader",
         options: {
+          compiler: require("vue-template-babel-compiler"),
           compilerOptions: {
             whitespace: "condense",
           },
