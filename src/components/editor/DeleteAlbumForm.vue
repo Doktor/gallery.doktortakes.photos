@@ -10,13 +10,17 @@
 
     <div class="delete-album">
       <input v-model="name" title="Name" type="text" />
-      <button type="button" @click="deleteAlbum">Delete</button>
+      <CustomButton class="button-danger" @click="deleteAlbum">
+        Delete
+      </CustomButton>
     </div>
   </section>
 </template>
 
 <script>
+import CustomButton from "@/components/form/CustomButton";
 export default {
+  components: { CustomButton },
   props: {
     album: {
       type: Object,

@@ -151,10 +151,6 @@ h2 {
   margin: 0.5rem 0;
 }
 
-#album-form-save {
-  align-self: flex-end;
-}
-
 .count {
   line-height: 1;
   margin: 1rem 0;

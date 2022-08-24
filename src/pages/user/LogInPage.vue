@@ -1,5 +1,5 @@
 <template>
-  <form class="form--1-column" v-on:submit.prevent="submit">
+  <form class="form--1-column" @submit.prevent="submit">
     <CustomInput label="Username" v-model="username" maxlength="150" required />
     <CustomInput
       label="Password"
@@ -11,16 +11,17 @@
 
     <div v-if="error" class="error">{{ error }}</div>
 
-    <button type="submit">Log in</button>
+    <CustomButton class="button-primary" type="submit">Log in</CustomButton>
   </form>
 </template>
 
 <script>
 import { router } from "@/router/main";
 import CustomInput from "@/components/form/CustomInput";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
-  components: { CustomInput },
+  components: { CustomButton, CustomInput },
   data() {
     return {
       username: "",

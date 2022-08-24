@@ -30,7 +30,9 @@
       />
     </fieldset>
 
-    <button type="button" @click="submit">Create thumbnail</button>
+    <CustomButton class="button-primary" @click="submit">
+      Create thumbnail
+    </CustomButton>
   </form>
 </template>
 
@@ -38,6 +40,7 @@
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
+import CustomButton from "@/components/form/CustomButton";
 
 const watermarkColors = [
   {
@@ -52,7 +55,7 @@ const watermarkColors = [
 
 export default {
   name: "ThumbnailForm",
-  components: { CustomSelect, CustomInput },
+  components: { CustomButton, CustomSelect, CustomInput },
   props: {
     photo: {
       type: Object,

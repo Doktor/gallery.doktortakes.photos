@@ -1,5 +1,5 @@
 <template>
-  <form class="form--1-column" v-on:submit.prevent="submit">
+  <form class="form--1-column" @submit.prevent="submit">
     <fieldset>
       <CustomInput
         label="Name"
@@ -66,7 +66,9 @@
       <CustomInput label="Parent" v-model="changes.parent" />
     </fieldset>
 
-    <button id="album-form-save" type="submit">{{ saveButtonText }}</button>
+    <CustomButton class="button-primary" type="submit">
+      {{ saveButtonText }}
+    </CustomButton>
   </form>
 </template>
 
@@ -76,6 +78,7 @@ import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
 import ListInput from "@/components/form/ListInput";
 import { accessLevels } from "@/constants";
+import CustomButton from "@/components/form/CustomButton";
 
 const displayImageSizes = [
   {
@@ -106,6 +109,7 @@ const displayImageSizes = [
 
 export default {
   components: {
+    CustomButton,
     ListInput,
     CustomSelect,
     CustomInput,

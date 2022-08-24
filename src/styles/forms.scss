@@ -221,46 +221,6 @@ label {
   width: 100%;
 }
 
-.form-button {
-  display: block;
-
-  width: 110px;
-  padding: 12px 0;
-  border: 0;
-  border-radius: $form-border-radius;
-
-  background-color: $text-color;
-  color: $background-color;
-
-  text-align: center;
-  line-height: 1;
-
-  cursor: pointer;
-
-  &:hover {
-    background-color: lighten($text-color, 15%);
-  }
-
-  &,
-  &:hover {
-    text-decoration: none;
-    transition: background-color 0.3s;
-  }
-
-  &-primary {
-    background-color: $text-blue;
-    color: white;
-
-    &:hover {
-      background-color: lighten($text-blue, 15%);
-    }
-  }
-
-  &-secondary {
-    //
-  }
-}
-
 // Form: range inputs
 
 $separator-width: 5%;

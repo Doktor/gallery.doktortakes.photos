@@ -1,5 +1,8 @@
 <template>
-  <form class="password-form form--1-column form--small">
+  <form
+    class="password-form form--1-column form--small"
+    @submit.prevent="submit"
+  >
     <fieldset>
       <CustomInput
         label="Current"
@@ -31,20 +34,8 @@
     </fieldset>
 
     <div class="form-buttons">
-      <router-link
-        class="form-button form-button-secondary"
-        :to="{ name: 'user' }"
-      >
-        Cancel
-      </router-link>
-
-      <button
-        class="form-button form-button-primary"
-        type="submit"
-        @click.prevent="submit"
-      >
-        Save
-      </button>
+      <CustomButton @click="cancel">Cancel</CustomButton>
+      <CustomButton class="button-primary" type="submit">Save</CustomButton>
     </div>
   </form>
 </template>
@@ -52,6 +43,7 @@
 <script>
 import CustomInput from "@/components/form/CustomInput";
 import { UserService } from "@/services/UserService";
+import CustomButton from "@/components/form/CustomButton";
 
 const errors = {
   empty: "This field can't be empty.",
@@ -62,6 +54,7 @@ const errors = {
 
 export default {
   components: {
+    CustomButton,
     CustomInput,
   },
 
@@ -132,6 +125,9 @@ export default {
       field.maxLength = Math.max(field.maxTyped, field.value.length);
     },
 
+    async cancel() {
+      await this.$router.push({ name: "user" });
+    },
     async submit() {
       if (!this.validate()) {
         return;

@@ -196,13 +196,9 @@
     </div>
 
     <div class="form-buttons">
-      <button
-        class="form-button form-button-primary"
-        type="button"
-        @click="search"
-      >
+      <CustomButton class="button-primary" @click="search">
         Search
-      </button>
+      </CustomButton>
     </div>
   </form>
 </template>
@@ -210,8 +206,10 @@
 <script>
 import { getQueryString, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
+  components: { CustomButton },
   props: {
     results: {
       type: Object,

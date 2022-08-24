@@ -10,19 +10,23 @@
       selected
     </div>
 
-    <div>
-      <button @click="toggleSelecting">{{ toggleSelectButtonText }}</button>
+    <div class="actions">
+      <div class="action-row">
+        <CustomButton @click="toggleSelecting">
+          {{ toggleSelectButtonText }}
+        </CustomButton>
+      </div>
 
       <template v-if="isSelecting">
-        <div>
-          <button @click="selectAll" type="button">Select all</button>
-          <button @click="selectNone" type="button">Select none</button>
-          <button @click="selectInvert" type="button">Invert selection</button>
+        <div class="action-row">
+          <CustomButton @click="selectAll">Select all</CustomButton>
+          <CustomButton @click="selectNone">Select none</CustomButton>
+          <CustomButton @click="selectInvert">Invert selection</CustomButton>
         </div>
 
-        <div>
-          <button @click="setAlbumCover" type="button">Set cover</button>
-          <button @click="deleteSelected" type="button">Delete</button>
+        <div class="action-row">
+          <CustomButton @click="setAlbumCover">Set cover</CustomButton>
+          <CustomButton @click="deleteSelected">Delete</CustomButton>
         </div>
       </template>
     </div>
@@ -44,9 +48,11 @@ import Photos from "@/components/photoList/Photos.vue";
 import { getCsrfToken, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
   components: {
+    CustomButton,
     Photos,
   },
 
@@ -180,3 +186,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.action-row {
+  margin-bottom: 8px;
+
+  .button + .button {
+    margin-left: 8px;
+  }
+}
+</style>

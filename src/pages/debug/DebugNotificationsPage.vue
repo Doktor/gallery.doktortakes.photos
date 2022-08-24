@@ -10,7 +10,9 @@
           v-model="status"
         />
 
-        <button type="button" @click="addNotification">Submit</button>
+        <CustomButton class="button-primary" @click="addNotification">
+          Submit
+        </CustomButton>
       </section>
 
       <section>
@@ -24,7 +26,9 @@
           v-model="status"
         />
 
-        <button type="button" @click="addTimedNotification">Submit</button>
+        <CustomButton class="button-primary" @click="addTimedNotification">
+          Submit
+        </CustomButton>
       </section>
     </main>
   </FixedWidthContainer>
@@ -34,9 +38,10 @@
 import CustomInput from "@/components/form/CustomInput";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import CustomSelect from "@/components/form/CustomSelect";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
-  components: { CustomSelect, FixedWidthContainer, CustomInput },
+  components: { CustomButton, CustomSelect, FixedWidthContainer, CustomInput },
 
   data() {
     return {
