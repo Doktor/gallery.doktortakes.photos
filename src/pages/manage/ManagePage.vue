@@ -12,19 +12,19 @@
       </ul>
     </FixedWidthContainer>
 
-    <SearchAlbums :albums="albums" :loading="loading" albumRoute="editAlbum" />
+    <AlbumGallery :albums="albums" :loading="loading" albumRoute="editAlbum" />
   </div>
 </template>
 
 <script>
-import SearchAlbums from "@/components/albumList/SearchAlbums";
+import AlbumGallery from "@/components/albumList/AlbumGallery";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {
     FixedWidthContainer,
-    SearchAlbums,
+    AlbumGallery,
   },
 
   data() {

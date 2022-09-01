@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import AlbumForm from "@/components/editor/AlbumForm.vue";
+import AlbumForm from "@/components/manage/AlbumForm.vue";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 

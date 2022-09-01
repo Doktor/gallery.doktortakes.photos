@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import AlbumThumbnailLoading from "@/components/albumList/AlbumThumbnailLoading";
-import AlbumThumbnailPlaceholder from "@/components/albumList/AlbumThumbnailPlaceholder";
-import AlbumThumbnailTitle from "@/components/albumList/AlbumThumbnailTitle";
+import AlbumThumbnailLoading from "@/components/albumTile/AlbumThumbnailLoading";
+import AlbumThumbnailPlaceholder from "@/components/albumTile/AlbumThumbnailPlaceholder";
+import AlbumThumbnailTitle from "@/components/albumTile/AlbumThumbnailTitle";
 
 export default {
   components: {

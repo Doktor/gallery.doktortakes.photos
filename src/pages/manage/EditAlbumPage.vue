@@ -21,7 +21,7 @@
           Edit parent album
         </router-link>
 
-        <AlbumChildren :album="album" :route="'editAlbum'" />
+        <AlbumChildrenListTiles :album="album" :route="'editAlbum'" />
       </template>
 
       <PhotoUploader :path="album.path" />
@@ -33,23 +33,23 @@
 </template>
 
 <script>
-import AlbumChildren from "@/components/albumList/AlbumChildren";
-import AlbumDetails from "@/components/editor/AlbumDetails.vue";
+import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
+import AlbumDetails from "@/components/manage/AlbumDetails.vue";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import DeleteAlbumForm from "@/components/editor/DeleteAlbumForm.vue";
-import PhotoManager from "@/components/editor/PhotoManager.vue";
-import PhotoUploader from "@/components/editor/PhotoUploader.vue";
+import DeleteAlbumForm from "@/components/manage/DeleteAlbumForm.vue";
+import PhotoManager from "@/components/manage/PhotoManager.vue";
+import PhotoUploader from "@/components/manage/PhotoUploader.vue";
 import { mapState } from "vuex";
 import { router } from "@/router/main";
 import { editorTitleTemplate } from "@/store/mutations";
-import AlbumLinks from "@/components/editor/AlbumLinks";
+import AlbumLinks from "@/components/manage/AlbumLinks";
 import { AlbumService } from "@/services/AlbumService";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 
 export default {
   components: {
     AlbumLinks,
-    AlbumChildren,
+    AlbumChildrenListTiles,
     AlbumDetails,
     DeleteAlbumForm,
     FixedWidthContainer,

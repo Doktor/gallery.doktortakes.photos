@@ -12,8 +12,6 @@
       :isLoading="isLoading"
     />
 
-    <slot name="footer"></slot>
-
     <Pagination
       :itemsPerPage="albumsPerPage"
       :itemsPerPageChoices="itemsPerPageChoices"
@@ -27,21 +25,21 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import AlbumCard from "./AlbumCard";
-import AlbumListCards from "./AlbumListCards";
+import AlbumTile from "../albumTile/AlbumTile";
+import AlbumListTiles from "./AlbumListTiles";
 import AlbumListSimple from "./AlbumListSimple";
 import AlbumListViewSelector from "./AlbumListViewSelector";
-import AlbumTable from "./AlbumTable";
+import AlbumListTable from "./AlbumListTable";
 import Pagination from "@/components/pagination/Pagination";
 
 export default {
   components: {
     Pagination,
-    AlbumListCards,
-    AlbumCard,
+    AlbumListTiles,
+    AlbumTile,
     AlbumListSimple,
     AlbumListViewSelector,
-    AlbumTable,
+    AlbumListTable,
   },
 
   props: {
@@ -79,9 +77,9 @@ export default {
         case "simple":
           return "AlbumListSimple";
         case "table":
-          return this.isStaff ? "AlbumTable" : "AlbumListCards";
+          return this.isStaff ? "AlbumListTable" : "AlbumListTiles";
         default:
-          return "AlbumListCards";
+          return "AlbumListTiles";
       }
     },
 

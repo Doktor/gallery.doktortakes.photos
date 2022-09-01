@@ -1,16 +1,16 @@
 <template>
   <main>
-    <SearchAlbums :albums="albums" :showCount="false" :loading="loading" />
+    <AlbumGallery :albums="albums" :showCount="false" :loading="loading" />
   </main>
 </template>
 
 <script>
-import SearchAlbums from "@/components/albumList/SearchAlbums";
+import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {
-    SearchAlbums,
+    AlbumGallery,
   },
 
   data() {

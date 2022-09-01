@@ -4,15 +4,15 @@
       {{ searchResults.length }} album{{ searchResults.length | pluralize }}
     </div>
 
-    <AlbumSearchInput v-model="searchTerm" @input="filterAlbums" />
+    <AlbumGallerySearchInput v-model="searchTerm" @input="filterAlbums" />
 
-    <Albums
+    <AlbumList
       v-if="loading"
       :albums="new Array(12).fill({})"
       :albumRoute="albumRoute"
       :isLoading="loading"
     />
-    <Albums
+    <AlbumList
       v-else-if="searchResults.length"
       :albums="searchResults"
       :albumRoute="albumRoute"
@@ -23,13 +23,13 @@
 </template>
 
 <script>
-import Albums from "@/components/albumList/Albums";
-import AlbumSearchInput from "@/components/albumList/AlbumSearchInput.vue";
+import AlbumList from "@/components/albumList/AlbumList";
+import AlbumGallerySearchInput from "@/components/albumList/AlbumGallerySearchInput.vue";
 
 export default {
   components: {
-    AlbumSearchInput,
-    Albums,
+    AlbumGallerySearchInput,
+    AlbumList,
   },
 
   props: {

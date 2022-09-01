@@ -1,5 +1,5 @@
 <template>
-  <PhotoWrapper v-show="isVisible">
+  <PhotoTileWrapper v-show="isVisible">
     <div class="photo" :class="classes">
       <component
         :is="allowSelect || photo.path === undefined ? 'div' : 'router-link'"
@@ -22,16 +22,16 @@
         </div>
       </div>
     </div>
-  </PhotoWrapper>
+  </PhotoTileWrapper>
 </template>
 
 <script>
 import PhotoThumbnail from "./PhotoThumbnail";
-import PhotoWrapper from "@/components/photoList/PhotoWrapper";
+import PhotoTileWrapper from "@/components/photoList/PhotoTileWrapper";
 
 export default {
   components: {
-    PhotoWrapper,
+    PhotoTileWrapper,
     PhotoThumbnail,
   },
 

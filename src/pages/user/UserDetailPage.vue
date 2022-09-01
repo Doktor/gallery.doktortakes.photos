@@ -25,7 +25,7 @@
 
     <section>
       <h2 style="text-align: left">Albums</h2>
-      <SearchAlbums :albums="albums" :loading="loading" />
+      <AlbumGallery :albums="albums" :loading="loading" />
     </section>
   </div>
 </template>
@@ -33,12 +33,12 @@
 <script>
 import { mapState } from "vuex";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import SearchAlbums from "@/components/albumList/SearchAlbums";
+import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {
-    SearchAlbums,
+    AlbumGallery,
     FixedWidthContainer,
   },
 

@@ -10,7 +10,7 @@
     />
 
     <Tiles>
-      <Photo
+      <PhotoTile
         v-for="(photo, index) in results.photos"
         :allowSelect="false"
         :key="index"
@@ -32,11 +32,11 @@
 
 <script>
 import Pagination from "@/components/pagination/Pagination";
-import Photo from "@/components/photoList/Photo";
+import PhotoTile from "@/components/photoList/PhotoTile";
 
 export default {
   components: {
-    Photo,
+    PhotoTile,
     Pagination,
   },
 

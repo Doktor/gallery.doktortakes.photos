@@ -12,8 +12,6 @@
 
 <script>
 export default {
-  name: "AlbumSearchInput",
-
   data() {
     return {
       value: "",

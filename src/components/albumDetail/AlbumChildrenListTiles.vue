@@ -1,6 +1,6 @@
 <template>
   <Tiles v-if="album.children.length > 0">
-    <AlbumCard
+    <AlbumTile
       v-for="child in album.children"
       :album="child"
       :isLoading="false"
@@ -12,13 +12,13 @@
 </template>
 
 <script>
-import AlbumCard from "./AlbumCard";
+import AlbumTile from "@/components/albumTile/AlbumTile";
 import Tiles from "@/components/Tiles";
 
 export default {
   components: {
     Tiles,
-    AlbumCard,
+    AlbumTile,
   },
 
   props: {

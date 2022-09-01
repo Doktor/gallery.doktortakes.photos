@@ -1,20 +1,20 @@
 <template>
   <section v-if="!loading && tag !== null">
     <h2>#{{ tag.slug }}</h2>
-    <SearchAlbums :albums="albums" :loading="false" />
+    <AlbumGallery :albums="albums" :loading="false" />
   </section>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { baseTitle } from "@/router/main.js";
-import SearchAlbums from "@/components/albumList/SearchAlbums";
+import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
 import { TagService } from "@/services/TagService";
 
 export default {
   components: {
-    SearchAlbums,
+    AlbumGallery,
   },
 
   data() {

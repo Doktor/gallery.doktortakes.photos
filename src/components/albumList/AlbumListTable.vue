@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <AlbumTableRow
+      <AlbumListTableRow
         v-for="(album, index) in albums"
         :album="album"
         :isVisible="indexStart <= index && index <= indexEnd"
@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import AlbumTableRow from "./AlbumTableRow";
+import AlbumListTableRow from "./AlbumListTableRow";
 
 export default {
   components: {
-    AlbumTableRow,
+    AlbumListTableRow,
   },
 
   props: {

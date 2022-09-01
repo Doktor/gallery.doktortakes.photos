@@ -1,5 +1,5 @@
 <template>
-  <AlbumWrapper v-show="isVisible">
+  <AlbumTileWrapper v-show="isVisible">
     <div class="album" :class="classes">
       <component
         :is="isLoading ? 'div' : 'router-link'"
@@ -8,16 +8,16 @@
         <AlbumThumbnail :isLoading="isLoading" :album="album" />
       </component>
     </div>
-  </AlbumWrapper>
+  </AlbumTileWrapper>
 </template>
 
 <script>
 import AlbumThumbnail from "./AlbumThumbnail";
-import AlbumWrapper from "@/components/albumList/AlbumWrapper";
+import AlbumTileWrapper from "@/components/albumTile/AlbumTileWrapper";
 
 export default {
   components: {
-    AlbumWrapper,
+    AlbumTileWrapper,
     AlbumThumbnail,
   },
 

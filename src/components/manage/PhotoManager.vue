@@ -32,7 +32,7 @@
     </div>
 
     <p v-if="!photos.length">This album does not contain any photos.</p>
-    <Photos
+    <PhotoGallery
       v-else
       :photos="photos"
       routeName="editPhoto"
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Photos from "@/components/photoList/Photos.vue";
+import PhotoGallery from "@/components/photoList/PhotoGallery.vue";
 import { getCsrfToken, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
@@ -53,7 +53,7 @@ import CustomButton from "@/components/form/CustomButton";
 export default {
   components: {
     CustomButton,
-    Photos,
+    PhotoGallery,
   },
 
   props: {

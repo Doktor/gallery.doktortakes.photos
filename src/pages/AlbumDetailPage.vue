@@ -8,15 +8,15 @@
       />
     </section>
 
-    <AlbumChildren v-if="!loading" :album="album" />
+    <AlbumChildrenListTiles v-if="!loading" :album="album" />
 
-    <Photos
+    <PhotoGallery
       v-if="loading"
       :photos="new Array(12).fill({})"
       :allowSelect="false"
       :isLoading="true"
     />
-    <Photos
+    <PhotoGallery
       v-else-if="photos.length > 0"
       :photos="photos"
       :allowSelect="false"
@@ -30,19 +30,19 @@
 <script>
 import { mapState } from "vuex";
 
-import AlbumCard from "@/components/albumList/AlbumCard";
-import AlbumChildren from "@/components/albumList/AlbumChildren";
+import AlbumTile from "@/components/albumTile/AlbumTile";
+import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
 import AlbumCover from "@/components/albumDetail/AlbumCover";
-import Photos from "@/components/photoList/Photos.vue";
+import PhotoGallery from "@/components/photoList/PhotoGallery.vue";
 import { titleTemplate } from "@/store/mutations";
 import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {
-    AlbumCard,
-    AlbumChildren,
+    AlbumTile,
+    AlbumChildrenListTiles,
     AlbumCover,
-    Photos,
+    PhotoGallery,
   },
 
   data() {

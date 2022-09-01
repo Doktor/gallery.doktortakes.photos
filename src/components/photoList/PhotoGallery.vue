@@ -10,7 +10,7 @@
     />
 
     <Tiles>
-      <Photo
+      <PhotoTile
         v-for="photo in photos"
         :allowSelect="allowSelect"
         :isSelected="
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Photo from "./Photo.vue";
+import PhotoTile from "./PhotoTile.vue";
 import Pagination from "@/components/pagination/Pagination";
 import Tiles from "@/components/Tiles";
 
@@ -47,7 +47,7 @@ export default {
   components: {
     Tiles,
     Pagination,
-    Photo,
+    PhotoTile,
   },
 
   data() {
