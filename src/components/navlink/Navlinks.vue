@@ -7,8 +7,8 @@
       </template>
 
       <!-- Main links -->
-      <NavlinkMenu title="Photos">
-        <Navlink title="Archive" display="Archive" route="albums" />
+      <NavlinkMenu title="Albums">
+        <Navlink title="All albums" route="albums" />
         <Navlink
           v-if="user.status !== 'anonymous'"
           title="Your albums"
