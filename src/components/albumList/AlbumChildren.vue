@@ -1,5 +1,5 @@
 <template>
-  <section v-if="album.children.length > 0" class="albums">
+  <Tiles v-if="album.children.length > 0">
     <AlbumCard
       v-for="child in album.children"
       :album="child"
@@ -8,14 +8,16 @@
       :key="child.path"
       :route="route"
     />
-  </section>
+  </Tiles>
 </template>
 
 <script>
 import AlbumCard from "./AlbumCard";
+import Tiles from "@/components/Tiles";
 
 export default {
   components: {
+    Tiles,
     AlbumCard,
   },
 

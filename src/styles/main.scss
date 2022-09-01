@@ -159,24 +159,6 @@ p {
   font-style: italic;
 }
 
-/* Photos */
-
-.photos {
-  display: flex;
-  flex-wrap: wrap;
-
-  margin: $itemSpacing (-$itemSpacing);
-}
-
-/* Albums */
-
-.albums {
-  display: flex;
-  flex-wrap: wrap;
-
-  margin: $itemSpacing (-$itemSpacing);
-}
-
 // Placeholder text
 .album-no-cover-note {
   position: absolute;

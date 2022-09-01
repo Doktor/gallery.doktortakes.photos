@@ -87,7 +87,6 @@ export default {
 
     classes() {
       return {
-        "albums": this.view === undefined || this.view === "default",
         "album-list-simple": this.view === "simple",
       };
     },

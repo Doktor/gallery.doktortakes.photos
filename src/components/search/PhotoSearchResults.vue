@@ -9,7 +9,7 @@
       @setPage="setPage"
     />
 
-    <section class="photos">
+    <Tiles>
       <Photo
         v-for="(photo, index) in results.photos"
         :allowSelect="false"
@@ -19,7 +19,7 @@
         :isLoading="false"
         :isVisible="true"
       />
-    </section>
+    </Tiles>
 
     <Pagination
       :itemsPerPage="results.itemsPerPage"

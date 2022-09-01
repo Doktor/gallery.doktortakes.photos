@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <Tiles>
     <AlbumCard
       v-for="(album, index) in albums"
       :album="album"
@@ -8,14 +8,16 @@
       :key="isLoading ? index : album.path"
       :routeName="routeName"
     />
-  </div>
+  </Tiles>
 </template>
 
 <script>
 import AlbumCard from "./AlbumCard";
+import Tiles from "@/components/Tiles";
 
 export default {
   components: {
+    Tiles,
     AlbumCard,
   },
 

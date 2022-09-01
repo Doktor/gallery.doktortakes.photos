@@ -9,7 +9,7 @@
       :pages="pages"
     />
 
-    <section class="photos">
+    <Tiles>
       <Photo
         v-for="photo in photos"
         :allowSelect="allowSelect"
@@ -25,7 +25,7 @@
         :routeName="routeName"
         @select="select"
       />
-    </section>
+    </Tiles>
 
     <Pagination
       :itemsPerPage="photosPerPage"
@@ -41,9 +41,11 @@
 <script>
 import Photo from "./Photo.vue";
 import Pagination from "@/components/pagination/Pagination";
+import Tiles from "@/components/Tiles";
 
 export default {
   components: {
+    Tiles,
     Pagination,
     Photo,
   },
