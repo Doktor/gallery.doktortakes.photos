@@ -1,5 +1,5 @@
 <template>
-  <div class="photo-wrapper" :class="wrapperClasses">
+  <PhotoWrapper v-show="isVisible">
     <div class="photo" :class="classes">
       <component
         :is="allowSelect || photo.path === undefined ? 'div' : 'router-link'"
@@ -22,14 +22,16 @@
         </div>
       </div>
     </div>
-  </div>
+  </PhotoWrapper>
 </template>
 
 <script>
 import PhotoThumbnail from "./PhotoThumbnail";
+import PhotoWrapper from "@/components/photoList/PhotoWrapper";
 
 export default {
   components: {
+    PhotoWrapper,
     PhotoThumbnail,
   },
 
@@ -63,13 +65,6 @@ export default {
   },
 
   computed: {
-    wrapperClasses() {
-      return {
-        hidden: !this.isVisible,
-        selected: this.isSelected,
-      };
-    },
-
     classes() {
       return {
         "photo-allow-select": this.allowSelect,
@@ -105,26 +100,6 @@ export default {
 </script>
 
 <style lang="scss">
-$photoWidth: 300px;
-
-.photo-wrapper {
-  padding: $itemSpacing;
-
-  @media (max-width: $photoWidth * 1) {
-    width: 100%;
-  }
-  @for $i from 1 through 4 {
-    @media (min-width: $photoWidth * ($i) + 1) and (max-width: $photoWidth * ($i + 1)) {
-      width: math.div(100%, $i + 1); // 50%, 33%, 25%, 20%
-    }
-  }
-  @media (min-width: $photoWidth * 5 + 1) {
-    width: math.div(100%, 6);
-  }
-
-  @include fade();
-}
-
 .photo-allow-select {
   position: relative;
 }
