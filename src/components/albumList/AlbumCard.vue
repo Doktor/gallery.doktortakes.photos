@@ -1,5 +1,5 @@
 <template>
-  <div class="album-wrapper" :class="wrapperClasses">
+  <AlbumWrapper v-show="isVisible">
     <div class="album" :class="classes">
       <component
         :is="isLoading ? 'div' : 'router-link'"
@@ -8,14 +8,16 @@
         <AlbumThumbnail :isLoading="isLoading" :album="album" />
       </component>
     </div>
-  </div>
+  </AlbumWrapper>
 </template>
 
 <script>
 import AlbumThumbnail from "./AlbumThumbnail";
+import AlbumWrapper from "@/components/albumList/AlbumWrapper";
 
 export default {
   components: {
+    AlbumWrapper,
     AlbumThumbnail,
   },
 
@@ -24,11 +26,6 @@ export default {
       return {
         "album-hidden": this.album.access_level > 0,
         "album-no-cover": this.album.cover === null,
-      };
-    },
-    wrapperClasses() {
-      return {
-        hidden: !this.isSkeleton && !this.isVisible,
       };
     },
 
@@ -66,30 +63,6 @@ export default {
 </script>
 
 <style lang="scss">
-$albumWidth: 400px;
-
-.album-wrapper {
-  padding: $itemSpacing;
-
-  @media (max-width: $albumWidth * 2) {
-    width: 100%;
-  }
-  @media (min-width: $albumWidth * 2 + 1) and (max-width: $albumWidth * 3) {
-    width: math.div(100%, 2); // 50%
-  }
-  @media (min-width: $albumWidth * 3 + 1) and (max-width: $albumWidth * 4) {
-    width: math.div(100%, 3); // 33%
-  }
-  @media (min-width: $albumWidth * 4 + 1) and (max-width: $albumWidth * 6) {
-    width: math.div(100%, 4); // 25%
-  }
-  @media (min-width: $albumWidth * 6 + 1) {
-    width: math.div(100%, 6); // 16.67%
-  }
-
-  @include fade();
-}
-
 .album {
   position: relative;
 }
