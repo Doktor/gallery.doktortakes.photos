@@ -68,6 +68,10 @@ export default {
 
 .nav-menu-opener {
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .nav-menu-container {
