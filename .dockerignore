@@ -24,8 +24,6 @@ media/
 __pycache__/
 .pytest_cache/
 .sass-cache/
-static/*.js
-static/images/
 static.1/
 
 # Libraries

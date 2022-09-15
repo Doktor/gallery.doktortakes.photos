@@ -33,6 +33,7 @@ COPY \
   package-lock.json \
   webpack.*.js \
   /app/
+COPY ./static/ /app/static/
 COPY ./src/ /app/src/
 
 RUN npm ci
