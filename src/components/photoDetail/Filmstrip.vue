@@ -3,7 +3,7 @@
     <div v-for="photo in photos" :class="classes(photo.index)">
       <img
         class="filmstrip-image"
-        :src="photo.images.square.url"
+        :src="photo.images.extraSmallSquare?.url ?? photo.images.square.url"
         @click="onClick(photo.index)"
         :title="`${photo.index + 1} of ${photos.length}`"
       />

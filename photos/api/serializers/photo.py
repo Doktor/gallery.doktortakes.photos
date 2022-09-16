@@ -2,7 +2,8 @@ from django.urls import reverse
 from rest_framework import serializers
 
 from photos.api.serializers.thumbnail import ThumbnailSerializer
-from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE, THUMBNAIL_MEDIUM_SQUARE
+from photos.models.photo.thumbnail import (
+    THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE, THUMBNAIL_MEDIUM_SQUARE, THUMBNAIL_EXTRA_SMALL_SQUARE)
 from photos.models import Photo
 
 import itertools
@@ -16,6 +17,7 @@ def serialize_thumbnail(thumbnail: "Thumbnail"):
 THUMBNAIL_TYPES = (
     # (property name, internal name)
     ("display", THUMBNAIL_DISPLAY),
+    ("extraSmallSquare", THUMBNAIL_EXTRA_SMALL_SQUARE),
     ("square", THUMBNAIL_SMALL_SQUARE),
     ("mediumSquare", THUMBNAIL_MEDIUM_SQUARE),
 )
