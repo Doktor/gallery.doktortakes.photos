@@ -1,9 +1,9 @@
 from django.core.files import File
 
 from photos.models import Photo
-from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_LARGE_SQUARE, THUMBNAIL_SMALL_SQUARE
+from photos.models.photo.thumbnail import THUMBNAIL_LARGE_SQUARE, THUMBNAIL_SMALL_SQUARE
 from photos.settings_photos import LARGE_SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
-from photos.utils.image import create_thumbnail, guess_aspect_ratio
+from photos.utils.image import create_thumbnail
 
 import datetime
 import PIL.Image
@@ -14,7 +14,6 @@ strptime = datetime.datetime.strptime
 
 def create_thumbnails(photo: Photo, file: File) -> None:
     update_square_thumbnail(photo, file)
-    # update_thumbnail(photo, file)
 
     photo.sidecar_exists = True
     photo.save()
@@ -45,26 +44,4 @@ def update_large_square_thumbnail(photo: Photo, file: File) -> None:
 
 
 def update_thumbnail(photo: Photo, file: File) -> None:
-    long_edge = 1200
-    width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
-
-    create_thumbnail(
-        photo, file,
-        width, height, THUMBNAIL_COVER,
-        quality=THUMBNAIL_QUALITY)
-
-
-# Helper functions
-
-
-def get_thumbnail_size_preserve_ratio(data: File, long_edge: int) -> Tuple[int, int]:
-    image = PIL.Image.open(data)
-    w, h = image.size
-
-    # Resize the image
-    ratio = guess_aspect_ratio(w, h)
-
-    if w > h:
-        return long_edge, int(long_edge / ratio)
-    else:
-        return int(long_edge / (1 / ratio)), long_edge
+    return

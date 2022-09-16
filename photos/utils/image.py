@@ -116,22 +116,3 @@ def apply_watermark(image: PIL.Image, color: str) -> PIL.Image:
 
     image.paste(watermark_image, coords, mask=watermark_image.split()[3])
     return image
-
-
-RATIOS = [(1, 1), (3, 2), (4, 3), (5, 4), (16, 9), (16, 10), (2.35, 1), (2.39, 1)]
-TOLERANCE = 1 / 100
-
-
-def guess_aspect_ratio(w: int, h: int) -> float:
-    long, short = max(w, h), min(w, h)
-
-    for rl, rs in RATIOS:
-        ratio = rl / rs
-
-        if abs((long / short) - ratio) < TOLERANCE:
-            if w > h:
-                return ratio
-            else:
-                return 1 / ratio
-    else:
-        return w / h

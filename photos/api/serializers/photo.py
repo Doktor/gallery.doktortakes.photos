@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import serializers
 
 from photos.api.serializers.thumbnail import ThumbnailSerializer
-from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
+from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE
 from photos.models import Photo
 
 import itertools
@@ -17,7 +17,6 @@ THUMBNAIL_TYPES = (
     # (property name, internal name)
     ("display", THUMBNAIL_DISPLAY),
     ("square", THUMBNAIL_SMALL_SQUARE),
-    ("cover", THUMBNAIL_COVER),
 )
 
 
