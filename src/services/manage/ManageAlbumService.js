@@ -114,15 +114,18 @@ export const ManageAlbumService = {
   },
 
   async deletePhotos(path, photoHashes) {
-    return await sendRequest(endpoints.albumPhotoList.replace(":path", path), {
-      method: "DELETE",
-      body: JSON.stringify({
-        photos: photoHashes,
-      }),
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "X-CSRFToken": getCsrfToken(),
-      },
-    });
+    return await sendRequest(
+      endpoints.manageAlbumPhotoList.replace(":path", path),
+      {
+        method: "DELETE",
+        body: JSON.stringify({
+          photos: photoHashes,
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-CSRFToken": getCsrfToken(),
+        },
+      }
+    );
   },
 };
