@@ -18,22 +18,6 @@ from typing import List, Union
 
 m = metadata(None)
 
-SIZE_2400 = '2400'
-SIZE_3000 = '3000'
-SIZE_3600 = '3600'
-SIZE_3840 = '3840'
-SIZE_4800 = '4800'
-SIZE_6000 = '6000'
-
-DISPLAY_IMAGE_SIZES = (
-    (SIZE_2400, '2400 x 1600'),
-    (SIZE_3000, '3000 x 2000'),
-    (SIZE_3600, '3600 x 2400'),
-    (SIZE_3840, '3840 x 2560'),
-    (SIZE_4800, '4800 x 3200'),
-    (SIZE_6000, '6000 x 4000'),
-)
-
 
 class Allow:
     PUBLIC = 0
@@ -71,9 +55,6 @@ class Album(MPTTModel):
     end = models.DateField(blank=True, null=True)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)
-
-    display_image_size = models.CharField(
-        max_length=4, choices=DISPLAY_IMAGE_SIZES, default=SIZE_3840)
 
     cover = models.OneToOneField(
         'Photo', models.SET_NULL,

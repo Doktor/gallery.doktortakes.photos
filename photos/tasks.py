@@ -32,7 +32,7 @@ def create_thumbnails(photo: Photo, file: File) -> None:
 
 
 def update_display_image(photo: Photo, file: File) -> None:
-    long_edge = int(photo.album.display_image_size)
+    long_edge = photo.width
     width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
 
     if False and photo.watermark is not None:

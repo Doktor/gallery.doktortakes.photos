@@ -42,12 +42,6 @@
       <CustomInput label="End" type="date" v-model="changes.end" />
 
       <CustomSelect
-        label="Display image size"
-        :options="displayImageSizes"
-        v-model="changes.display_image_size"
-      />
-
-      <CustomSelect
         label="Access level"
         :options="accessLevels"
         v-model="changes.access_level"
