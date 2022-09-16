@@ -19,9 +19,7 @@ strptime = datetime.datetime.strptime
 def create_thumbnails(photo: Photo, file: File) -> None:
     update_display_image(photo, file)
     update_square_thumbnail(photo, file)
-
-    if photo.rating >= 4:
-        update_thumbnail(photo, file)
+    # update_thumbnail(photo, file)
 
     photo.sidecar_exists = True
     photo.save()

@@ -61,12 +61,6 @@ def parse_xmp_data(photo: 'Photo', file: File) -> None:
         element = root.xpath('.//rdf:Description', namespaces=NS)[0]
 
         try:
-            rating = element.xpath('@xmp:Rating', namespaces=NS)[0]
-            photo.rating = int(rating)
-        except IndexError:
-            photo.rating = 0
-
-        try:
             label = element.xpath('@xmp:Label', namespaces=NS)[0].lower()
         except IndexError:
             photo.watermark = COLOR_NONE

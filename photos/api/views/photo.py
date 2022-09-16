@@ -92,20 +92,6 @@ def search_photos(request: Request) -> Response:
 
             query &= Q(**{field: value})
 
-    ratings = params.get('ratings', '').split(',')
-    if ratings:
-        subquery = Q()
-
-        for value in ratings:
-            try:
-                value = int(value)
-            except ValueError:
-                continue
-
-            subquery |= Q(rating=value)
-
-        query = query & subquery
-
     # Filtering: dates
 
     taken_start = params.get('takenStart', '')

@@ -87,7 +87,6 @@ class Photo(models.Model):
     edited = models.DateTimeField(editable=False)
 
     exif = JSONField(blank=True, verbose_name="EXIF")
-    rating = models.PositiveSmallIntegerField(default=0)
 
     # Bookkeeping
 
@@ -110,12 +109,6 @@ class Photo(models.Model):
             return True
 
         return self.album.check_access(request)
-
-    def clean(self) -> None:
-        if self.rating > 5:
-            raise ValidationError("Rating must be between 0 and 5")
-
-        super().clean()
 
     @property
     def filename(self) -> str:

@@ -175,23 +175,6 @@
             />
           </div>
         </div>
-
-        <div class="form-control">
-          <label>Rating</label>
-
-          <div class="form-control-options">
-            <template v-for="rating in allRatings">
-              <input
-                type="checkbox"
-                :id="'rating-' + rating"
-                name="rating"
-                :value="rating"
-                v-model="ratings"
-              />
-              <label :for="'rating-' + rating">{{ rating }}</label>
-            </template>
-          </div>
-        </div>
       </fieldset>
     </div>
 
@@ -223,8 +206,6 @@ export default {
       direction: "new",
       itemsPerPage: 24,
 
-      ratings: [],
-
       name: "",
       location: "",
       width: "",
@@ -238,10 +219,6 @@ export default {
   },
 
   computed: {
-    allRatings() {
-      return [0, 1, 2, 3, 4, 5];
-    },
-
     countChoices() {
       return [24, 48, 96];
     },

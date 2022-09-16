@@ -18,7 +18,7 @@ class PhotoAdmin(admin.ModelAdmin):
             'fields': ('preview', 'watermark', 'md5', 'dimensions', 'file_size')
         }),
         ('Other', {
-            'fields': ('rating', 'album')
+            'fields': ('album',)
         }),
         ('Dates', {
             'fields': ('taken', 'edited')
