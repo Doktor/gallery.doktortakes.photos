@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="hasContent">
     <div v-if="location" class="overlay-item">
       <i title="Location" class="fas fa-fw fa-map-marker-alt"></i>
       <span>{{ location }}</span>
@@ -56,6 +56,15 @@ export default {
 
   computed: {
     ...mapState(["photos", "user"]),
+
+    hasContent() {
+      return (
+        this.location ||
+        this.album.tags.length > 0 ||
+        this.album.description ||
+        this.album.parent
+      );
+    },
 
     location() {
       let place = this.album.place;
