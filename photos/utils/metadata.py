@@ -86,18 +86,23 @@ def get_exif(photo: 'Photo') -> dict:
 
     camera = e.get('Image Model', 'Camera unknown')
 
-    try:
-        make = e.get('EXIF LensMake', e['Image Make'])
-        model = e['EXIF LensModel']
+    lens_make = e.get('EXIF LensMake', e.get('Image Make', None))
+    lens_model = e.get('EXIF LensModel', None)
 
-        lens = f'{make} {model}'
-    except KeyError:
+    if lens_model is None:
         lens = 'Lens unknown'
+    elif lens_model.lower().startswith('tamron'):
+        lens = 'Tamron' + lens_model[len('Tamron'):]
+    else:
+        if lens_make is None:
+            lens = lens_model
+        else:
+            lens = f'{lens_make} {lens_model}'
 
-    if 'EF-S' in lens:
-        lens = lens.replace('EF-S', 'EF-S ')
-    elif 'EF' in lens:
-        lens = lens.replace('EF', 'EF ')
+        if 'EF-S' in lens:
+            lens = lens.replace('EF-S', 'EF-S ')
+        elif 'EF' in lens:
+            lens = lens.replace('EF', 'EF ')
 
     try:
         focal_length = f"{e['EXIF FocalLength']} mm"
