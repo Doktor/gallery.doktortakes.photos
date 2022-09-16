@@ -34,7 +34,10 @@
         </section>
 
         <section class="image-container">
-          <img class="image-preview" :src="photo.images.display.url" />
+          <img
+            class="image-preview"
+            :src="photo.images.display?.url ?? photo.images.original.url"
+          />
         </section>
       </main>
 

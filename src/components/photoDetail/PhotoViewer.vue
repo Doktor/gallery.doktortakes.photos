@@ -85,7 +85,7 @@ export default {
         return "https://upload.wikimedia.org/wikipedia/commons/a/aa/Philips_PM5544.svg";
       }
 
-      return this.photo.images.display.url;
+      return this.photo.images.display?.url ?? this.photo.images.original.url;
     },
     containerStyles() {
       let styles = {

@@ -143,7 +143,7 @@ export default {
     preloadPhoto(photo) {
       if (!photo.loaded) {
         let image = new Image();
-        image.src = photo.images.display.url;
+        image.src = photo.images.display?.url ?? photo.images.original.url;
 
         photo.loaded = true;
       }

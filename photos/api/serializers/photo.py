@@ -37,15 +37,26 @@ class PhotoSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_images(obj: Photo) -> dict:
-        thumbnails = {}
+        temp = {}
 
         for key, group in itertools.groupby(obj.thumbnails.all(), lambda t: t.type):
-            thumbnails[key] = next(group)
+            temp[key] = next(group)
 
-        return {
-            name: serialize_thumbnail(thumbnails[key]) if key in thumbnails else None
+        thumbnails = {
+            name: serialize_thumbnail(temp[key]) if key in temp else None
             for (name, key) in THUMBNAIL_TYPES
         }
+
+        if thumbnails["display"] is None:
+            thumbnails["original"] = {
+                "url": obj.original.url,
+                "name": obj.original.name,
+                "type": "original",
+                "width": obj.width,
+                "height": obj.height,
+            }
+
+        return thumbnails
 
     def get_admin(self, obj: Photo):
         if self.context.get('is_staff', False):

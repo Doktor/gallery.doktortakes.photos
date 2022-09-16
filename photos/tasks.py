@@ -1,11 +1,7 @@
 from django.core.files import File
 
 from photos.models import Photo
-from photos.models.photo.photo import COLOR_WHITE
-from photos.models.photo.thumbnail import (
-    THUMBNAIL_COVER, THUMBNAIL_DISPLAY, THUMBNAIL_LARGE_SQUARE,
-    THUMBNAIL_SMALL_SQUARE)
-from photos.models.photo.watermark import WATERMARK_COLOR_BLACK, WATERMARK_COLOR_WHITE
+from photos.models.photo.thumbnail import THUMBNAIL_COVER, THUMBNAIL_LARGE_SQUARE, THUMBNAIL_SMALL_SQUARE
 from photos.settings_photos import LARGE_SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_QUALITY
 from photos.utils.image import create_thumbnail, guess_aspect_ratio
 
@@ -17,7 +13,6 @@ strptime = datetime.datetime.strptime
 
 
 def create_thumbnails(photo: Photo, file: File) -> None:
-    update_display_image(photo, file)
     update_square_thumbnail(photo, file)
     # update_thumbnail(photo, file)
 
@@ -32,21 +27,7 @@ def create_thumbnails(photo: Photo, file: File) -> None:
 
 
 def update_display_image(photo: Photo, file: File) -> None:
-    long_edge = photo.width
-    width, height = get_thumbnail_size_preserve_ratio(file, long_edge)
-
-    if False and photo.watermark is not None:
-        watermark_color = WATERMARK_COLOR_WHITE if photo.watermark == COLOR_WHITE else WATERMARK_COLOR_BLACK
-
-        create_thumbnail(
-            photo, file,
-            width, height, THUMBNAIL_DISPLAY,
-            quality=90, add_watermark=True, watermark_color=watermark_color)
-    else:
-        create_thumbnail(
-            photo, file,
-            width, height, THUMBNAIL_DISPLAY,
-            quality=90)
+    return
 
 
 def update_square_thumbnail(photo: Photo, file: File) -> None:

@@ -69,7 +69,7 @@ export default {
     ...mapState(["user"]),
 
     image() {
-      return this.photo.images.display;
+      return this.photo.images.display ?? this.photo.images.original;
     },
   },
 };
