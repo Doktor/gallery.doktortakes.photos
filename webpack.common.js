@@ -16,8 +16,9 @@ module.exports = {
 
   plugins: [
     new BundleTracker({
-      path: path.resolve(__dirname, "./static/"),
-      filename: "webpack-stats.json",
+      // the "path" option is broken, so use an absolute path instead
+      // https://github.com/django-webpack/webpack-bundle-tracker/issues/108
+      filename: path.resolve(__dirname, "./static/", "webpack-stats.json"),
     }),
     new VueLoaderPlugin(),
   ],
