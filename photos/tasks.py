@@ -12,6 +12,7 @@ strptime = datetime.datetime.strptime
 
 def create_thumbnails(photo: Photo, file: File) -> None:
     update_square_thumbnail(photo, file)
+    update_medium_square_thumbnail(photo, file)
 
     photo.sidecar_exists = True
     photo.save()

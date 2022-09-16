@@ -33,7 +33,11 @@ export default {
 
   computed: {
     thumbnail() {
-      return this.photo.images?.square?.url ?? null;
+      return (
+        this.photo.images?.mediumSquare?.url ??
+        this.photo.images?.square?.url ??
+        null
+      );
     },
   },
 };
