@@ -33,9 +33,11 @@
 <script>
 import Pagination from "@/components/pagination/Pagination";
 import PhotoTile from "@/components/photoList/PhotoTile";
+import Tiles from "@/components/Tiles";
 
 export default {
   components: {
+    Tiles,
     PhotoTile,
     Pagination,
   },
