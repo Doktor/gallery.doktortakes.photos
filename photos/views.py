@@ -221,14 +221,14 @@ def view_album(request: HttpRequest, path: str) -> HttpResponse:
     ]
 
     if album.cover:
-        thumbnail = album.cover.get_display_image()
+        thumbnail = album.cover.get_meta_thumbnail()
         cover_url = get_media_url(thumbnail.image.url)
 
         meta.extend([
             MetaProperty('og:image', cover_url),
             MetaProperty('og:image:type', 'image/jpeg'),
-            MetaProperty('og:image:width', album.cover.width),
-            MetaProperty('og:image:height', album.cover.height),
+            MetaProperty('og:image:width', thumbnail.width),
+            MetaProperty('og:image:height', thumbnail.height),
 
             *meta_twitter_common,
             MetaName('twitter:card', 'photo'),
@@ -330,7 +330,7 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
         *meta_open_graph_article(last_update=photo.taken),
     ]
 
-    thumbnail = photo.get_display_image()
+    thumbnail = photo.get_meta_thumbnail()
 
     if thumbnail:
         image_url = get_media_url(thumbnail.image.url)
@@ -338,8 +338,8 @@ def view_photo(request: HttpRequest, path: str, md5: str) -> HttpResponse:
         meta.extend([
             MetaProperty('og:image', image_url),
             MetaProperty('og:image:type', 'image/jpeg'),
-            MetaProperty('og:image:width', photo.width),
-            MetaProperty('og:image:height', photo.height),
+            MetaProperty('og:image:width', thumbnail.width),
+            MetaProperty('og:image:height', thumbnail.height),
 
             *meta_twitter_common,
             MetaName('twitter:card', 'photo'),

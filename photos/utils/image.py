@@ -60,7 +60,7 @@ def create_thumbnail(
 
 
 def fit_image(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
-    """Resizes an image so that it fits within the given size, without
+    """Resizes an image so that it fits within the given long_size, without
     distorting the image and cropping the sides as necessary."""
     if image.format != 'JPEG':
         image = image.convert('RGB')
@@ -104,7 +104,7 @@ def apply_watermark(image: PIL.Image, color: str) -> PIL.Image:
     try:
         watermark = Watermark.objects.get(apply_to_size=image_size, color=color)
     except Watermark.DoesNotExist:
-        raise RuntimeError(f"no watermark found for parameters: size = {image_size}, color = {color}")
+        raise RuntimeError(f"no watermark found for parameters: long_size = {image_size}, color = {color}")
 
     watermark_image = PIL.Image.open(watermark.image)
 

@@ -12,7 +12,7 @@ from django.urls import reverse
 from rest_framework.request import Request
 
 from photos.fields import JSONField
-from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_LARGE_SQUARE
+from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_LARGE_SQUARE, THUMBNAIL_MEDIUM
 from photos.settings_photos import MEDIA_FOLDERS as MEDIA, DEFAULT_PATH
 
 import os
@@ -121,8 +121,8 @@ class Photo(models.Model):
     def get_large_square_thumbnail(self) -> Optional['Thumbnail']:
         return self.get_thumbnail(THUMBNAIL_LARGE_SQUARE)
 
-    def get_display_image(self) -> Optional['Thumbnail']:
-        return self.get_thumbnail(THUMBNAIL_DISPLAY)
+    def get_meta_thumbnail(self) -> Optional['Thumbnail']:
+        return self.get_thumbnail(THUMBNAIL_MEDIUM) or self.get_thumbnail(THUMBNAIL_DISPLAY)
 
     def get_absolute_url(self) -> str:
         return reverse('photo', args=[self.album.path, self.md5])

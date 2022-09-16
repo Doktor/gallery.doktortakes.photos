@@ -11,6 +11,8 @@ THUMBNAIL_SMALL_SQUARE = 'square'
 THUMBNAIL_MEDIUM_SQUARE = 'square_md'
 THUMBNAIL_LARGE_SQUARE = 'square_lg'
 
+THUMBNAIL_MEDIUM = 'display_md'
+
 # Deprecated
 THUMBNAIL_COVER = 'cover'
 
@@ -21,6 +23,8 @@ THUMBNAIL_TYPES = (
     (THUMBNAIL_SMALL_SQUARE, 'Square (small)'),
     (THUMBNAIL_MEDIUM_SQUARE, 'Square (medium)'),
     (THUMBNAIL_LARGE_SQUARE, 'Square (large)'),
+
+    (THUMBNAIL_MEDIUM, 'Regular (medium)'),
 
     # Deprecated
     (THUMBNAIL_COVER, 'Cover'),

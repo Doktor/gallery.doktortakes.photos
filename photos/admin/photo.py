@@ -44,7 +44,7 @@ class PhotoAdmin(admin.ModelAdmin):
 
     def preview(self, photo):
         thumbnail = photo.get_thumbnail(THUMBNAIL_SMALL_SQUARE)
-        display = photo.get_display_image()
+        display = photo.get_meta_thumbnail()
 
         return format_html('<a href="{}"><img height="300" src="{}"></a>',
                            display.image.url, thumbnail.image.url)
