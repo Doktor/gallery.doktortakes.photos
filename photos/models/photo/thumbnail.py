@@ -7,6 +7,7 @@ import uuid
 
 THUMBNAIL_DISPLAY = 'display'
 THUMBNAIL_SMALL_SQUARE = 'square'
+THUMBNAIL_MEDIUM_SQUARE = 'square_md'
 THUMBNAIL_LARGE_SQUARE = 'square_lg'
 
 # Deprecated
@@ -16,6 +17,7 @@ THUMBNAIL_COVER = 'cover'
 THUMBNAIL_TYPES = (
     (THUMBNAIL_DISPLAY, 'Display'),
     (THUMBNAIL_SMALL_SQUARE, 'Square (small)'),
+    (THUMBNAIL_MEDIUM_SQUARE, 'Square (medium)'),
     (THUMBNAIL_LARGE_SQUARE, 'Square (large)'),
 
     # Deprecated
