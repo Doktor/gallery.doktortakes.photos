@@ -12,7 +12,6 @@ strptime = datetime.datetime.strptime
 
 def create_thumbnails(photo: Photo, file: File) -> None:
     update_extra_small_square_thumbnail(photo, file)
-    update_square_thumbnail(photo, file)
     update_medium_square_thumbnail(photo, file)
 
     photo.sidecar_exists = True
@@ -37,10 +36,7 @@ def update_extra_small_square_thumbnail(photo: Photo, file: File) -> None:
 
 
 def update_square_thumbnail(photo: Photo, file: File) -> None:
-    create_thumbnail(
-        photo, file,
-        SQUARE_THUMBNAIL_WIDTH, SQUARE_THUMBNAIL_WIDTH, THUMBNAIL_SMALL_SQUARE,
-        quality=THUMBNAIL_QUALITY)
+    return
 
 
 def update_medium_square_thumbnail(photo: Photo, file: File) -> None:
