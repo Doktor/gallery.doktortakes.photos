@@ -112,7 +112,7 @@ export default {
       });
 
       let { ok } = await sendRequest(
-        endpoints.albumDetail.replace(":path", this.album.path),
+        endpoints.manageAlbumDetail.replace(":path", this.album.path),
         {
           method: "PATCH",
           body: JSON.stringify({ cover: selectedHash }),
