@@ -10,6 +10,14 @@
       selected
     </div>
 
+    <div>
+      <CustomInput
+        type="checkbox"
+        label="Show photos in child albums"
+        v-model="showPhotosInChildAlbumsComputed"
+      />
+    </div>
+
     <div class="actions">
       <div class="action-row">
         <CustomButton @click="toggleSelecting">
@@ -49,9 +57,11 @@ import { getCsrfToken, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
+import CustomInput from "@/components/form/CustomInput";
 
 export default {
   components: {
+    CustomInput,
     CustomButton,
     PhotoGallery,
   },
@@ -63,6 +73,11 @@ export default {
     },
     photos: {
       type: Array,
+      required: true,
+    },
+
+    showPhotosInChildAlbums: {
+      type: Boolean,
       required: true,
     },
   },
@@ -80,6 +95,15 @@ export default {
     },
     toggleSelectButtonText() {
       return `${this.isSelecting ? "Disable" : "Enable"} selection mode`;
+    },
+
+    showPhotosInChildAlbumsComputed: {
+      get() {
+        return this.showPhotosInChildAlbums;
+      },
+      set() {
+        this.$emit("toggleShowPhotosInChildAlbums");
+      },
     },
   },
 

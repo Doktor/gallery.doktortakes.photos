@@ -1,4 +1,9 @@
-import { getCsrfToken, parseAlbumForAPI, sendRequest } from "@/utils";
+import {
+  getCsrfToken,
+  getQueryString,
+  parseAlbumForAPI,
+  sendRequest,
+} from "@/utils";
 import { store } from "@/store";
 import { router } from "@/router/main";
 import { endpoints } from "@/constants";
@@ -111,6 +116,19 @@ export const ManageAlbumService = {
       });
       setTimeout(() => router.push({ name: "manage" }), 1500);
     }
+  },
+
+  async listAllPhotos(path) {
+    return await sendRequest(
+      endpoints.manageAlbumPhotoList.replace(":path", path) +
+        getQueryString({ recursive: true }),
+      {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "X-CSRFToken": getCsrfToken(),
+        },
+      }
+    );
   },
 
   async deletePhotos(path, photoHashes) {

@@ -1,3 +1,5 @@
+from typing import List
+
 from django.http import Http404
 
 from rest_framework import exceptions
@@ -7,7 +9,7 @@ from rest_framework.views import APIView
 
 from photos.api.serializers import (
     AlbumSerializer, SimpleAlbumSerializer, PhotoSerializer)
-from photos.models import Album
+from photos.models import Album, Photo
 from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
 
 from http import HTTPStatus as Status
@@ -25,6 +27,29 @@ def get_album(request: Request, path: str) -> Album:
         return get_album_for_user_or_404(request, path)
     except Http404:
         raise AlbumNotFound
+
+
+def get_photos_for_album(request: Request, path: str, recursive: bool = False) -> Response:
+    album = get_album(request, path)
+
+    if recursive:
+        albums = album.get_all_subalbums(include_self=True)
+        photos = Photo.objects.filter(album__in=albums)
+    else:
+        photos = album.photos
+
+    photos = photos.filter(sidecar_exists=True).order_by('taken').prefetch_related('album', 'thumbnails')
+
+    serialized = []
+
+    for index, photo in enumerate(photos):
+        context = {
+            'index': index,
+            'is_staff': request.user.is_staff,
+        }
+        serialized.append(PhotoSerializer(photo, context=context).data)
+
+    return Response({'photos': serialized}, status=Status.OK)
 
 
 class AlbumList(APIView):
@@ -57,16 +82,4 @@ class AlbumDetail(APIView):
 class AlbumPhotoList(APIView):
     @staticmethod
     def get(request: Request, path: str) -> Response:
-        album = get_album(request, path)
-
-        response = []
-        photos = album.photos.filter(sidecar_exists=True).order_by('taken').prefetch_related('thumbnails')
-
-        for index, photo in enumerate(photos):
-            context = {
-                'index': index,
-                'is_staff': request.user.is_staff,
-            }
-            response.append(PhotoSerializer(photo, context=context).data)
-
-        return Response({'photos': response}, status=Status.OK)
+        return get_photos_for_album(request, path, recursive=False)

@@ -25,7 +25,13 @@
       </template>
 
       <PhotoUploader :path="album.path" />
-      <PhotoManager :album="album" :photos="photos" @update="loadAlbum" />
+      <PhotoManager
+        :album="album"
+        :photos="filteredPhotos"
+        :showPhotosInChildAlbums="showPhotosInChildAlbums"
+        @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
+        @update="loadAlbum"
+      />
 
       <DeleteAlbumForm :album="album" @delete="deleteAlbum" />
     </template>
@@ -61,6 +67,9 @@ export default {
     return {
       album: {},
       photos: [],
+
+      showPhotosInChildAlbums: false,
+      allPhotos: null,
     };
   },
 
@@ -70,6 +79,10 @@ export default {
     routePath() {
       return this.$route.params.path;
     },
+
+    filteredPhotos() {
+      return this.showPhotosInChildAlbums ? this.allPhotos : this.photos;
+    },
   },
 
   async created() {
@@ -77,6 +90,17 @@ export default {
   },
 
   methods: {
+    async toggleShowPhotosInChildAlbums() {
+      if (this.allPhotos === null) {
+        let { content } = await ManageAlbumService.listAllPhotos(
+          this.routePath
+        );
+        this.allPhotos = content.photos;
+      }
+
+      this.showPhotosInChildAlbums = !this.showPhotosInChildAlbums;
+    },
+
     async loadAlbum() {
       this.$store.commit("setLoading", true);
 

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from photos.api.serializers import (
     AlbumSerializer, AlbumCoverSerializer, PhotoSerializer)
-from photos.api.views.album import get_album
+from photos.api.views.album import get_album, get_photos_for_album
 from photos.models import Photo
 from photos.tasks import create_thumbnails
 from photos.utils.metadata import parse_exif_data, parse_xmp_data
@@ -71,6 +71,10 @@ class ManageAlbumDetail(APIView):
 
 class ManageAlbumPhotoList(APIView):
     permission_classes = [IsAdminUser]
+
+    @staticmethod
+    def get(request: Request, path: str) -> Response:
+        return get_photos_for_album(request, path, recursive='recursive' in request.GET)
 
     @staticmethod
     def post(request: Request, path: str) -> Response:
