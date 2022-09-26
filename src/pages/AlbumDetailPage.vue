@@ -21,7 +21,11 @@
       :photos="photos"
       :allowSelect="false"
     />
-    <div class="album-empty-text" v-else>
+
+    <div
+      class="album-empty-text"
+      v-if="photos.length === 0 && album.children?.length === 0"
+    >
       There are no photos in this album.
     </div>
   </div>
