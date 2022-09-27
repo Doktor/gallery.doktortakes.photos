@@ -30,27 +30,18 @@ import AlbumAccessInfo from "./AlbumAccessInfo";
 import AlbumLinks from "./AlbumLinks";
 import AlbumMetadata from "./AlbumMetadata";
 
-const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-function twoDigitPad(n) {
-  return n <= 9 ? "0" + n : n;
+function toFullDateTimeForm(dateForm) {
+  return `${dateForm}T00:00:00+00:00`;
 }
 
-function formatDate(date) {
-  let weekday = days[date.getDay()];
-  let year = date.getFullYear();
-  let month = twoDigitPad(date.getMonth() + 1);
-  let day = twoDigitPad(date.getDate());
-
-  return `${weekday} ${year}/${month}/${day}`;
+function formatDate(dateString) {
+  return new Date(toFullDateTimeForm(dateString)).toLocaleString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export default {
@@ -72,12 +63,12 @@ export default {
     },
 
     date() {
-      let start = new Date(this.album.start);
-      let end = this.album.end === null ? null : new Date(this.album.end);
+      let start = this.album.start;
+      let end = this.album.end;
 
       return end === null
         ? formatDate(start)
-        : "{0} &ndash; {1}".format(formatDate(start), formatDate(end));
+        : `${formatDate(start)} &ndash; ${formatDate(end)}`;
     },
   },
 
