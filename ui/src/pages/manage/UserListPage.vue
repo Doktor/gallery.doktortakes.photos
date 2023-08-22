@@ -73,26 +73,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-table {
-  margin: 0 auto;
-}
-
-thead {
-  background-color: $background-color-3;
-  text-align: center;
-}
-
-th,
-td {
-  padding: 4px 8px;
-}
-
 .user-log-in,
 .user-date-joined {
   white-space: nowrap;
-}
-
-tr:nth-child(even) {
-  background-color: $background-color-2;
 }
 </style>

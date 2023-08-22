@@ -148,6 +148,29 @@ p {
   margin: 1rem 0;
 }
 
+table {
+  margin: 0 auto;
+  width: 100%;
+}
+
+thead {
+  background-color: $background-color-3;
+  text-align: center;
+}
+
+tbody {
+  text-align: left;
+}
+
+th,
+td {
+  padding: 4px 8px;
+}
+
+tr:nth-child(even) {
+  background-color: $background-color-2;
+}
+
 /* Generic classes */
 
 .hidden {
