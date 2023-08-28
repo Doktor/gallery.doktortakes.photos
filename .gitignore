@@ -26,3 +26,6 @@ static.1/
 
 # Libraries
 node_modules/
+
+# Other
+.DS_Store
