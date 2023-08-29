@@ -1,0 +1,89 @@
+<template>
+  <FixedWidthContainer :width="800">
+    <main>
+      <section>
+        <h2>Add notification</h2>
+        <CustomInput label="Text" v-model="message" />
+        <CustomSelect
+          label="Status"
+          :options="statusOptions"
+          v-model="status"
+        />
+
+        <CustomButton class="button-primary" @click="addNotification">
+          Submit
+        </CustomButton>
+      </section>
+
+      <section>
+        <h2>Add timed notification</h2>
+
+        <CustomInput label="Text" v-model="message" />
+        <CustomInput label="Time (ms)" type="number" v-model="timeMs" />
+        <CustomSelect
+          label="Status"
+          :options="statusOptions"
+          v-model="status"
+        />
+
+        <CustomButton class="button-primary" @click="addTimedNotification">
+          Submit
+        </CustomButton>
+      </section>
+    </main>
+  </FixedWidthContainer>
+</template>
+
+<script>
+import CustomInput from "../../components/form/CustomInput.vue";
+import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
+import CustomSelect from "../../components/form/CustomSelect.vue";
+import CustomButton from "../../components/form/CustomButton.vue";
+
+export default {
+  components: { CustomButton, CustomSelect, FixedWidthContainer, CustomInput },
+
+  data() {
+    return {
+      message: "",
+      timeMs: 0,
+      status: "",
+    };
+  },
+
+  computed: {
+    statusOptions() {
+      return ["default", "success", "warning", "error"].map((status) => {
+        return { value: status, display: status };
+      });
+    },
+  },
+
+  methods: {
+    addNotification() {
+      this.$store.commit("addNotification", {
+        message: this.message,
+        status: this.status,
+      });
+    },
+
+    addTimedNotification() {
+      this.$store.commit("addTimedNotification", {
+        message: this.message,
+        status: this.status,
+        hideAfter: this.timeMs,
+      });
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+main {
+  text-align: left;
+}
+
+.field {
+  max-width: 480px;
+}
+</style>

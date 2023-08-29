@@ -24,7 +24,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./src/:/app/src/
+      - ./ui/src/:/app/ui/src/
       - static_volume:/app/static/
     entrypoint: npx webpack --config webpack.dev.js
 

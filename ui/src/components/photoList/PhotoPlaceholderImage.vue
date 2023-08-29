@@ -1,0 +1,13 @@
+<template>
+  <PlaceholderImage :width="1" :height="1" alt="Photo thumbnail placeholder" />
+</template>
+
+<script>
+import PlaceholderImage from "../PlaceholderImage.vue";
+
+export default {
+  components: {
+    PlaceholderImage,
+  },
+};
+</script>

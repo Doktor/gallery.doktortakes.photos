@@ -26,15 +26,15 @@ RUN chmod +x /app/run.dev.sh
 
 FROM node:15.12.0 AS node
 
-WORKDIR /app/
+WORKDIR /app/ui/
 
 COPY \
-  package.json \
-  package-lock.json \
-  webpack.*.js \
+  ui/package.json \
+  ui/package-lock.json \
+  ui/webpack.*.js \
   /app/
 COPY ./static/ /app/static/
-COPY ./src/ /app/src/
+COPY ./ui/src/ /app/ui/src/
 
 RUN npm ci
 

@@ -1,11 +1,11 @@
 FROM node:15.12.0 AS node
 
-WORKDIR /app/
+WORKDIR /app/ui/
 
 COPY \
-  package.json \
-  package-lock.json \
-  webpack.*.js \
-  /app/
+  ui/package.json \
+  ui/package-lock.json \
+  ui/webpack.*.js \
+  /app/ui/
 
 RUN npm install

@@ -6,9 +6,9 @@ logs/
 *.bak
 *.db
 *.json
-!jsconfig.json
-!package.json
-!package-lock.json
+!ui/jsconfig.json
+!ui/package.json
+!ui/package-lock.json
 *.log
 *.pgsql
 *.rdb
