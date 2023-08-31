@@ -10,6 +10,7 @@ services:
     ports:
       - 8000:8000
     volumes:
+      - media_files:/app/media/
       - ./photos/:/app/photos/
       - static_volume:/app/static/
     depends_on:
@@ -36,5 +37,6 @@ services:
       - postgres_data:/var/lib/postgresql/data/
 
 volumes:
+  media_files:
   postgres_data:
   static_volume:
