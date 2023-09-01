@@ -31,7 +31,7 @@ class Taxon(models.Model):
     common_name = models.CharField(max_length=200, blank=True)
 
     parent = models.ForeignKey('Taxon', models.SET_NULL, related_name='children', null=True, blank=True)
-    parent_catalog_id = models.CharField(max_length=10, unique=True, help_text='Catalogue of Life identifier')
+    parent_catalog_id = models.CharField(max_length=10, help_text='Catalogue of Life identifier')
 
     created_date = models.DateTimeField(auto_now_add=True, editable=False)
     updated_date = models.DateTimeField(auto_now=True, editable=False)
