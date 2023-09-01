@@ -10,6 +10,8 @@ from photos.models import Photo
 
 from http import HTTPStatus as Status
 
+from photos.utils import try_parse_int
+
 
 class ManagePhotoDetail(APIView):
     permission_classes = [IsAdminUser]
@@ -27,9 +29,15 @@ class ManageRecentPhotoList(APIView):
 
     @staticmethod
     def get(request: Request) -> Response:
-        limit = request.data.get('limit', 12)
+        page = try_parse_int(request.GET.get('page', 1), 1)
+        size = try_parse_int(request.GET.get('size', 12), 12)
 
-        photos = Photo.objects.all().order_by('-uploaded')[0:limit]
+        start = (page - 1) * size
+        end = page * size
+
+        photos = Photo.objects.all().order_by('-uploaded')[start:end]
+        count = Photo.objects.count()
+
         serializer = PhotoSerializer(photos, many=True)
 
-        return Response(serializer.data, status=Status.OK)
+        return Response({"items": serializer.data, "count": count}, status=Status.OK)
