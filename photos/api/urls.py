@@ -19,6 +19,7 @@ manage_patterns = [
     path('users/', manage.UserList.as_view(), name='api_users'),
     path('groups/', manage.GroupList.as_view(), name='api_groups'),
 
+    path('taxa/import/', manage.ImportTaxon.as_view(), name='api_import_taxa'),
     path('taxa/', manage.ManageTaxonList.as_view(), name='api_manage_taxa'),
 ]
 
