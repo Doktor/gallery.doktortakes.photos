@@ -31,6 +31,8 @@ api_patterns = [
 
     path('tags/', views.TagList.as_view(), name='api_tags'),
 
+    path('taxa/', views.TaxonList.as_view(), name='api_taxa'),
+
     path('me/', views.get_current_user, name='api_current_user'),
     path('me/password/', views.change_password, name='api_change_password'),
 
