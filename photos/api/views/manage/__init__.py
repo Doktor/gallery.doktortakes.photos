@@ -1,5 +1,6 @@
 from .album import ManageAlbumList, ManageAlbumDetail, ManageAlbumPhotoList
 from .group import GroupList
 from .photo import ManagePhotoDetail, ManageRecentPhotoList
+from .taxon import ManageTaxonList
 from .thumbnail import ManageThumbnailList
 from .user import UserList

@@ -18,6 +18,8 @@ manage_patterns = [
 
     path('users/', manage.UserList.as_view(), name='api_users'),
     path('groups/', manage.GroupList.as_view(), name='api_groups'),
+
+    path('taxa/', manage.ManageTaxonList.as_view(), name='api_manage_taxa'),
 ]
 
 api_patterns = [
