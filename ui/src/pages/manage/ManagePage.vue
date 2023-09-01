@@ -13,7 +13,11 @@
     </FixedWidthContainer>
 
     <h3 style="text-align: left">Recently uploaded photos</h3>
-    <PhotoGallery :photos="recentPhotos" routeName="editPhoto" />
+    <PhotoGallery
+      routeName="editPhoto"
+      :useServerSidePagination="true"
+      :getPage="getPage"
+    />
 
     <AlbumGallery :albums="albums" :loading="loading" albumRoute="editAlbum" />
   </div>
@@ -41,22 +45,29 @@ export default {
     };
   },
 
+  methods: {
+    async getPage(page, size) {
+      let { ok, content } = await ManagePhotoService.getRecentPhotos(
+        page,
+        size
+      );
+
+      if (!ok) {
+        this.$store.commit("addNotification", {
+          message: "An error occurred when retrieving recent photos",
+          status: "error",
+        });
+
+        return { photos: [], count: 0 };
+      } else {
+        return content;
+      }
+    },
+  },
+
   async created() {
     this.loading = true;
     this.albums = await AlbumService.getAllAlbums();
-
-    let { ok, content } = await ManagePhotoService.getRecentPhotos(12);
-
-    if (!ok) {
-      this.recentPhotos = [];
-      this.$store.commit("addNotification", {
-        message: "An error occurred when retrieving recent photos",
-        status: "error",
-      });
-    } else {
-      this.recentPhotos = content;
-    }
-
     this.loading = false;
   },
 };

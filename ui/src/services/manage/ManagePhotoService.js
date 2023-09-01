@@ -8,9 +8,9 @@ export const ManagePhotoService = {
     );
   },
 
-  async getRecentPhotos(limit = 12) {
+  async getRecentPhotos(page, size) {
     return await sendRequest(
-      "/api/manage/photos/recent/" + getQueryString({ limit })
+      "/api/manage/photos/recent/" + getQueryString({ page, size })
     );
   },
 
