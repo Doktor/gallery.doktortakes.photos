@@ -10,7 +10,7 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, "./static/"),
+    path: path.resolve(__dirname, "../static/"),
     filename: "[name].js",
   },
 
@@ -18,7 +18,7 @@ module.exports = {
     new BundleTracker({
       // the "path" option is broken, so use an absolute path instead
       // https://github.com/django-webpack/webpack-bundle-tracker/issues/108
-      filename: path.resolve(__dirname, "./static/", "webpack-stats.json"),
+      filename: path.resolve(__dirname, "../static/", "webpack-stats.json"),
     }),
     new VueLoaderPlugin(),
   ],
