@@ -1,10 +1,16 @@
-import { getCsrfToken, sendRequest } from "../../utils";
+import { getCsrfToken, getQueryString, sendRequest } from "../../utils";
 import { endpoints } from "../../constants";
 
 export const ManagePhotoService = {
   async getThumbnails(md5) {
     return await sendRequest(
       endpoints.managePhotoThumbnailList.replace(":md5", md5)
+    );
+  },
+
+  async getRecentPhotos(limit = 12) {
+    return await sendRequest(
+      "/api/manage/photos/recent/" + getQueryString({ limit })
     );
   },
 

@@ -12,6 +12,9 @@
       </ul>
     </FixedWidthContainer>
 
+    <h3 style="text-align: left">Recently uploaded photos</h3>
+    <PhotoGallery :photos="recentPhotos" routeName="editPhoto" />
+
     <AlbumGallery :albums="albums" :loading="loading" albumRoute="editAlbum" />
   </div>
 </template>
@@ -20,9 +23,12 @@
 import AlbumGallery from "../../components/albumList/AlbumGallery.vue";
 import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
 import { AlbumService } from "../../services/AlbumService";
+import PhotoGallery from "../../components/photoList/PhotoGallery.vue";
+import { ManagePhotoService } from "../../services/manage/ManagePhotoService";
 
 export default {
   components: {
+    PhotoGallery,
     FixedWidthContainer,
     AlbumGallery,
   },
@@ -30,6 +36,7 @@ export default {
   data() {
     return {
       albums: [],
+      recentPhotos: [],
       loading: true,
     };
   },
@@ -37,6 +44,19 @@ export default {
   async created() {
     this.loading = true;
     this.albums = await AlbumService.getAllAlbums();
+
+    let { ok, content } = await ManagePhotoService.getRecentPhotos(12);
+
+    if (!ok) {
+      this.recentPhotos = [];
+      this.$store.commit("addNotification", {
+        message: "An error occurred when retrieving recent photos",
+        status: "error",
+      });
+    } else {
+      this.recentPhotos = content;
+    }
+
     this.loading = false;
   },
 };
