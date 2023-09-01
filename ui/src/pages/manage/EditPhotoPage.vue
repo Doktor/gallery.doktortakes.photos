@@ -197,21 +197,6 @@ h3 {
 
 .photo-details-table {
   width: 100%;
-
-  ::v-deep {
-    thead tr {
-      background-color: rgb(210, 210, 210);
-    }
-
-    tr:nth-child(even) {
-      background-color: rgb(230, 230, 230);
-    }
-
-    th,
-    td {
-      padding: 4px;
-    }
-  }
 }
 
 .image-preview {
