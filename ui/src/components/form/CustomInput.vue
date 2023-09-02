@@ -9,7 +9,7 @@
       :name="name"
       v-bind="$attrs"
       v-model="model"
-    />
+    ></textarea>
     <input
       v-else
       :class="classes"
@@ -23,13 +23,13 @@
     <label v-if="type === 'checkbox'" :for="id">{{ label }}</label>
 
     <template v-for="(_, name) in $scopedSlots" :slot="name">
-      <slot :name="name" />
+      <slot :name="name"></slot>
     </template>
   </InputWrapper>
 </template>
 
 <script>
-import InputWrapper from "./InputWrapper.vue";
+import InputWrapper from "./InputWrapper";
 
 export default {
   components: { InputWrapper },

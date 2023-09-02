@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import InputWrapper from "./InputWrapper.vue";
+import InputWrapper from "./InputWrapper";
 export default {
   components: { InputWrapper },
   props: {

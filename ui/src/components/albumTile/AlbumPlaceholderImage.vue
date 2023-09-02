@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PlaceholderImage from "../PlaceholderImage";
+import PlaceholderImage from "@/components/PlaceholderImage";
 
 export default {
   components: {

@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import Pagination from "../pagination/Pagination.vue";
-import PhotoTile from "../photoList/PhotoTile.vue";
-import Tiles from "../Tiles.vue";
+import Pagination from "../pagination/Pagination";
+import PhotoTile from "../photoList/PhotoTile";
+import Tiles from "../Tiles";
 
 export default {
   components: {

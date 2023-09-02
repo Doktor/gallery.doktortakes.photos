@@ -67,12 +67,12 @@
 </template>
 
 <script>
-import GenerateAccessCode from "./GenerateAccessCode.vue";
-import CustomInput from "../form/CustomInput.vue";
-import CustomSelect from "../form/CustomSelect.vue";
-import ListInput from "../form/ListInput.vue";
+import GenerateAccessCode from "./GenerateAccessCode";
+import CustomInput from "../form/CustomInput";
+import CustomSelect from "../form/CustomSelect";
+import ListInput from "../form/ListInput";
 import { accessLevels } from "@/constants";
-import CustomButton from "../form/CustomButton.vue";
+import CustomButton from "../form/CustomButton";
 
 const displayImageSizes = [
   {

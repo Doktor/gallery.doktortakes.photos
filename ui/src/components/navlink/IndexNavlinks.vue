@@ -22,7 +22,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Navlink from "./Navlink.vue";
+import Navlink from "./Navlink";
 
 export default {
   name: "IndexNavlinks",

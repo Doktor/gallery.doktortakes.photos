@@ -189,7 +189,7 @@
 <script>
 import { getQueryString, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
-import CustomButton from "../form/CustomButton.vue";
+import CustomButton from "../form/CustomButton";
 
 export default {
   components: { CustomButton },

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import FadeTransition from "@/transitions/FadeTransition.vue";
+import FadeTransition from "@/transitions/FadeTransition";
 
 export default {
   components: {

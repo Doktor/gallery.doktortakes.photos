@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import CustomInput from "../../../components/form/CustomInput.vue";
-import CustomSelect from "../../../components/form/CustomSelect.vue";
+import CustomInput from "@/components/form/CustomInput";
+import CustomSelect from "@/components/form/CustomSelect";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
-import CustomButton from "../../../components/form/CustomButton.vue";
+import CustomButton from "@/components/form/CustomButton";
 
 const watermarkColors = [
   {

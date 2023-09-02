@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import AlbumList from "./AlbumList.vue";
-import AlbumGallerySearchInput from "./AlbumGallerySearchInput.vue";
+import AlbumList from "./AlbumList";
+import AlbumGallerySearchInput from "./AlbumGallerySearchInput";
 
 export default {
   components: {

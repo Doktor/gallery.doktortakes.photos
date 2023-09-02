@@ -70,12 +70,12 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Navlink from "./Navlink.vue";
-import NavlinkDivider from "./NavlinkDivider.vue";
-import NavlinkSocial from "./NavlinkSocial.vue";
-import NavlinksLogo from "./NavlinksLogo.vue";
-import NavlinkMenu from "./NavlinkMenu.vue";
-import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon.vue";
+import Navlink from "./Navlink";
+import NavlinkDivider from "./NavlinkDivider";
+import NavlinkSocial from "./NavlinkSocial";
+import NavlinksLogo from "./NavlinksLogo";
+import NavlinkMenu from "./NavlinkMenu";
+import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 
 export default {
   components: {

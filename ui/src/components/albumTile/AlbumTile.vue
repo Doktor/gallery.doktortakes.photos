@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import AlbumThumbnail from "./AlbumThumbnail.vue";
-import AlbumTileWrapper from "./AlbumTileWrapper.vue";
+import AlbumThumbnail from "./AlbumThumbnail";
+import AlbumTileWrapper from "./AlbumTileWrapper";
 
 export default {
   components: {

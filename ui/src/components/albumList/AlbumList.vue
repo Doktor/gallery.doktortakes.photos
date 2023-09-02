@@ -25,12 +25,12 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import AlbumTile from "../albumTile/AlbumTile";
+import AlbumTile from "@/components/albumTile/AlbumTile";
 import AlbumListTiles from "./AlbumListTiles";
 import AlbumListSimple from "./AlbumListSimple";
 import AlbumListViewSelector from "./AlbumListViewSelector";
 import AlbumListTable from "./AlbumListTable";
-import Pagination from "../pagination/Pagination";
+import Pagination from "@/components/pagination/Pagination";
 
 export default {
   components: {

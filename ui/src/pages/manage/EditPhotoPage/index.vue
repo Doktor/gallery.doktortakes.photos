@@ -59,14 +59,14 @@
 </template>
 
 <script>
-import FixedWidthContainer from "@/components/FixedWidthContainer.vue";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { mapState } from "vuex";
 import { AlbumService } from "@/services/AlbumService";
 import { PhotoService } from "@/services/PhotoService";
-import PhotoMetadataTable from "./PhotoMetadataTable.vue";
-import PhotoExifTable from "./PhotoExifTable.vue";
-import PhotoThumbnailsTable from "./PhotoThumbnailsTable.vue";
-import ThumbnailForm from "./ThumbnailForm.vue";
+import PhotoMetadataTable from "./PhotoMetadataTable";
+import PhotoExifTable from "./PhotoExifTable";
+import PhotoThumbnailsTable from "./PhotoThumbnailsTable";
+import ThumbnailForm from "./ThumbnailForm";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 
 export default {

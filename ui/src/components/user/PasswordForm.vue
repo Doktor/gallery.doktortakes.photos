@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import CustomInput from "../form/CustomInput.vue";
+import CustomInput from "../form/CustomInput";
 import { UserService } from "@/services/UserService";
-import CustomButton from "../form/CustomButton.vue";
+import CustomButton from "../form/CustomButton";
 
 const errors = {
   empty: "This field can't be empty.",
