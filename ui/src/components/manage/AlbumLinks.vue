@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { domains } from "../../constants";
+import { domains } from "@/constants";
 
 export default {
   name: "AlbumLinks",

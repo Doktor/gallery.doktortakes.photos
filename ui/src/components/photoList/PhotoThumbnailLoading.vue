@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import PhotoPlaceholderImage from "./PhotoPlaceholderImage.vue";
+import PhotoPlaceholderImage from "./PhotoPlaceholderImage";
 
 export default {
   components: {

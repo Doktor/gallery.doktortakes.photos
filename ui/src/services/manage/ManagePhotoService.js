@@ -1,5 +1,5 @@
-import { getCsrfToken, getQueryString, sendRequest } from "../../utils";
-import { endpoints } from "../../constants";
+import { getCsrfToken, getQueryString, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export const ManagePhotoService = {
   async getThumbnails(md5) {

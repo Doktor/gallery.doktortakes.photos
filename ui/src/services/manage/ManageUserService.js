@@ -1,5 +1,5 @@
-import { sendRequest } from "../../utils";
-import { endpoints } from "../../constants";
+import { sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
 
 export const ManageUserService = {
   async listUsers() {

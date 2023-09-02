@@ -1,34 +1,34 @@
 import VueRouter from "vue-router";
 
-import { store } from "../store";
+import { store } from "@/store";
 
-import IndexPage from "../pages/public/IndexPage.vue";
+import IndexPage from "@/pages/public/IndexPage";
 
-import AlbumListPage from "../pages/public/AlbumListPage.vue";
-import AlbumDetailPage from "../pages/public/AlbumDetailPage.vue";
-import PhotoDetailPage from "../pages/public/PhotoDetailPage.vue";
-import TagListPage from "../pages/public/TagListPage.vue";
-import TagDetailPage from "../pages/public/TagDetailPage.vue";
-import UserListPage from "../pages/manage/UserListPage.vue";
-import UserDetailPage from "../pages/user/UserDetailPage.vue";
-import ChangePasswordPage from "../pages/user/ChangePasswordPage.vue";
+import AlbumListPage from "@/pages/public/AlbumListPage";
+import AlbumDetailPage from "@/pages/public/AlbumDetailPage";
+import PhotoDetailPage from "@/pages/public/PhotoDetailPage";
+import TagListPage from "@/pages/public/TagListPage";
+import TagDetailPage from "@/pages/public/TagDetailPage";
+import UserListPage from "@/pages/manage/UserListPage";
+import UserDetailPage from "@/pages/user/UserDetailPage";
+import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
 
-import GroupListPage from "../pages/manage/GroupListPage.vue";
+import GroupListPage from "@/pages/manage/GroupListPage";
 
-import AboutPage from "../pages/public/AboutPage.vue";
-import CopyrightPage from "../pages/public/CopyrightPage.vue";
+import AboutPage from "@/pages/public/AboutPage";
+import CopyrightPage from "@/pages/public/CopyrightPage";
 
-import SearchPhotosPage from "../pages/public/SearchPhotosPage.vue";
+import SearchPhotosPage from "@/pages/public/SearchPhotosPage";
 
-import EditAlbumPage from "../pages/manage/EditAlbumPage.vue";
-import ManagePage from "../pages/manage/ManagePage.vue";
-import NewAlbumPage from "../pages/manage/NewAlbumPage.vue";
+import EditAlbumPage from "@/pages/manage/EditAlbumPage";
+import ManagePage from "@/pages/manage/ManagePage";
+import NewAlbumPage from "@/pages/manage/NewAlbumPage";
 
-import LogInPage from "../pages/user/LogInPage.vue";
-import LogOutPage from "../pages/user/LogOutPage.vue";
-import EditPhotoPage from "../pages/manage/EditPhotoPage.vue";
-import DebugNotificationsPage from "../pages/debug/DebugNotificationsPage.vue";
-import EditTaxaPage from "../pages/manage/ManageTaxaPage.vue";
+import LogInPage from "@/pages/user/LogInPage";
+import LogOutPage from "@/pages/user/LogOutPage";
+import EditPhotoPage from "@/pages/manage/EditPhotoPage";
+import DebugNotificationsPage from "@/pages/debug/DebugNotificationsPage";
+import EditTaxaPage from "@/pages/manage/ManageTaxaPage";
 
 export const baseTitle = "Doktor Takes Photos";
 

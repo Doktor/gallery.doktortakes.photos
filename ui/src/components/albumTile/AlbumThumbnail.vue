@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import AlbumThumbnailLoading from "./AlbumThumbnailLoading.vue";
-import AlbumThumbnailPlaceholder from "./AlbumThumbnailPlaceholder.vue";
-import AlbumThumbnailTitle from "./AlbumThumbnailTitle.vue";
+import AlbumThumbnailLoading from "./AlbumThumbnailLoading";
+import AlbumThumbnailPlaceholder from "./AlbumThumbnailPlaceholder";
+import AlbumThumbnailTitle from "./AlbumThumbnailTitle";
 
 export default {
   components: {

@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import AlbumForm from "../../components/manage/AlbumForm.vue";
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import { ManageAlbumService } from "../../services/manage/ManageAlbumService";
+import AlbumForm from "@/components/manage/AlbumForm";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 
 export default {
   components: {

@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import { router } from "../../router/main";
-import CustomInput from "../../components/form/CustomInput.vue";
-import CustomButton from "../../components/form/CustomButton.vue";
+import { router } from "@/router/main";
+import CustomInput from "@/components/form/CustomInput";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
   components: { CustomButton, CustomInput },

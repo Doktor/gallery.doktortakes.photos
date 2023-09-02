@@ -32,9 +32,9 @@
 
 <script>
 import { mapState } from "vuex";
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import AlbumGallery from "../../components/albumList/AlbumGallery.vue";
-import { AlbumService } from "../../services/AlbumService";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import AlbumGallery from "@/components/albumList/AlbumGallery";
+import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {

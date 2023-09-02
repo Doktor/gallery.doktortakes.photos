@@ -39,7 +39,7 @@
 <script>
 import CustomInput from "../form/CustomInput.vue";
 import CustomSelect from "../form/CustomSelect.vue";
-import { ManagePhotoService } from "../../services/manage/ManagePhotoService";
+import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 import CustomButton from "../form/CustomButton.vue";
 
 const watermarkColors = [

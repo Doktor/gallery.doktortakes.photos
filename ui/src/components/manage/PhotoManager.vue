@@ -53,9 +53,9 @@
 
 <script>
 import PhotoGallery from "../photoList/PhotoGallery.vue";
-import { getCsrfToken, sendRequest } from "../../utils";
-import { endpoints } from "../../constants";
-import { ManageAlbumService } from "../../services/manage/ManageAlbumService";
+import { getCsrfToken, sendRequest } from "@/utils";
+import { endpoints } from "@/constants";
+import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "../form/CustomButton.vue";
 import CustomInput from "../form/CustomInput.vue";
 

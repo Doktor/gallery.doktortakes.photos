@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PlaceholderImage from "../PlaceholderImage.vue";
+import PlaceholderImage from "../PlaceholderImage";
 
 export default {
   components: {

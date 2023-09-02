@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import AlbumPlaceholder from "./AlbumPlaceholderImage.vue";
+import AlbumPlaceholder from "./AlbumPlaceholderImage";
 
 export default {
   components: {

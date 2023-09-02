@@ -33,9 +33,9 @@
 
 <script>
 import { mapState } from "vuex";
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import { formatDate, formatDateTime } from "../../date";
-import { ManageUserService } from "../../services/manage/ManageUserService";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { formatDate, formatDateTime } from "@/date";
+import { ManageUserService } from "@/services/manage/ManageUserService";
 
 export default {
   components: {

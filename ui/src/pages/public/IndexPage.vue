@@ -24,12 +24,12 @@
 
 <script>
 import { mapState } from "vuex";
-import AlbumListTiles from "../../components/albumList/AlbumListTiles.vue";
-import IndexNavlinks from "../../components/navlink/IndexNavlinks.vue";
-import IndexLogo from "../../components/index/IndexLogo.vue";
-import FadeTransition from "../../transitions/FadeTransition.vue";
-import HeroPhoto from "../../components/index/HeroPhoto.vue";
-import { HeroPhotoService } from "../../services/HeroPhotoService";
+import AlbumListTiles from "@/components/albumList/AlbumListTiles";
+import IndexNavlinks from "@/components/navlink/IndexNavlinks";
+import IndexLogo from "@/components/index/IndexLogo";
+import FadeTransition from "@/transitions/FadeTransition";
+import HeroPhoto from "@/components/index/HeroPhoto";
+import { HeroPhotoService } from "@/services/HeroPhotoService";
 
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {

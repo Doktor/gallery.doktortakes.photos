@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AlbumPlaceholderImage from "./AlbumPlaceholderImage.vue";
+import AlbumPlaceholderImage from "./AlbumPlaceholderImage";
 
 export default {
   components: {

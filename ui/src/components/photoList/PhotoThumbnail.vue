@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import PhotoThumbnailLoading from "./PhotoThumbnailLoading.vue";
-import PhotoThumbnailPlaceholder from "./PhotoThumbnailPlaceholder.vue";
+import PhotoThumbnailLoading from "./PhotoThumbnailLoading";
+import PhotoThumbnailPlaceholder from "./PhotoThumbnailPlaceholder";
 
 export default {
   components: {

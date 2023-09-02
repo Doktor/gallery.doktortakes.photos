@@ -3,10 +3,10 @@ import {
   getQueryString,
   parseAlbumForAPI,
   sendRequest,
-} from "../../utils";
-import { store } from "../../store";
-import { router } from "../../router/main";
-import { endpoints } from "../../constants";
+} from "@/utils";
+import { store } from "@/store";
+import { router } from "@/router/main";
+import { endpoints } from "@/constants";
 
 export const ManageAlbumService = {
   async createAlbum(album) {

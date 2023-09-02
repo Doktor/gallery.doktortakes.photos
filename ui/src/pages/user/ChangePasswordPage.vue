@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import PasswordForm from "../../components/user/PasswordForm.vue";
-import { sleep } from "../../utils";
-import { router } from "../../router/main";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import PasswordForm from "@/components/user/PasswordForm";
+import { sleep } from "@/utils";
+import { router } from "@/router/main";
 
 export default {
   components: {

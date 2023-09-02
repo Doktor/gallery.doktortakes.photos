@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import PhotoThumbnail from "./PhotoThumbnail.vue";
-import PhotoTileWrapper from "./PhotoTileWrapper.vue";
+import PhotoThumbnail from "./PhotoThumbnail";
+import PhotoTileWrapper from "./PhotoTileWrapper";
 
 export default {
   components: {

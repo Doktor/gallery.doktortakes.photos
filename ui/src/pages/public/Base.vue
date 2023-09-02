@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import Navlinks from "../../components/navlink/Navlinks.vue";
-import Notifications from "../../components/Notifications.vue";
-import FadeTransition from "../../transitions/FadeTransition.vue";
-import { TaglineService } from "../../services/TaglineService";
+import Navlinks from "@/components/navlink/Navlinks";
+import Notifications from "@/components/Notifications";
+import FadeTransition from "@/transitions/FadeTransition";
+import { TaglineService } from "@/services/TaglineService";
 
 export default {
   components: {

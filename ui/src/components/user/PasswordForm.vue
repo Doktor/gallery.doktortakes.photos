@@ -42,7 +42,7 @@
 
 <script>
 import CustomInput from "../form/CustomInput.vue";
-import { UserService } from "../../services/UserService";
+import { UserService } from "@/services/UserService";
 import CustomButton from "../form/CustomButton.vue";
 
 const errors = {

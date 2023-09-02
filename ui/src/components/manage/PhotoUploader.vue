@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import { getCsrfToken, getQueryString } from "../../utils";
-import { endpoints } from "../../constants";
+import { getCsrfToken, getQueryString } from "@/utils";
+import { endpoints } from "@/constants";
 import CustomInput from "../form/CustomInput.vue";
 
 export default {

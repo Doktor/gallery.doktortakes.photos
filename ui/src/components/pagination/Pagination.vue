@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import PageSkipInput from "./PageSkipInput.vue";
+import PageSkipInput from "./PageSkipInput";
 
 const skip = "skip";
 

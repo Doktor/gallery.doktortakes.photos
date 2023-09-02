@@ -39,18 +39,18 @@
 </template>
 
 <script>
-import AlbumChildrenListTiles from "../../components/albumDetail/AlbumChildrenListTiles.vue";
-import AlbumDetails from "../../components/manage/AlbumDetails.vue";
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import DeleteAlbumForm from "../../components/manage/DeleteAlbumForm.vue";
-import PhotoManager from "../../components/manage/PhotoManager.vue";
-import PhotoUploader from "../../components/manage/PhotoUploader.vue";
+import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
+import AlbumDetails from "@/components/manage/AlbumDetails";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import DeleteAlbumForm from "@/components/manage/DeleteAlbumForm";
+import PhotoManager from "@/components/manage/PhotoManager";
+import PhotoUploader from "@/components/manage/PhotoUploader";
 import { mapState } from "vuex";
-import { router } from "../../router/main";
-import { editorTitleTemplate } from "../../store/mutations";
-import AlbumLinks from "../../components/manage/AlbumLinks.vue";
-import { AlbumService } from "../../services/AlbumService";
-import { ManageAlbumService } from "../../services/manage/ManageAlbumService";
+import { router } from "@/router/main";
+import { editorTitleTemplate } from "@/store/mutations";
+import AlbumLinks from "@/components/manage/AlbumLinks";
+import { AlbumService } from "@/services/AlbumService";
+import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 
 export default {
   components: {

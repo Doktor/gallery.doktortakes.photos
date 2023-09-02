@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import CustomInput from "../../components/form/CustomInput.vue";
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import CustomSelect from "../../components/form/CustomSelect.vue";
-import CustomButton from "../../components/form/CustomButton.vue";
+import CustomInput from "@/components/form/CustomInput";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import CustomSelect from "@/components/form/CustomSelect";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
   components: { CustomButton, CustomSelect, FixedWidthContainer, CustomInput },

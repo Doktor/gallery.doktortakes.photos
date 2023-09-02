@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import AlbumGallery from "../../components/albumList/AlbumGallery.vue";
-import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
-import { AlbumService } from "../../services/AlbumService";
-import PhotoGallery from "../../components/photoList/PhotoGallery.vue";
-import { ManagePhotoService } from "../../services/manage/ManagePhotoService";
+import AlbumGallery from "@/components/albumList/AlbumGallery";
+import FixedWidthContainer from "@/components/FixedWidthContainer";
+import { AlbumService } from "@/services/AlbumService";
+import PhotoGallery from "@/components/photoList/PhotoGallery";
+import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 
 export default {
   components: {

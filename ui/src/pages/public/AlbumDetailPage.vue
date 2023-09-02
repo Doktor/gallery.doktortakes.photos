@@ -34,12 +34,12 @@
 <script>
 import { mapState } from "vuex";
 
-import AlbumTile from "../../components/albumTile/AlbumTile.vue";
-import AlbumChildrenListTiles from "../../components/albumDetail/AlbumChildrenListTiles.vue";
-import AlbumCover from "../../components/albumDetail/AlbumCover.vue";
-import PhotoGallery from "../../components/photoList/PhotoGallery.vue";
-import { titleTemplate } from "../../store/mutations";
-import { AlbumService } from "../../services/AlbumService";
+import AlbumTile from "@/components/albumTile/AlbumTile";
+import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
+import AlbumCover from "@/components/albumDetail/AlbumCover";
+import PhotoGallery from "@/components/photoList/PhotoGallery";
+import { titleTemplate } from "@/store/mutations";
+import { AlbumService } from "@/services/AlbumService";
 
 export default {
   components: {

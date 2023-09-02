@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import AlbumTile from "../albumTile/AlbumTile.vue";
-import Tiles from "../Tiles.vue";
+import AlbumTile from "@/components/albumTile/AlbumTile";
+import Tiles from "@/components/Tiles";
 
 export default {
   components: {
