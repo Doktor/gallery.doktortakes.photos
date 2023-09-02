@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
 
 export default {
   components: {

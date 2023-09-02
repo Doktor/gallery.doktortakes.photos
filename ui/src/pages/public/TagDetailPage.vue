@@ -7,10 +7,10 @@
 
 <script>
 import { mapState } from "vuex";
-import { baseTitle } from "../router/main.js";
-import AlbumGallery from "../components/albumList/AlbumGallery.vue";
-import { AlbumService } from "../services/AlbumService";
-import { TagService } from "../services/TagService";
+import { baseTitle } from "../../router/main.js";
+import AlbumGallery from "../../components/albumList/AlbumGallery.vue";
+import { AlbumService } from "../../services/AlbumService";
+import { TagService } from "../../services/TagService";
 
 export default {
   components: {

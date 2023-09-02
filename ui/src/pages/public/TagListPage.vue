@@ -15,8 +15,8 @@
 
 <script>
 import { mapState } from "vuex";
-import FixedWidthContainer from "../components/FixedWidthContainer.vue";
-import { TagService } from "../services/TagService";
+import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
+import { TagService } from "../../services/TagService";
 
 export default {
   components: {

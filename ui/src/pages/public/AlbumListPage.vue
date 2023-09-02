@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import AlbumGallery from "../components/albumList/AlbumGallery.vue";
-import { AlbumService } from "../services/AlbumService";
+import AlbumGallery from "../../components/albumList/AlbumGallery.vue";
+import { AlbumService } from "../../services/AlbumService";
 
 export default {
   components: {

@@ -4,7 +4,7 @@
 
     <figure class="icon">
       <img
-        :src="require('../images/camera.png').default"
+        :src="require('../../images/camera.png').default"
         alt="A blue dog holding a camera"
         title="Me!"
       />
@@ -159,7 +159,7 @@
 </template>
 
 <script>
-import FixedWidthContainer from "../components/FixedWidthContainer.vue";
+import FixedWidthContainer from "../../components/FixedWidthContainer.vue";
 
 export default {
   components: {

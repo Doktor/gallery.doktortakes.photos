@@ -28,15 +28,15 @@
 
 <script>
 import { mapState } from "vuex";
-import { router } from "../router/main.js";
+import { router } from "../../router/main.js";
 
-import PhotoExif from "../components/photoDetail/PhotoExif.vue";
-import Filmstrip from "../components/photoDetail/Filmstrip.vue";
-import KeyboardShortcuts from "../components/photoDetail/KeyboardShortcuts.vue";
-import PhotoLinks from "../components/photoDetail/PhotoLinks.vue";
-import PhotoMetadata from "../components/photoDetail/PhotoMetadata.vue";
-import PhotoViewer from "../components/photoDetail/PhotoViewer.vue";
-import { AlbumService } from "../services/AlbumService";
+import PhotoExif from "../../components/photoDetail/PhotoExif.vue";
+import Filmstrip from "../../components/photoDetail/Filmstrip.vue";
+import KeyboardShortcuts from "../../components/photoDetail/KeyboardShortcuts.vue";
+import PhotoLinks from "../../components/photoDetail/PhotoLinks.vue";
+import PhotoMetadata from "../../components/photoDetail/PhotoMetadata.vue";
+import PhotoViewer from "../../components/photoDetail/PhotoViewer.vue";
+import { AlbumService } from "../../services/AlbumService";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 

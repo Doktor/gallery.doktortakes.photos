@@ -2,23 +2,23 @@ import VueRouter from "vue-router";
 
 import { store } from "../store";
 
-import IndexPage from "../pages/IndexPage.vue";
+import IndexPage from "../pages/public/IndexPage.vue";
 
-import AlbumListPage from "../pages/AlbumListPage.vue";
-import AlbumDetailPage from "../pages/AlbumDetailPage.vue";
-import PhotoDetailPage from "../pages/PhotoDetailPage.vue";
-import TagListPage from "../pages/TagListPage.vue";
-import TagDetailPage from "../pages/TagDetailPage.vue";
+import AlbumListPage from "../pages/public/AlbumListPage.vue";
+import AlbumDetailPage from "../pages/public/AlbumDetailPage.vue";
+import PhotoDetailPage from "../pages/public/PhotoDetailPage.vue";
+import TagListPage from "../pages/public/TagListPage.vue";
+import TagDetailPage from "../pages/public/TagDetailPage.vue";
 import UserListPage from "../pages/manage/UserListPage.vue";
 import UserDetailPage from "../pages/user/UserDetailPage.vue";
 import ChangePasswordPage from "../pages/user/ChangePasswordPage.vue";
 
 import GroupListPage from "../pages/manage/GroupListPage.vue";
 
-import AboutPage from "../pages/AboutPage.vue";
-import CopyrightPage from "../pages/CopyrightPage.vue";
+import AboutPage from "../pages/public/AboutPage.vue";
+import CopyrightPage from "../pages/public/CopyrightPage.vue";
 
-import SearchPhotosPage from "../pages/SearchPhotosPage.vue";
+import SearchPhotosPage from "../pages/public/SearchPhotosPage.vue";
 
 import EditAlbumPage from "../pages/manage/EditAlbumPage.vue";
 import ManagePage from "../pages/manage/ManagePage.vue";
