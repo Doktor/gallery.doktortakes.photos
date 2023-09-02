@@ -40,11 +40,11 @@
 
 <script>
 import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
-import AlbumDetails from "@/components/manage/AlbumDetails";
+import AlbumDetails from "./AlbumDetails";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import DeleteAlbumForm from "@/components/manage/DeleteAlbumForm";
-import PhotoManager from "@/components/manage/PhotoManager";
-import PhotoUploader from "@/components/manage/PhotoUploader";
+import DeleteAlbumForm from "./DeleteAlbumForm";
+import PhotoManager from "./PhotoManager";
+import PhotoUploader from "./PhotoUploader";
 import { mapState } from "vuex";
 import { router } from "@/router/main";
 import { editorTitleTemplate } from "@/store/mutations";

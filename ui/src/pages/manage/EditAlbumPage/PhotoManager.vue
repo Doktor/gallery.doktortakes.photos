@@ -52,12 +52,12 @@
 </template>
 
 <script>
-import PhotoGallery from "../photoList/PhotoGallery.vue";
+import PhotoGallery from "@/components/photoList/PhotoGallery";
 import { getCsrfToken, sendRequest } from "@/utils";
 import { endpoints } from "@/constants";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
-import CustomButton from "../form/CustomButton.vue";
-import CustomInput from "../form/CustomInput.vue";
+import CustomButton from "@/components/form/CustomButton";
+import CustomInput from "@/components/form/CustomInput";
 
 export default {
   components: {

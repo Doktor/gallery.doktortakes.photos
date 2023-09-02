@@ -26,7 +26,7 @@
 <script>
 import { getCsrfToken, getQueryString } from "@/utils";
 import { endpoints } from "@/constants";
-import CustomInput from "../form/CustomInput.vue";
+import CustomInput from "../../../components/form/CustomInput.vue";
 
 export default {
   components: { CustomInput },

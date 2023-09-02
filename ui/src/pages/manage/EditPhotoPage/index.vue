@@ -63,10 +63,10 @@ import FixedWidthContainer from "@/components/FixedWidthContainer.vue";
 import { mapState } from "vuex";
 import { AlbumService } from "@/services/AlbumService";
 import { PhotoService } from "@/services/PhotoService";
-import PhotoMetadataTable from "@/components/manage/PhotoMetadataTable.vue";
-import PhotoExifTable from "@/components/manage/PhotoExifTable.vue";
-import PhotoThumbnailsTable from "@/components/manage/PhotoThumbnailsTable.vue";
-import ThumbnailForm from "@/components/manage/ThumbnailForm.vue";
+import PhotoMetadataTable from "./PhotoMetadataTable.vue";
+import PhotoExifTable from "./PhotoExifTable.vue";
+import PhotoThumbnailsTable from "./PhotoThumbnailsTable.vue";
+import ThumbnailForm from "./ThumbnailForm.vue";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 
 export default {

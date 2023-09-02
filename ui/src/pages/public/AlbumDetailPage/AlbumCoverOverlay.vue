@@ -27,7 +27,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import AlbumAccessInfo from "./AlbumAccessInfo";
-import AlbumLinks from "./AlbumLinks";
+import AlbumLinks from "@/components/albumDetail/AlbumLinks";
 import AlbumMetadata from "./AlbumMetadata";
 
 function toFullDateTimeForm(dateForm) {

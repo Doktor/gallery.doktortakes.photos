@@ -30,12 +30,12 @@
 import { mapState } from "vuex";
 import { router } from "@/router/main";
 
-import PhotoExif from "@/components/photoDetail/PhotoExif";
-import Filmstrip from "@/components/photoDetail/Filmstrip";
-import KeyboardShortcuts from "@/components/photoDetail/KeyboardShortcuts";
-import PhotoLinks from "@/components/photoDetail/PhotoLinks";
-import PhotoMetadata from "@/components/photoDetail/PhotoMetadata";
-import PhotoViewer from "@/components/photoDetail/PhotoViewer";
+import PhotoExif from "./PhotoExif";
+import Filmstrip from "./Filmstrip";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+import PhotoLinks from "./PhotoLinks";
+import PhotoMetadata from "./PhotoMetadata";
+import PhotoViewer from "./PhotoViewer";
 import { AlbumService } from "@/services/AlbumService";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";

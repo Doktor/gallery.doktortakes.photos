@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import CustomInput from "../form/CustomInput.vue";
-import CustomSelect from "../form/CustomSelect.vue";
+import CustomInput from "../../../components/form/CustomInput.vue";
+import CustomSelect from "../../../components/form/CustomSelect.vue";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
-import CustomButton from "../form/CustomButton.vue";
+import CustomButton from "../../../components/form/CustomButton.vue";
 
 const watermarkColors = [
   {
@@ -54,7 +54,6 @@ const watermarkColors = [
 ];
 
 export default {
-  name: "ThumbnailForm",
   components: { CustomButton, CustomSelect, CustomInput },
   props: {
     photo: {

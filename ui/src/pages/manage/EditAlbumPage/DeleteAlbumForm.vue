@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import CustomButton from "../form/CustomButton.vue";
+import CustomButton from "@/components/form/CustomButton";
+
 export default {
   components: { CustomButton },
   props: {

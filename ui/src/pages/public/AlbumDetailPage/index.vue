@@ -36,7 +36,7 @@ import { mapState } from "vuex";
 
 import AlbumTile from "@/components/albumTile/AlbumTile";
 import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
-import AlbumCover from "@/components/albumDetail/AlbumCover";
+import AlbumCover from "./AlbumCover";
 import PhotoGallery from "@/components/photoList/PhotoGallery";
 import { titleTemplate } from "@/store/mutations";
 import { AlbumService } from "@/services/AlbumService";

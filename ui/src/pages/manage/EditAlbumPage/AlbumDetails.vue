@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import AlbumForm from "./AlbumForm.vue";
-import AlbumPlaceholder from "../albumTile/AlbumPlaceholderImage.vue";
+import AlbumForm from "@/components/manage/AlbumForm";
+import AlbumPlaceholder from "@/components/albumTile/AlbumPlaceholderImage";
 
 export default {
   components: {
