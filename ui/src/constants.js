@@ -21,6 +21,8 @@ export const endpoints = {
   heroPhotoList: "/api/heroPhotos/",
   randomTagline: "/api/taglines/random/",
 
+  taxaList: "/api/taxa/",
+
   userList: "/api/manage/users/",
   groupList: "/api/manage/groups/",
 };

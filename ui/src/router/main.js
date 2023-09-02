@@ -28,6 +28,7 @@ import LogInPage from "../pages/user/LogInPage.vue";
 import LogOutPage from "../pages/user/LogOutPage.vue";
 import EditPhotoPage from "../pages/manage/EditPhotoPage.vue";
 import DebugNotificationsPage from "../pages/debug/DebugNotificationsPage.vue";
+import EditTaxaPage from "../pages/manage/ManageTaxaPage.vue";
 
 export const baseTitle = "Doktor Takes Photos";
 
@@ -199,6 +200,15 @@ const manageRoutes = [
     meta: {
       staff: true,
       title: "Edit photo: {md5}",
+    },
+  },
+  {
+    path: "/manage/taxa/",
+    name: "editTaxa",
+    component: EditTaxaPage,
+    meta: {
+      staff: true,
+      title: "Edit taxa",
     },
   },
 ];
