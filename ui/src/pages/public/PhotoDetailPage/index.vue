@@ -28,7 +28,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { router } from "@/router/main";
+import { router } from "@/router";
 
 import PhotoExif from "./PhotoExif";
 import Filmstrip from "./Filmstrip";
@@ -165,7 +165,7 @@ export default {
 
       document.title = photoTitleTemplate.format(
         this.photo.md5.substring(0, 8),
-        this.album.name
+        this.album.name,
       );
     },
 

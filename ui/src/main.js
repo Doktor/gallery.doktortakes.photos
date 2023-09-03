@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Base from "./pages/public/Base";
-import { router } from "./router/main.js";
+import { router } from "./router";
 import { store } from "./store";
 
 import "./styles/main.scss";

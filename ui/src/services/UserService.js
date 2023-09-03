@@ -1,7 +1,5 @@
 import { getCsrfToken, sendRequest } from "../utils";
 import { endpoints } from "../constants";
-import { router } from "../router/main";
-import { store } from "../store";
 
 export const UserService = {
   async changePassword(data) {

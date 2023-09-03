@@ -5,7 +5,7 @@ import {
   sendRequest,
 } from "@/utils";
 import { store } from "@/store";
-import { router } from "@/router/main";
+import { router } from "@/router";
 import { endpoints } from "@/constants";
 
 export const ManageAlbumService = {
@@ -52,7 +52,7 @@ export const ManageAlbumService = {
 
     setTimeout(
       () => router.push({ name: "editAlbum", params: { path: path } }),
-      1500
+      1500,
     );
   },
 
@@ -68,7 +68,7 @@ export const ManageAlbumService = {
           "Content-Type": "application/json",
           "X-CSRFToken": getCsrfToken(),
         },
-      }
+      },
     );
 
     if (!ok) {
@@ -106,7 +106,7 @@ export const ManageAlbumService = {
           "Content-Type": "application/json; charset=utf-8",
           "X-CSRFToken": getCsrfToken(),
         },
-      }
+      },
     );
 
     if (ok) {
@@ -127,7 +127,7 @@ export const ManageAlbumService = {
           "Content-Type": "application/json; charset=utf-8",
           "X-CSRFToken": getCsrfToken(),
         },
-      }
+      },
     );
   },
 
@@ -143,7 +143,7 @@ export const ManageAlbumService = {
           "Content-Type": "application/json; charset=utf-8",
           "X-CSRFToken": getCsrfToken(),
         },
-      }
+      },
     );
   },
 };

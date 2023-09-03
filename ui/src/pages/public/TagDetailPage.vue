@@ -7,7 +7,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { baseTitle } from "@/router/main";
+import { baseTitle } from "@/router";
 import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
 import { TagService } from "@/services/TagService";

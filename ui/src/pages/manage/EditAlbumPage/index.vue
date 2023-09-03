@@ -46,7 +46,7 @@ import DeleteAlbumForm from "./DeleteAlbumForm";
 import PhotoManager from "./PhotoManager";
 import PhotoUploader from "./PhotoUploader";
 import { mapState } from "vuex";
-import { router } from "@/router/main";
+import { router } from "@/router";
 import { editorTitleTemplate } from "@/store/mutations";
 import AlbumLinks from "@/components/manage/AlbumLinks";
 import { AlbumService } from "@/services/AlbumService";
@@ -93,7 +93,7 @@ export default {
     async toggleShowPhotosInChildAlbums() {
       if (this.allPhotos === null) {
         let { content } = await ManageAlbumService.listAllPhotos(
-          this.routePath
+          this.routePath,
         );
         this.allPhotos = content.photos;
       }

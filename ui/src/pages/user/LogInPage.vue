@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { router } from "@/router/main";
+import { router } from "@/router";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
 

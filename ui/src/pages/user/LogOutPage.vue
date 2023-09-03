@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { router } from "@/router/main";
+import { router } from "@/router";
 
 export default {
   async mounted() {
