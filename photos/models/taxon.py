@@ -1,5 +1,7 @@
 from django.db import models
 
+from typing import Optional
+
 
 RANK_DOMAIN = 'domain'
 RANK_KINGDOM = 'kingdom'
@@ -38,6 +40,13 @@ class Taxon(models.Model):
 
     def __str__(self) -> str:
         return f'{self.rank}: {self.name}'
+
+    @property
+    def passthrough_parent_catalog_id(self) -> Optional[str]:
+        if self.parent is None:
+            return None
+
+        return self.parent.catalog_id
 
     class Meta:
         verbose_name_plural = "taxa"
