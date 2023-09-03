@@ -29,6 +29,7 @@ import LogOutPage from "@/pages/user/LogOutPage";
 import EditPhotoPage from "@/pages/manage/EditPhotoPage";
 import DebugNotificationsPage from "@/pages/debug/DebugNotificationsPage";
 import EditTaxaPage from "@/pages/manage/ManageTaxaPage";
+import TaxonListPage from "@/pages/public/TaxonListPage";
 
 export const baseTitle = "Doktor Takes Photos";
 
@@ -83,6 +84,12 @@ const browserRoutes = [
     meta: {
       title: false,
     },
+  },
+
+  {
+    path: "/taxa/",
+    name: "taxa",
+    component: TaxonListPage,
   },
 
   {
