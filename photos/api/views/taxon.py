@@ -9,7 +9,7 @@ from photos.api.serializers import TaxonSerializer
 class TaxonList(APIView):
     @staticmethod
     def get(request: Request) -> Response:
-        taxa = Taxon.objects.all()
+        taxa = Taxon.objects.all().prefetch_related('parent')
         serializer = TaxonSerializer(taxa, many=True)
 
         return Response(serializer.data)
