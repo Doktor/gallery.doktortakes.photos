@@ -1,24 +1,15 @@
 import IndexPage from "@/pages/public/IndexPage";
+import AboutPage from "@/pages/public/AboutPage";
+import CopyrightPage from "@/pages/public/CopyrightPage";
 
 import AlbumListPage from "@/pages/public/AlbumListPage";
 import AlbumDetailPage from "@/pages/public/AlbumDetailPage";
 import PhotoDetailPage from "@/pages/public/PhotoDetailPage";
 import TagListPage from "@/pages/public/TagListPage";
 import TagDetailPage from "@/pages/public/TagDetailPage";
-import UserListPage from "@/pages/manage/UserListPage";
-import UserDetailPage from "@/pages/user/UserDetailPage";
-import ChangePasswordPage from "@/pages/user/ChangePasswordPage";
-
-import GroupListPage from "@/pages/manage/GroupListPage";
-
-import AboutPage from "@/pages/public/AboutPage";
-import CopyrightPage from "@/pages/public/CopyrightPage";
+import TaxonListPage from "@/pages/public/TaxonListPage";
 
 import SearchPhotosPage from "@/pages/public/SearchPhotosPage";
-
-import LogInPage from "@/pages/user/LogInPage";
-import LogOutPage from "@/pages/user/LogOutPage";
-import TaxonListPage from "@/pages/public/TaxonListPage";
 
 export const publicRoutes = [
   {
@@ -89,23 +80,6 @@ export const publicRoutes = [
   },
 
   {
-    path: "/users/:slug/",
-    name: "user",
-    component: UserDetailPage,
-    meta: {
-      title: false,
-    },
-  },
-  {
-    path: "/users/:slug/password/",
-    name: "changePassword",
-    component: ChangePasswordPage,
-    meta: {
-      title: "Change your password",
-    },
-  },
-
-  {
     path: "/about/",
     name: "about",
     component: AboutPage,
@@ -119,23 +93,6 @@ export const publicRoutes = [
     component: CopyrightPage,
     meta: {
       title: "Copyright",
-    },
-  },
-
-  {
-    path: "/log-in/",
-    name: "logIn",
-    component: LogInPage,
-    meta: {
-      title: "Log in",
-    },
-  },
-  {
-    path: "/log-out/",
-    name: "logOut",
-    component: LogOutPage,
-    meta: {
-      title: "Log out",
     },
   },
 ];

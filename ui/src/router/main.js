@@ -3,12 +3,18 @@ import VueRouter from "vue-router";
 import { store } from "@/store";
 
 import { publicRoutes } from "./publicRoutes";
+import { userRoutes } from "./userRoutes";
 import { manageRoutes } from "./manageRoutes";
 import { debugRoutes } from "./debugRoutes";
 
 export const baseTitle = "Doktor Takes Photos";
 
-const routes = [...publicRoutes, ...manageRoutes, ...debugRoutes];
+const routes = [
+  ...publicRoutes,
+  ...userRoutes,
+  ...manageRoutes,
+  ...debugRoutes,
+];
 routes.forEach((route) => (route.pathToRegexpOptions = { strict: true }));
 
 const router = new VueRouter({
