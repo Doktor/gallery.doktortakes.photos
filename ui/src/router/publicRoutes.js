@@ -89,15 +89,6 @@ export const publicRoutes = [
   },
 
   {
-    path: "/users/",
-    name: "users",
-    component: UserListPage,
-    meta: {
-      staff: true,
-      title: "Users",
-    },
-  },
-  {
     path: "/users/:slug/",
     name: "user",
     component: UserDetailPage,
@@ -111,16 +102,6 @@ export const publicRoutes = [
     component: ChangePasswordPage,
     meta: {
       title: "Change your password",
-    },
-  },
-
-  {
-    path: "/groups/",
-    name: "groups",
-    component: GroupListPage,
-    meta: {
-      staff: true,
-      title: "Groups",
     },
   },
 
