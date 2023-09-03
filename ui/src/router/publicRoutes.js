@@ -65,6 +65,11 @@ export const publicRoutes = [
   },
 
   {
+    path: "/taxa/:catalogId/",
+    name: "taxaByCatalogId",
+    component: TaxonListPage,
+  },
+  {
     path: "/taxa/",
     name: "taxa",
     component: TaxonListPage,

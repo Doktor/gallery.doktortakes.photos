@@ -6,7 +6,6 @@
 
 <script>
 import { TaxaService } from "@/services/TaxaService";
-import { sleep, withLoading } from "@/utils";
 import TaxaList from "./TaxaList";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 
@@ -22,39 +21,68 @@ const ranks = [
 ].reverse();
 
 export default {
+  name: "TaxonListPage",
   components: { FixedWidthContainer, TaxaList },
+
   data() {
     return {
       loading: true,
       taxa: [],
+
+      taxaById: {},
+      taxaByRank: {},
     };
+  },
+
+  computed: {
+    catalogId() {
+      return this.$route.params.catalogId;
+    },
+  },
+
+  watch: {
+    catalogId: {
+      handler(newCatalogId) {
+        if (newCatalogId) {
+          this.taxa = [this.taxaById[newCatalogId]];
+        } else {
+          this.taxa = this.taxaByRank["kingdom"];
+        }
+      },
+    },
   },
 
   async mounted() {
     this.loading = true;
+
     let taxa = await TaxaService.getTaxa();
-    this.loading = false;
 
-    let taxaByRank = {};
-
-    for (let rank of ranks) {
-      taxaByRank[rank] = taxa.filter((t) => t.rank === rank);
+    for (let taxon of taxa) {
+      this.taxaById[taxon.catalog_id] = taxon;
     }
 
-    console.log(taxaByRank);
+    for (let rank of ranks) {
+      this.taxaByRank[rank] = taxa.filter((t) => t.rank === rank);
+    }
 
     for (let i = 1; i < ranks.length; i++) {
       let rank = ranks[i];
       let rankBelow = ranks[i - 1];
 
-      for (let taxon of taxaByRank[rank]) {
-        taxon.children = taxaByRank[rankBelow].filter(
+      for (let taxon of this.taxaByRank[rank]) {
+        taxon.children = this.taxaByRank[rankBelow].filter(
           (t) => taxon.catalog_id === t.passthrough_parent_catalog_id,
         );
       }
     }
 
-    this.taxa = taxaByRank["kingdom"];
+    if (this.catalogId) {
+      this.taxa = [this.taxaById[this.catalogId]];
+    } else {
+      this.taxa = this.taxaByRank["kingdom"];
+    }
+
+    this.loading = false;
   },
 };
 </script>

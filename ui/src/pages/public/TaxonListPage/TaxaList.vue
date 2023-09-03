@@ -2,7 +2,14 @@
   <ul class="taxa-list">
     <li v-for="item in items" :key="item.catalog_id">
       <span>
-        {{ item.name }}
+        <router-link
+          :to="{
+            name: 'taxaByCatalogId',
+            params: { catalogId: item.catalog_id },
+          }"
+        >
+          {{ item.name }}
+        </router-link>
         <template v-if="item.common_name"
           >&mdash; <em>{{ item.common_name.toLowerCase() }}</em>
         </template>
