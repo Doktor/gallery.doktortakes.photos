@@ -44,6 +44,7 @@ urlpatterns = [
     re_path(r'^manage/', views.editor_entry_point, name='editor'),
     path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),
+    re_path(r'^taxa/', views.index),
     re_path(r'^users/', views.users_entry_point, name='users'),
     path('wall/', views.wall, name='wall'),
 ]

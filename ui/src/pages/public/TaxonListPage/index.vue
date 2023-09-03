@@ -1,5 +1,6 @@
 <template>
-  <FixedWidthContainer>
+  <FixedWidthContainer v-if="!loading">
+    <TaxonParents v-if="catalogId" :taxon="taxa[0]" :taxaById="taxaById" />
     <TaxaList :items="taxa" />
   </FixedWidthContainer>
 </template>
@@ -8,6 +9,7 @@
 import { TaxaService } from "@/services/TaxaService";
 import TaxaList from "./TaxaList";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
+import TaxonParents from "./TaxonParents";
 
 const ranks = [
   "domain",
@@ -22,7 +24,7 @@ const ranks = [
 
 export default {
   name: "TaxonListPage",
-  components: { FixedWidthContainer, TaxaList },
+  components: { TaxonParents, FixedWidthContainer, TaxaList },
 
   data() {
     return {
