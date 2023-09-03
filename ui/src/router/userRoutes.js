@@ -23,7 +23,7 @@ export const userRoutes = [
   },
 
   {
-    path: "/log-in/",
+    path: "/users/log-in/",
     name: "logIn",
     component: LogInPage,
     meta: {
@@ -31,7 +31,7 @@ export const userRoutes = [
     },
   },
   {
-    path: "/log-out/",
+    path: "/users/log-out/",
     name: "logOut",
     component: LogOutPage,
     meta: {
