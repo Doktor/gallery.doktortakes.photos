@@ -88,6 +88,8 @@ class Photo(models.Model):
 
     exif = JSONField(blank=True, verbose_name="EXIF")
 
+    taxa = models.ManyToManyField('Taxon', through="PhotoTaxon", related_name='photos')
+
     # Bookkeeping
 
     uploaded = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Created date')
