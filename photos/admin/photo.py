@@ -3,7 +3,13 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from photos.fields import JSONField, JSONWidget
+from photos.models import Photo
 from photos.models.photo.thumbnail import THUMBNAIL_SMALL_SQUARE
+
+
+class PhotoTaxonInline(admin.TabularInline):
+    model = Photo.taxa.through
+    extra = 1
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -23,6 +29,9 @@ class PhotoAdmin(admin.ModelAdmin):
         ('Dates', {
             'fields': ('taken', 'edited')
         }),
+    )
+    inlines = (
+        PhotoTaxonInline,
     )
     list_display = ('__str__', 'original_filename', 'album_name',
                     'width', 'height', 'file_size', 'taken', 'uploaded')
