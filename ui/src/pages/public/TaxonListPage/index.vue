@@ -1,13 +1,13 @@
 <template>
   <FixedWidthContainer v-if="!loading">
     <TaxonParents v-if="catalogId" :taxon="taxa[0]" :taxaById="taxaById" />
-    <TaxaList :items="taxa" />
+    <TaxaChildren :items="taxa" />
   </FixedWidthContainer>
 </template>
 
 <script>
 import { TaxaService } from "@/services/TaxaService";
-import TaxaList from "./TaxaList";
+import TaxaChildren from "./TaxaChildren";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import TaxonParents from "./TaxonParents";
 
@@ -24,7 +24,7 @@ const ranks = [
 
 export default {
   name: "TaxonListPage",
-  components: { TaxonParents, FixedWidthContainer, TaxaList },
+  components: { TaxonParents, FixedWidthContainer, TaxaChildren },
 
   data() {
     return {

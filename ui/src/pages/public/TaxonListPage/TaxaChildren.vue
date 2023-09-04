@@ -1,5 +1,5 @@
 <template>
-  <ul class="taxa-list">
+  <ul class="taxa-children">
     <li v-for="item in items" :key="item.catalog_id">
       <span>
         <router-link
@@ -15,7 +15,7 @@
         </template>
       </span>
 
-      <TaxaList
+      <TaxaChildren
         v-if="item.children?.length > 0 ?? false"
         :items="item.children"
       />
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "TaxaList",
+  name: "TaxaChildren",
 
   props: {
     items: {
@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style>
-.taxa-list {
+.taxa-children {
   margin: 0;
   text-align: left;
 }
