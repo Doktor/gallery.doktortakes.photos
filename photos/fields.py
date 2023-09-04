@@ -30,7 +30,7 @@ class JSONField(models.TextField):
             if isinstance(value, str):
                 return json.loads(value)
         except ValueError:
-            pass
+            return None
 
         return value
 
