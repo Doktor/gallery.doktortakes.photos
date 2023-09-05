@@ -58,7 +58,7 @@ def populate_taxon(catalog_id):
 
     while True:
         print('processing', catalog_id)
-        taxon, parent_id = get_or_create_taxon(catalog_id)
+        taxon, parent_id, created = get_or_create_taxon(catalog_id)
 
         if base_taxon is None:
             base_taxon = taxon
@@ -74,6 +74,11 @@ def populate_taxon(catalog_id):
         if previous_taxon is not None:
             previous_taxon.parent = taxon
             previous_taxon.save()
+
+        # We didn't create a new taxon object, which means we processed the
+        # parent taxa previously and don't have to process them again
+        if not created:
+            break
 
         previous_taxon = taxon
         catalog_id = parent_id
@@ -96,7 +101,7 @@ def get_or_create_taxon(catalog_id):
     except Taxon.DoesNotExist:
         pass
     else:
-        return taxon, taxon.parent_catalog_id
+        return taxon, taxon.parent_catalog_id, False
 
     response = get_taxon_from_catalog(catalog_id)
 
@@ -105,7 +110,7 @@ def get_or_create_taxon(catalog_id):
 
     # Skip intermediate taxonomic ranks
     if rank not in [item[0] for item in TAXON_RANKS]:
-        return None, parent_id
+        return None, parent_id, False
 
     taxon = Taxon()
     taxon.catalog_id = response['taxon']['id']
@@ -116,7 +121,7 @@ def get_or_create_taxon(catalog_id):
     taxon.common_name = get_common_name(response.get('vernacularNames', []))
     taxon.save()
 
-    return taxon, parent_id
+    return taxon, parent_id, True
 
 
 def get_common_name(names):
