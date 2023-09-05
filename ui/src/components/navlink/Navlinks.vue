@@ -15,6 +15,7 @@
           :to="{ name: 'user', params: { slug: user.name } }"
         />
         <Navlink title="Tags" route="tags" />
+        <Navlink title="Taxonomy" route="taxa" />
         <Navlink title="Search" route="search" />
       </NavlinkMenu>
 
