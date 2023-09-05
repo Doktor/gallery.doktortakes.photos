@@ -380,6 +380,20 @@ libcloud = ["apache-libcloud"]
 sftp = ["paramiko"]
 
 [[package]]
+name = "django-tree-queries"
+version = "0.15.0"
+description = "Tree queries with explicit opt-in, without configurability"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "django_tree_queries-0.15.0-py3-none-any.whl", hash = "sha256:cf11340de59d3122919fde46e99966bad40ff942df768d683383b111554134a1"},
+    {file = "django_tree_queries-0.15.0.tar.gz", hash = "sha256:0e994c2a4601c021a115a397ec8d0ff7d5e614fae95947f72126e6a419c60f08"},
+]
+
+[package.extras]
+tests = ["coverage"]
+
+[[package]]
 name = "django-webpack-loader"
 version = "1.4.1"
 description = "Transparently use webpack with django"
@@ -970,4 +984,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "7bd25badfecee1b1bba4f596bc8560a2e156f98faa4a6931206aba718b7647fe"
+content-hash = "4d0ff2432f0672dd8a40c09a39f6e780643b4ea7ceadb24491c96ed9e40c1dad"
