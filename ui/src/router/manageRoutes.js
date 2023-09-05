@@ -2,7 +2,7 @@ import ManagePage from "@/pages/manage/ManagePage";
 import NewAlbumPage from "@/pages/manage/NewAlbumPage";
 import EditAlbumPage from "@/pages/manage/EditAlbumPage";
 import EditPhotoPage from "@/pages/manage/EditPhotoPage";
-import EditTaxaPage from "@/pages/manage/ManageTaxaPage";
+import ManageTaxaPage from "@/pages/manage/ManageTaxaPage";
 import UserListPage from "@/pages/manage/UserListPage";
 import GroupListPage from "@/pages/manage/GroupListPage";
 
@@ -47,11 +47,11 @@ export const manageRoutes = [
 
   {
     path: "/manage/taxa/",
-    name: "editTaxa",
-    component: EditTaxaPage,
+    name: "manageTaxa",
+    component: ManageTaxaPage,
     meta: {
       staff: true,
-      title: "Edit taxa",
+      title: "Manage taxa",
     },
   },
 
