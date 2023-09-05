@@ -6,12 +6,23 @@ from django.utils.text import slugify
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from photos.models import Photo, Tag, Album
+from photos.models import Photo, Tag, Album, Taxon
 
 from http import HTTPStatus as Status
 from typing import Optional
 
 User = get_user_model()
+
+
+class TaxonCatalogIdField(serializers.RelatedField):
+    def to_internal_value(self, data: str) -> Photo:
+        try:
+            return Taxon.objects.get(catalog_id=data)
+        except Photo.DoesNotExist:
+            raise ValidationError(f"Taxon with catalog ID '{data}' does not exist.", code=Status.BAD_REQUEST)
+
+    def to_representation(self, value: Taxon) -> str:
+        return value.catalog_id
 
 
 class GroupField(serializers.RelatedField):
