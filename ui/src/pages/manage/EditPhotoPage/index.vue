@@ -22,7 +22,7 @@
 
       <section class="taxa-table">
         <h2>Manage taxa</h2>
-        <PhotoTaxaTable :photo="photo" />
+        <PhotoTaxonTable :photo="photo" />
       </section>
 
       <main>
@@ -73,11 +73,11 @@ import PhotoExifTable from "./PhotoExifTable";
 import PhotoThumbnailsTable from "./PhotoThumbnailsTable";
 import ThumbnailForm from "./ThumbnailForm";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
-import PhotoTaxaTable from "@/pages/manage/EditPhotoPage/PhotoTaxaTable.vue";
+import PhotoTaxonTable from "./PhotoTaxonTable";
 
 export default {
   components: {
-    PhotoTaxaTable,
+    PhotoTaxonTable,
     ThumbnailForm,
     PhotoThumbnailsTable,
     PhotoExifTable,
