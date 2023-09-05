@@ -239,9 +239,15 @@ export default {
         this.searchResults = species;
       }
 
-      this.searchResults = species.filter(
-        (t) => t.name.search(newSearchText) !== -1,
-      );
+      this.searchResults = species.filter((t) => {
+        let name = t.name.toLowerCase();
+        let commonName = t.common_name.toLowerCase();
+        let searchText = newSearchText.toLowerCase();
+
+        return (
+          name.search(searchText) !== -1 || commonName.search(searchText) !== -1
+        );
+      });
     },
   },
 };
