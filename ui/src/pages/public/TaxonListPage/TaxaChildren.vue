@@ -39,6 +39,7 @@ export default {
 <style>
 .taxa-children {
   margin: 0;
+  padding: 0 32px;
   text-align: left;
 }
 </style>
