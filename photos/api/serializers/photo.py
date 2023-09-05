@@ -26,9 +26,6 @@ THUMBNAIL_TYPES = (
 class PhotoSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField(read_only=True)
 
-    # Links
-    admin = serializers.SerializerMethodField(read_only=True, allow_null=True)
-
     # Metadata
     taken = serializers.DateTimeField(
         read_only=True, format="%A, %Y-%m-%d, %-I:%M:%S %p")
@@ -76,12 +73,6 @@ class PhotoSerializer(serializers.ModelSerializer):
 
         return thumbnails
 
-    def get_admin(self, obj: Photo):
-        if self.context.get('is_staff', False):
-            return reverse('admin:photos_photo_change', args=[obj.pk])
-        else:
-            return None
-
     def to_representation(self, instance: Photo) -> dict:
         instance.index = self.context.get('index', None)
 
@@ -95,7 +86,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = (
             'images',
-            'admin',
             'taken',
             'width', 'height', 'md5', 'index',
             'path', 'exif',

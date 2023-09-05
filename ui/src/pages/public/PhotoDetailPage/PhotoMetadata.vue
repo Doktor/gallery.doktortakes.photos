@@ -43,7 +43,7 @@
 
       <div v-if="isStaff">
         <dt><i title="Admin" class="fas fa-fw fa-toolbox"></i></dt>
-        <dd><a :href="photo.admin" title="Open in admin site">Admin</a></dd>
+        <dd><a :href="adminUrl" title="Open in admin site">Admin</a></dd>
       </div>
     </dl>
   </div>
@@ -67,6 +67,10 @@ export default {
   computed: {
     ...mapGetters(["isStaff"]),
     ...mapState(["user"]),
+
+    adminUrl() {
+      return `/redirect/admin/photos/${this.photo.md5}`;
+    },
 
     image() {
       return this.photo.images.display ?? this.photo.images.original;
