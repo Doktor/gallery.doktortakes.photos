@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.templatetags.static import static
 from django.urls import reverse
@@ -433,3 +433,12 @@ def users_entry_point(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request, 'base.html', context)
+
+
+# Redirects
+
+def redirect_admin_photo(request, md5):
+    photo = get_object_or_404(Photo, md5=md5)
+    url = reverse('admin:photos_photo_change', args=[photo.id])
+
+    return redirect(url, permanent=False)

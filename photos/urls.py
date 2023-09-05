@@ -22,6 +22,10 @@ album_patterns = [
     path('<path:path>/', views.view_album, name='album'),
 ]
 
+redirect_patterns = [
+    path('admin/photos/<md5:md5>', views.redirect_admin_photo),
+]
+
 tag_patterns = [
     path('', views.view_tags, name='tags'),
     path('<slug:slug>/', views.view_tag, name='tag'),
@@ -42,6 +46,7 @@ urlpatterns = [
     re_path(r'^debug/', views.index, name='debug'),
     path('groups/', views.groups_entry_point, name='groups'),
     re_path(r'^manage/', views.editor_entry_point, name='editor'),
+    path('redirect/', include(redirect_patterns)),
     path('search/', views.search_photos, name='search'),
     path('tags/', include(tag_patterns)),
     re_path(r'^taxa/', views.index),
