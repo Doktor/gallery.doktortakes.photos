@@ -20,6 +20,11 @@
         <h3 class="photo-hash">{{ photo.md5 }}</h3>
       </header>
 
+      <section class="taxa-table">
+        <h2>Manage taxa</h2>
+        <PhotoTaxaTable :photo="photo" />
+      </section>
+
       <main>
         <section class="photo-details">
           <div>
@@ -68,9 +73,11 @@ import PhotoExifTable from "./PhotoExifTable";
 import PhotoThumbnailsTable from "./PhotoThumbnailsTable";
 import ThumbnailForm from "./ThumbnailForm";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
+import PhotoTaxaTable from "@/pages/manage/EditPhotoPage/PhotoTaxaTable.vue";
 
 export default {
   components: {
+    PhotoTaxaTable,
     ThumbnailForm,
     PhotoThumbnailsTable,
     PhotoExifTable,
@@ -146,7 +153,7 @@ export default {
 
     async loadThumbnails() {
       let { ok, content } = await ManagePhotoService.getThumbnails(
-        this.routeMd5
+        this.routeMd5,
       );
 
       if (!ok) {
@@ -193,6 +200,10 @@ h3 {
 .photo-details,
 .image-container {
   width: 50%;
+}
+
+.taxa-table {
+  width: 100%;
 }
 
 .photo-details-table {
