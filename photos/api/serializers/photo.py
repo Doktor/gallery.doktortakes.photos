@@ -1,4 +1,3 @@
-from django.urls import reverse
 from rest_framework import serializers
 
 from photos.api.serializers.thumbnail import ThumbnailSerializer
@@ -21,6 +20,29 @@ THUMBNAIL_TYPES = (
     ("square", THUMBNAIL_SMALL_SQUARE),
     ("mediumSquare", THUMBNAIL_MEDIUM_SQUARE),
 )
+
+
+def get_images(photo: Photo) -> dict:
+    temp = {}
+
+    for key, group in itertools.groupby(photo.thumbnails.all(), lambda t: t.type):
+        temp[key] = next(group)
+
+    thumbnails = {
+        name: serialize_thumbnail(temp[key]) if key in temp else None
+        for (name, key) in THUMBNAIL_TYPES
+    }
+
+    if thumbnails["display"] is None:
+        thumbnails["original"] = {
+            "url": photo.original.url,
+            "name": photo.original.name,
+            "type": "original",
+            "width": photo.width,
+            "height": photo.height,
+        }
+
+    return thumbnails
 
 
 class PhotoSerializer(serializers.ModelSerializer):
@@ -52,26 +74,7 @@ class PhotoSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_images(obj: Photo) -> dict:
-        temp = {}
-
-        for key, group in itertools.groupby(obj.thumbnails.all(), lambda t: t.type):
-            temp[key] = next(group)
-
-        thumbnails = {
-            name: serialize_thumbnail(temp[key]) if key in temp else None
-            for (name, key) in THUMBNAIL_TYPES
-        }
-
-        if thumbnails["display"] is None:
-            thumbnails["original"] = {
-                "url": obj.original.url,
-                "name": obj.original.name,
-                "type": "original",
-                "width": obj.width,
-                "height": obj.height,
-            }
-
-        return thumbnails
+        return get_images(obj)
 
     def to_representation(self, instance: Photo) -> dict:
         instance.index = self.context.get('index', None)
@@ -94,13 +97,15 @@ class PhotoSerializer(serializers.ModelSerializer):
 
 
 class SimplePhotoSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=True)
-    square_thumbnail = serializers.ImageField(use_url=True)
-    url = serializers.CharField(read_only=True, source='get_absolute_url')
+    images = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_images(obj: Photo) -> dict:
+        return get_images(obj)
 
     class Meta:
         model = Photo
-        fields = ('image', 'square_thumbnail', 'url')
+        fields = ('images', 'md5', 'path')
 
 
 class PhotoThumbnailSerializer(serializers.ModelSerializer):

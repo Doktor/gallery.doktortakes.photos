@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.models import Taxon, PhotoTaxon, Photo
-from photos.api.serializers import TaxonSerializer, PhotoSerializer
+from photos.api.serializers import TaxonSerializer, PhotoSerializer, SimplePhotoSerializer
 
 
 class TaxonList(APIView):
@@ -34,5 +34,5 @@ class TaxonPhotoList(APIView):
             taxon = get_object_or_404(Taxon, catalog_id=catalog_id)
             photos = taxon.photos.all()
 
-        serializer = PhotoSerializer(photos, many=True)
+        serializer = SimplePhotoSerializer(photos, many=True)
         return Response(serializer.data)
