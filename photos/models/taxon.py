@@ -1,4 +1,5 @@
 from django.db import models
+from tree_queries.models import TreeNode
 
 from typing import Optional
 
@@ -23,7 +24,8 @@ TAXON_RANKS = (
     (RANK_SPECIES, 'Species'),
 )
 
-class Taxon(models.Model):
+
+class Taxon(TreeNode):
     catalog_id = models.CharField(max_length=10, unique=True, help_text='Catalogue of Life identifier')
 
     name = models.CharField(max_length=100)
