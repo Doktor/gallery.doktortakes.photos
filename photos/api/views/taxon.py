@@ -19,24 +19,19 @@ class TaxonList(APIView):
 class TaxonPhotoList(APIView):
     @staticmethod
     def get(request: Request, catalog_id: str) -> Response:
-        taxon = get_object_or_404(Taxon, catalog_id=catalog_id)
-
-        # TODO: replace this with something more efficient
         if request.GET.get('recursive', False):
-            taxa = [taxon]
-            queue = [taxon]
-
-            while queue:
-                top = queue.pop()
-
-                children = top.children.all()
-                taxa.extend(children)
-                queue.extend(children)
+            objects = Taxon.objects.with_tree_fields()
+            taxon = get_object_or_404(objects, catalog_id=catalog_id)
+            taxa = taxon.descendants(include_self=True)
 
             links = PhotoTaxon.objects.filter(taxon__in=taxa)
-            photo_ids = set(link.photo.id for link in links)
-            photos = Photo.objects.filter(id__in=photo_ids)
+
+            photo_ids = set(link.photo_id for link in links)
+            photos = Photo.objects.filter(id__in=photo_ids) \
+                .select_related('album') \
+                .prefetch_related('thumbnails')
         else:
+            taxon = get_object_or_404(Taxon, catalog_id=catalog_id)
             photos = taxon.photos.all()
 
         serializer = PhotoSerializer(photos, many=True)
