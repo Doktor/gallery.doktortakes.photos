@@ -1,7 +1,16 @@
 <template>
   <FixedWidthContainer v-if="!loading">
-    <TaxonParents v-if="catalogId" :taxon="taxa[0]" :taxaById="taxaById" />
+    <TaxonParents
+      v-if="catalogId"
+      :taxon="selectedTaxon"
+      :taxaById="taxaById"
+    />
     <TaxaChildren :items="taxa" />
+
+    <template v-if="!loadingPhotos">
+      <PhotoGallery v-if="photos.length > 0" :photos="photos" />
+      <div v-else>There are no photos of this taxon.</div>
+    </template>
   </FixedWidthContainer>
 </template>
 
@@ -10,6 +19,8 @@ import { TaxaService } from "@/services/TaxaService";
 import TaxaChildren from "./TaxaChildren";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import TaxonParents from "./TaxonParents";
+import PhotoGallery from "@/components/photoList/PhotoGallery.vue";
+import { TaxonPhotoService } from "@/services/TaxonPhotoService";
 
 const ranks = [
   "domain",
@@ -24,7 +35,7 @@ const ranks = [
 
 export default {
   name: "TaxonListPage",
-  components: { TaxonParents, FixedWidthContainer, TaxaChildren },
+  components: { PhotoGallery, TaxonParents, FixedWidthContainer, TaxaChildren },
 
   data() {
     return {
@@ -33,6 +44,9 @@ export default {
 
       taxaById: {},
       taxaByRank: {},
+
+      loadingPhotos: true,
+      photos: [],
     };
   },
 
@@ -40,13 +54,39 @@ export default {
     catalogId() {
       return this.$route.params.catalogId;
     },
+    selectedTaxon() {
+      return this.taxa[0];
+    },
+  },
+
+  methods: {
+    async loadPhotos() {
+      this.loadingPhotos = true;
+
+      let { ok, content } = await TaxonPhotoService.get(
+        this.selectedTaxon.catalog_id,
+        true,
+      );
+
+      if (ok) {
+        this.photos = content;
+      } else {
+        this.$store.commit("addNotification", {
+          message: "An error occurred when retrieving photos for this taxon.",
+          status: "error",
+        });
+      }
+
+      this.loadingPhotos = false;
+    },
   },
 
   watch: {
     catalogId: {
-      handler(newCatalogId) {
+      async handler(newCatalogId) {
         if (newCatalogId) {
           this.taxa = [this.taxaById[newCatalogId]];
+          await this.loadPhotos();
         } else {
           this.taxa = this.taxaByRank["kingdom"];
         }
@@ -80,6 +120,7 @@ export default {
 
     if (this.catalogId) {
       this.taxa = [this.taxaById[this.catalogId]];
+      await this.loadPhotos();
     } else {
       this.taxa = this.taxaByRank["kingdom"];
     }
