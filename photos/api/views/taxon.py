@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.models import Taxon, PhotoTaxon, Photo
-from photos.api.serializers import TaxonSerializer, PhotoSerializer, SimplePhotoSerializer
+from photos.api.serializers import TaxonSerializer, SimplePhotoSerializer
+from photos.models.taxon import RANK_SPECIES
 
 
 class TaxonList(APIView):
@@ -14,6 +15,24 @@ class TaxonList(APIView):
         serializer = TaxonSerializer(taxa, many=True)
 
         return Response(serializer.data)
+
+
+class SpeciesList(APIView):
+    @staticmethod
+    def get(request: Request) -> Response:
+        species = Taxon.objects \
+            .filter(rank=RANK_SPECIES) \
+            .prefetch_related('parent', 'photos', 'photos__album', 'photos__thumbnails')
+        species = [item for item in species if len(item.photos.all()) > 0]
+
+        response = [
+            {
+                'taxon': TaxonSerializer(item).data,
+                'photos': SimplePhotoSerializer(item.photos.all(), many=True).data,
+            } for item in species
+        ]
+
+        return Response(response)
 
 
 class TaxonPhotoList(APIView):
