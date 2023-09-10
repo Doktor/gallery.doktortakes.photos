@@ -1,7 +1,8 @@
 from .photo import PhotoSerializer, SimplePhotoSerializer, PhotoThumbnailSerializer
 from .album import AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer
 from .tag import TagSerializer
-from .taxon import TaxonSerializer, PhotoTaxonSerializer
+from .taxon import TaxonSerializer
+from .photo_taxon import PhotoTaxonSerializer, ManagePhotoTaxonSerializer
 from .thumbnail import ThumbnailSerializer
 from .user import LogInSerializer, UserSerializer
 from .group import GroupSerializer

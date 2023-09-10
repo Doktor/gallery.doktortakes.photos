@@ -3,7 +3,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers.taxon import ManagePhotoTaxonSerializer, TaxonSerializer
+from photos.api.serializers import ManagePhotoTaxonSerializer, TaxonSerializer
 from photos.api.views.photo import get_photo
 
 from http import HTTPStatus as Status
