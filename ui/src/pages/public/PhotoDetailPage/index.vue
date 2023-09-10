@@ -19,7 +19,11 @@
 
     <section class="info">
       <PhotoMetadata :photo="photo" :count="photos.length" />
-      <PhotoExif :exif="photo.exif" />
+      <div>
+        <PhotoTaxa v-if="photo.taxa.length > 0" :taxa="photo.taxa" />
+        <PhotoExif :exif="photo.exif" />
+      </div>
+
       <KeyboardShortcuts />
       <PhotoLinks :album="album" />
     </section>
@@ -37,6 +41,7 @@ import PhotoLinks from "./PhotoLinks";
 import PhotoMetadata from "./PhotoMetadata";
 import PhotoViewer from "./PhotoViewer";
 import { AlbumService } from "@/services/AlbumService";
+import PhotoTaxa from "./PhotoTaxa";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
@@ -51,6 +56,7 @@ export default {
   },
 
   components: {
+    PhotoTaxa,
     PhotoViewer,
     PhotoExif,
     Filmstrip,
