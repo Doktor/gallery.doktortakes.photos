@@ -39,10 +39,13 @@
         </section>
 
         <section class="image-container">
-          <img
-            class="image-preview"
-            :src="photo.images.display?.url ?? photo.images.original.url"
-          />
+          <a
+            :href="thumbnailUrl"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
+            <img class="image-preview" :src="thumbnailUrl" />
+          </a>
         </section>
       </main>
 
@@ -76,6 +79,7 @@ import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 import PhotoTaxonTable from "./PhotoTaxonTable";
 
 export default {
+  name: "EditPhotoPage",
   components: {
     PhotoTaxonTable,
     ThumbnailForm,
@@ -101,6 +105,10 @@ export default {
     },
     routeMd5() {
       return this.$route.params.md5;
+    },
+
+    thumbnailUrl() {
+      return this.photo.images.display?.url ?? this.photo.images.original.url;
     },
   },
 
