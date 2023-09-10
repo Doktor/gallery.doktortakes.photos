@@ -12,7 +12,7 @@
       <div v-if="tagline" class="tagline">"<span v-html="tagline"></span>"</div>
 
       <p>
-        photos are free for personal use<br />website and photos
+        website and photos
         <router-link :to="{ name: 'copyright' }">&copy;</router-link> Doktor
       </p>
     </footer>
