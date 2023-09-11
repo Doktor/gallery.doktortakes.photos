@@ -17,41 +17,17 @@
       />
     </div>
 
-    <section class="info">
-      <div>
-        <PhotoMetadata
-          class="info-metadata"
-          :photo="photo"
-          :count="photos.length"
-        />
-        <KeyboardShortcuts class="info-shortcuts" />
-      </div>
-
-      <div>
-        <PhotoTaxa
-          class="info-taxa"
-          v-if="photo.taxa.length > 0"
-          :taxa="photo.taxa"
-        />
-        <PhotoExif class="info-exif" :exif="photo.exif" />
-        <PhotoLinks class="info-links" :album="album" />
-      </div>
-    </section>
+    <PhotoInfo :album="album" :photo="photo" :photos="photos" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { router } from "@/router";
-
-import PhotoExif from "./PhotoExif";
 import Filmstrip from "./Filmstrip";
-import KeyboardShortcuts from "./KeyboardShortcuts";
-import PhotoLinks from "./PhotoLinks";
-import PhotoMetadata from "./PhotoMetadata";
 import PhotoViewer from "./PhotoViewer";
 import { AlbumService } from "@/services/AlbumService";
-import PhotoTaxa from "./PhotoTaxa";
+import PhotoInfo from "./PhotoInfo";
 
 const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
 
@@ -66,13 +42,9 @@ export default {
   },
 
   components: {
-    PhotoTaxa,
+    PhotoInfo,
     PhotoViewer,
-    PhotoExif,
     Filmstrip,
-    KeyboardShortcuts,
-    PhotoLinks,
-    PhotoMetadata,
   },
 
   data() {
@@ -223,14 +195,6 @@ body.photo-viewer {
 </style>
 
 <style lang="scss" scoped>
-.info-shortcuts {
-  display: none;
-
-  @media (min-width: 901px) {
-    display: block;
-  }
-}
-
 .photo-navigation {
   display: flex;
   flex-direction: column;
@@ -257,42 +221,5 @@ body.photo-viewer {
   margin: 0;
   margin-top: auto;
   padding: 1rem;
-}
-
-.info {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  width: 90%;
-  margin: 2rem auto 0 auto;
-  max-width: 1000px;
-
-  text-align: left;
-
-  > div {
-    width: 100%;
-
-    @media (min-width: 901px) {
-      width: 50%;
-    }
-  }
-
-  > div > div {
-    margin-bottom: 1rem;
-  }
-
-  &::v-deep {
-    dl,
-    dt,
-    dd {
-      margin: 0;
-    }
-
-    dt,
-    dd {
-      display: inline;
-    }
-  }
 }
 </style>
