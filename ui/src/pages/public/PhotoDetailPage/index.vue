@@ -18,14 +18,24 @@
     </div>
 
     <section class="info">
-      <PhotoMetadata :photo="photo" :count="photos.length" />
       <div>
-        <PhotoTaxa v-if="photo.taxa.length > 0" :taxa="photo.taxa" />
-        <PhotoExif :exif="photo.exif" />
+        <PhotoMetadata
+          class="info-metadata"
+          :photo="photo"
+          :count="photos.length"
+        />
+        <KeyboardShortcuts class="info-shortcuts" />
       </div>
 
-      <KeyboardShortcuts />
-      <PhotoLinks :album="album" />
+      <div>
+        <PhotoTaxa
+          class="info-taxa"
+          v-if="photo.taxa.length > 0"
+          :taxa="photo.taxa"
+        />
+        <PhotoExif class="info-exif" :exif="photo.exif" />
+        <PhotoLinks class="info-links" :album="album" />
+      </div>
     </section>
   </div>
 </template>
@@ -213,6 +223,14 @@ body.photo-viewer {
 </style>
 
 <style lang="scss" scoped>
+.info-shortcuts {
+  display: none;
+
+  @media (min-width: 901px) {
+    display: block;
+  }
+}
+
 .photo-navigation {
   display: flex;
   flex-direction: column;
@@ -241,43 +259,40 @@ body.photo-viewer {
   padding: 1rem;
 }
 
-.info,
-footer {
-  margin: 0 auto;
-  width: 90%;
-}
-
 .info {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: row;
   flex-wrap: wrap;
 
-  text-align: left;
-  margin-top: 2rem;
-
+  width: 90%;
+  margin: 2rem auto 0 auto;
   max-width: 1000px;
-}
 
-.info > div {
-  width: 100%;
-  margin-bottom: 1rem;
+  text-align: left;
 
-  @media (min-width: 901px) {
-    width: 50%;
-  }
-}
+  > div {
+    width: 100%;
 
-.info::v-deep {
-  dl,
-  dt,
-  dd {
-    margin: 0;
+    @media (min-width: 901px) {
+      width: 50%;
+    }
   }
 
-  dt,
-  dd {
-    display: inline;
+  > div > div {
+    margin-bottom: 1rem;
+  }
+
+  &::v-deep {
+    dl,
+    dt,
+    dd {
+      margin: 0;
+    }
+
+    dt,
+    dd {
+      display: inline;
+    }
   }
 }
 </style>
