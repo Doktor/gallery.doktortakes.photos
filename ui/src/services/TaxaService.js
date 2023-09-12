@@ -6,4 +6,9 @@ export const TaxaService = {
     let { content } = await sendRequest(endpoints.taxaList);
     return content;
   },
+
+  async getSpecies() {
+    let { content } = await sendRequest("/api/taxa/species/");
+    return content;
+  },
 };

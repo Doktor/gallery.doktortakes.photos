@@ -8,6 +8,7 @@ import PhotoDetailPage from "@/pages/public/PhotoDetailPage";
 import TagListPage from "@/pages/public/TagListPage";
 import TagDetailPage from "@/pages/public/TagDetailPage";
 import TaxonListPage from "@/pages/public/TaxonListPage";
+import SpeciesListPage from "@/pages/public/SpeciesListPage";
 
 import SearchPhotosPage from "@/pages/public/SearchPhotosPage";
 
@@ -64,6 +65,11 @@ export const publicRoutes = [
     },
   },
 
+  {
+    path: "/taxa/species/",
+    name: "species",
+    component: SpeciesListPage,
+  },
   {
     path: "/taxa/:catalogId/",
     name: "taxaByCatalogId",

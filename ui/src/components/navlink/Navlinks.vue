@@ -16,6 +16,7 @@
         />
         <Navlink title="Tags" route="tags" />
         <Navlink title="Taxonomy" route="taxa" />
+        <Navlink title="Species" route="species" />
         <Navlink title="Search" route="search" />
       </NavlinkMenu>
 
