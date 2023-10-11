@@ -19,11 +19,6 @@
       </div>
 
       <div>
-        <dt><i title="MD5 checksum" class="fas fa-fw fa-check-circle"></i></dt>
-        <dd class="md5">{{ photo.md5.substring(0, 8) }}</dd>
-      </div>
-
-      <div>
         <dt>
           <i
             title="Open in new tab"
@@ -82,11 +77,5 @@ export default {
 <style scoped>
 i {
   margin-right: 6px;
-}
-
-.md5 {
-  font-family: "Consolas", monospace;
-  line-height: 1;
-  word-break: break-all;
 }
 </style>
