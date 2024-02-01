@@ -1,6 +1,7 @@
 <template>
   <section>
     <Pagination
+      v-if="showTopController"
       :itemsPerPage="size"
       :itemsPerPageChoices="sizeOptions"
       @setPage="setPage"
@@ -12,6 +13,7 @@
     <slot></slot>
 
     <Pagination
+      v-if="showBottomController"
       :itemsPerPage="size"
       :itemsPerPageChoices="sizeOptions"
       @setPage="setPage"
@@ -32,6 +34,15 @@ export default {
     isServerSide: {
       type: Boolean,
       default: false,
+    },
+
+    showTopController: {
+      type: Boolean,
+      default: false,
+    },
+    showBottomController: {
+      type: Boolean,
+      default: true,
     },
 
     clientSideItems: {
