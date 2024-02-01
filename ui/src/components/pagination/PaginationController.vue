@@ -21,6 +21,7 @@
     />
   </section>
 </template>
+
 <script>
 import Pagination from "./Pagination";
 
@@ -98,6 +99,8 @@ export default {
       if (this.isServerSide) {
         await this.getPageServerSide(page, this.size);
       }
+
+      await this.$router.push({ query: { page } });
     },
 
     async setSize(size) {
@@ -131,7 +134,14 @@ export default {
         }
 
         this.$emit("setItems", newItems);
-        this.setPage(1);
+
+        let queryPage = Number.parseInt(this.$route.query?.page);
+
+        if (!Number.isNaN(queryPage)) {
+          this.setPage(queryPage);
+        } else {
+          this.setPage(1);
+        }
       },
     },
   },
