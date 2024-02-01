@@ -1,5 +1,5 @@
 <template>
-  <PaginationController
+  <PaginationControl
     :isServerSide="useServerSidePagination"
     :clientSideItems="photos"
     :page="page"
@@ -34,17 +34,17 @@
         @select="select"
       />
     </Tiles>
-  </PaginationController>
+  </PaginationControl>
 </template>
 
 <script>
 import PhotoTile from "./PhotoTile";
 import Tiles from "../Tiles";
-import PaginationController from "../pagination/PaginationController";
+import PaginationControl from "../pagination/PaginationControl";
 
 export default {
   components: {
-    PaginationController,
+    PaginationControl,
     Tiles,
     PhotoTile,
   },

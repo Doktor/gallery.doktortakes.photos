@@ -1,7 +1,7 @@
 <template>
   <section>
     <Pagination
-      v-if="showTopController"
+      v-if="showTopControl"
       :itemsPerPage="size"
       :itemsPerPageChoices="sizeOptions"
       @setPage="setPage"
@@ -13,7 +13,7 @@
     <slot></slot>
 
     <Pagination
-      v-if="showBottomController"
+      v-if="showBottomControl"
       :itemsPerPage="size"
       :itemsPerPageChoices="sizeOptions"
       @setPage="setPage"
@@ -36,11 +36,11 @@ export default {
       default: false,
     },
 
-    showTopController: {
+    showTopControl: {
       type: Boolean,
       default: false,
     },
-    showBottomController: {
+    showBottomControl: {
       type: Boolean,
       default: true,
     },
