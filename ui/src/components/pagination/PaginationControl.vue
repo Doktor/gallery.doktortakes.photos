@@ -111,7 +111,7 @@ export default {
         await this.getPageServerSide(page, this.size);
       }
 
-      await this.$router.push({ query: { page } });
+      await this.$router.push({ query: { ...this.$route.query, page } });
     },
 
     async setSize(size) {
