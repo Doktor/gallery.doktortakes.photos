@@ -114,7 +114,7 @@ export default {
   cursor: pointer;
 
   .photo-unselected & {
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.4);
   }
 
   &:hover,
