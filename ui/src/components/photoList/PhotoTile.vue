@@ -113,8 +113,14 @@ export default {
 
   cursor: pointer;
 
+  border: 8px solid transparent;
+
   .photo-unselected & {
     background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .photo-selected & {
+    border-color: $text-blue;
   }
 
   &:hover,
