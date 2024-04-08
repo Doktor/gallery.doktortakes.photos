@@ -84,7 +84,7 @@ export default {
 
   async mounted() {
     if (this.isServerSide) {
-      await this.setPage(this.page);
+      await this.setPage(this.page, true);
     }
   },
 
@@ -104,14 +104,20 @@ export default {
       this.$emit("setItems", items);
     },
 
-    async setPage(page) {
+    async setPage(page, initial = false) {
       this.$emit("setPage", page);
 
       if (this.isServerSide) {
         await this.getPageServerSide(page, this.size);
       }
 
-      await this.$router.push({ query: { ...this.$route.query, page } });
+      let location = { query: { ...this.$route.query, page } };
+
+      if (initial) {
+        await this.$router.replace(location);
+      } else {
+        await this.$router.push(location);
+      }
     },
 
     async setSize(size) {
@@ -151,7 +157,7 @@ export default {
         if (!Number.isNaN(queryPage)) {
           this.setPage(queryPage);
         } else {
-          this.setPage(1);
+          this.setPage(1, true);
         }
       },
     },
