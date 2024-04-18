@@ -5,12 +5,23 @@ import EditPhotoPage from "@/pages/manage/EditPhotoPage";
 import ManageTaxaPage from "@/pages/manage/ManageTaxaPage";
 import UserListPage from "@/pages/manage/UserListPage";
 import GroupListPage from "@/pages/manage/GroupListPage";
+import NewManagePage from "@/pages/manage/NewManagePage.vue";
 
 export const manageRoutes = [
   {
     path: "/manage/",
     name: "manage",
     component: ManagePage,
+    meta: {
+      staff: true,
+      title: "Manage",
+    },
+  },
+
+  {
+    path: "/manage/new/",
+    name: "manage-new",
+    component: NewManagePage,
     meta: {
       staff: true,
       title: "Manage",
