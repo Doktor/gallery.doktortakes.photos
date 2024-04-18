@@ -11,7 +11,6 @@ The website implements several features that are specifically designed for my us
 - Directory-like album structure
 - Album access permissions with user and group granularity, and access tokens for guest access
 - Automatic asynchronous thumbnail generation
-- Automatic watermarking of uploaded photos
 
 ## Frontend
 - Responsive design

@@ -2,8 +2,6 @@
   <section>
     <h2>Upload photos</h2>
 
-    <CustomInput label="Add watermark" type="checkbox" v-model="addWatermark" />
-
     <div>
       <form
         id="dropzone"
@@ -33,7 +31,6 @@ export default {
 
   data() {
     return {
-      addWatermark: true,
       csrfToken: getCsrfToken(),
     };
   },
@@ -42,10 +39,6 @@ export default {
     action() {
       let base = endpoints.manageAlbumPhotoList.replace(":path", this.path);
       let options = {};
-
-      if (this.addWatermark) {
-        options.addWatermark = true;
-      }
 
       return base + getQueryString(options);
     },

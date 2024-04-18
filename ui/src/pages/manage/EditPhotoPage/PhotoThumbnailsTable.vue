@@ -5,7 +5,6 @@
         <th>Name</th>
         <th>Width</th>
         <th>Height</th>
-        <th>Watermark</th>
         <th>Link</th>
       </tr>
     </thead>
@@ -17,7 +16,6 @@
         </td>
         <td>{{ thumbnail.width }}</td>
         <td>{{ thumbnail.height }}</td>
-        <td>{{ thumbnail.is_watermarked ? "yes" : "no" }}</td>
         <td>
           <a :href="thumbnail.url">{{ thumbnail.name }}</a>
         </td>

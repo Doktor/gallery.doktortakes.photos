@@ -21,7 +21,7 @@ class PhotoAdmin(admin.ModelAdmin):
             'fields': ('original', 'original_filename', 'exif')
         }),
         ('Display image', {
-            'fields': ('preview', 'watermark', 'md5', 'dimensions', 'file_size')
+            'fields': ('preview', 'md5', 'dimensions', 'file_size')
         }),
         ('Other', {
             'fields': ('album',)

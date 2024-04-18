@@ -46,26 +46,20 @@ def parse_exif_data(photo: 'Photo', file: File) -> None:
 
 def parse_xmp_data(photo: 'Photo', file: File) -> None:
     """Extracts XMP data from an image and adds it to a Photo object."""
+    return
 
-    file.seek(0)
-    data = file.read()
-    start = data.find(XMP_START)
-    end = data.find(XMP_END)
-
-    if start == -1 or end == -1:
-        pass
-    else:
-        xml = data[start:end + len(XMP_END)].decode('utf-8')
-        root = etree.fromstring(xml)
-
-        element = root.xpath('.//rdf:Description', namespaces=NS)[0]
-
-        try:
-            label = element.xpath('@xmp:Label', namespaces=NS)[0].lower()
-        except IndexError:
-            photo.watermark = COLOR_NONE
-        else:
-            photo.watermark = COLOR_BLACK if label == 'green' else COLOR_WHITE
+    # file.seek(0)
+    # data = file.read()
+    # start = data.find(XMP_START)
+    # end = data.find(XMP_END)
+    #
+    # if start == -1 or end == -1:
+    #     pass
+    # else:
+    #     xml = data[start:end + len(XMP_END)].decode('utf-8')
+    #     root = etree.fromstring(xml)
+    #     element = root.xpath('.//rdf:Description', namespaces=NS)[0]
+    #     label = element.xpath('@xmp:Label', namespaces=NS)[0].lower()
 
 
 def format_f_stop(f: str) -> float:

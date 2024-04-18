@@ -1,11 +1,10 @@
 from django.core.files import File
 
-from photos.models import Photo, Thumbnail, Watermark
-from photos.settings_photos import WATERMARK_OFFSET_PERCENT
+from photos.models import Photo, Thumbnail
 from photos.utils.models import format_file_size
 
 from io import BytesIO
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 import PIL.Image
 
 
@@ -19,9 +18,7 @@ def create_thumbnail(
         width: int,
         height: int,
         name: str,
-        quality: int = 90,
-        add_watermark: bool = False,
-        watermark_color: str = None) -> "Thumbnail":
+        quality: int = 90) -> "Thumbnail":
 
     image = PIL.Image.open(file)
 
@@ -29,7 +26,7 @@ def create_thumbnail(
     icc_profile = image.info.get('icc_profile', None)
 
     try:
-        thumbnail = Thumbnail.objects.get(photo=photo, width=width, height=height, is_watermarked=add_watermark)
+        thumbnail = Thumbnail.objects.get(photo=photo, width=width, height=height)
         thumbnail.image.delete(save=False)
     except Thumbnail.DoesNotExist:
         thumbnail = Thumbnail()
@@ -39,10 +36,6 @@ def create_thumbnail(
 
     if image.size != (width, height):
         image = fit_image(image, (width, height))
-
-    if add_watermark:
-        thumbnail.is_watermarked = True
-        image = apply_watermark(image, watermark_color)
 
     assert image.width == width
     assert image.height == height
@@ -94,25 +87,3 @@ def fit_image(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
         image = image.crop(int_all(left, 0, right, old_h))
 
     return image.resize(size, PIL.Image.LANCZOS)
-
-
-def apply_watermark(image: PIL.Image, color: str) -> PIL.Image:
-    """Applies a watermark to an image."""
-    w, h = image.size
-    image_size = max(w, h)
-
-    try:
-        watermark = Watermark.objects.get(apply_to_size=image_size, color=color)
-    except Watermark.DoesNotExist:
-        raise RuntimeError(f"no watermark found for parameters: long_size = {image_size}, color = {color}")
-
-    watermark_image = PIL.Image.open(watermark.image)
-
-    offset = int(image_size * (WATERMARK_OFFSET_PERCENT / 100))
-
-    x = w - watermark_image.width - offset
-    y = h - watermark_image.height - offset
-    coords = (x, y)
-
-    image.paste(watermark_image, coords, mask=watermark_image.split()[3])
-    return image

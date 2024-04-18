@@ -61,12 +61,9 @@ class ManageThumbnailList(APIView):
             return Response({'error': errors}, status=Status.BAD_REQUEST)
 
         name = request.data.get("name", '')
-        add_watermark = request.data.get("addWatermark", False)
-        watermark_color = request.data.get("watermarkColor", None)
 
         thumbnail = create_thumbnail(
             photo.pk, None,
-            width, height, name,
-            add_watermark=add_watermark, watermark_color=watermark_color)
+            width, height, name)
         serializer = ThumbnailSerializer(thumbnail)
         return Response(serializer.data)

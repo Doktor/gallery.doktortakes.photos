@@ -17,17 +17,6 @@
       />
 
       <CustomInput label="Name" v-model="request.name" />
-      <CustomInput
-        label="Add watermark"
-        type="checkbox"
-        v-model="request.addWatermark"
-      />
-      <CustomSelect
-        label="Watermark color"
-        v-model="request.watermarkColor"
-        :options="watermarkColors"
-        :errors="errors.watermarkColor"
-      />
     </fieldset>
 
     <CustomButton class="button-primary" @click="submit">
@@ -41,17 +30,6 @@ import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 import CustomButton from "@/components/form/CustomButton";
-
-const watermarkColors = [
-  {
-    value: "black",
-    display: "Black",
-  },
-  {
-    value: "white",
-    display: "White",
-  },
-];
 
 export default {
   components: { CustomButton, CustomSelect, CustomInput },
@@ -67,16 +45,12 @@ export default {
       errors: {
         width: [],
         height: [],
-        watermarkColor: [],
       },
       request: {
         width: this.photo.width.toString(),
         height: this.photo.height.toString(),
         name: "",
-        addWatermark: false,
-        watermarkColor: "",
       },
-      watermarkColors,
     };
   },
 
@@ -96,20 +70,12 @@ export default {
         hasErrors = true;
       }
 
-      if (this.request.addWatermark && !this.request.watermarkColor) {
-        this.errors.watermarkColor.push(
-          "watermark color should be set if adding watermark"
-        );
-        hasErrors = true;
-      }
-
       if (hasErrors) {
         return null;
       }
 
       this.errors.width = [];
       this.errors.height = [];
-      this.errors.watermarkColor = [];
 
       return {
         ...this.request,
@@ -126,7 +92,7 @@ export default {
 
       let { ok } = await ManagePhotoService.createThumbnail(
         this.photo.md5,
-        data
+        data,
       );
 
       if (!ok) {

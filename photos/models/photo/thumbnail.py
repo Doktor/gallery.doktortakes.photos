@@ -52,7 +52,6 @@ class Thumbnail(models.Model):
         blank=True,
         null=True,
         editable=False)
-    is_watermarked = models.BooleanField(default=False)
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)

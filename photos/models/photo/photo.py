@@ -74,9 +74,6 @@ class Photo(models.Model):
 
     sidecar_exists = models.BooleanField(default=False)
 
-    watermark = models.CharField(
-        max_length=1, choices=COLOR_CHOICES, default=COLOR_WHITE, blank=True)
-
     # Metadata
 
     album = models.ForeignKey(
