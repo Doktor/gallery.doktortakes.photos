@@ -1,6 +1,13 @@
 <template>
   <main v-if="!loading">
     <div class="sidebar">
+      <h2>Photos</h2>
+      <ul>
+        <li @click="selectRecentPhotos">
+          <a href="#">Recent photos</a>
+        </li>
+      </ul>
+
       <h2>Albums</h2>
       <ul>
         <li v-for="album in albums" :key="album.id" @click="selectAlbum(album)">
@@ -8,7 +15,16 @@
         </li>
       </ul>
     </div>
-    <div v-if="selectedAlbum !== null" class="contents">
+
+    <div v-if="showRecentPhotos">
+      <h2 style="text-align: left">Recent photos</h2>
+      <PhotoGallery
+        routeName="editPhoto"
+        :useServerSidePagination="true"
+        :getPage="getRecentPhotosPage"
+      />
+    </div>
+    <div v-else-if="selectedAlbum !== null" class="contents">
       <section class="album-cover-container">
         <AlbumCover :album="selectedAlbum" :count="photos.length" />
       </section>
@@ -22,6 +38,7 @@
 import { AlbumService } from "@/services/AlbumService";
 import PhotoGallery from "@/components/photoList/PhotoGallery.vue";
 import AlbumCover from "@/pages/public/AlbumDetailPage/AlbumCover.vue";
+import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 
 export default {
   components: { AlbumCover, PhotoGallery },
@@ -30,6 +47,7 @@ export default {
       loading: true,
       albums: [],
 
+      showRecentPhotos: true,
       selectedAlbum: null,
       photos: [],
     };
@@ -43,7 +61,29 @@ export default {
 
   methods: {
     selectAlbum(album) {
+      this.showRecentPhotos = false;
       this.selectedAlbum = album;
+    },
+
+    selectRecentPhotos() {
+      this.showRecentPhotos = true;
+    },
+    async getRecentPhotosPage(page, size) {
+      let { ok, content } = await ManagePhotoService.getRecentPhotos(
+        page,
+        size,
+      );
+
+      if (!ok) {
+        this.$store.commit("addNotification", {
+          message: "An error occurred when retrieving recent photos",
+          status: "error",
+        });
+
+        return { photos: [], count: 0 };
+      } else {
+        return content;
+      }
     },
   },
 
