@@ -1,5 +1,5 @@
 <template>
-  <div class="lazy-image" :class="{ 'lazy-image-loaded': loaded }">
+  <div class="lazy-image" :class="{ 'lazy-image-loaded': isLoaded }">
     <div
       v-if="placeholder"
       ref="placeholder"
@@ -26,7 +26,7 @@ export default {
 
   data() {
     return {
-      loaded: false,
+      isLoaded: false,
     };
   },
 
@@ -69,7 +69,7 @@ export default {
 
       image.addEventListener("load", () => {
         delete image.onload;
-        this.loaded = true;
+        this.isLoaded = true;
 
         if (placeholder) {
           timeout = setTimeout(() => placeholder.remove(), 400);
