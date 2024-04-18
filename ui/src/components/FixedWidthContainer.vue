@@ -11,12 +11,18 @@ export default {
       type: Number,
       default: 1000,
     },
+
+    isCentered: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   computed: {
     styles() {
       return {
         "max-width": `${this.width}px`,
+        "margin": this.isCentered ? "0 auto" : "0",
       };
     },
   },
@@ -26,6 +32,5 @@ export default {
 <style scoped>
 .container-fixed-width {
   text-align: left;
-  margin: 0 auto;
 }
 </style>
