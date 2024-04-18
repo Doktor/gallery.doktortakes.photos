@@ -84,6 +84,9 @@ def format_f_stop(f: str) -> float:
 def get_exif(photo: 'Photo') -> dict:
     e = photo.exif
 
+    if not e:
+        return {}
+
     camera = e.get('Image Model', 'Camera unknown')
 
     lens_make = e.get('EXIF LensMake', e.get('Image Make', None))
