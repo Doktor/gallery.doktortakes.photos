@@ -80,6 +80,13 @@ export default {
         ? Math.ceil(this.count / this.size)
         : Math.ceil(this.clientSideItems.length / this.size);
     },
+
+    indexStart() {
+      return this.size * (this.page - 1);
+    },
+    indexEnd() {
+      return this.indexStart + this.size - 1;
+    },
   },
 
   async mounted() {
@@ -118,6 +125,8 @@ export default {
       } else {
         await this.$router.push(location);
       }
+
+      this.$nextTick(() => this.updateClientSideItems());
     },
 
     async setSize(size) {
@@ -130,9 +139,20 @@ export default {
         return;
       }
 
-      this.clientSideItems.forEach((item, index) => {
-        item.page = Math.floor(index / this.size) + 1;
-      });
+      this.$nextTick(() => this.updateClientSideItems());
+    },
+
+    updateClientSideItems() {
+      let currentItems = this.clientSideItems.slice(
+        this.indexStart,
+        this.indexEnd + 1,
+      );
+
+      for (let item of currentItems) {
+        item.isLoaded = true;
+      }
+
+      this.$emit("setItems", currentItems);
     },
   },
 
@@ -144,13 +164,9 @@ export default {
           return;
         }
 
-        for (let [index, item] of newItems.entries()) {
-          item.index = index;
-          item.page = Math.floor(index / this.size) + 1;
-          item.loaded = false;
+        for (let item of newItems) {
+          item.isLoaded = false;
         }
-
-        this.$emit("setItems", newItems);
 
         let queryPage = Number.parseInt(this.$route.query?.page);
 
@@ -159,6 +175,8 @@ export default {
         } else {
           this.setPage(1, true);
         }
+
+        this.$nextTick(() => this.updateClientSideItems());
       },
     },
   },

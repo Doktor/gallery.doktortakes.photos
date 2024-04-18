@@ -19,15 +19,10 @@
           allowSelect ? selectedPhotoHashes.includes(photo.md5) : false
         "
         :isLoading="
-          useServerSidePagination
-            ? false
-            : isLoading || !loadedPages.includes(photo.page)
+          useServerSidePagination ? false : isLoading || !photo.isLoaded
         "
         :isVisible="
-          useServerSidePagination
-            ? true
-            : isLoading ||
-              (indexStart <= photo.index && photo.index <= indexEnd)
+          useServerSidePagination ? true : isLoading || photo.isLoaded
         "
         :photo="photo"
         :routeName="routeName"
@@ -53,20 +48,11 @@ export default {
     return {
       page: 1,
       size: 12,
-
       items: [],
-      loadedPages: [],
     };
   },
 
   computed: {
-    indexStart() {
-      return this.size * (this.page - 1);
-    },
-    indexEnd() {
-      return this.indexStart + this.size - 1;
-    },
-
     sizeOptions() {
       return [12, 24, 48, 96];
     },
@@ -108,15 +94,12 @@ export default {
       this.$emit("select", md5);
     },
 
-    async setPage(page) {
+    setPage(page) {
       this.page = page;
-      this.loadedPages.push(page);
     },
-
     setSize(size) {
       this.size = size;
     },
-
     setItems(items) {
       this.items = items;
     },
