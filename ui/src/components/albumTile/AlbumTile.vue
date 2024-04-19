@@ -1,23 +1,19 @@
 <template>
-  <AlbumTileWrapper v-show="isVisible">
-    <div class="album" :class="classes">
-      <component
-        :is="isLoading ? 'div' : 'router-link'"
-        :to="isLoading ? null : albumLink"
-      >
-        <AlbumThumbnail :isLoading="isLoading" :album="album" />
-      </component>
-    </div>
-  </AlbumTileWrapper>
+  <div class="album" :class="classes" v-show="isVisible">
+    <component
+      :is="isLoading ? 'div' : 'router-link'"
+      :to="isLoading ? null : albumLink"
+    >
+      <AlbumThumbnail :isLoading="isLoading" :album="album" />
+    </component>
+  </div>
 </template>
 
 <script>
 import AlbumThumbnail from "./AlbumThumbnail";
-import AlbumTileWrapper from "./AlbumTileWrapper";
 
 export default {
   components: {
-    AlbumTileWrapper,
     AlbumThumbnail,
   },
 

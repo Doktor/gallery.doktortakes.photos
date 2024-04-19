@@ -1,37 +1,33 @@
 <template>
-  <PhotoTileWrapper v-show="isVisible">
-    <div class="photo" :class="classes">
-      <component
-        :is="allowSelect || photo.path === undefined ? 'div' : 'router-link'"
-        :to="allowSelect ? null : photoLink"
-      >
-        <PhotoThumbnail :isLoading="isLoading" :photo="photo" />
-      </component>
+  <div class="photo" :class="classes" v-show="isVisible">
+    <component
+      :is="allowSelect || photo.path === undefined ? 'div' : 'router-link'"
+      :to="allowSelect ? null : photoLink"
+    >
+      <PhotoThumbnail :isLoading="isLoading" :photo="photo" />
+    </component>
 
-      <div v-if="allowSelect" class="photo-select-overlay" @click="select">
-        <div class="photo-select-checkbox-container">
-          <input
-            class="photo-select-checkbox"
-            type="checkbox"
-            :checked="isSelected"
-          />
-          <i
-            v-show="isSelected"
-            class="photo-select-checkbox-icon fas fa-check"
-          ></i>
-        </div>
+    <div v-if="allowSelect" class="photo-select-overlay" @click="select">
+      <div class="photo-select-checkbox-container">
+        <input
+          class="photo-select-checkbox"
+          type="checkbox"
+          :checked="isSelected"
+        />
+        <i
+          v-show="isSelected"
+          class="photo-select-checkbox-icon fas fa-check"
+        ></i>
       </div>
     </div>
-  </PhotoTileWrapper>
+  </div>
 </template>
 
 <script>
 import PhotoThumbnail from "./PhotoThumbnail";
-import PhotoTileWrapper from "./PhotoTileWrapper";
 
 export default {
   components: {
-    PhotoTileWrapper,
     PhotoThumbnail,
   },
 

@@ -10,7 +10,7 @@
     @setSize="setSize"
     @setItems="setItems"
   >
-    <Tiles>
+    <Tiles class="photo-tiles">
       <PhotoTile
         v-for="photo in items"
         :key="photo.md5"
@@ -106,3 +106,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.photo-tiles {
+  grid-template-columns: repeat(auto-fit, minmax($photo-width, 1fr));
+}
+</style>

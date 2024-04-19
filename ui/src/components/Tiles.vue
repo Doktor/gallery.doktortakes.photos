@@ -6,9 +6,11 @@
 
 <style lang="scss">
 .tiles {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
 
-  margin: $itemSpacing (-$itemSpacing);
+  column-gap: $item-spacing;
+  row-gap: $item-spacing;
+
+  margin: $item-spacing 0;
 }
 </style>

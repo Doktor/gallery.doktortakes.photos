@@ -1,5 +1,5 @@
 <template>
-  <Tiles>
+  <Tiles class="album-tiles">
     <AlbumTile
       v-for="(album, index) in albums"
       :album="album"
@@ -47,3 +47,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.album-tiles {
+  grid-template-columns: repeat(auto-fit, minmax($album-width, 1fr));
+}
+</style>

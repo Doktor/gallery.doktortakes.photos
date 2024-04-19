@@ -1,5 +1,5 @@
 <template>
-  <Tiles v-if="album.children.length > 0">
+  <Tiles v-if="album.children.length > 0" class="album-children-tiles">
     <AlbumTile
       v-for="child in album.children"
       :album="child"
@@ -33,3 +33,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.album-children-tiles {
+  grid-template-columns: repeat(auto-fit, minmax($album-width, 1fr));
+}
+</style>
