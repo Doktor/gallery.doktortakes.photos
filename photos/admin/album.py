@@ -16,7 +16,7 @@ class AlbumAdmin(MPTTModelAdmin):
     form = AlbumForm
     fieldsets = (
         ('Main', {
-            'fields': ('name', 'slug', 'location', 'description',
+            'fields': ('name', 'slug', 'location', 'description', 'license',
                        'start', 'end', 'parent', 'tags'),
         }),
         ('Visibility', {

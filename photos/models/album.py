@@ -50,6 +50,8 @@ class Album(MPTTModel):
     description = models.CharField(
         max_length=1000, blank=True,
         help_text="A brief description of this album")
+    license = models.ForeignKey(
+        'License', on_delete=models.PROTECT, blank=True, null=True)
 
     start = models.DateField()
     end = models.DateField(blank=True, null=True)
