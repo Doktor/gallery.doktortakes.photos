@@ -380,7 +380,7 @@ def wall(request: HttpRequest) -> HttpResponse:
     today = datetime.date.today()
     start = today - datetime.timedelta(days=365 * 2)
 
-    q = Q(album__access_level=Allow.PUBLIC, sidecar_exists=True, taken__gte=start)
+    q = Q(album__access_level=Allow.PUBLIC, taken__gte=start)
 
     photos = Photo.objects.filter(q).order_by('?').select_related('album')[:60]
     context = {'photos': photos}

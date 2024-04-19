@@ -51,9 +51,6 @@ def get_photo_for_user_or_404(request: Union[HttpRequest, Request], md5: str,
 
     photo = qs.first()
 
-    if not photo.sidecar_exists:
-        raise Http404
-
     if not photo.check_access(request):
         raise Http404
 

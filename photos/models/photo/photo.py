@@ -72,8 +72,6 @@ class Photo(models.Model):
     file_size = models.CharField(
         max_length=50, editable=False, blank=True)
 
-    sidecar_exists = models.BooleanField(default=False)
-
     # Metadata
 
     album = models.ForeignKey(
