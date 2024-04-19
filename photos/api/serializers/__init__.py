@@ -7,3 +7,4 @@ from .thumbnail import ThumbnailSerializer
 from .user import LogInSerializer, UserSerializer
 from .group import GroupSerializer
 from .hero_photo import HeroPhotoSerializer
+from .license import LicenseSerializer
