@@ -9,6 +9,16 @@
       </header>
 
       <h2>Album details</h2>
+
+      <div>
+        <CustomButton
+          class="button-danger"
+          @click="showDeleteAlbumModal = true"
+        >
+          Delete album
+        </CustomButton>
+      </div>
+
       <AlbumDetails v-if="!loading" :album="album" @save="saveAlbum" />
 
       <template v-if="album.parent || album.children.length > 0">
@@ -33,7 +43,12 @@
         @update="loadAlbum"
       />
 
-      <DeleteAlbumForm :album="album" @delete="deleteAlbum" />
+      <DeleteAlbumModal
+        v-show="showDeleteAlbumModal"
+        :album="album"
+        @close="showDeleteAlbumModal = false"
+        @submit="deleteAlbum"
+      />
     </template>
   </FixedWidthContainer>
 </template>
@@ -42,7 +57,7 @@
 import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
 import AlbumDetails from "./AlbumDetails";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import DeleteAlbumForm from "./DeleteAlbumForm";
+import DeleteAlbumModal from "./DeleteAlbumModal";
 import PhotoManager from "./PhotoManager";
 import PhotoUploader from "./PhotoUploader";
 import { mapState } from "vuex";
@@ -51,13 +66,15 @@ import { editorTitleTemplate } from "@/store/mutations";
 import AlbumLinks from "@/components/manage/AlbumLinks";
 import { AlbumService } from "@/services/AlbumService";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
+import CustomButton from "@/components/form/CustomButton";
 
 export default {
   components: {
+    CustomButton,
     AlbumLinks,
     AlbumChildrenListTiles,
     AlbumDetails,
-    DeleteAlbumForm,
+    DeleteAlbumModal,
     FixedWidthContainer,
     PhotoManager,
     PhotoUploader,
@@ -70,6 +87,8 @@ export default {
 
       showPhotosInChildAlbums: false,
       allPhotos: null,
+
+      showDeleteAlbumModal: false,
     };
   },
 
@@ -187,10 +206,5 @@ h2 {
 .photo-actions {
   display: flex;
   justify-content: space-between;
-}
-
-.delete-album {
-  display: flex;
-  max-width: 600px;
 }
 </style>
