@@ -1,56 +1,62 @@
 <template>
-  <FixedWidthContainer>
-    <router-link :to="{ name: 'manage' }">Back to editor</router-link>
+  <div>
+    <FixedWidthContainer>
+      <router-link :to="{ name: 'manage' }">Back to editor</router-link>
 
-    <template v-if="!loading">
-      <header>
-        <h2 id="album-name">{{ album.name }}</h2>
-        <AlbumLinks :album="album" />
-      </header>
+      <template v-if="!loading">
+        <header>
+          <h2 id="album-name">{{ album.name }}</h2>
+          <AlbumLinks :album="album" />
+        </header>
 
-      <h2>Album details</h2>
+        <h2>Album details</h2>
 
-      <div>
-        <CustomButton
-          class="button-danger"
-          @click="showDeleteAlbumModal = true"
-        >
-          Delete album
-        </CustomButton>
-      </div>
+        <div>
+          <CustomButton
+            class="button-danger"
+            @click="showDeleteAlbumModal = true"
+          >
+            Delete album
+          </CustomButton>
+        </div>
 
-      <AlbumDetails v-if="!loading" :album="album" @save="saveAlbum" />
+        <AlbumDetails v-if="!loading" :album="album" @save="saveAlbum" />
 
-      <template v-if="album.parent || album.children.length > 0">
-        <h2>Related albums</h2>
+        <template v-if="album.parent || album.children.length > 0">
+          <h2>Related albums</h2>
 
-        <router-link
-          v-if="album.parent !== null"
-          :to="{ name: 'editAlbum', params: { path: album.parent.split('/') } }"
-        >
-          Edit parent album
-        </router-link>
+          <router-link
+            v-if="album.parent !== null"
+            :to="{
+              name: 'editAlbum',
+              params: { path: album.parent.split('/') },
+            }"
+          >
+            Edit parent album
+          </router-link>
 
-        <AlbumChildrenListTiles :album="album" :route="'editAlbum'" />
+          <AlbumChildrenListTiles :album="album" :route="'editAlbum'" />
+        </template>
+
+        <PhotoUploader :path="album.path" />
+
+        <DeleteAlbumModal
+          v-show="showDeleteAlbumModal"
+          :album="album"
+          @close="showDeleteAlbumModal = false"
+          @submit="deleteAlbum"
+        />
       </template>
+    </FixedWidthContainer>
 
-      <PhotoUploader :path="album.path" />
-      <PhotoManager
-        :album="album"
-        :photos="filteredPhotos"
-        :showPhotosInChildAlbums="showPhotosInChildAlbums"
-        @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
-        @update="loadAlbum"
-      />
-
-      <DeleteAlbumModal
-        v-show="showDeleteAlbumModal"
-        :album="album"
-        @close="showDeleteAlbumModal = false"
-        @submit="deleteAlbum"
-      />
-    </template>
-  </FixedWidthContainer>
+    <PhotoManager
+      :album="album"
+      :photos="filteredPhotos"
+      :showPhotosInChildAlbums="showPhotosInChildAlbums"
+      @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
+      @update="loadAlbum"
+    />
+  </div>
 </template>
 
 <script>

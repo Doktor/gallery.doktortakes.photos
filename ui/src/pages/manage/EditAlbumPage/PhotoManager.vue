@@ -1,5 +1,5 @@
 <template>
-  <section class="manage-photos">
+  <section class="manage-photos" style="text-align: left">
     <h2>Manage photos</h2>
 
     <div>
@@ -58,9 +58,11 @@ import { endpoints } from "@/constants";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
 import CustomInput from "@/components/form/CustomInput";
+import FixedWidthContainer from "@/components/FixedWidthContainer.vue";
 
 export default {
   components: {
+    FixedWidthContainer,
     CustomInput,
     CustomButton,
     PhotoGallery,
@@ -144,7 +146,7 @@ export default {
             "Content-Type": "application/json",
             "X-CSRFToken": getCsrfToken(),
           },
-        }
+        },
       );
 
       if (!ok) {
@@ -171,7 +173,7 @@ export default {
       if (this.selectedPhotoHashes.includes(md5)) {
         this.selectedPhotoHashes.splice(
           this.selectedPhotoHashes.indexOf(md5),
-          1
+          1,
         );
       } else {
         this.selectedPhotoHashes.push(md5);
@@ -198,7 +200,7 @@ export default {
     async deleteSelected() {
       let { ok } = await ManageAlbumService.deletePhotos(
         this.album.path,
-        this.selectedPhotoHashes
+        this.selectedPhotoHashes,
       );
 
       if (ok) {
