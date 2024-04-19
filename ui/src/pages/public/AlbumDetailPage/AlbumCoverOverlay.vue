@@ -20,6 +20,21 @@
       <AlbumMetadata class="overlay-item" :album="album" />
       <AlbumAccessInfo class="overlay-item" :album="album" />
       <AlbumLinks class="overlay-item" v-if="isStaff" :album="album" />
+
+      <div v-if="album.license" class="overlay-item">
+        <i title="License" class="fas fa-fw fa-copyright"></i>
+
+        <span :title="album.license.full_name || album.license.display_name">
+          <a
+            v-if="album.license.link"
+            :href="album.license.link"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            >{{ album.license.display_name }}
+          </a>
+          <template v-else>{{ album.license.display_name }}</template>
+        </span>
+      </div>
     </div>
   </div>
 </template>
