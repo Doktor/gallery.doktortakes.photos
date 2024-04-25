@@ -51,10 +51,21 @@
         <td colspan="5">
           <CustomInput label="" v-model="searchText" />
 
-          <div v-if="searchResults" class="search-results">
+          <div class="search-results">
             <ul>
-              <li v-for="taxon in searchResults" @click="addTaxon(taxon)">
+              <li class="search-results-header">
+                Search results ({{ searchResults.length }})
+              </li>
+              <li
+                v-for="taxon in searchResults.slice(0, this.searchResultsLimit)"
+                :key="taxon.catalog_id"
+                class="search-result"
+                @click="addTaxon(taxon)"
+              >
                 {{ taxon.common_name }} ({{ taxon.name }})
+              </li>
+              <li v-if="searchResults.length > searchResultsLimit" class="note">
+                {{ searchResults.length - searchResultsLimit }} result(s) hidden
               </li>
             </ul>
           </div>
@@ -98,6 +109,7 @@ export default {
 
       allSpecies: [],
       searchResults: [],
+      searchResultsLimit: 5,
     };
   },
 
@@ -254,9 +266,11 @@ export default {
 </script>
 
 <style lang="scss">
-.search-results {
-  border: 1px solid black;
+.search-results-header {
+  font-weight: 700;
+}
 
+.search-results {
   ul {
     list-style-type: none;
 
@@ -265,11 +279,21 @@ export default {
   }
 
   li {
-    border: 1px solid black;
-    padding: 8px;
-    margin: 8px;
+    background-color: white;
 
-    cursor: pointer;
+    padding: 8px;
+  }
+}
+
+.search-result {
+  cursor: pointer;
+
+  &:nth-child(even) {
+    background-color: rgb(245, 245, 245);
+  }
+
+  &:hover {
+    background-color: rgb(220, 220, 220);
   }
 }
 
