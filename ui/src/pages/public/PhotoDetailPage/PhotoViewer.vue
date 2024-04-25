@@ -54,8 +54,8 @@ export default {
       scaleLevels: [1, 2, 4],
 
       transitionProperties: ["transform", "left", "top"],
-      transitionTime: 0.6,
-      transitionTimingFunction: "ease",
+      transitionTime: 0.4,
+      transitionTimingFunction: "ease-in-out",
 
       dragging: false,
       delayTranslateX: null,
