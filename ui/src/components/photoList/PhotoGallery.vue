@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       page: 1,
-      size: 12,
+      size: 24,
       items: [],
     };
   },
