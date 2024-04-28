@@ -109,6 +109,12 @@ export default {
 
 <style lang="scss">
 .photo-tiles {
-  grid-template-columns: repeat(auto-fit, minmax($photo-width, 1fr));
+  $sizes: 1, 2, 3, 4, 6, 8;
+
+  @each $size in $sizes {
+    @media (min-width: $photo-width * $size) {
+      grid-template-columns: repeat($size, 1fr);
+    }
+  }
 }
 </style>
