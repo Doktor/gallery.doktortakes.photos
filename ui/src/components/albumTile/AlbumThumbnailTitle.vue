@@ -1,6 +1,6 @@
 <template>
   <div class="album-thumbnail-title-container">
-    <div class="album-thumbnail-title">{{ album.name }}</div>
+    <div class="album-thumbnail-title" :title="album.name">{{ album.name }}</div>
   </div>
 </template>
 
@@ -18,24 +18,26 @@ export default {
 <style lang="scss">
 .album-thumbnail-title-container {
   position: absolute;
-  bottom: 0.5rem;
-  left: 0.5rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-  background-color: rgba($background-color, 0.8);
-  border-radius: 2px;
+  background-color: rgba(black, 0.5);
 }
 
 .album-thumbnail-title {
   @include headings-font();
 
-  color: $text-color;
+  color: $background-color;
   font-size: 1.3rem;
   line-height: 1;
-  text-align: center;
-  text-transform: lowercase;
+  text-align: left;
 
-  border-radius: 5px;
-  margin: 0.55rem 0.65rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  padding: 12px;
 
   &:hover {
     text-decoration: none;
