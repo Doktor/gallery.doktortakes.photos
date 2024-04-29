@@ -51,8 +51,8 @@ function toFullDateTimeForm(dateForm) {
 
 function formatDate(dateString) {
   return new Date(toFullDateTimeForm(dateString)).toLocaleString("en-US", {
-    weekday: "long",
-    month: "long",
+    weekday: "short",
+    month: "short",
     day: "numeric",
     year: "numeric",
     timeZone: "UTC",
