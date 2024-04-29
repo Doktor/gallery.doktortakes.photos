@@ -114,7 +114,7 @@ export default {
 .overlay-container {
   position: relative;
   z-index: 1;
-  min-height: 50vh;
+  min-height: (100vh / 3);
 
   display: flex;
   flex-direction: column;
