@@ -61,7 +61,7 @@ export default {
 
   data() {
     return {
-      albumsPerPage: 12,
+      albumsPerPage: 24,
       page: 1,
 
       albumsCopy: [],
