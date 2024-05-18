@@ -36,6 +36,12 @@ export default {
 
 <style lang="scss">
 .album-children-tiles {
-  grid-template-columns: repeat(auto-fit, minmax($album-width, 1fr));
+  $sizes: 1, 2, 3, 4, 6, 8;
+
+  @each $size in $sizes {
+    @media (min-width: $album-width * $size) {
+      grid-template-columns: repeat($size, 1fr);
+    }
+  }
 }
 </style>
