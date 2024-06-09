@@ -30,7 +30,7 @@ export const AlbumService = {
       return { ok };
     }
 
-    let album = content;
+    let { album, children } = content;
 
     if (!getPhotos) {
       return { ok, album };
@@ -50,9 +50,11 @@ export const AlbumService = {
     album.pathSplit = album.path.split("/");
     album.tags.sort();
 
-    for (let child of album.children) {
+    for (let child of children) {
       child.pathSplit = child.path.split("/");
     }
+
+    album.children = children;
 
     return { ok, album, photos };
   },

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from django.http import Http404
 
@@ -27,6 +27,18 @@ def get_album(request: Request, path: str) -> Album:
         return get_album_for_user_or_404(request, path)
     except Http404:
         raise AlbumNotFound
+
+
+def get_album_and_children(request: Request, path: str) -> Tuple[Album, List[Album]]:
+    album = get_album(request, path)
+
+    children = [
+        c for c
+        in album.children.select_related('cover').prefetch_related('cover__thumbnails')
+        if c.check_access(request)
+    ]
+
+    return (album, children)
 
 
 def get_photos_for_album(request: Request, path: str, recursive: bool = False) -> Response:
@@ -73,10 +85,15 @@ class AlbumList(APIView):
 class AlbumDetail(APIView):
     @staticmethod
     def get(request: Request, path: str) -> Response:
-        album = get_album(request, path)
-        serializer = AlbumSerializer(album)
+        album, children = get_album_and_children(request, path)
 
-        return Response(serializer.data)
+        album_serializer = AlbumSerializer(album)
+        children_serializer = SimpleAlbumSerializer(children, many=True)
+
+        return Response({
+            'album': album_serializer.data,
+            'children': children_serializer.data,
+        })
 
 
 class AlbumPhotoList(APIView):

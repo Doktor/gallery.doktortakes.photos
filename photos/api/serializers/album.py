@@ -24,14 +24,9 @@ class AlbumSerializer(serializers.ModelSerializer):
     groups = GroupField(many=True, allow_empty=True, queryset=Q())
 
     parent = NullableAlbumField(allow_empty=True, allow_null=True, queryset=Q())
-    children = serializers.SerializerMethodField(read_only=True)
 
     url = serializers.CharField(read_only=True, source='get_absolute_url')
     admin_url = serializers.CharField(read_only=True, source='get_admin_url')
-
-    @staticmethod
-    def get_children(obj: Album):
-        return SimpleAlbumSerializer(obj.children, many=True).data
 
     def validate(self, data):
         if self.instance is not None:
@@ -53,7 +48,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             'start', 'end',
             'cover',
             'access_level', 'access_code', 'users', 'groups',
-            'parent', 'children',
+            'parent',
             'url', 'admin_url',
         )
 
