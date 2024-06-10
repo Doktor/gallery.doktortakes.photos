@@ -42,24 +42,24 @@ class ManageAlbumDetail(APIView):
         album = get_album(request, path)
         serializer = AlbumCoverSerializer(album, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-            photo = PhotoSerializer(album.cover)
-            return Response(photo.data)
+        serializer.save()
 
-        return Response(serializer.errors, status=Status.BAD_REQUEST)
+        photo = PhotoSerializer(album.cover)
+        return Response(photo.data)
 
     @staticmethod
     def put(request: Request, path: str) -> Response:
         album = get_album(request, path)
         serializer = AlbumSerializer(album, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-        return Response(serializer.errors, status=Status.BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data)
 
     @staticmethod
     def delete(request: Request, path: str) -> Response:
