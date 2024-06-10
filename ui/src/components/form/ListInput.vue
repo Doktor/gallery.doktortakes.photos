@@ -3,13 +3,15 @@
     <label :for="id">{{ label }}</label>
 
     <div class="list-input-wrapper">
-      <span
-        v-for="(item, index) in items"
-        class="list-input-item"
-        :key="item"
-        @click="removeItem(index)"
-        >{{ item }}</span
-      >
+      <div class="list-input-tags">
+        <span
+          v-for="(item, index) in items"
+          class="list-input-item"
+          :key="item"
+          @click="removeItem(index)"
+          >{{ item }}</span
+        >
+      </div>
 
       <input
         class="list-input-input"
@@ -112,7 +114,6 @@ export default {
   padding: 0;
 
   flex-grow: 1;
-  width: auto;
 
   &:focus,
   &:focus-visible {
@@ -125,23 +126,23 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
 
   // Style the wrapper like an input
   background-color: rgb(215, 215, 215);
   border: 1px solid rgb(195, 195, 195);
-  border-radius: 4px;
   color: rgb(40, 40, 40);
 
-  padding: 6px 8px;
+  padding: 8px;
 }
 
 .list-input-item {
   display: inline-block;
 
   border: 1px solid black;
-  border-radius: 4px;
-  margin-right: 6px;
-  padding: 2px 6px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  padding: 4px 8px;
 
   background-color: white;
   color: black;
