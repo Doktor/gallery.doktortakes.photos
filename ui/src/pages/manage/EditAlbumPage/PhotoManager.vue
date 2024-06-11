@@ -132,8 +132,11 @@ export default {
         return;
       }
 
-      await ManageAlbumService.setAlbumCover(this.album, selectedHash);
-      this.$emit("update");
+      let album = await ManageAlbumService.setAlbumCover(
+        this.album,
+        selectedHash,
+      );
+      this.$emit("setAlbum", album);
     },
 
     toggleSelecting() {

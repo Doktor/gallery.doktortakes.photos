@@ -54,7 +54,7 @@
       :photos="filteredPhotos"
       :showPhotosInChildAlbums="showPhotosInChildAlbums"
       @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
-      @update="loadAlbum"
+      @setAlbum="setAlbum"
     />
   </div>
 </template>
@@ -115,6 +115,10 @@ export default {
   },
 
   methods: {
+    setAlbum(album) {
+      this.album = album;
+    },
+
     async toggleShowPhotosInChildAlbums() {
       if (this.allPhotos === null) {
         let { content } = await ManageAlbumService.listAllPhotos(
@@ -152,7 +156,7 @@ export default {
     },
 
     async saveAlbum(album) {
-      await ManageAlbumService.saveAlbum(album);
+      this.album = await ManageAlbumService.saveAlbum(album);
       this.updateDocumentTitle();
     },
 

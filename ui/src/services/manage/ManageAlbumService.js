@@ -95,6 +95,12 @@ export const ManageAlbumService = {
       message: "Album saved successfully.",
       status: "success",
     });
+
+    let children;
+    ({ album, children } = content);
+    album.children = children;
+
+    return album;
   },
 
   async setAlbumCover(album, photoHash) {
@@ -103,7 +109,7 @@ export const ManageAlbumService = {
       status: "default",
     });
 
-    let { ok } = await sendRequest(
+    let { ok, content } = await sendRequest(
       endpoints.manageAlbumDetail.replace(":path", album.path),
       {
         method: "PATCH",
@@ -128,6 +134,12 @@ export const ManageAlbumService = {
       message: "Cover photo set successfully.",
       status: "success",
     });
+
+    let children;
+    ({ album, children } = content);
+    album.children = children;
+
+    return album;
   },
 
   async deleteAlbum(path) {

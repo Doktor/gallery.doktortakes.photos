@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from photos.api.serializers import (
     AlbumSerializer, AlbumCoverSerializer, PhotoSerializer)
-from photos.api.views.album import get_album, get_photos_for_album
+from photos.api.views.album import AlbumDetail, get_album, get_photos_for_album
 from photos.models import Photo
 from photos.tasks import create_thumbnails
 from photos.utils.metadata import parse_exif_data, parse_xmp_data
@@ -45,10 +45,8 @@ class ManageAlbumDetail(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-        serializer.save()
-
-        photo = PhotoSerializer(album.cover)
-        return Response(photo.data)
+        album = serializer.save()
+        return AlbumDetail.get(request, album.path)
 
     @staticmethod
     def put(request: Request, path: str) -> Response:
@@ -58,8 +56,8 @@ class ManageAlbumDetail(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=Status.BAD_REQUEST)
 
-        serializer.save()
-        return Response(serializer.data)
+        album = serializer.save()
+        return AlbumDetail.get(request, album.path)
 
     @staticmethod
     def delete(request: Request, path: str) -> Response:
