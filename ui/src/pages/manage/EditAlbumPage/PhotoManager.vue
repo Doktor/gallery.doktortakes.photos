@@ -132,36 +132,7 @@ export default {
         return;
       }
 
-      let id = this.$store.commit("addNotification", {
-        message: "Setting cover photo.",
-        status: "default",
-      });
-
-      let { ok } = await sendRequest(
-        endpoints.manageAlbumDetail.replace(":path", this.album.path),
-        {
-          method: "PATCH",
-          body: JSON.stringify({ cover: selectedHash }),
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCsrfToken(),
-          },
-        },
-      );
-
-      if (!ok) {
-        this.$store.commit("addNotification", {
-          message: "An error occurred when setting the cover photo.",
-          status: "error",
-        });
-        return;
-      }
-
-      this.$store.commit("removeNotification", id);
-      this.$store.commit("addNotification", {
-        message: "Cover photo set successfully.",
-        status: "success",
-      });
+      await ManageAlbumService.setAlbumCover(this.album, selectedHash);
       this.$emit("update");
     },
 

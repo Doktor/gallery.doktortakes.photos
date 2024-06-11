@@ -97,6 +97,39 @@ export const ManageAlbumService = {
     });
   },
 
+  async setAlbumCover(album, photoHash) {
+    let id = store.commit("addNotification", {
+      message: "Setting cover photo.",
+      status: "default",
+    });
+
+    let { ok } = await sendRequest(
+      endpoints.manageAlbumDetail.replace(":path", album.path),
+      {
+        method: "PATCH",
+        body: JSON.stringify({ cover: photoHash }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCsrfToken(),
+        },
+      },
+    );
+
+    if (!ok) {
+      store.commit("addNotification", {
+        message: "An error occurred when setting the cover photo.",
+        status: "error",
+      });
+      return;
+    }
+
+    store.commit("removeNotification", id);
+    store.commit("addNotification", {
+      message: "Cover photo set successfully.",
+      status: "success",
+    });
+  },
+
   async deleteAlbum(path) {
     let { ok } = await sendRequest(
       endpoints.manageAlbumDetail.replace(":path", path),
