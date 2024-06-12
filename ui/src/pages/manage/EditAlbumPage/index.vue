@@ -5,8 +5,7 @@
 
       <template v-if="!loading">
         <header>
-          <h2 id="album-name">{{ album.name }}</h2>
-          <AlbumLinks :album="album" />
+          <AlbumCover :count="0" :album="album" :showManage="false" />
         </header>
 
         <h2>Album details</h2>
@@ -20,7 +19,12 @@
           </CustomButton>
         </div>
 
-        <AlbumDetails v-if="!loading" :album="album" @save="saveAlbum" />
+        <AlbumForm
+          v-if="!loading"
+          :album="album"
+          @save="saveAlbum"
+          :isUpdate="true"
+        />
 
         <template v-if="album.parent || album.children.length > 0">
           <h2>Related albums</h2>
@@ -61,25 +65,24 @@
 
 <script>
 import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
-import AlbumDetails from "./AlbumDetails";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import DeleteAlbumModal from "./DeleteAlbumModal";
 import PhotoManager from "./PhotoManager";
 import PhotoUploader from "./PhotoUploader";
 import { mapState } from "vuex";
-import { router } from "@/router";
 import { editorTitleTemplate } from "@/store/mutations";
-import AlbumLinks from "@/components/manage/AlbumLinks";
 import { AlbumService } from "@/services/AlbumService";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
+import AlbumCover from "@/pages/public/AlbumDetailPage/AlbumCover.vue";
+import AlbumForm from "@/components/manage/AlbumForm.vue";
 
 export default {
   components: {
+    AlbumForm,
+    AlbumCover,
     CustomButton,
-    AlbumLinks,
     AlbumChildrenListTiles,
-    AlbumDetails,
     DeleteAlbumModal,
     FixedWidthContainer,
     PhotoManager,

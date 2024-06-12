@@ -19,7 +19,12 @@
     <div class="overlay-section" v-if="!loading">
       <AlbumMetadata class="overlay-item" :album="album" />
       <AlbumAccessInfo class="overlay-item" :album="album" />
-      <AlbumLinks class="overlay-item" v-if="isStaff" :album="album" />
+      <AlbumLinks
+        class="overlay-item"
+        v-if="isStaff"
+        :album="album"
+        :showManage="showManage"
+      />
 
       <div v-if="album.license" class="overlay-item">
         <i title="License" class="fas fa-fw fa-copyright"></i>
@@ -105,6 +110,10 @@ export default {
     isSkeleton: {
       type: Boolean,
       default: false,
+    },
+    showManage: {
+      type: Boolean,
+      default: true,
     },
   },
 };

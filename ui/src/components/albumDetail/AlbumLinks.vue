@@ -3,9 +3,18 @@
     <i title="Links" class="fas fa-fw fa-link"></i>
 
     <router-link
+      v-if="showManage"
       class="album-link"
+      title="Manage album"
       :to="{ name: 'editAlbum', params: { path: album.path } }"
-      >Edit</router-link
+      >Manage</router-link
+    >
+    <router-link
+      v-else
+      class="album-link"
+      title="View album"
+      :to="{ name: 'album', params: { path: album.path } }"
+      >View</router-link
     >
 
     <span class="divider"></span>
@@ -49,6 +58,10 @@ export default {
     album: {
       type: Object,
       required: true,
+    },
+    showManage: {
+      type: Boolean,
+      default: true,
     },
   },
 

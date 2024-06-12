@@ -1,6 +1,11 @@
 <template>
   <figure class="album-cover" :class="classes">
-    <AlbumCoverOverlay :album="album" :count="count" :isSkeleton="isSkeleton" />
+    <AlbumCoverOverlay
+      :album="album"
+      :count="count"
+      :isSkeleton="isSkeleton"
+      :showManage="showManage"
+    />
     <AlbumCoverImage
       v-if="!isSkeleton && album.cover !== null"
       :album="album"
@@ -39,6 +44,10 @@ export default {
     isSkeleton: {
       type: Boolean,
       default: false,
+    },
+    showManage: {
+      type: Boolean,
+      default: true,
     },
   },
 };
