@@ -116,6 +116,10 @@ export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function wait(ms, f) {
+  return setTimeout(f, ms);
+}
+
 Array.prototype.remove = function (item) {
   this.splice(this.indexOf(item), 1);
 };

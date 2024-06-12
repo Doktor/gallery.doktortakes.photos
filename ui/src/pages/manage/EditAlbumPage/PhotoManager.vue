@@ -37,7 +37,7 @@
       </template>
     </div>
 
-    <PhotoUploader :path="album.path" />
+    <PhotoUploader :path="album.path" @addPhoto="addPhoto" />
 
     <p v-if="!photos.length">This album does not contain any photos.</p>
     <PhotoGallery
@@ -118,6 +118,10 @@ export default {
   },
 
   methods: {
+    addPhoto(photo) {
+      this.$emit("addPhoto", photo);
+    },
+
     async setAlbumCover() {
       if (this.selectedPhotoHashes.length !== 1) {
         return;

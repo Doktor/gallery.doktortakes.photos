@@ -46,6 +46,7 @@
           :album="album"
           :photos="filteredPhotos"
           :showPhotosInChildAlbums="showPhotosInChildAlbums"
+          @addPhoto="addPhoto"
           @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
           @setAlbum="setAlbum"
         />
@@ -116,6 +117,10 @@ export default {
   },
 
   methods: {
+    addPhoto(photo) {
+      this.photos.push(photo);
+    },
+
     setAlbum(newAlbum) {
       let oldAlbum = this.album;
 

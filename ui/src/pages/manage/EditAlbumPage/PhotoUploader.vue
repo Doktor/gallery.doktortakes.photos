@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { getCsrfToken, getQueryString } from "@/utils";
+import { getCsrfToken, getQueryString, wait } from "@/utils";
 import { endpoints } from "@/constants";
 import CustomInput from "@/components/form/CustomInput";
 
@@ -52,6 +52,15 @@ export default {
       headers: {
         Authorization: "Token " + this.$store.state.token,
       },
+    });
+
+    dropzone.on("success", (file) => {
+      let response = JSON.parse(file.xhr.responseText);
+      this.$emit("addPhoto", response);
+
+      wait(2000, () => {
+        dropzone.removeFile(file);
+      });
     });
   },
 
