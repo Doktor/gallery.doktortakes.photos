@@ -1,23 +1,21 @@
 <template>
   <div>
-    <FixedWidthContainer>
-      <router-link :to="{ name: 'manage' }">Back to editor</router-link>
+    <router-link :to="{ name: 'manage' }">Back to editor</router-link>
 
-      <template v-if="!loading">
-        <header>
-          <AlbumCover :count="0" :album="album" :showManage="false" />
-        </header>
+    <header class="manage-album-header">
+      <AlbumCover :count="0" :album="album" :showManage="false" />
+    </header>
 
+    <main class="manage-album-container">
+      <div class="manage-album-item manage-album-details">
         <h2>Album details</h2>
 
-        <div>
-          <CustomButton
-            class="button-danger"
-            @click="showDeleteAlbumModal = true"
-          >
-            Delete album
-          </CustomButton>
-        </div>
+        <CustomButton
+          class="button-danger"
+          @click="showDeleteAlbumModal = true"
+        >
+          Delete album
+        </CustomButton>
 
         <AlbumForm
           v-if="!loading"
@@ -41,24 +39,26 @@
 
           <AlbumChildrenListTiles :album="album" :route="'editAlbum'" />
         </template>
+      </div>
 
+      <div class="manage-album-item">
         <PhotoUploader :path="album.path" />
 
-        <DeleteAlbumModal
-          v-show="showDeleteAlbumModal"
+        <PhotoManager
           :album="album"
-          @close="showDeleteAlbumModal = false"
-          @submit="deleteAlbum"
+          :photos="filteredPhotos"
+          :showPhotosInChildAlbums="showPhotosInChildAlbums"
+          @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
+          @setAlbum="setAlbum"
         />
-      </template>
-    </FixedWidthContainer>
+      </div>
+    </main>
 
-    <PhotoManager
+    <DeleteAlbumModal
+      v-show="showDeleteAlbumModal"
       :album="album"
-      :photos="filteredPhotos"
-      :showPhotosInChildAlbums="showPhotosInChildAlbums"
-      @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
-      @setAlbum="setAlbum"
+      @close="showDeleteAlbumModal = false"
+      @submit="deleteAlbum"
     />
   </div>
 </template>
@@ -206,6 +206,25 @@ section {
 
 h2 {
   margin: 0.5rem 0;
+}
+
+$breakpoint: 1201px;
+
+.manage-album-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  @media (min-width: $breakpoint) {
+    flex-direction: row;
+  }
+}
+
+.manage-album-details {
+  @media (min-width: $breakpoint) {
+    min-width: 480px;
+    margin-right: 40px;
+  }
 }
 
 .count {
