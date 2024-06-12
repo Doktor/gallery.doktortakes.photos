@@ -1,7 +1,5 @@
 <template>
   <section>
-    <h2>Upload photos</h2>
-
     <div>
       <form
         id="dropzone"

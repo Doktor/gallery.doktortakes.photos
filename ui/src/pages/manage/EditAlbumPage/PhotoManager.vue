@@ -1,7 +1,5 @@
 <template>
   <section class="manage-photos" style="text-align: left">
-    <h2>Manage photos</h2>
-
     <div>
       {{ photos.length }} photos in album,
       {{ selectedPhotoHashes.length }} photo{{
@@ -39,6 +37,8 @@
       </template>
     </div>
 
+    <PhotoUploader :path="album.path" />
+
     <p v-if="!photos.length">This album does not contain any photos.</p>
     <PhotoGallery
       v-else
@@ -59,9 +59,11 @@ import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
 import CustomInput from "@/components/form/CustomInput";
 import FixedWidthContainer from "@/components/FixedWidthContainer.vue";
+import PhotoUploader from "@/pages/manage/EditAlbumPage/PhotoUploader.vue";
 
 export default {
   components: {
+    PhotoUploader,
     FixedWidthContainer,
     CustomInput,
     CustomButton,

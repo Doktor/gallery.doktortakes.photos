@@ -42,8 +42,6 @@
       </div>
 
       <div class="manage-album-item">
-        <PhotoUploader :path="album.path" />
-
         <PhotoManager
           :album="album"
           :photos="filteredPhotos"
