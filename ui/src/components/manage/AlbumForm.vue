@@ -128,7 +128,7 @@ export default {
 
   data() {
     return {
-      changes: { ...this.album },
+      changes: {},
 
       accessLevels,
       displayImageSizes,
@@ -141,13 +141,20 @@ export default {
     },
 
     submit() {
-      let changes = { ...this.changes };
-
-      if (!changes.end) {
-        changes.end = null;
+      if (!this.changes.end) {
+        this.changes.end = null;
       }
 
-      this.$emit("save", changes);
+      this.$emit("save", this.changes);
+    },
+  },
+
+  watch: {
+    album: {
+      immediate: true,
+      handler(newAlbum, oldAlbum) {
+        this.changes = structuredClone(newAlbum);
+      },
     },
   },
 };

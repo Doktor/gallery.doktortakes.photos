@@ -1,6 +1,7 @@
 import {
   getCsrfToken,
   getQueryString,
+  parseAlbumDetail,
   parseAlbumForAPI,
   sendRequest,
 } from "@/utils";
@@ -98,8 +99,8 @@ export const ManageAlbumService = {
 
     let children;
     ({ album, children } = content);
-    album.children = children;
 
+    parseAlbumDetail(album, children);
     return album;
   },
 
@@ -137,8 +138,8 @@ export const ManageAlbumService = {
 
     let children;
     ({ album, children } = content);
-    album.children = children;
 
+    parseAlbumDetail(album, children);
     return album;
   },
 

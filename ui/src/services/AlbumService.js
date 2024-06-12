@@ -1,4 +1,4 @@
-import { getQueryString, sendRequest } from "../utils";
+import { getQueryString, parseAlbumDetail, sendRequest } from "../utils";
 import { endpoints } from "../constants";
 
 export const AlbumService = {
@@ -23,7 +23,7 @@ export const AlbumService = {
     let query = code ? getQueryString({ code }) : "";
 
     let { ok, content } = await sendRequest(
-      endpoints.albumDetail.replace(":path", path) + query
+      endpoints.albumDetail.replace(":path", path) + query,
     );
 
     if (!ok) {
@@ -37,7 +37,7 @@ export const AlbumService = {
     }
 
     ({ ok, content } = await sendRequest(
-      endpoints.albumPhotoList.replace(":path", path) + query
+      endpoints.albumPhotoList.replace(":path", path) + query,
     ));
 
     if (!ok) {
@@ -46,15 +46,8 @@ export const AlbumService = {
 
     let photos = content.photos;
 
+    parseAlbumDetail(album, children);
     album.isLoaded = true;
-    album.pathSplit = album.path.split("/");
-    album.tags.sort();
-
-    for (let child of children) {
-      child.pathSplit = child.path.split("/");
-    }
-
-    album.children = children;
 
     return { ok, album, photos };
   },

@@ -56,6 +56,17 @@ export function parseAlbumForAPI(album) {
   return data;
 }
 
+export function parseAlbumDetail(album, children) {
+  album.pathSplit = album.path.split("/");
+  album.tags.sort();
+
+  for (let child of children) {
+    child.pathSplit = child.path.split("/");
+  }
+
+  album.children = children;
+}
+
 function getCookie(name) {
   let value = null;
 

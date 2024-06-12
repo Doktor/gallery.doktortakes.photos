@@ -115,8 +115,26 @@ export default {
   },
 
   methods: {
-    setAlbum(album) {
-      this.album = album;
+    setAlbum(newAlbum) {
+      let oldAlbum = this.album;
+
+      if (oldAlbum.name !== newAlbum.name) {
+        document.title = editorTitleTemplate.format(newAlbum.name);
+      }
+
+      // Prevent duplicate navigation
+      if (oldAlbum.path !== undefined && oldAlbum.path !== newAlbum.path) {
+        let resolved = this.$router.resolve({
+          name: "editAlbum",
+          params: { path: newAlbum.path.split("/") },
+        });
+
+        // Use history.replaceState instead of $router.replace to prevent
+        // the component from reloading
+        window.history.replaceState(null, null, resolved.href);
+      }
+
+      this.album = newAlbum;
     },
 
     async toggleShowPhotosInChildAlbums() {
@@ -148,32 +166,15 @@ export default {
         return;
       }
 
-      this.album = album;
+      this.setAlbum(album);
       this.photos = photos;
 
-      this.updateDocumentTitle();
       this.$store.commit("setLoading", false);
     },
 
     async saveAlbum(album) {
-      this.album = await ManageAlbumService.saveAlbum(album);
-      this.updateDocumentTitle();
-    },
-
-    updateDocumentTitle() {
-      let newTitle = editorTitleTemplate.format(this.album.name);
-
-      // Update history entry
-      if (document.title !== newTitle) {
-        document.title = newTitle;
-
-        let route = {
-          name: "editAlbum",
-          params: { path: this.album.path.split("/") },
-        };
-        let resolved = router.resolve(route);
-        window.history.replaceState(null, newTitle, resolved.href);
-      }
+      let newAlbum = await ManageAlbumService.saveAlbum(album);
+      this.setAlbum(newAlbum);
     },
 
     async deleteAlbum() {
