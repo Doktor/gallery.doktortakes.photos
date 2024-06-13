@@ -1,14 +1,14 @@
-import { sendRequest } from "@/utils";
+import { getAsync } from "@/utils";
 import { endpoints } from "@/constants";
 
 export const TaxaService = {
   async getTaxa() {
-    let { content } = await sendRequest(endpoints.taxaList);
+    let { content } = await getAsync(endpoints.taxaList);
     return content;
   },
 
   async getSpecies() {
-    let { content } = await sendRequest("/api/taxa/species/");
+    let { content } = await getAsync("/api/taxa/species/");
     return content;
   },
 };

@@ -1,4 +1,4 @@
-import { getQueryString, parseAlbumDetail, sendRequest } from "../utils";
+import { getAsync, getQueryString, parseAlbumDetail } from "../utils";
 import { endpoints } from "../constants";
 
 export const AlbumService = {
@@ -6,8 +6,7 @@ export const AlbumService = {
     full = full ?? false;
     let query = full ? getQueryString({ full }) : "";
 
-    let url = endpoints.albumList + query;
-    let { content } = await sendRequest(url);
+    let { content } = await getAsync(endpoints.albumList + query);
     let albums = content.albums;
 
     for (let album of albums) {
@@ -22,7 +21,7 @@ export const AlbumService = {
     let path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
     let query = code ? getQueryString({ code }) : "";
 
-    let { ok, content } = await sendRequest(
+    let { ok, content } = await getAsync(
       endpoints.albumDetail.replace(":path", path) + query,
     );
 
@@ -36,7 +35,7 @@ export const AlbumService = {
       return { ok, album };
     }
 
-    ({ ok, content } = await sendRequest(
+    ({ ok, content } = await getAsync(
       endpoints.albumPhotoList.replace(":path", path) + query,
     ));
 

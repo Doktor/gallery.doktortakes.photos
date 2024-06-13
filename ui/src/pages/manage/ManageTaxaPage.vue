@@ -38,7 +38,7 @@
 import { TaxaService } from "@/services/TaxaService";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
-import { getCsrfToken, sendRequest } from "@/utils";
+import { postAsync } from "@/utils";
 import { formatDateTime } from "@/date";
 
 export default {
@@ -62,13 +62,8 @@ export default {
     formatDateTime,
 
     async submit() {
-      let { ok, content } = await sendRequest("/api/manage/taxa/import/", {
-        method: "POST",
-        body: JSON.stringify({ catalogId: this.catalogId }),
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCsrfToken(),
-        },
+      let { ok, content } = await postAsync("/api/manage/taxa/import/", {
+        catalogId: this.catalogId,
       });
 
       if (!ok) {

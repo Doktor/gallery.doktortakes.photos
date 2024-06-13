@@ -53,8 +53,6 @@
 
 <script>
 import PhotoGallery from "@/components/photoList/PhotoGallery";
-import { getCsrfToken, sendRequest } from "@/utils";
-import { endpoints } from "@/constants";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
 import CustomInput from "@/components/form/CustomInput";

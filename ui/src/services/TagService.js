@@ -1,9 +1,9 @@
-import { sendRequest } from "../utils";
+import { getAsync } from "../utils";
 import { endpoints } from "../constants";
 
 export const TagService = {
   async getTags() {
-    let { content } = await sendRequest(endpoints.tagList);
+    let { content } = await getAsync(endpoints.tagList);
     return content.tags;
   },
 

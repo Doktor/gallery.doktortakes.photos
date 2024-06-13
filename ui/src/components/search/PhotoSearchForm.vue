@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import { getQueryString, sendRequest } from "@/utils";
+import { getAsync, getQueryString } from "@/utils";
 import { endpoints } from "@/constants";
 import CustomButton from "../form/CustomButton";
 
@@ -242,7 +242,7 @@ export default {
         itemsPerPage: this.itemsPerPage,
       });
 
-      let { content } = await sendRequest(endpoints.searchPhotos + query);
+      let { content } = await getAsync(endpoints.searchPhotos + query);
 
       results.photos = content.photos.map((photo) => {
         return { ...photo, isLoaded: true };

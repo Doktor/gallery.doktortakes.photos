@@ -1,7 +1,7 @@
 import { store } from "./store";
 import { fields } from "./constants";
 
-export function addAuthorizationHeader(options) {
+function addAuthorizationHeader(options) {
   if (store.state.token !== null) {
     let header = `Token ${store.state.token}`;
 
@@ -15,7 +15,59 @@ export function addAuthorizationHeader(options) {
   }
 }
 
-export async function sendRequest(url, options = {}) {
+export function getCsrfToken() {
+  return getCookie("csrftoken");
+}
+
+export async function getAsync(url, options) {
+  return await sendRequest(url, options);
+}
+
+export async function postAsync(url, body) {
+  return await sendRequest(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-CSRFToken": getCsrfToken(),
+    },
+  });
+}
+
+export async function patchAsync(url, body) {
+  return await sendRequest(url, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-CSRFToken": getCsrfToken(),
+    },
+  });
+}
+
+export async function putAsync(url, body) {
+  return await sendRequest(url, {
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-CSRFToken": getCsrfToken(),
+    },
+  });
+}
+
+export async function deleteAsync(url, body = null) {
+  return await sendRequest(url, {
+    method: "DELETE",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "X-CSRFToken": getCsrfToken(),
+    },
+  });
+}
+
+async function sendRequest(url, options = {}) {
   addAuthorizationHeader(options);
 
   try {
@@ -84,10 +136,6 @@ function getCookie(name) {
   }
 
   return value;
-}
-
-export function getCsrfToken() {
-  return getCookie("csrftoken");
 }
 
 export function getQueryString(params) {

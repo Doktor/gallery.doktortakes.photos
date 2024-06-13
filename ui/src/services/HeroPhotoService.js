@@ -1,9 +1,9 @@
-import {sendRequest} from "../utils";
-import {endpoints} from "../constants";
+import { getAsync } from "../utils";
+import { endpoints } from "../constants";
 
 export const HeroPhotoService = {
   async list() {
-    let { content } = await sendRequest(endpoints.heroPhotoList);
+    let { content } = await getAsync(endpoints.heroPhotoList);
     return content;
   },
-}
+};

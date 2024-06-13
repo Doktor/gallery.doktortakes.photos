@@ -1,14 +1,14 @@
-import { sendRequest } from "@/utils";
+import { getAsync } from "@/utils";
 import { endpoints } from "@/constants";
 
 export const ManageUserService = {
   async listUsers() {
-    let { content } = await sendRequest(endpoints.userList);
+    let { content } = await getAsync(endpoints.userList);
     return content.users.sort((a, b) => a.id - b.id);
   },
 
   async listGroups() {
-    let { content } = await sendRequest(endpoints.groupList);
+    let { content } = await getAsync(endpoints.groupList);
     return content.groups.sort((a, b) => a.id - b.id);
   },
 };

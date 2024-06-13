@@ -1,35 +1,18 @@
-import { getCsrfToken, sendRequest } from "@/utils";
+import { deleteAsync, postAsync, putAsync } from "@/utils";
 
 export const ManagePhotoTaxonService = {
   async create(md5, taxon) {
-    return await sendRequest(`/api/manage/photos/${md5}/taxa/`, {
-      body: JSON.stringify(taxon),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "X-CSRFToken": getCsrfToken(),
-      },
-    });
+    return await postAsync(`/api/manage/photos/${md5}/taxa/`, taxon);
   },
 
   async update(md5, catalogId, taxon) {
-    return await sendRequest(`/api/manage/photos/${md5}/taxa/${catalogId}/`, {
-      body: JSON.stringify(taxon),
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "X-CSRFToken": getCsrfToken(),
-      },
-    });
+    return await putAsync(
+      `/api/manage/photos/${md5}/taxa/${catalogId}/`,
+      taxon,
+    );
   },
 
   async delete(md5, catalogId) {
-    return await sendRequest(`/api/manage/photos/${md5}/taxa/${catalogId}/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "X-CSRFToken": getCsrfToken(),
-      },
-    });
+    return await deleteAsync(`/api/manage/photos/${md5}/taxa/${catalogId}/`);
   },
 };

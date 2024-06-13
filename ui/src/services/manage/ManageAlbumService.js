@@ -1,9 +1,12 @@
 import {
-  getCsrfToken,
+  deleteAsync,
+  getAsync,
   getQueryString,
   parseAlbumDetail,
   parseAlbumForAPI,
-  sendRequest,
+  patchAsync,
+  postAsync,
+  putAsync,
 } from "@/utils";
 import { store } from "@/store";
 import { router } from "@/router";
@@ -13,14 +16,7 @@ export const ManageAlbumService = {
   async createAlbum(album) {
     let data = parseAlbumForAPI(album);
 
-    let { ok, content } = await sendRequest(endpoints.manageAlbumList, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCsrfToken(),
-      },
-    });
+    let { ok, content } = await postAsync(endpoints.manageAlbumList, data);
 
     if (!ok) {
       for (let [field, errors] of Object.entries(content)) {
@@ -60,16 +56,9 @@ export const ManageAlbumService = {
   async saveAlbum(album) {
     let data = parseAlbumForAPI(album);
 
-    let { ok, status, content } = await sendRequest(
+    let { ok, status, content } = await putAsync(
       endpoints.manageAlbumDetail.replace(":path", album.path),
-      {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCsrfToken(),
-        },
-      },
+      data,
     );
 
     if (!ok) {
@@ -110,16 +99,9 @@ export const ManageAlbumService = {
       status: "default",
     });
 
-    let { ok, content } = await sendRequest(
+    let { ok, content } = await patchAsync(
       endpoints.manageAlbumDetail.replace(":path", album.path),
-      {
-        method: "PATCH",
-        body: JSON.stringify({ cover: photoHash }),
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCsrfToken(),
-        },
-      },
+      { cover: photoHash },
     );
 
     if (!ok) {
@@ -144,15 +126,8 @@ export const ManageAlbumService = {
   },
 
   async deleteAlbum(path) {
-    let { ok } = await sendRequest(
+    let { ok } = await deleteAsync(
       endpoints.manageAlbumDetail.replace(":path", path),
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "X-CSRFToken": getCsrfToken(),
-        },
-      },
     );
 
     if (ok) {
@@ -165,30 +140,17 @@ export const ManageAlbumService = {
   },
 
   async listAllPhotos(path) {
-    return await sendRequest(
+    return await getAsync(
       endpoints.manageAlbumPhotoList.replace(":path", path) +
         getQueryString({ recursive: true }),
-      {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "X-CSRFToken": getCsrfToken(),
-        },
-      },
     );
   },
 
   async deletePhotos(path, photoHashes) {
-    return await sendRequest(
+    return await deleteAsync(
       endpoints.manageAlbumPhotoList.replace(":path", path),
       {
-        method: "DELETE",
-        body: JSON.stringify({
-          photos: photoHashes,
-        }),
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          "X-CSRFToken": getCsrfToken(),
-        },
+        photos: photoHashes,
       },
     );
   },
