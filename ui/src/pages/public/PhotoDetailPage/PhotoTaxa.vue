@@ -7,12 +7,12 @@
         <router-link
           :to="{
             name: 'taxaByCatalogId',
-            params: { catalogId: taxon.catalog_id },
+            params: { catalogId: taxon.catalogId },
           }"
         >
           {{ taxon.name }}
         </router-link>
-        &mdash; {{ taxon.common_name }}
+        &mdash; {{ taxon.commonName }}
       </li>
     </ul>
   </div>

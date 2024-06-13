@@ -22,12 +22,12 @@
       </thead>
       <tbody>
         <tr v-for="taxon in taxa" :key="taxon.id">
-          <td>{{ taxon.catalog_id }}</td>
+          <td>{{ taxon.catalogId }}</td>
           <td>{{ taxon.rank }}</td>
           <td>{{ taxon.name }}</td>
-          <td>{{ taxon.common_name }}</td>
-          <td>{{ formatDateTime(taxon.created_date) }}</td>
-          <td>{{ formatDateTime(taxon.updated_date) }}</td>
+          <td>{{ taxon.commonName }}</td>
+          <td>{{ formatDateTime(taxon.createdDate) }}</td>
+          <td>{{ formatDateTime(taxon.updatedDate) }}</td>
         </tr>
       </tbody>
     </table>

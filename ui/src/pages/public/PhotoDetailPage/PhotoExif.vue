@@ -22,14 +22,14 @@
           <i title="Focal length" class="fas fa-fw fa-ruler-horizontal"></i>
         </dt>
         <dd>
-          <span>{{ exif.focal_length }}</span>
+          <span>{{ exif.focalLength }}</span>
         </dd>
       </div>
 
       <div>
         <dt><i title="Shutter speed" class="fas fa-fw fa-stopwatch"></i></dt>
         <dd>
-          <span>{{ exif.shutter_speed }}</span>
+          <span>{{ exif.shutterSpeed }}</span>
         </dd>
       </div>
 
@@ -43,7 +43,7 @@
       <div>
         <dt><i title="ISO sensitivity" class="fas fa-fw fa-film"></i></dt>
         <dd>
-          <span>{{ exif.iso_speed }}</span>
+          <span>{{ exif.isoSpeed }}</span>
         </dd>
       </div>
     </dl>

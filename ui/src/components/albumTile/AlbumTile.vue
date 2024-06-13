@@ -20,7 +20,7 @@ export default {
   computed: {
     classes() {
       return {
-        "album-hidden": this.album.access_level > 0,
+        "album-hidden": this.album.accessLevel > 0,
         "album-no-cover": this.album.cover === null,
       };
     },

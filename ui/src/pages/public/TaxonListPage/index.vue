@@ -64,7 +64,7 @@ export default {
       this.loadingPhotos = true;
 
       let { ok, content } = await TaxonPhotoService.get(
-        this.selectedTaxon.catalog_id,
+        this.selectedTaxon.catalogId,
         true,
       );
 
@@ -100,7 +100,7 @@ export default {
     let taxa = await TaxaService.getTaxa();
 
     for (let taxon of taxa) {
-      this.taxaById[taxon.catalog_id] = taxon;
+      this.taxaById[taxon.catalogId] = taxon;
     }
 
     for (let rank of ranks) {
@@ -113,7 +113,7 @@ export default {
 
       for (let taxon of this.taxaByRank[rank]) {
         taxon.children = this.taxaByRank[rankBelow].filter(
-          (t) => taxon.catalog_id === t.passthrough_parent_catalog_id,
+          (t) => taxon.catalogId === t.passthroughParentCatalogId,
         );
       }
     }

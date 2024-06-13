@@ -14,12 +14,12 @@
     <tbody>
       <tr
         v-for="taxon in editingTaxa"
-        :key="taxon.catalog_id"
+        :key="taxon.catalogId"
         :class="getRowClasses(taxon)"
       >
-        <td>{{ taxon.catalog_id }}</td>
+        <td>{{ taxon.catalogId }}</td>
         <td>{{ taxon.name }}</td>
-        <td>{{ taxon.common_name }}</td>
+        <td>{{ taxon.commonName }}</td>
         <td>
           <CustomInput
             label=""
@@ -58,11 +58,11 @@
               </li>
               <li
                 v-for="taxon in searchResults.slice(0, this.searchResultsLimit)"
-                :key="taxon.catalog_id"
+                :key="taxon.catalogId"
                 class="search-result"
                 @click="addTaxon(taxon)"
               >
-                {{ taxon.common_name }} ({{ taxon.name }})
+                {{ taxon.commonName }} ({{ taxon.name }})
               </li>
               <li v-if="searchResults.length > searchResultsLimit" class="note">
                 {{ searchResults.length - searchResultsLimit }} result(s) hidden
@@ -180,7 +180,7 @@ export default {
         let { ok, content } = await ManagePhotoTaxonService.create(
           this.photo.md5,
           {
-            taxon: taxon.catalog_id,
+            taxon: taxon.catalogId,
             rating: taxon.rating,
             notes: taxon.notes,
           },
@@ -199,9 +199,9 @@ export default {
       for (let taxon of toUpdate) {
         let { ok, content } = await ManagePhotoTaxonService.update(
           this.photo.md5,
-          taxon.catalog_id,
+          taxon.catalogId,
           {
-            taxon: taxon.catalog_id,
+            taxon: taxon.catalogId,
             rating: taxon.rating,
             notes: taxon.notes,
           },
@@ -220,7 +220,7 @@ export default {
       for (let taxon of toDelete) {
         let { ok } = await ManagePhotoTaxonService.delete(
           this.photo.md5,
-          taxon.catalog_id,
+          taxon.catalogId,
         );
 
         if (!ok) {
@@ -242,9 +242,9 @@ export default {
 
   watch: {
     searchText(newSearchText) {
-      let currentSpecies = this.editingTaxa.map((t) => t.catalog_id);
+      let currentSpecies = this.editingTaxa.map((t) => t.catalogId);
       let species = this.allSpecies.filter(
-        (s) => !currentSpecies.includes(s.catalog_id),
+        (s) => !currentSpecies.includes(s.catalogId),
       );
 
       if (!newSearchText) {
@@ -253,7 +253,7 @@ export default {
 
       this.searchResults = species.filter((t) => {
         let name = t.name.toLowerCase();
-        let commonName = t.common_name.toLowerCase();
+        let commonName = t.commonName.toLowerCase();
         let searchText = newSearchText.toLowerCase();
 
         return (

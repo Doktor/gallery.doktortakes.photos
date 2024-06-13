@@ -36,7 +36,7 @@ export default {
     heroPhotoStyles() {
       let styles = {
         backgroundImage: `url(${this.photo.image})`,
-        backgroundPositionX: this.photo.x_position ?? "center",
+        backgroundPositionX: this.photo.xPosition ?? "center",
       };
 
       if (!this.initialImageLoaded) {

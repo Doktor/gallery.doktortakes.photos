@@ -1,5 +1,5 @@
 <template>
-  <div v-if="album.access_level > 0">
+  <div v-if="album.accessLevel > 0">
     <div v-if="!isStaff" class="overlay-item">
       <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
       <span>Please ask before sharing these photos.</span>
@@ -10,13 +10,13 @@
       <span>Access level: {{ accessLevelDisplay }}</span>
     </div>
 
-    <div v-if="isStaff && album.access_code" class="overlay-item">
+    <div v-if="isStaff && album.accessCode" class="overlay-item">
       <i title="Access code" class="fas fa-fw fa-key"></i>
       <span
         ><!--
       -->Access code:
         <router-link :to="accessCodeRoute">
-          {{ album.access_code }}
+          {{ album.accessCode }}
         </router-link>
       </span>
     </div>
@@ -57,13 +57,13 @@ export default {
           path: this.album.pathSplit,
         },
         query: {
-          code: this.album.access_code,
+          code: this.album.accessCode,
         },
       };
     },
 
     accessLevelDisplay() {
-      return accessLevelsMap[this.album.access_level];
+      return accessLevelsMap[this.album.accessLevel];
     },
 
     hasGroups() {

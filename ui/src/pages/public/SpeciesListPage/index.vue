@@ -4,17 +4,17 @@
       <div
         class="wrapper"
         v-for="{ taxon, photos } in species"
-        :key="taxon.catalog_id"
+        :key="taxon.catalogId"
       >
         <router-link
           :to="{
             name: 'taxaByCatalogId',
-            params: { catalogId: taxon.catalog_id },
+            params: { catalogId: taxon.catalogId },
           }"
         >
           <PhotoThumbnail :isLoading="false" :photo="photos[0]" />
         </router-link>
-        <div class="subtitle">{{ taxon.common_name.toLowerCase() }}</div>
+        <div class="subtitle">{{ taxon.commonName.toLowerCase() }}</div>
       </div>
     </div>
   </main>

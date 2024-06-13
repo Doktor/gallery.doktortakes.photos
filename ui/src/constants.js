@@ -56,11 +56,11 @@ export const accessLevelsMap = Object.assign(
   {},
   ...accessLevels.map(({ value, display }) => {
     return { [value]: display };
-  })
+  }),
 );
 
 export const fields = {
-  readonly: ["slug", "path", "cover", "children", "url", "admin_url"],
+  readonly: ["slug", "path", "cover", "children", "url", "adminUrl"],
 };
 
 export const domains = {

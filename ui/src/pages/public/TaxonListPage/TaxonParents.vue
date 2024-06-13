@@ -1,10 +1,10 @@
 <template>
   <ul class="taxon-parents">
-    <li v-for="item in parents" :key="item.catalog_id">
+    <li v-for="item in parents" :key="item.catalogIdc">
       <router-link
         :to="{
           name: 'taxaByCatalogId',
-          params: { catalogId: item.catalog_id },
+          params: { catalogId: item.catalogId },
         }"
         >{{ item.name }}</router-link
       >
@@ -32,7 +32,7 @@ export default {
 
       while (taxon !== undefined) {
         ret.push(taxon);
-        taxon = this.taxaById[taxon.passthrough_parent_catalog_id];
+        taxon = this.taxaById[taxon.passthroughParentCatalogId];
       }
 
       return ret.reverse();

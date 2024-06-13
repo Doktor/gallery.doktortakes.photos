@@ -44,10 +44,10 @@
       <CustomSelect
         label="Access level"
         :options="accessLevels"
-        v-model="changes.access_level"
+        v-model="changes.accessLevel"
       />
 
-      <CustomInput label="Access code" v-model="changes.access_code">
+      <CustomInput label="Access code" v-model="changes.accessCode">
         <template #footer>
           <GenerateAccessCode @setAccessCode="setAccessCode" />
         </template>
@@ -109,7 +109,7 @@ export default {
 
   methods: {
     setAccessCode(value) {
-      this.changes.access_code = value;
+      this.changes.accessCode = value;
     },
 
     submit() {

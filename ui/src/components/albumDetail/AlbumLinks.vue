@@ -20,7 +20,7 @@
     <span class="divider"></span>
 
     <a
-      :href="album.admin_url"
+      :href="album.adminUrl"
       class="album-link"
       title="View album on admin site"
       >Admin</a

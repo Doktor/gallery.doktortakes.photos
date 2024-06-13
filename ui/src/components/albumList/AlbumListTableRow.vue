@@ -21,7 +21,7 @@
         <span v-if="index !== album.tags.length - 1" v-html="' '"></span>
       </template>
     </td>
-    <td>{{ album.access_level }}</td>
+    <td>{{ album.accessLevel }}</td>
     <td>
       <template v-if="album.users?.length > 0 ?? false">
         <strong>Users:</strong> {{ album.users.join(", ") }}

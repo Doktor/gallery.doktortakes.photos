@@ -19,11 +19,11 @@
       <tbody>
         <tr v-for="(user, index) in users" :key="index">
           <td>{{ user.id }}</td>
-          <td>{{ user.username }}<span v-if="user.is_staff">*</span></td>
+          <td>{{ user.username }}<span v-if="user.isStaff">*</span></td>
           <td>{{ user.email }}</td>
           <td>{{ formatGroups(user.groups) }}</td>
-          <td class="user-log-in">{{ formatDateTime(user.last_login) }}</td>
-          <td class="user-date-joined">{{ formatDate(user.date_joined) }}</td>
+          <td class="user-log-in">{{ formatDateTime(user.lastLogin) }}</td>
+          <td class="user-date-joined">{{ formatDate(user.dateJoined) }}</td>
         </tr>
       </tbody>
     </table>

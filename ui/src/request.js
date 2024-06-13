@@ -37,47 +37,59 @@ export function getCsrfToken() {
   return getCookie("csrftoken");
 }
 
+function modifyKeys(item, f) {
+  if (Array.isArray(item)) {
+    return item.map((el) => modifyKeys(el, f));
+  }
+
+  if (typeof item === "object" && item !== null) {
+    return Object.fromEntries(
+      Object.entries(item).map(([key, value]) => [
+        f(key),
+        modifyKeys(value, f),
+      ]),
+    );
+  }
+
+  return item;
+}
+
+function snakeToCamel(item) {
+  return modifyKeys(item, (str) =>
+    str.replace(/(_[a-z])/gi, (c) => c.toUpperCase().replace(/_/g, "")),
+  );
+}
+
+function camelToSnake(item) {
+  return modifyKeys(item, (str) =>
+    str.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`),
+  );
+}
+
 export async function getAsync(url, options) {
-  return await sendRequest(url, options);
+  return await sendRequestAsync(url, options);
 }
 
 export async function postAsync(url, body) {
-  return await sendRequest(url, {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "X-CSRFToken": getCsrfToken(),
-    },
-  });
+  return await sendWriteRequestAsync("POST", url, body);
 }
 
 export async function patchAsync(url, body) {
-  return await sendRequest(url, {
-    method: "PATCH",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "X-CSRFToken": getCsrfToken(),
-    },
-  });
+  return await sendWriteRequestAsync("PATCH", url, body);
 }
 
 export async function putAsync(url, body) {
-  return await sendRequest(url, {
-    method: "PUT",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "X-CSRFToken": getCsrfToken(),
-    },
-  });
+  return await sendWriteRequestAsync("PUT", url, body);
 }
 
 export async function deleteAsync(url, body = null) {
-  return await sendRequest(url, {
-    method: "DELETE",
-    body: JSON.stringify(body),
+  return await sendWriteRequestAsync("DELETE", url, body);
+}
+
+async function sendWriteRequestAsync(method, url, body) {
+  return await sendRequestAsync(url, {
+    method,
+    body: JSON.stringify(camelToSnake(body)),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "X-CSRFToken": getCsrfToken(),
@@ -85,7 +97,7 @@ export async function deleteAsync(url, body = null) {
   });
 }
 
-async function sendRequest(url, options = {}) {
+async function sendRequestAsync(url, options = {}) {
   addAuthorizationHeader(options);
 
   try {
@@ -104,7 +116,11 @@ async function sendRequest(url, options = {}) {
       }
     }
 
-    return { ok: response.ok, status: response.status, content: content };
+    if (typeof content === "object" && content !== null) {
+      content = snakeToCamel(content);
+    }
+
+    return { ok: response.ok, status: response.status, content };
   } catch (error) {
     console.error(error);
   }

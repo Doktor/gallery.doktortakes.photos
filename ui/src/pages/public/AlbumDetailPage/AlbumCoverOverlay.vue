@@ -29,15 +29,15 @@
       <div v-if="album.license" class="overlay-item">
         <i title="License" class="fas fa-fw fa-copyright"></i>
 
-        <span :title="album.license.full_name || album.license.display_name">
+        <span :title="album.license.fullName || album.license.displayName">
           <a
             v-if="album.license.link"
             :href="album.license.link"
             target="_blank"
             rel="noopener noreferrer nofollow"
-            >{{ album.license.display_name }}
+            >{{ album.license.displayName }}
           </a>
-          <template v-else>{{ album.license.display_name }}</template>
+          <template v-else>{{ album.license.displayName }}</template>
         </span>
       </div>
     </div>

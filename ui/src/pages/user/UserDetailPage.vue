@@ -4,8 +4,8 @@
       <h2>{{ user.name }}</h2>
 
       <ul>
-        <li>Account created: {{ user.account_created }}</li>
-        <li>Last sign in: {{ user.last_sign_in }}</li>
+        <li>Account created: {{ user.accountCreated }}</li>
+        <li>Last sign in: {{ user.lastSignIn }}</li>
       </ul>
     </FixedWidthContainer>
 
@@ -57,7 +57,7 @@ export default {
     this.loading = true;
 
     let albums = await AlbumService.getAllAlbums(true);
-    this.albums = albums.filter((album) => album.access_level > 0);
+    this.albums = albums.filter((album) => album.accessLevel > 0);
 
     this.loading = false;
   },
