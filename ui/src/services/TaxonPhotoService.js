@@ -1,4 +1,5 @@
-import { getAsync, getQueryString } from "@/utils";
+import { getQueryString } from "@/utils";
+import { getAsync } from "@/request";
 
 export const TaxonPhotoService = {
   async get(catalogId, recursive = false) {

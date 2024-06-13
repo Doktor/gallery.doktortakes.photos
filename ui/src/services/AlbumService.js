@@ -1,5 +1,6 @@
-import { getAsync, getQueryString, parseAlbumDetail } from "../utils";
+import { getQueryString, parseAlbumDetail } from "../utils";
 import { endpoints } from "../constants";
+import { getAsync } from "@/request";
 
 export const AlbumService = {
   async getAllAlbums(full = false) {

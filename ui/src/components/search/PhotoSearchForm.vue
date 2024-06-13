@@ -187,9 +187,10 @@
 </template>
 
 <script>
-import { getAsync, getQueryString } from "@/utils";
+import { getQueryString } from "@/utils";
 import { endpoints } from "@/constants";
 import CustomButton from "../form/CustomButton";
+import { getAsync } from "@/request";
 
 export default {
   components: { CustomButton },

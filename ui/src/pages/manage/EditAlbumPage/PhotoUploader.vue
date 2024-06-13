@@ -20,9 +20,10 @@
 </template>
 
 <script>
-import { getCsrfToken, getQueryString, wait } from "@/utils";
+import { getQueryString, wait } from "@/utils";
 import { endpoints } from "@/constants";
 import CustomInput from "@/components/form/CustomInput";
+import { getCsrfToken } from "@/request";
 
 export default {
   components: { CustomInput },

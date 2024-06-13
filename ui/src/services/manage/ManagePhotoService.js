@@ -1,5 +1,6 @@
-import { getAsync, getQueryString, postAsync } from "@/utils";
+import { getQueryString } from "@/utils";
 import { endpoints } from "@/constants";
+import { getAsync, postAsync } from "@/request";
 
 export const ManagePhotoService = {
   async getThumbnails(md5) {

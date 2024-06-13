@@ -1,5 +1,5 @@
-import { getAsync, postAsync } from "../utils";
 import { endpoints } from "../constants";
+import { getAsync, postAsync } from "@/request";
 
 export const actions = {
   async ensureCsrfToken(context) {

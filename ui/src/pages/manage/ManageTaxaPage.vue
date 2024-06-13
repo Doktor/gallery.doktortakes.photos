@@ -38,8 +38,8 @@
 import { TaxaService } from "@/services/TaxaService";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
-import { postAsync } from "@/utils";
 import { formatDateTime } from "@/date";
+import { postAsync } from "@/request";
 
 export default {
   components: { CustomButton, CustomInput },

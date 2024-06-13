@@ -1,4 +1,4 @@
-import { deleteAsync, postAsync, putAsync } from "@/utils";
+import { deleteAsync, postAsync, putAsync } from "@/request";
 
 export const ManagePhotoTaxonService = {
   async create(md5, taxon) {

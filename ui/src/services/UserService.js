@@ -1,5 +1,5 @@
-import { postAsync } from "../utils";
 import { endpoints } from "../constants";
+import { postAsync } from "@/request";
 
 export const UserService = {
   async changePassword(data) {

@@ -1,5 +1,5 @@
-import { getAsync } from "@/utils";
 import { endpoints } from "@/constants";
+import { getAsync } from "@/request";
 
 export const ManageUserService = {
   async listUsers() {

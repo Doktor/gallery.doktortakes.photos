@@ -1,16 +1,14 @@
-import {
-  deleteAsync,
-  getAsync,
-  getQueryString,
-  parseAlbumDetail,
-  parseAlbumForAPI,
-  patchAsync,
-  postAsync,
-  putAsync,
-} from "@/utils";
+import { getQueryString, parseAlbumDetail, parseAlbumForAPI } from "@/utils";
 import { store } from "@/store";
 import { router } from "@/router";
 import { endpoints } from "@/constants";
+import {
+  deleteAsync,
+  getAsync,
+  patchAsync,
+  postAsync,
+  putAsync,
+} from "@/request";
 
 export const ManageAlbumService = {
   async createAlbum(album) {
