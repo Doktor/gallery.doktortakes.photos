@@ -74,33 +74,6 @@ import ListInput from "../form/ListInput";
 import { accessLevels } from "@/constants";
 import CustomButton from "../form/CustomButton";
 
-const displayImageSizes = [
-  {
-    value: "2400",
-    display: "2400 x 1600",
-  },
-  {
-    value: "3000",
-    display: "3000 x 2000",
-  },
-  {
-    value: "3600",
-    display: "3600 x 2400",
-  },
-  {
-    value: "3840",
-    display: "3840 x 2560",
-  },
-  {
-    value: "4800",
-    display: "4800 x 3200",
-  },
-  {
-    value: "6000",
-    display: "6000 x 4000",
-  },
-];
-
 export default {
   components: {
     CustomButton,
@@ -131,7 +104,6 @@ export default {
       changes: {},
 
       accessLevels,
-      displayImageSizes,
     };
   },
 
