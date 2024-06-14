@@ -36,7 +36,7 @@
     "analyze": "webpack-bundle-analyzer stats.json ../static",
     "profile": "webpack --config webpack.prod.js --profile --json > stats.json",
     "check": "npm run eslint && npm run prettier",
-    "eslint": "eslint --color \"./ui/src/**/*.{js,vue}\"",
-    "prettier": "prettier --check \"./ui/src/**/*.{js,vue}\""
+    "eslint": "eslint --color \"./src/**/*.{js,vue}\"",
+    "prettier": "prettier --check \"./src/**/*.{js,vue}\""
   }
 }
