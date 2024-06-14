@@ -7,6 +7,8 @@ export const endpoints = {
   manageAlbumDetail: "/api/manage/albums/:path/",
   manageAlbumPhotoList: "/api/manage/albums/:path/photos/",
 
+  manageLicenseList: "/api/manage/licenses/",
+
   photoDetail: "/api/photos/:md5/",
 
   managePhotoDetail: "/api/manage/photos/:md5/",

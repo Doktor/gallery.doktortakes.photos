@@ -22,6 +22,7 @@
           :album="album"
           @save="saveAlbum"
           :isUpdate="true"
+          :licenseOptions="licenseOptions"
         />
 
         <template v-if="album.parent || album.children.length > 0">
@@ -75,6 +76,7 @@ import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
 import AlbumCover from "@/pages/public/AlbumDetailPage/AlbumCover.vue";
 import AlbumForm from "@/components/manage/AlbumForm.vue";
+import { ManageLicenseService } from "@/services/manage/ManageLicenseService";
 
 export default {
   components: {
@@ -93,6 +95,8 @@ export default {
       album: {},
       photos: [],
 
+      licenses: [],
+
       showPhotosInChildAlbums: false,
       allPhotos: null,
 
@@ -110,10 +114,24 @@ export default {
     filteredPhotos() {
       return this.showPhotosInChildAlbums ? this.allPhotos : this.photos;
     },
+
+    licenseOptions() {
+      return this.licenses.map((license) => {
+        return {
+          value: license.id,
+          display: license.displayName,
+        };
+      });
+    },
   },
 
   async created() {
+    this.$store.commit("setLoading", true);
+
     await this.loadAlbum();
+    await this.loadLicenses();
+
+    this.$store.commit("setLoading", false);
   },
 
   methods: {
@@ -155,8 +173,6 @@ export default {
     },
 
     async loadAlbum() {
-      this.$store.commit("setLoading", true);
-
       let { ok, album, photos } = await AlbumService.getAlbum({
         rawPath: this.routePath,
         code: "",
@@ -174,8 +190,10 @@ export default {
 
       this.setAlbum(album);
       this.photos = photos;
+    },
 
-      this.$store.commit("setLoading", false);
+    async loadLicenses() {
+      this.licenses = await ManageLicenseService.listLicenses();
     },
 
     async saveAlbum(album) {

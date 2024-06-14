@@ -24,6 +24,8 @@ export function parseAlbumDetail(album, children) {
     child.pathSplit = child.path.split("/");
   }
 
+  album.licenseId = album.license?.id ?? null;
+
   album.children = children;
 }
 

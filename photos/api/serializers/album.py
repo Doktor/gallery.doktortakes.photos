@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from photos.api.fields import (
     TagField, UserField, GroupField, NullableAlbumField, PhotoHashField)
-from photos.models import Album
+from photos.models import Album, License
 
 from .license import LicenseSerializer
 from .photo import PhotoThumbnailSerializer
@@ -16,6 +16,8 @@ class AlbumSerializer(serializers.ModelSerializer):
     path = serializers.CharField(read_only=True)
 
     license = LicenseSerializer(read_only=True)
+    license_id = serializers.PrimaryKeyRelatedField(
+        queryset=License.objects, write_only=True)
 
     cover = PhotoThumbnailSerializer(read_only=True)
 
@@ -27,6 +29,21 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     url = serializers.CharField(read_only=True, source='get_absolute_url')
     admin_url = serializers.CharField(read_only=True, source='get_admin_url')
+
+    def create(self, validated_data):
+        license = validated_data.pop('license_id')
+
+        tags = validated_data.pop('tags')
+        users = validated_data.pop('users')
+        groups = validated_data.pop('groups')
+
+        album = Album.objects.create(license=license, **validated_data)
+
+        album.tags.set(tags)
+        album.users.set(users)
+        album.groups.set(groups)
+
+        return album
 
     def validate(self, data):
         if self.instance is not None:
@@ -44,7 +61,7 @@ class AlbumSerializer(serializers.ModelSerializer):
         fields = (
             'name', 'slug', 'path',
             'place', 'location', 'description', 'tags',
-            'license',
+            'license', 'license_id',
             'start', 'end',
             'cover',
             'access_level', 'access_code', 'users', 'groups',

@@ -12,6 +12,8 @@ manage_patterns = [
     path('albums/<path:path>/', manage.ManageAlbumDetail.as_view(), name='api_manage_album'),
     path('albums/', manage.ManageAlbumList.as_view(), name='api_manage_albums'),
 
+    path('licenses/', manage.ManageLicenseList.as_view(), name='api_manage_licenses'),
+
     path('photos/recent/', manage.ManageRecentPhotoList.as_view(), name='recent_photos'),
     path('photos/<md5:md5>/', manage.ManagePhotoDetail.as_view(), name='api_manage_photo'),
     path('photos/<md5:md5>/thumbnails/', manage.ManageThumbnailList.as_view(), name='api_thumbnail'),

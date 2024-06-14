@@ -42,6 +42,12 @@
       <CustomInput label="End" type="date" v-model="changes.end" />
 
       <CustomSelect
+        label="License"
+        :options="licenseOptions"
+        v-model="changes.licenseId"
+      />
+
+      <CustomSelect
         label="Access level"
         :options="accessLevels"
         v-model="changes.accessLevel"
@@ -86,6 +92,11 @@ export default {
   props: {
     album: {
       type: Object,
+      required: true,
+    },
+
+    licenseOptions: {
+      type: Array,
       required: true,
     },
 
