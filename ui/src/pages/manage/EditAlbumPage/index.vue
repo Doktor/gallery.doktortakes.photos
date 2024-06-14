@@ -8,15 +8,6 @@
 
     <main class="manage-album-container">
       <div class="manage-album-details">
-        <h2>Album details</h2>
-
-        <CustomButton
-          class="button-danger"
-          @click="showDeleteAlbumModal = true"
-        >
-          Delete album
-        </CustomButton>
-
         <AlbumForm
           v-if="!loading"
           :album="album"
@@ -24,6 +15,13 @@
           :isUpdate="true"
           :licenseOptions="licenseOptions"
         />
+
+        <CustomButton
+          class="button-danger"
+          @click="showDeleteAlbumModal = true"
+        >
+          Delete album
+        </CustomButton>
 
         <template v-if="album.parent || album.children.length > 0">
           <h2>Related albums</h2>
