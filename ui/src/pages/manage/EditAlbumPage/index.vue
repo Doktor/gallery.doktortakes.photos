@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <router-link :to="{ name: 'manage' }">Back to editor</router-link>
 
     <header class="manage-album-header">
