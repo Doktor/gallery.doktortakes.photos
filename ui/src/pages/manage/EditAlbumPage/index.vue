@@ -227,6 +227,11 @@ h2 {
 }
 
 $breakpoint: 1201px;
+$margin: 32px;
+
+.manage-album-header {
+  margin-bottom: $margin;
+}
 
 .manage-album-container {
   display: flex;
@@ -241,7 +246,7 @@ $breakpoint: 1201px;
 .manage-album-details {
   @media (min-width: $breakpoint) {
     min-width: 480px;
-    margin-right: 40px;
+    margin-right: $margin;
   }
 }
 
