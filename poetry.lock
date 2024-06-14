@@ -313,19 +313,6 @@ Django = ">=2.2"
 sqlparse = ">=0.2.0"
 
 [[package]]
-name = "django-debug-toolbar-request-history"
-version = "0.1.4"
-description = "Request History Panel for Django Debug Toolbar"
-optional = false
-python-versions = "*"
-files = [
-    {file = "django_debug_toolbar_request_history-0.1.4-py2.py3-none-any.whl", hash = "sha256:753ebed8b88dc8f71a8920cac5d69be18d56f510b25f841c877413c4549a2733"},
-]
-
-[package.dependencies]
-django-debug-toolbar = ">=2.0"
-
-[[package]]
 name = "django-js-asset"
 version = "2.0.0"
 description = "script tag with additional attributes for django.forms.Media"
@@ -997,4 +984,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "988c20c41ec5e600646942f0416fef4d50ee33b324edc60d3e33620fd842b38c"
+content-hash = "ba1786fdf8d4c40ab660a83cbd9be59a38f5373c1e17fdb99fba90f1a8fabbeb"
