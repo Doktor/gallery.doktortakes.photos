@@ -1,5 +1,5 @@
 <template>
-  <section class="manage-photos" style="text-align: left">
+  <div style="text-align: left">
     <div>
       {{ photos.length }} photos in album,
       {{ selectedPhotoHashes.length }} photo{{
@@ -48,7 +48,7 @@
       :allowSelect="isSelecting"
       @select="select"
     />
-  </section>
+  </div>
 </template>
 
 <script>

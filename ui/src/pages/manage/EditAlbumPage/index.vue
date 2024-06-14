@@ -7,7 +7,7 @@
     </header>
 
     <main class="manage-album-container">
-      <div class="manage-album-item manage-album-details">
+      <div class="manage-album-details">
         <h2>Album details</h2>
 
         <CustomButton
@@ -42,16 +42,15 @@
         </template>
       </div>
 
-      <div class="manage-album-item">
-        <PhotoManager
-          :album="album"
-          :photos="filteredPhotos"
-          :showPhotosInChildAlbums="showPhotosInChildAlbums"
-          @addPhoto="addPhoto"
-          @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
-          @setAlbum="setAlbum"
-        />
-      </div>
+      <PhotoManager
+        class="manage-album-photos"
+        :album="album"
+        :photos="filteredPhotos"
+        :showPhotosInChildAlbums="showPhotosInChildAlbums"
+        @addPhoto="addPhoto"
+        @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
+        @setAlbum="setAlbum"
+      />
     </main>
 
     <DeleteAlbumModal
@@ -248,12 +247,12 @@ $breakpoint: 1201px;
   }
 }
 
-.count {
-  line-height: 1;
-  margin: 1rem 0;
+.manage-album-photos {
+  width: 100%;
 }
 
-.manage-photos {
+.count {
+  line-height: 1;
   margin: 1rem 0;
 }
 
