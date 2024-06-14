@@ -3,90 +3,97 @@ from datetime import date
 from http import HTTPStatus as Status
 
 from django.urls import reverse
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
 
-from photos.tests.api.utils import AlbumFactory, create_user, Level
-
-
-URL = lambda path: reverse('api_manage_album', kwargs={'path': path})
+from photos.api.views.manage import ManageAlbumDetail
+from photos.tests.api.utils import AlbumFactory, LicenseFactory, create_user, Level
 
 
-def create_request_body(**kwargs):
-    return {
-        'parent': None,
-
-        'tags': [],
-        'users': [],
-        'groups': [],
-
-        **kwargs,
-    }
+url = lambda path: reverse('api_manage_album', kwargs={'path': path})
 
 
 @pytest.mark.django_db
 class TestManageAlbumDetail:
+    @classmethod
+    @pytest.fixture(autouse=True)
+    def setup_class(cls):
+        cls.factory = APIRequestFactory()
+        cls.default_license = LicenseFactory()
+
     def setup_method(self):
         self.client = APIClient()
 
-    def test_put__missing_name(self):
-        # Arrange
-        user = create_user(Level.SUPERUSER)
-        self.client.force_authenticate(user)
+    def create_request_body(self, **kwargs):
+        return {
+            'license_id': self.default_license.id,
+            'parent': None,
 
+            'tags': [],
+            'users': [],
+            'groups': [],
+
+            **kwargs,
+        }
+
+    def test_put__missing_name__bad_request(self):
+        # Arrange
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
-        body = create_request_body(start='2020-12-31')
+
+        body = self.create_request_body(start='2020-12-31')
+        request = self.factory.put(url(album.path), data=body)
+        force_authenticate(request, user=create_user(Level.SUPERUSER))
 
         # Act
-        response = self.client.put(URL(album.path), data=body)
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.BAD_REQUEST
         assert response.data == {'name': ['This field is required.']}
 
-    def test_put__missing_start_date(self):
+    def test_put__missing_start_date__bad_request(self):
         # Arrange
-        user = create_user(Level.SUPERUSER)
-        self.client.force_authenticate(user)
-
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
-        body = create_request_body(name='Album Name 1')
+
+        body = self.create_request_body(name='Album Name 1')
+        request = self.factory.put(url(album.path), data=body)
+        force_authenticate(request, user=create_user(Level.SUPERUSER))
 
         # Act
-        response = self.client.put(URL(album.path), data=body)
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.BAD_REQUEST
         assert response.data == {'start': ['This field is required.']}
 
-    def test_put__invalid_parent(self):
+    def test_put__parent_is_self__bad_request(self):
         # Arrange
-        user = create_user(Level.SUPERUSER)
-        self.client.force_authenticate(user)
-
         album = AlbumFactory(
             name='Album Name 1', start=date(2020, 1, 1), parent=None)
-        body = create_request_body(
+
+        body = self.create_request_body(
             name=album.name, start=album.start, parent=album.path)
+        request = self.factory.put(url(album.path), data=body)
+        force_authenticate(request, user=create_user(Level.SUPERUSER))
 
         # Act
-        response = self.client.put(URL(album.path), data=body)
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.BAD_REQUEST
         assert response.data == {
             'non_field_errors': ['An album can\'t be its own parent.']}
 
-    def test_put__start_date_after_end_date(self):
+    def test_put__start_date_after_end_date__bad_request(self):
         # Arrange
-        user = create_user(Level.SUPERUSER)
-        self.client.force_authenticate(user)
-
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
-        body = create_request_body(
+
+        body = self.create_request_body(
             name='Album Name 1', start='2020-01-01', end='2019-12-31', parent='album-name-1')
+        request = self.factory.put(url(album.path), data=body)
+        force_authenticate(request, user=create_user(Level.SUPERUSER))
 
         # Act
-        response = self.client.put(URL(album.path), data=body)
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.BAD_REQUEST
@@ -95,48 +102,49 @@ class TestManageAlbumDetail:
 
     def test_put(self):
         # Arrange
-        user = create_user(Level.SUPERUSER)
-        self.client.force_authenticate(user)
+        album = AlbumFactory(name='Original Album Name', start=date(2024, 1, 1))
 
-        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
-        body = create_request_body(name='Album Name 2', start='2010-12-31')
+        body = self.create_request_body(name='Updated Album Name', start='2024-12-31')
+        request = self.factory.put(url(album.path), data=body)
+        force_authenticate(request, user=create_user(Level.SUPERUSER))
 
         # Act
-        response = self.client.put(URL(album.path), data=body)
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.OK
 
-        actual = response.data
-        assert actual['name'] == 'Album Name 2'
-        assert actual['start'] == '2010-12-31'
+        actual_album = response.data['album']
+        assert actual_album['name'] == 'Updated Album Name'
+        assert actual_album['start'] == '2024-12-31'
 
-    def test_delete__no_permission(self):
+    def test_delete__no_permission__forbidden(self):
         # Arrange
-        user = create_user(Level.USER)
-        self.client.force_authenticate(user)
-
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
 
+        request = self.factory.delete(url(album.path))
+        force_authenticate(request, user=create_user(Level.USER))
+
         # Act
-        response = self.client.delete(URL(album.path))
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.FORBIDDEN
 
+        response.render()
         content = response.content.decode('utf-8')
         assert album.name not in content
         assert album.path not in content
 
-    def test_delete(self):
+    def test_delete__ok(self):
         # Arrange
-        user = create_user(Level.SUPERUSER)
-        self.client.force_authenticate(user)
-
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
 
+        request = self.factory.delete(url(album.path))
+        force_authenticate(request, user=create_user(Level.SUPERUSER))
+
         # Act
-        response = self.client.delete(URL(album.path))
+        response = ManageAlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.NO_CONTENT

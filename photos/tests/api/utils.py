@@ -4,7 +4,7 @@ from typing import Union
 
 from django.contrib.auth.models import User, AnonymousUser
 
-from photos.models import Album
+from photos.models import Album, License
 from photos.models.album import Allow
 
 
@@ -38,6 +38,11 @@ class AlbumFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = Album
+
+
+class LicenseFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = License
 
 
 # Factory functions
