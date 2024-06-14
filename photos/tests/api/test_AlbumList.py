@@ -7,7 +7,7 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 
 from photos.api.views import AlbumList
 from photos.tests.api.album import AlbumFactory
-from photos.tests.api.utils import Level, create_user
+from photos.tests.api.utils import create_anonymous_user
 
 url = reverse('api_albums')
 
@@ -16,13 +16,12 @@ url = reverse('api_albums')
 class TestAlbumList:
     @classmethod
     def setup_class(cls):
-        cls.default_user = create_user(Level.ANONYMOUS)
         cls.factory = APIRequestFactory()
 
     def test__get_albums_no_albums__ok(self):
         # Arrange
         request = self.factory.get(url)
-        force_authenticate(request, user=self.default_user)
+        force_authenticate(request, user=create_anonymous_user())
 
         # Act
         response = AlbumList.as_view()(request)
@@ -39,7 +38,7 @@ class TestAlbumList:
         AlbumFactory(name='Album Name 2', start=Date(2024, 12, 31))
 
         request = self.factory.get(url)
-        force_authenticate(request, user=self.default_user)
+        force_authenticate(request, user=create_anonymous_user())
 
         # Act
         response = AlbumList.as_view()(request)
@@ -64,7 +63,7 @@ class TestAlbumList:
         AlbumFactory(name='child1', parent=parent)
 
         request = self.factory.get(url)
-        force_authenticate(request, user=self.default_user)
+        force_authenticate(request, user=create_anonymous_user())
 
         # Act
         response = AlbumList.as_view()(request)

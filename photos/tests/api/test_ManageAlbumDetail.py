@@ -6,7 +6,8 @@ from django.urls import reverse
 from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
 
 from photos.api.views.manage import ManageAlbumDetail
-from photos.tests.api.utils import AlbumFactory, LicenseFactory, create_user, Level
+from photos.tests.api.utils import (
+    AlbumFactory, LicenseFactory, create_standard_user, create_superuser)
 
 
 url = lambda path: reverse('api_manage_album', kwargs={'path': path})
@@ -41,7 +42,7 @@ class TestManageAlbumDetail:
 
         body = self.create_request_body(start='2020-12-31')
         request = self.factory.put(url(album.path), data=body)
-        force_authenticate(request, user=create_user(Level.SUPERUSER))
+        force_authenticate(request, user=create_superuser())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)
@@ -56,7 +57,7 @@ class TestManageAlbumDetail:
 
         body = self.create_request_body(name='Album Name 1')
         request = self.factory.put(url(album.path), data=body)
-        force_authenticate(request, user=create_user(Level.SUPERUSER))
+        force_authenticate(request, user=create_superuser())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)
@@ -73,7 +74,7 @@ class TestManageAlbumDetail:
         body = self.create_request_body(
             name=album.name, start=album.start, parent=album.path)
         request = self.factory.put(url(album.path), data=body)
-        force_authenticate(request, user=create_user(Level.SUPERUSER))
+        force_authenticate(request, user=create_superuser())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)
@@ -90,7 +91,7 @@ class TestManageAlbumDetail:
         body = self.create_request_body(
             name='Album Name 1', start='2020-01-01', end='2019-12-31', parent='album-name-1')
         request = self.factory.put(url(album.path), data=body)
-        force_authenticate(request, user=create_user(Level.SUPERUSER))
+        force_authenticate(request, user=create_superuser())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)
@@ -106,7 +107,7 @@ class TestManageAlbumDetail:
 
         body = self.create_request_body(name='Updated Album Name', start='2024-12-31')
         request = self.factory.put(url(album.path), data=body)
-        force_authenticate(request, user=create_user(Level.SUPERUSER))
+        force_authenticate(request, user=create_superuser())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)
@@ -123,7 +124,7 @@ class TestManageAlbumDetail:
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
 
         request = self.factory.delete(url(album.path))
-        force_authenticate(request, user=create_user(Level.USER))
+        force_authenticate(request, user=create_standard_user())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)
@@ -141,7 +142,7 @@ class TestManageAlbumDetail:
         album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1))
 
         request = self.factory.delete(url(album.path))
-        force_authenticate(request, user=create_user(Level.SUPERUSER))
+        force_authenticate(request, user=create_superuser())
 
         # Act
         response = ManageAlbumDetail.as_view()(request, album.path)

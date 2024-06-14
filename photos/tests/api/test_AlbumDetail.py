@@ -7,7 +7,7 @@ from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
 
 from photos.api.views import AlbumDetail
 from photos.models.album import Allow
-from photos.tests.api.utils import AlbumFactory, Level, create_album, create_user
+from photos.tests.api.utils import AlbumFactory, Level, create_album, create_anonymous_user, create_user
 
 
 def url(path):
@@ -18,7 +18,6 @@ def url(path):
 class TestAlbumDetail:
     @classmethod
     def setup_class(cls):
-        cls.default_user = create_user(Level.ANONYMOUS)
         cls.factory = APIRequestFactory()
 
     def setup_method(self):
@@ -76,7 +75,7 @@ class TestAlbumDetail:
         path = "test_get_album_not_found"
 
         request = self.factory.get(url(path))
-        force_authenticate(request, user=self.default_user)
+        force_authenticate(request, user=create_anonymous_user())
 
         # Act
         response = AlbumDetail.as_view()(request, path)
@@ -93,7 +92,7 @@ class TestAlbumDetail:
             parent=None)
 
         request = self.factory.get(url(album.path))
-        force_authenticate(request, user=self.default_user)
+        force_authenticate(request, user=create_anonymous_user())
 
         # Act
         response = AlbumDetail.as_view()(request, album.path)
@@ -118,7 +117,7 @@ class TestAlbumDetail:
         AlbumFactory(name="child2", start=Date(2024, 2, 1), parent=album)
 
         request = self.factory.get(url(album.path))
-        force_authenticate(request, user=self.default_user)
+        force_authenticate(request, user=create_anonymous_user())
 
         # Act
         response = AlbumDetail.as_view()(request, album.path)

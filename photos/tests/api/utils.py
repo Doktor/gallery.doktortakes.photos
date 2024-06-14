@@ -48,6 +48,18 @@ class LicenseFactory(factory.DjangoModelFactory):
 # Factory functions
 
 
+def create_anonymous_user():
+    return create_user(Level.ANONYMOUS)
+
+
+def create_standard_user():
+    return create_user(Level.USER)
+
+
+def create_superuser():
+    return create_user(Level.SUPERUSER)
+
+
 def create_user(level: Level) -> DjangoUser:
     if level == Level.ANONYMOUS:
         return AnonymousUser()
