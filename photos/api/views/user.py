@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime as DateTime
 from http import HTTPStatus
 import pytz
 
@@ -15,8 +15,8 @@ from photos.api.serializers import LogInSerializer
 User = get_user_model()
 
 
-def get_formatted_time(dt: datetime) -> str:
-    return dt.astimezone(pytz.timezone("US/Eastern")).strftime("%Y-%m-%d %H:%M:%S")
+def get_formatted_time(dt: DateTime) -> str:
+    return dt.astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S UTC+00:00")
 
 
 @api_view()
