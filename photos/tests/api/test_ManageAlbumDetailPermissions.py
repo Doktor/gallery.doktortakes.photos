@@ -7,8 +7,8 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 
 from photos.api.views.manage import ManageAlbumDetail
 from photos.models.album import Album, Allow
-from photos.tests.api.utils import DjangoUser, Level, create_album, create_user
-
+from photos.tests.api.album import create_album
+from photos.tests.api.utils import DjangoUser, Level, create_user
 
 api_factory = APIRequestFactory()
 view = ManageAlbumDetail.as_view()

@@ -6,8 +6,8 @@ from django.urls import reverse
 from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
 
 from photos.api.views.manage import ManageAlbumDetail
-from photos.tests.api.utils import (
-    AlbumFactory, LicenseFactory, create_standard_user, create_superuser)
+from photos.tests.api.album import AlbumFactory
+from photos.tests.api.utils import LicenseFactory, create_standard_user, create_superuser
 
 
 url = lambda path: reverse('api_manage_album', kwargs={'path': path})

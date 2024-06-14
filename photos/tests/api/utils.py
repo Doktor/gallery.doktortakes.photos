@@ -4,9 +4,7 @@ from typing import Union
 
 from django.contrib.auth.models import User, AnonymousUser
 
-from photos.models import Album, License
-from photos.models.album import Allow
-
+from photos.models import License
 
 DjangoUser = Union[AnonymousUser, User]
 
@@ -30,14 +28,6 @@ class UserFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = User
-
-
-class AlbumFactory(factory.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f"Album {n} Title")
-    start = factory.Faker('date')
-
-    class Meta:
-        model = Album
 
 
 class LicenseFactory(factory.DjangoModelFactory):
@@ -71,12 +61,3 @@ def create_user(level: Level) -> DjangoUser:
         return UserFactory(is_staff=True)
     elif level == Level.SUPERUSER:
         return UserFactory(is_staff=True, is_superuser=True)
-
-
-def create_album(access_level: Allow, user: DjangoUser = None):
-    album = AlbumFactory(access_level=access_level)
-
-    if user is not None and not user.is_anonymous:
-        album.users.add(user)
-
-    return album

@@ -7,7 +7,8 @@ from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
 
 from photos.api.views import AlbumDetail
 from photos.models.album import Allow
-from photos.tests.api.utils import AlbumFactory, Level, create_album, create_anonymous_user, create_user
+from photos.tests.api.album import AlbumFactory, create_album
+from photos.tests.api.utils import Level, create_anonymous_user, create_user
 
 
 def url(path):
