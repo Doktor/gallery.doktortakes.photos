@@ -1,8 +1,12 @@
 <template>
   <div v-if="album.accessLevel > 0">
-    <div v-if="!isStaff" class="overlay-item">
+    <div v-if="!isStaff && album.accessCode" class="overlay-item">
       <i title="Warning" class="fas fa-fw fa-exclamation-triangle"></i>
-      <span>Please ask before sharing these photos.</span>
+      <span
+        >This is an unlisted link; please don't share the link. If you want to
+        share the photos, please download the photos and post them
+        directly.</span
+      >
     </div>
 
     <div v-if="isStaff" class="overlay-item">
