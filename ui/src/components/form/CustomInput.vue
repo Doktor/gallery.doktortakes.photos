@@ -79,6 +79,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.field[type="date"],
+.field[type="text"],
+textarea.field {
+  border-radius: 0;
+}
+
 .field[type="checkbox"] {
   width: 16px;
   height: 16px;

@@ -57,3 +57,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+select {
+  border: 1px solid black;
+  border-radius: 0;
+}
+</style>
