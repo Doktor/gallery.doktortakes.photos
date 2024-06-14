@@ -1,32 +1,28 @@
 import pytest
-from datetime import date
+from datetime import date as Date
 from http import HTTPStatus as Status
 
 from django.urls import reverse
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APIRequestFactory, force_authenticate
 
+from photos.api.views import AlbumDetail
 from photos.models.album import Allow
 from photos.tests.api.utils import AlbumFactory, Level, create_album, create_user
 
-URL = lambda path: reverse('api_album', kwargs={'path': path})
+
+def url(path):
+    return reverse("api_album", kwargs={"path": path})
 
 
 @pytest.mark.django_db
 class TestAlbumDetail:
+    @classmethod
+    def setup_class(cls):
+        cls.default_user = create_user(Level.ANONYMOUS)
+        cls.factory = APIRequestFactory()
+
     def setup_method(self):
         self.client = APIClient()
-
-    @staticmethod
-    def create_request_body(**kwargs):
-        return {
-            'parent': None,
-
-            'tags': [],
-            'users': [],
-            'groups': [],
-
-            **kwargs,
-        }
 
     @pytest.mark.parametrize("user_level, album_level, can_access", [
         (Level.ANONYMOUS, Allow.PUBLIC, True),
@@ -59,7 +55,7 @@ class TestAlbumDetail:
         (Level.SUPERUSER, Allow.STAFF, True),
         (Level.SUPERUSER, Allow.SUPERUSER, True),
     ])
-    def test_get__permissions(self, user_level: Level, album_level: Allow, can_access: bool):
+    def test__get_album__permissions(self, user_level: Level, album_level: Allow, can_access: bool):
         # Arrange
         user = create_user(user_level)
         self.client.force_authenticate(user)
@@ -67,7 +63,7 @@ class TestAlbumDetail:
         album = create_album(album_level, user if user_level == Level.OWNER else None)
 
         # Act
-        response = self.client.get(URL(album.path))
+        response = self.client.get(url(album.path))
 
         # Assert
         if can_access:
@@ -75,24 +71,71 @@ class TestAlbumDetail:
         else:
             assert response.status_code == Status.NOT_FOUND, response.content
 
-    def test_get__not_found(self):
+    def test__get_album__not_found(self):
+        # Arrange
+        path = "test_get_album_not_found"
+
+        request = self.factory.get(url(path))
+        force_authenticate(request, user=self.default_user)
+
         # Act
-        response = self.client.get(URL("path"))
+        response = AlbumDetail.as_view()(request, path)
 
         # Assert
         assert response.status_code == Status.NOT_FOUND
 
-    def test_get(self):
+    def test__get_album(self):
         # Arrange
-        album = AlbumFactory(name='Album Name 1', start=date(2020, 1, 1), parent=None)
+        album = AlbumFactory(
+            name="test_get_album",
+            start=Date(2024, 1, 1),
+            end=Date(2024, 1, 31),
+            parent=None)
+
+        request = self.factory.get(url(album.path))
+        force_authenticate(request, user=self.default_user)
 
         # Act
-        response = self.client.get(URL(album.path))
+        response = AlbumDetail.as_view()(request, album.path)
 
         # Assert
         assert response.status_code == Status.OK
 
-        actual = response.data
-        assert actual['name'] == album.name
-        assert actual['start'] == '2020-01-01'
-        assert actual['parent'] is None
+        actual_album = response.data["album"]
+        assert actual_album["name"] == "test_get_album"
+        assert actual_album["start"] == "2024-01-01"
+        assert actual_album["end"] == "2024-01-31"
+        assert actual_album["parent"] is None
+
+        actual_children = response.data["children"]
+        assert actual_children == []
+
+    def test__get_album_with_children(self):
+        # Arrange
+        album = AlbumFactory(name="test_get_album_with_children")
+
+        AlbumFactory(name="child1", start=Date(2024, 1, 1), parent=album)
+        AlbumFactory(name="child2", start=Date(2024, 2, 1), parent=album)
+
+        request = self.factory.get(url(album.path))
+        force_authenticate(request, user=self.default_user)
+
+        # Act
+        response = AlbumDetail.as_view()(request, album.path)
+
+        # Assert
+        assert response.status_code == Status.OK
+
+        actual_album = response.data["album"]
+        assert actual_album["name"] == "test_get_album_with_children"
+
+        actual_children = response.data["children"]
+        assert len(actual_children) == 2
+
+        actual_child1 = actual_children[0]
+        assert actual_child1["name"] == "child1"
+        assert actual_child1["start"] == "2024-01-01"
+
+        actual_child2 = actual_children[1]
+        assert actual_child2["name"] == "child2"
+        assert actual_child2["start"] == "2024-02-01"
