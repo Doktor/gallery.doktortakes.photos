@@ -14,8 +14,11 @@ from photos.settings_photos import ITEMS_PER_PAGE
 from photos.utils.query import get_photo_for_user_or_404
 
 import datetime
-import pytz
 from http import HTTPStatus as Status
+from zoneinfo import ZoneInfo
+
+parse_datetime = datetime.datetime.strptime
+UTC = ZoneInfo("UTC")
 
 
 class PhotoNotFound(exceptions.APIException):
@@ -45,14 +48,12 @@ def date_query(start: str, end: str) -> Q:
     query = Q()
 
     try:
-        start = datetime.datetime.strptime(start, '%Y-%m-%d')
-        start = start.replace(tzinfo=pytz.utc)
+        start = parse_datetime(start, '%Y-%m-%d').replace(tzinfo=UTC)
     except ValueError:
         start = False
 
     try:
-        end = datetime.datetime.strptime(end, '%Y-%m-%d')
-        end = end.replace(tzinfo=pytz.utc)
+        end = parse_datetime(end, '%Y-%m-%d').replace(tzinfo=UTC)
     except ValueError:
         end = False
 

@@ -5,12 +5,14 @@ from django.core.files import File
 from django.core.files.storage import DefaultStorage, FileSystemStorage
 from django.db.models.fields.files import ImageFieldFile
 
-import datetime
 import hashlib
 import os
-import pytz
 import uuid
+from datetime import datetime as DateTime
 from io import BytesIO
+from zoneinfo import ZoneInfo
+
+UTC = ZoneInfo("UTC")
 
 CHUNK_SIZE = 64 * 1024  # 64 KB
 DATE_FORMAT = "%Y:%m:%d %H:%M:%S"
@@ -33,7 +35,7 @@ def generate_md5_hash(file: File) -> str:
     return hasher.hexdigest()
 
 
-def get_modified_time_utc(file: Union[BytesIO, File]) -> datetime.datetime:
+def get_modified_time_utc(file: Union[BytesIO, File]) -> DateTime:
     if isinstance(file, BytesIO):
         name = os.path.join(settings.BASE_DIR, 'temp', f'{uuid.uuid4()}.tmp')
 
@@ -41,10 +43,10 @@ def get_modified_time_utc(file: Union[BytesIO, File]) -> datetime.datetime:
             with open(name, 'wb') as f:
                 f.write(file.read())
         except:
-            return datetime.datetime.now(tz=pytz.utc)
+            return DateTime.now(tz=UTC)
         else:
             ts = os.path.getmtime(name)
-            m_time = datetime.datetime.fromtimestamp(ts).replace(tzinfo=pytz.utc)
+            m_time = DateTime.fromtimestamp(ts).replace(tzinfo=UTC)
             os.remove(name)
             return m_time
 
@@ -56,4 +58,4 @@ def get_modified_time_utc(file: Union[BytesIO, File]) -> datetime.datetime:
     try:
         return storage.get_modified_time(file.name)
     except FileNotFoundError:
-        return datetime.datetime.now(tz=pytz.utc)
+        return DateTime.now(tz=UTC)

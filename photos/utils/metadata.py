@@ -5,10 +5,11 @@ from photos.utils.models import DATE_FORMAT, get_modified_time_utc
 
 import datetime
 import exifread
-import pytz
 from lxml import etree
+from zoneinfo import ZoneInfo
 
-strptime = datetime.datetime.strptime
+parse_datetime = datetime.datetime.strptime
+UTC = ZoneInfo("UTC")
 
 XMP_START = b'<x:xmpmeta'
 XMP_END = b'</x:xmpmeta>'
@@ -29,17 +30,16 @@ def parse_exif_data(photo: 'Photo', file: File) -> None:
 
     # Timestamps
     modified = get_modified_time_utc(file)
-    tz = pytz.utc
 
     taken = photo.exif.get('EXIF DateTimeOriginal', None)
     if taken is not None:
-        photo.taken = strptime(taken, DATE_FORMAT).replace(tzinfo=tz)
+        photo.taken = parse_datetime(taken, DATE_FORMAT).replace(tzinfo=UTC)
     else:
         photo.taken = modified
 
     edited = photo.exif.get('Image DateTime', None)
     if edited is not None:
-        photo.edited = strptime(edited, DATE_FORMAT).replace(tzinfo=tz)
+        photo.edited = parse_datetime(edited, DATE_FORMAT).replace(tzinfo=UTC)
     else:
         photo.edited = modified
 

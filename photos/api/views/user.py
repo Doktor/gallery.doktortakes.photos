@@ -1,6 +1,6 @@
 from datetime import datetime as DateTime
 from http import HTTPStatus
-import pytz
+from zoneinfo import ZoneInfo
 
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 def get_formatted_time(dt: DateTime) -> str:
-    return dt.astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S UTC+00:00")
+    return dt.astimezone(ZoneInfo("UTC")).strftime("%Y-%m-%d %H:%M:%S UTC+00:00")
 
 
 @api_view()
