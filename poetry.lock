@@ -398,18 +398,17 @@ files = [
 
 [[package]]
 name = "djangorestframework"
-version = "3.13.1"
+version = "3.15.1"
 description = "Web APIs for Django, made easy."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
-    {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},
+    {file = "djangorestframework-3.15.1-py3-none-any.whl", hash = "sha256:3ccc0475bce968608cf30d07fb17d8e52d1d7fc8bfe779c905463200750cbca6"},
+    {file = "djangorestframework-3.15.1.tar.gz", hash = "sha256:f88fad74183dfc7144b2756d0d2ac716ea5b4c7c9840995ac3bfd8ec034333c1"},
 ]
 
 [package.dependencies]
-django = ">=2.2"
-pytz = "*"
+django = ">=3.0"
 
 [[package]]
 name = "exifread"
@@ -821,17 +820,6 @@ files = [
 six = ">=1.5"
 
 [[package]]
-name = "pytz"
-version = "2024.1"
-description = "World timezone definitions, modern and historical"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytz-2024.1-py2.py3-none-any.whl", hash = "sha256:328171f4e3623139da4983451950b28e95ac706e13f3f2630a879749e7a8b319"},
-    {file = "pytz-2024.1.tar.gz", hash = "sha256:2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812"},
-]
-
-[[package]]
 name = "requests"
 version = "2.31.0"
 description = "Python HTTP for Humans."
@@ -998,4 +986,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "f764f890ea1e6d244172050f0ea337a1556b6d7241754414608f5aa07db0676d"
+content-hash = "6795018d0739996dd1cc810c6ed79542b4320570de4dd4f72a6a9136e4a62a66"
