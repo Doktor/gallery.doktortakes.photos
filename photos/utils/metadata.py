@@ -5,7 +5,6 @@ from photos.utils.models import DATE_FORMAT, get_modified_time_utc
 
 import datetime
 import exifread
-from lxml import etree
 from zoneinfo import ZoneInfo
 
 parse_datetime = datetime.datetime.strptime
