@@ -1,6 +1,6 @@
 from django import forms
+from django.contrib import admin
 from django.utils.html import format_html
-from mptt.admin import MPTTModelAdmin
 
 from photos.models import Album
 
@@ -12,7 +12,7 @@ class AlbumForm(forms.ModelForm):
         widgets = {'description': forms.Textarea}
 
 
-class AlbumAdmin(MPTTModelAdmin):
+class AlbumAdmin(admin.ModelAdmin):
     form = AlbumForm
     fieldsets = (
         ('Main', {
@@ -27,7 +27,6 @@ class AlbumAdmin(MPTTModelAdmin):
         }),
     )
     list_display = ('name', 'location', 'start', 'end', 'description', 'path')
-    mptt_level_indent = 30
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('preview',)
     search_fields = ('name', 'location', 'description')

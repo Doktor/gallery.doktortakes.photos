@@ -63,7 +63,6 @@ INSTALLED_APPS = filter_none([
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mptt',
     'rest_framework',
     'rest_framework.authtoken',
     'storages',
