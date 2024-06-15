@@ -13,7 +13,7 @@ django-mptt = "^0.16.0"
 django-webpack-loader = "^3.1.0"
 toml = "0.10.2"
 ExifRead = "2.3.2"
-Pillow = "9.1.0"
+Pillow = "10.0.0"
 boto3 = "^1.21.33"
 gunicorn = "20.1.0"
 whitenoise = {version = "6.6.0", extras = ["brotli"]}
