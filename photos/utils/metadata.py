@@ -1,6 +1,5 @@
 from django.core.files import File
 
-from photos.models.photo.photo import COLOR_NONE, COLOR_WHITE, COLOR_BLACK
 from photos.utils.models import DATE_FORMAT, get_modified_time_utc
 
 import datetime

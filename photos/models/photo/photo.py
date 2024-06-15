@@ -19,17 +19,6 @@ import os
 from typing import Optional, Union
 
 
-COLOR_NONE = ''
-COLOR_WHITE = 'w'
-COLOR_BLACK = 'b'
-
-COLOR_CHOICES = (
-    (COLOR_NONE, 'None'),
-    (COLOR_WHITE, 'White'),
-    (COLOR_BLACK, 'Black'),
-)
-
-
 def get_filename(photo: 'Photo', filename: str, ext: Optional[str] = None) -> str:
     if ext is None:
         _, ext = os.path.splitext(filename)
