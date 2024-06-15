@@ -374,13 +374,13 @@ sftp = ["paramiko (>=1.10.0)"]
 
 [[package]]
 name = "django-tree-queries"
-version = "0.15.0"
+version = "0.19.0"
 description = "Tree queries with explicit opt-in, without configurability"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 files = [
-    {file = "django_tree_queries-0.15.0-py3-none-any.whl", hash = "sha256:cf11340de59d3122919fde46e99966bad40ff942df768d683383b111554134a1"},
-    {file = "django_tree_queries-0.15.0.tar.gz", hash = "sha256:0e994c2a4601c021a115a397ec8d0ff7d5e614fae95947f72126e6a419c60f08"},
+    {file = "django_tree_queries-0.19.0-py3-none-any.whl", hash = "sha256:05b9e3158e31612528f136b4704a8d807e14edc0b4a607a45377e6132517ba2c"},
+    {file = "django_tree_queries-0.19.0.tar.gz", hash = "sha256:d1325e75f96e90b86c4316a3d63498101ec05703f4e629786b561e8aaab0e4a7"},
 ]
 
 [package.extras]
@@ -987,4 +987,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "eb2a4577474b6da8487cffbb7bc9f47e84b49f300b8c8ba49702ec6fc1bc5fae"
+content-hash = "5222d89023e8753c22dde232b20deef455fa956e4be3083677414efb3ed0a38b"
