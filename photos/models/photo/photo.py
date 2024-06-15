@@ -33,18 +33,6 @@ def get_original_path(photo: 'Photo', filename: str) -> str:
     return f"{MEDIA['ORIGINAL']}/{get_filename(photo, filename)}"
 
 
-def get_display_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['DISPLAY']}/{get_filename(photo, filename)}"
-
-
-def get_thumbnail_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['THUMBNAIL']}/{get_filename(photo, filename, ext='jpg')}"
-
-
-def get_square_thumbnail_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['SQUARE']}/{get_filename(photo, filename, ext='jpg')}"
-
-
 class Photo(models.Model):
     # Original image
 

@@ -43,21 +43,3 @@ def get_image_file(photo: "Photo", image_type: str) -> Optional[ImageFieldFile]:
 def get_image_filename(photo: "Photo", image_type: str) -> Optional[str]:
     file = get_image_file(photo, image_type)
     return file.name if file is not None else None
-
-
-def get_image_filename_candidate(photo: "Photo", image_type: str) -> Optional[str]:
-    from photos.models.photo import get_display_path, get_original_path, get_square_thumbnail_path, get_thumbnail_path
-
-    if image_type == 'original':
-        function = get_original_path
-    elif image_type == 'display_image':
-        function = get_display_path
-    elif image_type == 'square_thumbnail':
-        function = get_square_thumbnail_path
-    elif image_type == 'thumbnail':
-        function = get_thumbnail_path
-    else:
-        raise ValueError
-
-    filename = get_image_filename(photo, image_type)
-    return function(photo, filename) if filename is not None else None

@@ -2,8 +2,13 @@ import boto3
 import botocore.exceptions
 import json
 import pprint
+from typing import Optional
 from .main import django_setup
-from .utils import get_image_file, get_image_filename, get_image_filename_candidate
+from .utils import get_image_file, get_image_filename
+
+
+def get_image_filename_candidate(photo: "Photo", image_type: str) -> Optional[str]:
+    raise NotImplementedError
 
 
 def rename_image_files(dry_run=False, image_type=None, file='tasks/move_errors.json', print_errors=True):
