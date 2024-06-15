@@ -2,13 +2,11 @@ import boto3
 import botocore.exceptions
 import json
 import pprint
-from invoke import task
 from .main import django_setup
 from .utils import get_image_file, get_image_filename, get_image_filename_candidate
 
 
-@task
-def rename_image_files(ctx, dry_run=False, image_type=None, file='tasks/move_errors.json', print_errors=True):
+def rename_image_files(dry_run=False, image_type=None, file='tasks/move_errors.json', print_errors=True):
     """Renames any image files associated with Photo objects."""
     django_setup()
     import photos.models.photo as mp

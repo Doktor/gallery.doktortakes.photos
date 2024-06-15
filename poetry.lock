@@ -495,17 +495,6 @@ files = [
 ]
 
 [[package]]
-name = "invoke"
-version = "1.7.0"
-description = "Pythonic task execution"
-optional = false
-python-versions = "*"
-files = [
-    {file = "invoke-1.7.0-py3-none-any.whl", hash = "sha256:a5159fc63dba6ca2a87a1e33d282b99cea69711b03c64a35bb4e1c53c6c4afa0"},
-    {file = "invoke-1.7.0.tar.gz", hash = "sha256:e332e49de40463f2016315f51df42313855772be86435686156bc18f45b5cc6c"},
-]
-
-[[package]]
 name = "jmespath"
 version = "1.0.0"
 description = "JSON Matching Expressions"
@@ -939,4 +928,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10"
-content-hash = "96b89d1d9cb507146a6afb4f712b6cec746db570328589630703da5e0bed7cd4"
+content-hash = "8d7a3c16f9780b17dc4eefe3dbd6f090784896c8de542dfbd4e9c7c9266188a5"

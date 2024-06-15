@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from invoke import task
 import django
 import json
 import os
@@ -19,8 +18,7 @@ def check_output(command: str) -> str:
         shlex.split(command), stdout=subprocess.PIPE, universal_newlines=True).stdout
 
 
-@task
-def create_default_superuser(ctx):
+def create_default_superuser():
     django_setup()
     User = get_user_model()
 
@@ -57,8 +55,7 @@ def django_setup():
 # Tasks
 
 
-@task
-def check_generated_images(ctx, file=None, fix=False):
+def check_generated_images(file=None, fix=False):
     """Checks that every photo has a display image and square thumbnail."""
     django_setup()
 
