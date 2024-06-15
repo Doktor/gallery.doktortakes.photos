@@ -1,32 +1,9 @@
-from django.conf import settings
-from django.contrib.humanize.templatetags.humanize import naturaltime
-
-import datetime
-import json
-import os
-
-
 # Media files
-
-MEDIA_FOLDERS = {
-    'ORIGINAL': 'original',
-    'DISPLAY': 'photos',
-    'THUMBNAIL': 'thumbs',
-    'SQUARE': 'squares',
-}
-
 DEFAULT_PATH = 'all'
 
 
-# Index page
-
-INDEX_ALBUMS = 12
-
-
 # Albums
-
 ITEMS_PER_PAGE = 30
-ITEMS_IN_FILMSTRIP = 11
 
 
 # Thumbnails

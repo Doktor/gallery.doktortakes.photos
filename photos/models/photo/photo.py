@@ -13,7 +13,7 @@ from rest_framework.request import Request
 
 from photos.fields import JSONField
 from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_LARGE_SQUARE, THUMBNAIL_MEDIUM
-from photos.settings_photos import MEDIA_FOLDERS as MEDIA, DEFAULT_PATH
+from photos.settings_photos import DEFAULT_PATH
 
 import os
 from typing import Optional, Union
@@ -30,7 +30,7 @@ def get_filename(photo: 'Photo', filename: str, ext: Optional[str] = None) -> st
 
 
 def get_original_path(photo: 'Photo', filename: str) -> str:
-    return f"{MEDIA['ORIGINAL']}/{get_filename(photo, filename)}"
+    return f"original/{get_filename(photo, filename)}"
 
 
 class Photo(models.Model):
