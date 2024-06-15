@@ -3,7 +3,7 @@
 set -e
 
 poetry run python manage.py migrate --no-input
-poetry run inv create-default-superuser
+poetry run python manage.py create_default_superuser
 
 echo "Collecting static files"
 poetry run python manage.py collectstatic --no-input --clear

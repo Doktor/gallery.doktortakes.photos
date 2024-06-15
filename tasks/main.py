@@ -1,11 +1,8 @@
-from django.contrib.auth import get_user_model
 import django
-import json
 import os
 import pprint
 import shlex
 import subprocess
-import sys
 
 
 # Task parts
@@ -16,35 +13,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def check_output(command: str) -> str:
     return subprocess.run(
         shlex.split(command), stdout=subprocess.PIPE, universal_newlines=True).stdout
-
-
-def create_default_superuser():
-    django_setup()
-    User = get_user_model()
-
-    from django.conf import settings
-
-    if not settings.DEBUG:
-        print("error: this script can only be used in debug mode", file=sys.stderr)
-        sys.exit(1)
-
-    credentials_path = os.path.join(BASE_DIR, 'config', 'superuser.json')
-
-    try:
-        with open(credentials_path) as f:
-            user = json.loads(f.read())
-    except FileNotFoundError:
-        print("error: credentials file not found", file=sys.stderr)
-        sys.exit(1)
-    except json.JSONDecodeError:
-        print("error: failed to decode credentials file")
-        sys.exit(1)
-
-    if User.objects.filter(is_superuser=True).exists():
-        print("warning: a default superuser already exists")
-        sys.exit(0)
-    User.objects.create_superuser(
-        user['username'], user['email'], user['password'])
 
 
 def django_setup():
