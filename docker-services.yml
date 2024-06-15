@@ -7,4 +7,4 @@ services:
     environment:
       - POSTGRES_USER=photos
       - POSTGRES_PASSWORD=photos
-      - POSTGRES_DB=photos
+      - POSTGRES_DB="gallery.doktortakes.photos"

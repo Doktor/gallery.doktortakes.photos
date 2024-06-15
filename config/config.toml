@@ -11,6 +11,6 @@ use_local_storage = true
 ENGINE = "django.db.backends.postgresql"
 HOST = "database"
 PORT = "5432"
-NAME = "photos"
+NAME = "gallery.doktortakes.photos"
 USER = "photos"
 PASSWORD = "photos"
