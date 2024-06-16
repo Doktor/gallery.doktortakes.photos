@@ -24,6 +24,10 @@ RUN apt update \
   && pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir "poetry==$POETRY_VERSION" \
   && poetry install --no-interaction \
+  && rm -rf /root/.cache/pypoetry/artifacts/ \
+  && rm -rf /root/.cache/pypoetry/cache/ \
+  && apt remove --yes gcc python3-dev libssl-dev $pillow \
+  && apt autoremove --yes
 
 COPY . /app/
 
