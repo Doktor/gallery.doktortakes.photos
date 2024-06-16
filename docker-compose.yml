@@ -1,10 +1,10 @@
 services:
   backend:
-    image: photos_backend
+    image: photos-backend
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
+      target: backend-development
     ports:
       - 8000:8000
     volumes:
@@ -16,11 +16,11 @@ services:
     entrypoint: /app/run.dev.sh
 
   frontend:
-    image: photos_frontend
+    image: photos-frontend
     build:
       context: .
       dockerfile: Dockerfile
-      target: node
+      target: frontend
     depends_on:
       - backend
     volumes:

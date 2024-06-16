@@ -43,12 +43,12 @@ COPY --parents \
 RUN mkdir -p /app/logs/
 
 
-FROM base as development
+FROM base as backend-development
 
 RUN chmod +x /app/run.dev.sh
 
 
-FROM node:15.12.0 AS node
+FROM node:15.12.0 AS frontend
 
 WORKDIR /app/ui/
 
@@ -57,7 +57,7 @@ COPY ui/ /app/ui/
 RUN npm install
 
 
-FROM base as staging
+FROM base as backend-staging
 
 COPY ./config/config.staging.toml /app/config/config.toml
 COPY ./config/secrets.staging.toml /app/config/secrets.toml
@@ -67,7 +67,7 @@ COPY --from=node /app/ui/static/ /app/ui/static/
 RUN chmod +x /app/run.staging.sh
 
 
-FROM base as production
+FROM base as backend-production
 
 COPY ./config/config.production.toml /app/config/config.toml
 COPY ./config/secrets.production.toml /app/config/secrets.toml
