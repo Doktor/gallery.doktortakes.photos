@@ -11,7 +11,7 @@ ARG pillow="libtiff5-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev \
     libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
     libharfbuzz-dev libfribidi-dev libxcb1-dev"
 
-WORKDIR /app/
+WORKDIR /app/api/
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK="on" \
   PYTHONDONTWRITEBYTECODE=1 \
@@ -19,7 +19,10 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK="on" \
   POETRY_VERSION=1.6.1
 
 # Copy requirements first to populate Docker layer cache
-COPY poetry.lock pyproject.toml /app/
+COPY \
+  api/poetry.lock \
+  api/pyproject.toml \
+  /app/api/
 
 RUN apt update \
   && apt install --yes $pillow \
@@ -32,10 +35,8 @@ RUN apt update \
   && apt autoremove --yes
 
 COPY --parents \
-  config/ \
-  photos/ \
-  static/ \
-  manage.py \
+  api/ \
+  tasks/ \
   run.dev.sh \
   /app/
 
@@ -79,4 +80,4 @@ COPY ./config/secrets.production.toml /app/config/secrets.toml
 
 COPY --from=node /app/static/ /app/static/
 
-RUN poetry run python manage.py collectstatic --no-input --clear
+RUN poetry run python /app/api/manage.py collectstatic --no-input --clear

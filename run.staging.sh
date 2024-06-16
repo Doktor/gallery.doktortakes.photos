@@ -2,6 +2,7 @@
 
 set -e
 
+cd /app/api/
 poetry run python manage.py migrate --no-input
 poetry run python manage.py create_default_superuser
 

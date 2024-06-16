@@ -9,8 +9,8 @@ services:
       - 8000:8000
     volumes:
       - media_files:/app/media/
-      - ./photos/:/app/photos/
-      - static_volume:/app/static/
+      - ./api/photos/:/app/api/photos/
+      - static_volume:/app/api/static/
     depends_on:
       - database
     entrypoint: /app/run.dev.sh
