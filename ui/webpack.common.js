@@ -48,7 +48,7 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              prependData: `@use "sass:math";\n@import "./src/styles/_variables.scss";`,
+              additionalData: `@use "sass:math";\n@import "./src/styles/_variables.scss";`,
             },
           },
         ],
