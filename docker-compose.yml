@@ -19,7 +19,8 @@ services:
     image: photos_frontend
     build:
       context: .
-      dockerfile: ./build/webpack/Dockerfile
+      dockerfile: Dockerfile
+      target: node
     depends_on:
       - backend
     volumes:

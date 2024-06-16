@@ -54,7 +54,7 @@ WORKDIR /app/ui/
 
 COPY ui/ /app/ui/
 
-RUN npm ci
+RUN npm install
 
 
 FROM base as staging
