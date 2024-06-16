@@ -3,8 +3,8 @@ import botocore.exceptions
 import json
 import pprint
 from typing import Optional
-from .main import django_setup
-from .utils import get_image_file, get_image_filename
+
+from .utils import django_setup, get_image_file, get_image_filename
 
 
 def get_image_filename_candidate(photo: "Photo", image_type: str) -> Optional[str]:
@@ -60,7 +60,7 @@ def rename_image_files(dry_run=False, image_type=None, file='tasks/move_errors.j
             errors[old_name] = {
                 'pk': photo.pk,
                 'new_name': new_name,
-                'error': "missing old name"
+                'error': "missing archive name"
             }
             continue
 
@@ -99,7 +99,7 @@ def rename_image_files(dry_run=False, image_type=None, file='tasks/move_errors.j
         image_field.name = new_name
         photo.save()
 
-        # Delete the old file
+        # Delete the archive file
         response = bucket.delete_objects(
             Delete={
                 'Objects': [

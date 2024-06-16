@@ -35,7 +35,6 @@ COPY --parents \
   config/ \
   photos/ \
   static/ \
-  tasks/ \
   manage.py \
   run.dev.sh \
   /app/

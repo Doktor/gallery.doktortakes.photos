@@ -1,6 +1,23 @@
-from typing import Optional
-
+import django
 from django.db.models.fields.files import ImageFieldFile
+
+from typing import Optional
+import os
+import shlex
+import subprocess
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def check_output(command: str) -> str:
+    return subprocess.run(
+        shlex.split(command), stdout=subprocess.PIPE, universal_newlines=True).stdout
+
+
+def django_setup():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "photos.settings_django")
+    django.setup()
 
 
 def generate_image(photo: "Photo", image_type: str, save: bool = False) -> None:

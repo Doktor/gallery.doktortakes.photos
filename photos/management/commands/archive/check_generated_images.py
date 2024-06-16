@@ -1,26 +1,6 @@
-import django
-import os
+from photos.management.commands.archive.utils import django_setup
+
 import pprint
-import shlex
-import subprocess
-
-
-# Task parts
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def check_output(command: str) -> str:
-    return subprocess.run(
-        shlex.split(command), stdout=subprocess.PIPE, universal_newlines=True).stdout
-
-
-def django_setup():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "photos.settings_django")
-    django.setup()
-
-
-# Tasks
 
 
 def check_generated_images(file=None, fix=False):
