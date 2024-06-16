@@ -10,13 +10,13 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, "../static/"),
+    path: path.resolve(__dirname, "./static/"),
     filename: "[name].js",
   },
 
   plugins: [
     new BundleTracker({
-      path: path.resolve(__dirname, "../static/"),
+      path: path.resolve(__dirname, "./static/"),
       filename: "webpack-stats.json",
     }),
     new VueLoaderPlugin(),
