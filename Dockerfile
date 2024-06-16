@@ -1,5 +1,14 @@
 FROM python:3.12.4-slim as base
 
+# Pillow build requirements
+# https://pillow.readthedocs.io/en/stable/installation/building-from-source.html
+
+# The documentation asks for libjpeg8-dev, which isn't available on the slim image,
+# but apt suggests libjpeg62-turbo-dev, which seems to work.
+ARG pillow="libtiff5-dev libjpeg62-turbo-dev libopenjp2-7-dev zlib1g-dev \
+    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
+    libharfbuzz-dev libfribidi-dev libxcb1-dev"
+
 WORKDIR /app/
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK="on" \
@@ -7,12 +16,14 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK="on" \
   PYTHONUNBUFFERED=1 \
   POETRY_VERSION=1.6.1
 
-RUN pip install --upgrade pip
-RUN pip install "poetry==$POETRY_VERSION"
-
 # Copy requirements first to populate Docker layer cache
 COPY poetry.lock pyproject.toml /app/
-RUN poetry install --no-interaction
+
+RUN apt update \
+  && apt install --yes $pillow \
+  && pip install --no-cache-dir --upgrade pip \
+  && pip install --no-cache-dir "poetry==$POETRY_VERSION" \
+  && poetry install --no-interaction \
 
 COPY . /app/
 
