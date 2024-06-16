@@ -8,10 +8,7 @@
     "babel-loader": "^8.3.0",
     "babel-runtime": "^6.26.0",
     "css-loader": "^7.1.2",
-    "eslint": "^7.30.0",
-    "eslint-plugin-vue": "^7.12.1",
     "file-loader": "^6.2.0",
-    "prettier": "^3.3.2",
     "sass": "^1.77.5",
     "sass-loader": "^14.2.1",
     "style-loader": "^4.0.0",
@@ -27,6 +24,9 @@
     "webpack-merge": "^5.10.0"
   },
   "devDependencies": {
+    "eslint": "^7.30.0",
+    "eslint-plugin-vue": "^7.12.1",
+    "prettier": "^3.3.2",
     "webpack-bundle-analyzer": "^3.8.0"
   },
   "resolutions": {
