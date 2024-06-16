@@ -1,3 +1,5 @@
+# syntax=docker.io/docker/dockerfile:1.7-labs
+
 FROM python:3.12.4-slim as base
 
 # Pillow build requirements
@@ -29,7 +31,14 @@ RUN apt update \
   && apt remove --yes gcc python3-dev libssl-dev $pillow \
   && apt autoremove --yes
 
-COPY . /app/
+COPY --parents \
+  config/ \
+  photos/ \
+  static/ \
+  tasks/ \
+  manage.py \
+  run.dev.sh \
+  /app/
 
 RUN mkdir -p /app/logs/
 
