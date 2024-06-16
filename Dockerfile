@@ -52,13 +52,7 @@ FROM node:15.12.0 AS node
 
 WORKDIR /app/ui/
 
-COPY \
-  ui/package.json \
-  ui/package-lock.json \
-  ui/webpack.*.js \
-  /app/
-COPY ./static/ /app/static/
-COPY ./ui/src/ /app/ui/src/
+COPY ui/ /app/ui/
 
 RUN npm ci
 
@@ -68,7 +62,7 @@ FROM base as staging
 COPY ./config/config.staging.toml /app/config/config.toml
 COPY ./config/secrets.staging.toml /app/config/secrets.toml
 
-COPY --from=node /app/static/ /app/static/
+COPY --from=node /app/ui/static/ /app/ui/static/
 
 RUN chmod +x /app/run.staging.sh
 
@@ -78,6 +72,6 @@ FROM base as production
 COPY ./config/config.production.toml /app/config/config.toml
 COPY ./config/secrets.production.toml /app/config/secrets.toml
 
-COPY --from=node /app/static/ /app/static/
+COPY --from=node /app/ui/static/ /app/ui/static/
 
 RUN poetry run python /app/api/manage.py collectstatic --no-input --clear

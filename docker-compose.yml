@@ -24,7 +24,7 @@ services:
       - backend
     volumes:
       - ./ui/src/:/app/ui/src/
-      - static_volume:/app/static/
+      - static_volume:/app/ui/static/
     entrypoint: npx webpack --config webpack.dev.js
 
   database:
