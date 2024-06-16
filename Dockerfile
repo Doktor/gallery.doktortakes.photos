@@ -48,7 +48,7 @@ FROM base as backend-development
 RUN chmod +x /app/run.dev.sh
 
 
-FROM node:16.20.2 AS frontend
+FROM node:16.20.2-alpine AS frontend
 
 WORKDIR /app/ui/
 
