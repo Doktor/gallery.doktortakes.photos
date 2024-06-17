@@ -46,6 +46,7 @@
         :photos="filteredPhotos"
         :showPhotosInChildAlbums="showPhotosInChildAlbums"
         @addPhoto="addPhoto"
+        @removePhotosByHash="removePhotosByHash"
         @toggleShowPhotosInChildAlbums="toggleShowPhotosInChildAlbums"
         @setAlbum="setAlbum"
       />
@@ -134,6 +135,18 @@ export default {
   methods: {
     addPhoto(photo) {
       this.photos.push(photo);
+    },
+
+    removePhotosByHash(hashes) {
+      for (let hash of hashes) {
+        let index = this.photos.findIndex((photo) => photo.md5 === hash);
+
+        if (index === -1) {
+          continue;
+        }
+
+        this.photos.splice(index, 1);
+      }
     },
 
     setAlbum(newAlbum) {

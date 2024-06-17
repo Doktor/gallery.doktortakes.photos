@@ -182,9 +182,9 @@ export default {
       );
 
       if (ok) {
-        this.selectedPhotoHashes = [];
+        this.$emit("removePhotosByHash", [...this.selectedPhotoHashes]);
 
-        this.$emit("update");
+        this.selectedPhotoHashes = [];
       }
     },
   },
