@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div>
-      <Navlinks />
+      <Sidebar />
     </div>
 
     <FadeTransition appear :duration="200" mode="out-in">
@@ -13,14 +13,14 @@
 </template>
 
 <script>
-import Navlinks from "@/components/navlink/Navlinks";
+import Sidebar from "@/components/navlink/Sidebar";
 import Notifications from "@/components/Notifications";
 import FadeTransition from "@/transitions/FadeTransition";
 
 export default {
   components: {
     FadeTransition,
-    Navlinks,
+    Sidebar,
     Notifications,
   },
 };
