@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Sidebar from "@/components/navlink/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import Notifications from "@/components/Notifications";
 import FadeTransition from "@/transitions/FadeTransition";
 import { mapState } from "vuex";
