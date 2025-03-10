@@ -14,7 +14,7 @@ export default {
 
     isCentered: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
 
