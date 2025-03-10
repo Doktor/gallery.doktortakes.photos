@@ -138,7 +138,7 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
 
-  @include variables.secondary-headings-font();
+  @include variables.text-font();
   text-align: left;
   font-size: 1.25rem;
   line-height: 1;

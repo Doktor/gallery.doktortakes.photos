@@ -36,7 +36,7 @@ export default {
   height: 3.2rem;
   padding: 6px 12px;
 
-  @include variables.secondary-headings-font();
+  @include variables.text-font();
   color: variables.$text-color;
   font-size: 1.5rem;
   line-height: 1;
