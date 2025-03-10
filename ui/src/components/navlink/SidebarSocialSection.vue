@@ -31,7 +31,7 @@ import SidebarSection from "./SidebarSection";
 import SidebarList from "@/components/navlink/SidebarList.vue";
 
 export default {
-  name: "SidebarSocialList",
+  name: "SidebarSocialSection",
   components: {
     SidebarList,
     SidebarSection,
