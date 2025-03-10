@@ -2,20 +2,14 @@
   <nav class="sidebar">
     <SidebarHeader />
 
-    <CustomButton
-      class="sidebar-menu-button open-menu-button"
-      @click="isMenuOpen = true"
-    >
+    <SidebarMenuButton class="open-menu-button" @click="isMenuOpen = true">
       <MenuIcon class="menu-icon" /><span>Menu</span>
-    </CustomButton>
+    </SidebarMenuButton>
 
     <SidebarMenu :isOpen="isMenuOpen">
-      <CustomButton
-        class="sidebar-menu-button close-menu-button"
-        @click="isMenuOpen = false"
-      >
+      <SidebarMenuButton class="close-menu-button" @click="isMenuOpen = false">
         <span>&times; Close</span>
-      </CustomButton>
+      </SidebarMenuButton>
 
       <SidebarList class="sidebar-items">
         <!-- Main links -->
@@ -101,9 +95,11 @@ import SidebarListItem from "./SidebarListItem";
 import CustomButton from "@/components/form/CustomButton.vue";
 import SidebarMenu from "@/components/navlink/SidebarMenu.vue";
 import MenuIcon from "@/components/navlink/MenuIcon.vue";
+import SidebarMenuButton from "@/components/navlink/SidebarMenuButton.vue";
 
 export default {
   components: {
+    SidebarMenuButton,
     MenuIcon,
     SidebarMenu,
     CustomButton,
@@ -186,56 +182,6 @@ export default {
 
   .sidebar-item-log-out & {
     @include link(variables.$text-error);
-  }
-}
-
-.sidebar-menu-button {
-  background: none;
-  width: variables.$sidebar-width;
-
-  border: 1px solid black;
-  border-radius: 2px;
-  margin: 0 auto;
-  margin-bottom: variables.$sidebar-margin;
-  padding: 12px;
-
-  cursor: pointer;
-
-  @include variables.headings-font();
-  font-size: 2rem;
-  text-transform: uppercase;
-
-  &:hover {
-    background-color: rgb(230, 230, 230);
-  }
-
-  &,
-  &:hover {
-    transition: background-color 0.1s ease-in-out;
-  }
-}
-
-.open-menu-button {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
-  @media (width >= variables.$full-layout-breakpoint + 1) {
-    display: none;
-  }
-
-  .menu-icon {
-    width: 1rem;
-    height: 1rem;
-
-    margin-right: 12px;
-  }
-}
-
-.close-menu-button {
-  @media (width >= variables.$full-layout-breakpoint + 1) {
-    display: none;
   }
 }
 </style>
