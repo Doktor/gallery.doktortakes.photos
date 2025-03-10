@@ -91,14 +91,14 @@ import { mapGetters, mapState } from "vuex";
 import SidebarLink from "./SidebarLink";
 import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
-import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
+import SidebarDivider from "./SidebarDivider";
 import SidebarSocialSection from "./SidebarSocialSection";
 import SidebarList from "./SidebarList";
 import SidebarSection from "./SidebarSection";
 import SidebarListItem from "./SidebarListItem";
-import CustomButton from "@/components/form/CustomButton.vue";
-import SidebarMenu from "@/components/navlink/SidebarMenu.vue";
-import SidebarMenuButton from "@/components/navlink/SidebarMenuButton.vue";
+import CustomButton from "@/components/form/CustomButton";
+import SidebarMenu from "./SidebarMenu";
+import SidebarMenuButton from "./SidebarMenuButton";
 
 export default {
   components: {

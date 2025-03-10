@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SidebarListItem from "@/components/navlink/SidebarListItem.vue";
+import SidebarListItem from "./SidebarListItem";
 
 export default {
   name: "SidebarSocialItem",

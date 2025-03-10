@@ -37,9 +37,9 @@
 
 <script>
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
-import SidebarSocialItem from "./SidebarSocialItem.vue";
+import SidebarSocialItem from "./SidebarSocialItem";
 import SidebarSection from "./SidebarSection";
-import SidebarList from "@/components/navlink/SidebarList.vue";
+import SidebarList from "./SidebarList";
 
 export default {
   name: "SidebarSocialSection",
