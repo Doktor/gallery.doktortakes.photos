@@ -25,7 +25,7 @@ export default {
   width: 100%;
   max-width: 500px;
 
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 }
 
 .album-search-input {

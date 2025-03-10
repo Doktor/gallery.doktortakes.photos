@@ -12,14 +12,23 @@
       </ul>
     </FixedWidthContainer>
 
-    <h3 style="text-align: left">Recently uploaded photos</h3>
-    <PhotoGallery
-      routeName="editPhoto"
-      :useServerSidePagination="true"
-      :getPage="getPage"
-    />
+    <section>
+      <h3 style="text-align: left">Recently uploaded photos</h3>
 
-    <AlbumGallery :albums="albums" :loading="loading" albumRoute="editAlbum" />
+      <PhotoGallery
+        routeName="editPhoto"
+        :useServerSidePagination="true"
+        :getPage="getPage"
+      />
+    </section>
+
+    <section>
+      <AlbumGallery
+        :albums="albums"
+        :loading="loading"
+        albumRoute="editAlbum"
+      />
+    </section>
   </div>
 </template>
 
@@ -49,7 +58,7 @@ export default {
     async getPage(page, size) {
       let { ok, content } = await ManagePhotoService.getRecentPhotos(
         page,
-        size
+        size,
       );
 
       if (!ok) {

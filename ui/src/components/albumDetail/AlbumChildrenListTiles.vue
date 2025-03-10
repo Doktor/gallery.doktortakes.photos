@@ -36,6 +36,8 @@ export default {
 
 <style lang="scss">
 .album-children-tiles {
+  margin: 1rem 0;
+
   $sizes: 1, 2, 3, 4, 6, 8;
 
   @each $size in $sizes {

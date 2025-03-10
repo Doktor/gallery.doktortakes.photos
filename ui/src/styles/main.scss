@@ -68,18 +68,23 @@ h4,
 h5,
 h6 {
   @include variables.headings-font();
-  margin: 0.5rem 0;
+  margin: 0;
   text-transform: lowercase;
 }
 
-header {
-  margin-bottom: 1rem;
+h1,
+h2 {
+  margin-bottom: 2rem;
 }
 
-footer {
-  margin-top: 2rem;
+h3,
+h4 {
+  margin-bottom: 1.5rem;
+}
+
+h5,
+h6 {
   margin-bottom: 1rem;
-  color: variables.$text-color-2;
 }
 
 header,

@@ -36,7 +36,7 @@ export default {
   @media (width > (variables.$sidebar-width + variables.$album-width)) {
     display: grid;
     grid-template-columns: variables.$sidebar-width 1fr;
-    gap: variables.$page-margin;
+    gap: variables.$sidebar-margin;
   }
 }
 

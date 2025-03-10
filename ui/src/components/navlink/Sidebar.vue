@@ -111,7 +111,7 @@ export default {
     font-size: 2rem;
 
     margin: 0;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
   }
 }
 
