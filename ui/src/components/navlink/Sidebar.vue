@@ -124,28 +124,34 @@ export default {
   text-transform: lowercase;
 }
 
+@mixin link($text-color, $background-color: variables.$background-color) {
+  color: $text-color;
+  background-color: $background-color;
+
+  &:hover {
+    color: $background-color;
+    background-color: $text-color;
+  }
+}
+
 .sidebar-link {
   display: inline-block;
   padding: 6px;
 
-  color: variables.$text-color;
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
 
   transition: color, background-color;
 
-  &:hover {
-    color: variables.$background-color;
-    background-color: variables.$text-color;
-  }
+  @include link(variables.$text-color);
 
   .sidebar-item-profile & {
-    color: variables.$text-blue;
+    @include link(variables.$text-blue);
   }
 
   .sidebar-item-log-out & {
-    color: variables.$text-error;
+    @include link(variables.$text-error);
   }
 }
 </style>
