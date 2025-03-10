@@ -3,12 +3,6 @@
     <NavHeader />
 
     <ul class="nav-items">
-      <li class="nav-section">
-        <h2>
-          <a href="https://doktortakes.photos/about/">About</a>
-        </h2>
-      </li>
-
       <!-- Main links -->
       <li class="nav-section">
         <h2>Albums</h2>
@@ -56,6 +50,15 @@
       </li>
       <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
 
+      <SidebarDivider />
+
+      <!-- About -->
+      <li class="nav-section">
+        <h2>
+          <a href="https://doktortakes.photos/about/">About</a>
+        </h2>
+      </li>
+
       <!-- Social media links -->
       <li class="nav-section">
         <h2>Links</h2>
@@ -80,6 +83,8 @@
           </NavlinkSocial>
         </div>
       </li>
+
+      <SidebarDivider />
     </ul>
 
     <NavFooter />
@@ -93,9 +98,11 @@ import NavlinkSocial from "./NavlinkSocial";
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import NavHeader from "./NavHeader.vue";
 import NavFooter from "@/components/navlink/NavFooter.vue";
+import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
 
 export default {
   components: {
+    SidebarDivider,
     NavFooter,
     NavHeader,
     FontAwesomeCircleIcon,
