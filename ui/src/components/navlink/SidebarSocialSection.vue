@@ -10,6 +10,10 @@
         <i class="fas fa-info-circle"></i>
       </SidebarSocialItem>
 
+      <SidebarSocialItem href="mailto:doktorthehusky@gmail.com" title="Email">
+        <FontAwesomeCircleIcon iconClass="fas fa-envelope" />
+      </SidebarSocialItem>
+
       <!-- Twitter -->
       <SidebarSocialItem
         href="https://twitter.com/DoktorTheHusky"
