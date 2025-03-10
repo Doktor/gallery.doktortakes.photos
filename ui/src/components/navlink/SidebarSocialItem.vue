@@ -1,33 +1,33 @@
 <template>
-  <div class="nav-item-social">
+  <div class="sidebar-social-item">
     <a
-      class="sidebar-link nav-item-fa-wrapper"
+      class="sidebar-link sidebar-social-item-fa-wrapper"
       target="blank"
       rel="noopener noreferrer"
       v-bind="$attrs"
     >
       <slot></slot>
-      <span class="nav-link-title">{{ $attrs.title }}</span>
+      <span class="sidebar-social-item-title">{{ $attrs.title }}</span>
     </a>
   </div>
 </template>
 
 <script>
 export default {
-  name: "NavlinkSocial",
+  name: "SidebarSocialItem",
   inheritAttrs: false,
 };
 </script>
 
 <style lang="scss" scoped>
-.nav-item-social {
+.sidebar-social-item {
   a {
     text-decoration: none !important;
     padding: 6px;
   }
 }
 
-.nav-item-fa-wrapper {
+.sidebar-social-item-fa-wrapper {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -37,7 +37,7 @@ export default {
   }
 }
 
-.nav-link-title {
+.sidebar-social-item-title {
   font-size: 1.2rem;
   font-weight: 400;
   line-height: 1;

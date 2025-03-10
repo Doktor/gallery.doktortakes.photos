@@ -2,28 +2,31 @@
   <SidebarSection>
     <h2>Links</h2>
 
-    <div class="nav-socials">
+    <div>
       <!-- Twitter -->
-      <NavlinkSocial href="https://twitter.com/DoktorTheHusky" title="Twitter">
+      <SidebarSocialItem
+        href="https://twitter.com/DoktorTheHusky"
+        title="Twitter"
+      >
         <FontAwesomeCircleIcon iconClass="fab fa-twitter" />
-      </NavlinkSocial>
+      </SidebarSocialItem>
 
       <!-- Telegram -->
-      <NavlinkSocial href="https://t.me/DoktorTakesPhotos" title="Telegram">
+      <SidebarSocialItem href="https://t.me/DoktorTakesPhotos" title="Telegram">
         <i class="fab fa-telegram"></i>
-      </NavlinkSocial>
+      </SidebarSocialItem>
 
       <!-- Website -->
-      <NavlinkSocial href="https://doktorthehusky.com" title="Website">
+      <SidebarSocialItem href="https://doktorthehusky.com" title="Website">
         <i class="fas fa-globe-americas"></i>
-      </NavlinkSocial>
+      </SidebarSocialItem>
     </div>
   </SidebarSection>
 </template>
 
 <script>
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
-import NavlinkSocial from "./NavlinkSocial";
+import SidebarSocialItem from "./SidebarSocialItem.vue";
 import SidebarSection from "./SidebarSection";
 
 export default {
@@ -31,7 +34,7 @@ export default {
   components: {
     SidebarSection,
     FontAwesomeCircleIcon,
-    NavlinkSocial,
+    SidebarSocialItem,
   },
 };
 </script>
