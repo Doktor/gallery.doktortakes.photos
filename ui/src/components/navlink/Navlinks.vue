@@ -81,6 +81,17 @@
       </li>
       <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
     </ul>
+
+    <footer class="nav-footer">
+      <div v-if="tagline" class="nav-tagline">
+        "<span v-html="tagline"></span>"
+      </div>
+
+      <div>
+        website & photos
+        <router-link :to="{ name: 'copyright' }">&copy; Doktor</router-link>
+      </div>
+    </footer>
   </nav>
 </template>
 
@@ -92,6 +103,7 @@ import NavlinkSocial from "./NavlinkSocial";
 import NavlinkMenu from "./NavlinkMenu";
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import NavlinksHeader from "./NavlinksHeader";
+import { TaglineService } from "@/services/TaglineService";
 
 export default {
   components: {
@@ -105,6 +117,16 @@ export default {
   computed: {
     ...mapGetters(["isAuthenticated", "isStaff"]),
     ...mapState(["showNav", "user"]),
+  },
+
+  data() {
+    return {
+      tagline: "",
+    };
+  },
+
+  async created() {
+    this.tagline = await TaglineService.getTagline();
   },
 };
 </script>
@@ -192,5 +214,15 @@ ul {
   .nav-item-log-out & {
     color: variables.$text-error;
   }
+}
+
+.nav-tagline {
+  @include variables.headings-font();
+  color: variables.$text-color;
+  //font-size: 1.6rem;
+  font-weight: 400;
+
+  margin: 1rem 0;
+  width: 100%;
 }
 </style>
