@@ -2,14 +2,18 @@
   <nav class="sidebar">
     <SidebarHeader />
 
-    <SidebarMenuButton class="open-menu-button" @click="isMenuOpen = true">
-      <MenuIcon class="menu-icon" /><span>Menu</span>
-    </SidebarMenuButton>
+    <SidebarMenuButton
+      @click="isMenuOpen = true"
+      iconClass="fas fa-caret-square-down"
+      title="Menu"
+    />
 
     <SidebarMenu :isOpen="isMenuOpen">
-      <SidebarMenuButton class="close-menu-button" @click="isMenuOpen = false">
-        <span>&times; Close</span>
-      </SidebarMenuButton>
+      <SidebarMenuButton
+        @click="isMenuOpen = false"
+        iconClass="fas fa-times"
+        title="Close"
+      />
 
       <SidebarList class="sidebar-items">
         <!-- Main links -->
@@ -94,13 +98,11 @@ import SidebarSection from "./SidebarSection";
 import SidebarListItem from "./SidebarListItem";
 import CustomButton from "@/components/form/CustomButton.vue";
 import SidebarMenu from "@/components/navlink/SidebarMenu.vue";
-import MenuIcon from "@/components/navlink/MenuIcon.vue";
 import SidebarMenuButton from "@/components/navlink/SidebarMenuButton.vue";
 
 export default {
   components: {
     SidebarMenuButton,
-    MenuIcon,
     SidebarMenu,
     CustomButton,
     SidebarListItem,

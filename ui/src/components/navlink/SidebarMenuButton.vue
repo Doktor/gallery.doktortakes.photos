@@ -1,6 +1,11 @@
 <template>
-  <CustomButton class="sidebar-menu-button" @click="$emit('click')">
-    <slot></slot>
+  <CustomButton
+    class="sidebar-menu-button"
+    @click="$emit('click')"
+    :title="title"
+  >
+    <i :class="iconClass"></i>
+    <span>{{ title }}</span>
   </CustomButton>
 </template>
 
@@ -11,12 +16,27 @@ export default {
   components: {
     CustomButton,
   },
+
+  props: {
+    iconClass: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .sidebar-menu-button {
-  background: none;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
   width: variables.$sidebar-width;
 
   border: 1px solid black;
@@ -25,41 +45,26 @@ export default {
   margin-bottom: variables.$sidebar-margin;
   padding: 12px;
 
-  cursor: pointer;
-
   @include variables.headings-font();
   font-size: 2rem;
   text-transform: uppercase;
 
+  cursor: pointer;
+  transition: none !important;
+
+  color: variables.$text-color;
+  background-color: variables.$background-color;
+
   &:hover {
-    background-color: rgb(230, 230, 230);
+    color: variables.$background-color;
+    background-color: variables.$text-color;
   }
 
-  &,
-  &:hover {
-    transition: background-color 0.1s ease-in-out;
-  }
-}
-
-.open-menu-button {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
-  @media (width >= variables.$full-layout-breakpoint + 1) {
-    display: none;
-  }
-
-  .menu-icon {
-    width: 1rem;
-    height: 1rem;
-
+  i {
+    font-size: 1.6rem;
     margin-right: 12px;
   }
-}
 
-.close-menu-button {
   @media (width >= variables.$full-layout-breakpoint + 1) {
     display: none;
   }
