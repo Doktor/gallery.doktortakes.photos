@@ -1,8 +1,8 @@
 <template>
-  <li class="nav-section">
+  <header class="nav-header">
     <h1 class="nav-logo">
       <router-link
-        class="nav-item-link"
+        class="nav-logo-link"
         title="Doktor Takes Photos"
         :to="{ name: 'index' }"
       >
@@ -11,16 +11,20 @@
         <div>Photos</div>
       </router-link>
     </h1>
-  </li>
+  </header>
 </template>
 
 <script>
 export default {
-  name: "NavlinksLogo",
+  name: "NavlinksHeader",
 };
 </script>
 
 <style lang="scss" scoped>
+.nav-header {
+  margin-bottom: variables.$sidebar-margin;
+}
+
 .nav-logo {
   @include variables.logo-font();
   line-height: 1;
@@ -35,10 +39,10 @@ export default {
     text-align: left;
     font-size: 3.5rem;
   }
+}
 
-  .nav-item-link {
-    color: variables.$text-blue;
-    text-decoration: none;
-  }
+.nav-logo-link {
+  color: variables.$text-blue;
+  text-decoration: none;
 }
 </style>

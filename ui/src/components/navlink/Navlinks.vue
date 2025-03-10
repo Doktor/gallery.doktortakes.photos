@@ -1,8 +1,8 @@
 <template>
   <nav v-if="showNav" class="nav">
-    <ul class="nav-items">
-      <NavlinksLogo />
+    <NavlinksHeader />
 
+    <ul class="nav-items">
       <li class="nav-section">
         <h2>
           <a href="https://doktortakes.photos/about/">About</a>
@@ -89,15 +89,15 @@ import { mapGetters, mapState } from "vuex";
 import Navlink from "./Navlink";
 import NavlinkDivider from "./NavlinkDivider";
 import NavlinkSocial from "./NavlinkSocial";
-import NavlinksLogo from "./NavlinksLogo";
 import NavlinkMenu from "./NavlinkMenu";
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
+import NavlinksHeader from "./NavlinksHeader";
 
 export default {
   components: {
+    NavlinksHeader,
     FontAwesomeCircleIcon,
     NavlinkMenu,
-    NavlinksLogo,
     NavlinkSocial,
     NavlinkDivider,
     Navlink,
