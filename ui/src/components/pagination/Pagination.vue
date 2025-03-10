@@ -138,11 +138,9 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
 
-  @include variables.text-font();
-  text-align: left;
+  @include variables.headings-font();
   font-size: 1.25rem;
   line-height: 1;
-  letter-spacing: unset;
 
   // Prevent selection
   -webkit-touch-callout: none;
