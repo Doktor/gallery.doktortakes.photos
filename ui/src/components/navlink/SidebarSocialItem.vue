@@ -29,7 +29,7 @@ export default {
   display: inline-grid !important;
   justify-content: start;
   align-items: center;
-  grid-template-columns: 24px 1fr;
+  grid-template-columns: variables.$sidebar-icon-size 1fr;
   gap: 8px;
 
   text-decoration: none !important;

@@ -27,8 +27,8 @@ export default {
   background-color: variables.$text-color;
 
   // Background: circle
-  width: 24px;
-  height: 24px;
+  width: variables.$sidebar-icon-size;
+  height: variables.$sidebar-icon-size;
   border-radius: 100%;
 
   // Foreground: icon
