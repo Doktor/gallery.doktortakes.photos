@@ -7,10 +7,6 @@
 <style lang="scss">
 .tiles {
   display: grid;
-
-  column-gap: variables.$item-spacing;
-  row-gap: variables.$item-spacing;
-
-  margin: variables.$item-spacing 0;
+  gap: variables.$item-spacing;
 }
 </style>
