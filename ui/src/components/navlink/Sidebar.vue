@@ -2,12 +2,12 @@
   <nav v-if="showNavigation" class="nav">
     <SidebarHeader />
 
-    <ul class="nav-items">
+    <SidebarList class="nav-items">
       <!-- Main links -->
       <li class="nav-section">
         <h2>Albums</h2>
 
-        <ul>
+        <SidebarList>
           <Navlink title="All albums" route="index" />
           <Navlink
             v-if="user.status !== 'anonymous'"
@@ -18,35 +18,35 @@
           <!-- <Navlink title="Taxonomy" route="taxa" />-->
           <!-- <Navlink title="Species" route="species" />-->
           <Navlink title="Search" route="search" />
-        </ul>
+        </SidebarList>
       </li>
 
       <!-- Content management -->
       <li v-if="isStaff" class="nav-section">
         <h2>Manage</h2>
 
-        <ul>
+        <SidebarList>
           <Navlink title="Dashboard" route="manage" />
           <li class="nav-item">
             <a class="nav-item-link" href="/admin/">Admin</a>
           </li>
           <Navlink title="Groups" route="groups" />
           <Navlink title="Users" route="users" />
-        </ul>
+        </SidebarList>
       </li>
 
       <!-- User management -->
       <li v-if="isAuthenticated" class="nav-section">
         <h2>User</h2>
 
-        <ul>
+        <SidebarList>
           <Navlink
             class="nav-item-profile"
             title="Profile"
             :to="{ name: 'user', params: { slug: user.name } }"
           />
           <Navlink class="nav-item-log-out" title="Log out" route="logOut" />
-        </ul>
+        </SidebarList>
       </li>
       <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
 
@@ -62,7 +62,7 @@
       <SidebarSocials />
 
       <SidebarDivider />
-    </ul>
+    </SidebarList>
 
     <SidebarFooter />
   </nav>
@@ -75,9 +75,11 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
 import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
+import SidebarList from "./SidebarList";
 
 export default {
   components: {
+    SidebarList,
     SidebarSocials,
     SidebarDivider,
     SidebarFooter,
@@ -92,11 +94,6 @@ export default {
 </script>
 
 <style lang="scss">
-ul {
-  margin: 0;
-  padding: 0;
-}
-
 .nav {
   margin: 0;
   padding: 0;
@@ -118,14 +115,6 @@ ul {
   @include variables.headings-font();
   font-size: variables.$nav-font-size;
   text-transform: lowercase;
-
-  padding: 0;
-  margin: 0;
-
-  &,
-  ul {
-    list-style-type: none;
-  }
 
   a,
   h2 a {
