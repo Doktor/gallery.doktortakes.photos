@@ -34,7 +34,10 @@ def get_album_and_children(request: Request, path: str) -> Tuple[Album, List[Alb
 
     children = [
         c for c
-        in album.children.select_related('cover').prefetch_related('cover__thumbnails')
+        in (album.children.
+            select_related('cover').
+            prefetch_related('cover__thumbnails').
+            order_by('start', 'name'))
         if c.check_access(request)
     ]
 
