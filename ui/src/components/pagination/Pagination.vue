@@ -1,5 +1,5 @@
 <template>
-  <div class="pagination">
+  <section class="pagination">
     <div class="pagination-controls">
       <div class="item" @click="selectPreviousPage">Prev</div>
 
@@ -39,7 +39,7 @@
         <span class="item-text">{{ count }}</span>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -143,8 +143,6 @@ export default {
   font-size: 1.25rem;
   line-height: 1;
   letter-spacing: unset;
-
-  margin: 0;
 
   // Prevent selection
   -webkit-touch-callout: none;
