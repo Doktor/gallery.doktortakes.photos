@@ -30,7 +30,7 @@ import SidebarSocialItem from "./SidebarSocialItem.vue";
 import SidebarSection from "./SidebarSection";
 
 export default {
-  name: "SidebarSocials",
+  name: "SidebarSocialList",
   components: {
     SidebarSection,
     FontAwesomeCircleIcon,

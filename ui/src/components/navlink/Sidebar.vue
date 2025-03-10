@@ -65,7 +65,7 @@
         </h2>
       </SidebarSection>
 
-      <SidebarSocials />
+      <SidebarSocialList />
 
       <SidebarDivider />
     </SidebarList>
@@ -80,7 +80,7 @@ import Navlink from "./Navlink";
 import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
-import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
+import SidebarSocialList from "./SidebarSocialList";
 import SidebarList from "./SidebarList";
 import SidebarSection from "./SidebarSection";
 import SidebarListItem from "./SidebarListItem";
@@ -90,7 +90,7 @@ export default {
     SidebarListItem,
     SidebarSection,
     SidebarList,
-    SidebarSocials,
+    SidebarSocialList,
     SidebarDivider,
     SidebarFooter,
     SidebarHeader,
