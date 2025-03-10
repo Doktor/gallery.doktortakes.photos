@@ -2,6 +2,15 @@
   <section>
     <AlbumListViewSelector v-if="isStaff" />
 
+    <Pagination
+      :itemsPerPage="albumsPerPage"
+      :itemsPerPageChoices="itemsPerPageChoices"
+      @setPage="setPage"
+      @setItemsPerPage="setAlbumsPerPage"
+      :page="page"
+      :pages="pages"
+    />
+
     <component
       :is="albumListComponent"
       :class="classes"
