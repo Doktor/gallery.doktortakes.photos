@@ -4,7 +4,7 @@
 
     <SidebarList class="nav-items">
       <!-- Main links -->
-      <li class="nav-section">
+      <SidebarSection>
         <h2>Albums</h2>
 
         <SidebarList>
@@ -19,10 +19,10 @@
           <!-- <Navlink title="Species" route="species" />-->
           <Navlink title="Search" route="search" />
         </SidebarList>
-      </li>
+      </SidebarSection>
 
       <!-- Content management -->
-      <li v-if="isStaff" class="nav-section">
+      <SidebarSection v-if="isStaff">
         <h2>Manage</h2>
 
         <SidebarList>
@@ -33,10 +33,10 @@
           <Navlink title="Groups" route="groups" />
           <Navlink title="Users" route="users" />
         </SidebarList>
-      </li>
+      </SidebarSection>
 
       <!-- User management -->
-      <li v-if="isAuthenticated" class="nav-section">
+      <SidebarSection v-if="isAuthenticated">
         <h2>User</h2>
 
         <SidebarList>
@@ -47,17 +47,17 @@
           />
           <Navlink class="nav-item-log-out" title="Log out" route="logOut" />
         </SidebarList>
-      </li>
+      </SidebarSection>
       <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
 
       <SidebarDivider />
 
       <!-- About -->
-      <li class="nav-section">
+      <SidebarSection>
         <h2>
           <a href="https://doktortakes.photos/about/">About</a>
         </h2>
-      </li>
+      </SidebarSection>
 
       <SidebarSocials />
 
@@ -76,9 +76,11 @@ import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
 import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
 import SidebarList from "./SidebarList";
+import SidebarSection from "./SidebarSection";
 
 export default {
   components: {
+    SidebarSection,
     SidebarList,
     SidebarSocials,
     SidebarDivider,
@@ -134,10 +136,6 @@ export default {
     color: variables.$background-color;
     background-color: variables.$text-color;
   }
-}
-
-.nav-section {
-  margin-bottom: 40px;
 }
 
 .nav-item {

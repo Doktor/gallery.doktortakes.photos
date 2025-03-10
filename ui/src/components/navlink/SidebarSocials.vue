@@ -1,5 +1,5 @@
 <template>
-  <li class="nav-section">
+  <SidebarSection>
     <h2>Links</h2>
 
     <div class="nav-socials">
@@ -18,16 +18,18 @@
         <i class="fas fa-globe-americas"></i>
       </NavlinkSocial>
     </div>
-  </li>
+  </SidebarSection>
 </template>
 
 <script>
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import NavlinkSocial from "./NavlinkSocial";
+import SidebarSection from "./SidebarSection";
 
 export default {
   name: "SidebarSocials",
   components: {
+    SidebarSection,
     FontAwesomeCircleIcon,
     NavlinkSocial,
   },
