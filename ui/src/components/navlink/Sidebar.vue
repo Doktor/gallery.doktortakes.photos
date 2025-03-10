@@ -185,9 +185,9 @@ ul {
 
   &::before {
     content: "-";
-    color: variables.$text-color-2;
+    color: variables.$text-color;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 400;
 
     margin-right: 2px;
   }
