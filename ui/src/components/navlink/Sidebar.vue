@@ -56,15 +56,6 @@
 
       <SidebarDivider />
 
-      <!-- About -->
-      <SidebarSection>
-        <h2>
-          <a class="sidebar-link" href="https://doktortakes.photos/about/"
-            >About</a
-          >
-        </h2>
-      </SidebarSection>
-
       <SidebarSocialSection />
 
       <SidebarDivider />
@@ -139,10 +130,6 @@ export default {
   padding: variables.$sidebar-link-margin;
   padding-left: variables.$sidebar-link-margin * 3;
   width: 100%;
-
-  h2 & {
-    margin-left: variables.$sidebar-link-margin * -3;
-  }
 
   text-decoration-line: underline;
   text-decoration-thickness: 1px;

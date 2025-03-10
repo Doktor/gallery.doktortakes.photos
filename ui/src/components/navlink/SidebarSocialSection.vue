@@ -3,6 +3,13 @@
     <h2>Links</h2>
 
     <SidebarList>
+      <SidebarSocialItem
+        href="https://doktortakes.photos/about/"
+        title="About me"
+      >
+        <i class="fas fa-info-circle"></i>
+      </SidebarSocialItem>
+
       <!-- Twitter -->
       <SidebarSocialItem
         href="https://twitter.com/DoktorTheHusky"
