@@ -142,9 +142,6 @@ export default {
 
   h2 {
     font-size: 2rem;
-
-    margin: 0;
-    margin-bottom: 16px;
   }
 }
 

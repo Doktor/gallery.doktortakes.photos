@@ -67,22 +67,8 @@ h5,
 h6 {
   @include variables.headings-font();
   margin: 0;
-  text-transform: lowercase;
-}
-
-h1,
-h2 {
-  margin-bottom: 2rem;
-}
-
-h3,
-h4 {
-  margin-bottom: 1.5rem;
-}
-
-h5,
-h6 {
   margin-bottom: 1rem;
+  text-transform: lowercase;
 }
 
 header,
