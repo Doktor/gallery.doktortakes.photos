@@ -43,7 +43,7 @@ export default {
 }
 
 .nav-index .nav-item-link {
-  color: $background-color;
+  color: variables.$background-color;
   line-height: 1;
 
   &:hover {
@@ -51,7 +51,7 @@ export default {
   }
 
   @media (min-width: 901px) {
-    font-size: $nav-font-size-index;
+    font-size: variables.$nav-font-size-index;
   }
 }
 </style>

@@ -28,8 +28,8 @@ export default {
   height: 24px;
   border-radius: 100%;
 
-  color: $background-color;
-  background-color: $text-color;
+  color: variables.$background-color;
+  background-color: variables.$text-color;
 
   // Foreground: icon
   i {

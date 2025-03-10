@@ -188,7 +188,7 @@ h3 {
 
   img {
     width: 100%;
-    background-color: $background-color-2;
+    background-color: variables.$background-color-2;
   }
 }
 

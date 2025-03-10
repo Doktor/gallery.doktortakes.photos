@@ -123,7 +123,7 @@ $fadeTime: 0.2s;
   width: 50px;
   height: 50px;
 
-  border: 1px solid $text-color;
+  border: 1px solid variables.$text-color;
   margin: 0 4px;
 
   cursor: pointer;

@@ -198,7 +198,7 @@ h3 {
 }
 
 .photo-hash {
-  @include text-font();
+  @include variables.text-font();
 }
 
 .photo-details {

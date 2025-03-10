@@ -29,20 +29,20 @@ export default {
 }
 
 .album-search-input {
-  background-color: $background-color;
-  border: 1px solid $background-color-3;
+  background-color: variables.$background-color;
+  border: 1px solid variables.$background-color-3;
   border-radius: 0;
 
   height: 3.2rem;
   padding: 6px 12px;
 
-  @include secondary-headings-font();
-  color: $text-color;
+  @include variables.secondary-headings-font();
+  color: variables.$text-color;
   font-size: 1.5rem;
   line-height: 1;
 
   &::placeholder {
-    color: $text-color-2;
+    color: variables.$text-color-2;
   }
 }
 </style>

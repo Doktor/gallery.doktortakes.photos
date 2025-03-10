@@ -59,18 +59,18 @@ export default {
 
   th {
     padding: 12px 6px;
-    background-color: $text-blue;
+    background-color: variables.$text-blue;
     color: white;
     text-align: center;
   }
 
   tr {
     &:nth-child(odd) {
-      background-color: $background-color-2;
+      background-color: variables.$background-color-2;
     }
 
     &:nth-child(even) {
-      background-color: $background-color-3;
+      background-color: variables.$background-color-3;
     }
   }
 

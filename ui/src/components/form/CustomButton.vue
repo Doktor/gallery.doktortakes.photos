@@ -34,10 +34,10 @@
   text-align: center;
 
   // Default
-  @include button($background-color-3, $text-color);
+  @include button(variables.$background-color-3, variables.$text-color);
 
   &.button-primary {
-    @include button($text-blue, $background-color);
+    @include button(variables.$text-blue, variables.$background-color);
   }
 
   &.button-danger {

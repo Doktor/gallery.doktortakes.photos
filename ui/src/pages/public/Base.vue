@@ -58,8 +58,8 @@ export default {
 }
 
 .tagline {
-  @include headings-font();
-  color: $text-color;
+  @include variables.headings-font();
+  color: variables.$text-color;
   font-size: 1.6rem;
   font-weight: 400;
 

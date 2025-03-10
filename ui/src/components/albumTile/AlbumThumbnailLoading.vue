@@ -19,7 +19,7 @@ export default {
 
 <style lang="scss" scoped>
 .album-thumbnail-loading {
-  border: 1px solid $background-color-2;
+  border: 1px solid variables.$background-color-2;
   position: relative;
 }
 
@@ -31,7 +31,7 @@ export default {
   transform: translateX(-50%) translateY(-50%);
 
   i {
-    color: $text-color-2;
+    color: variables.$text-color-2;
   }
 }
 </style>

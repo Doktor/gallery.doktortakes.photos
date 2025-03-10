@@ -12,11 +12,11 @@ export default {
 .nav-divider {
   display: none;
 
-  @include secondary-headings-font();
-  color: $text-color-2;
+  @include variables.secondary-headings-font();
+  color: variables.$text-color-2;
   font-style: normal;
 
-  margin: 0 math.div($nav-item-spacing, 3);
+  margin: 0 math.div(variables.$nav-item-spacing, 3);
   margin-bottom: 1rem;
 
   &::before {

@@ -52,8 +52,8 @@ export default {
 
 <style lang="scss">
 .notification {
-  border: 1px solid $text-color;
-  color: $text-color;
+  border: 1px solid variables.$text-color;
+  color: variables.$text-color;
   padding: 8px 16px;
 
   cursor: pointer;
@@ -74,7 +74,7 @@ export default {
   }
 
   &.default {
-    $color: $background-color-2;
+    $color: variables.$background-color-2;
 
     background-color: $color;
     border-color: darken($color, 20%);

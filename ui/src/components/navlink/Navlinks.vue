@@ -119,8 +119,8 @@ export default {
   align-items: center;
   flex-wrap: wrap;
 
-  @include headings-font();
-  font-size: $nav-font-size;
+  @include variables.headings-font();
+  font-size: variables.$nav-font-size;
   text-transform: lowercase;
 
   padding: 0;
@@ -138,11 +138,11 @@ export default {
 .nav-item {
   display: block;
 
-  margin: 0 math.div($nav-item-spacing, 2);
+  margin: 0 math.div(variables.$nav-item-spacing, 2);
   margin-bottom: 1rem;
 
   @media (min-width: 901px) {
-    line-height: $nav-logo-size * 1.15;
+    line-height: variables.$nav-logo-size * 1.15;
   }
 }
 
@@ -160,14 +160,14 @@ export default {
 }
 
 .nav-item-link {
-  color: $text-color;
+  color: variables.$text-color;
 
   .nav-item-profile & {
-    color: $text-blue;
+    color: variables.$text-blue;
   }
 
   .nav-item-log-out & {
-    color: $text-error;
+    color: variables.$text-error;
   }
 }
 </style>

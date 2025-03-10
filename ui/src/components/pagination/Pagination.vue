@@ -138,7 +138,7 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
 
-  @include secondary-headings-font();
+  @include variables.secondary-headings-font();
   text-align: left;
   font-size: 1.25rem;
   line-height: 1;
@@ -174,18 +174,18 @@ export default {
 .item {
   display: inline-block;
 
-  background-color: $background-color-2;
-  border: 1px solid $background-color-4;
+  background-color: variables.$background-color-2;
+  border: 1px solid variables.$background-color-4;
   border-right: 0;
   padding: 8px 12px;
 
   &:last-child {
-    border-right: 1px solid $background-color-4;
+    border-right: 1px solid variables.$background-color-4;
   }
 
   &:not(.item-label) {
     &:hover {
-      background-color: $background-color-4;
+      background-color: variables.$background-color-4;
     }
 
     &,
@@ -199,12 +199,12 @@ export default {
 
     &.selected,
     &.selected:hover {
-      background-color: $text-blue;
-      border-color: darken($text-blue, 10%);
+      background-color: variables.$text-blue;
+      border-color: darken(variables.$text-blue, 10%);
 
       & + .item {
         border-left: 0;
-        box-shadow: -1px 0 0 darken($text-blue, 10%);
+        box-shadow: -1px 0 0 darken(variables.$text-blue, 10%);
       }
     }
   }
@@ -212,7 +212,7 @@ export default {
 
 .item-text,
 .item-icon {
-  color: $text-color;
+  color: variables.$text-color;
   line-height: 1;
 }
 
@@ -230,7 +230,7 @@ export default {
 
   &,
   &:hover {
-    background-color: $background-color-2;
+    background-color: variables.$background-color-2;
   }
 }
 </style>

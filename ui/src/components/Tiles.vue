@@ -8,9 +8,9 @@
 .tiles {
   display: grid;
 
-  column-gap: $item-spacing;
-  row-gap: $item-spacing;
+  column-gap: variables.$item-spacing;
+  row-gap: variables.$item-spacing;
 
-  margin: $item-spacing 0;
+  margin: variables.$item-spacing 0;
 }
 </style>

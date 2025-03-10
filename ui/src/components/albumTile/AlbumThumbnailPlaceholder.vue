@@ -24,7 +24,7 @@ export default {
 
 <style lang="scss">
 .album-thumbnail-placeholder {
-  background: $background-color-2;
-  border: 1px solid $background-color-2;
+  background: variables.$background-color-2;
+  border: 1px solid variables.$background-color-2;
 }
 </style>

@@ -112,7 +112,7 @@ export default {
   $sizes: 1, 2, 3, 4, 6, 8;
 
   @each $size in $sizes {
-    @media (min-width: $photo-width * $size) {
+    @media (min-width: variables.$photo-width * $size) {
       grid-template-columns: repeat($size, 1fr);
     }
   }

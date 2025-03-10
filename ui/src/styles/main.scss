@@ -1,5 +1,5 @@
 @use "sass:math";
-@import "variables";
+@use "variables";
 
 // Top-level elements
 
@@ -11,7 +11,7 @@
 
 *::selection,
 *::-moz-selection {
-  background-color: $text-blue;
+  background-color: variables.$text-blue;
 }
 
 html {
@@ -20,14 +20,14 @@ html {
 }
 
 body {
-  @include text-font();
-  color: $text-color;
+  @include variables.text-font();
+  color: variables.$text-color;
   font-size: 1.4rem;
   line-height: 1.5;
   text-align: center;
 
   margin: 0 auto;
-  background-color: $background-color;
+  background-color: variables.$background-color;
 
   width: 90%;
   max-width: 90%;
@@ -75,7 +75,7 @@ h3,
 h4,
 h5,
 h6 {
-  @include headings-font();
+  @include variables.headings-font();
   margin: 0.5rem 0;
   text-transform: lowercase;
 }
@@ -87,7 +87,7 @@ header {
 footer {
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: $text-color-2;
+  color: variables.$text-color-2;
 }
 
 header,
@@ -98,7 +98,7 @@ footer {
 // Other elements
 
 a {
-  color: $text-blue;
+  color: variables.$text-blue;
   text-decoration: none;
 
   &:hover {
@@ -158,7 +158,7 @@ table {
 }
 
 thead {
-  background-color: $background-color-3;
+  background-color: variables.$background-color-3;
   text-align: center;
 }
 
@@ -172,7 +172,7 @@ td {
 }
 
 tr:nth-child(even) {
-  background-color: $background-color-2;
+  background-color: variables.$background-color-2;
 }
 
 /* Generic classes */
@@ -182,7 +182,7 @@ tr:nth-child(even) {
 }
 
 .note {
-  color: $text-color-2;
+  color: variables.$text-color-2;
   font-style: italic;
 }
 

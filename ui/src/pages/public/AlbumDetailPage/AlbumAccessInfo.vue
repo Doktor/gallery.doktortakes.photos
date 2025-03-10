@@ -89,7 +89,7 @@ export default {
   user-select: none;
 
   &::before {
-    color: $text-color;
+    color: variables.$text-color;
     content: "\00a0\00b7\00a0"; // nbsp, middle dot, nbsp
   }
 }

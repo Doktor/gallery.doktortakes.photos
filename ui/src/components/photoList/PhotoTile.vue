@@ -116,7 +116,7 @@ export default {
   }
 
   .photo-selected & {
-    border-color: $text-blue;
+    border-color: variables.$text-blue;
   }
 
   &:hover,
@@ -161,8 +161,8 @@ $checkbox-size: 1.6rem;
   cursor: pointer;
 
   &:checked {
-    background-color: $text-blue;
-    border: 1px solid darken($text-blue, 10%);
+    background-color: variables.$text-blue;
+    border: 1px solid darken(variables.$text-blue, 10%);
 
     cursor: pointer;
   }

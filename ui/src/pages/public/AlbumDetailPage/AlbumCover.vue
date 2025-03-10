@@ -61,7 +61,7 @@ export default {
 
   &.is-empty,
   &.is-skeleton {
-    border: 1px solid $background-color-2;
+    border: 1px solid variables.$background-color-2;
   }
 }
 </style>

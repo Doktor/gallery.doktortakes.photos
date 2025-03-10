@@ -66,7 +66,7 @@ export default {
   padding: 4px 12px;
   border-radius: 2px;
 
-  @include headings-font();
+  @include variables.headings-font();
   font-weight: 400 !important;
 }
 </style>

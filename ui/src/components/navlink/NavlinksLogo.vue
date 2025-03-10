@@ -21,15 +21,15 @@ export default {
 <style lang="scss" scoped>
 .nav-logo {
   .nav-item-link {
-    @include logo-font();
+    @include variables.logo-font();
 
-    color: $text-blue;
-    font-size: $nav-logo-size;
+    color: variables.$text-blue;
+    font-size: variables.$nav-logo-size;
     line-height: 1;
     text-align: center;
 
     @media (min-width: 901px) {
-      font-size: $nav-logo-size * 1.15;
+      font-size: variables.$nav-logo-size * 1.15;
     }
   }
 

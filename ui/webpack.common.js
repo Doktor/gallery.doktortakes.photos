@@ -47,7 +47,7 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              additionalData: `@use "sass:math";\n@import "./src/styles/_variables.scss";`,
+              additionalData: `@use "sass:math";\n@use "./src/styles/_variables.scss" as variables;`,
             },
           },
         ],

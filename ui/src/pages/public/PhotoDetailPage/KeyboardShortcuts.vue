@@ -50,12 +50,12 @@ dt {
 }
 
 kbd {
-  border: 2px solid $background-color-5;
+  border: 2px solid variables.$background-color-5;
   border-radius: 3px;
   padding: 0 5px;
 
-  background-color: $background-color-3;
-  color: $text-color;
+  background-color: variables.$background-color-3;
+  color: variables.$text-color;
 
   font-family: "Consolas", monospace;
   font-size: 14pt;

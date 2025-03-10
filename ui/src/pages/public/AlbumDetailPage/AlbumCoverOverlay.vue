@@ -130,7 +130,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 
-  background-color: rgba($background-color, 0.6);
+  background-color: rgba(variables.$background-color, 0.6);
 
   &.is-empty,
   &.is-skeleton {
@@ -154,7 +154,7 @@ export default {
 
 .overlay-item,
 ::v-deep .overlay-item {
-  @include secondary-headings-font();
+  @include variables.secondary-headings-font();
 
   font-size: 1.5rem;
   line-height: 1.1;

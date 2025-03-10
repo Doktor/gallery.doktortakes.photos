@@ -102,8 +102,8 @@ export default {
 
 <style lang="scss" scoped>
 .album-results-count {
-  @include headings-font();
-  color: $text-color;
+  @include variables.headings-font();
+  color: variables.$text-color;
   font-size: 2rem;
   font-weight: 400;
   line-height: 2.5rem;
