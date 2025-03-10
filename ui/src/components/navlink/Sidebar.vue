@@ -59,30 +59,7 @@
         </h2>
       </li>
 
-      <!-- Social media links -->
-      <li class="nav-section">
-        <h2>Links</h2>
-
-        <div class="nav-socials">
-          <!-- Twitter -->
-          <NavlinkSocial
-            href="https://twitter.com/DoktorTheHusky"
-            title="Twitter"
-          >
-            <FontAwesomeCircleIcon iconClass="fab fa-twitter" />
-          </NavlinkSocial>
-
-          <!-- Telegram -->
-          <NavlinkSocial href="https://t.me/DoktorTakesPhotos" title="Telegram">
-            <i class="fab fa-telegram"></i>
-          </NavlinkSocial>
-
-          <!-- Website -->
-          <NavlinkSocial href="https://doktorthehusky.com" title="Website">
-            <i class="fas fa-globe-americas"></i>
-          </NavlinkSocial>
-        </div>
-      </li>
+      <SidebarSocials />
 
       <SidebarDivider />
     </ul>
@@ -94,19 +71,17 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import Navlink from "./Navlink";
-import NavlinkSocial from "./NavlinkSocial";
-import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import NavHeader from "./NavHeader.vue";
 import NavFooter from "@/components/navlink/NavFooter.vue";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
+import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
 
 export default {
   components: {
+    SidebarSocials,
     SidebarDivider,
     NavFooter,
     NavHeader,
-    FontAwesomeCircleIcon,
-    NavlinkSocial,
     Navlink,
   },
   computed: {
@@ -191,12 +166,6 @@ ul {
 
     margin-right: 2px;
   }
-}
-
-.nav-socials {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
 }
 
 .nav-item-link {
