@@ -10,25 +10,27 @@
     @setSize="setSize"
     @setItems="setItems"
   >
-    <Tiles class="photo-tiles">
-      <PhotoTile
-        v-for="photo in items"
-        :key="photo.md5"
-        :allowSelect="allowSelect"
-        :isSelected="
-          allowSelect ? selectedPhotoHashes.includes(photo.md5) : false
-        "
-        :isLoading="
-          useServerSidePagination ? false : isLoading || !photo.isLoaded
-        "
-        :isVisible="
-          useServerSidePagination ? true : isLoading || photo.isLoaded
-        "
-        :photo="photo"
-        :routeName="routeName"
-        @select="select"
-      />
-    </Tiles>
+    <div class="photo-gallery-container">
+      <Tiles class="photo-gallery">
+        <PhotoTile
+          v-for="photo in items"
+          :key="photo.md5"
+          :allowSelect="allowSelect"
+          :isSelected="
+            allowSelect ? selectedPhotoHashes.includes(photo.md5) : false
+          "
+          :isLoading="
+            useServerSidePagination ? false : isLoading || !photo.isLoaded
+          "
+          :isVisible="
+            useServerSidePagination ? true : isLoading || photo.isLoaded
+          "
+          :photo="photo"
+          :routeName="routeName"
+          @select="select"
+        />
+      </Tiles>
+    </div>
   </PaginationManager>
 </template>
 
@@ -108,12 +110,22 @@ export default {
 </script>
 
 <style lang="scss">
-.photo-tiles {
-  $sizes: 1, 2, 3, 4, 6, 8;
+.photo-gallery-container {
+  container-name: gallery;
+  container-type: inline-size;
+}
 
-  @each $size in $sizes {
-    @media (min-width: variables.$photo-width * $size) {
-      grid-template-columns: repeat($size, 1fr);
+.photo-gallery {
+  grid-template-columns: 1fr;
+
+  @each $n in [2, 3, 4, 6, 8] {
+    // Calculate the max width of (n - 1) photos with (n - 2) gaps
+    $breakpoint: (variables.$photo-width * ($n - 1)) +
+      (variables.$item-spacing * ($n - 2));
+
+    // Add another column at $breakpoint + 1 so photos don't exceed $photo-width
+    @container gallery (width >= #{$breakpoint + 1}) {
+      grid-template-columns: repeat($n, 1fr);
     }
   }
 }
