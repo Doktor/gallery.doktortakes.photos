@@ -135,8 +135,14 @@ export default {
 }
 
 .sidebar-link {
+  $padding: 6px;
+
   display: inline-block;
-  padding: 6px;
+  padding: $padding;
+
+  h2 & {
+    margin: -$padding;
+  }
 
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
