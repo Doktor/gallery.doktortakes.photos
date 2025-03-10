@@ -28,7 +28,7 @@
         <SidebarList>
           <Navlink title="Dashboard" route="manage" />
           <SidebarListItem>
-            <a class="nav-item-link" href="/admin/">Admin</a>
+            <a class="sidebar-link" href="/admin/">Admin</a>
           </SidebarListItem>
           <Navlink title="Groups" route="groups" />
           <Navlink title="Users" route="users" />
@@ -41,11 +41,15 @@
 
         <SidebarList>
           <Navlink
-            class="nav-item-profile"
+            class="sidebar-item-profile"
             title="Profile"
             :to="{ name: 'user', params: { slug: user.name } }"
           />
-          <Navlink class="nav-item-log-out" title="Log out" route="logOut" />
+          <Navlink
+            class="sidebar-item-log-out"
+            title="Log out"
+            route="logOut"
+          />
         </SidebarList>
       </SidebarSection>
       <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
@@ -55,7 +59,9 @@
       <!-- About -->
       <SidebarSection>
         <h2>
-          <a href="https://doktortakes.photos/about/">About</a>
+          <a class="sidebar-link" href="https://doktortakes.photos/about/"
+            >About</a
+          >
         </h2>
       </SidebarSection>
 
@@ -119,35 +125,29 @@ export default {
   @include variables.headings-font();
   font-size: variables.$nav-font-size;
   text-transform: lowercase;
+}
 
-  a,
-  h2 a {
-    color: variables.$text-color;
+.sidebar-link {
+  display: inline-block;
+  padding: 6px;
 
-    padding: 6px;
+  color: variables.$text-color;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 
-    text-decoration-line: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
+  transition: color, background-color;
 
-    transition: color, background-color;
-  }
-
-  a:hover,
-  h2 a:hover {
+  &:hover {
     color: variables.$background-color;
     background-color: variables.$text-color;
   }
-}
 
-.nav-item-link {
-  display: inline-block;
-
-  .nav-item-profile & {
+  .sidebar-item-profile & {
     color: variables.$text-blue;
   }
 
-  .nav-item-log-out & {
+  .sidebar-item-log-out & {
     color: variables.$text-error;
   }
 }

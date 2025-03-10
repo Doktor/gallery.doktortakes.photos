@@ -1,6 +1,6 @@
 <template>
   <SidebarListItem>
-    <router-link class="nav-item-link" :title="title" :to="toComputed"
+    <router-link class="sidebar-link" :title="title" :to="toComputed"
       >{{ display || title }}
     </router-link>
   </SidebarListItem>

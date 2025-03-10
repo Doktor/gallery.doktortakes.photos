@@ -1,7 +1,7 @@
 <template>
   <div class="nav-item-social">
     <a
-      class="nav-item-link nav-item-fa-wrapper"
+      class="sidebar-link nav-item-fa-wrapper"
       target="blank"
       rel="noopener noreferrer"
       v-bind="$attrs"

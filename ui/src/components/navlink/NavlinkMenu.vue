@@ -104,7 +104,7 @@ export default {
     white-space: nowrap;
   }
 
-  .nav-item-link {
+  .sidebar-link {
     color: variables.$text-color;
   }
 }
