@@ -105,6 +105,16 @@ b {
   font-weight: 700;
 }
 
+dl {
+  margin: 0;
+}
+
+dt,
+dd {
+  display: inline;
+  margin: 0;
+}
+
 figure {
   margin: 0;
 }

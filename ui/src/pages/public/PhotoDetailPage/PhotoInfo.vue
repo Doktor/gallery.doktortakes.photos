@@ -1,23 +1,18 @@
 <template>
   <section class="info">
-    <div>
-      <PhotoMetadata
-        class="info-metadata"
-        :photo="photo"
-        :count="photos.length"
-      />
-      <KeyboardShortcuts class="info-shortcuts" />
-    </div>
-
-    <div>
-      <PhotoTaxa
-        class="info-taxa"
-        v-if="photo.taxa.length > 0"
-        :taxa="photo.taxa"
-      />
-      <PhotoExif class="info-exif" :exif="photo.exif" />
-      <PhotoLinks class="info-links" :album="album" />
-    </div>
+    <PhotoMetadata
+      class="info-metadata"
+      :photo="photo"
+      :count="photos.length"
+    />
+    <PhotoTaxa
+      class="info-taxa"
+      v-if="photo.taxa.length > 0"
+      :taxa="photo.taxa"
+    />
+    <PhotoExif class="info-exif" :exif="photo.exif" />
+    <PhotoLinks class="info-links" :album="album" />
+    <KeyboardShortcuts class="info-shortcuts" />
   </section>
 </template>
 
@@ -63,39 +58,19 @@ export default {
 }
 
 .info {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  gap: variables.$page-margin;
 
-  width: 90%;
-  margin: 2rem auto 0 auto;
-  max-width: 1000px;
+  @media (width >= variables.$full-layout-breakpoint + 1) {
+    grid-template-columns: 50% 50%;
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  margin: 2rem auto;
+  max-width: 800px;
 
   text-align: left;
-
-  > div {
-    width: 100%;
-
-    @media (width >= variables.$full-layout-breakpoint + 1) {
-      width: 50%;
-    }
-  }
-
-  > div > div {
-    margin-bottom: 1rem;
-  }
-
-  &::v-deep {
-    dl,
-    dt,
-    dd {
-      margin: 0;
-    }
-
-    dt,
-    dd {
-      display: inline;
-    }
-  }
 }
 </style>
