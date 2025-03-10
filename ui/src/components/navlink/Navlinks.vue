@@ -27,31 +27,6 @@
         </ul>
       </li>
 
-      <!-- Social media links -->
-      <li class="nav-section">
-        <h2>Social</h2>
-
-        <div class="nav-socials">
-          <!-- Twitter -->
-          <NavlinkSocial
-            href="https://twitter.com/DoktorTheHusky"
-            title="Twitter"
-          >
-            <FontAwesomeCircleIcon iconClass="fab fa-twitter" />
-          </NavlinkSocial>
-
-          <!-- Telegram -->
-          <NavlinkSocial href="https://t.me/DoktorTakesPhotos" title="Telegram">
-            <i class="fab fa-telegram"></i>
-          </NavlinkSocial>
-
-          <!-- Website -->
-          <NavlinkSocial href="https://doktorthehusky.com" title="Website">
-            <i class="fas fa-globe-americas"></i>
-          </NavlinkSocial>
-        </div>
-      </li>
-
       <!-- Content management -->
       <li v-if="isStaff" class="nav-section">
         <h2>Manage</h2>
@@ -80,6 +55,31 @@
         </ul>
       </li>
       <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
+
+      <!-- Social media links -->
+      <li class="nav-section">
+        <h2>Links</h2>
+
+        <div class="nav-socials">
+          <!-- Twitter -->
+          <NavlinkSocial
+            href="https://twitter.com/DoktorTheHusky"
+            title="Twitter"
+          >
+            <FontAwesomeCircleIcon iconClass="fab fa-twitter" />
+          </NavlinkSocial>
+
+          <!-- Telegram -->
+          <NavlinkSocial href="https://t.me/DoktorTakesPhotos" title="Telegram">
+            <i class="fab fa-telegram"></i>
+          </NavlinkSocial>
+
+          <!-- Website -->
+          <NavlinkSocial href="https://doktorthehusky.com" title="Website">
+            <i class="fas fa-globe-americas"></i>
+          </NavlinkSocial>
+        </div>
+      </li>
     </ul>
 
     <NavFooter />
@@ -180,8 +180,9 @@ ul {
 }
 
 .nav-socials {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
 }
 
 .nav-item-link {

@@ -20,8 +20,6 @@ export default {
 
 <style lang="scss" scoped>
 .nav-item-social {
-  display: inline-block;
-
   a {
     text-decoration: none !important;
   }
