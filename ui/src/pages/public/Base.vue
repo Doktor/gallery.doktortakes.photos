@@ -1,21 +1,25 @@
 <template>
   <div id="app">
-    <Navlinks :showDividers="true" :showLogo="true" />
+    <div>
+      <Navlinks />
 
-    <Notifications />
+      <footer>
+        <div v-if="tagline" class="tagline">
+          "<span v-html="tagline"></span>"
+        </div>
+
+        <p>
+          website and photos
+          <router-link :to="{ name: 'copyright' }">&copy;</router-link> Doktor
+        </p>
+      </footer>
+    </div>
 
     <FadeTransition appear :duration="200" mode="out-in">
       <router-view id="content" />
     </FadeTransition>
 
-    <footer>
-      <div v-if="tagline" class="tagline">"<span v-html="tagline"></span>"</div>
-
-      <p>
-        website and photos
-        <router-link :to="{ name: 'copyright' }">&copy;</router-link> Doktor
-      </p>
-    </footer>
+    <Notifications />
   </div>
 </template>
 
@@ -46,11 +50,13 @@ export default {
 
 <style lang="scss">
 #app {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: block;
 
-  min-height: 100vh;
+  @media (width > (variables.$sidebar-width + variables.$album-width)) {
+    display: grid;
+    grid-template-columns: variables.$sidebar-width 1fr;
+    gap: variables.$page-margin;
+  }
 }
 
 #content {

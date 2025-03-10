@@ -26,16 +26,9 @@ body {
   line-height: 1.5;
   text-align: center;
 
-  margin: 0 auto;
   background-color: variables.$background-color;
 
-  width: 90%;
-  max-width: 90%;
-
-  @media (min-width: 901px) {
-    width: 95%;
-    max-width: 95%;
-  }
+  margin: variables.$page-margin;
 }
 
 // Headers and footers

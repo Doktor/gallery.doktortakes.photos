@@ -1,5 +1,5 @@
 <template>
-  <li class="nav-item">
+  <div class="nav-item-social">
     <a
       class="nav-item-link nav-item-fa-wrapper"
       target="blank"
@@ -8,7 +8,7 @@
     >
       <slot></slot>
     </a>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -19,6 +19,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nav-item-social {
+  display: inline-block;
+
+  a {
+    text-decoration: none !important;
+  }
+}
+
 .nav-item-fa-wrapper {
   display: flex;
   justify-content: center;

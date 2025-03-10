@@ -1,5 +1,5 @@
 <template>
-  <li class="nav-item">
+  <li class="nav-section">
     <h1 class="nav-logo">
       <router-link
         class="nav-item-link"
@@ -20,6 +20,12 @@ export default {
 
 <style lang="scss" scoped>
 .nav-logo {
+  line-height: 1;
+
+  margin: 0;
+  padding: 0;
+  padding-bottom: 4px;
+
   .nav-item-link {
     @include variables.logo-font();
 
@@ -32,9 +38,5 @@ export default {
       font-size: variables.$nav-logo-size * 1.15;
     }
   }
-
-  margin: 0;
-  padding: 0;
-  padding-bottom: 4px;
 }
 </style>

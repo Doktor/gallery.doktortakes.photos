@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,700;0,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,700");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300&display=swap");
@@ -90,6 +90,9 @@ $nav-font-size-index: $nav-font-size * 1.25;
 $nav-logo-size: 2.4rem;
 
 $nav-item-spacing: 1.7rem;
+
+$page-margin: 32px;
+$sidebar-width: 192px;
 
 /* Other */
 $index-logo-size: 3.2rem;
