@@ -1,15 +1,17 @@
 <template>
-  <main v-if="!loading">
-    <div class="sidebar">
+  <main v-if="!loading" class="manage-container">
+    <div class="manage-sidebar">
       <h2>Photos</h2>
-      <ul>
+
+      <ul class="manage-photos-list">
         <li @click="selectRecentPhotos">
           <a href="#">Recent photos</a>
         </li>
       </ul>
 
       <h2>Albums</h2>
-      <ul>
+
+      <ul class="manage-albums-list">
         <li v-for="album in albums" :key="album.id" @click="selectAlbum(album)">
           <a href="#">{{ album.name }}</a>
         </li>
@@ -93,8 +95,8 @@ export default {
         return;
       }
 
-      let { ok, photos } = await AlbumService.getAlbumPhotos({
-        path: newAlbum.path,
+      let { ok, album, photos } = await AlbumService.getAlbum({
+        rawPath: newAlbum.path,
       });
 
       if (!ok) {
@@ -104,6 +106,7 @@ export default {
         return;
       }
 
+      this.selectedAlbum = album;
       this.photos = photos;
     },
   },
@@ -111,31 +114,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-main {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
+.manage-container {
+  display: grid;
+  grid-template-columns: 256px 1fr;
 }
 
-$sidebar-width: 20%;
-
-.sidebar {
-  width: $sidebar-width;
+.manage-sidebar {
   border: 1px solid lightgray;
   margin-right: 2rem;
 
-  ul {
+  .manage-albums-list {
     list-style-type: none;
 
     margin: 0;
     padding: 0;
+    padding-right: 16px;
+
+    height: 60vh;
 
     text-align: left;
-  }
-}
 
-.contents {
-  width: 100% - $sidebar-width;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    li {
+      overflow: hidden;
+      text-overflow: "...";
+      white-space: nowrap;
+    }
+  }
 }
 </style>
