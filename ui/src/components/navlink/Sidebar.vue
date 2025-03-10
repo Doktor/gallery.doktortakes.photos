@@ -21,16 +21,16 @@
           <h2>Albums</h2>
 
           <SidebarList>
-            <Navlink title="All albums" route="index" />
-            <Navlink
+            <SidebarLink title="All albums" route="index" />
+            <SidebarLink
               v-if="user.status !== 'anonymous'"
               title="Your albums"
               :to="{ name: 'user', params: { slug: user.name } }"
             />
-            <Navlink title="Tags" route="tags" />
-            <!-- <Navlink title="Taxonomy" route="taxa" />-->
-            <!-- <Navlink title="Species" route="species" />-->
-            <Navlink title="Search" route="search" />
+            <SidebarLink title="Tags" route="tags" />
+            <!-- <SidebarLink title="Taxonomy" route="taxa" />-->
+            <!-- <SidebarLink title="Species" route="species" />-->
+            <SidebarLink title="Search" route="search" />
           </SidebarList>
         </SidebarSection>
 
@@ -39,12 +39,12 @@
           <h2>Manage</h2>
 
           <SidebarList>
-            <Navlink title="Dashboard" route="manage" />
+            <SidebarLink title="Dashboard" route="manage" />
             <SidebarListItem>
               <a class="sidebar-link" href="/admin/">Admin</a>
             </SidebarListItem>
-            <Navlink title="Groups" route="groups" />
-            <Navlink title="Users" route="users" />
+            <SidebarLink title="Groups" route="groups" />
+            <SidebarLink title="Users" route="users" />
           </SidebarList>
         </SidebarSection>
 
@@ -53,19 +53,19 @@
           <h2>User</h2>
 
           <SidebarList>
-            <Navlink
+            <SidebarLink
               v-if="isAuthenticated"
               class="sidebar-item-profile"
               title="Profile"
               :to="{ name: 'user', params: { slug: user.name } }"
             />
-            <Navlink
+            <SidebarLink
               v-if="isAuthenticated"
               class="sidebar-item-log-out"
               title="Log out"
               route="logOut"
             />
-            <Navlink
+            <SidebarLink
               v-if="!isAuthenticated"
               class="sidebar-item-profile"
               title="Log in"
@@ -88,7 +88,7 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import Navlink from "./Navlink";
+import SidebarLink from "./SidebarLink";
 import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
@@ -112,7 +112,7 @@ export default {
     SidebarDivider,
     SidebarFooter,
     SidebarHeader,
-    Navlink,
+    SidebarLink,
   },
   computed: {
     ...mapGetters(["isAuthenticated", "isStaff"]),

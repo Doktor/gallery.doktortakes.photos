@@ -10,7 +10,7 @@
 import SidebarListItem from "./SidebarListItem";
 
 export default {
-  name: "Navlink",
+  name: "SidebarLink",
   components: { SidebarListItem },
 
   props: {
