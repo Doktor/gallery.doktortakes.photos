@@ -156,10 +156,20 @@ ul {
   h2 a {
     color: variables.$text-color;
 
+    padding: 6px;
+
     text-decoration-line: underline;
     text-decoration-color: variables.$text-color-2;
     text-decoration-thickness: 1px;
     text-underline-offset: 4px;
+
+    transition: color, background-color;
+  }
+
+  a:hover,
+  h2 a:hover {
+    color: variables.$background-color;
+    background-color: variables.$text-color;
   }
 }
 
@@ -174,15 +184,13 @@ ul {
   font-weight: 400;
   line-height: 1;
 
-  margin-bottom: 12px;
-
   &::before {
     content: "-";
     color: variables.$text-color-2;
     font-size: 1rem;
     font-weight: 700;
 
-    margin-right: 6px;
+    margin-right: 2px;
   }
 }
 
@@ -193,6 +201,8 @@ ul {
 }
 
 .nav-item-link {
+  display: inline-block;
+
   .nav-item-profile & {
     color: variables.$text-blue;
   }
