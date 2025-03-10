@@ -8,7 +8,7 @@
 
       <!-- Main links -->
       <NavlinkMenu title="Albums">
-        <Navlink title="All albums" route="albums" />
+        <Navlink title="All albums" route="index" />
         <Navlink
           v-if="user.status !== 'anonymous'"
           title="Your albums"

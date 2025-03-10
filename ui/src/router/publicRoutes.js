@@ -1,4 +1,3 @@
-import IndexPage from "@/pages/public/IndexPage";
 import AboutPage from "@/pages/public/AboutPage";
 import CopyrightPage from "@/pages/public/CopyrightPage";
 
@@ -16,7 +15,7 @@ export const publicRoutes = [
   {
     path: "/",
     name: "index",
-    component: IndexPage,
+    component: AlbumListPage,
   },
 
   {
@@ -41,10 +40,8 @@ export const publicRoutes = [
   },
   {
     path: "/albums/",
-    name: "albums",
-    component: AlbumListPage,
-    meta: {
-      title: "Albums",
+    redirect: {
+      name: "index",
     },
   },
 

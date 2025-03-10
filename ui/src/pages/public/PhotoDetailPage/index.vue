@@ -84,7 +84,7 @@ export default {
         message: "Album not found.",
         status: "error",
       });
-      await this.$router.push({ name: "albums" });
+      await this.$router.push({ name: "index" });
 
       return;
     }
@@ -169,7 +169,7 @@ export default {
             params: { path: this.album.pathSplit },
           });
         case "l":
-          return router.push({ name: "albums" });
+          return router.push({ name: "index" });
         case "h":
           window.location.href = "/";
           break;

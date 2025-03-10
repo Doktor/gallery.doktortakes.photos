@@ -193,7 +193,7 @@ export default {
           message: "Album not found.",
           status: "error",
         });
-        await this.$router.push({ name: "albums" });
+        await this.$router.push({ name: "index" });
 
         return;
       }

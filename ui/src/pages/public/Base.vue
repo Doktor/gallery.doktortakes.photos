@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navlinks v-if="!isIndex" :showDividers="true" :showLogo="true" />
+    <Navlinks :showDividers="true" :showLogo="true" />
 
     <Notifications />
 
@@ -8,7 +8,7 @@
       <router-view id="content" />
     </FadeTransition>
 
-    <footer v-if="!isIndex">
+    <footer>
       <div v-if="tagline" class="tagline">"<span v-html="tagline"></span>"</div>
 
       <p>
@@ -36,12 +36,6 @@ export default {
     return {
       tagline: "",
     };
-  },
-
-  computed: {
-    isIndex() {
-      return this.$route.name === "index";
-    },
   },
 
   async created() {

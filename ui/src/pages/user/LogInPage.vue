@@ -52,7 +52,7 @@ export default {
           });
           await this.$store.dispatch("getUser");
 
-          router.push(this.redirect ?? { name: "albums" });
+          router.push(this.redirect ?? { name: "index" });
           return;
         }
 
