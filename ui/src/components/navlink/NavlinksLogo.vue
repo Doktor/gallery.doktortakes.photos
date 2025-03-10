@@ -6,7 +6,9 @@
         title="Doktor Takes Photos"
         :to="{ name: 'index' }"
       >
-        Doktor Takes Photos
+        <div>Doktor</div>
+        <div>Takes</div>
+        <div>Photos</div>
       </router-link>
     </h1>
   </li>
@@ -20,23 +22,23 @@ export default {
 
 <style lang="scss" scoped>
 .nav-logo {
+  @include variables.logo-font();
   line-height: 1;
+  text-align: center;
 
   margin: 0;
   padding: 0;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
+  border-bottom: 8px solid variables.$text-blue;
+
+  @media (min-width: 901px) {
+    text-align: left;
+    font-size: 3.5rem;
+  }
 
   .nav-item-link {
-    @include variables.logo-font();
-
     color: variables.$text-blue;
-    font-size: variables.$nav-logo-size;
-    line-height: 1;
-    text-align: center;
-
-    @media (min-width: 901px) {
-      font-size: variables.$nav-logo-size * 1.15;
-    }
+    text-decoration: none;
   }
 }
 </style>
