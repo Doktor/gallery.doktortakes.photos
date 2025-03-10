@@ -1,6 +1,6 @@
 <template>
   <nav v-if="showNavigation" class="nav">
-    <NavHeader />
+    <SidebarHeader />
 
     <ul class="nav-items">
       <!-- Main links -->
@@ -71,7 +71,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import Navlink from "./Navlink";
-import NavHeader from "./NavHeader.vue";
+import SidebarHeader from "./SidebarHeader";
 import NavFooter from "@/components/navlink/NavFooter.vue";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
 import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
@@ -81,7 +81,7 @@ export default {
     SidebarSocials,
     SidebarDivider,
     NavFooter,
-    NavHeader,
+    SidebarHeader,
     Navlink,
   },
   computed: {

@@ -1,8 +1,8 @@
 <template>
-  <header class="nav-header">
-    <h1 class="nav-logo">
+  <header class="sidebar-header">
+    <h1 class="sidebar-logo">
       <router-link
-        class="nav-logo-link"
+        class="sidebar-logo-link"
         title="Doktor Takes Photos"
         :to="{ name: 'index' }"
       >
@@ -16,16 +16,16 @@
 
 <script>
 export default {
-  name: "NavHeader",
+  name: "SidebarHeader",
 };
 </script>
 
 <style lang="scss" scoped>
-.nav-header {
+.sidebar-header {
   margin-bottom: variables.$sidebar-margin;
 }
 
-.nav-logo {
+.sidebar-logo {
   @include variables.logo-font();
   line-height: 1;
   text-align: center;
@@ -41,7 +41,7 @@ export default {
   }
 }
 
-.nav-logo-link {
+.sidebar-logo-link {
   color: variables.$text-blue;
   text-decoration: none;
 }
