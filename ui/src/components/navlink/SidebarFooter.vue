@@ -1,6 +1,6 @@
 <template>
-  <footer class="nav-footer">
-    <div v-if="tagline" class="nav-tagline">
+  <footer class="sidebar-footer">
+    <div v-if="tagline" class="sidebar-tagline">
       "<span v-html="tagline"></span>"
     </div>
 
@@ -15,7 +15,7 @@
 import { TaglineService } from "@/services/TaglineService";
 
 export default {
-  name: "NavFooter",
+  name: "SidebarFooter",
 
   data() {
     return {
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss">
-.nav-tagline {
+.sidebar-tagline {
   @include variables.headings-font();
   color: variables.$text-color;
   //font-size: 1.6rem;

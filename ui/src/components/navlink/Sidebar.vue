@@ -64,7 +64,7 @@
       <SidebarDivider />
     </ul>
 
-    <NavFooter />
+    <SidebarFooter />
   </nav>
 </template>
 
@@ -72,7 +72,7 @@
 import { mapGetters, mapState } from "vuex";
 import Navlink from "./Navlink";
 import SidebarHeader from "./SidebarHeader";
-import NavFooter from "@/components/navlink/NavFooter.vue";
+import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
 import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
 
@@ -80,7 +80,7 @@ export default {
   components: {
     SidebarSocials,
     SidebarDivider,
-    NavFooter,
+    SidebarFooter,
     SidebarHeader,
     Navlink,
   },
