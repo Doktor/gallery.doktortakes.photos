@@ -1,13 +1,15 @@
 <template>
   <SidebarListItem :showMarker="false">
     <a
-      class="sidebar-link sidebar-social-item-link"
+      class="sidebar-link sidebar-social-link"
       target="blank"
       rel="noopener noreferrer"
       v-bind="$attrs"
     >
-      <slot></slot>
-      <span class="sidebar-social-item-title">{{ $attrs.title }}</span>
+      <span class="sidebar-social-link-icon">
+        <slot></slot>
+      </span>
+      <span class="sidebar-social-link-title">{{ $attrs.title }}</span>
     </a>
   </SidebarListItem>
 </template>
@@ -23,19 +25,14 @@ export default {
 </script>
 
 <style lang="scss">
-.sidebar-social-item-link {
-  display: inline-flex;
+.sidebar-social-link {
+  display: inline-flex !important;
   justify-content: start;
   align-items: center;
-
-  text-decoration: none !important;
-  padding: 8px;
 
   width: 100%;
 
   &:hover {
-    text-decoration: none;
-
     .font-awesome-circle-icon {
       color: variables.$text-color;
       background-color: variables.$background-color;
@@ -43,9 +40,12 @@ export default {
   }
 }
 
-.sidebar-social-item-title {
-  margin-left: 8px;
+.sidebar-social-link-icon {
+  margin-right: variables.$sidebar-link-margin;
+  text-decoration: none;
+}
 
+.sidebar-social-link-title {
   text-decoration: underline;
 }
 </style>
