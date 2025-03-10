@@ -18,11 +18,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.error {
-  color: variables.$text-error;
-  line-height: 1;
-  margin: 1rem 0;
-}
-</style>

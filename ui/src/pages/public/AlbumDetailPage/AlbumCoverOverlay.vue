@@ -148,20 +148,17 @@ export default {
   margin: 0;
 
   font-size: 3.3rem;
-  line-height: 1;
   text-transform: none;
 }
 
 .overlay-item,
 ::v-deep .overlay-item {
-  @include variables.text-font();
-
+  @include variables.sidebar-font();
   font-size: 1.5rem;
-  line-height: 1.1;
   text-align: left;
   text-transform: none;
 
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 
   i {
     margin-right: 6px;

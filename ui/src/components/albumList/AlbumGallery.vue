@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="showCount" class="album-results-count">
+    <h2 v-if="showCount" class="album-results-count">
       {{ searchResults.length }} album{{ searchResults.length | pluralize }}
-    </div>
+    </h2>
 
     <AlbumGallerySearchInput v-model="searchTerm" @input="filterAlbums" />
 
@@ -102,14 +102,6 @@ export default {
 
 <style lang="scss" scoped>
 .album-results-count {
-  @include variables.headings-font();
-  color: variables.$text-color;
-  font-size: 2rem;
-  font-weight: 400;
-  line-height: 2.5rem;
   text-align: left;
-  text-transform: none;
-
-  margin: 1rem 0;
 }
 </style>

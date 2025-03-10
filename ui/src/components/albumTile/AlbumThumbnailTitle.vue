@@ -32,7 +32,6 @@ export default {
 
   color: variables.$background-color;
   font-size: 1.3rem;
-  line-height: 1;
   text-align: left;
 
   overflow: hidden;

@@ -30,7 +30,6 @@
   border-radius: 4px;
 
   cursor: pointer;
-  line-height: 1;
   text-align: center;
 
   // Default

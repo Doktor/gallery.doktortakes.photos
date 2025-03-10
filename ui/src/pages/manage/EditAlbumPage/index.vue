@@ -267,11 +267,6 @@ $margin: 32px;
   width: 100%;
 }
 
-.count {
-  line-height: 1;
-  margin: 1rem 0;
-}
-
 .photo-actions {
   display: flex;
   justify-content: space-between;

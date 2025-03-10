@@ -39,7 +39,6 @@ export default {
   @include variables.text-font();
   color: variables.$text-color;
   font-size: 1.5rem;
-  line-height: 1;
 
   &::placeholder {
     color: variables.$text-color-2;

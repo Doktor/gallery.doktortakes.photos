@@ -27,7 +27,6 @@ export default {
 
 .sidebar-logo {
   @include variables.logo-font();
-  line-height: 1;
   text-align: center;
 
   margin: 0;

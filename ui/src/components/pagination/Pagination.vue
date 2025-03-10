@@ -140,7 +140,6 @@ export default {
 
   @include variables.headings-font();
   font-size: 1.25rem;
-  line-height: 1;
 
   // Prevent selection
   -webkit-touch-callout: none;
@@ -209,7 +208,6 @@ export default {
 .item-text,
 .item-icon {
   color: variables.$text-color;
-  line-height: 1;
 }
 
 .item-condensed .item-text {
