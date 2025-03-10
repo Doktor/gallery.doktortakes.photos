@@ -1,6 +1,6 @@
 <template>
   <nav v-if="showNav" class="nav">
-    <NavlinksHeader />
+    <NavHeader />
 
     <ul class="nav-items">
       <li class="nav-section">
@@ -91,13 +91,13 @@ import { mapGetters, mapState } from "vuex";
 import Navlink from "./Navlink";
 import NavlinkSocial from "./NavlinkSocial";
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
-import NavlinksHeader from "./NavlinksHeader";
+import NavHeader from "./NavHeader.vue";
 import NavFooter from "@/components/navlink/NavFooter.vue";
 
 export default {
   components: {
     NavFooter,
-    NavlinksHeader,
+    NavHeader,
     FontAwesomeCircleIcon,
     NavlinkSocial,
     Navlink,

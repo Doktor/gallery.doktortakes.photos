@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "NavlinksHeader",
+  name: "NavHeader",
 };
 </script>
 
