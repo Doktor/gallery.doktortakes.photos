@@ -38,7 +38,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('404/', views.debug_404, name='debug_404'),
     path('500/', views.debug_500, name='debug_500'),
-    path('about/', views.view_about, name='about'),
     path('admin/', admin.site.urls),
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),

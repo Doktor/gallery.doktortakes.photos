@@ -164,23 +164,6 @@ def view_copyright(request: HttpRequest) -> HttpResponse:
     return render(request, 'base.html', context)
 
 
-@require_GET
-def view_about(request: HttpRequest) -> HttpResponse:
-    context = {
-        'title': 'About',
-        'meta': meta_to_string([
-            *meta_open_graph_common,
-            MetaProperty('og:title', metadata['TITLE']),
-            MetaProperty('og:url', get_canonical_url(reverse('about'))),
-            *meta_open_graph_generic_image,
-
-            *meta_open_graph_profile,
-        ]),
-    }
-
-    return render(request, 'base.html', context)
-
-
 # Albums
 
 
