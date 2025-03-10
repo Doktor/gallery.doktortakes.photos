@@ -1,17 +1,17 @@
 <template>
-  <SidebarListItem>
-    <a
-      class="sidebar-link sidebar-social-link"
-      target="blank"
-      rel="noopener noreferrer"
-      v-bind="$attrs"
-    >
-      <span class="sidebar-social-link-icon">
-        <slot></slot>
-      </span>
-      <span class="sidebar-social-link-title">{{ $attrs.title }}</span>
-    </a>
-  </SidebarListItem>
+  <!--  <SidebarListItem>-->
+  <a
+    class="sidebar-link sidebar-link-social"
+    target="blank"
+    rel="noopener noreferrer"
+    v-bind="$attrs"
+  >
+    <span class="sidebar-link-social-icon">
+      <slot></slot>
+    </span>
+    <span class="sidebar-link-social-title">{{ $attrs.title }}</span>
+  </a>
+  <!--  </SidebarListItem>-->
 </template>
 
 <script>
@@ -25,12 +25,14 @@ export default {
 </script>
 
 <style lang="scss">
-.sidebar-social-link {
-  display: inline-flex !important;
+.sidebar-link-social {
+  display: inline-grid !important;
   justify-content: start;
   align-items: center;
+  grid-template-columns: 24px 1fr;
+  gap: 8px;
 
-  width: 100%;
+  text-decoration: none !important;
 
   &:hover {
     .font-awesome-circle-icon {
@@ -40,12 +42,14 @@ export default {
   }
 }
 
-.sidebar-social-link-icon {
-  margin-right: variables.$sidebar-link-margin;
-  text-decoration: none;
+.sidebar-link-social-icon {
+  i {
+    display: block;
+  }
 }
 
-.sidebar-social-link-title {
+.sidebar-link-social-title {
+  @include variables.sidebar-font();
   text-decoration: underline;
 }
 </style>

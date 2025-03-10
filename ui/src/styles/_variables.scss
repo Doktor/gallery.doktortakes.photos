@@ -72,6 +72,13 @@ $background-color-5: rgb(175, 175, 175);
   letter-spacing: -0.02rem;
 }
 
+@mixin sidebar-font() {
+  @include headings-font();
+  font-size: $sidebar-font-size;
+  font-weight: 400;
+  line-height: 1;
+}
+
 @mixin text-font() {
   font-family: "Roboto", sans-serif;
   font-style: normal;

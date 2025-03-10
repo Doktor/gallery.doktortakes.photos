@@ -8,8 +8,6 @@
 .sidebar-list-item {
   display: block;
 
-  font-size: variables.$sidebar-font-size;
-  font-weight: 400;
-  line-height: 1;
+  @include variables.sidebar-font();
 }
 </style>

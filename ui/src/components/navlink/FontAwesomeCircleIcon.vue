@@ -19,7 +19,7 @@ export default {
 <style lang="scss">
 // Encloses a Font Awesome icon in a circle
 .font-awesome-circle-icon {
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 
@@ -27,13 +27,14 @@ export default {
   background-color: variables.$text-color;
 
   // Background: circle
-  width: variables.$sidebar-font-size;
-  height: variables.$sidebar-font-size;
+  width: 24px;
+  height: 24px;
   border-radius: 100%;
 
   // Foreground: icon
   i {
-    font-size: math.div(variables.$sidebar-font-size, 2);
+    display: block;
+    font-size: 12px;
   }
 }
 </style>
