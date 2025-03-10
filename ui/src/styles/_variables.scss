@@ -100,3 +100,6 @@ $sidebar-icon-size: 24px;
 $item-spacing: 16px;
 $photo-width: 400px;
 $album-width: 500px;
+
+$full-layout-breakpoint: $page-margin + $sidebar-width + $sidebar-margin +
+  $album-width + $page-margin;

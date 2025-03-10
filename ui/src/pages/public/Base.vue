@@ -31,10 +31,10 @@ export default {
 
 <style lang="scss">
 #app {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr;
 
-  @media (width > (variables.$sidebar-width + variables.$album-width)) {
-    display: grid;
+  @media (width >= variables.$full-layout-breakpoint) {
     grid-template-columns: variables.$sidebar-width 1fr;
     gap: variables.$sidebar-margin;
   }
