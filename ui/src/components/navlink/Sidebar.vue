@@ -1,5 +1,5 @@
 <template>
-  <nav v-if="showNav" class="nav">
+  <nav v-if="showNavigation" class="nav">
     <NavHeader />
 
     <ul class="nav-items">
@@ -111,7 +111,7 @@ export default {
   },
   computed: {
     ...mapGetters(["isAuthenticated", "isStaff"]),
-    ...mapState(["showNav", "user"]),
+    ...mapState(["showNavigation", "user"]),
   },
 };
 </script>

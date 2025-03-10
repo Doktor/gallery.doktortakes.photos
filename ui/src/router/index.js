@@ -56,7 +56,7 @@ router.afterEach((to, from) => {
       document.body.className = body;
     }
 
-    store.state.showNav = record.meta?.nav ?? true;
+    store.state.showNavigation = record.meta?.showNavigation ?? true;
 
     // Document title
     let title = record.meta.title;

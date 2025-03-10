@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <div>
+  <div id="app" :class="{ 'app-single-column': !showNavigation }">
+    <div v-if="showNavigation">
       <Sidebar />
     </div>
 
@@ -16,12 +16,17 @@
 import Sidebar from "@/components/navlink/Sidebar";
 import Notifications from "@/components/Notifications";
 import FadeTransition from "@/transitions/FadeTransition";
+import { mapState } from "vuex";
 
 export default {
   components: {
     FadeTransition,
     Sidebar,
     Notifications,
+  },
+
+  computed: {
+    ...mapState(["showNavigation"]),
   },
 };
 </script>
@@ -35,6 +40,10 @@ export default {
     grid-template-columns: variables.$sidebar-width 1fr;
     gap: variables.$page-margin;
   }
+}
+
+.app-single-column {
+  display: block !important;
 }
 
 #content {

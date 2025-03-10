@@ -25,7 +25,7 @@ export const publicRoutes = [
     component: PhotoDetailPage,
     meta: {
       body: "photo-viewer",
-      nav: false,
+      showNavigation: false,
       title: false,
     },
   },
