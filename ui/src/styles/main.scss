@@ -124,16 +124,9 @@ img {
   display: block;
 }
 
-nav,
 pre,
 section {
   margin: 1rem 0;
-}
-
-@media (max-width: 600px) {
-  nav {
-    text-align: center;
-  }
 }
 
 ol,

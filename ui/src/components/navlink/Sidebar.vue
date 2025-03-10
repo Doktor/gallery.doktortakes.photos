@@ -1,8 +1,8 @@
 <template>
-  <nav v-if="showNavigation" class="nav">
+  <nav class="sidebar">
     <SidebarHeader />
 
-    <SidebarList class="nav-items">
+    <SidebarList class="sidebar-items">
       <!-- Main links -->
       <SidebarSection>
         <h2>Albums</h2>
@@ -98,16 +98,13 @@ export default {
   },
   computed: {
     ...mapGetters(["isAuthenticated", "isStaff"]),
-    ...mapState(["showNavigation", "user"]),
+    ...mapState(["user"]),
   },
 };
 </script>
 
 <style lang="scss">
-.nav {
-  margin: 0;
-  padding: 0;
-
+.sidebar {
   text-align: left;
 
   width: variables.$sidebar-width;
@@ -121,9 +118,9 @@ export default {
   }
 }
 
-.nav-items {
+.sidebar-items {
   @include variables.headings-font();
-  font-size: variables.$nav-font-size;
+  font-size: 1.5rem;
   text-transform: lowercase;
 }
 
