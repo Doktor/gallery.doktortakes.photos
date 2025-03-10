@@ -114,7 +114,7 @@ export default {
     line-height: 1;
 
     margin: 0;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
   }
 }
 
