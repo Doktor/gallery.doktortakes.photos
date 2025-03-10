@@ -159,7 +159,6 @@ ul {
     padding: 6px;
 
     text-decoration-line: underline;
-    text-decoration-color: variables.$text-color-2;
     text-decoration-thickness: 1px;
     text-underline-offset: 4px;
 
