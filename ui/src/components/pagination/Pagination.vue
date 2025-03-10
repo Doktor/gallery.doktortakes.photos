@@ -135,7 +135,7 @@ export default {
 <style lang="scss" scoped>
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
 
   @include variables.headings-font();
@@ -147,10 +147,6 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
-  @media (min-width: 901px) {
-    justify-content: space-between;
-  }
 }
 
 .pagination-controls {
@@ -161,7 +157,7 @@ export default {
   margin: 0 auto;
   margin-bottom: 0.5rem;
 
-  @media (min-width: 901px) {
+  @media (width >= variables.$full-layout-breakpoint + 1) {
     margin: 0;
   }
 }

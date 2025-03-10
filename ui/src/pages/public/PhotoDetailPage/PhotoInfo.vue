@@ -57,7 +57,7 @@ export default {
 .info-shortcuts {
   display: none;
 
-  @media (min-width: 901px) {
+  @media (width >= variables.$full-layout-breakpoint + 1) {
     display: block;
   }
 }
@@ -76,7 +76,7 @@ export default {
   > div {
     width: 100%;
 
-    @media (min-width: 901px) {
+    @media (width >= variables.$full-layout-breakpoint + 1) {
       width: 50%;
     }
   }

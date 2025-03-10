@@ -37,7 +37,7 @@ form {
     border-radius: $form-border-radius;
   }
 
-  @media (min-width: 901px) {
+  @media (width >= variables.$full-layout-breakpoint + 1) {
     .form-column {
       width: 50%;
     }

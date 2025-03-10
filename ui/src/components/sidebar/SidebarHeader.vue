@@ -34,7 +34,7 @@ export default {
   padding-bottom: 8px;
   border-bottom: 8px solid variables.$text-blue;
 
-  @media (min-width: 901px) {
+  @media (width >= variables.$full-layout-breakpoint + 1) {
     text-align: left;
     font-size: 3.5rem;
   }

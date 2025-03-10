@@ -53,11 +53,9 @@ body {
   }
 }
 
-@media (max-width: 900px) {
-  @include headers(1.33);
-}
+@include headers(1.33);
 
-@media (min-width: 901px) {
+@media (width >= variables.$full-layout-breakpoint + 1) {
   @include headers(1.4);
 }
 
@@ -195,14 +193,7 @@ tr:nth-child(even) {
 }
 
 .photo-wall-item {
-  width: math.div(100%, 5);
-
-  @media (min-width: 901px) and (max-width: 1500px) {
-    width: math.div(100%, 8);
-  }
-  @media (min-width: 1501px) {
-    width: math.div(100%, 10);
-  }
+  width: 256px;
 
   filter: brightness(1);
 

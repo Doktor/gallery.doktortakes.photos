@@ -268,7 +268,7 @@ export default {
 }
 
 form {
-  @media (min-width: 1501px) {
+  @media (width >= variables.$full-layout-breakpoint + 1) {
     width: 60%;
     margin: 0 auto;
   }
