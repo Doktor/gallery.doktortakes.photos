@@ -1,14 +1,17 @@
 <template>
-  <li class="nav-item">
+  <SidebarListItem>
     <router-link class="nav-item-link" :title="title" :to="toComputed"
       >{{ display || title }}
     </router-link>
-  </li>
+  </SidebarListItem>
 </template>
 
 <script>
+import SidebarListItem from "./SidebarListItem";
+
 export default {
   name: "Navlink",
+  components: { SidebarListItem },
 
   props: {
     title: {

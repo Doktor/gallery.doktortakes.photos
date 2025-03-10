@@ -27,9 +27,9 @@
 
         <SidebarList>
           <Navlink title="Dashboard" route="manage" />
-          <li class="nav-item">
+          <SidebarListItem>
             <a class="nav-item-link" href="/admin/">Admin</a>
-          </li>
+          </SidebarListItem>
           <Navlink title="Groups" route="groups" />
           <Navlink title="Users" route="users" />
         </SidebarList>
@@ -77,9 +77,11 @@ import SidebarDivider from "@/components/navlink/SidebarDivider.vue";
 import SidebarSocials from "@/components/navlink/SidebarSocials.vue";
 import SidebarList from "./SidebarList";
 import SidebarSection from "./SidebarSection";
+import SidebarListItem from "./SidebarListItem";
 
 export default {
   components: {
+    SidebarListItem,
     SidebarSection,
     SidebarList,
     SidebarSocials,
@@ -135,23 +137,6 @@ export default {
   h2 a:hover {
     color: variables.$background-color;
     background-color: variables.$text-color;
-  }
-}
-
-.nav-item {
-  display: block;
-
-  font-size: 1.2rem;
-  font-weight: 400;
-  line-height: 1;
-
-  &::before {
-    content: "-";
-    color: variables.$text-color;
-    font-size: 1rem;
-    font-weight: 400;
-
-    margin-right: 2px;
   }
 }
 
