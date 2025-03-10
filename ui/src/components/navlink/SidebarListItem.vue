@@ -1,18 +1,32 @@
 <template>
-  <li class="sidebar-list-item">
+  <li
+    class="sidebar-list-item"
+    :class="{ 'sidebar-list-item-marker': showMarker }"
+  >
     <slot></slot>
   </li>
 </template>
+
+<script>
+export default {
+  props: {
+    showMarker: {
+      type: Boolean,
+      default: true,
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 .sidebar-list-item {
   display: block;
 
-  font-size: 1.2rem;
+  font-size: variables.$sidebar-font-size;
   font-weight: 400;
   line-height: 1;
 
-  &::before {
+  &.sidebar-list-item-marker::before {
     content: "-";
     color: variables.$text-color;
     font-size: 1rem;

@@ -2,7 +2,7 @@
   <SidebarSection>
     <h2>Links</h2>
 
-    <div>
+    <SidebarList>
       <!-- Twitter -->
       <SidebarSocialItem
         href="https://twitter.com/DoktorTheHusky"
@@ -20,7 +20,7 @@
       <SidebarSocialItem href="https://doktorthehusky.com" title="Website">
         <i class="fas fa-globe-americas"></i>
       </SidebarSocialItem>
-    </div>
+    </SidebarList>
   </SidebarSection>
 </template>
 
@@ -28,10 +28,12 @@
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import SidebarSocialItem from "./SidebarSocialItem.vue";
 import SidebarSection from "./SidebarSection";
+import SidebarList from "@/components/navlink/SidebarList.vue";
 
 export default {
   name: "SidebarSocialList",
   components: {
+    SidebarList,
     SidebarSection,
     FontAwesomeCircleIcon,
     SidebarSocialItem,
