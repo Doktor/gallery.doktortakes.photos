@@ -1,5 +1,5 @@
 <template>
-  <SidebarListItem :showMarker="false">
+  <SidebarListItem>
     <a
       class="sidebar-link sidebar-social-link"
       target="blank"
