@@ -7,6 +7,7 @@
       v-bind="$attrs"
     >
       <slot></slot>
+      <span class="nav-link-title">{{ $attrs.title }}</span>
     </a>
   </div>
 </template>
@@ -22,16 +23,27 @@ export default {
 .nav-item-social {
   a {
     text-decoration: none !important;
+    padding: 6px;
   }
 }
 
 .nav-item-fa-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 
   &:hover {
     text-decoration: none;
   }
+}
+
+.nav-link-title {
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1;
+
+  margin-left: 8px;
+
+  text-decoration: underline;
 }
 </style>

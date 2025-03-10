@@ -33,11 +33,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.nav-socials {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-}
-</style>
