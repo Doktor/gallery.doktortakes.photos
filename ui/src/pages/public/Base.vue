@@ -1,8 +1,6 @@
 <template>
   <div id="app" :class="{ 'app-single-column': !showNavigation }">
-    <div v-if="showNavigation">
-      <Sidebar />
-    </div>
+    <Sidebar v-if="showNavigation" />
 
     <FadeTransition appear :duration="200" mode="out-in">
       <router-view id="content" />
@@ -44,9 +42,5 @@ export default {
 
 .app-single-column {
   display: block !important;
-}
-
-#content {
-  flex: 1;
 }
 </style>
