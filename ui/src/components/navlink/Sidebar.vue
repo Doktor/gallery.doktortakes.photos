@@ -36,23 +36,30 @@
       </SidebarSection>
 
       <!-- User management -->
-      <SidebarSection v-if="isAuthenticated">
+      <SidebarSection>
         <h2>User</h2>
 
         <SidebarList>
           <Navlink
+            v-if="isAuthenticated"
             class="sidebar-item-profile"
             title="Profile"
             :to="{ name: 'user', params: { slug: user.name } }"
           />
           <Navlink
+            v-if="isAuthenticated"
             class="sidebar-item-log-out"
             title="Log out"
             route="logOut"
           />
+          <Navlink
+            v-if="!isAuthenticated"
+            class="sidebar-item-profile"
+            title="Log in"
+            route="logIn"
+          />
         </SidebarList>
       </SidebarSection>
-      <Navlink v-else-if="!isAuthenticated" title="Log in" route="logIn" />
 
       <SidebarDivider />
 
