@@ -193,7 +193,7 @@ export default {
           });
         }
 
-        this.$set(this.editingTaxa, this.editingTaxa.indexOf(taxon), content);
+        this.editingTaxa[this.editingTaxa.indexOf(taxon)] = content;
       }
 
       for (let taxon of toUpdate) {
@@ -214,7 +214,7 @@ export default {
           });
         }
 
-        this.$set(this.editingTaxa, this.editingTaxa.indexOf(taxon), content);
+        this.editingTaxa[this.editingTaxa.indexOf(taxon)] = content;
       }
 
       for (let taxon of toDelete) {

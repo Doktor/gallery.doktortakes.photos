@@ -126,7 +126,7 @@ export default {
         .filter((album) => !album.loaded)
         .forEach((album, index) => {
           if (page === Math.floor(index / this.albumsPerPage) + 1) {
-            this.$set(album, "isLoaded", true);
+            album.isLoaded = true;
           }
         });
     },
