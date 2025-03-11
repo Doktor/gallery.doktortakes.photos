@@ -18,7 +18,7 @@ export const mutations = {
     state.user = { status: "anonymous" };
   },
 
-  addNotification(state, { message, status = "note" }) {
+  addNotification(state, { message, status = "default" }) {
     state.notificationId += 1;
 
     let notification = { id: state.notificationId, message, status };
@@ -27,7 +27,7 @@ export const mutations = {
     return notification.id;
   },
 
-  addTimedNotification(state, { message, status = "note", hideAfter = 0 }) {
+  addTimedNotification(state, { message, status = "default", hideAfter = 0 }) {
     let id = this.commit("addNotification", { message, status });
 
     if (hideAfter > 0) {
