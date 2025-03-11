@@ -37,8 +37,6 @@ export default {
         afterLeave(el) {
           el.style.animationDuration = "";
         },
-
-        ...component.$listeners,
       };
     },
   },
