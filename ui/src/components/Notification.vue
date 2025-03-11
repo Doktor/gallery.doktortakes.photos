@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import { sleep } from "../utils";
-
 export default {
   props: {
     notification: {
@@ -20,85 +18,55 @@ export default {
     },
   },
 
-  data() {
-    return {
-      visible: false,
-    };
-  },
-
   computed: {
     classes() {
       return {
-        visible: this.visible,
-        [this.notification.status]: true,
+        [`notification-${this.notification.status}`]: true,
       };
     },
   },
 
   methods: {
-    async remove() {
-      this.visible = false;
-      await sleep(200);
+    remove() {
       this.$store.commit("removeNotification", this.notification.id);
     },
-  },
-
-  async mounted() {
-    await sleep(200);
-    this.visible = true;
   },
 };
 </script>
 
 <style lang="scss">
 .notification {
-  border: 1px solid variables.$text-color;
+  @include variables.headings-font();
   color: variables.$text-color;
-  padding: 8px 16px;
+
+  border: 1px solid variables.$text-color;
+  padding: 16px;
 
   cursor: pointer;
-
-  opacity: 0;
-
-  &.visible {
-    opacity: 1;
-  }
-
-  &,
-  &.visible {
-    transition: opacity 200ms ease-in-out;
-  }
 
   &:not(:last-child) {
     margin-bottom: 1rem;
   }
 
-  &.default {
-    $color: variables.$background-color-2;
-
+  @mixin notification($color) {
     background-color: $color;
     border-color: darken($color, 20%);
   }
 
-  &.success {
-    $color: #00cb8a;
-
-    background-color: $color;
-    border-color: darken($color, 20%);
+  &.notification-default {
+    @include notification(variables.$background-color-2);
   }
 
-  &.warning {
-    $color: #ffea00;
-
-    background-color: $color;
-    border-color: darken($color, 20%);
+  &.notification-success {
+    @include notification(#00cb8a);
   }
 
-  &.error {
-    $color: #ff5959;
+  &.notification-warning {
+    @include notification(#ffea00);
+  }
 
-    background-color: $color;
-    border-color: darken($color, 20%);
+  &.notification-error {
+    @include notification(#ff5959);
   }
 }
 </style>

@@ -31,6 +31,6 @@ export default {
 
   z-index: 100;
 
-  margin: 1rem;
+  padding: 1rem;
 }
 </style>
