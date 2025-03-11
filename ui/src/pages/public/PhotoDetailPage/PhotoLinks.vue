@@ -13,9 +13,7 @@
       <div>
         <dt title="Album list"><i class="fas fa-fw fa-list"></i></dt>
         <dd>
-          <router-link :to="{ name: 'albums' }"
-            >Return to album list</router-link
-          >
+          <router-link :to="{ name: 'index' }">Return to index</router-link>
         </dd>
       </div>
 

@@ -5,9 +5,7 @@
       <code class="path">{{ path }}</code> was not found.
     </p>
     <p>
-      <router-link :to="{ name: 'albums' }"
-        >Return to photos archive</router-link
-      >
+      <router-link :to="{ name: 'index' }">Return to index</router-link>
     </p>
   </FixedWidthContainer>
 </template>
