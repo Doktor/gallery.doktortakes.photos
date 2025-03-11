@@ -15,7 +15,7 @@
         </div>
         <PageSkipInput
           v-else
-          :key="n"
+          key="skip"
           @setPage="setPage"
           :page="page"
           :pages="pages"

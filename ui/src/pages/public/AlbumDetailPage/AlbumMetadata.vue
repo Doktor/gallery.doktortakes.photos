@@ -8,11 +8,8 @@
     <div v-if="album.tags.length > 0" class="overlay-item">
       <i title="Tags" class="fas fa-fw fa-tags"></i>
       <span>
-        <template v-for="(slug, index) in album.tags">
-          <router-link
-            class="tag"
-            :key="slug"
-            :to="{ name: 'tag', params: { slug: slug } }"
+        <template v-for="(slug, index) in album.tags" :key="slug">
+          <router-link class="tag" :to="{ name: 'tag', params: { slug: slug } }"
             ><!--
               -->#{{ slug
             }}<!--
