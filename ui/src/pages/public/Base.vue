@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="{ 'app-single-column': !showNavigation }">
+  <main class="app" :class="{ 'app-single-column': !showNavigation }">
     <Sidebar v-if="showNavigation" />
 
     <FadeTransition appear :duration="200" mode="out-in">
@@ -7,7 +7,7 @@
     </FadeTransition>
 
     <Notifications />
-  </div>
+  </main>
 </template>
 
 <script>
@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
+.app {
   display: grid;
   grid-template-columns: 1fr;
 

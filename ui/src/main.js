@@ -1,5 +1,4 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createApp } from "vue";
 
 import Base from "./pages/public/Base";
 import { router } from "./router";
@@ -8,23 +7,12 @@ import { store } from "./store";
 import "./styles/main.scss";
 import "./styles/forms.scss";
 
-Vue.config.productionTip = process.env.NODE_ENV !== "production";
-Vue.use(VueRouter);
+const app = createApp(Base);
 
-(async function () {
-  store.commit("setApiTokenFromLocalStorage");
-  await store.dispatch("getUser");
+store.commit("setApiTokenFromLocalStorage");
+await store.dispatch("getUser");
 
-  new Vue({
-    el: "#app",
+app.use(router);
+app.use(store);
 
-    router,
-    store,
-
-    components: {
-      Base,
-    },
-
-    template: `<Base/>`,
-  });
-})();
+app.mount("#app");
