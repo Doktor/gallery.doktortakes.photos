@@ -15,12 +15,12 @@
         title="Close"
       />
 
-      <SidebarList class="sidebar-items">
+      <ul class="sidebar-items">
         <!-- Main links -->
         <SidebarSection>
           <h2>Albums</h2>
 
-          <SidebarList>
+          <ul>
             <SidebarLink title="All albums" route="index" />
             <SidebarLink
               v-if="user.status !== 'anonymous'"
@@ -31,28 +31,28 @@
             <!-- <SidebarLink title="Taxonomy" route="taxa" />-->
             <!-- <SidebarLink title="Species" route="species" />-->
             <SidebarLink title="Search" route="search" />
-          </SidebarList>
+          </ul>
         </SidebarSection>
 
         <!-- Content management -->
         <SidebarSection v-if="isStaff">
           <h2>Manage</h2>
 
-          <SidebarList>
+          <ul>
             <SidebarLink title="Dashboard" route="manage" />
             <li>
               <a class="sidebar-link" href="/admin/">Admin</a>
             </li>
             <SidebarLink title="Groups" route="groups" />
             <SidebarLink title="Users" route="users" />
-          </SidebarList>
+          </ul>
         </SidebarSection>
 
         <!-- User management -->
         <SidebarSection>
           <h2>User</h2>
 
-          <SidebarList>
+          <ul>
             <SidebarLink
               v-if="isAuthenticated"
               class="sidebar-item-profile"
@@ -71,7 +71,7 @@
               title="Log in"
               route="logIn"
             />
-          </SidebarList>
+          </ul>
         </SidebarSection>
 
         <SidebarDivider />
@@ -79,7 +79,7 @@
         <SidebarSocialSection />
 
         <SidebarDivider />
-      </SidebarList>
+      </ul>
 
       <SidebarFooter />
     </SidebarMenu>
@@ -93,7 +93,6 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "./SidebarDivider";
 import SidebarSocialSection from "./SidebarSocialSection";
-import SidebarList from "./SidebarList";
 import SidebarSection from "./SidebarSection";
 import CustomButton from "@/components/form/CustomButton";
 import SidebarMenu from "./SidebarMenu";
@@ -105,7 +104,6 @@ export default {
     SidebarMenu,
     CustomButton,
     SidebarSection,
-    SidebarList,
     SidebarSocialSection,
     SidebarDivider,
     SidebarFooter,
@@ -143,6 +141,13 @@ export default {
 
   h2 {
     font-size: 2rem;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    list-style-type: none;
   }
 }
 

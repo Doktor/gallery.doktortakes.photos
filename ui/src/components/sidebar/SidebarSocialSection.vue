@@ -39,12 +39,10 @@
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import SidebarSocialItem from "./SidebarSocialItem";
 import SidebarSection from "./SidebarSection";
-import SidebarList from "./SidebarList";
 
 export default {
   name: "SidebarSocialSection",
   components: {
-    SidebarList,
     SidebarSection,
     FontAwesomeCircleIcon,
     SidebarSocialItem,
