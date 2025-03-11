@@ -8,7 +8,7 @@
       </option>
     </select>
 
-    <template v-for="(_, name) in $scopedSlots" :slot="name">
+    <template v-for="(_, name) in $slots" :slot="name">
       <slot :name="name"></slot>
     </template>
   </InputWrapper>
