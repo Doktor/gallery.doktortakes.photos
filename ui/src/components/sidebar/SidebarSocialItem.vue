@@ -45,11 +45,11 @@ export default {
 .sidebar-link-social-icon {
   i {
     display: block;
+    font-size: 24px;
   }
 }
 
 .sidebar-link-social-title {
-  @include variables.sidebar-font();
   text-decoration: underline;
 }
 </style>

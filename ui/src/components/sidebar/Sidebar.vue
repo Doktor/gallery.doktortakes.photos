@@ -131,7 +131,10 @@ export default {
 
 <style lang="scss">
 .sidebar {
+  @include variables.sidebar-font();
+  font-size: 1.3rem;
   text-align: left;
+
   width: variables.$sidebar-width;
 
   margin: 0 auto 2rem auto;
@@ -146,8 +149,6 @@ export default {
 }
 
 .sidebar-items {
-  @include variables.headings-font();
-  font-size: 1.5rem;
   text-transform: lowercase;
 }
 

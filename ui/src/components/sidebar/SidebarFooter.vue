@@ -33,7 +33,6 @@ export default {
 .sidebar-tagline {
   @include variables.headings-font();
   color: variables.$text-color;
-  //font-size: 1.6rem;
   font-weight: 400;
 
   margin: 1rem 0;

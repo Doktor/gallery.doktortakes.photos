@@ -27,7 +27,6 @@ export default {
 
 .sidebar-logo {
   @include variables.logo-font();
-  text-align: center;
 
   margin: 0;
   padding: 0;
@@ -35,7 +34,6 @@ export default {
   border-bottom: 8px solid variables.$text-blue;
 
   @media (width >= variables.$full-layout-breakpoint + 1) {
-    text-align: left;
     font-size: 3.5rem;
   }
 }
