@@ -1,5 +1,4 @@
 <template>
-  <!--  <SidebarListItem>-->
   <a
     class="sidebar-link sidebar-link-social"
     target="blank"
@@ -11,15 +10,11 @@
     </span>
     <span class="sidebar-link-social-title">{{ $attrs.title }}</span>
   </a>
-  <!--  </SidebarListItem>-->
 </template>
 
 <script>
-import SidebarListItem from "./SidebarListItem";
-
 export default {
   name: "SidebarSocialItem",
-  components: { SidebarListItem },
   inheritAttrs: false,
 };
 </script>

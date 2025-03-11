@@ -1,17 +1,14 @@
 <template>
-  <SidebarListItem>
+  <li>
     <router-link class="sidebar-link" :title="title" :to="toComputed"
       >{{ display || title }}
     </router-link>
-  </SidebarListItem>
+  </li>
 </template>
 
 <script>
-import SidebarListItem from "./SidebarListItem";
-
 export default {
   name: "SidebarLink",
-  components: { SidebarListItem },
 
   props: {
     title: {
