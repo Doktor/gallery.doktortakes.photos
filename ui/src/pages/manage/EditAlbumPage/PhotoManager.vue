@@ -3,7 +3,7 @@
     <div>
       {{ photos.length }} photos in album,
       {{ selectedPhotoHashes.length }} photo{{
-        selectedPhotoHashes.length | pluralize
+        pluralize(selectedPhotoHashes.length)
       }}
       selected
     </div>
@@ -58,6 +58,7 @@ import CustomButton from "@/components/form/CustomButton";
 import CustomInput from "@/components/form/CustomInput";
 import FixedWidthContainer from "@/components/FixedWidthContainer.vue";
 import PhotoUploader from "@/pages/manage/EditAlbumPage/PhotoUploader.vue";
+import { pluralize } from "@/utils";
 
 export default {
   components: {
@@ -109,13 +110,9 @@ export default {
     },
   },
 
-  filters: {
-    pluralize(value) {
-      return value === 1 ? "" : "s";
-    },
-  },
-
   methods: {
+    pluralize,
+
     addPhoto(photo) {
       this.$emit("addPhoto", photo);
     },

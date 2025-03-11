@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 v-if="showCount" class="album-results-count">
-      {{ searchResults.length }} album{{ searchResults.length | pluralize }}
+      {{ searchResults.length }} album{{ pluralize(searchResults.length) }}
     </h2>
 
     <AlbumGallerySearchInput v-model="searchTerm" @input="filterAlbums" />
@@ -25,6 +25,7 @@
 <script>
 import AlbumList from "./AlbumList";
 import AlbumGallerySearchInput from "./AlbumGallerySearchInput";
+import { pluralize } from "@/utils";
 
 export default {
   components: {
@@ -67,6 +68,8 @@ export default {
   },
 
   methods: {
+    pluralize,
+
     filterAlbums() {
       this.searchResults = this.searchTerm
         ? this.albums.filter(this.matchAlbum)
@@ -89,12 +92,6 @@ export default {
   watch: {
     albums(newAlbums) {
       this.loadAlbums(newAlbums);
-    },
-  },
-
-  filters: {
-    pluralize(value) {
-      return value === 1 ? "" : "s";
     },
   },
 };

@@ -59,6 +59,10 @@ export function wait(ms, f) {
   return setTimeout(f, ms);
 }
 
+export function pluralize(value) {
+  return value === 1 ? "" : "s";
+}
+
 Array.prototype.remove = function (item) {
   this.splice(this.indexOf(item), 1);
 };

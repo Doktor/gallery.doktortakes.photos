@@ -11,7 +11,7 @@
 
         <template v-if="count > 0">
           <span> &middot; </span>
-          <span>{{ count }} photo{{ count | pluralize }}</span>
+          <span>{{ count }} photo{{ pluralize(count) }}</span>
         </template>
       </div>
     </div>
@@ -50,6 +50,7 @@ import { mapGetters, mapState } from "vuex";
 import AlbumAccessInfo from "./AlbumAccessInfo";
 import AlbumLinks from "@/components/albumDetail/AlbumLinks";
 import AlbumMetadata from "./AlbumMetadata";
+import { pluralize } from "@/utils";
 
 function toFullDateTimeForm(dateForm) {
   return `${dateForm}T00:00:00+00:00`;
@@ -93,10 +94,8 @@ export default {
     },
   },
 
-  filters: {
-    pluralize(value) {
-      return value === 1 ? "" : "s";
-    },
+  methods: {
+    pluralize,
   },
 
   props: {
