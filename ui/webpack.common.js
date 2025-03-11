@@ -1,6 +1,6 @@
 const path = require("path");
 const BundleTracker = require("webpack-bundle-tracker");
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
+const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = {
   context: __dirname,
@@ -28,7 +28,6 @@ module.exports = {
         test: /\.vue$/,
         loader: "vue-loader",
         options: {
-          compiler: require("vue-template-babel-compiler"),
           compilerOptions: {
             whitespace: "condense",
           },
@@ -91,7 +90,7 @@ module.exports = {
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "vue": "vue/dist/vue.js",
+      "vue": "vue/dist/vue.runtime.esm-bundler.js",
     },
     extensions: [".js", ".json", ".vue"],
   },
