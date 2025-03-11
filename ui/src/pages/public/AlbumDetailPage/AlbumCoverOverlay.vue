@@ -151,7 +151,7 @@ export default {
 }
 
 .overlay-item,
-::v-deep .overlay-item {
+:deep(.overlay-item) {
   @include variables.sidebar-font();
   font-size: 1.5rem;
   text-align: left;
