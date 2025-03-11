@@ -11,14 +11,14 @@
       <CustomInput
         v-if="isUpdate"
         label="Slug"
-        :value="album.slug"
+        v-model="album.slug"
         disabled
         readonly
       />
       <CustomInput
         v-if="isUpdate"
         label="Path"
-        :value="album.path"
+        v-model="album.path"
         disabled
         readonly
       />
