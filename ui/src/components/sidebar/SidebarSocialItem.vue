@@ -1,26 +1,29 @@
 <template>
-  <a
-    class="sidebar-link sidebar-link-social"
-    target="blank"
-    rel="noopener noreferrer"
-    v-bind="$attrs"
-  >
+  <SidebarLink class="sidebar-link-social" :href="href" :title="title">
     <span class="sidebar-link-social-icon">
       <slot></slot>
     </span>
-    <span class="sidebar-link-social-title">{{ $attrs.title }}</span>
-  </a>
+    <span class="sidebar-link-social-title">{{ title }}</span>
+  </SidebarLink>
 </template>
 
-<script>
-export default {
-  name: "SidebarSocialItem",
-  inheritAttrs: false,
-};
+<script setup>
+import SidebarLink from "@/components/sidebar/SidebarLink.vue";
+
+const props = defineProps({
+  href: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+});
 </script>
 
 <style lang="scss">
-.sidebar-link-social {
+.sidebar-link-social .sidebar-link {
   display: inline-grid !important;
   justify-content: start;
   align-items: center;

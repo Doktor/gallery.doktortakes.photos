@@ -40,9 +40,7 @@
 
           <ul>
             <SidebarLink title="Dashboard" route="manage" />
-            <li>
-              <a class="sidebar-link" href="/admin/">Admin</a>
-            </li>
+            <SidebarLink title="Admin" href="/admin/" />
             <SidebarLink title="Groups" route="groups" />
             <SidebarLink title="Users" route="users" />
           </ul>
@@ -153,38 +151,5 @@ export default {
 
 .sidebar-items {
   text-transform: lowercase;
-}
-
-@mixin link($text-color, $background-color: variables.$background-color) {
-  color: $text-color;
-  background-color: $background-color;
-
-  &:hover {
-    color: $background-color;
-    background-color: $text-color;
-  }
-}
-
-.sidebar-link {
-  display: inline-block;
-  padding: variables.$sidebar-link-margin;
-  padding-left: variables.$sidebar-link-margin * 3;
-  width: 100%;
-
-  text-decoration-line: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-
-  transition: color, background-color;
-
-  @include link(variables.$text-color);
-
-  .sidebar-item-profile & {
-    @include link(variables.$text-blue);
-  }
-
-  .sidebar-item-log-out & {
-    @include link(variables.$text-error);
-  }
 }
 </style>
