@@ -1,19 +1,19 @@
 <template>
   <PaginationManager
     :isServerSide="useServerSidePagination"
-    :clientSideItems="photos"
+    :allItems="photos"
     :page="page"
     :size="size"
     :sizeOptions="sizeOptions"
     :getPage="getPage"
     @setPage="setPage"
     @setSize="setSize"
-    @setItems="setItems"
+    @setPaginatedItems="setPaginatedItems"
   >
     <div class="photo-gallery-container">
       <Tiles class="photo-gallery">
         <PhotoTile
-          v-for="photo in items"
+          v-for="photo in paginatedItems"
           :key="photo.md5"
           :allowSelect="allowSelect"
           :isSelected="
@@ -50,7 +50,7 @@ export default {
     return {
       page: 1,
       size: 24,
-      items: [],
+      paginatedItems: [],
     };
   },
 
@@ -102,8 +102,8 @@ export default {
     setSize(size) {
       this.size = size;
     },
-    setItems(items) {
-      this.items = items;
+    setPaginatedItems(items) {
+      this.paginatedItems = items;
     },
   },
 };

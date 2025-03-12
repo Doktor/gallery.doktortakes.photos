@@ -31,11 +31,6 @@ export default {
   components: { Pagination },
 
   props: {
-    isServerSide: {
-      type: Boolean,
-      default: false,
-    },
-
     showTopControl: {
       type: Boolean,
       default: false,
@@ -45,8 +40,15 @@ export default {
       default: true,
     },
 
-    clientSideItems: {
+    // Client
+    allItems: {
       type: Array,
+    },
+
+    // Server
+    isServerSide: {
+      type: Boolean,
+      default: false,
     },
     getPage: {
       // (page, size) -> items
@@ -78,7 +80,7 @@ export default {
     pages() {
       return this.isServerSide
         ? Math.ceil(this.count / this.size)
-        : Math.ceil(this.clientSideItems.length / this.size);
+        : Math.ceil(this.allItems.length / this.size);
     },
 
     indexStart() {
@@ -108,7 +110,7 @@ export default {
         this.count = count;
       }
 
-      this.$emit("setItems", items);
+      this.$emit("setPaginatedItems", items);
     },
 
     async setPage(page, initial = false) {
@@ -126,7 +128,7 @@ export default {
         await this.$router.push(location);
       }
 
-      this.$nextTick(() => this.updateClientSideItems());
+      this.$nextTick(() => this.updatePaginatedItems());
     },
 
     async setSize(size) {
@@ -139,25 +141,25 @@ export default {
         return;
       }
 
-      this.$nextTick(() => this.updateClientSideItems());
+      this.$nextTick(() => this.updatePaginatedItems());
     },
 
-    updateClientSideItems() {
-      let currentItems = this.clientSideItems.slice(
+    updatePaginatedItems() {
+      let paginatedItems = this.allItems.slice(
         this.indexStart,
         this.indexEnd + 1,
       );
 
-      for (let item of currentItems) {
+      for (let item of paginatedItems) {
         item.isLoaded = true;
       }
 
-      this.$emit("setItems", currentItems);
+      this.$emit("setPaginatedItems", paginatedItems);
     },
   },
 
   watch: {
-    clientSideItems: {
+    allItems: {
       immediate: true,
       handler(newItems) {
         if (this.isServerSide || newItems.length === 0) {
@@ -176,7 +178,7 @@ export default {
           this.setPage(1, true);
         }
 
-        this.$nextTick(() => this.updateClientSideItems());
+        this.$nextTick(() => this.updatePaginatedItems());
       },
     },
   },
