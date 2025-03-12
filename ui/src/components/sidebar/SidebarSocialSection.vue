@@ -3,41 +3,41 @@
     <h2>Links</h2>
 
     <ul>
-      <SidebarSocialItem
+      <SidebarSocialLink
         href="https://doktortakes.photos/about/"
         title="About me"
       >
         <i class="fas fa-info-circle"></i>
-      </SidebarSocialItem>
+      </SidebarSocialLink>
 
-      <SidebarSocialItem href="mailto:doktorthehusky@gmail.com" title="Email">
+      <SidebarSocialLink href="mailto:doktorthehusky@gmail.com" title="Email">
         <FontAwesomeCircleIcon iconClass="fas fa-envelope" />
-      </SidebarSocialItem>
+      </SidebarSocialLink>
 
       <!-- Twitter -->
-      <SidebarSocialItem
+      <SidebarSocialLink
         href="https://twitter.com/DoktorTheHusky"
         title="Twitter"
       >
         <FontAwesomeCircleIcon iconClass="fab fa-twitter" />
-      </SidebarSocialItem>
+      </SidebarSocialLink>
 
       <!-- Telegram -->
-      <SidebarSocialItem href="https://t.me/DoktorTakesPhotos" title="Telegram">
+      <SidebarSocialLink href="https://t.me/DoktorTakesPhotos" title="Telegram">
         <i class="fab fa-telegram"></i>
-      </SidebarSocialItem>
+      </SidebarSocialLink>
 
       <!-- Website -->
-      <SidebarSocialItem href="https://doktorthehusky.com" title="Website">
+      <SidebarSocialLink href="https://doktorthehusky.com" title="Website">
         <i class="fas fa-globe-americas"></i>
-      </SidebarSocialItem>
+      </SidebarSocialLink>
     </ul>
   </SidebarSection>
 </template>
 
 <script>
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
-import SidebarSocialItem from "./SidebarSocialItem";
+import SidebarSocialLink from "./SidebarSocialLink.vue";
 import SidebarSection from "./SidebarSection";
 
 export default {
@@ -45,7 +45,7 @@ export default {
   components: {
     SidebarSection,
     FontAwesomeCircleIcon,
-    SidebarSocialItem,
+    SidebarSocialLink,
   },
 };
 </script>
