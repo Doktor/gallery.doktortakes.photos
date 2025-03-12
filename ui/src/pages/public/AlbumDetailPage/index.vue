@@ -100,7 +100,11 @@ export default {
   },
 
   watch: {
-    async routePath() {
+    async routePath(newPath, oldPath) {
+      if (oldPath.join("/") === newPath.join("/")) {
+        return;
+      }
+
       await this.loadAlbum();
     },
   },
