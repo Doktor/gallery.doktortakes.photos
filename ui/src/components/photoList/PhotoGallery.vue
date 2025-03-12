@@ -1,5 +1,6 @@
 <template>
   <PaginationManager
+    v-if="photos.length > 0"
     :isServerSide="useServerSidePagination"
     :allItems="photos"
     :page="page"
