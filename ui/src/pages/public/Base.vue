@@ -2,9 +2,7 @@
   <main class="app" :class="{ 'app-single-column': !showNavigation }">
     <Sidebar v-if="showNavigation" />
 
-    <FadeTransition appear :duration="200" mode="out-in">
-      <router-view id="content" />
-    </FadeTransition>
+    <router-view id="content" />
 
     <Notifications />
   </main>
