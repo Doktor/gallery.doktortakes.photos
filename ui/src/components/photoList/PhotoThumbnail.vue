@@ -1,7 +1,6 @@
 <template>
-  <PhotoThumbnailLoading v-if="isLoading" />
   <img
-    v-else-if="thumbnail !== null"
+    v-if="thumbnail !== null"
     class="photo-thumbnail"
     :src="thumbnail"
     alt="Photo thumbnail"
@@ -9,38 +8,24 @@
   <PhotoThumbnailPlaceholder v-else />
 </template>
 
-<script>
-import PhotoThumbnailLoading from "./PhotoThumbnailLoading";
+<script setup>
+import { computed } from "vue";
 import PhotoThumbnailPlaceholder from "./PhotoThumbnailPlaceholder";
 
-export default {
-  components: {
-    PhotoThumbnailPlaceholder,
-    PhotoThumbnailLoading,
+const props = defineProps({
+  photo: {
+    type: Object,
+    required: true,
   },
+});
 
-  props: {
-    photo: {
-      type: Object,
-      required: true,
-    },
-
-    isLoading: {
-      type: Boolean,
-      default: true,
-    },
-  },
-
-  computed: {
-    thumbnail() {
-      return (
-        this.photo.images?.mediumSquare?.url ??
-        this.photo.images?.square?.url ??
-        null
-      );
-    },
-  },
-};
+const thumbnail = computed(() => {
+  return (
+    props.photo.images?.mediumSquare?.url ??
+    props.photo.images?.square?.url ??
+    null
+  );
+});
 </script>
 
 <style lang="scss">

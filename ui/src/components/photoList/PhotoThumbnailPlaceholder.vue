@@ -5,14 +5,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import PhotoPlaceholderImage from "./PhotoPlaceholderImage";
-
-export default {
-  components: {
-    PhotoPlaceholderImage,
-  },
-};
 </script>
 
 <style lang="scss">

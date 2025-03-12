@@ -13,19 +13,19 @@
     <div class="photo-gallery-container">
       <Tiles class="photo-gallery">
         <PhotoTile
-          v-for="photo in paginatedItems"
-          :key="photo.md5"
+          v-for="n in size"
+          :key="n"
           :allowSelect="allowSelect"
           :isSelected="
-            allowSelect ? selectedPhotoHashes.includes(photo.md5) : false
+            allowSelect
+              ? selectedPhotoHashes.includes(paginatedItems[n].md5)
+              : false
           "
-          :isLoading="
-            useServerSidePagination ? false : isLoading || !photo.isLoaded
-          "
+          :isLoading="loading > 0"
           :isVisible="
-            useServerSidePagination ? true : isLoading || photo.isLoaded
+            loading > 0 || (page - 1) * size + (n - 1) < photos.length
           "
-          :photo="photo"
+          :photo="paginatedItems[n - 1]"
           :routeName="routeName"
           @select="select"
         />
@@ -38,6 +38,7 @@
 import PhotoTile from "./PhotoTile";
 import Tiles from "../Tiles";
 import PaginationManager from "../pagination/PaginationManager";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -55,6 +56,7 @@ export default {
   },
 
   computed: {
+    ...mapState(["loading"]),
     sizeOptions() {
       return [12, 24, 48, 96];
     },

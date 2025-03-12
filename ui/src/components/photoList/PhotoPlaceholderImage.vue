@@ -2,12 +2,6 @@
   <PlaceholderImage :width="1" :height="1" alt="Photo thumbnail placeholder" />
 </template>
 
-<script>
+<script setup>
 import PlaceholderImage from "../PlaceholderImage";
-
-export default {
-  components: {
-    PlaceholderImage,
-  },
-};
 </script>
