@@ -22,11 +22,6 @@
 
           <ul>
             <SidebarLink title="All albums" route="index" />
-            <SidebarLink
-              v-if="user.status !== 'anonymous'"
-              title="Your albums"
-              :to="{ name: 'user', params: { slug: user.name } }"
-            />
             <SidebarLink title="Tags" route="tags" />
             <!-- <SidebarLink title="Taxonomy" route="taxa" />-->
             <!-- <SidebarLink title="Species" route="species" />-->
