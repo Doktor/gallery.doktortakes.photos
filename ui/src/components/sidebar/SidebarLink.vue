@@ -46,7 +46,15 @@ const linkProps = {
 
 const renderLink = () => {
   return props.route || props.to
-    ? h(RouterLink, { ...linkProps, to: toComputed.value }, [renderContent()])
+    ? h(
+        RouterLink,
+        {
+          ...linkProps,
+          to: toComputed.value,
+          exactActiveClass: "sidebar-link-active",
+        },
+        [renderContent()],
+      )
     : h(
         "a",
         {
@@ -67,6 +75,7 @@ const render = h("li", null, [renderLink()]);
   color: $text-color;
   background-color: $background-color;
 
+  &.sidebar-link-active,
   &:hover {
     color: $background-color;
     background-color: $text-color;
