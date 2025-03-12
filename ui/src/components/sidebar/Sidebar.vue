@@ -17,7 +17,7 @@
 
       <ul class="sidebar-items">
         <!-- Main links -->
-        <SidebarSection>
+        <li class="sidebar-section">
           <h2>Albums</h2>
 
           <ul>
@@ -32,10 +32,10 @@
             <!-- <SidebarLink title="Species" route="species" />-->
             <SidebarLink title="Search" route="search" />
           </ul>
-        </SidebarSection>
+        </li>
 
         <!-- Content management -->
-        <SidebarSection v-if="isStaff">
+        <li class="sidebar-section" v-if="isStaff">
           <h2>Manage</h2>
 
           <ul>
@@ -44,10 +44,10 @@
             <SidebarLink title="Groups" route="groups" />
             <SidebarLink title="Users" route="users" />
           </ul>
-        </SidebarSection>
+        </li>
 
         <!-- User management -->
-        <SidebarSection>
+        <li class="sidebar-section">
           <h2>User</h2>
 
           <ul>
@@ -70,7 +70,7 @@
               route="logIn"
             />
           </ul>
-        </SidebarSection>
+        </li>
 
         <SidebarDivider />
 
@@ -91,7 +91,6 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
 import SidebarDivider from "./SidebarDivider";
 import SidebarSocialSection from "./SidebarSocialSection";
-import SidebarSection from "./SidebarSection";
 import CustomButton from "@/components/form/CustomButton";
 import SidebarMenu from "./SidebarMenu";
 import SidebarMenuButton from "./SidebarMenuButton";
@@ -101,7 +100,6 @@ export default {
     SidebarMenuButton,
     SidebarMenu,
     CustomButton,
-    SidebarSection,
     SidebarSocialSection,
     SidebarDivider,
     SidebarFooter,
@@ -151,5 +149,9 @@ export default {
 
 .sidebar-items {
   text-transform: lowercase;
+}
+
+.sidebar-section {
+  margin-bottom: variables.$sidebar-margin;
 }
 </style>

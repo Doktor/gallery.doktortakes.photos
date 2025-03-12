@@ -1,5 +1,5 @@
 <template>
-  <SidebarSection>
+  <li class="sidebar-section">
     <h2>Links</h2>
 
     <ul>
@@ -32,18 +32,16 @@
         <i class="fas fa-globe-americas"></i>
       </SidebarSocialLink>
     </ul>
-  </SidebarSection>
+  </li>
 </template>
 
 <script>
 import FontAwesomeCircleIcon from "./FontAwesomeCircleIcon";
 import SidebarSocialLink from "./SidebarSocialLink.vue";
-import SidebarSection from "./SidebarSection";
 
 export default {
   name: "SidebarSocialSection",
   components: {
-    SidebarSection,
     FontAwesomeCircleIcon,
     SidebarSocialLink,
   },
