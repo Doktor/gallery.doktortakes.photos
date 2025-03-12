@@ -2,7 +2,7 @@
   <SidebarSection>
     <h2>Links</h2>
 
-    <div class="test">
+    <ul>
       <SidebarSocialItem
         href="https://doktortakes.photos/about/"
         title="About me"
@@ -31,7 +31,7 @@
       <SidebarSocialItem href="https://doktorthehusky.com" title="Website">
         <i class="fas fa-globe-americas"></i>
       </SidebarSocialItem>
-    </div>
+    </ul>
   </SidebarSection>
 </template>
 
@@ -49,9 +49,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.test {
-  display: grid;
-}
-</style>
