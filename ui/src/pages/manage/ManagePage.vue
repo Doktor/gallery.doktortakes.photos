@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div>
     <FixedWidthContainer>
       <h2>Edit</h2>
 

@@ -1,6 +1,6 @@
 <template>
   <PaginationManager
-    v-if="photos.length > 0"
+    v-if="useServerSidePagination || isLoading || photos.length > 0"
     :isServerSide="useServerSidePagination"
     :allItems="photos"
     :page="page"
@@ -19,12 +19,14 @@
           :allowSelect="allowSelect"
           :isSelected="
             allowSelect
-              ? selectedPhotoHashes.includes(paginatedItems[n].md5)
+              ? selectedPhotoHashes.includes(paginatedItems[n]?.md5)
               : false
           "
           :isLoading="loading > 0"
           :isVisible="
-            loading > 0 || (page - 1) * size + (n - 1) < photos.length
+            useServerSidePagination ||
+            loading > 0 ||
+            (page - 1) * size + (n - 1) < photos.length
           "
           :photo="paginatedItems[n - 1]"
           :routeName="routeName"

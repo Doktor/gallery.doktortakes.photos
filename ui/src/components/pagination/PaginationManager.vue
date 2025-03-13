@@ -98,26 +98,11 @@ export default {
   },
 
   methods: {
-    async getPageServerSide(page, size) {
-      let items, count;
-
-      if (Object.prototype.hasOwnProperty.call(this.cache, page)) {
-        items = this.cache[page];
-      } else {
-        ({ items, count } = await this.getPage(page, size));
-
-        this.cache[page] = items;
-        this.count = count;
-      }
-
-      this.$emit("setPaginatedItems", items);
-    },
-
     async setPage(page, initial = false) {
       this.$emit("setPage", page);
 
       if (this.isServerSide) {
-        await this.getPageServerSide(page, this.size);
+        await this.updateServerPaginatedItems(page, this.size);
       }
 
       let location = { query: { ...this.$route.query, page } };
@@ -128,7 +113,11 @@ export default {
         await this.$router.push(location);
       }
 
-      this.$nextTick(() => this.updatePaginatedItems());
+      if (this.isServerSide) {
+        return;
+      }
+
+      this.$nextTick(() => this.updateClientPaginatedItems());
     },
 
     async setSize(size) {
@@ -141,10 +130,10 @@ export default {
         return;
       }
 
-      this.$nextTick(() => this.updatePaginatedItems());
+      this.$nextTick(() => this.updateClientPaginatedItems());
     },
 
-    updatePaginatedItems() {
+    updateClientPaginatedItems() {
       let paginatedItems = this.allItems.slice(
         this.indexStart,
         this.indexEnd + 1,
@@ -155,6 +144,27 @@ export default {
       }
 
       this.$emit("setPaginatedItems", paginatedItems);
+    },
+
+    async updateServerPaginatedItems(page, size) {
+      let items, count;
+
+      if (Object.prototype.hasOwnProperty.call(this.cache, page)) {
+        items = this.cache[page];
+        this.$emit("setPaginatedItems", items);
+        return;
+      }
+
+      this.$store.commit("setLoading", true);
+      this.$emit("setPaginatedItems", Array(size).fill(undefined));
+
+      ({ items, count } = await this.getPage(page, size));
+
+      this.cache[page] = items;
+      this.count = count;
+
+      this.$store.commit("setLoading", false);
+      this.$emit("setPaginatedItems", items);
     },
   },
 
@@ -178,7 +188,7 @@ export default {
           this.setPage(1, true);
         }
 
-        this.$nextTick(() => this.updatePaginatedItems());
+        this.$nextTick(() => this.updateClientPaginatedItems());
       },
     },
   },

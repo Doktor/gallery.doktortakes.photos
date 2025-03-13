@@ -10,7 +10,7 @@
 
     <AlbumChildrenListTiles v-if="!loading" :album="album" />
 
-    <PhotoGallery :photos="photos" :allowSelect="false" />
+    <PhotoGallery :isLoading="loading" :photos="photos" :allowSelect="false" />
 
     <div
       class="album-empty-text"
