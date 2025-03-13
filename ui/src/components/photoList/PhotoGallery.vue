@@ -18,9 +18,8 @@
           :key="n"
           :allowSelect="allowSelect"
           :isSelected="
-            allowSelect
-              ? selectedPhotoHashes.includes(paginatedItems[n]?.md5)
-              : false
+            allowSelect &&
+            selectedPhotoHashes.includes(paginatedItems[n - 1]?.md5)
           "
           :isVisible="
             useServerSidePagination ||
