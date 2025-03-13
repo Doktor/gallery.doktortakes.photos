@@ -22,7 +22,6 @@
               ? selectedPhotoHashes.includes(paginatedItems[n]?.md5)
               : false
           "
-          :isLoading="loading > 0"
           :isVisible="
             useServerSidePagination ||
             loading > 0 ||

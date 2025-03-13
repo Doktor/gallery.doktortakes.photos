@@ -47,10 +47,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    isLoading: {
-      type: Boolean,
-      default: false,
-    },
     isVisible: {
       type: Boolean,
       required: true,
