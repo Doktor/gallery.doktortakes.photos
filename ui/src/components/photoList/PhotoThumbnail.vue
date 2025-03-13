@@ -1,16 +1,9 @@
 <template>
-  <img
-    v-if="thumbnail !== null"
-    class="photo-thumbnail"
-    :src="thumbnail"
-    alt="Photo thumbnail"
-  />
-  <PhotoThumbnailPlaceholder v-else />
+  <img class="photo-thumbnail" :src="thumbnail" alt="Photo thumbnail" />
 </template>
 
 <script setup>
 import { computed } from "vue";
-import PhotoThumbnailPlaceholder from "./PhotoThumbnailPlaceholder";
 
 const props = defineProps({
   photo: {
@@ -20,11 +13,7 @@ const props = defineProps({
 });
 
 const thumbnail = computed(() => {
-  return (
-    props.photo.images?.mediumSquare?.url ??
-    props.photo.images?.square?.url ??
-    null
-  );
+  return props.photo.images.mediumSquare?.url ?? props.photo.images.square.url;
 });
 </script>
 
