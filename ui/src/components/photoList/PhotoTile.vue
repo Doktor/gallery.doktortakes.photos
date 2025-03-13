@@ -1,16 +1,8 @@
 <template>
   <div class="photo" :class="classes" v-show="isVisible">
-    <PhotoThumbnailLoading v-if="isLoading" />
-
-    <template v-else-if="isVisible && photo !== undefined">
-      <div v-if="allowSelect">
-        <PhotoThumbnail :photo="photo" />
-      </div>
-
-      <router-link v-else :to="photoLink">
-        <PhotoThumbnail :photo="photo" />
-      </router-link>
-    </template>
+    <router-link v-if="isVisible" :to="photoLink">
+      <PhotoThumbnail :photo="photo" />
+    </router-link>
 
     <div v-if="allowSelect" class="photo-select-overlay" @click="select">
       <div class="photo-select-checkbox-container">
@@ -30,11 +22,9 @@
 
 <script>
 import PhotoThumbnail from "./PhotoThumbnail";
-import PhotoThumbnailLoading from "@/components/photoList/PhotoThumbnailLoading.vue";
 
 export default {
   components: {
-    PhotoThumbnailLoading,
     PhotoThumbnail,
   },
 
@@ -77,6 +67,10 @@ export default {
     },
 
     photoLink() {
+      if (this.photo === undefined) {
+        return "#";
+      }
+
       return {
         name: this.routeName,
         params: {
