@@ -1,7 +1,5 @@
 <template>
   <div v-if="!loading">
-    <router-link :to="{ name: 'manage' }">Back to editor</router-link>
-
     <header class="manage-album-header">
       <AlbumCover :count="0" :album="album" :showManage="false" />
     </header>

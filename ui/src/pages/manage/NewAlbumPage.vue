@@ -1,7 +1,5 @@
 <template>
   <FixedWidthContainer>
-    <router-link :to="{ name: 'manage' }">Back to editor</router-link>
-
     <h2>Create new album</h2>
 
     <AlbumForm
