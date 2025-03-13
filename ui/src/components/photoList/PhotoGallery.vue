@@ -1,6 +1,8 @@
 <template>
   <PaginationManager
     v-if="useServerSidePagination || isLoading || photos.length > 0"
+    :showTopControl="size > 12 && photos.length > 12"
+    :showBottomControl="true"
     :isServerSide="useServerSidePagination"
     :allItems="photos"
     :page="page"
