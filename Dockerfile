@@ -58,12 +58,19 @@ COPY ui/ /app/ui/
 RUN npm install
 
 
+FROM frontend AS frontend-build-production
+
+WORKDIR /app/ui/
+
+RUN npx webpack --config webpack.prod.js
+
+
 FROM base as backend-staging
 
 COPY ./api/config/config.staging.toml /app/api/config/config.toml
 COPY ./api/config/secrets.staging.toml /app/api/config/secrets.toml
 
-COPY --from=frontend /app/ui/static/ /app/ui/static/
+COPY --from=frontend-build-production /app/ui/static/ /app/ui/static/
 
 RUN chmod +x /app/run.staging.sh
 
@@ -73,6 +80,6 @@ FROM base as backend-production
 COPY ./api/config/config.production.toml /app/api/config/config.toml
 COPY ./api/config/secrets.production.toml /app/api/config/secrets.toml
 
-COPY --from=frontend /app/ui/static/ /app/ui/static/
+COPY --from=frontend-build-production /app/ui/static/ /app/ui/static/
 
 RUN poetry run python /app/api/manage.py collectstatic --no-input --clear
