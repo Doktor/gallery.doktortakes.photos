@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from photos.api.serializers.taxon import TaxonSerializer
 from photos.api.serializers.thumbnail import ThumbnailSerializer
 from photos.models.photo.thumbnail import (
     THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE, THUMBNAIL_MEDIUM_SQUARE, THUMBNAIL_EXTRA_SMALL_SQUARE)
-from photos.models import Photo, PhotoTaxon
+from photos.models import Photo
 
 import itertools
 from collections import OrderedDict
@@ -55,22 +56,7 @@ class PhotoSerializer(serializers.ModelSerializer):
         read_only=True, allow_null=True, default=None)
     exif = serializers.DictField(read_only=True, source='get_exif')
 
-    taxa = serializers.SerializerMethodField(read_only=True)
-
-    @staticmethod
-    def get_taxa(obj: Photo) -> list:
-        from photos.api.serializers import TaxonSerializer, PhotoTaxonSerializer
-
-        value = []
-        queryset = PhotoTaxon.objects.filter(photo=obj).select_related('taxon')
-
-        for item in queryset:
-            through = PhotoTaxonSerializer(item)
-            taxon = TaxonSerializer(item.taxon)
-
-            value.append({**through.data, **taxon.data})
-
-        return value
+    taxa = TaxonSerializer(many=True)
 
     @staticmethod
     def get_images(obj: Photo) -> dict:
