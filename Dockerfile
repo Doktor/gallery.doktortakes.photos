@@ -36,6 +36,7 @@ RUN apt update \
 
 COPY --parents \
   api/ \
+  build/ \
   tasks/ \
   run.dev.sh \
   /app/
@@ -59,19 +60,19 @@ RUN npm install
 
 FROM base as backend-staging
 
-COPY ./config/config.staging.toml /app/config/config.toml
-COPY ./config/secrets.staging.toml /app/config/secrets.toml
+COPY ./api/config/config.staging.toml /app/api/config/config.toml
+COPY ./api/config/secrets.staging.toml /app/api/config/secrets.toml
 
-COPY --from=node /app/ui/static/ /app/ui/static/
+COPY --from=frontend /app/ui/static/ /app/ui/static/
 
 RUN chmod +x /app/run.staging.sh
 
 
 FROM base as backend-production
 
-COPY ./config/config.production.toml /app/config/config.toml
-COPY ./config/secrets.production.toml /app/config/secrets.toml
+COPY ./api/config/config.production.toml /app/api/config/config.toml
+COPY ./api/config/secrets.production.toml /app/api/config/secrets.toml
 
-COPY --from=node /app/ui/static/ /app/ui/static/
+COPY --from=frontend /app/ui/static/ /app/ui/static/
 
 RUN poetry run python /app/api/manage.py collectstatic --no-input --clear

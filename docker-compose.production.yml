@@ -5,6 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
       target: backend-production
-    command: poetry run gunicorn photos.wsgi -c ./build/gunicorn.conf.py
+    command: poetry run gunicorn photos.wsgi -c ./app/build/gunicorn.conf.py
     ports:
       - 1337:1337
