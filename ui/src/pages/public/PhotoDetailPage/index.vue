@@ -19,6 +19,9 @@
 
     <PhotoInfo :album="album" :photo="photo" :photos="photos" />
   </div>
+  <div v-else class="photo-detail-loading">
+    <i class="fas fa-spin fa-spinner"></i>
+  </div>
 </template>
 
 <script>
@@ -195,6 +198,21 @@ body.photo-viewer {
 </style>
 
 <style lang="scss" scoped>
+.photo-detail-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 6rem;
+}
+
 .photo-navigation {
   display: flex;
   flex-direction: column;
