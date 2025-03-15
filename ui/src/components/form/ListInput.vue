@@ -3,11 +3,12 @@
     <label :for="id">{{ label }}</label>
 
     <div class="list-input-wrapper">
-      <div class="list-input-tags">
+      <div class="list-input-items">
         <span
           v-for="(item, index) in items"
           class="list-input-item"
           :key="item"
+          title="Click to delete"
           @click="removeItem(index)"
           >{{ item }}</span
         >
@@ -60,7 +61,6 @@ export default {
   computed: {
     classes() {
       return {
-        "field": true,
         "field-invalid": this.errors.length > 0,
       };
     },
@@ -105,50 +105,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.field {
-  display: inline-block;
-}
-
-.list-input-input {
-  border: 0;
-  border-radius: 0;
-  margin: 0;
+.list-input-wrapper {
   padding: 0;
 
-  flex-grow: 1;
-
-  &:focus,
-  &:focus-visible {
+  input {
     border: 0;
-    outline: 0;
+  }
+
+  &:focus-within {
+    outline: 2px solid variables.$text-blue;
+
+    input {
+      &:active,
+      &:focus,
+      &:focus-visible {
+        outline: 0;
+      }
+    }
   }
 }
 
-.list-input-wrapper {
+.list-input-items {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
   flex-wrap: wrap;
-
-  // Style the wrapper like an input
-  background-color: rgb(215, 215, 215);
-  border: 1px solid rgb(195, 195, 195);
-  color: rgb(40, 40, 40);
+  gap: 8px;
 
   padding: 8px;
+
+  background-color: variables.$background-color-3;
+
+  text-align: left;
 }
 
 .list-input-item {
-  display: inline-block;
-
   border: 1px solid black;
-  margin-right: 8px;
-  margin-bottom: 8px;
   padding: 4px 8px;
 
-  background-color: white;
-  color: black;
-  font-size: 14pt;
+  background-color: variables.$background-color;
+  color: variables.$text-color;
+  font-size: 1.2rem;
 
   cursor: pointer;
 
@@ -156,12 +152,8 @@ export default {
     border-color: red;
 
     color: red;
-    text-decoration: line-through double;
+    text-decoration: line-through;
     text-decoration-color: red;
-  }
-
-  &:last-of-type {
-    margin-right: 10px;
   }
 }
 </style>

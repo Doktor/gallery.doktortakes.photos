@@ -90,19 +90,26 @@ label {
   text-align: left;
 }
 
+// elements that look like standard input elements
 input,
 select,
-textarea {
-  display: block;
-
+textarea,
+.list-input-wrapper {
   width: 100%;
-  padding: 8px 12px;
-
-  @include variables.input-font();
 
   background-color: variables.$background-color;
   border: 1px solid variables.$background-color-3;
   color: variables.$text-color;
+}
+
+// standard input elements
+input,
+select,
+textarea {
+  display: block;
+  padding: 12px;
+
+  @include variables.input-font();
 
   &:active,
   &:focus,
