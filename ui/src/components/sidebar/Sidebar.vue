@@ -18,10 +18,10 @@
       <ul class="sidebar-items">
         <!-- Main links -->
         <li class="sidebar-section">
-          <h2>Albums</h2>
+          <h2>Photos</h2>
 
           <ul>
-            <SidebarLink title="All albums" route="index" />
+            <SidebarLink title="Albums" route="index" />
             <SidebarLink title="Tags" route="tags" />
             <!-- <SidebarLink title="Taxonomy" route="taxa" />-->
             <!-- <SidebarLink title="Species" route="species" />-->
@@ -35,9 +35,9 @@
 
           <ul>
             <SidebarLink title="Dashboard" route="manage" />
-            <SidebarLink title="Admin" href="/admin/" />
             <SidebarLink title="Groups" route="groups" />
             <SidebarLink title="Users" route="users" />
+            <SidebarLink title="Admin" href="/admin/" />
           </ul>
         </li>
 
