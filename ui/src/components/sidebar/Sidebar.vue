@@ -25,7 +25,7 @@
             <SidebarLink title="Tags" route="tags" />
             <!-- <SidebarLink title="Taxonomy" route="taxa" />-->
             <!-- <SidebarLink title="Species" route="species" />-->
-            <SidebarLink title="Search" route="search" />
+            <!-- <SidebarLink title="Search" route="search" />-->
           </ul>
         </li>
 
