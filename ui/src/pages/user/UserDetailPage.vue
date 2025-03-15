@@ -24,7 +24,6 @@
     </FixedWidthContainer>
 
     <section>
-      <h2 style="text-align: left">Albums</h2>
       <AlbumGallery :albums="albums" :loading="loading" />
     </section>
   </div>
