@@ -18,7 +18,7 @@
         :class="classes"
         :id="id"
         type="text"
-        v-model="current"
+        v-model="inputValue"
         @keydown.enter.prevent="addItem"
         @keydown.backspace="removeLastItem"
       />
@@ -44,7 +44,7 @@ export default {
       required: true,
     },
 
-    value: {
+    modelValue: {
       type: Array,
       default: () => [],
     },
@@ -52,8 +52,8 @@ export default {
 
   data() {
     return {
-      items: [...this.value],
-      current: "",
+      items: [...this.modelValue],
+      inputValue: "",
     };
   },
 
@@ -74,28 +74,30 @@ export default {
 
   methods: {
     addItem() {
-      if (!this.current.trim()) {
+      if (!this.inputValue.trim()) {
         return;
       }
 
-      if (this.items.includes(this.current)) {
-        this.current = "";
+      if (this.items.includes(this.inputValue)) {
+        this.inputValue = "";
         return;
       }
 
-      this.items.push(this.current);
-      this.current = "";
+      this.items.push(this.inputValue);
+      this.inputValue = "";
 
-      this.$emit("input", this.items);
+      this.$emit("update:modelValue", this.items);
     },
+
     removeItem(index) {
       this.items.splice(index, 1);
-      this.$emit("input", this.items);
+      this.$emit("update:modelValue", this.items);
     },
+
     removeLastItem() {
-      if (!this.current.trim()) {
+      if (!this.inputValue.trim()) {
         this.removeItem(this.items.length - 1);
-        this.$emit("input", this.items);
+        this.$emit("update:modelValue", this.items);
       }
     },
   },
