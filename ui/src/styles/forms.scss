@@ -75,55 +75,6 @@ legend {
   font-weight: 700;
 }
 
-textarea {
-  display: block;
-}
-
-input,
-textarea {
-  background-color: variables.$background-color-3;
-  border: 1px solid variables.$background-color-4;
-  border-radius: $form-border-radius;
-  color: variables.$text-color;
-
-  &:active,
-  &:focus {
-    border: 1px solid variables.$text-blue;
-  }
-}
-
-input:disabled {
-  background-color: variables.$background-color;
-  border-color: variables.$background-color;
-
-  cursor: not-allowed;
-}
-
-input[type="date"],
-input[type="number"],
-input[type="password"],
-input[type="text"],
-select,
-textarea {
-  width: 100%;
-  padding: 8px 10px;
-
-  font-size: $form-font-size;
-  line-height: 1;
-}
-
-label {
-  display: block;
-
-  width: 100%;
-  margin-bottom: 0.5rem;
-
-  font-size: $form-font-size;
-  line-height: 1;
-  font-weight: bold;
-  text-align: left;
-}
-
 .field-wrapper {
   display: flex;
   justify-content: start;

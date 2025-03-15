@@ -88,6 +88,12 @@ $background-color-5: rgb(175, 175, 175);
   line-height: 1.5;
 }
 
+@mixin input-font() {
+  @include text-font();
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
 /* Sidebar */
 $page-margin: 32px;
 $sidebar-margin: $page-margin + 8px;

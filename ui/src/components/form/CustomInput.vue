@@ -78,24 +78,58 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.field[type="date"],
-.field[type="text"],
-textarea.field {
-  border-radius: 0;
+<style lang="scss">
+label {
+  display: block;
+
+  width: 100%;
+  margin-bottom: 0.5rem;
+
+  @include variables.headings-font();
+  font-size: 1.5rem;
+  text-align: left;
 }
 
-.field[type="checkbox"] {
+input,
+select,
+textarea {
+  display: block;
+
+  width: 100%;
+  padding: 8px 12px;
+
+  @include variables.input-font();
+
+  background-color: variables.$background-color;
+  border: 1px solid variables.$background-color-3;
+  color: variables.$text-color;
+
+  &:active,
+  &:focus,
+  &:focus-visible {
+    outline: 2px solid variables.$text-blue;
+  }
+
+  &:disabled {
+    background-color: variables.$background-color-3;
+    border-color: variables.$background-color-5;
+
+    cursor: not-allowed;
+  }
+}
+
+input[type="checkbox"] {
+  display: inline-block;
+
   width: 16px;
   height: 16px;
-
   margin-right: 8px;
 
-  vertical-align: 2px;
-
   & + label {
-    display: inline;
-    width: auto;
+    display: inline-block;
+
+    width: unset;
+    margin-bottom: 0;
   }
 }
 </style>
