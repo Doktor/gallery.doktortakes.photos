@@ -11,7 +11,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, "./static/"),
-    filename: "[name].js",
+    filename: "[name].[contenthash].js",
   },
 
   plugins: [
