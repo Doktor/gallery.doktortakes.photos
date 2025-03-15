@@ -35,6 +35,9 @@ def get_api_token(request: Request) -> Response:
     user = serializer.validated_data['user']
     token, _ = Token.objects.get_or_create(user=user)
 
+    user.last_login = DateTime.utcnow()
+    user.save()
+
     return Response({"message": "Logged in successfully.", "token": token.key}, status=HTTPStatus.OK)
 
 
