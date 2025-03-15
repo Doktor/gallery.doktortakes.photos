@@ -1,23 +1,32 @@
 <template>
   <div class="album-search-container">
-    <input
-      class="album-search-input"
+    <CustomInput
       type="text"
+      label=""
       placeholder="Search albums by name"
-      :value="value"
-      @input="$emit('input', $event.target.value)"
+      v-model="value"
     />
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      value: "",
-    };
+<script setup>
+import { computed } from "vue";
+import CustomInput from "@/components/form/CustomInput.vue";
+
+const emit = defineEmits(["update:modelValue"]);
+
+const props = defineProps({
+  modelValue: {},
+});
+
+const value = computed({
+  get() {
+    return props.modelValue;
   },
-};
+  set(newValue) {
+    emit("update:modelValue", newValue);
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -26,22 +35,5 @@ export default {
   max-width: 500px;
 
   margin-bottom: 1rem;
-}
-
-.album-search-input {
-  background-color: variables.$background-color;
-  border: 1px solid variables.$background-color-3;
-  border-radius: 0;
-
-  height: 3.2rem;
-  padding: 6px 12px;
-
-  @include variables.text-font();
-  color: variables.$text-color;
-  font-size: 1.5rem;
-
-  &::placeholder {
-    color: variables.$text-color-2;
-  }
 }
 </style>
