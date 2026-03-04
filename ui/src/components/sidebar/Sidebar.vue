@@ -119,11 +119,15 @@ export default {
       const albumsByPath = new Map();
       const topLevel = [];
 
-      for (const album of this.featuredAlbums) {
+      const albums = this.featuredAlbums.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
+
+      for (const album of albums) {
         albumsByPath.set(album.path, { album, children: [] });
       }
 
-      for (const album of this.featuredAlbums) {
+      for (const album of albums) {
         const parentPath = album.path.includes("/")
           ? album.path.slice(0, album.path.lastIndexOf("/"))
           : null;
