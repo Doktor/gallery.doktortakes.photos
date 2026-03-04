@@ -1,5 +1,5 @@
 <template>
-  <SidebarLink class="sidebar-link-social" :href="href" :title="title">
+  <SidebarLink class="sidebar-link-social" :href="href" :route="route" :title="title">
     <span class="sidebar-link-social-icon">
       <slot></slot>
     </span>
@@ -13,7 +13,9 @@ import SidebarLink from "@/components/sidebar/SidebarLink.vue";
 const props = defineProps({
   href: {
     type: String,
-    required: true,
+  },
+  route: {
+    type: String,
   },
   title: {
     type: String,

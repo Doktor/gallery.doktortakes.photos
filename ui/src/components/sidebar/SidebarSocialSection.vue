@@ -3,10 +3,7 @@
     <h2>Links</h2>
 
     <ul>
-      <SidebarSocialLink
-        href="https://doktortakes.photos/about/"
-        title="About me"
-      >
+      <SidebarSocialLink title="About me" route="about">
         <i class="fas fa-info-circle"></i>
       </SidebarSocialLink>
 

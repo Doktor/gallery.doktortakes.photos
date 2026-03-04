@@ -1,3 +1,4 @@
+import AboutPage from "@/pages/public/AboutPage";
 import CopyrightPage from "@/pages/public/CopyrightPage";
 
 import AlbumListPage from "@/pages/public/AlbumListPage";
@@ -97,6 +98,14 @@ export const publicRoutes = [
     },
   },
 
+  {
+    path: "/about/",
+    name: "about",
+    component: AboutPage,
+    meta: {
+      title: "About",
+    },
+  },
   {
     path: "/copyright/",
     name: "copyright",
