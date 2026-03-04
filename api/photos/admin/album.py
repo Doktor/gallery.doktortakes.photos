@@ -16,7 +16,7 @@ class AlbumAdmin(admin.ModelAdmin):
     form = AlbumForm
     fieldsets = (
         ('Main', {
-            'fields': ('name', 'slug', 'location', 'description', 'license',
+            'fields': ('name', 'slug', 'type', 'location', 'description', 'license',
                        'start', 'end', 'parent', 'tags'),
         }),
         ('Visibility', {
