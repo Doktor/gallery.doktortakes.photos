@@ -136,7 +136,7 @@ export default {
     album: {
       immediate: true,
       handler(newAlbum, oldAlbum) {
-        this.changes = structuredClone(newAlbum);
+        this.changes = { ...newAlbum };
       },
     },
   },
