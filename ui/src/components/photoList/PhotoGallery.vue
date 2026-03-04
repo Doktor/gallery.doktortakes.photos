@@ -1,6 +1,23 @@
 <template>
+  <div v-if="!shouldPaginate" class="photo-gallery-container">
+    <Tiles class="photo-gallery">
+      <PhotoTile
+        v-for="n in photos.length"
+        :key="n"
+        :allowSelect="allowSelect"
+        :isSelected="
+          allowSelect &&
+          selectedPhotoHashes.includes(paginatedItems[n - 1]?.md5)
+        "
+        :isVisible="true"
+        :photo="photos[n - 1]"
+        :routeName="routeName"
+        @select="select"
+      />
+    </Tiles>
+  </div>
   <PaginationManager
-    v-if="useServerSidePagination || isLoading || photos.length > 0"
+    v-else-if="useServerSidePagination || isLoading || photos.length > 0"
     :showTopControl="size > 12 && photos.length > 12"
     :showBottomControl="true"
     :isServerSide="useServerSidePagination"
@@ -83,6 +100,10 @@ export default {
       default: "photo",
     },
 
+    shouldPaginate: {
+      type: Boolean,
+      default: true,
+    },
     allowSelect: {
       type: Boolean,
       default: false,

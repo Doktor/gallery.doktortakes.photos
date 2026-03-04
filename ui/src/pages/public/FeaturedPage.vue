@@ -7,7 +7,7 @@
       <template v-else>{{ album.name }}</template>
     </h2>
 
-    <PhotoGallery :photos="photos" />
+    <PhotoGallery :photos="photos" :shouldPaginate="false" />
   </div>
 </template>
 
