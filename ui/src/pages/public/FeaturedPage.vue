@@ -52,7 +52,7 @@ export default {
 
       if (ok) {
         this.album = album;
-        this.photos = photos;
+        this.photos = photos.sort((a, b) => b.index - a.index);
       }
 
       this.$store.commit("setLoading", false);
