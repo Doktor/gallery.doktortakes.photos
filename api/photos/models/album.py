@@ -37,6 +37,17 @@ ACCESS_LEVELS = (
 )
 
 
+class AlbumType:
+    STANDARD = 'standard'
+    FEATURED = 'featured'
+
+
+ALBUM_TYPES = (
+    (AlbumType.STANDARD, "Standard"),
+    (AlbumType.FEATURED, "Featured"),
+)
+
+
 class Album(TreeNode):
     name = models.CharField(max_length=256)
     slug = models.SlugField(max_length=256)
@@ -72,6 +83,9 @@ class Album(TreeNode):
     path = models.TextField(
         blank=True, editable=False,
         help_text="The path to this album; automatically set")
+
+    type = models.CharField(
+        max_length=16, choices=ALBUM_TYPES, default=AlbumType.STANDARD)
 
     # Permissions
     access_level = models.PositiveSmallIntegerField(

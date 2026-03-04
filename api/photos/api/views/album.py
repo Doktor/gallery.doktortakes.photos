@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 
 from photos.api.serializers import (
     AlbumSerializer, SimpleAlbumSerializer, PhotoSerializer)
+from photos.models.album import AlbumType
 from photos.models import Album, Photo
 from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
 
@@ -103,3 +104,13 @@ class AlbumPhotoList(APIView):
     @staticmethod
     def get(request: Request, path: str) -> Response:
         return get_photos_for_album(request, path, recursive=False)
+
+
+class FeaturedAlbumList(APIView):
+    @staticmethod
+    def get(request: Request) -> Response:
+        albums = Album.objects.filter(type=AlbumType.FEATURED) \
+            .select_related('cover', 'parent') \
+            .prefetch_related('cover__thumbnails')
+        serializer = SimpleAlbumSerializer(albums, many=True)
+        return Response({'albums': serializer.data})

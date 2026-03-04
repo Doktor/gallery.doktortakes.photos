@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 
 from photos.models import Album, Photo, Tag
-from photos.models.album import Allow
+from photos.models.album import Allow, AlbumType
 
 
 def get_albums(path: str) -> List[Album]:
@@ -82,6 +82,8 @@ def get_albums_for_user(user, exclude_public=False, top_level_only=True) -> Quer
 
     if exclude_public:
         q &= Q(access_level__gt=Allow.PUBLIC)
+
+    q &= Q(type=AlbumType.STANDARD)
 
     return Album.objects.filter(q).distinct().order_by('-start')
 

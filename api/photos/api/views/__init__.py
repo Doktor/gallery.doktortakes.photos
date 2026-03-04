@@ -1,4 +1,4 @@
-from .album import AlbumList, AlbumDetail, AlbumPhotoList
+from .album import AlbumList, AlbumDetail, AlbumPhotoList, FeaturedAlbumList
 from .hero_photo import get_hero_photos
 from .photo import PhotoDetail, search_photos
 from .tag import TagList

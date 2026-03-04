@@ -64,6 +64,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             'license', 'license_id',
             'start', 'end',
             'cover',
+            'type',
             'access_level', 'access_code', 'users', 'groups',
             'parent',
             'url', 'admin_url',
@@ -81,6 +82,7 @@ class SimpleAlbumSerializer(serializers.ModelSerializer):
             'place', 'location', 'description',
             'start', 'end',
             'cover',
+            'type',
             'url',
             'access_level',
         )
