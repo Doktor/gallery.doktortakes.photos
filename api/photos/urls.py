@@ -46,6 +46,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('albums/', include(album_patterns)),
     path('api/', include(api_patterns)),
+    path('about/', views.view_about, name='about'),
     path('copyright/', views.view_copyright, name='copyright'),
     path('featured/', include(featured_patterns)),
     re_path(r'^debug/', views.index, name='debug'),
