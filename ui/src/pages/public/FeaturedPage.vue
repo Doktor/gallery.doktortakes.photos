@@ -75,6 +75,7 @@ export default {
 .gallery-title {
   @include variables.headings-font();
   font-size: 2.5rem;
+  text-align: left;
   text-transform: uppercase;
   overflow-wrap: break-word;
 
