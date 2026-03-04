@@ -68,6 +68,7 @@ export default {
   props: {
     photos: {
       type: Array,
+      default: () => [],
     },
     getPage: {
       type: Function,
