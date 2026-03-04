@@ -237,6 +237,73 @@ def view_restricted_album(request: HttpRequest) -> HttpResponse:
     return render(request, 'base.html', {})
 
 
+# Featured
+
+
+@require_GET
+def view_featured(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': 'Featured',
+        'meta': meta_to_string([
+            *meta_open_graph_common,
+            MetaProperty('og:title', metadata['TITLE']),
+            MetaProperty('og:url', get_canonical_url(reverse('featured'))),
+            *meta_open_graph_generic_image,
+
+            *meta_open_graph_article(),
+        ])
+    }
+
+    return render(request, 'base.html', context)
+
+
+@require_GET
+def view_featured_album(request: HttpRequest, path: str) -> HttpResponse:
+    album = get_album(path)
+
+    if album is None or album.access_level > Allow.PUBLIC:
+        return view_restricted_album(request)
+
+    title = f"{album.name} | {metadata['TITLE']}"
+
+    meta = [
+        *meta_open_graph_common,
+        MetaProperty('og:title', title),
+        MetaProperty('og:url', get_canonical_url(request.path)),
+        MetaProperty('og:updated_time', album.start.isoformat()),
+
+        *meta_open_graph_article(last_update=album.start),
+    ]
+
+    if album.cover:
+        thumbnail = album.cover.get_meta_thumbnail()
+        cover_url = get_media_url(thumbnail.image.url)
+
+        meta.extend([
+            MetaProperty('og:image', cover_url),
+            MetaProperty('og:image:type', 'image/jpeg'),
+            MetaProperty('og:image:width', thumbnail.width),
+            MetaProperty('og:image:height', thumbnail.height),
+
+            *meta_twitter_common,
+            MetaName('twitter:card', 'photo'),
+            MetaName('twitter:title', title),
+            MetaProperty('twitter:image', cover_url),
+        ])
+    else:
+        meta.extend(meta_open_graph_generic_image)
+
+    if album.access_level > Allow.PUBLIC:
+        meta.append(meta_no_robots)
+
+    context = {
+        'title': album.name,
+        'meta': meta_to_string(meta)
+    }
+
+    return render(request, 'base.html', context)
+
+
 # Tags
 
 
