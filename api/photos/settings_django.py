@@ -55,7 +55,6 @@ INTERNAL_IPS = internal_ips
 # Application definition
 
 INSTALLED_APPS = filter_none([
-    'whitenoise.runserver_nostatic' if not TEST else None,
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -97,7 +96,6 @@ REST_FRAMEWORK = {
 MIDDLEWARE = filter_none([
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware' if not TEST else None,
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -276,9 +274,6 @@ en_formats.DATETIME_FORMAT = "Y-m-d H:i:s"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static.1')
 STATIC_URL = '/static/'
-
-if not TEST:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Local or remote storage for media files
 LOCAL_STORAGE = CONFIG['django'].get('use_local_storage', True)
