@@ -18,6 +18,17 @@ export const AlbumService = {
     return albums;
   },
 
+  async getFeaturedAlbums() {
+    let { content } = await getAsync(endpoints.featuredAlbumList);
+    let albums = content.albums.map((a) => ({
+      ...a,
+      parentName: a.parent_name,
+      accessLevel: a.access_level,
+    }));
+    albums.sort((a, b) => new Date(b.start) - new Date(a.start));
+    return albums;
+  },
+
   async getAlbum({ rawPath, code, getPhotos = true }) {
     let path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
     let query = code ? getQueryString({ code }) : "";

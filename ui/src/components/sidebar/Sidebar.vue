@@ -16,6 +16,13 @@
       />
 
       <ul class="sidebar-items">
+        <!-- Featured albums -->
+        <li class="sidebar-section" v-if="featuredAlbums.length">
+          <h2>Featured</h2>
+
+          <SidebarAlbumTree :items="albumTree" />
+        </li>
+
         <!-- Main links -->
         <li class="sidebar-section">
           <h2>Photos</h2>
@@ -81,6 +88,8 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import { AlbumService } from "@/services/AlbumService";
+import SidebarTree from "./SidebarTree.vue";
 import SidebarLink from "./SidebarLink";
 import SidebarHeader from "./SidebarHeader";
 import SidebarFooter from "./SidebarFooter";
@@ -92,6 +101,7 @@ import SidebarMenuButton from "./SidebarMenuButton";
 
 export default {
   components: {
+    SidebarAlbumTree: SidebarTree,
     SidebarMenuButton,
     SidebarMenu,
     CustomButton,
@@ -104,12 +114,41 @@ export default {
   computed: {
     ...mapGetters(["isAuthenticated", "isStaff"]),
     ...mapState(["user"]),
+
+    albumTree() {
+      const albumsByPath = new Map();
+      const topLevel = [];
+
+      for (const album of this.featuredAlbums) {
+        albumsByPath.set(album.path, { album, children: [] });
+      }
+
+      for (const album of this.featuredAlbums) {
+        const parentPath = album.path.includes("/")
+          ? album.path.slice(0, album.path.lastIndexOf("/"))
+          : null;
+
+        if (parentPath === null) {
+          topLevel.push(albumsByPath.get(album.path));
+        } else {
+          const parent = albumsByPath.get(parentPath);
+          parent.children.push(albumsByPath.get(album.path));
+        }
+      }
+
+      return topLevel;
+    },
   },
 
   data() {
     return {
       isMenuOpen: false,
+      featuredAlbums: [],
     };
+  },
+
+  async created() {
+    this.featuredAlbums = await AlbumService.getFeaturedAlbums();
   },
 
   methods: {},

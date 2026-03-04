@@ -1,5 +1,6 @@
 export const endpoints = {
   albumList: "/api/albums/",
+  featuredAlbumList: "/api/albums/featured/",
   albumDetail: "/api/albums/:path/",
   albumPhotoList: "/api/albums/:path/photos/",
 

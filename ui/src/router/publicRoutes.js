@@ -9,6 +9,7 @@ import TaxonListPage from "@/pages/public/TaxonListPage";
 import SpeciesListPage from "@/pages/public/SpeciesListPage";
 
 import SearchPhotosPage from "@/pages/public/SearchPhotosPage";
+import FeaturedPage from "@/pages/public/FeaturedPage";
 
 export const publicRoutes = [
   {
@@ -41,6 +42,16 @@ export const publicRoutes = [
     path: "/albums/",
     redirect: {
       name: "index",
+    },
+  },
+
+  {
+    path: "/featured/:path+/",
+    strict: true,
+    name: "featuredAlbum",
+    component: FeaturedPage,
+    meta: {
+      title: false,
     },
   },
 
