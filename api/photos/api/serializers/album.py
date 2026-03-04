@@ -74,6 +74,9 @@ class AlbumSerializer(serializers.ModelSerializer):
 class SimpleAlbumSerializer(serializers.ModelSerializer):
     cover = PhotoThumbnailSerializer(read_only=True)
     url = serializers.CharField(read_only=True, source='get_absolute_url')
+    parent_name = serializers.CharField(
+        read_only=True, source='parent.name', default=None)
+    size = serializers.IntegerField(read_only=True, default=0)
 
     class Meta:
         model = Album
@@ -85,6 +88,8 @@ class SimpleAlbumSerializer(serializers.ModelSerializer):
             'type',
             'url',
             'access_level',
+            'parent_name',
+            'size',
         )
         read_only_fields = ('slug', 'path')
 

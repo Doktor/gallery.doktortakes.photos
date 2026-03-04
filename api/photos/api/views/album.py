@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+from django.db.models import Count
 from django.http import Http404
 
 from rest_framework import exceptions
@@ -110,6 +111,7 @@ class FeaturedAlbumList(APIView):
     @staticmethod
     def get(request: Request) -> Response:
         albums = Album.objects.filter(type=AlbumType.FEATURED) \
+            .annotate(size=Count('photos')) \
             .select_related('cover', 'parent') \
             .prefetch_related('cover__thumbnails')
         serializer = SimpleAlbumSerializer(albums, many=True)
