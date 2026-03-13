@@ -15,11 +15,11 @@ const routes = [
   ...manageRoutes,
   ...debugRoutes,
 ];
-routes.forEach((route) => (route.pathToRegexpOptions = { strict: true }));
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  strict: true,
 });
 
 router.beforeEach((to, from, next) => {
