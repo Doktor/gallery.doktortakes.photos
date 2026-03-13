@@ -189,7 +189,7 @@
 <script>
 import { getQueryString } from "@/utils";
 import CustomButton from "../form/CustomButton";
-import { getAsync } from "@/request";
+import { PhotoService } from "@/services/PhotoService";
 
 export default {
   components: { CustomButton },
@@ -242,7 +242,7 @@ export default {
         itemsPerPage: this.itemsPerPage,
       });
 
-      let { content } = await getAsync("/api/photos/search/" + query);
+      let content = await PhotoService.search(query);
 
       results.photos = content.photos.map((photo) => {
         return { ...photo, isLoaded: true };

@@ -39,7 +39,7 @@ import { TaxaService } from "@/services/TaxaService";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
 import { formatDateTime } from "@/date";
-import { postAsync } from "@/request";
+import { ManageTaxaService } from "@/services/manage/ManageTaxaService";
 
 export default {
   components: { CustomButton, CustomInput },
@@ -62,9 +62,7 @@ export default {
     formatDateTime,
 
     async submit() {
-      let { ok, content } = await postAsync("/api/manage/taxa/import/", {
-        catalogId: this.catalogId,
-      });
+      let { ok, content } = await ManageTaxaService.importTaxon(this.catalogId);
 
       if (!ok) {
         this.$store.commit("addNotification", {
