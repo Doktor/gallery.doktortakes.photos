@@ -1,9 +1,8 @@
-import { endpoints } from "../constants";
 import { getAsync } from "@/request";
 
 export const TagService = {
   async getTags() {
-    let { content } = await getAsync(endpoints.tagList);
+    let { content } = await getAsync("/api/tags/");
     return content.tags;
   },
 

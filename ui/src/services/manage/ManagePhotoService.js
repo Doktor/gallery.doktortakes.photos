@@ -1,11 +1,10 @@
 import { getQueryString } from "@/utils";
-import { endpoints } from "@/constants";
 import { getAsync, postAsync } from "@/request";
 
 export const ManagePhotoService = {
   async getThumbnails(md5) {
     return await getAsync(
-      endpoints.managePhotoThumbnailList.replace(":md5", md5),
+      `/api/manage/photos/${md5}/thumbnails/`,
     );
   },
 
@@ -17,7 +16,7 @@ export const ManagePhotoService = {
 
   async createThumbnail(md5, data) {
     return await postAsync(
-      endpoints.managePhotoThumbnailList.replace(":md5", md5),
+      `/api/manage/photos/${md5}/thumbnails/`,
       data,
     );
   },

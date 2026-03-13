@@ -1,5 +1,4 @@
 import { getQueryString, parseAlbumDetail } from "../utils";
-import { endpoints } from "../constants";
 import { getAsync } from "@/request";
 
 export const AlbumService = {
@@ -7,7 +6,7 @@ export const AlbumService = {
     full = full ?? false;
     let query = full ? getQueryString({ full }) : "";
 
-    let { content } = await getAsync(endpoints.albumList + query);
+    let { content } = await getAsync("/api/albums/" + query);
     let albums = content.albums;
 
     for (let album of albums) {
@@ -19,7 +18,7 @@ export const AlbumService = {
   },
 
   async getFeaturedAlbums() {
-    let { content } = await getAsync(endpoints.featuredAlbumList);
+    let { content } = await getAsync("/api/albums/featured/");
     let albums = content.albums.map((a) => ({
       ...a,
       parentName: a.parent_name,
@@ -34,7 +33,7 @@ export const AlbumService = {
     let query = code ? getQueryString({ code }) : "";
 
     let { ok, content } = await getAsync(
-      endpoints.albumDetail.replace(":path", path) + query,
+      `/api/albums/${path}/` + query,
     );
 
     if (!ok) {
@@ -48,7 +47,7 @@ export const AlbumService = {
     }
 
     ({ ok, content } = await getAsync(
-      endpoints.albumPhotoList.replace(":path", path) + query,
+      `/api/albums/${path}/photos/` + query,
     ));
 
     if (!ok) {

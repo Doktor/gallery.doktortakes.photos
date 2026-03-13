@@ -1,9 +1,8 @@
-import { endpoints } from "../constants";
 import { getAsync } from "@/request";
 
 export const TaglineService = {
   async getTagline() {
-    let { content } = await getAsync(endpoints.randomTagline);
+    let { content } = await getAsync("/api/taglines/random/");
     return content;
   },
 };

@@ -1,9 +1,8 @@
-import { endpoints } from "@/constants";
 import { getAsync } from "@/request";
 
 export const TaxaService = {
   async getTaxa() {
-    let { content } = await getAsync(endpoints.taxaList);
+    let { content } = await getAsync("/api/taxa/");
     return content;
   },
 

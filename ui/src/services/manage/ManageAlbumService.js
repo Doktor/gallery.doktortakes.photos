@@ -1,7 +1,6 @@
 import { getQueryString, parseAlbumDetail, parseAlbumForAPI } from "@/utils";
 import { store } from "@/store";
 import { router } from "@/router";
-import { endpoints } from "@/constants";
 import {
   deleteAsync,
   getAsync,
@@ -14,7 +13,7 @@ export const ManageAlbumService = {
   async createAlbum(album) {
     let data = parseAlbumForAPI(album);
 
-    let { ok, content } = await postAsync(endpoints.manageAlbumList, data);
+    let { ok, content } = await postAsync("/api/manage/albums/", data);
 
     if (!ok) {
       for (let [field, errors] of Object.entries(content)) {
@@ -55,7 +54,7 @@ export const ManageAlbumService = {
     let data = parseAlbumForAPI(album);
 
     let { ok, status, content } = await putAsync(
-      endpoints.manageAlbumDetail.replace(":path", album.path),
+      `/api/manage/albums/${album.path}/`,
       data,
     );
 
@@ -98,7 +97,7 @@ export const ManageAlbumService = {
     });
 
     let { ok, content } = await patchAsync(
-      endpoints.manageAlbumDetail.replace(":path", album.path),
+      `/api/manage/albums/${album.path}/`,
       { cover: photoHash },
     );
 
@@ -125,7 +124,7 @@ export const ManageAlbumService = {
 
   async deleteAlbum(path) {
     let { ok } = await deleteAsync(
-      endpoints.manageAlbumDetail.replace(":path", path),
+      `/api/manage/albums/${path}/`,
     );
 
     if (ok) {
@@ -139,14 +138,13 @@ export const ManageAlbumService = {
 
   async listAllPhotos(path) {
     return await getAsync(
-      endpoints.manageAlbumPhotoList.replace(":path", path) +
-        getQueryString({ recursive: true }),
+      `/api/manage/albums/${path}/photos/` + getQueryString({ recursive: true }),
     );
   },
 
   async deletePhotos(path, photoHashes) {
     return await deleteAsync(
-      endpoints.manageAlbumPhotoList.replace(":path", path),
+      `/api/manage/albums/${path}/photos/`,
       {
         photos: photoHashes,
       },

@@ -1,35 +1,3 @@
-export const endpoints = {
-  albumList: "/api/albums/",
-  featuredAlbumList: "/api/albums/featured/",
-  albumDetail: "/api/albums/:path/",
-  albumPhotoList: "/api/albums/:path/photos/",
-
-  manageAlbumList: "/api/manage/albums/",
-  manageAlbumDetail: "/api/manage/albums/:path/",
-  manageAlbumPhotoList: "/api/manage/albums/:path/photos/",
-
-  manageLicenseList: "/api/manage/licenses/",
-
-  photoDetail: "/api/photos/:md5/",
-
-  managePhotoDetail: "/api/manage/photos/:md5/",
-  managePhotoThumbnailList: "/api/manage/photos/:md5/thumbnails/",
-
-  tagList: "/api/tags/",
-  searchPhotos: "/api/photos/search/",
-  currentUser: "/api/me/",
-  changePassword: "/api/me/password/",
-  csrf: "/api/csrf/",
-  authenticate: "/api/authenticate/",
-  heroPhotoList: "/api/heroPhotos/",
-  randomTagline: "/api/taglines/random/",
-
-  taxaList: "/api/taxa/",
-
-  userList: "/api/manage/users/",
-  groupList: "/api/manage/groups/",
-};
-
 export const production = process.env.NODE_ENV === "production";
 
 export const accessLevels = [

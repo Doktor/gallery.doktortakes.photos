@@ -1,10 +1,8 @@
-import { endpoints } from "@/constants";
-
 import { getAsync } from "@/request";
 
 export const ManageLicenseService = {
   async listLicenses() {
-    let { content } = await getAsync(endpoints.manageLicenseList);
+    let { content } = await getAsync("/api/manage/licenses/");
 
     return content;
   },

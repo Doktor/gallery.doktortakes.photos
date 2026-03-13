@@ -21,7 +21,6 @@
 
 <script>
 import { getQueryString, wait } from "@/utils";
-import { endpoints } from "@/constants";
 import CustomInput from "@/components/form/CustomInput";
 import { getCsrfToken } from "@/request";
 
@@ -36,7 +35,7 @@ export default {
 
   computed: {
     action() {
-      let base = endpoints.manageAlbumPhotoList.replace(":path", this.path);
+      let base = `/api/manage/albums/${this.path}/photos/`;
       let options = {};
 
       return base + getQueryString(options);
