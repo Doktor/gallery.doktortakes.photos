@@ -42,7 +42,8 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-  if (to.name !== from.name) {
+  if (from.name !== to.name) {
+    store.commit("setBreadcrumbs", []);
     window.scrollTo(0, 0);
   }
 

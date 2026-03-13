@@ -47,4 +47,8 @@ export const mutations = {
   setLoading(state, loading) {
     loading ? (state.loading += 1) : (state.loading -= 1);
   },
+
+  setBreadcrumbs(state, items) {
+    state.breadcrumbs = items;
+  },
 };

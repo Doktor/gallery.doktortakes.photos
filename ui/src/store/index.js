@@ -10,6 +10,7 @@ export const store = createStore({
 
     token: null,
     showNavigation: true,
+    breadcrumbs: [],
 
     user: {},
     notifications: [],
