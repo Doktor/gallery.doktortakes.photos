@@ -34,7 +34,7 @@
 <script setup>
 import { computed } from "vue";
 
-const increment = 32;
+const increment = 24;
 
 const props = defineProps({
   items: {
