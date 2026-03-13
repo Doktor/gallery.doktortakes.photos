@@ -48,6 +48,7 @@ class Photo(models.Model):
     height = models.PositiveIntegerField(default=0, editable=False)
     file_size = models.CharField(
         max_length=50, editable=False, blank=True)
+    placeholder_color = models.CharField(max_length=6, null=True, blank=True)
 
     # Metadata
 

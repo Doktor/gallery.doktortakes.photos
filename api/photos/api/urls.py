@@ -16,6 +16,7 @@ manage_patterns = [
 
     path('photos/recent/', manage.ManageRecentPhotoList.as_view(), name='recent_photos'),
     path('photos/<md5:md5>/', manage.ManagePhotoDetail.as_view(), name='api_manage_photo'),
+    path('photos/<md5:md5>/calculate-average-color/', manage.ManagePhotoAverageColor.as_view(), name='api_manage_photo_average_color'),
     path('photos/<md5:md5>/thumbnails/', manage.ManageThumbnailList.as_view(), name='api_thumbnail'),
     path('photos/<md5:md5>/taxa/<str:catalog_id>/', manage.ManagePhotoTaxonDetail.as_view()),
     path('photos/<md5:md5>/taxa/', manage.ManagePhotoTaxonList.as_view()),

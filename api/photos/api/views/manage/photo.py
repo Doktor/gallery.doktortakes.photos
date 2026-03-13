@@ -5,12 +5,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.serializers import PhotoSerializer
-from photos.api.views.photo import get_photo
+from photos.api.views.photo import get_photo, PhotoNotFound
 from photos.models import Photo
+from photos.utils import try_parse_int
+from photos.utils.image import get_average_color
 
 from http import HTTPStatus as Status
-
-from photos.utils import try_parse_int
+import PIL.Image
 
 
 class ManagePhotoDetail(APIView):
@@ -22,6 +23,23 @@ class ManagePhotoDetail(APIView):
         photo.delete()
 
         return Response(status=Status.NO_CONTENT)
+
+
+class ManagePhotoAverageColor(APIView):
+    permission_classes = [IsAdminUser]
+
+    @staticmethod
+    def post(request: Request, md5: str) -> Response:
+        photo = get_photo(request, md5)
+
+        if photo is None:
+            return Response({}, status=Status.NOT_FOUND)
+
+        image = PIL.Image.open(photo.original)
+        photo.placeholder_color = get_average_color(image)
+        photo.save()
+
+        return Response({}, status=Status.OK)
 
 
 class ManageRecentPhotoList(APIView):

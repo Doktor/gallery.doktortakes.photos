@@ -52,6 +52,11 @@ def create_thumbnail(
     return thumbnail
 
 
+def get_average_color(image: PIL.Image.Image) -> str:
+    r, g, b = image.convert('RGB').resize((1, 1), PIL.Image.LANCZOS).getpixel((0, 0))
+    return f"{r:02x}{g:02x}{b:02x}"
+
+
 def fit_image(image: PIL.Image, size: Tuple[int, int]) -> PIL.Image:
     """Resizes an image so that it fits within the given long_size, without
     distorting the image and cropping the sides as necessary."""

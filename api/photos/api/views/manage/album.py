@@ -12,6 +12,7 @@ from photos.api.serializers import (
 from photos.api.views.album import AlbumDetail, get_album, get_photos_for_album
 from photos.models import Photo
 from photos.tasks import create_thumbnails
+from photos.utils.image import get_average_color
 from photos.utils.metadata import parse_exif_data, parse_xmp_data
 from photos.utils.models import format_file_size, generate_md5_hash, CHUNK_SIZE
 
@@ -106,6 +107,7 @@ class ManageAlbumPhotoList(APIView):
         image = PIL.Image.open(file)
         photo.width = image.width
         photo.height = image.height
+        photo.placeholder_color = get_average_color(image)
 
         photo.file_size = format_file_size(file.size)
 

@@ -105,4 +105,4 @@ class PhotoThumbnailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Photo
-        fields = ('thumbnail',)
+        fields = ('thumbnail', 'placeholder_color')
