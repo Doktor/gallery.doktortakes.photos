@@ -114,5 +114,7 @@ export default {
   display: flex;
   justify-content: center;
   align-content: center;
+
+  border: 1px solid variables.$background-color-2;
 }
 </style>
