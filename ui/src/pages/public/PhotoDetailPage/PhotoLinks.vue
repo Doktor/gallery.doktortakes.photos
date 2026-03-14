@@ -16,11 +16,6 @@
           <router-link :to="{ name: 'index' }">Return to index</router-link>
         </dd>
       </div>
-
-      <div>
-        <dt title="Index"><i class="fas fa-fw fa-home"></i></dt>
-        <dd><a href="/static">Return home</a></dd>
-      </div>
     </dl>
   </div>
 </template>
