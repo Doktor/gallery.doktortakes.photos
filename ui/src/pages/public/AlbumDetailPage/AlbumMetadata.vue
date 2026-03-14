@@ -28,15 +28,6 @@
       <i title="Description" class="fas fa-fw fa-book"></i>
       <span v-html="album.description"></span>
     </div>
-
-    <div v-if="album.parent" class="overlay-item">
-      <i title="Parent album" class="fas fa-fw fa-chevron-circle-up"></i>
-      <router-link
-        :to="{ name: 'album', params: { path: album.parent.split('/') } }"
-        ><!--
-        -->View parent album<!--
-      --></router-link>
-    </div>
   </div>
 </template>
 
@@ -56,10 +47,7 @@ export default {
 
     hasContent() {
       return (
-        this.location ||
-        this.album.tags.length > 0 ||
-        this.album.description ||
-        this.album.parent
+        this.location || this.album.tags.length > 0 || this.album.description
       );
     },
 

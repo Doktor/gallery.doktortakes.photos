@@ -21,18 +21,8 @@
           Delete album
         </CustomButton>
 
-        <template v-if="album.parent || album.children.length > 0">
-          <h2>Related albums</h2>
-
-          <router-link
-            v-if="album.parent !== null"
-            :to="{
-              name: 'editAlbum',
-              params: { path: album.parent.split('/') },
-            }"
-          >
-            Edit parent album
-          </router-link>
+        <template v-if="album.children.length > 0">
+          <h2>Child albums</h2>
 
           <AlbumChildrenListTiles :album="album" :route="'editAlbum'" />
         </template>
