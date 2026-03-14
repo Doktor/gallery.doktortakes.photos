@@ -52,6 +52,10 @@ class PhotoSerializer(serializers.ModelSerializer):
     # Metadata
     taken = serializers.DateTimeField(
         read_only=True, format="%A, %Y-%m-%d, %-I:%M:%S %p")
+    taken_date = serializers.DateTimeField(
+        source="taken", read_only=True, format="%A, %B %-m, %Y")
+    taken_time = serializers.DateTimeField(
+        source="taken", read_only=True, format="%-I:%M:%S %p")
     index = serializers.IntegerField(
         read_only=True, allow_null=True, default=None)
     exif = serializers.DictField(read_only=True, source='get_exif')
@@ -75,7 +79,7 @@ class PhotoSerializer(serializers.ModelSerializer):
         model = Photo
         fields = (
             'images',
-            'taken',
+            'taken', 'taken_date', 'taken_time',
             'width', 'height', 'md5', 'index',
             'path', 'exif',
             'taxa',

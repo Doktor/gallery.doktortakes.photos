@@ -9,8 +9,13 @@
       </div>
 
       <div>
-        <dt><i title="Date taken" class="fas fa-fw fa-clock"></i></dt>
-        <dd>{{ photo.taken }}</dd>
+        <dt><i title="Taken at (date)" class="fas fa-fw fa-clock"></i></dt>
+        <dd>{{ photo.takenDate }}</dd>
+      </div>
+
+      <div>
+        <dt><i title="Taken at (time)" class="fas fa-fw fa-clock"></i></dt>
+        <dd>{{ photo.takenTime }}</dd>
       </div>
 
       <div>
