@@ -88,11 +88,7 @@
           </ul>
         </li>
 
-        <SidebarDivider />
-
         <SidebarSocialSection />
-
-        <SidebarDivider />
       </ul>
 
       <SidebarFooter />
