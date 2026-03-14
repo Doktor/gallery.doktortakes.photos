@@ -130,7 +130,7 @@ export default {
         ...this.album.hierarchy.map((album) => {
           return {
             label: album.name,
-            to: { name: "album", params: { path: album.path } },
+            to: { name: "editAlbum", params: { path: album.path } },
           };
         }),
       ];
