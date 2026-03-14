@@ -1,6 +1,6 @@
 <template>
   <ul class="sidebar-tree">
-    <li v-for="item in items" :key="item.album.path">
+    <li class="sidebar-tree-item" v-for="item in items" :key="item.album.path">
       <span
         v-if="item.children.length && !item.album.size"
         class="sidebar-tree-heading"
@@ -34,7 +34,7 @@
 <script setup>
 import { computed } from "vue";
 
-const increment = 24;
+const increment = 16;
 
 const props = defineProps({
   items: {
@@ -55,14 +55,22 @@ const style = computed(() => {
 </script>
 
 <style lang="scss">
+.sidebar-tree-item {
+  margin-bottom: 32px;
+
+  &:last-child,
+  & & {
+    margin-bottom: 0;
+  }
+}
+
 .sidebar-tree-heading {
   display: inline-block;
-  padding: variables.$sidebar-link-margin;
-  padding-left: 0;
   width: 100%;
+
+  margin-bottom: 8px;
 
   font-weight: 700;
   font-size: 24px;
-  margin-top: 16px;
 }
 </style>

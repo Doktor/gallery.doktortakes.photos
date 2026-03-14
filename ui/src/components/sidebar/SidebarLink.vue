@@ -95,6 +95,7 @@ const render = h("li", null, [renderLink()]);
   transition: color, background-color;
 
   @include link(variables.$text-color);
+  background-color: unset;
 }
 
 .sidebar-link {

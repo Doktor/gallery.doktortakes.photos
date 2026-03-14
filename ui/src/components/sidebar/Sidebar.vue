@@ -18,9 +18,23 @@
       <ul class="sidebar-items">
         <!-- Featured albums -->
         <li class="sidebar-section" v-if="featuredAlbums.length">
-          <h2>Featured</h2>
+          <h2
+            class="sidebar-featured-toggle"
+            @click="isFeaturedOpen = !isFeaturedOpen"
+            title="Click to expand"
+          >
+            <i
+              class="fas fa-chevron-right sidebar-featured-arrow"
+              :class="{ 'sidebar-featured-arrow-open': isFeaturedOpen }"
+            />
+            Featured
+          </h2>
 
-          <SidebarAlbumTree :items="albumTree" />
+          <SidebarAlbumTree
+            v-show="isFeaturedOpen"
+            class="sidebar-featured-tree"
+            :items="albumTree"
+          />
         </li>
 
         <!-- Main links -->
@@ -147,6 +161,7 @@ export default {
   data() {
     return {
       isMenuOpen: false,
+      isFeaturedOpen: false,
       featuredAlbums: [],
     };
   },
@@ -191,5 +206,27 @@ export default {
 
 .sidebar-section {
   margin-bottom: variables.$sidebar-margin;
+}
+
+.sidebar-featured-tree {
+  background-color: variables.$background-color-2;
+  padding: 16px !important;
+}
+
+.sidebar-featured-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.sidebar-featured-arrow {
+  font-size: 16px;
+
+  &.sidebar-featured-arrow-open {
+    transform: rotate(90deg);
+  }
 }
 </style>
