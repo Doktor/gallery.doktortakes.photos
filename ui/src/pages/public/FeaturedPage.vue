@@ -36,6 +36,20 @@ export default {
     routePath() {
       return this.$route.params.path;
     },
+
+    breadcrumbs() {
+      if (!this.album.name) {
+        return [];
+      }
+
+      return [
+        { label: "Featured" },
+        {
+          label: this.album.name,
+          to: { name: "featuredAlbum", params: { path: this.routePath } },
+        },
+      ];
+    },
   },
 
   async created() {
@@ -60,6 +74,10 @@ export default {
   },
 
   watch: {
+    breadcrumbs(val) {
+      this.$store.commit("setBreadcrumbs", val);
+    },
+
     async routePath(newPath, oldPath) {
       if (newPath === oldPath) {
         return;

@@ -20,6 +20,18 @@ export default {
     PasswordForm,
   },
 
+  created() {
+    const slug = this.$store.state.user.name;
+
+    this.$store.commit("setBreadcrumbs", [
+      { label: slug, to: { name: "user", params: { slug } } },
+      {
+        label: "Change password",
+        to: { name: "changePassword", params: { slug } },
+      },
+    ]);
+  },
+
   methods: {
     async redirect() {
       await sleep(1000);

@@ -57,6 +57,13 @@ export default {
     selectedTaxon() {
       return this.taxa[0];
     },
+    breadcrumbs() {
+      const crumbs = [{ label: "Taxa", to: { name: "taxa" } }];
+      if (this.catalogId) {
+        crumbs.push({ label: this.catalogId, to: { name: "taxaByCatalogId", params: { catalogId: this.catalogId } } });
+      }
+      return crumbs;
+    },
   },
 
   methods: {
@@ -82,6 +89,10 @@ export default {
   },
 
   watch: {
+    breadcrumbs(val) {
+      this.$store.commit("setBreadcrumbs", val);
+    },
+
     catalogId: {
       async handler(newCatalogId) {
         if (newCatalogId) {
@@ -95,6 +106,7 @@ export default {
   },
 
   async mounted() {
+    this.$store.commit("setBreadcrumbs", this.breadcrumbs);
     this.loading = true;
 
     let taxa = await TaxaService.getTaxa();

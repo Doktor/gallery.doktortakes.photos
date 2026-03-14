@@ -119,6 +119,16 @@ export default {
         };
       });
     },
+
+    breadcrumbs() {
+      return [
+        { label: "Manage", to: { name: "manage" } },
+        {
+          label: this.album.name,
+          to: { name: "editAlbum", params: { path: this.routePath } },
+        },
+      ];
+    },
   },
 
   async created() {
@@ -217,6 +227,10 @@ export default {
   watch: {
     async routePath() {
       await this.loadAlbum();
+    },
+
+    breadcrumbs(val) {
+      this.$store.commit("setBreadcrumbs", val);
     },
   },
 };

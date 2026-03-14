@@ -34,6 +34,15 @@ export default {
     };
   },
 
+  created() {
+    this.$store.commit("setBreadcrumbs", [
+      {
+        label: "Species",
+        to: { name: "species" },
+      },
+    ]);
+  },
+
   async mounted() {
     this.loading = true;
     this.species = await TaxaService.getSpecies();

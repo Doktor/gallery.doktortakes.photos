@@ -53,6 +53,11 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setBreadcrumbs", [
+      { label: "Manage", to: { name: "manage" } },
+      { label: "Taxa", to: { name: "manageTaxa" } },
+    ]);
+
     this.loading = true;
     this.taxa = await TaxaService.getTaxa();
     this.loading = false;

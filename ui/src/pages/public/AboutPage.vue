@@ -173,6 +173,15 @@
 <script setup>
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import cameraImage from "@/images/camera.png";
+import { useStore } from "vuex";
+
+const store = useStore();
+store.commit("setBreadcrumbs", [
+  {
+    label: "About",
+    to: { name: "about" },
+  },
+]);
 </script>
 
 <style lang="scss" scoped>

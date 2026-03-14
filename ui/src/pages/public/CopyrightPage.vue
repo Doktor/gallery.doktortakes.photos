@@ -108,6 +108,15 @@ export default {
   components: {
     FixedWidthContainer,
   },
+
+  created() {
+    this.$store.commit("setBreadcrumbs", [
+      {
+        label: "Copyright",
+        to: { name: "copyright" },
+      },
+    ]);
+  },
 };
 </script>
 

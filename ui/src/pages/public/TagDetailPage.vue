@@ -34,6 +34,29 @@ export default {
     slug() {
       return this.$route.params.slug;
     },
+
+    breadcrumbs() {
+      if (!this.tag?.slug) {
+        return [];
+      }
+
+      return [
+        { label: "Tags", to: { name: "tags" } },
+        {
+          label: `#${this.tag.slug}`,
+          to: {
+            name: "tag",
+            params: { slug: this.tag.slug },
+          },
+        },
+      ];
+    },
+  },
+
+  watch: {
+    breadcrumbs(val) {
+      this.$store.commit("setBreadcrumbs", val);
+    },
   },
 
   async created() {

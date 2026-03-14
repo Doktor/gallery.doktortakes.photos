@@ -47,10 +47,13 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setBreadcrumbs", [
+      { label: "Manage", to: { name: "manage" } },
+      { label: "New album", to: { name: "newAlbum" } },
+    ]);
+
     this.$store.commit("setLoading", true);
-
     await this.loadLicenses();
-
     this.$store.commit("setLoading", false);
   },
 

@@ -56,6 +56,10 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setBreadcrumbs", [
+      { label: "Manage", to: { name: "manage-new" } },
+    ]);
+
     this.loading = true;
     this.albums = await AlbumService.getAllAlbums();
     this.loading = false;

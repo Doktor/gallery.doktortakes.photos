@@ -34,6 +34,13 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setBreadcrumbs", [
+      {
+        label: "Tags",
+        to: { name: "tags" },
+      },
+    ]);
+
     this.$store.commit("setLoading", true);
     this.tags = await TagService.getTags();
     this.$store.commit("setLoading", false);

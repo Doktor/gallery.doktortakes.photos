@@ -1,19 +1,5 @@
 <template>
   <FixedWidthContainer>
-    <div>
-      <router-link :to="{ name: 'manage' }">Return to dashboard</router-link>
-    </div>
-
-    <div>
-      <router-link
-        :to="{
-          name: 'editAlbum',
-          params: { path: this.$route.params.path },
-        }"
-        >Return to album</router-link
-      >
-    </div>
-
     <template v-if="!loading">
       <header>
         <h2 class="album-name">{{ album.name }}</h2>
@@ -110,6 +96,27 @@ export default {
     thumbnailUrl() {
       return this.photo.images.display?.url ?? this.photo.images.original.url;
     },
+
+    breadcrumbs() {
+      if (!this.album.name) {
+        return [];
+      }
+
+      return [
+        { label: "Manage", to: { name: "manage" } },
+        {
+          label: this.album.name,
+          to: { name: "editAlbum", params: { path: this.routePath } },
+        },
+        {
+          label: this.photo.md5,
+          to: {
+            name: "editPhoto",
+            params: { path: this.routePath, md5: this.routeMd5 },
+          },
+        },
+      ];
+    },
   },
 
   async created() {
@@ -180,6 +187,10 @@ export default {
   watch: {
     async routePath() {
       await this.loadAlbum();
+    },
+
+    breadcrumbs(val) {
+      this.$store.commit("setBreadcrumbs", val);
     },
   },
 };

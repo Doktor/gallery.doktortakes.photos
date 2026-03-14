@@ -43,6 +43,18 @@ import CustomButton from "@/components/form/CustomButton";
 export default {
   components: { CustomButton, CustomSelect, FixedWidthContainer, CustomInput },
 
+  created() {
+    this.$store.commit("setBreadcrumbs", [
+      { label: "Debug" },
+      {
+        label: "Notifications",
+        to: {
+          name: "debugNotifications",
+        },
+      },
+    ]);
+  },
+
   data() {
     return {
       message: "",

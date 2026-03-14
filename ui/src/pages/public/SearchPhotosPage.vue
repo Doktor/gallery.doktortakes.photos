@@ -16,6 +16,15 @@ export default {
     PhotoSearchResults,
   },
 
+  created() {
+    this.$store.commit("setBreadcrumbs", [
+      {
+        label: "Search",
+        to: { name: "search" },
+      },
+    ]);
+  },
+
   data() {
     return {
       results: {

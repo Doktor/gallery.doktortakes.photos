@@ -53,6 +53,13 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setBreadcrumbs", [
+      {
+        label: this.$route.params.slug,
+        to: { name: "user", params: { slug: this.$route.params.slug } },
+      },
+    ]);
+
     this.loading = true;
 
     let albums = await AlbumService.getAllAlbums(true);

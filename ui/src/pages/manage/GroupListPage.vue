@@ -44,6 +44,10 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setBreadcrumbs", [
+      { label: "Manage", to: { name: "manage" } },
+      { label: "Groups", to: { name: "groups" } },
+    ]);
     this.$store.commit("setLoading", true);
     this.groups = await ManageUserService.listGroups();
     this.$store.commit("setLoading", false);
