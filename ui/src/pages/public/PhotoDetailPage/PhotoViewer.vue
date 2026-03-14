@@ -295,9 +295,9 @@ export default {
       if (scale === 1) {
         if (Math.abs(pointerXDiffFromStart) >= this.containerWidth / 10) {
           if (pointerXDiffFromStart > 0) {
-            this.pointerUpCallback = () => this.next();
-          } else {
             this.pointerUpCallback = () => this.previous();
+          } else {
+            this.pointerUpCallback = () => this.next();
           }
         }
 
