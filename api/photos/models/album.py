@@ -219,6 +219,9 @@ class Album(TreeNode):
     def get_groups(self) -> str:
         return ', '.join(f'Group: {group.name}' for group in self.groups.all())
 
+    def get_hierarchy(self) -> list["Album"]:
+        return self.ancestors(include_self=True)
+
     def get_location(self) -> str:
         if self.location or not self.parent:
             return self.location

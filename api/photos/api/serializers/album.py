@@ -11,6 +11,12 @@ from .license import LicenseSerializer
 from .photo import PhotoThumbnailSerializer
 
 
+class AlbumHierarchySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Album
+        fields = ('name', 'slug', 'path')
+
+
 class AlbumSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(read_only=True)
     path = serializers.CharField(read_only=True)
@@ -29,6 +35,8 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     url = serializers.CharField(read_only=True, source='get_absolute_url')
     admin_url = serializers.CharField(read_only=True, source='get_admin_url')
+
+    hierarchy = AlbumHierarchySerializer(read_only=True, many=True, source='get_hierarchy')
 
     def create(self, validated_data):
         license = validated_data.pop('license_id')
@@ -67,6 +75,7 @@ class AlbumSerializer(serializers.ModelSerializer):
             'type',
             'access_level', 'access_code', 'users', 'groups',
             'parent',
+            'hierarchy',
             'url', 'admin_url',
         )
 

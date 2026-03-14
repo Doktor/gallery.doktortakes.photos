@@ -67,10 +67,12 @@ export default {
           label: "Albums",
           to: { name: "index" },
         },
-        {
-          label: this.album.name,
-          to: { name: "album", params: { path: this.routePath } },
-        },
+        ...this.album.hierarchy.map((album) => {
+          return {
+            label: album.name,
+            to: { name: "album", params: { path: album.path } },
+          };
+        }),
       ];
     },
   },

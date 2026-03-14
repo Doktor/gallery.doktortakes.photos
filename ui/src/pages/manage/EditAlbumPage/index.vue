@@ -121,12 +121,18 @@ export default {
     },
 
     breadcrumbs() {
+      if (!this.album?.hierarchy) {
+        return [];
+      }
+
       return [
         { label: "Manage", to: { name: "manage" } },
-        {
-          label: this.album.name,
-          to: { name: "editAlbum", params: { path: this.routePath } },
-        },
+        ...this.album.hierarchy.map((album) => {
+          return {
+            label: album.name,
+            to: { name: "album", params: { path: album.path } },
+          };
+        }),
       ];
     },
   },
