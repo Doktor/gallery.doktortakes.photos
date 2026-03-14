@@ -44,5 +44,4 @@ export const fields = {
 
 export const domains = {
   production: "https://gallery.doktortakes.photos",
-  alpha: "https://alpha.doktortakes.photos",
 };

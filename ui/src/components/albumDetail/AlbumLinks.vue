@@ -36,17 +36,6 @@
       rel="noopener noreferrer"
       >Production</a
     >
-
-    <span class="divider"></span>
-
-    <a
-      :href="urlAlphaSite"
-      class="album-link"
-      title="View album on alpha site (new tab)"
-      target="_blank"
-      rel="noopener noreferrer"
-      >Alpha</a
-    >
   </div>
 </template>
 
@@ -66,10 +55,6 @@ export default {
   },
 
   computed: {
-    urlAlphaSite() {
-      return new URL(this.album.url, domains.alpha).href;
-    },
-
     urlProductionSite() {
       return new URL(this.album.url, domains.production).href;
     },
