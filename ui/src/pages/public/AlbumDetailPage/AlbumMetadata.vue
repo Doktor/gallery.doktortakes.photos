@@ -5,7 +5,7 @@
       <span>{{ location }}</span>
     </div>
 
-    <div v-if="album.tags.length > 0" class="overlay-item">
+    <div v-if="album.tags?.length > 0" class="overlay-item">
       <i title="Tags" class="fas fa-fw fa-tags"></i>
       <span>
         <template v-for="(slug, index) in album.tags" :key="slug">
@@ -47,7 +47,7 @@ export default {
 
     hasContent() {
       return (
-        this.location || this.album.tags.length > 0 || this.album.description
+        this.location || this.album?.tags?.length > 0 || this.album?.description
       );
     },
 

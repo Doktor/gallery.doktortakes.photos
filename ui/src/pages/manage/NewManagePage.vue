@@ -26,7 +26,7 @@
         :getPage="getRecentPhotosPage"
       />
     </div>
-    <div v-else-if="selectedAlbum !== null" class="contents">
+    <div v-else-if="selectedAlbum?.isLoaded" class="contents">
       <section class="album-cover-container">
         <AlbumCover :album="selectedAlbum" :count="photos.length" />
       </section>
@@ -95,7 +95,7 @@ export default {
 
   watch: {
     async selectedAlbum(newAlbum, oldAlbum) {
-      if (newAlbum === oldAlbum) {
+      if (newAlbum?.slug === oldAlbum?.slug) {
         return;
       }
 
