@@ -49,7 +49,7 @@ def get_album_and_children(request: Request, path: str) -> Tuple[Album, List[Alb
     return (album, children)
 
 
-def get_photos_for_album(request: Request, path: str, recursive: bool = False) -> Response:
+def get_photos_for_album(request: Request, path: str, recursive: bool = False) -> list[PhotoSerializer]:
     album = get_album(request, path)
 
     if recursive:
@@ -69,7 +69,7 @@ def get_photos_for_album(request: Request, path: str, recursive: bool = False) -
         }
         serialized.append(PhotoSerializer(photo, context=context).data)
 
-    return Response({'photos': serialized}, status=Status.OK)
+    return serialized
 
 
 class AlbumList(APIView):
@@ -110,17 +110,13 @@ class AlbumDetail(APIView):
 
         album_serializer = AlbumSerializer(album)
         children_serializer = SimpleAlbumSerializer(children, many=True)
+        photos = get_photos_for_album(request, path, recursive=False)
 
         return Response({
             'album': album_serializer.data,
             'children': children_serializer.data,
+            'photos': photos,
         })
-
-
-class AlbumPhotoList(APIView):
-    @staticmethod
-    def get(request: Request, path: str) -> Response:
-        return get_photos_for_album(request, path, recursive=False)
 
 
 class FeaturedAlbumList(APIView):

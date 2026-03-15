@@ -39,29 +39,17 @@ export const AlbumService = {
     let path = Array.isArray(rawPath) ? rawPath.join("/") : rawPath;
     let query = code ? getQueryString({ code }) : "";
 
-    let { ok, content } = await getAsync(
-      `/api/albums/${path}/` + query,
-    );
+    let { ok, content } = await getAsync(`/api/albums/${path}/` + query);
 
     if (!ok) {
       return { ok };
     }
 
-    let { album, children } = content;
+    let { album, children, photos } = content;
 
     if (!getPhotos) {
       return { ok, album };
     }
-
-    ({ ok, content } = await getAsync(
-      `/api/albums/${path}/photos/` + query,
-    ));
-
-    if (!ok) {
-      return { ok };
-    }
-
-    let photos = content.photos;
 
     parseAlbumDetail(album, children);
     album.isLoaded = true;

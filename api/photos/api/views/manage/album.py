@@ -73,7 +73,9 @@ class ManageAlbumPhotoList(APIView):
 
     @staticmethod
     def get(request: Request, path: str) -> Response:
-        return get_photos_for_album(request, path, recursive='recursive' in request.GET)
+        photos = get_photos_for_album(request, path, recursive='recursive' in request.GET)
+
+        return Response({'photos': photos}, status=Status.OK)
 
     @staticmethod
     def post(request: Request, path: str) -> Response:

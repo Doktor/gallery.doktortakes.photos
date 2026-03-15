@@ -34,7 +34,6 @@ api_patterns = [
     path('photos/<md5:md5>/', views.PhotoDetail.as_view(), name='api_photo'),
 
     path('albums/featured/', views.FeaturedAlbumList.as_view(), name='api_featured_albums'),
-    path('albums/<path:path>/photos/', views.AlbumPhotoList.as_view(), name='api_album_photos'),
     path('albums/<path:path>/', views.AlbumDetail.as_view(), name='api_album'),
     path('albums/', views.AlbumList.as_view(), name='api_albums'),
 
