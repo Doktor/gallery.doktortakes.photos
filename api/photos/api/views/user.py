@@ -55,6 +55,7 @@ def get_current_user(request: Request) -> Response:
         return Response({"status": "anonymous"})
 
     return Response({
+        "id": user.id,
         "name": user.username,
         "status": status,
         "account_created": get_formatted_time(user.date_joined),
