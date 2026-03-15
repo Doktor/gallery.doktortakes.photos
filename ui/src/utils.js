@@ -51,6 +51,10 @@ export function getQueryString(params) {
     })
     .filter((item) => item !== undefined);
 
+  if (query.length === 0) {
+    return "";
+  }
+
   return "?" + query.join("&");
 }
 
