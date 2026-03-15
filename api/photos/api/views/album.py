@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from photos.api.serializers import (
     AlbumSerializer, SimpleAlbumSerializer, PhotoSerializer)
 from photos.models.album import AlbumType, ACCESS_LEVELS, Allow
-from photos.models import Album, Photo
+from photos.models import Album, Photo, Tag
 from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
 
 from http import HTTPStatus as Status
@@ -92,6 +92,10 @@ class AlbumList(APIView):
 
         if user_id:
             albums = albums.filter(access_level__gt=Allow.PUBLIC)
+
+        if (tag_slug := request.GET.get('tag', None)) is not None:
+            tag = Tag.objects.get(slug=tag_slug)
+            albums = albums.filter(tags=tag)
 
         if request.GET.get('full', 'false') == 'true':
             albums = albums.prefetch_related('children', 'tags', 'users', 'groups', 'cover__thumbnails')

@@ -65,9 +65,7 @@ export default {
     this.$store.commit("setLoading", true);
 
     this.tag = await TagService.getTag(this.slug);
-
-    let albums = await AlbumService.getAllAlbums(true);
-    this.albums = albums.filter((album) => album.tags.includes(this.tag.slug));
+    this.albums = await AlbumService.getAlbumsForTag(this.slug);
 
     this.$store.commit("setLoading", false);
   },
