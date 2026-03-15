@@ -97,14 +97,9 @@ class AlbumList(APIView):
             tag = Tag.objects.get(slug=tag_slug)
             albums = albums.filter(tags=tag)
 
-        if request.GET.get('full', 'false') == 'true':
-            albums = albums.prefetch_related('children', 'tags', 'users', 'groups', 'cover__thumbnails')
-            serializer_type = AlbumSerializer
-        else:
-            albums = albums.prefetch_related('cover__thumbnails')
-            serializer_type = SimpleAlbumSerializer
+        albums = albums.prefetch_related('cover__thumbnails')
+        serializer = SimpleAlbumSerializer(albums, many=True)
 
-        serializer = serializer_type(albums, many=True)
         return Response({'albums': serializer.data})
 
 

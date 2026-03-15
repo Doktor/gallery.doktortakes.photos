@@ -2,8 +2,8 @@ import { getQueryString, parseAlbumDetail } from "../utils";
 import { getAsync } from "@/request";
 
 export const AlbumService = {
-  async getAllAlbums(full = false, userId = null, tagSlug = null) {
-    let query = getQueryString({ full, userId, tag: tagSlug });
+  async getAllAlbums(userId = null, tagSlug = null) {
+    let query = getQueryString({ userId, tag: tagSlug });
 
     let { content } = await getAsync("/api/albums/" + query);
     let albums = content.albums;
@@ -17,11 +17,11 @@ export const AlbumService = {
   },
 
   async getAlbumsForUser(userId) {
-    return await this.getAllAlbums(false, userId);
+    return await this.getAllAlbums(userId, null);
   },
 
   async getAlbumsForTag(tagSlug) {
-    return await this.getAllAlbums(false, null, tagSlug);
+    return await this.getAllAlbums(null, tagSlug);
   },
 
   async getFeaturedAlbums() {
