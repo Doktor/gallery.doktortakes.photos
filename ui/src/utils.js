@@ -1,4 +1,5 @@
 import { fields } from "./constants";
+import { camelToSnake } from "@/request";
 
 export function parseAlbumForAPI(album) {
   let data = {};
@@ -38,12 +39,14 @@ export function getQueryString(params) {
 
   let query = Object.entries(params)
     .map(([key, value]) => {
+      const snakeKey = camelToSnake(key);
+
       if (Array.isArray(value) && value.length > 0) {
-        return escape(key) + "=" + escape(value.join(","));
+        return escape(snakeKey) + "=" + escape(value.join(","));
       }
 
       if (value !== undefined && value !== null && value !== "") {
-        return escape(key) + "=" + escape(value);
+        return escape(snakeKey) + "=" + escape(value);
       }
     })
     .filter((item) => item !== undefined);

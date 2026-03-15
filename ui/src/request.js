@@ -54,16 +54,20 @@ function modifyKeys(item, f) {
   return item;
 }
 
-function snakeToCamel(item) {
-  return modifyKeys(item, (str) =>
-    str.replace(/(_[a-z])/gi, (c) => c.toUpperCase().replace(/_/g, "")),
-  );
+export function snakeToCamel(str) {
+  return str.replace(/(_[a-z])/gi, (c) => c.toUpperCase().replace(/_/g, ""));
 }
 
-function camelToSnake(item) {
-  return modifyKeys(item, (str) =>
-    str.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`),
-  );
+function convertSnakeKeysToCamel(item) {
+  return modifyKeys(item, snakeToCamel);
+}
+
+export function camelToSnake(str) {
+  return str.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
+}
+
+function convertCamelKeysToSnake(item) {
+  return modifyKeys(item, camelToSnake);
 }
 
 export async function getAsync(url, options) {
@@ -89,7 +93,7 @@ export async function deleteAsync(url, body = null) {
 async function sendWriteRequestAsync(method, url, body) {
   return await sendRequestAsync(url, {
     method,
-    body: JSON.stringify(camelToSnake(body)),
+    body: JSON.stringify(convertCamelKeysToSnake(body)),
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "X-CSRFToken": getCsrfToken(),
@@ -117,7 +121,7 @@ async function sendRequestAsync(url, options = {}) {
     }
 
     if (typeof content === "object" && content !== null) {
-      content = snakeToCamel(content);
+      content = convertSnakeKeysToCamel(content);
     }
 
     return { ok: response.ok, status: response.status, content };
