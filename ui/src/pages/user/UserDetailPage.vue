@@ -61,10 +61,7 @@ export default {
     ]);
 
     this.loading = true;
-
-    let albums = await AlbumService.getAllAlbums(true);
-    this.albums = albums.filter((album) => album.accessLevel > 0);
-
+    this.albums = await AlbumService.getAlbumsForUser(this.user.id);
     this.loading = false;
   },
 };

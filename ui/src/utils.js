@@ -34,16 +34,16 @@ export function getQueryString(params) {
     return "";
   }
 
-  let esc = encodeURIComponent;
+  let escape = encodeURIComponent;
 
   let query = Object.entries(params)
     .map(([key, value]) => {
-      if (Array.isArray(value)) {
-        if (value.length > 0) {
-          return esc(key) + "=" + esc(value.join(","));
-        }
-      } else if (value !== null && value !== "") {
-        return esc(key) + "=" + esc(value);
+      if (Array.isArray(value) && value.length > 0) {
+        return escape(key) + "=" + escape(value.join(","));
+      }
+
+      if (value !== undefined && value !== null && value !== "") {
+        return escape(key) + "=" + escape(value);
       }
     })
     .filter((item) => item !== undefined);

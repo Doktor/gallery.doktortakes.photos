@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+from django.contrib.auth import get_user_model
 from django.db.models import Count
 from django.http import Http404
 
@@ -10,11 +11,13 @@ from rest_framework.views import APIView
 
 from photos.api.serializers import (
     AlbumSerializer, SimpleAlbumSerializer, PhotoSerializer)
-from photos.models.album import AlbumType
+from photos.models.album import AlbumType, ACCESS_LEVELS, Allow
 from photos.models import Album, Photo
 from photos.utils.query import get_album_for_user_or_404, get_albums_for_user
 
 from http import HTTPStatus as Status
+
+User = get_user_model()
 
 
 class AlbumNotFound(exceptions.APIException):
@@ -72,15 +75,29 @@ def get_photos_for_album(request: Request, path: str, recursive: bool = False) -
 class AlbumList(APIView):
     @staticmethod
     def get(request: Request) -> Response:
-        if request.GET.get('full', False):
-            albums = get_albums_for_user(request.user, top_level_only=True) \
-                .select_related('cover', 'parent') \
-                .prefetch_related('children', 'tags', 'users', 'groups', 'cover__thumbnails')
+        if user_id := request.GET.get('user_id', False):
+            user = User.objects.get(id=user_id)
+
+            if request.user.id != user and not request.user.is_staff:
+                return Response({}, status=Status.FORBIDDEN)
+
+            target_user = user
+        else:
+            target_user = request.user
+
+        albums = (
+            get_albums_for_user(target_user, top_level_only=True).
+            select_related('cover', 'parent')
+        )
+
+        if user_id:
+            albums = albums.filter(access_level__gt=Allow.PUBLIC)
+
+        if request.GET.get('full', 'false') == 'true':
+            albums = albums.prefetch_related('children', 'tags', 'users', 'groups', 'cover__thumbnails')
             serializer_type = AlbumSerializer
         else:
-            albums = get_albums_for_user(request.user, top_level_only=True) \
-                .select_related('cover', 'parent') \
-                .prefetch_related('cover__thumbnails')
+            albums = albums.prefetch_related('cover__thumbnails')
             serializer_type = SimpleAlbumSerializer
 
         serializer = serializer_type(albums, many=True)
