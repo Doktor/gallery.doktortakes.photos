@@ -59,7 +59,15 @@ const title = computed(() => {
 
 function onClick() {
   if (route.name === "index") {
-    shuffleArray(associates);
+    const oldTitle = title.value;
+
+    while (true) {
+      shuffleArray(associates);
+
+      if (oldTitle !== title.value) {
+        break;
+      }
+    }
   }
 }
 </script>
