@@ -5,7 +5,6 @@
         <router-link
           :to="{ name: route, params: { path: album.pathSplit } }"
           :title="album.name"
-          :href="album.url"
         >
           {{ album.name }}
         </router-link>
