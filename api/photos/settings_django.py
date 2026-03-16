@@ -2,7 +2,6 @@ import json
 import os
 import socket
 import sys
-import toml
 import warnings
 from django.core.management.utils import get_random_secret_key
 
@@ -14,26 +13,11 @@ def filter_none(list):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Load configuration files
-with open(os.path.join(BASE_DIR, 'config', 'config.toml')) as f:
-    CONFIG = toml.loads(f.read().strip())
-
-with open(os.path.join(BASE_DIR, 'config', 'secrets.toml')) as f:
-    secrets = toml.loads(f.read().strip())
-
-# Shallow merge
-for category, contents in secrets.items():
-    if category in CONFIG:
-        CONFIG[category] |= contents
-    else:
-        CONFIG[category] = contents
-
-
 # General settings
 TEST = any('test' in argv for argv in sys.argv)
-DEBUG = CONFIG['django'].get('debug', False)
+DEBUG = os.environ.get('DJANGO_DEBUG', 'false').lower() == 'true'
 
-secret_key = CONFIG['django'].get('secret_key', None)
+secret_key = os.environ.get('DJANGO_SECRET_KEY') or None
 
 if secret_key is None:
     if DEBUG:
@@ -48,7 +32,9 @@ if secret_key is None:
 SECRET_KEY = secret_key
 
 internal_ips = ['127.0.0.1', 'localhost']
-ALLOWED_HOSTS = CONFIG['django'].get('allowed_hosts', internal_ips)
+allowed_hosts_comma_separated = os.environ.get('DJANGO_ALLOWED_HOSTS_COMMA_SEPARATED', '')
+
+ALLOWED_HOSTS = [host for host in allowed_hosts_comma_separated.split(',') if host] or internal_ips
 INTERNAL_IPS = internal_ips
 
 
@@ -144,15 +130,13 @@ if TEST:
         'NAME': ':memory:'
     }
 else:
-    database = CONFIG['database']
-
     default = {
-        'ENGINE': database['ENGINE'],
-        'HOST': database['HOST'],
-        'PORT': database['PORT'],
-        'NAME': database['NAME'],
-        'USER': database['USER'],
-        'PASSWORD': database['PASSWORD'],
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql'),
+        'HOST': os.environ.get('DATABASE_HOST', ''),
+        'PORT': os.environ.get('DATABASE_PORT', '5432'),
+        'NAME': os.environ.get('DATABASE_NAME', ''),
+        'USER': os.environ.get('DATABASE_USER', ''),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
     }
 
 DATABASES = {"default": default}
@@ -276,7 +260,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static.1')
 STATIC_URL = '/static/'
 
 # Local or remote storage for media files
-LOCAL_STORAGE = CONFIG['django'].get('use_local_storage', True)
+LOCAL_STORAGE = os.environ.get('DJANGO_USE_LOCAL_STORAGE', 'true').lower() == 'true'
 
 MEDIA_URL = '/media/'
 
@@ -286,22 +270,20 @@ if LOCAL_STORAGE:
     else:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media_test')
 else:
-    storage = CONFIG['spaces']
-
     DEFAULT_FILE_STORAGE = 'photos.storage_backends.CustomS3Boto3Storage'
 
     # Keys
-    AWS_ACCESS_KEY_ID = storage['access_key']
-    AWS_SECRET_ACCESS_KEY = storage['secret_key']
+    AWS_ACCESS_KEY_ID = os.environ.get('SPACES_ACCESS_KEY', '')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('SPACES_SECRET_KEY', '')
 
     # Region
-    AWS_S3_REGION_NAME = storage['region_name']
+    AWS_S3_REGION_NAME = os.environ.get('SPACES_REGION_NAME', '')
     AWS_S3_USE_SSL = True
-    AWS_S3_ENDPOINT_URL = storage['endpoint']
+    AWS_S3_ENDPOINT_URL = os.environ.get('SPACES_ENDPOINT', '')
 
     # Bucket
-    AWS_STORAGE_BUCKET_NAME = storage['bucket_name']
-    AWS_LOCATION = storage['path_prefix']
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('SPACES_BUCKET_NAME', '')
+    AWS_LOCATION = os.environ.get('SPACES_PATH_PREFIX', '')
     AWS_DEFAULT_ACL = 'public-read'
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_ADDRESSING_STYLE = 'virtual'

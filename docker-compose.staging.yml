@@ -5,11 +5,12 @@ services:
       context: .
       dockerfile: Dockerfile
       target: backend-staging
+    env_file: .env.staging
     expose:
       - 1337
     depends_on:
       - database
-    entrypoint: /app/run.dev.sh
+    entrypoint: /app/run.staging.sh
 
   nginx:
     image: photos-nginx

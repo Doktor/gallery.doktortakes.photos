@@ -39,6 +39,8 @@ COPY --parents \
   build/ \
   tasks/ \
   run.dev.sh \
+  run.staging.sh \
+  run.production.sh \
   /app/
 
 RUN mkdir -p /app/logs/
@@ -67,9 +69,6 @@ RUN npx webpack --config webpack.prod.js
 
 FROM base as backend-staging
 
-COPY ./api/config/config.staging.toml /app/api/config/config.toml
-COPY ./api/config/secrets.staging.toml /app/api/config/secrets.toml
-
 COPY --from=frontend-build-production /app/ui/static/ /app/ui/static/
 
 RUN chmod +x /app/run.staging.sh
@@ -77,9 +76,6 @@ RUN chmod +x /app/run.staging.sh
 
 FROM base as backend-production
 
-COPY ./api/config/config.production.toml /app/api/config/config.toml
-COPY ./api/config/secrets.production.toml /app/api/config/secrets.toml
-
 COPY --from=frontend-build-production /app/ui/static/ /app/ui/static/
 
-RUN poetry run python /app/api/manage.py collectstatic --no-input --clear
+RUN chmod +x /app/run.production.sh

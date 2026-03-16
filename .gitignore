@@ -13,6 +13,12 @@ logs/
 *.pgsql
 *.rdb
 
+# Secrets
+!.env.example
+.env
+.env.staging
+.env.production
+
 # Media files
 media/
 
