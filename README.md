@@ -17,3 +17,49 @@ The website implements several features that are specifically designed for my us
 - Lazy-loading of image thumbnails
 - Search through all photos by album attributes and common metadata, e.g. album name, image dimensions, and taken date
 - Frontend content management system, designed to supplement and eventually replace the built-in Django admin site
+
+## Instructions
+
+1. Create a `.env.production` file based on `.env.example` and set values for all of the environment variables.
+
+2. Build the Docker container.
+
+```sh
+sudo docker compose -f docker-compose.production.yml build
+```
+
+3. Copy the collected static files from the container to the local filesystem.
+
+```sh
+sudo docker cp gallerydoktortakesphotos-backend-1:/app/api/static.1/. ./static/
+```
+
+4. Set up a reverse proxy for the Gunicorn server and static file hosting for the static files. I currently use Caddy for both.
+
+```sh
+sudo nano /etc/caddy/Caddyfile
+```
+
+```caddyfile
+gallery.doktortakes.photos {
+    handle_path /static/* {
+        root * /projects/gallery.doktortakes.photos/static/
+        file_server
+    }
+    
+    reverse_proxy localhost:1337
+}
+```
+
+5. Reload Caddy and verify that it's running without errors.
+
+```sh
+sudo systemctl reload caddy
+sudo systemctl status caddy
+```
+
+6. Start the Docker container.
+
+```sh
+sudo docker compose -f docker-compose.production.yml up --detach
+```
