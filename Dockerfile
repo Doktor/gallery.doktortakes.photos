@@ -69,13 +69,13 @@ RUN npx webpack --config webpack.prod.js
 
 FROM base as backend-staging
 
-COPY --from=frontend-build-production /app/ui/static/ /app/ui/static/
+COPY --from=frontend-build-production /app/ui/static/ /app/api/static/
 
 RUN chmod +x /app/run.staging.sh
 
 
 FROM base as backend-production
 
-COPY --from=frontend-build-production /app/ui/static/ /app/ui/static/
+COPY --from=frontend-build-production /app/ui/static/ /app/api/static/
 
 RUN chmod +x /app/run.production.sh
