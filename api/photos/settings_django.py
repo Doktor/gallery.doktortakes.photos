@@ -117,10 +117,6 @@ ENABLE_REGISTRATION = False
 
 LOGIN_URL = 'log_in'
 
-if DEBUG:
-    from debug_toolbar import settings
-    DEBUG_TOOLBAR_PANELS = ['ddt_request_history.panels.request_history.RequestHistoryPanel'] + settings.PANELS_DEFAULTS
-
 
 # Database
 
