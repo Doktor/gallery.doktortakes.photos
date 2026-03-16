@@ -2,6 +2,8 @@
 
 FROM python:3.12.4-slim as base
 
+COPY --from=ghcr.io/astral-sh/uv:0.10.9 /uv /bin/
+
 # Pillow build requirements
 # https://pillow.readthedocs.io/en/stable/installation/building-from-source.html
 
@@ -16,21 +18,17 @@ WORKDIR /app/api/
 ENV PIP_DISABLE_PIP_VERSION_CHECK="on" \
   PYTHONDONTWRITEBYTECODE=1 \
   PYTHONUNBUFFERED=1 \
-  POETRY_VERSION=1.6.1
+  UV_PROJECT_ENVIRONMENT="/app/venv"
 
-# Copy requirements first to populate Docker layer cache
 COPY \
-  api/poetry.lock \
+  api/uv.lock \
   api/pyproject.toml \
+  api/.python-version \
   /app/api/
 
 RUN apt update \
   && apt install --yes $pillow \
-  && pip install --no-cache-dir --upgrade pip \
-  && pip install --no-cache-dir "poetry==$POETRY_VERSION" \
-  && poetry install --no-interaction \
-  && rm -rf /root/.cache/pypoetry/artifacts/ \
-  && rm -rf /root/.cache/pypoetry/cache/ \
+  && uv sync --frozen --no-cache \
   && apt remove --yes gcc python3-dev libssl-dev $pillow \
   && apt autoremove --yes
 

@@ -1,31 +1,31 @@
-[tool.poetry]
-name = "gallery.doktortakes.photos"
+[project]
+name = "gallery-doktortakes-photos"
 version = "0.1.0"
 description = ""
-authors = ["Doktor <doktorthehusky@gmail.com>"]
+authors = [
+    { name = "Doktor", email = "doktorthehusky@gmail.com" }
+]
+requires-python = "==3.12.4"
+dependencies = [
+    "django==5.0.6",
+    "django-storages==1.13.2",
+    "djangorestframework==3.15.1",
+    "django-webpack-loader>=3.1.0,<4",
+    "toml==0.10.2",
+    "exifread==2.3.2",
+    "pillow==10.3.0",
+    "boto3>=1.21.33,<2",
+    "gunicorn==20.1.0",
+    "requests>=2.31.0,<3",
+    "django-tree-queries==0.19",
+    "psycopg[binary]==3.1.19",
+]
 
-[tool.poetry.dependencies]
-python = "3.12.4"
-Django = "5.0.6"
-django-storages = "1.13.2"
-djangorestframework = "3.15.1"
-django-webpack-loader = "^3.1.0"
-toml = "0.10.2"
-ExifRead = "2.3.2"
-Pillow = "10.3.0"
-boto3 = "^1.21.33"
-gunicorn = "20.1.0"
-requests = "^2.31.0"
-django-tree-queries = "0.19"
-psycopg = {version = "3.1.19", extras = ["binary"]}
-
-[tool.poetry.dev-dependencies]
-django-debug-toolbar = "3.2.4"
-factory-boy = "2.12.0"
-Faker = "2.0.0"
-pytest = "^7.1.2"
-pytest-django = "3.5.1"
-
-[build-system]
-requires = ["poetry-core>=1.1.13"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "django-debug-toolbar==3.2.4",
+    "factory-boy==2.12.0",
+    "faker==2.0.0",
+    "pytest>=7.1.2,<8",
+    "pytest-django==3.5.1",
+]
