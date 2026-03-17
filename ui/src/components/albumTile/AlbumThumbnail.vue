@@ -52,7 +52,7 @@ export default {
 
   computed: {
     thumbnail() {
-      return this.album.cover?.thumbnail?.url ?? null;
+      return this.album.cover?.url ?? null;
     },
     placeholderColor() {
       let color = this.album.cover?.placeholderColor;

@@ -6,6 +6,7 @@ from rest_framework import serializers
 from photos.api.fields import (
     TagField, UserField, GroupField, NullableAlbumField, PhotoHashField)
 from photos.models import Album, License
+from photos.api.serializers.thumbnail import ThumbnailSerializer
 
 from .license import LicenseSerializer
 from .photo import PhotoThumbnailSerializer
@@ -81,7 +82,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class SimpleAlbumSerializer(serializers.ModelSerializer):
-    cover = PhotoThumbnailSerializer(read_only=True)
+    cover = ThumbnailSerializer(source='thumbnail', read_only=True)
     size = serializers.IntegerField(read_only=True, default=0)
 
     class Meta:

@@ -87,7 +87,7 @@ class AlbumList(APIView):
 
         albums = (
             get_albums_for_user(target_user, top_level_only=True).
-            select_related('cover')
+            select_related('thumbnail')
         )
 
         if user_id:
@@ -96,7 +96,6 @@ class AlbumList(APIView):
         if (tag_slug := request.GET.get('tag', None)) is not None:
             albums = albums.filter(tags__slug=tag_slug)
 
-        albums = albums.prefetch_related('cover__thumbnails')
         serializer = SimpleAlbumSerializer(albums, many=True)
 
         return Response({'albums': serializer.data})

@@ -23,7 +23,7 @@ class AlbumAdmin(admin.ModelAdmin):
             'fields': ('access_level', 'access_code', 'users', 'groups'),
         }),
         ('Cover photo', {
-            'fields': ('cover', 'preview'),
+            'fields': ('cover', 'thumbnail', 'preview'),
         }),
     )
     list_display = ('name', 'location', 'start', 'end', 'description', 'path')

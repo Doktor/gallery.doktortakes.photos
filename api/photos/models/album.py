@@ -74,6 +74,10 @@ class Album(TreeNode):
         'Photo', models.SET_NULL,
         related_name='cover_for', blank=True, null=True,
         help_text="The cover photo for this album")
+    thumbnail = models.OneToOneField(
+        'Thumbnail', models.SET_NULL,
+        related_name='thumbnail_for', blank=True, null=True
+    )
 
     parent = models.ForeignKey(
         'self', models.SET_NULL,
