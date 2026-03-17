@@ -70,8 +70,7 @@ def get_albums_for_user(user, exclude_public=False, top_level_only=True) -> Quer
         owner_q = Q(users=user)
 
         # Group (indirect) ownership
-        for group in user.groups.all():
-            owner_q |= Q(groups=group)
+        owner_q |= Q(groups__in=user.groups.all())
 
         owner_q &= Q(access_level__lte=Allow.OWNERS)
 

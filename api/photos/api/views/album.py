@@ -78,7 +78,7 @@ class AlbumList(APIView):
         if user_id := request.GET.get('user_id', False):
             user = User.objects.get(id=user_id)
 
-            if request.user.id != user and not request.user.is_staff:
+            if request.user.id != user.id and not request.user.is_staff:
                 return Response({}, status=Status.FORBIDDEN)
 
             target_user = user
@@ -87,15 +87,14 @@ class AlbumList(APIView):
 
         albums = (
             get_albums_for_user(target_user, top_level_only=True).
-            select_related('cover', 'parent')
+            select_related('cover')
         )
 
         if user_id:
             albums = albums.filter(access_level__gt=Allow.PUBLIC)
 
         if (tag_slug := request.GET.get('tag', None)) is not None:
-            tag = Tag.objects.get(slug=tag_slug)
-            albums = albums.filter(tags=tag)
+            albums = albums.filter(tags__slug=tag_slug)
 
         albums = albums.prefetch_related('cover__thumbnails')
         serializer = SimpleAlbumSerializer(albums, many=True)
