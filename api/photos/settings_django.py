@@ -80,6 +80,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = filter_none([
+    'photos.middleware.ProfilerMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
