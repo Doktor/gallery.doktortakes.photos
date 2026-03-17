@@ -6,6 +6,5 @@ services:
       dockerfile: Dockerfile
       target: backend-production
     env_file: .env.production
-    ports:
-      - 1337:1337
+    network_mode: host
     entrypoint: /app/run.production.sh
