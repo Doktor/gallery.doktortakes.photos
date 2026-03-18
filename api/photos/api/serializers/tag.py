@@ -6,4 +6,4 @@ from photos.models import Tag
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ("slug", "display_name", "description")
+        fields = ("namespace", "slug", "display_name", "description")

@@ -3,6 +3,7 @@ from django.urls import reverse
 
 
 class Tag(models.Model):
+    namespace = models.SlugField(max_length=100, default="", blank=True)
     slug = models.SlugField(max_length=100, unique=True)
     display_name = models.CharField(max_length=100, blank=True)
 
