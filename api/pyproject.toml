@@ -17,7 +17,7 @@ dependencies = [
     "boto3>=1.21.33,<2",
     "gunicorn==25.1.0",
     "requests>=2.31.0,<3",
-    "django-tree-queries==0.19",
+    "django-tree-queries==0.23.1",
     "psycopg[binary]==3.1.19",
 ]
 

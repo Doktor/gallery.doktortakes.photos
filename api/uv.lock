@@ -123,11 +123,11 @@ wheels = [
 
 [[package]]
 name = "django-tree-queries"
-version = "0.19.0"
+version = "0.23.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4c/ff/3243bcd0976efae6797141c8fbfab7f82635afe9e349dd58c25e8a8c1ad9/django_tree_queries-0.19.0.tar.gz", hash = "sha256:d1325e75f96e90b86c4316a3d63498101ec05703f4e629786b561e8aaab0e4a7", size = 11541, upload-time = "2024-04-25T14:22:40.321Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/5d/b458b8c1826cdb12b2017ca338725ea0eabfef3d6effe4236da697fc0489/django_tree_queries-0.23.1.tar.gz", hash = "sha256:9e7a4954b6e044cf6bdaa03e8e19088f031defe6f4f5896c9eaf7e109ca189c0", size = 28569, upload-time = "2026-02-18T10:51:49.523Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3f/0e/8ac15cd2fcc8685be4cdc22ab67e7ca7a9bbbbfbf9ce4daf447513d59a30/django_tree_queries-0.19.0-py3-none-any.whl", hash = "sha256:05b9e3158e31612528f136b4704a8d807e14edc0b4a607a45377e6132517ba2c", size = 13796, upload-time = "2024-04-25T14:22:42.469Z" },
+    { url = "https://files.pythonhosted.org/packages/07/d6/6676c83c63083984f9b58d3d7bf60eb089ab7755745498e4e3b1a6883f43/django_tree_queries-0.23.1-py3-none-any.whl", hash = "sha256:5b77c82bfbc57a613bad1e58be7eca4b4a22aa9b20e2571262687429de5d164d", size = 32567, upload-time = "2026-02-18T10:51:47.604Z" },
 ]
 
 [[package]]
@@ -219,7 +219,7 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.21.33,<2" },
     { name = "django", specifier = "==5.0.6" },
     { name = "django-storages", specifier = "==1.13.2" },
-    { name = "django-tree-queries", specifier = "==0.19" },
+    { name = "django-tree-queries", specifier = "==0.23.1" },
     { name = "django-webpack-loader", specifier = ">=3.1.0,<4" },
     { name = "djangorestframework", specifier = "==3.15.1" },
     { name = "exifread", specifier = "==2.3.2" },
