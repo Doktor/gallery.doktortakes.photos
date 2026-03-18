@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from photos.fields import JSONField, JSONWidget
 from photos.models import Photo
 from photos.models.photo.thumbnail import THUMBNAIL_SMALL_SQUARE
 
@@ -13,9 +12,6 @@ class PhotoTaxonInline(admin.TabularInline):
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        JSONField: {'widget': JSONWidget},
-    }
     fieldsets = (
         ('Image', {
             'fields': ('original', 'original_filename', 'exif')

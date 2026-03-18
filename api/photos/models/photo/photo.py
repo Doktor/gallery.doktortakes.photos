@@ -11,7 +11,6 @@ from django.urls import reverse
 
 from rest_framework.request import Request
 
-from photos.fields import JSONField
 from photos.models.photo.thumbnail import THUMBNAIL_DISPLAY, THUMBNAIL_LARGE_SQUARE, THUMBNAIL_MEDIUM
 from photos.settings_photos import DEFAULT_PATH
 
@@ -59,7 +58,7 @@ class Photo(models.Model):
     taken = models.DateTimeField(editable=False)
     edited = models.DateTimeField(editable=False)
 
-    exif = JSONField(blank=True, verbose_name="EXIF")
+    exif = models.JSONField(blank=True, verbose_name="EXIF")
 
     taxa = models.ManyToManyField('Taxon', through="PhotoTaxon", related_name='photos')
 
