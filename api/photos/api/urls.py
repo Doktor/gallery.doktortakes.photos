@@ -1,10 +1,7 @@
-from django.urls import include, path, register_converter
+from django.urls import include, path
 
 from photos.api import views
 from photos.api.views import manage
-from photos.converters import MD5HashConverter
-
-register_converter(MD5HashConverter, 'md5')
 
 
 manage_patterns = [

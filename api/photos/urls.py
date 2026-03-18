@@ -4,16 +4,17 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path, register_converter
 
+from photos.converters import MD5HashConverter
+register_converter(MD5HashConverter, 'md5')
+
 from photos import views
 from photos.api.urls import api_patterns
-from photos.converters import MD5HashConverter
 
 import debug_toolbar
 
 handler404 = 'photos.views.handler_404'
 handler500 = 'photos.views.handler_500'
 
-register_converter(MD5HashConverter, 'md5')
 
 album_patterns = [
     path('', views.view_albums, name='albums'),

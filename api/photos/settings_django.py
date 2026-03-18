@@ -235,7 +235,6 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = False
-USE_L10N = True
 USE_TZ = True
 
 DATE_FORMAT = 'D, Y-m-d'
@@ -261,13 +260,21 @@ LOCAL_STORAGE = os.environ.get('DJANGO_USE_LOCAL_STORAGE', 'true').lower() == 't
 
 MEDIA_URL = '/media/'
 
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 if LOCAL_STORAGE:
     if not TEST:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     else:
         MEDIA_ROOT = os.path.join(BASE_DIR, 'media_test')
 else:
-    DEFAULT_FILE_STORAGE = 'photos.storage_backends.CustomS3Boto3Storage'
+    STORAGES["default"] = {
+        "BACKEND": "photos.storage_backends.CustomS3Boto3Storage",
+    }
 
     # Keys
     AWS_ACCESS_KEY_ID = os.environ.get('SPACES_ACCESS_KEY', '')
