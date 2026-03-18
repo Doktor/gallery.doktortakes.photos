@@ -2,14 +2,24 @@
   <FixedWidthContainer v-if="!loading">
     <h2>Tags</h2>
 
-    <ul v-if="tags" class="tags">
-      <li v-for="tag in tags">
-        <router-link :to="{ name: 'tag', params: { slug: tag.slug } }">
-          #{{ tag.slug }}
-        </router-link>
-      </li>
-    </ul>
-    <p v-else>No tags found.</p>
+    <section>
+      <template
+        v-if="tagGroups"
+        v-for="[namespace, tags] in Object.entries(tagGroups)"
+      >
+        <h3 v-if="namespace">{{ namespace }}</h3>
+
+        <ul class="tags">
+          <li v-for="tag in tags">
+            <router-link :to="{ name: 'tag', params: { slug: tag.slug } }">
+              #{{ tag.slug }}
+            </router-link>
+          </li>
+        </ul>
+      </template>
+
+      <p v-else>No tags found.</p>
+    </section>
   </FixedWidthContainer>
 </template>
 
@@ -29,7 +39,7 @@ export default {
 
   data() {
     return {
-      tags: [],
+      tagGroups: {},
     };
   },
 
@@ -42,7 +52,10 @@ export default {
     ]);
 
     this.$store.commit("setLoading", true);
-    this.tags = await TagService.getTags();
+
+    const tags = await TagService.getTags();
+    this.tagGroups = Object.groupBy(tags, (tag) => tag.namespace);
+
     this.$store.commit("setLoading", false);
   },
 };
