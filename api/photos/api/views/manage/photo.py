@@ -4,8 +4,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from photos.api.serializers import PhotoSerializer
-from photos.api.views.photo import get_photo, PhotoNotFound
+from photos.api.serializers import PhotoSerializer, ManagePhotoUpdateSerializer
+from photos.api.views.photo import get_photo, PhotoNotFound, PhotoDetail
 from photos.models import Photo
 from photos.utils import try_parse_int
 from photos.utils.image import get_average_color
@@ -16,6 +16,17 @@ import PIL.Image
 
 class ManagePhotoDetail(APIView):
     permission_classes = [IsAdminUser]
+
+    @staticmethod
+    def patch(request: Request, md5: str) -> Response:
+        photo = get_photo(request, md5)
+        serializer = ManagePhotoUpdateSerializer(photo, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=Status.BAD_REQUEST)
+
+        serializer.save()
+        return PhotoDetail.get(request, md5)
 
     @staticmethod
     def delete(request: Request, md5: str) -> Response:

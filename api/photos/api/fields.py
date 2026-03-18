@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from photos.models import Photo, Tag, Album, Taxon
+from photos.models import Photo, Tag, Album, Taxon, Creator
 
 from http import HTTPStatus as Status
 from typing import Optional
@@ -57,6 +57,20 @@ class PhotoHashField(serializers.RelatedField):
 
     def to_representation(self, value: Photo) -> str:
         return value.md5
+
+
+class CreatorField(serializers.RelatedField):
+    def to_internal_value(self, data: str) -> Creator | None:
+        name = data.strip().lower()
+
+        if not name:
+            raise ValidationError("Creator name can't be empty.", code=Status.BAD_REQUEST)
+
+        creator, _ = Creator.objects.get_or_create(name=name)
+        return creator
+
+    def to_representation(self, value: Creator) -> str:
+        return value.name
 
 
 class TagField(serializers.RelatedField):

@@ -6,6 +6,12 @@
         <h3 class="photo-hash">{{ photo.md5 }}</h3>
       </header>
 
+      <section>
+        <h2>Photo details</h2>
+
+        <PhotoDetailsForm :photo="photo" @update="loadPhoto" />
+      </section>
+
       <section class="taxa-table">
         <h2>Manage taxa</h2>
         <PhotoTaxonTable :photo="photo" />
@@ -61,6 +67,7 @@ import PhotoMetadataTable from "./PhotoMetadataTable";
 import PhotoExifTable from "./PhotoExifTable";
 import PhotoThumbnailsTable from "./PhotoThumbnailsTable";
 import ThumbnailForm from "./ThumbnailForm";
+import PhotoDetailsForm from "./PhotoDetailsForm";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
 import PhotoTaxonTable from "./PhotoTaxonTable";
 
@@ -68,6 +75,7 @@ export default {
   name: "EditPhotoPage",
   components: {
     PhotoTaxonTable,
+    PhotoDetailsForm,
     ThumbnailForm,
     PhotoThumbnailsTable,
     PhotoExifTable,

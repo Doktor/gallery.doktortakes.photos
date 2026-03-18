@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
+from photos.api.fields import CreatorField
 from photos.api.serializers.taxon import TaxonSerializer
 from photos.api.serializers.thumbnail import ThumbnailSerializer
 from photos.models.photo.thumbnail import (
     THUMBNAIL_DISPLAY, THUMBNAIL_SMALL_SQUARE, THUMBNAIL_MEDIUM_SQUARE, THUMBNAIL_EXTRA_SMALL_SQUARE)
-from photos.models import Photo
+from photos.models import Photo, Creator
 
 import itertools
 from collections import OrderedDict
@@ -48,6 +49,8 @@ def get_images(photo: Photo) -> dict:
 
 class PhotoSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField(read_only=True)
+    creator = serializers.SerializerMethodField(read_only=True)
+    description = serializers.CharField(read_only=True)
 
     # Metadata
     taken = serializers.DateTimeField(
@@ -61,6 +64,10 @@ class PhotoSerializer(serializers.ModelSerializer):
     exif = serializers.DictField(read_only=True, source='get_exif')
 
     taxa = TaxonSerializer(many=True)
+
+    @staticmethod
+    def get_creator(obj: Photo):
+        return obj.creator.name if obj.creator else None
 
     @staticmethod
     def get_images(obj: Photo) -> dict:
@@ -83,6 +90,7 @@ class PhotoSerializer(serializers.ModelSerializer):
             'width', 'height', 'md5', 'index',
             'path', 'exif',
             'taxa',
+            'creator', 'description',
         )
 
 
@@ -110,3 +118,12 @@ class PhotoThumbnailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = ('thumbnail', 'placeholder_color')
+
+
+class ManagePhotoUpdateSerializer(serializers.ModelSerializer):
+    creator = CreatorField(queryset=Creator.objects.all(), required=False, allow_null=True)
+    description = serializers.CharField(required=False, allow_blank=True)
+
+    class Meta:
+        model = Photo
+        fields = ('creator', 'description')

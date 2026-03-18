@@ -1,5 +1,5 @@
 import { getQueryString } from "@/utils";
-import { getAsync, postAsync } from "@/request";
+import { getAsync, patchAsync, postAsync } from "@/request";
 
 export const ManagePhotoService = {
   async getThumbnails(md5) {
@@ -19,5 +19,9 @@ export const ManagePhotoService = {
       `/api/manage/photos/${md5}/thumbnails/`,
       data,
     );
+  },
+
+  async updatePhoto(md5, data) {
+    return await patchAsync(`/api/manage/photos/${md5}/`, data);
   },
 };

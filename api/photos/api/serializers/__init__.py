@@ -1,4 +1,4 @@
-from .photo import PhotoSerializer, SimplePhotoSerializer, PhotoThumbnailSerializer
+from .photo import PhotoSerializer, SimplePhotoSerializer, PhotoThumbnailSerializer, ManagePhotoUpdateSerializer
 from .album import AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer
 from .tag import TagSerializer
 from .taxon import TaxonSerializer
