@@ -282,6 +282,8 @@ else:
 
     # Region
     AWS_S3_USE_SSL = True
+    AWS_S3_REGION_NAME = os.environ.get('SPACES_REGION_NAME', '')
+    AWS_S3_ENDPOINT_URL = os.environ.get('SPACES_ENDPOINT', '')
     AWS_S3_CUSTOM_DOMAIN = os.environ.get('SPACES_CUSTOM_DOMAIN', '')
 
     # Bucket
