@@ -59,7 +59,10 @@ def get_photo_for_user_or_404(request: Union[HttpRequest, Request], md5: str,
 
 def get_albums_for_user(user, exclude_public=False, top_level_only=True) -> QuerySet:
     """Returns a QuerySet of the albums that a user has access to."""
-    q = Q(parent__isnull=True) if top_level_only else Q()
+    q = Q(type=AlbumType.STANDARD)
+
+    if top_level_only:
+        q &= Q(parent__isnull=True)
 
     if user.is_superuser:
         q &= Q(access_level__lte=Allow.SUPERUSER)
@@ -81,8 +84,6 @@ def get_albums_for_user(user, exclude_public=False, top_level_only=True) -> Quer
 
     if exclude_public:
         q &= Q(access_level__gt=Allow.PUBLIC)
-
-    q &= Q(type=AlbumType.STANDARD)
 
     return Album.objects.filter(q).distinct().order_by('-start')
 

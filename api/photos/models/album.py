@@ -40,11 +40,13 @@ ACCESS_LEVELS = (
 class AlbumType:
     STANDARD = 'standard'
     FEATURED = 'featured'
+    EXTERNAL = 'external'
 
 
 ALBUM_TYPES = (
     (AlbumType.STANDARD, "Standard"),
     (AlbumType.FEATURED, "Featured"),
+    (AlbumType.EXTERNAL, "External"),
 )
 
 
