@@ -55,6 +55,10 @@ $background-color-3: rgb(215, 215, 215);
 $background-color-4: rgb(195, 195, 195);
 $background-color-5: rgb(175, 175, 175);
 
+$success-color: #00cb8a;
+$warning-color: #ffea00;
+$error-color: #ff5959;
+
 /* Typefaces */
 
 @mixin logo-font() {

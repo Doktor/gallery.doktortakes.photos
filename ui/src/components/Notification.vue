@@ -58,15 +58,15 @@ export default {
   }
 
   &.notification-success {
-    @include notification(#00cb8a);
+    @include notification(variables.$success-color);
   }
 
   &.notification-warning {
-    @include notification(#ffea00);
+    @include notification(variables.$warning-color);
   }
 
   &.notification-error {
-    @include notification(#ff5959);
+    @include notification(variables.$error-color);
   }
 }
 </style>
