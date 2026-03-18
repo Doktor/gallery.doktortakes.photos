@@ -2,10 +2,7 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, re_path, register_converter
-
-from photos.converters import MD5HashConverter
-register_converter(MD5HashConverter, 'md5')
+from django.urls import path, re_path
 
 from photos import views
 from photos.api.urls import api_patterns
