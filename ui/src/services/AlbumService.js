@@ -16,6 +16,18 @@ export const AlbumService = {
     return albums;
   },
 
+  async getExternalAlbums() {
+    let { content } = await getAsync("/api/external/albums/");
+    let albums = content.albums;
+
+    for (let album of albums) {
+      album.pathSplit = album.path.split("/");
+      album.tags?.sort();
+    }
+
+    return albums;
+  },
+
   async getAlbumsForUser(userId) {
     return await this.getAllAlbums(userId, null);
   },

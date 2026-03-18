@@ -11,6 +11,7 @@ import SpeciesListPage from "@/pages/public/SpeciesListPage";
 
 import SearchPhotosPage from "@/pages/public/SearchPhotosPage";
 import FeaturedPage from "@/pages/public/FeaturedPage";
+import ExternalAlbumListPage from "@/pages/public/ExternalAlbumListPage.vue";
 
 export const publicRoutes = [
   {
@@ -54,6 +55,12 @@ export const publicRoutes = [
     meta: {
       title: false,
     },
+  },
+
+  {
+    path: "/external/",
+    name: "externalAlbums",
+    component: ExternalAlbumListPage,
   },
 
   {

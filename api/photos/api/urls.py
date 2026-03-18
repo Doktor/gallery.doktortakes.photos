@@ -1,6 +1,7 @@
 from django.urls import include, path
 
 from photos.api import views
+from photos.api.views import external_album
 from photos.api.views import manage
 
 
@@ -25,6 +26,10 @@ manage_patterns = [
     path('taxa/', manage.ManageTaxonList.as_view(), name='api_manage_taxa'),
 ]
 
+external_patterns = [
+    path('albums/', external_album.ExternalAlbumList.as_view(), name='api_external_albums')
+]
+
 api_patterns = [
     path('photos/search/', views.search_photos, name='search_photos'),
 
@@ -33,6 +38,8 @@ api_patterns = [
     path('albums/featured/', views.FeaturedAlbumList.as_view(), name='api_featured_albums'),
     path('albums/<path:path>/', views.AlbumDetail.as_view(), name='api_album'),
     path('albums/', views.AlbumList.as_view(), name='api_albums'),
+
+    path('external/', include(external_patterns)),
 
     path('tags/', views.TagList.as_view(), name='api_tags'),
 

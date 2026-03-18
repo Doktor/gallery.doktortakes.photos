@@ -321,6 +321,20 @@ def view_featured_album(request: HttpRequest, path: str) -> HttpResponse:
     return render(request, 'base.html', context)
 
 
+# External albums
+
+
+@require_GET
+def external_entry_point(request: HttpRequest) -> HttpResponse:
+    context = {
+        'title': 'External',
+        'meta': meta_to_string([
+            meta_no_robots,
+        ])
+    }
+    return render(request, 'base.html', context)
+
+
 # Tags
 
 

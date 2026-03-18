@@ -46,6 +46,7 @@ urlpatterns = [
     path('api/', include(api_patterns)),
     path('about/', views.view_about, name='about'),
     path('copyright/', views.view_copyright, name='copyright'),
+    path('external/', views.external_entry_point, name='external'),
     path('featured/', include(featured_patterns)),
     re_path(r'^debug/', views.index, name='debug'),
     path('groups/', views.groups_entry_point, name='groups'),
