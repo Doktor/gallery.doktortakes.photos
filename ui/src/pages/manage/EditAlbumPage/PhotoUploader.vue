@@ -28,7 +28,6 @@
 <script setup>
 import { computed, markRaw, onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import { getQueryString } from "@/utils";
 import { getCsrfToken } from "@/request";
 import PhotoUploaderList from "@/pages/manage/EditAlbumPage/PhotoUploaderList.vue";
 import {
@@ -37,6 +36,7 @@ import {
   STATUS_UPLOADING,
 } from "@/pages/manage/EditAlbumPage/uploader";
 import PhotoUploaderSummary from "@/pages/manage/EditAlbumPage/PhotoUploaderSummary.vue";
+import { Dropzone } from "@deltablot/dropzone";
 
 const csrfToken = ref(getCsrfToken());
 const uploads = ref([]);
@@ -55,9 +55,7 @@ const props = defineProps({
 const emit = defineEmits(["addPhoto"]);
 
 const action = computed(() => {
-  let base = `/api/manage/albums/${props.path.value}/photos/`;
-  let options = {};
-  return base + getQueryString(options);
+  return `/api/manage/albums/${props.path}/photos/`;
 });
 
 onMounted(() => {
@@ -71,6 +69,7 @@ onMounted(() => {
     headers: {
       Authorization: "Token " + store.state.token,
     },
+    url: action.value,
   });
 
   dropzone.value.on("addedfile", (file) => {
