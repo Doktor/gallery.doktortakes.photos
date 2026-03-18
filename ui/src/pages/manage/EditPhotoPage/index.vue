@@ -1,60 +1,61 @@
 <template>
-  <FixedWidthContainer>
-    <template v-if="!loading">
-      <header>
-        <h2 class="album-name">{{ album.name }}</h2>
-        <h3 class="photo-hash">{{ photo.md5 }}</h3>
-      </header>
-
-      <section>
+  <FixedWidthContainer v-if="!loading" :width="1200">
+    <section class="photo-details-section">
+      <div>
         <h2>Photo details</h2>
 
         <PhotoDetailsForm :photo="photo" @update="loadPhoto" />
-      </section>
+      </div>
 
-      <section class="taxa-table">
-        <h2>Manage taxa</h2>
-        <PhotoTaxonTable :photo="photo" />
-      </section>
+      <div>
+        <h2>Photo preview</h2>
 
-      <main>
-        <section class="photo-details">
-          <div>
-            <h2>Metadata</h2>
-            <PhotoMetadataTable class="photo-details-table" :photo="photo" />
-          </div>
+        <a
+          :href="thumbnailUrl"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+        >
+          <img class="photo-image" :src="thumbnailUrl" />
+        </a>
+      </div>
+    </section>
 
-          <div>
-            <h2>EXIF</h2>
-            <PhotoExifTable class="photo-details-table" :photo="photo" />
-          </div>
-        </section>
+    <section class="photo-details-section">
+      <div>
+        <h2>Metadata</h2>
 
-        <section class="image-container">
-          <a
-            :href="thumbnailUrl"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-          >
-            <img class="image-preview" :src="thumbnailUrl" />
-          </a>
-        </section>
-      </main>
+        <PhotoMetadataTable class="photo-thumbnails-table" :photo="photo" />
+      </div>
 
-      <section>
+      <div>
+        <h2>EXIF</h2>
+
+        <PhotoExifTable class="photo-thumbnails-table" :photo="photo" />
+      </div>
+    </section>
+
+    <section class="photo-details-section">
+      <div>
         <h2>Thumbnails</h2>
+
         <PhotoThumbnailsTable
-          class="photo-details-table"
+          class="photo-thumbnails-table"
           :thumbnails="thumbnails"
         />
-      </section>
+      </div>
 
-      <section>
+      <div>
         <h2>Create thumbnail</h2>
 
         <ThumbnailForm :photo="photo" @update="loadThumbnails" />
-      </section>
-    </template>
+      </div>
+    </section>
+
+    <section class="photo-taxa-table">
+      <h2>Manage taxa</h2>
+
+      <PhotoTaxonTable :photo="photo" />
+    </section>
   </FixedWidthContainer>
 </template>
 
@@ -205,39 +206,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-main {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
+$margin: 24px;
 
-h2,
-h3 {
-  margin: 0;
+section {
+  margin: $margin 0;
 }
 
 .photo-hash {
   @include variables.text-font();
 }
 
-.photo-details {
-  margin-right: 16px;
+.photo-details-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: $margin;
+
+  & > div {
+    width: 50%;
+  }
 }
 
-.photo-details,
-.image-container {
-  width: 50%;
-}
-
-.taxa-table {
-  width: 100%;
-}
-
-.photo-details-table {
-  width: 100%;
-}
-
-.image-preview {
+.photo-image {
   width: 100%;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <form class="form--1-column" v-on:submit.prevent="submit">
     <fieldset>
+      <CustomInput label="Name" v-model="request.name" />
+
       <CustomInput
         label="Width"
         type="number"
@@ -15,8 +17,6 @@
         required
         :errors="errors.height"
       />
-
-      <CustomInput label="Name" v-model="request.name" />
     </fieldset>
 
     <CustomButton class="button-primary" @click="submit">

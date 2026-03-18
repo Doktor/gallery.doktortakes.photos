@@ -5,20 +5,19 @@
         <th>Name</th>
         <th>Width</th>
         <th>Height</th>
-        <th>Link</th>
       </tr>
     </thead>
+
     <tbody>
       <tr v-for="(thumbnail, index) in thumbnails" :key="index">
         <td>
-          <span v-if="thumbnail.type">{{ thumbnail.type }}</span>
-          <i v-else>(untitled)</i>
+          <a :href="thumbnail.url">
+            <span v-if="thumbnail.type">{{ thumbnail.type }}</span>
+            <i v-else>(untitled)</i>
+          </a>
         </td>
         <td>{{ thumbnail.width }}</td>
         <td>{{ thumbnail.height }}</td>
-        <td>
-          <a :href="thumbnail.url">{{ thumbnail.name }}</a>
-        </td>
       </tr>
     </tbody>
   </table>
