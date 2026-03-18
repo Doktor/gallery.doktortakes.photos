@@ -49,6 +49,13 @@ class Photo(models.Model):
         max_length=50, editable=False, blank=True)
     placeholder_color = models.CharField(max_length=6, null=True, blank=True)
 
+    # Properties
+
+    creator = models.ForeignKey(
+        'Creator', on_delete=models.RESTRICT, related_name='photos',
+        blank=True, null=True)
+    description = models.TextField(default="", blank=True)
+
     # Metadata
 
     album = models.ForeignKey(
