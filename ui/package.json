@@ -10,6 +10,7 @@
     "babel-runtime": "^6.26.0",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
+    "normalize.css": "^8.0.1",
     "sass": "^1.77.5",
     "sass-loader": "^14.2.1",
     "style-loader": "^4.0.0",

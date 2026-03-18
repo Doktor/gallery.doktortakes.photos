@@ -4,6 +4,8 @@ import Base from "./pages/public/Base";
 import { router } from "./router";
 import { store } from "./store";
 
+import "normalize.css";
+
 import "./styles/main.scss";
 import "./styles/forms.scss";
 
