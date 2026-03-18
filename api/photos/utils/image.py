@@ -33,6 +33,8 @@ def create_thumbnail(
 
     thumbnail.photo = photo
     thumbnail.type = name
+    thumbnail.width = width
+    thumbnail.height = height
 
     if image.size != (width, height):
         image = fit_image(image, (width, height))

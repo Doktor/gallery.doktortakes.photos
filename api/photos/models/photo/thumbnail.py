@@ -45,13 +45,7 @@ class Thumbnail(models.Model):
 
     # Image
 
-    image = models.ImageField(
-        upload_to=get_filename,
-        width_field='width',
-        height_field='height',
-        blank=True,
-        null=True,
-        editable=False)
+    image = models.ImageField(upload_to=get_filename, blank=True, null=True, editable=False)
 
     width = models.PositiveIntegerField(default=0, editable=False)
     height = models.PositiveIntegerField(default=0, editable=False)
