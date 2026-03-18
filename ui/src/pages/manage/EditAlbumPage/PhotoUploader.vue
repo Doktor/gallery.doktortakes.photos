@@ -1,6 +1,8 @@
 <template>
   <section>
-    <div>
+    <PhotoUploaderSummary :uploads="uploads" @clearSuccess="clearSuccess" />
+
+    <section>
       <form
         id="dropzone"
         class="dropzone"
@@ -14,80 +16,159 @@
           <input type="file" name="file" />
           <input type="submit" value="Upload" />
         </div>
+
+        <div class="dz-message">Drop photos here or click to upload</div>
       </form>
-    </div>
+    </section>
+
+    <PhotoUploaderList :uploads="uploads" />
   </section>
 </template>
 
-<script>
-import { getQueryString, wait } from "@/utils";
-import CustomInput from "@/components/form/CustomInput";
+<script setup>
+import { computed, markRaw, onBeforeUnmount, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+import { getQueryString } from "@/utils";
 import { getCsrfToken } from "@/request";
+import PhotoUploaderList from "@/pages/manage/EditAlbumPage/PhotoUploaderList.vue";
+import {
+  STATUS_ERROR,
+  STATUS_SUCCESS,
+  STATUS_UPLOADING,
+} from "@/pages/manage/EditAlbumPage/uploader";
+import PhotoUploaderSummary from "@/pages/manage/EditAlbumPage/PhotoUploaderSummary.vue";
 
-export default {
-  components: { CustomInput },
+const csrfToken = ref(getCsrfToken());
+const uploads = ref([]);
+const nextId = ref(0);
+const dropzone = ref(null);
 
-  data() {
-    return {
-      csrfToken: getCsrfToken(),
+const store = useStore();
+
+const props = defineProps({
+  path: {
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["addPhoto"]);
+
+const action = computed(() => {
+  let base = `/api/manage/albums/${props.path.value}/photos/`;
+  let options = {};
+  return base + getQueryString(options);
+});
+
+onMounted(() => {
+  Dropzone.autoDiscover = false;
+
+  dropzone.value = new Dropzone("#dropzone", {
+    paramName: "file",
+    uploadMultiple: false,
+    parallelUploads: 2,
+    previewTemplate: "<div style='display: none'></div>",
+    headers: {
+      Authorization: "Token " + store.state.token,
+    },
+  });
+
+  dropzone.value.on("addedfile", (file) => {
+    const entry = {
+      id: nextId.value,
+      filename: file.name,
+      size: file.size,
+      thumbnailUrl: null,
+      status: STATUS_UPLOADING,
+      progress: 0,
+      errorMessage: null,
+      dzFile: markRaw(file),
     };
-  },
 
-  computed: {
-    action() {
-      let base = `/api/manage/albums/${this.path}/photos/`;
-      let options = {};
+    nextId.value += 1;
 
-      return base + getQueryString(options);
-    },
-  },
+    file.internalUploadId = entry.id;
+    uploads.value.push(entry);
+  });
 
-  mounted() {
-    Dropzone.autoDiscover = false;
+  dropzone.value.on("thumbnail", (file, dataUrl) => {
+    const entry = uploads.value.find((u) => u.id === file.internalUploadId);
 
-    const dropzone = new Dropzone("#dropzone", {
-      paramName: "file",
-      uploadMultiple: false,
-      parallelUploads: 2,
-      headers: {
-        Authorization: "Token " + this.$store.state.token,
-      },
-    });
+    if (entry) {
+      entry.thumbnailUrl = dataUrl;
+    }
+  });
 
-    dropzone.on("success", (file) => {
-      let response = JSON.parse(file.xhr.responseText);
-      this.$emit("addPhoto", response);
+  dropzone.value.on("uploadprogress", (file, progress) => {
+    const entry = uploads.value.find((u) => u.id === file.internalUploadId);
 
-      wait(2000, () => {
-        dropzone.removeFile(file);
-      });
-    });
-  },
+    if (entry) {
+      entry.progress = progress;
+    }
+  });
 
-  props: {
-    path: {
-      type: String,
-      required: true,
-    },
-  },
-};
+  dropzone.value.on("success", (file) => {
+    const entry = uploads.value.find((u) => u.id === file.internalUploadId);
+
+    if (entry) {
+      entry.status = STATUS_SUCCESS;
+      entry.progress = 100;
+    }
+
+    let response = JSON.parse(file.xhr.responseText);
+    emit("addPhoto", response);
+  });
+
+  dropzone.value.on("error", (file, message) => {
+    const entry = uploads.value.find((u) => u.id === file.internalUploadId);
+
+    if (entry) {
+      entry.status = STATUS_ERROR;
+
+      if (Array.isArray(message)) {
+        entry.errorMessage = message.join("; ");
+      } else {
+        entry.errorMessage = message;
+      }
+    }
+  });
+});
+
+onBeforeUnmount(() => {
+  dropzone.value.destroy();
+});
+
+function clearSuccess() {
+  const completed = uploads.value.filter((u) => u.status === STATUS_SUCCESS);
+
+  for (const entry of completed) {
+    dropzone.value.removeFile(entry.dzFile);
+  }
+
+  uploads.value = uploads.value.filter((u) => u.status !== STATUS_SUCCESS);
+}
 </script>
 
 <style lang="scss">
 .dropzone {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
 
-  border: 1px solid black;
-  border-radius: 0;
-}
+  height: 192px;
 
-.dz-preview {
-  margin: 8px !important;
-}
+  border: 2px dashed variables.$background-color-5;
+  cursor: pointer;
 
-.dz-image {
-  border-radius: 0 !important;
+  &:hover {
+    border-color: variables.$text-blue;
+  }
+
+  .dz-message {
+    @include variables.text-font();
+
+    font-size: 1.1rem;
+    color: variables.$text-color-2;
+  }
 }
 </style>
