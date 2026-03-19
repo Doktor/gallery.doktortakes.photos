@@ -7,8 +7,6 @@ import { userRoutes } from "./userRoutes";
 import { manageRoutes } from "./manageRoutes";
 import { debugRoutes } from "./debugRoutes";
 
-export const baseTitle = "Doktor Takes Photos";
-
 const routes = [
   ...publicRoutes,
   ...userRoutes,
@@ -62,12 +60,8 @@ router.afterEach((to, from) => {
     // Document title
     let title = record.meta.title;
 
-    if (title === false) {
-      // Don't change the title
-    } else if (title !== undefined) {
-      document.title = title + " | " + baseTitle;
-    } else {
-      document.title = baseTitle;
+    if (typeof title === "string") {
+      store.commit("setTitle", title);
     }
   }
 });

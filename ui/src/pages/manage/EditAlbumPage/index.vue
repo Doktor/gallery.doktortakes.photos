@@ -56,7 +56,6 @@ import DeleteAlbumModal from "./DeleteAlbumModal";
 import PhotoManager from "./PhotoManager";
 import PhotoUploader from "./PhotoUploader";
 import { mapState } from "vuex";
-import { editorTitleTemplate } from "@/store/mutations";
 import { AlbumService } from "@/services/AlbumService";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
@@ -157,7 +156,7 @@ export default {
       let oldAlbum = this.album;
 
       if (oldAlbum.name !== newAlbum.name) {
-        document.title = editorTitleTemplate.format(newAlbum.name);
+        this.$store.commit("setTitle", "Editing " + newAlbum.name);
       }
 
       // Prevent duplicate navigation

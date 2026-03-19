@@ -28,7 +28,6 @@ export const publicRoutes = [
     meta: {
       body: "photo-viewer",
       showNavigation: false,
-      title: false,
     },
   },
   {
@@ -36,9 +35,6 @@ export const publicRoutes = [
     strict: true,
     name: "album",
     component: AlbumDetailPage,
-    meta: {
-      title: false,
-    },
   },
   {
     path: "/albums/",
@@ -52,9 +48,6 @@ export const publicRoutes = [
     strict: true,
     name: "featuredAlbum",
     component: FeaturedPage,
-    meta: {
-      title: false,
-    },
   },
 
   {
@@ -75,9 +68,6 @@ export const publicRoutes = [
     path: "/tags/:slug/",
     name: "tag",
     component: TagDetailPage,
-    meta: {
-      title: false,
-    },
   },
 
   {

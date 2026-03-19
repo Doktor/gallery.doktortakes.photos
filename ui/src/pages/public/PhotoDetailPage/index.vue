@@ -32,8 +32,6 @@ import PhotoViewer from "./PhotoViewer";
 import { AlbumService } from "@/services/AlbumService";
 import PhotoInfo from "./PhotoInfo";
 
-const photoTitleTemplate = "{0} | {1} | Doktor Takes Photos";
-
 export default {
   beforeRouteEnter(to, from, next) {
     next((view) => document.addEventListener("keyup", view.handleKey));
@@ -154,9 +152,9 @@ export default {
         ? window.history.replaceState(null, null, resolved.href)
         : window.history.pushState(null, null, resolved.href);
 
-      document.title = photoTitleTemplate.format(
-        this.photo.md5.substring(0, 8),
-        this.album.name,
+      this.$store.commit(
+        "setTitle",
+        this.photo.md5.substring(0, 8) + " | " + this.album.name,
       );
     },
 

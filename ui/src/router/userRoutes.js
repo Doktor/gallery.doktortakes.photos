@@ -9,9 +9,6 @@ export const userRoutes = [
     path: "/users/:slug/",
     name: "user",
     component: UserDetailPage,
-    meta: {
-      title: false,
-    },
   },
   {
     path: "/users/:slug/password/",

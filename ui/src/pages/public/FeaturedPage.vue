@@ -53,6 +53,7 @@ export default {
       if (ok) {
         this.album = album;
         this.photos = photos.sort((a, b) => b.index - a.index);
+        this.$store.commit("setTitle", album.name);
       }
 
       this.$store.commit("setLoading", false);

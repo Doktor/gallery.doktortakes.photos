@@ -106,6 +106,14 @@ export default {
       return this.photo.images.display?.url ?? this.photo.images.original.url;
     },
 
+    pageTitle() {
+      if (!this.photo.md5 || !this.album.name) {
+        return null;
+      }
+
+      return "Editing " + this.photo.md5.substring(0, 8) + " | " + this.album.name;
+    },
+
     breadcrumbs() {
       if (!this.album.name) {
         return [];
@@ -196,6 +204,10 @@ export default {
   watch: {
     async routePath() {
       await this.loadAlbum();
+    },
+
+    pageTitle(val) {
+      this.$store.commit("setTitle", val);
     },
 
     breadcrumbs(val) {

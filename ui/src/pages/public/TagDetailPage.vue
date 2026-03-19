@@ -7,7 +7,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { baseTitle } from "@/router";
 import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
 import { TagService } from "@/services/TagService";
@@ -60,7 +59,7 @@ export default {
   },
 
   async created() {
-    document.title = "Tag: #{0} | {1}".format(this.slug, baseTitle);
+    this.$store.commit("setTitle", "Tag: #" + this.slug);
 
     this.$store.commit("setLoading", true);
 

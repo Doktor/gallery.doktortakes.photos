@@ -1,6 +1,3 @@
-export const titleTemplate = "{0} | Doktor Takes Photos";
-export const editorTitleTemplate = "Editing {0} | Doktor Takes Photos";
-
 export const mutations = {
   setApiTokenFromLocalStorage(state) {
     state.token = localStorage.getItem("token");
@@ -50,5 +47,17 @@ export const mutations = {
 
   setBreadcrumbs(state, items) {
     state.breadcrumbs = items;
+  },
+
+  setTitle(state, title) {
+    const baseTitle = "Doktor Takes Photos";
+
+    if (title) {
+      document.title = title + " | " + baseTitle;
+      state.title = title;
+    } else {
+      document.title = baseTitle;
+      state.title = null;
+    }
   },
 };

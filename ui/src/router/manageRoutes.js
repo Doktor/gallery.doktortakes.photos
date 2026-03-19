@@ -43,7 +43,6 @@ export const manageRoutes = [
     component: EditAlbumPage,
     meta: {
       staff: true,
-      title: "Edit album: {album}",
     },
   },
   {
@@ -52,7 +51,6 @@ export const manageRoutes = [
     component: EditPhotoPage,
     meta: {
       staff: true,
-      title: "Edit photo: {md5}",
     },
   },
 

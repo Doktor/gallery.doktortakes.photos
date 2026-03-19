@@ -53,6 +53,7 @@ export default {
   },
 
   async created() {
+    this.$store.commit("setTitle", this.$route.params.slug);
     this.$store.commit("setBreadcrumbs", [
       {
         label: this.$route.params.slug,
