@@ -14,7 +14,7 @@
 
         <div class="logo-subtitle">
           <div class="logo-gray-text logo-small-text">Associates</div>
-          <div class="logo-gray-text logo-small-text">GmbH</div>
+          <div class="logo-gray-text logo-small-text">LLP</div>
         </div>
 
         <div class="logo-bar">
@@ -53,7 +53,7 @@ const associates = reactive([
 const title = computed(() => {
   return (
     associates.map((associate) => associate.name).join(" + ") +
-    " Associates GmbH"
+    " + Associates LLP"
   );
 });
 
