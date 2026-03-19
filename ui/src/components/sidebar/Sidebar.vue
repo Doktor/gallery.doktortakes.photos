@@ -16,6 +16,16 @@
       />
 
       <ul class="sidebar-items">
+        <li class="sidebar-section">
+          <h2>
+            <RouterLink :to="{ name: 'externalAlbums' }">
+              Appearances
+            </RouterLink>
+          </h2>
+
+          <span class="sidebar-note">photos featuring the associates</span>
+        </li>
+
         <!-- Featured albums -->
         <li class="sidebar-section" v-if="featuredAlbums.length">
           <h2
@@ -39,7 +49,8 @@
 
         <!-- Main links -->
         <li class="sidebar-section">
-          <h2>Photos</h2>
+          <h2>Photography</h2>
+          <span class="sidebar-note">photos taken by the associates</span>
 
           <ul>
             <SidebarLink title="Albums" route="index" />
@@ -194,6 +205,13 @@ export default {
 
     list-style-type: none;
   }
+}
+
+.sidebar-note {
+  display: block;
+  margin: 16px 0;
+
+  color: variables.$text-color-2;
 }
 
 .sidebar-items {
