@@ -10,7 +10,12 @@
 
     <AlbumChildrenListTiles v-if="!loading" :album="album" />
 
-    <PhotoGallery :isLoading="loading" :photos="photos" :allowSelect="false" />
+    <PhotoGallery
+      :isLoading="loading"
+      :photos="photos"
+      :allowSelect="false"
+      :routeName="isExternal ? 'externalPhoto' : 'photo'"
+    />
 
     <div
       class="album-empty-text"
@@ -45,6 +50,13 @@ export default {
     };
   },
 
+  props: {
+    isExternal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   computed: {
     ...mapState(["loading"]),
 
@@ -62,14 +74,22 @@ export default {
       }
 
       return [
-        {
-          label: "Albums",
-          to: { name: "index" },
-        },
+        this.isExternal
+          ? {
+              label: "Appearances",
+              to: { name: "externalAlbums" },
+            }
+          : {
+              label: "Albums",
+              to: { name: "index" },
+            },
         ...this.album.hierarchy.map((album) => {
           return {
             label: album.name,
-            to: { name: "album", params: { path: album.path } },
+            to: {
+              name: this.isExternal ? "externalAlbum" : "album",
+              params: { path: album.path },
+            },
           };
         }),
       ];

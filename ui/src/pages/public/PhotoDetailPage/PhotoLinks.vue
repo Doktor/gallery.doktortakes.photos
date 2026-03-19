@@ -27,12 +27,16 @@ export default {
       type: Object,
       required: true,
     },
+    isExternal: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     albumRoute() {
       return {
-        name: "album",
+        name: this.isExternal ? "externalAlbum" : "album",
         params: {
           path: this.album.pathSplit,
         },

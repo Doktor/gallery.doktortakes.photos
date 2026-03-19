@@ -11,7 +11,7 @@
       :taxa="photo.taxa"
     />
     <PhotoExif class="info-exif" :exif="photo.exif" />
-    <PhotoLinks class="info-links" :album="album" />
+    <PhotoLinks class="info-links" :album="album" :isExternal="isExternal" />
     <KeyboardShortcuts class="info-shortcuts" />
   </section>
 </template>
@@ -44,6 +44,10 @@ export default {
     photos: {
       type: Array,
       required: true,
+    },
+    isExternal: {
+      type: Boolean,
+      default: false,
     },
   },
 };

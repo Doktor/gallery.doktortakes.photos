@@ -17,7 +17,12 @@
       />
     </div>
 
-    <PhotoInfo :album="album" :photo="photo" :photos="photos" />
+    <PhotoInfo
+      :album="album"
+      :photo="photo"
+      :photos="photos"
+      :isExternal="isExternal"
+    />
   </div>
   <div v-else class="photo-detail-loading">
     <i class="fas fa-spin fa-spinner"></i>
@@ -56,6 +61,13 @@ export default {
       onClick: () => {},
       photo: {},
     };
+  },
+
+  props: {
+    isExternal: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -140,7 +152,7 @@ export default {
 
     updateHistory(replace = false) {
       let resolved = router.resolve({
-        name: "photo",
+        name: this.isExternal ? "externalPhoto" : "photo",
         params: {
           path: this.album.pathSplit,
           md5: this.photo.md5,
@@ -166,7 +178,7 @@ export default {
       switch (event.key.toLowerCase()) {
         case "a":
           return router.push({
-            name: "album",
+            name: this.isExternal ? "externalAlbum" : "album",
             params: { path: this.album.pathSplit },
           });
         case "l":

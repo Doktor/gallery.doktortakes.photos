@@ -51,6 +51,28 @@ export const publicRoutes = [
   },
 
   {
+    path: "/external/:path+/:md5",
+    strict: true,
+    name: "externalPhoto",
+    component: PhotoDetailPage,
+    meta: {
+      body: "photo-viewer",
+      showNavigation: false,
+    },
+    props: {
+      isExternal: true,
+    },
+  },
+  {
+    path: "/external/:path+/",
+    strict: true,
+    name: "externalAlbum",
+    component: AlbumDetailPage,
+    props: {
+      isExternal: true,
+    },
+  },
+  {
     path: "/external/",
     name: "externalAlbums",
     component: ExternalAlbumListPage,
