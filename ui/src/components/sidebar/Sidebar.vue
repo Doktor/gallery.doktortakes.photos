@@ -17,18 +17,13 @@
 
       <ul class="sidebar-items">
         <li class="sidebar-section">
-          <h2>
-            <RouterLink :to="{ name: 'externalAlbums' }">
-              Appearances
-            </RouterLink>
-          </h2>
-
-          <span class="sidebar-note">photos featuring the associates</span>
+          <h2>Photography</h2>
+          <span class="sidebar-note">photos taken by the associates</span>
         </li>
 
         <!-- Featured albums -->
         <li class="sidebar-section" v-if="featuredAlbums.length">
-          <h2
+          <h3
             class="sidebar-featured-toggle"
             @click="isFeaturedOpen = !isFeaturedOpen"
             title="Click to expand"
@@ -38,7 +33,7 @@
               :class="{ 'sidebar-featured-arrow-open': isFeaturedOpen }"
             />
             Featured
-          </h2>
+          </h3>
 
           <SidebarAlbumTree
             v-show="isFeaturedOpen"
@@ -49,17 +44,30 @@
 
         <!-- Main links -->
         <li class="sidebar-section">
-          <h2>Photography</h2>
-          <span class="sidebar-note">photos taken by the associates</span>
+          <h3>Albums</h3>
 
           <ul>
-            <SidebarLink title="Albums" route="index" />
+            <SidebarLink title="All albums" route="index" />
             <SidebarLink title="Tags" route="tags" />
             <!-- <SidebarLink title="Taxonomy" route="taxa" />-->
             <!-- <SidebarLink title="Species" route="species" />-->
             <!-- <SidebarLink title="Search" route="search" />-->
           </ul>
         </li>
+
+        <SidebarDivider />
+
+        <li class="sidebar-section">
+          <h2>Appearances</h2>
+
+          <span class="sidebar-note">photos featuring the associates</span>
+
+          <ul>
+            <SidebarLink title="All appearances" route="externalAlbums" />
+          </ul>
+        </li>
+
+        <SidebarDivider />
 
         <!-- Content management -->
         <li class="sidebar-section" v-if="isStaff">
@@ -196,7 +204,13 @@ export default {
   }
 
   h2 {
-    font-size: 2rem;
+    @include variables.logo-font();
+    font-size: 32px;
+    text-transform: lowercase;
+  }
+
+  h3 {
+    font-size: 28px;
   }
 
   ul {

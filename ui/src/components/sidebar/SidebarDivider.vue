@@ -6,7 +6,7 @@
 .sidebar-divider {
   margin: variables.$sidebar-margin 0;
   border: 0;
-  border-top: 4px solid variables.$text-blue;
+  border-top: 8px solid variables.$text-color;
 
   width: variables.$sidebar-width;
 }
