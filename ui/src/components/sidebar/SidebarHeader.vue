@@ -3,19 +3,12 @@
     <h1 class="sidebar-logo">
       <router-link
         class="sidebar-logo-link"
-        :title="title"
+        title="Doktor & Associates LLP"
         @click="onClick"
         :to="{ name: 'index' }"
       >
-        <div v-for="associate in associates" class="logo-name">
-          <span :style="`color: ${associate.color}`">{{ associate.name }}</span>
-          <span class="logo-gray-text">+</span>
-        </div>
-
-        <div class="logo-subtitle">
-          <div class="logo-gray-text logo-small-text">Associates</div>
-          <div class="logo-gray-text logo-small-text">LLP</div>
-        </div>
+        <div class="logo-name">Doktor</div>
+        <div class="logo-subtitle">& Associates LLP</div>
 
         <div class="logo-bar">
           <div
@@ -92,25 +85,13 @@ function onClick() {
 }
 
 .logo-name {
-  display: flex;
-  justify-content: space-between;
-
-  @media (width >= variables.$full-layout-breakpoint + 1) {
-    font-size: 48px;
-  }
+  color: #0078ff;
+  font-size: 60px;
 }
 
 .logo-subtitle {
-  margin-top: 4px;
-}
-
-.logo-gray-text {
   color: #333333;
-}
-
-.logo-small-text {
-  font-size: 36px;
-  margin-bottom: 8px;
+  font-size: 24px;
 }
 
 .logo-bar {
