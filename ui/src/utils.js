@@ -1,7 +1,7 @@
 import { fields } from "./constants";
 import { camelToSnake } from "@/request";
 
-export function parseAlbumForAPI(album) {
+export function prepareAlbumForRequest(album) {
   let data = {};
 
   Object.entries(album).forEach(([key, value]) => {
@@ -17,15 +17,14 @@ export function parseAlbumForAPI(album) {
   return data;
 }
 
-export function parseAlbumDetail(album, children) {
-  album.pathSplit = album.path.split("/");
+export function parseAlbumResponse(album, children) {
+  album.pathArray = album.hierarchy.map((item) => item.slug);
   album.tags.sort();
+  album.licenseId = album.license?.id ?? null;
 
   for (let child of children) {
-    child.pathSplit = child.path.split("/");
+    child.pathArray = child.path.split("/");
   }
-
-  album.licenseId = album.license?.id ?? null;
 
   album.children = children;
 }

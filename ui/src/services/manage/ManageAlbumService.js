@@ -1,4 +1,9 @@
-import { getQueryString, parseAlbumDetail, parseAlbumForAPI } from "@/utils";
+import {
+  getQueryString,
+  parseAlbumDetail,
+  prepareAlbumForRequest,
+  parseAlbumResponse,
+} from "@/utils";
 import { store } from "@/store";
 import { router } from "@/router";
 import {
@@ -11,7 +16,7 @@ import {
 
 export const ManageAlbumService = {
   async createAlbum(album) {
-    let data = parseAlbumForAPI(album);
+    let data = prepareAlbumForRequest(album);
 
     let { ok, content } = await postAsync("/api/manage/albums/", data);
 
@@ -51,7 +56,7 @@ export const ManageAlbumService = {
   },
 
   async saveAlbum(album) {
-    let data = parseAlbumForAPI(album);
+    let data = prepareAlbumForRequest(album);
 
     let { ok, status, content } = await putAsync(
       `/api/manage/albums/${album.path}/`,
@@ -86,7 +91,7 @@ export const ManageAlbumService = {
     let children;
     ({ album, children } = content);
 
-    parseAlbumDetail(album, children);
+    parseAlbumResponse(album, children);
     return album;
   },
 
@@ -118,14 +123,12 @@ export const ManageAlbumService = {
     let children;
     ({ album, children } = content);
 
-    parseAlbumDetail(album, children);
+    parseAlbumResponse(album, children);
     return album;
   },
 
   async deleteAlbum(path) {
-    let { ok } = await deleteAsync(
-      `/api/manage/albums/${path}/`,
-    );
+    let { ok } = await deleteAsync(`/api/manage/albums/${path}/`);
 
     if (ok) {
       store.commit("addNotification", {
@@ -138,16 +141,14 @@ export const ManageAlbumService = {
 
   async listAllPhotos(path) {
     return await getAsync(
-      `/api/manage/albums/${path}/photos/` + getQueryString({ recursive: true }),
+      `/api/manage/albums/${path}/photos/` +
+        getQueryString({ recursive: true }),
     );
   },
 
   async deletePhotos(path, photoHashes) {
-    return await deleteAsync(
-      `/api/manage/albums/${path}/photos/`,
-      {
-        photos: photoHashes,
-      },
-    );
+    return await deleteAsync(`/api/manage/albums/${path}/photos/`, {
+      photos: photoHashes,
+    });
   },
 };

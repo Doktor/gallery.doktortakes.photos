@@ -1,4 +1,4 @@
-import { getQueryString, parseAlbumDetail } from "../utils";
+import { getQueryString, parseAlbumDetail, parseAlbumResponse } from "../utils";
 import { getAsync } from "@/request";
 
 export const AlbumService = {
@@ -6,26 +6,16 @@ export const AlbumService = {
     let query = getQueryString({ userId, tag: tagSlug });
 
     let { content } = await getAsync("/api/albums/" + query);
-    let albums = content.albums;
 
-    for (let album of albums) {
-      album.pathSplit = album.path.split("/");
-      album.tags?.sort();
-    }
-
-    return albums;
+    content.albums.forEach((album) => parseAlbumResponse(album, []));
+    return content.albums;
   },
 
   async getExternalAlbums() {
     let { content } = await getAsync("/api/external/albums/");
-    let albums = content.albums;
 
-    for (let album of albums) {
-      album.pathSplit = album.path.split("/");
-      album.tags?.sort();
-    }
-
-    return albums;
+    content.albums.forEach((album) => parseAlbumResponse(album, []));
+    return content.albums;
   },
 
   async getAlbumsForUser(userId) {
@@ -63,7 +53,7 @@ export const AlbumService = {
       return { ok, album };
     }
 
-    parseAlbumDetail(album, children);
+    parseAlbumResponse(album, children);
     album.isLoaded = true;
 
     return { ok, album, photos };
