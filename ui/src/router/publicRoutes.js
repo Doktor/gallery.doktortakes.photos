@@ -18,6 +18,9 @@ export const publicRoutes = [
     path: "/",
     name: "index",
     component: AlbumListPage,
+    meta: {
+      title: "Index",
+    },
   },
 
   {
