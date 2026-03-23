@@ -82,7 +82,7 @@ export default {
     },
 
     routePath() {
-      return this.$route.params.path;
+      return this.$route.params.pathArray;
     },
   },
 
@@ -154,7 +154,7 @@ export default {
       let resolved = router.resolve({
         name: this.isExternal ? "externalPhoto" : "photo",
         params: {
-          path: this.album.pathSplit,
+          pathArray: this.album.pathArray,
           md5: this.photo.md5,
         },
         query: this.$route.query,
@@ -179,7 +179,7 @@ export default {
         case "a":
           return router.push({
             name: this.isExternal ? "externalAlbum" : "album",
-            params: { path: this.album.pathSplit },
+            params: { pathArray: this.album.pathArray },
           });
         case "l":
           return router.push({ name: "index" });

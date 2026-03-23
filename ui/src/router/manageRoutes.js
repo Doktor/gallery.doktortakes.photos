@@ -38,7 +38,7 @@ export const manageRoutes = [
     },
   },
   {
-    path: "/manage/albums/:path+/",
+    path: "/manage/albums/:pathArray+/",
     name: "editAlbum",
     component: EditAlbumPage,
     meta: {
@@ -46,7 +46,7 @@ export const manageRoutes = [
     },
   },
   {
-    path: "/manage/albums/:path+/photos/:md5",
+    path: "/manage/albums/:pathArray+/photos/:md5",
     name: "editPhoto",
     component: EditPhotoPage,
     meta: {

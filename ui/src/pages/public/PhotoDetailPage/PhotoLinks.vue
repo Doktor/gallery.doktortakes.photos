@@ -38,7 +38,7 @@ export default {
       return {
         name: this.isExternal ? "externalAlbum" : "album",
         params: {
-          path: this.album.pathSplit,
+          pathArray: this.album.pathArray,
         },
         query: {
           code: this.$route.query.code,

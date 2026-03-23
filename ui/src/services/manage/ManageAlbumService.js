@@ -50,7 +50,7 @@ export const ManageAlbumService = {
     });
 
     setTimeout(
-      () => router.push({ name: "editAlbum", params: { path: path } }),
+      () => router.push({ name: "editAlbum", params: { pathArray: path.split("/") } }),
       1500,
     );
   },

@@ -70,7 +70,7 @@ export default {
       return {
         name: this.routeName,
         params: {
-          path: this.photo.path?.split("/") ?? "",
+          pathArray: this.photo.path?.split("/") ?? "",
           md5: this.photo.md5,
         },
         query: {

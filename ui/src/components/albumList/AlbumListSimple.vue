@@ -3,7 +3,7 @@
     <template v-for="(album, index) in albums">
       <li v-if="indexStart <= index && index <= indexEnd">
         <router-link
-          :to="{ name: route, params: { path: album.pathSplit } }"
+          :to="{ name: route, params: { pathArray: album.pathArray } }"
           :title="album.name"
         >
           {{ album.name }}

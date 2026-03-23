@@ -3,7 +3,7 @@
     <td>
       <router-link
         :title="album.name"
-        :to="{ name: route, params: { path: album.path } }"
+        :to="{ name: route, params: { pathArray: album.pathArray } }"
       >
         {{ album.name }}
       </router-link>

@@ -65,7 +65,7 @@ export default {
     },
 
     routePath() {
-      return this.$route.params.path;
+      return this.$route.params.pathArray;
     },
 
     breadcrumbs() {
@@ -88,7 +88,7 @@ export default {
             label: album.name,
             to: {
               name: this.isExternal ? "externalAlbum" : "album",
-              params: { path: album.path },
+              params: { pathArray: album.path.split("/") },
             },
           };
         }),

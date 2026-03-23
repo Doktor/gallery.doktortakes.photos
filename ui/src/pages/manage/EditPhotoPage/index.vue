@@ -96,7 +96,7 @@ export default {
     ...mapState(["loading"]),
 
     routePath() {
-      return this.$route.params.path;
+      return this.$route.params.pathArray;
     },
     routeMd5() {
       return this.$route.params.md5;
@@ -123,13 +123,13 @@ export default {
         { label: "Manage", to: { name: "manage" } },
         {
           label: this.album.name,
-          to: { name: "editAlbum", params: { path: this.routePath } },
+          to: { name: "editAlbum", params: { pathArray: this.routePath } },
         },
         {
           label: this.photo.md5,
           to: {
             name: "editPhoto",
-            params: { path: this.routePath, md5: this.routeMd5 },
+            params: { pathArray: this.routePath, md5: this.routeMd5 },
           },
         },
       ];

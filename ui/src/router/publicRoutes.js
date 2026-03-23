@@ -24,7 +24,7 @@ export const publicRoutes = [
   },
 
   {
-    path: "/albums/:path+/:md5",
+    path: "/albums/:pathArray+/:md5",
     strict: true,
     name: "photo",
     component: PhotoDetailPage,
@@ -34,7 +34,7 @@ export const publicRoutes = [
     },
   },
   {
-    path: "/albums/:path+/",
+    path: "/albums/:pathArray+/",
     strict: true,
     name: "album",
     component: AlbumDetailPage,
@@ -47,14 +47,14 @@ export const publicRoutes = [
   },
 
   {
-    path: "/featured/:path+/",
+    path: "/featured/:pathArray+/",
     strict: true,
     name: "featuredAlbum",
     component: FeaturedPage,
   },
 
   {
-    path: "/external/:path+/:md5",
+    path: "/external/:pathArray+/:md5",
     strict: true,
     name: "externalPhoto",
     component: PhotoDetailPage,
@@ -67,7 +67,7 @@ export const publicRoutes = [
     },
   },
   {
-    path: "/external/:path+/",
+    path: "/external/:pathArray+/",
     strict: true,
     name: "externalAlbum",
     component: AlbumDetailPage,

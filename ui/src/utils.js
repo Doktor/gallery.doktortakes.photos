@@ -18,8 +18,8 @@ export function prepareAlbumForRequest(album) {
 }
 
 export function parseAlbumResponse(album, children) {
-  album.pathArray = album.hierarchy.map((item) => item.slug);
-  album.tags.sort();
+  album.pathArray = album.path.split("/");
+  album.tags?.sort();
   album.licenseId = album.license?.id ?? null;
 
   for (let child of children) {

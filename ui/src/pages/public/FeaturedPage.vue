@@ -34,7 +34,7 @@ export default {
     ...mapState(["loading"]),
 
     routePath() {
-      return this.$route.params.path;
+      return this.$route.params.pathArray;
     },
   },
 

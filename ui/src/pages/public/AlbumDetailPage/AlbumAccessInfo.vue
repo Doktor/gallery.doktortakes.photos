@@ -58,7 +58,7 @@ export default {
       return {
         name: "album",
         params: {
-          path: this.album.pathSplit,
+          pathArray: this.album.pathArray,
         },
         query: {
           code: this.album.accessCode,

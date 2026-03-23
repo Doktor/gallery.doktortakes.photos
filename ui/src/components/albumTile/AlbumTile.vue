@@ -29,7 +29,7 @@ export default {
       return {
         name: this.routeName,
         params: {
-          path: this.album.pathSplit,
+          pathArray: this.album.pathArray,
         },
       };
     },

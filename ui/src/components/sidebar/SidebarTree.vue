@@ -16,7 +16,7 @@
         :title="item.album.name"
         :to="{
           name: 'featuredAlbum',
-          params: { path: item.album.path.split('/') },
+          params: { pathArray: item.album.path.split('/') },
         }"
       >
         {{ item.album.name }}

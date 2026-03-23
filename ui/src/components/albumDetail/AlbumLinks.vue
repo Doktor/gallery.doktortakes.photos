@@ -6,14 +6,14 @@
       v-if="showManage"
       class="album-link"
       title="Manage album"
-      :to="{ name: 'editAlbum', params: { path: album.path } }"
+      :to="{ name: 'editAlbum', params: { pathArray: album.pathArray } }"
       >Manage</router-link
     >
     <router-link
       v-else
       class="album-link"
       title="View album"
-      :to="{ name: 'album', params: { path: album.path } }"
+      :to="{ name: 'album', params: { pathArray: album.pathArray } }"
       >View</router-link
     >
 

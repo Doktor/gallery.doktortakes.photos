@@ -93,7 +93,7 @@ export default {
     ...mapState(["loading"]),
 
     routePath() {
-      return this.$route.params.path;
+      return this.$route.params.pathArray;
     },
 
     filteredPhotos() {
@@ -119,7 +119,7 @@ export default {
         ...this.album.hierarchy.map((album) => {
           return {
             label: album.name,
-            to: { name: "editAlbum", params: { path: album.path } },
+            to: { name: "editAlbum", params: { pathArray: album.path.split("/") } },
           };
         }),
       ];
@@ -163,7 +163,7 @@ export default {
       if (oldAlbum.path !== undefined && oldAlbum.path !== newAlbum.path) {
         let resolved = this.$router.resolve({
           name: "editAlbum",
-          params: { path: newAlbum.path.split("/") },
+          params: { pathArray: newAlbum.path.split("/") },
         });
 
         // Use history.replaceState instead of $router.replace to prevent
