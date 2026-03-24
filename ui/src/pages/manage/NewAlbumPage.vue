@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import AlbumForm from "@/components/manage/AlbumForm";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
@@ -47,14 +48,15 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setBreadcrumbs", [
+    const store = useStore();
+    store.setBreadcrumbs([
       { label: "Manage", to: { name: "manage" } },
       { label: "New album", to: { name: "newAlbum" } },
     ]);
 
-    this.$store.commit("setLoading", true);
+    store.setLoading(true);
     await this.loadLicenses();
-    this.$store.commit("setLoading", false);
+    store.setLoading(false);
   },
 
   methods: {

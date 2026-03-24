@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import AlbumAccessInfo from "./AlbumAccessInfo";
 import AlbumLinks from "@/components/albumDetail/AlbumLinks";
 import AlbumMetadata from "./AlbumMetadata";
@@ -74,8 +75,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isStaff"]),
-    ...mapState(["loading", "user"]),
+    ...mapState(useStore, ["isStaff"]),
+    ...mapState(useStore, ["loading", "user"]),
 
     classes() {
       return {

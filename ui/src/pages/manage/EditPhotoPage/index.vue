@@ -61,7 +61,8 @@
 
 <script>
 import FixedWidthContainer from "@/components/FixedWidthContainer";
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import { AlbumService } from "@/services/AlbumService";
 import { PhotoService } from "@/services/PhotoService";
 import PhotoMetadataTable from "./PhotoMetadataTable";
@@ -93,7 +94,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
 
     routePath() {
       return this.$route.params.pathArray;
@@ -137,7 +138,8 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setLoading", true);
+    const store = useStore();
+    store.setLoading(true);
 
     await Promise.all([
       this.loadAlbum(),
@@ -145,7 +147,7 @@ export default {
       this.loadThumbnails(),
     ]);
 
-    this.$store.commit("setLoading", false);
+    store.setLoading(false);
   },
 
   methods: {
@@ -157,7 +159,7 @@ export default {
       });
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "Album not found.",
           status: "error",
         });
@@ -172,7 +174,7 @@ export default {
       let { ok, content } = await PhotoService.get(this.routeMd5);
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "Photo not found.",
           status: "error",
         });
@@ -189,7 +191,7 @@ export default {
       );
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "Photo not found.",
           status: "error",
         });
@@ -207,11 +209,11 @@ export default {
     },
 
     pageTitle(val) {
-      this.$store.commit("setTitle", val);
+      useStore().setTitle(val);
     },
 
     breadcrumbs(val) {
-      this.$store.commit("setBreadcrumbs", val);
+      useStore().setBreadcrumbs(val);
     },
   },
 };

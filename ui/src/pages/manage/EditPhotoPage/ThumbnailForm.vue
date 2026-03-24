@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import CustomSelect from "@/components/form/CustomSelect";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
@@ -96,14 +97,14 @@ export default {
       );
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "An unknown error occurred.",
           status: "error",
         });
         return;
       }
 
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: "Successfully created thumbnail.",
         status: "success",
       });

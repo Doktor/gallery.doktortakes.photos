@@ -30,7 +30,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import { router } from "@/router";
 import Filmstrip from "./Filmstrip";
 import PhotoViewer from "./PhotoViewer";
@@ -71,7 +72,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
 
     md5() {
       return this.$route.params.md5;
@@ -93,7 +94,7 @@ export default {
     });
 
     if (!ok) {
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: "Album not found.",
         status: "error",
       });
@@ -164,8 +165,7 @@ export default {
         ? window.history.replaceState(null, null, resolved.href)
         : window.history.pushState(null, null, resolved.href);
 
-      this.$store.commit(
-        "setTitle",
+      useStore().setTitle(
         this.photo.md5.substring(0, 8) + " | " + this.album.name,
       );
     },

@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import Pagination from "./Pagination";
 
 export default {
@@ -155,7 +156,8 @@ export default {
         return;
       }
 
-      this.$store.commit("setLoading", true);
+      const store = useStore();
+      store.setLoading(true);
       this.$emit("setPaginatedItems", Array(size).fill(undefined));
 
       ({ items, count } = await this.getPage(page, size));
@@ -163,7 +165,7 @@ export default {
       this.cache[page] = items;
       this.count = count;
 
-      this.$store.commit("setLoading", false);
+      store.setLoading(false);
       this.$emit("setPaginatedItems", items);
     },
   },

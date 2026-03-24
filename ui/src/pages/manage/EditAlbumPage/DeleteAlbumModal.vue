@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import CustomButton from "@/components/form/CustomButton";
 import Modal from "@/components/Modal.vue";
 
@@ -47,7 +48,7 @@ export default {
         return;
       }
 
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: "Incorrect album name.",
         status: "error",
       });

@@ -173,10 +173,10 @@
 <script setup>
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import cameraImage from "@/images/camera.png";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 
 const store = useStore();
-store.commit("setBreadcrumbs", [
+store.setBreadcrumbs([
   {
     label: "About",
     to: { name: "about" },

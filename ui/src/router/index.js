@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { store } from "@/store";
+import { useStore } from "@/store";
 
 import { publicRoutes } from "./publicRoutes";
 import { userRoutes } from "./userRoutes";
@@ -21,8 +21,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const store = useStore();
+
   if (to.matched.some((record) => record.meta.staff)) {
-    let user = store.state.user;
+    let user = store.user;
 
     if (user.status === "staff" || user.status === "superuser") {
       next();
@@ -40,8 +42,10 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
+  const store = useStore();
+
   if (from.name !== to.name) {
-    store.commit("setBreadcrumbs", []);
+    store.setBreadcrumbs([]);
     window.scrollTo(0, 0);
   }
 
@@ -55,13 +59,13 @@ router.afterEach((to, from) => {
       document.body.className = body;
     }
 
-    store.state.showNavigation = record.meta?.showNavigation ?? true;
+    store.showNavigation = record.meta?.showNavigation ?? true;
 
     // Document title
     let title = record.meta.title;
 
     if (typeof title === "string") {
-      store.commit("setTitle", title);
+      store.setTitle(title);
     }
   }
 });

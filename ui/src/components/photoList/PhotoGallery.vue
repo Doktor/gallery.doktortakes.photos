@@ -58,7 +58,8 @@
 import PhotoTile from "./PhotoTile";
 import Tiles from "../Tiles";
 import PaginationManager from "../pagination/PaginationManager";
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 
 export default {
   components: {
@@ -76,7 +77,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
     sizeOptions() {
       return [12, 24, 48, 96];
     },

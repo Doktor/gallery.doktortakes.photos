@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import AlbumGallery from "@/components/albumList/AlbumGallery";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { AlbumService } from "@/services/AlbumService";
@@ -62,7 +63,7 @@ export default {
       );
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "An error occurred when retrieving recent photos",
           status: "error",
         });
@@ -75,7 +76,7 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       { label: "Manage", to: { name: "manage" } },
     ]);
 

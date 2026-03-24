@@ -1,8 +1,10 @@
-import { store } from "@/store";
+import { useStore } from "@/store";
 
 function addAuthorizationHeader(options) {
-  if (store.state.token !== null) {
-    let header = `Token ${store.state.token}`;
+  const store = useStore();
+
+  if (store.token !== null) {
+    let header = `Token ${store.token}`;
 
     if (options.hasOwnProperty("headers")) {
       options.headers["Authorization"] = header;

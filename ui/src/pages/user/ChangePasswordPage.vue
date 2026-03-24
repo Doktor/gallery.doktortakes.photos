@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import PasswordForm from "@/components/user/PasswordForm";
 import { sleep } from "@/utils";
@@ -21,9 +22,10 @@ export default {
   },
 
   created() {
-    const slug = this.$store.state.user.name;
+    const store = useStore();
+    const slug = store.user.name;
 
-    this.$store.commit("setBreadcrumbs", [
+    store.setBreadcrumbs([
       { label: slug, to: { name: "user", params: { slug } } },
       {
         label: "Change password",
@@ -39,7 +41,7 @@ export default {
       await router.push({
         name: "user",
         params: {
-          slug: this.$store.state.user.name,
+          slug: useStore().user.name,
         },
       });
     },

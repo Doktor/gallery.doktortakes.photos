@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import PhotoSearchForm from "@/components/search/PhotoSearchForm";
 import PhotoSearchResults from "@/components/search/PhotoSearchResults";
 
@@ -17,7 +18,7 @@ export default {
   },
 
   created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       {
         label: "Search",
         to: { name: "search" },

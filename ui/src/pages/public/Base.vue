@@ -16,7 +16,8 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import Sidebar from "@/components/sidebar/Sidebar";
 import Notifications from "@/components/Notifications";
 import FadeTransition from "@/transitions/FadeTransition";
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 
 export default {
   components: {
@@ -27,7 +28,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["showNavigation", "breadcrumbs"]),
+    ...mapState(useStore, ["showNavigation", "breadcrumbs"]),
   },
 };
 </script>

@@ -13,17 +13,17 @@
 import { onMounted, ref } from "vue";
 import { AlbumService } from "@/services/AlbumService";
 import AlbumGallery from "@/components/albumList/AlbumGallery.vue";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 
 const store = useStore();
 const albums = ref([]);
 
 onMounted(async () => {
-  store.commit("setLoading", true);
+  store.setLoading(true);
 
   albums.value = await AlbumService.getExternalAlbums();
 
-  store.commit("setLoading", false);
+  store.setLoading(false);
 });
 </script>
 

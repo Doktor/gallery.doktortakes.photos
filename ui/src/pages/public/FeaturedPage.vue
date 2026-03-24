@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import { AlbumService } from "@/services/AlbumService";
 import PhotoGallery from "@/components/photoList/PhotoGallery.vue";
 
@@ -31,7 +32,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
 
     routePath() {
       return this.$route.params.pathArray;
@@ -44,7 +45,8 @@ export default {
 
   methods: {
     async loadAlbum() {
-      this.$store.commit("setLoading", true);
+      const store = useStore();
+      store.setLoading(true);
 
       let { ok, album, photos } = await AlbumService.getAlbum({
         rawPath: this.routePath,
@@ -53,10 +55,10 @@ export default {
       if (ok) {
         this.album = album;
         this.photos = photos.sort((a, b) => b.index - a.index);
-        this.$store.commit("setTitle", album.name);
+        store.setTitle(album.name);
       }
 
-      this.$store.commit("setLoading", false);
+      store.setLoading(false);
     },
   },
 

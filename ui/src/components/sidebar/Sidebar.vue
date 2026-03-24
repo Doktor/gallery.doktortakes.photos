@@ -116,7 +116,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import { AlbumService } from "@/services/AlbumService";
 import SidebarTree from "./SidebarTree.vue";
 import SidebarLink from "./SidebarLink";
@@ -141,8 +142,8 @@ export default {
     SidebarLink,
   },
   computed: {
-    ...mapGetters(["isAuthenticated", "isStaff"]),
-    ...mapState(["user"]),
+    ...mapState(useStore, ["isAuthenticated", "isStaff"]),
+    ...mapState(useStore, ["user"]),
 
     albumTree() {
       const albumsByPath = new Map();

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import { AlbumService } from "@/services/AlbumService";
 import PhotoGallery from "@/components/photoList/PhotoGallery.vue";
 import AlbumCover from "@/pages/public/AlbumDetailPage/AlbumCover.vue";
@@ -56,7 +57,7 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       { label: "Manage", to: { name: "manage-new" } },
     ]);
 
@@ -81,7 +82,7 @@ export default {
       );
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "An error occurred when retrieving recent photos",
           status: "error",
         });

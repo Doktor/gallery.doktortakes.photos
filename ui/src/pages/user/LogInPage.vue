@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import { router } from "@/router";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
@@ -38,19 +39,20 @@ export default {
 
   methods: {
     async submit() {
+      const store = useStore();
       try {
-        let { ok, content } = await this.$store.dispatch("authenticate", {
+        let { ok, content } = await store.authenticate({
           username: this.username,
           password: this.password,
         });
 
         if (ok) {
-          this.$store.commit("setApiToken", content.token);
-          this.$store.commit("addTimedNotification", {
+          store.setApiToken(content.token);
+          store.addTimedNotification({
             message: "Logged in successfully.",
             hideAfter: 5000,
           });
-          await this.$store.dispatch("getUser");
+          await store.getUser();
 
           router.push(this.redirect ?? { name: "index" });
           return;
@@ -64,7 +66,7 @@ export default {
   },
 
   async mounted() {
-    await this.$store.dispatch("ensureCsrfToken");
+    await useStore().ensureCsrfToken();
   },
 };
 </script>

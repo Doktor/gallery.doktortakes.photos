@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import AlbumTile from "@/components/albumTile/AlbumTile";
 import AlbumListTiles from "./AlbumListTiles";
 import AlbumListSimple from "./AlbumListSimple";
@@ -78,8 +79,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isStaff"]),
-    ...mapState(["user"]),
+    ...mapState(useStore, ["isStaff"]),
+    ...mapState(useStore, ["user"]),
 
     albumListComponent() {
       switch (this.view) {

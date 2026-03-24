@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 
 export default {
@@ -110,7 +111,7 @@ export default {
   },
 
   created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       {
         label: "Copyright",
         to: { name: "copyright" },

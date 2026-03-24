@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import { TaxaService } from "@/services/TaxaService";
 import TaxaChildren from "./TaxaChildren";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
@@ -78,7 +79,7 @@ export default {
       if (ok) {
         this.photos = content;
       } else {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "An error occurred when retrieving photos for this taxon.",
           status: "error",
         });
@@ -90,7 +91,7 @@ export default {
 
   watch: {
     breadcrumbs(val) {
-      this.$store.commit("setBreadcrumbs", val);
+      useStore().setBreadcrumbs(val);
     },
 
     catalogId: {
@@ -106,7 +107,7 @@ export default {
   },
 
   async mounted() {
-    this.$store.commit("setBreadcrumbs", this.breadcrumbs);
+    useStore().setBreadcrumbs(this.breadcrumbs);
     this.loading = true;
 
     let taxa = await TaxaService.getTaxa();

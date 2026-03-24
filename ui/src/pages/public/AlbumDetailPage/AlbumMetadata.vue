@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 
 export default {
   props: {
@@ -43,7 +44,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["photos", "user"]),
+    ...mapState(useStore, ["photos", "user"]),
 
     hasContent() {
       return (

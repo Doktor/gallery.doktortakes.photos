@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import { TaxaService } from "@/services/TaxaService";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
@@ -53,7 +54,7 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       { label: "Manage", to: { name: "manage" } },
       { label: "Taxa", to: { name: "manageTaxa" } },
     ]);
@@ -70,7 +71,7 @@ export default {
       let { ok, content } = await ManageTaxaService.importTaxon(this.catalogId);
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: `An error occurred when importing this taxon: ${content}`,
           status: "error",
         });
@@ -78,7 +79,7 @@ export default {
         return;
       }
 
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: "Succesfully imported taxon.",
         status: "success",
       });

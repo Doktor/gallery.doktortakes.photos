@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import { TagService } from "@/services/TagService";
 
@@ -34,7 +35,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
   },
 
   data() {
@@ -44,19 +45,20 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setBreadcrumbs", [
+    const store = useStore();
+    store.setBreadcrumbs([
       {
         label: "Tags",
         to: { name: "tags" },
       },
     ]);
 
-    this.$store.commit("setLoading", true);
+    store.setLoading(true);
 
     const tags = await TagService.getTags();
     this.tagGroups = Object.groupBy(tags, (tag) => tag.namespace);
 
-    this.$store.commit("setLoading", false);
+    store.setLoading(false);
   },
 };
 </script>

@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import CustomInput from "../form/CustomInput";
 import { UserService } from "@/services/UserService";
 import CustomButton from "../form/CustomButton";
@@ -141,7 +142,7 @@ export default {
 
       if (!ok) {
         for (let error of content.errors) {
-          this.$store.commit("addNotification", {
+          useStore().addNotification({
             message: error,
             status: "error",
           });
@@ -150,7 +151,7 @@ export default {
         return;
       }
 
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: "Your password was changed successfully.",
         status: "success",
       });

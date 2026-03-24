@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import CustomSelect from "@/components/form/CustomSelect";
@@ -44,7 +45,7 @@ export default {
   components: { CustomButton, CustomSelect, FixedWidthContainer, CustomInput },
 
   created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       { label: "Debug" },
       {
         label: "Notifications",
@@ -73,14 +74,14 @@ export default {
 
   methods: {
     addNotification() {
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: this.message,
         status: this.status,
       });
     },
 
     addTimedNotification() {
-      this.$store.commit("addTimedNotification", {
+      useStore().addTimedNotification({
         message: this.message,
         status: this.status,
         hideAfter: this.timeMs,

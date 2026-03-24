@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import { TaxaService } from "@/services/TaxaService";
 import PhotoThumbnail from "@/components/photoList/PhotoThumbnail.vue";
 
@@ -35,7 +36,7 @@ export default {
   },
 
   created() {
-    this.$store.commit("setBreadcrumbs", [
+    useStore().setBreadcrumbs([
       {
         label: "Species",
         to: { name: "species" },

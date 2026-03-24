@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import PhotoGallery from "@/components/photoList/PhotoGallery";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
@@ -126,7 +127,7 @@ export default {
       let currentHash = this.album.cover?.md5;
 
       if (currentHash !== null && selectedHash === currentHash) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "That photo is already set as the cover photo.",
           status: "error",
         });

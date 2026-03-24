@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 
 import AlbumTile from "@/components/albumTile/AlbumTile";
 import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
@@ -58,7 +59,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
 
     routeAccessCode() {
       return this.$route.query.code || "";
@@ -102,7 +103,8 @@ export default {
 
   methods: {
     async loadAlbum() {
-      this.$store.commit("setLoading", true);
+      const store = useStore();
+      store.setLoading(true);
 
       let { ok, album, photos } = await AlbumService.getAlbum({
         rawPath: this.routePath,
@@ -110,7 +112,7 @@ export default {
       });
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        store.addNotification({
           message: "Album not found.",
           status: "error",
         });
@@ -122,14 +124,14 @@ export default {
       this.album = album;
       this.photos = photos;
 
-      this.$store.commit("setTitle", album.name);
-      this.$store.commit("setLoading", false);
+      store.setTitle(album.name);
+      store.setLoading(false);
     },
   },
 
   watch: {
     breadcrumbs(val) {
-      this.$store.commit("setBreadcrumbs", val);
+      useStore().setBreadcrumbs(val);
     },
 
     async routePath(newPath, oldPath) {

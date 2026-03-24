@@ -30,7 +30,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import FixedWidthContainer from "@/components/FixedWidthContainer";
 import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
@@ -42,7 +43,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["user"]),
+    ...mapState(useStore, ["user"]),
   },
 
   data() {
@@ -53,8 +54,9 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setTitle", this.$route.params.slug);
-    this.$store.commit("setBreadcrumbs", [
+    const store = useStore();
+    store.setTitle(this.$route.params.slug);
+    store.setBreadcrumbs([
       {
         label: this.$route.params.slug,
         to: { name: "user", params: { slug: this.$route.params.slug } },

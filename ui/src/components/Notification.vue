@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
+
 export default {
   props: {
     notification: {
@@ -28,7 +30,7 @@ export default {
 
   methods: {
     remove() {
-      this.$store.commit("removeNotification", this.notification.id);
+      useStore().removeNotification(this.notification.id);
     },
   },
 };

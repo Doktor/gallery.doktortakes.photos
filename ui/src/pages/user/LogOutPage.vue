@@ -5,12 +5,14 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import { router } from "@/router";
 
 export default {
   async mounted() {
-    await this.$store.commit("logOut");
-    await this.$store.commit("addTimedNotification", {
+    const store = useStore();
+    store.logOut();
+    store.addTimedNotification({
       message: "Logged out successfully.",
       hideAfter: 5000,
     });

@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import CustomInput from "@/components/form/CustomInput.vue";
 import { TaxaService } from "@/services/TaxaService";
 import CustomButton from "@/components/form/CustomButton.vue";
@@ -172,6 +173,7 @@ export default {
     },
 
     async save() {
+      const store = useStore();
       let toCreate = this.editingTaxa.filter((t) => t.status === STATUS_CREATE);
       let toUpdate = this.editingTaxa.filter((t) => t.status === STATUS_UPDATE);
       let toDelete = this.editingTaxa.filter((t) => t.status === STATUS_DELETE);
@@ -187,7 +189,7 @@ export default {
         );
 
         if (!ok) {
-          this.$store.commit("addNotification", {
+          store.addNotification({
             message: "An error occurred when creating a taxon link.",
             status: "error",
           });
@@ -208,7 +210,7 @@ export default {
         );
 
         if (!ok) {
-          this.$store.commit("addNotification", {
+          store.addNotification({
             message: "An error occurred when updating a taxon link.",
             status: "error",
           });
@@ -224,7 +226,7 @@ export default {
         );
 
         if (!ok) {
-          this.$store.commit("addNotification", {
+          store.addNotification({
             message: "An error occurred when deleting a taxon link.",
             status: "error",
           });
@@ -233,7 +235,7 @@ export default {
         this.editingTaxa.splice(this.editingTaxa.indexOf(taxon), 1);
       }
 
-      this.$store.commit("addNotification", {
+      store.addNotification({
         message: "Successfully updated taxon links.",
         status: "success",
       });

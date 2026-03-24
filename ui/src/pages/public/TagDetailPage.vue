@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import AlbumGallery from "@/components/albumList/AlbumGallery";
 import { AlbumService } from "@/services/AlbumService";
 import { TagService } from "@/services/TagService";
@@ -24,7 +25,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
 
     route() {
       return this.$route;
@@ -54,19 +55,20 @@ export default {
 
   watch: {
     breadcrumbs(val) {
-      this.$store.commit("setBreadcrumbs", val);
+      useStore().setBreadcrumbs(val);
     },
   },
 
   async created() {
-    this.$store.commit("setTitle", "Tag: #" + this.slug);
+    const store = useStore();
+    store.setTitle("Tag: #" + this.slug);
 
-    this.$store.commit("setLoading", true);
+    store.setLoading(true);
 
     this.tag = await TagService.getTag(this.slug);
     this.albums = await AlbumService.getAlbumsForTag(this.slug);
 
-    this.$store.commit("setLoading", false);
+    store.setLoading(false);
   },
 };
 </script>

@@ -1,8 +1,9 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 
 import Base from "./pages/public/Base";
 import { router } from "./router";
-import { store } from "./store";
+import { useStore } from "./store";
 
 import "normalize.css";
 
@@ -11,10 +12,12 @@ import "./styles/forms.scss";
 
 const app = createApp(Base);
 
-store.commit("setApiTokenFromLocalStorage");
-await store.dispatch("getUser");
+app.use(createPinia());
+
+const store = useStore();
+store.setApiTokenFromLocalStorage();
+await store.getUser();
 
 app.use(router);
-app.use(store);
 
 app.mount("#app");

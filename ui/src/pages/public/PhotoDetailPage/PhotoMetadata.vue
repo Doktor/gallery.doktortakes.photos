@@ -50,7 +50,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 
 export default {
   props: {
@@ -65,8 +66,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isStaff"]),
-    ...mapState(["user"]),
+    ...mapState(useStore, ["isStaff"]),
+    ...mapState(useStore, ["user"]),
 
     adminUrl() {
       return `/redirect/admin/photos/${this.photo.md5}`;

@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import Notification from "./Notification";
 
 export default {
@@ -18,7 +19,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["notifications"]),
+    ...mapState(useStore, ["notifications"]),
   },
 };
 </script>

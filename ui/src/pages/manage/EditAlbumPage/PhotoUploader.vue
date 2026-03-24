@@ -27,7 +27,7 @@
 
 <script setup>
 import { computed, markRaw, onBeforeUnmount, onMounted, ref } from "vue";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 import { getCsrfToken } from "@/request";
 import PhotoUploaderList from "@/pages/manage/EditAlbumPage/PhotoUploaderList.vue";
 import {
@@ -67,7 +67,7 @@ onMounted(() => {
     parallelUploads: 2,
     previewTemplate: "<div style='display: none'></div>",
     headers: {
-      Authorization: "Token " + store.state.token,
+      Authorization: "Token " + store.token,
     },
     url: action.value,
   });

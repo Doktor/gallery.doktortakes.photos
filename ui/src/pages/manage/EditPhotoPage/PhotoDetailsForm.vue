@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
 import CustomInput from "@/components/form/CustomInput";
 import CustomButton from "@/components/form/CustomButton";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
@@ -53,14 +54,14 @@ export default {
       );
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "An unknown error occurred.",
           status: "error",
         });
         return;
       }
 
-      this.$store.commit("addNotification", {
+      useStore().addNotification({
         message: "Successfully updated photo details.",
         status: "success",
       });

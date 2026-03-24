@@ -4,7 +4,7 @@ import {
   prepareAlbumForRequest,
   parseAlbumResponse,
 } from "@/utils";
-import { store } from "@/store";
+import { useStore } from "@/store";
 import { router } from "@/router";
 import {
   deleteAsync,
@@ -16,6 +16,7 @@ import {
 
 export const ManageAlbumService = {
   async createAlbum(album) {
+    const store = useStore();
     let data = prepareAlbumForRequest(album);
 
     let { ok, content } = await postAsync("/api/manage/albums/", data);
@@ -23,7 +24,7 @@ export const ManageAlbumService = {
     if (!ok) {
       for (let [field, errors] of Object.entries(content)) {
         for (let error of errors) {
-          store.commit("addNotification", {
+          store.addNotification({
             message: "{0}: {1}".format(field, error),
             status: "error",
           });
@@ -36,14 +37,14 @@ export const ManageAlbumService = {
     let path = content.path;
 
     if (!path) {
-      store.commit("addNotification", {
+      store.addNotification({
         message: "An unknown API error occurred when creating the album.",
         status: "error",
       });
       return;
     }
 
-    store.commit("addTimedNotification", {
+    store.addTimedNotification({
       message: "Album created successfully. Redirecting...",
       status: "success",
       hideAfter: 2500,
@@ -56,6 +57,7 @@ export const ManageAlbumService = {
   },
 
   async saveAlbum(album) {
+    const store = useStore();
     let data = prepareAlbumForRequest(album);
 
     let { ok, status, content } = await putAsync(
@@ -65,7 +67,7 @@ export const ManageAlbumService = {
 
     if (!ok) {
       if (status === 403) {
-        store.commit("addNotification", {
+        store.addNotification({
           message: content.detail,
           status: "error",
         });
@@ -74,7 +76,7 @@ export const ManageAlbumService = {
 
       for (let [field, errors] of Object.entries(content)) {
         for (let error of errors) {
-          store.commit("addNotification", {
+          store.addNotification({
             message: "{0}: {1}".format(field, error),
             status: "error",
           });
@@ -83,7 +85,7 @@ export const ManageAlbumService = {
       return;
     }
 
-    store.commit("addNotification", {
+    store.addNotification({
       message: "Album saved successfully.",
       status: "success",
     });
@@ -96,7 +98,8 @@ export const ManageAlbumService = {
   },
 
   async setAlbumCover(album, photoHash) {
-    let id = store.commit("addNotification", {
+    const store = useStore();
+    let id = store.addNotification({
       message: "Setting cover photo.",
       status: "default",
     });
@@ -107,15 +110,15 @@ export const ManageAlbumService = {
     );
 
     if (!ok) {
-      store.commit("addNotification", {
+      store.addNotification({
         message: "An error occurred when setting the cover photo.",
         status: "error",
       });
       return;
     }
 
-    store.commit("removeNotification", id);
-    store.commit("addNotification", {
+    store.removeNotification(id);
+    store.addNotification({
       message: "Cover photo set successfully.",
       status: "success",
     });
@@ -128,10 +131,11 @@ export const ManageAlbumService = {
   },
 
   async deleteAlbum(path) {
+    const store = useStore();
     let { ok } = await deleteAsync(`/api/manage/albums/${path}/`);
 
     if (ok) {
-      store.commit("addNotification", {
+      store.addNotification({
         message: "Album deleted successfully. Redirecting...",
         status: "success",
       });

@@ -55,7 +55,8 @@ import FixedWidthContainer from "@/components/FixedWidthContainer";
 import DeleteAlbumModal from "./DeleteAlbumModal";
 import PhotoManager from "./PhotoManager";
 import PhotoUploader from "./PhotoUploader";
-import { mapState } from "vuex";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import { AlbumService } from "@/services/AlbumService";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import CustomButton from "@/components/form/CustomButton";
@@ -90,7 +91,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["loading"]),
+    ...mapState(useStore, ["loading"]),
 
     routePath() {
       return this.$route.params.pathArray;
@@ -127,12 +128,13 @@ export default {
   },
 
   async created() {
-    this.$store.commit("setLoading", true);
+    const store = useStore();
+    store.setLoading(true);
 
     await this.loadAlbum();
     await this.loadLicenses();
 
-    this.$store.commit("setLoading", false);
+    store.setLoading(false);
   },
 
   methods: {
@@ -156,7 +158,7 @@ export default {
       let oldAlbum = this.album;
 
       if (oldAlbum.name !== newAlbum.name) {
-        this.$store.commit("setTitle", "Editing " + newAlbum.name);
+        useStore().setTitle("Editing " + newAlbum.name);
       }
 
       // Prevent duplicate navigation
@@ -192,7 +194,7 @@ export default {
       });
 
       if (!ok) {
-        this.$store.commit("addNotification", {
+        useStore().addNotification({
           message: "Album not found.",
           status: "error",
         });
@@ -225,7 +227,7 @@ export default {
     },
 
     breadcrumbs(val) {
-      this.$store.commit("setBreadcrumbs", val);
+      useStore().setBreadcrumbs(val);
     },
   },
 };
