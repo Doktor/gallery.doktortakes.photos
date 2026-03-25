@@ -262,6 +262,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .form-buttons {
   justify-content: center;
 }

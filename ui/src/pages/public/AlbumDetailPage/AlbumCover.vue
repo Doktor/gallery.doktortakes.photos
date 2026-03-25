@@ -54,6 +54,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .album-cover {
   position: relative;
 

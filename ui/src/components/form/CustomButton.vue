@@ -5,6 +5,8 @@
 </template>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 @mixin button($background-color, $text-color) {
   background-color: $background-color;
   border: 1px solid darken($background-color, 8%);

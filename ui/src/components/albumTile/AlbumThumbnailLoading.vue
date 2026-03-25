@@ -18,6 +18,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .album-thumbnail-loading {
   border: 1px solid variables.$background-color-2;
   position: relative;

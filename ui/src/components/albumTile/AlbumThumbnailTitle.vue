@@ -18,6 +18,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .album-thumbnail-title-container {
   position: absolute;
   bottom: 0;

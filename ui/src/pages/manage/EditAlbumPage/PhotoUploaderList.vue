@@ -56,6 +56,8 @@ defineProps({
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 $thumbnail-size: 128px;
 
 .upload-list {

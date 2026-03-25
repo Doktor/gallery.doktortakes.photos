@@ -93,6 +93,9 @@ export default {
 </script>
 
 <style lang="scss">
+@use "sass:math";
+@use "@/styles/variables";
+
 .photo-allow-select {
   position: relative;
 }

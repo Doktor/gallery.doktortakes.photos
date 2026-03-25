@@ -28,6 +28,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .sidebar-menu-container {
   @media (width <= variables.$full-layout-breakpoint) {
     display: none;

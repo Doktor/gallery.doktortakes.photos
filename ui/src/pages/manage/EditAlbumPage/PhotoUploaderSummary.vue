@@ -50,6 +50,8 @@ const counts = computed(() => {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .upload-summary {
   @include variables.headings-font();
 

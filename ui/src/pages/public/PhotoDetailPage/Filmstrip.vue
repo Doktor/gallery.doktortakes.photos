@@ -92,6 +92,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 $fadeTime: 0.2s;
 
 .filmstrip-item {

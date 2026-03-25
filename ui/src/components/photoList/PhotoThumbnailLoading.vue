@@ -18,6 +18,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .photo-thumbnail-loading {
   border: 1px solid variables.$background-color-2;
   position: relative;

@@ -34,6 +34,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .app {
   display: grid;
   grid-template-columns: 1fr;

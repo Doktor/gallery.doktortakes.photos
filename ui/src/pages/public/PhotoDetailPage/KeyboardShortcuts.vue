@@ -38,6 +38,8 @@
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 dl div {
   display: flex;
   justify-content: flex-start;

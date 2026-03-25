@@ -53,6 +53,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

@@ -35,6 +35,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .album-children-tiles {
   margin: 1rem 0;
 

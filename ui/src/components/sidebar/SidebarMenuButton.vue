@@ -31,6 +31,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .sidebar-menu-button {
   display: inline-flex;
   flex-direction: row;

@@ -71,6 +71,8 @@ const render = h("li", null, [renderLink()]);
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 @mixin link($text-color, $background-color: variables.$background-color) {
   color: $text-color;
   background-color: $background-color;

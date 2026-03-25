@@ -17,6 +17,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 // Encloses a Font Awesome icon in a circle
 .font-awesome-circle-icon {
   display: flex;

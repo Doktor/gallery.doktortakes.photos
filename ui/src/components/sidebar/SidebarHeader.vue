@@ -66,6 +66,8 @@ function onClick() {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .sidebar-header {
   margin-bottom: variables.$sidebar-margin;
 }

@@ -138,6 +138,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .photo-gallery-container {
   container-name: gallery;
   container-type: inline-size;

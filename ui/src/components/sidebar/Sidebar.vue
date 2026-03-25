@@ -191,6 +191,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .sidebar {
   @include variables.sidebar-font();
   font-size: 1.3rem;

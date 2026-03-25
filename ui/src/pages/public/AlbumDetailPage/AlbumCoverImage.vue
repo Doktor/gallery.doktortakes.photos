@@ -22,6 +22,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:math";
 .album-cover-image {
   background: no-repeat 50% math.div(100%, 3);
   background-size: cover;

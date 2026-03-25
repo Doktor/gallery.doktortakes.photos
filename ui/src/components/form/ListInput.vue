@@ -105,6 +105,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .list-input-wrapper {
   padding: 0;
 

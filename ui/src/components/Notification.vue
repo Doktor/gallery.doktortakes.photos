@@ -37,6 +37,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .notification {
   @include variables.headings-font();
   color: variables.$text-color;

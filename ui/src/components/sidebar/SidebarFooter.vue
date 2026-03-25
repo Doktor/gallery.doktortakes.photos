@@ -30,6 +30,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .sidebar-tagline {
   @include variables.headings-font();
   color: variables.$text-color;

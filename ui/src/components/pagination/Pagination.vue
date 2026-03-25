@@ -133,6 +133,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .pagination {
   display: flex;
   justify-content: space-between;

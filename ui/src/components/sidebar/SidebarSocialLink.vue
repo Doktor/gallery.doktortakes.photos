@@ -1,5 +1,10 @@
 <template>
-  <SidebarLink class="sidebar-link-social" :href="href" :route="route" :title="title">
+  <SidebarLink
+    class="sidebar-link-social"
+    :href="href"
+    :route="route"
+    :title="title"
+  >
     <span class="sidebar-link-social-icon">
       <slot></slot>
     </span>
@@ -25,6 +30,8 @@ const props = defineProps({
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .sidebar-link-social .sidebar-link {
   display: inline-grid !important;
   justify-content: start;

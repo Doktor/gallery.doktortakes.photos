@@ -75,6 +75,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .gallery-title {
   @include variables.headings-font();
   font-size: 2.5rem;

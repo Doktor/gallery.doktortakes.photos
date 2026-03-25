@@ -49,6 +49,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .album-tiles {
   $sizes: 1, 2, 3, 4, 6;
 

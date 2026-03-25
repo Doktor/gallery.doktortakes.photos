@@ -83,6 +83,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .divider {
   -moz-user-select: none;
   -webkit-user-select: none;

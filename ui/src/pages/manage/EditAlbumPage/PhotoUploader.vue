@@ -149,6 +149,8 @@ function clearSuccess() {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .dropzone {
   display: flex;
   justify-content: center;

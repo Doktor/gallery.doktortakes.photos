@@ -72,6 +72,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 .error {
   color: variables.$text-error;
   margin: 1rem 0;

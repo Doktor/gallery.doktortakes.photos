@@ -39,21 +39,18 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/,
-        exclude: [path.resolve(__dirname, "./src/styles/main.scss")],
         use: [
           "style-loader",
           "css-loader",
           {
             loader: "sass-loader",
             options: {
-              additionalData: `@use "sass:math";\n@use "./src/styles/_variables.scss" as variables;`,
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, "src/styles")],
+              },
             },
           },
         ],
-      },
-      {
-        resource: path.resolve(__dirname, "./src/styles/main.scss"),
-        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.js$/,

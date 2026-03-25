@@ -3,6 +3,8 @@
 </template>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .sidebar-divider {
   margin: variables.$sidebar-margin 0;
   border: 0;

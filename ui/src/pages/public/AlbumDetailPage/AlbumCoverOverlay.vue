@@ -121,6 +121,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:math";
+@use "@/styles/variables";
+
 .overlay-container {
   position: relative;
   z-index: 1;

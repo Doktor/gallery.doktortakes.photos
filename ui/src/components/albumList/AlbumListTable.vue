@@ -53,6 +53,8 @@ export default {
 </script>
 
 <style lang="scss">
+@use "@/styles/variables";
+
 .album-table {
   border-collapse: collapse;
   width: 100%;

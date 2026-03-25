@@ -112,7 +112,9 @@ export default {
         return null;
       }
 
-      return "Editing " + this.photo.md5.substring(0, 8) + " | " + this.album.name;
+      return (
+        "Editing " + this.photo.md5.substring(0, 8) + " | " + this.album.name
+      );
     },
 
     breadcrumbs() {
@@ -220,6 +222,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "@/styles/variables";
+
 $margin: 24px;
 
 section {
