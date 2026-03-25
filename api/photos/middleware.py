@@ -75,6 +75,7 @@ class RequestLoggingMiddleware:
             user_agent=request.META.get('HTTP_USER_AGENT', ''),
             referer=request.META.get('HTTP_REFERER', ''),
             status_code=response.status_code,
+            user=request.user if request.user.is_authenticated else None,
         )
 
         return response

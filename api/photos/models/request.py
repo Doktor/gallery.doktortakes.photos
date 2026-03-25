@@ -1,4 +1,8 @@
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class Request(models.Model):
@@ -10,6 +14,7 @@ class Request(models.Model):
     user_agent = models.TextField(blank=True)
     referer = models.URLField(max_length=2048, blank=True)
     status_code = models.PositiveSmallIntegerField()
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['-created_at']
