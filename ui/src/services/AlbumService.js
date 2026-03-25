@@ -1,4 +1,4 @@
-import { getQueryString, parseAlbumDetail, parseAlbumResponse } from "../utils";
+import { getQueryString, parseAlbumResponse } from "../utils";
 import { getAsync } from "@/request";
 
 export const AlbumService = {

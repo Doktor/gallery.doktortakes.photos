@@ -5,6 +5,7 @@ import Base from "./pages/public/Base";
 import { router } from "./router";
 import { useStore } from "./store";
 
+import "vite/modulepreload-polyfill";
 import "normalize.css";
 
 import "./styles/main.scss";

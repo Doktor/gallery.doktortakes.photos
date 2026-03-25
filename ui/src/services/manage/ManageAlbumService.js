@@ -1,6 +1,5 @@
 import {
   getQueryString,
-  parseAlbumDetail,
   prepareAlbumForRequest,
   parseAlbumResponse,
 } from "@/utils";
@@ -51,7 +50,11 @@ export const ManageAlbumService = {
     });
 
     setTimeout(
-      () => router.push({ name: "editAlbum", params: { pathArray: path.split("/") } }),
+      () =>
+        router.push({
+          name: "editAlbum",
+          params: { pathArray: path.split("/") },
+        }),
       1500,
     );
   },

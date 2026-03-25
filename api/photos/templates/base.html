@@ -22,7 +22,8 @@
   {% block content %}{% endblock %}
   <div id="app"></div>
 
-  {% load render_bundle from webpack_loader %}
-  {% render_bundle 'main' attrs='defer' %}
+  {% load django_vite %}
+  {% vite_hmr_client %}
+  {% vite_asset "src/main.js" %}
 </body>
 </html>

@@ -48,7 +48,7 @@ FROM frontend AS frontend-build-production
 
 WORKDIR /app/ui/
 
-RUN npx webpack --config webpack.prod.js
+RUN npx vite build
 
 
 FROM base as backend-staging

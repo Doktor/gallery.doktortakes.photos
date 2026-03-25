@@ -52,7 +52,7 @@ INSTALLED_APPS = filter_none([
     'rest_framework.authtoken',
     'storages',
     'photos',
-    'webpack_loader',
+    'django_vite',
 ])
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#configure-internal-ips
@@ -302,12 +302,11 @@ else:
     S3_NETWORK_RETRY_COUNT = 2
 
 
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': '',
-        'POLL_INTERVAL': 0.1,
-        'TIMEOUT': None,
-        'STATS_FILE': os.path.join(BASE_DIR, 'static', 'webpack-stats.json'),
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": DEBUG,
+        "dev_server_host": "127.0.0.1",
+        "dev_server_port": "5173",
+        "manifest_path": os.path.join(BASE_DIR, "static", ".vite", "manifest.json"),
     }
 }

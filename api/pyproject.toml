@@ -10,7 +10,7 @@ dependencies = [
     "django==6.0.3",
     "django-storages==1.13.2",
     "djangorestframework==3.16.1",
-    "django-webpack-loader>=3.1.0,<4",
+    "django-vite>=3.0.0,<4",
     "toml==0.10.2",
     "exifread==2.3.2",
     "pillow==10.3.0",

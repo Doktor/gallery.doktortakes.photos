@@ -1,4 +1,4 @@
-export const production = process.env.NODE_ENV === "production";
+export const production = import.meta.env.PROD;
 
 export const accessLevels = [
   {
