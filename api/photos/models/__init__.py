@@ -5,6 +5,7 @@ from .license import License
 from .photo import Photo, Thumbnail
 from .photo.creator import Creator
 from .photo_taxon import PhotoTaxon
+from .request import Request
 from .tag import Tag
 from .tagline import Tagline
 from .taxon import Taxon

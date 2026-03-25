@@ -89,6 +89,7 @@ MIDDLEWARE = filter_none([
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'photos.middleware.RequestLoggingMiddleware',
 ])
 
 ROOT_URLCONF = 'photos.urls'

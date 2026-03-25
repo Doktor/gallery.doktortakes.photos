@@ -10,8 +10,9 @@ from .tag import TagAdmin
 from .tagline import TaglineAdmin
 from .taxon import TaxonAdmin
 from .thumbnail import ThumbnailAdmin
+from .request import RequestAdmin
 
-from photos.models import Album, Creator, File, HeroPhoto, License, Photo, Tag, Tagline, Taxon, Thumbnail
+from photos.models import Album, Creator, File, HeroPhoto, License, Photo, Tag, Tagline, Taxon, Thumbnail, Request
 
 
 admin.site.register(Album, AlbumAdmin)
@@ -23,4 +24,5 @@ admin.site.register(Tag, TagAdmin)
 admin.site.register(Tagline, TaglineAdmin)
 admin.site.register(Taxon, TaxonAdmin)
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(Request, RequestAdmin)
 admin.site.register(Thumbnail, ThumbnailAdmin)
