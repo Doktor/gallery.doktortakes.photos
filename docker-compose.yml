@@ -25,7 +25,6 @@ services:
       - 5173:5173
     volumes:
       - ./ui/src/:/app/ui/src/
-      - ./ui/public/:/app/ui/public/
     entrypoint: npx vite --host
 
   database:
