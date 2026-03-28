@@ -1,12 +1,5 @@
 <template>
-  <div v-if="album.name">
-    <h2 class="gallery-title">
-      <template v-if="album.parent">
-        {{ album.parent }} // {{ album.name }}
-      </template>
-      <template v-else>{{ album.name }}</template>
-    </h2>
-
+  <div v-if="!loading">
     <PhotoGallery :photos="photos" :shouldPaginate="false" />
   </div>
 </template>
@@ -37,6 +30,27 @@ export default {
     routePath() {
       return this.$route.params.pathArray;
     },
+
+    breadcrumbs() {
+      if (!this.album.name) {
+        return [];
+      }
+
+      return [
+        {
+          label: "Featured",
+        },
+        ...this.album.hierarchy.map((album) => {
+          return {
+            label: album.name,
+            to: {
+              name: "featuredAlbum",
+              params: { pathArray: album.path.split("/") },
+            },
+          };
+        }),
+      ];
+    },
   },
 
   async created() {
@@ -63,6 +77,10 @@ export default {
   },
 
   watch: {
+    breadcrumbs(val) {
+      useStore().setBreadcrumbs(val);
+    },
+
     async routePath(newPath, oldPath) {
       if (newPath === oldPath) {
         return;
@@ -73,18 +91,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@use "@/styles/variables";
-
-.gallery-title {
-  @include variables.headings-font();
-  font-size: 2.5rem;
-  text-align: left;
-  text-transform: uppercase;
-  overflow-wrap: break-word;
-
-  width: 100%;
-  margin-bottom: variables.$item-spacing;
-}
-</style>
