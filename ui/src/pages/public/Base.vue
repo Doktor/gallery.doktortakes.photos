@@ -40,6 +40,10 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
 
+  #content {
+    min-width: 0;
+  }
+
   @media (width >= variables.$full-layout-breakpoint + 1) {
     grid-template-columns: variables.$sidebar-width 1fr;
     gap: variables.$sidebar-margin;
