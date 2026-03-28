@@ -182,6 +182,12 @@ export default {
     };
   },
 
+  watch: {
+    $route() {
+      this.isMenuOpen = false;
+    },
+  },
+
   async created() {
     this.featuredAlbums = await AlbumService.getFeaturedAlbums();
   },
