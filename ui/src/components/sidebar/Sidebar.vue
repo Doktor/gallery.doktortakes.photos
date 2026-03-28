@@ -4,7 +4,7 @@
 
     <SidebarMenuButton
       @click="isMenuOpen = true"
-      iconClass="fas fa-caret-square-down"
+      iconClass="fas fa-chevron-down"
       title="Menu"
     />
 
