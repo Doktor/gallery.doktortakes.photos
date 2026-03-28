@@ -1,7 +1,9 @@
 <template>
   <section class="pagination">
     <div class="pagination-controls">
-      <div class="item" @click="selectPreviousPage">Prev</div>
+      <div class="item" @click="selectPreviousPage">
+        <i title="Previous" class="fas fa-angle-left"></i>
+      </div>
 
       <template v-for="n in getPages()">
         <div
@@ -22,7 +24,9 @@
         />
       </template>
 
-      <div class="item" @click="selectNextPage">Next</div>
+      <div class="item" @click="selectNextPage">
+        <i title="Next" class="fas fa-angle-right"></i>
+      </div>
     </div>
 
     <div class="pagination-controls" v-if="itemsPerPageChoices.length > 0">
