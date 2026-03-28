@@ -69,12 +69,15 @@ export default {
   grid-template-rows: repeat(3, 1fr);
   gap: variables.$page-margin;
 
+  margin: variables.$page-margin;
+
   @media (width >= variables.$full-layout-breakpoint + 1) {
     grid-template-columns: 50% 50%;
     grid-template-rows: repeat(2, 1fr);
+
+    margin: variables.$page-margin auto;
   }
 
-  margin: 2rem auto;
   max-width: 800px;
 
   text-align: left;
