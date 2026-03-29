@@ -23,6 +23,13 @@ onMounted(async () => {
 
   albums.value = await AlbumService.getExternalAlbums();
 
+  useStore().setBreadcrumbs([
+    {
+      label: "Appearances",
+      to: { name: "externalAlbums" },
+    },
+  ]);
+
   store.setLoading(false);
 });
 </script>
