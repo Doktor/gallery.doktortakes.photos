@@ -1,8 +1,24 @@
 <template>
-  <button class="button" type="button" v-bind="$attrs">
+  <button
+    class="button"
+    :class="{ 'button-active': isActive }"
+    type="button"
+    v-bind="$attrs"
+  >
     <slot></slot>
   </button>
 </template>
+
+<script setup>
+defineOptions({ inheritAttrs: false });
+
+const props = defineProps({
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
 
 <style lang="scss">
 @use "@/styles/variables";
@@ -44,5 +60,9 @@
   &.button-danger {
     @include button(rgb(255, 30, 0), white);
   }
+}
+
+.button-active {
+  @include button(variables.$text-blue, variables.$background-color);
 }
 </style>

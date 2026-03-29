@@ -10,18 +10,27 @@
 
     <AlbumChildrenListTiles v-if="!loading" :album="album" />
 
+    <PhotoFilters
+      v-if="isExternal && !loading"
+      :photos="photos"
+      @update:filteredPhotos="filteredPhotos = $event"
+    />
+
     <PhotoGallery
       :isLoading="loading"
-      :photos="photos"
+      :photos="filteredPhotos"
       :allowSelect="false"
       :routeName="isExternal ? 'externalPhoto' : 'photo'"
     />
 
     <div
       class="album-empty-text"
-      v-if="photos.length === 0 && album.children?.length === 0"
+      v-if="filteredPhotos.length === 0 && album.children?.length === 0"
     >
-      There are no photos in this album.
+      <template v-if="photos.length > 0">
+        No photos match the selected filters.
+      </template>
+      <template v-else>There are no photos in this album.</template>
     </div>
   </div>
 </template>
@@ -33,6 +42,7 @@ import { useStore } from "@/store";
 import AlbumTile from "@/components/albumTile/AlbumTile";
 import AlbumChildrenListTiles from "@/components/albumDetail/AlbumChildrenListTiles";
 import AlbumCover from "./AlbumCover";
+import PhotoFilters from "./PhotoFilters.vue";
 import PhotoGallery from "@/components/photoList/PhotoGallery";
 import { AlbumService } from "@/services/AlbumService";
 
@@ -41,6 +51,7 @@ export default {
     AlbumTile,
     AlbumChildrenListTiles,
     AlbumCover,
+    PhotoFilters,
     PhotoGallery,
   },
 
@@ -48,6 +59,7 @@ export default {
     return {
       album: {},
       photos: [],
+      filteredPhotos: [],
     };
   },
 
@@ -123,6 +135,7 @@ export default {
 
       this.album = album;
       this.photos = photos;
+      this.filteredPhotos = photos;
 
       store.setTitle(album.name);
       store.setLoading(false);

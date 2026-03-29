@@ -32,10 +32,19 @@
 
         <div class="action-row">
           <CustomButton @click="setAlbumCover">Set cover</CustomButton>
+          <CustomButton @click="showSetCreatorModal = true"
+            >Set creator</CustomButton
+          >
           <CustomButton @click="deleteSelected">Delete</CustomButton>
         </div>
       </template>
     </div>
+
+    <SetCreatorModal
+      v-show="showSetCreatorModal"
+      @close="showSetCreatorModal = false"
+      @submit="setCreator"
+    />
 
     <PhotoUploader :path="album.path" @addPhoto="addPhoto" />
 
@@ -55,6 +64,8 @@
 import { useStore } from "@/store";
 import PhotoGallery from "@/components/photoList/PhotoGallery";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
+import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
+import SetCreatorModal from "@/pages/manage/EditAlbumPage/SetCreatorModal.vue";
 import CustomButton from "@/components/form/CustomButton";
 import CustomInput from "@/components/form/CustomInput";
 import FixedWidthContainer from "@/components/FixedWidthContainer.vue";
@@ -63,6 +74,7 @@ import { pluralize } from "@/utils";
 
 export default {
   components: {
+    SetCreatorModal,
     PhotoUploader,
     FixedWidthContainer,
     CustomInput,
@@ -90,6 +102,7 @@ export default {
     return {
       isSelecting: false,
       selectedPhotoHashes: [],
+      showSetCreatorModal: false,
     };
   },
 
@@ -170,6 +183,19 @@ export default {
       this.selectedPhotoHashes = hashes;
     },
     selectNone() {
+      this.selectedPhotoHashes = [];
+    },
+
+    async setCreator(creatorName) {
+      for (let md5 of this.selectedPhotoHashes) {
+        await ManagePhotoService.updatePhoto(md5, { creator: creatorName });
+      }
+
+      useStore().addNotification({
+        message: `Updated creator for ${this.selectedPhotoHashes.length} photo${pluralize(this.selectedPhotoHashes.length)}.`,
+      });
+
+      this.showSetCreatorModal = false;
       this.selectedPhotoHashes = [];
     },
 
