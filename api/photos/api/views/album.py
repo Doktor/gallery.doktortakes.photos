@@ -49,8 +49,9 @@ def get_album_and_children(request: Request, path: str) -> Tuple[Album, List[Alb
     return (album, children)
 
 
-def get_photos_for_album(request: Request, path: str, recursive: bool = False) -> list[PhotoSerializer]:
-    album = get_album(request, path)
+def get_photos_for_album(request: Request, path: str, album: Album | None = None, recursive: bool = False) -> list[PhotoSerializer]:
+    if album is None:
+        album = get_album(request, path)
 
     if recursive:
         albums = album.get_all_subalbums(include_self=True)
@@ -58,7 +59,7 @@ def get_photos_for_album(request: Request, path: str, recursive: bool = False) -
     else:
         photos = album.photos
 
-    photos = photos.prefetch_related('album', 'thumbnails', 'taxa', 'taxa__taxon')
+    photos = photos.prefetch_related('album', 'creator', 'thumbnails', 'taxa', 'taxa__taxon')
 
     serialized = []
 
@@ -108,7 +109,7 @@ class AlbumDetail(APIView):
 
         album_serializer = AlbumSerializer(album)
         children_serializer = SimpleAlbumSerializer(children, many=True)
-        photos = get_photos_for_album(request, path, recursive=False)
+        photos = get_photos_for_album(request, path, album=album, recursive=False)
 
         return Response({
             'album': album_serializer.data,
