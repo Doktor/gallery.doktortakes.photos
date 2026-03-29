@@ -13,7 +13,10 @@
       v-else
       class="album-link"
       title="View album"
-      :to="{ name: 'album', params: { pathArray: album.pathArray } }"
+      :to="{
+        name: album.type === 'external' ? 'externalAlbum' : 'album',
+        params: { pathArray: album.pathArray },
+      }"
       >View</router-link
     >
 
