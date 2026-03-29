@@ -120,7 +120,10 @@ export default {
         ...this.album.hierarchy.map((album) => {
           return {
             label: album.name,
-            to: { name: "editAlbum", params: { pathArray: album.path.split("/") } },
+            to: {
+              name: "editAlbum",
+              params: { pathArray: album.path.split("/") },
+            },
           };
         }),
       ];
@@ -256,19 +259,18 @@ $margin: 32px;
 }
 
 .manage-album-container {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $margin;
 
   @media (min-width: $breakpoint) {
-    flex-direction: row;
+    grid-template-columns: min-content 1fr;
   }
 }
 
 .manage-album-details {
   @media (min-width: $breakpoint) {
-    min-width: 480px;
-    margin-right: $margin;
+    min-width: 400px;
   }
 }
 
