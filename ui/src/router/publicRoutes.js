@@ -11,7 +11,7 @@ import SpeciesListPage from "@/pages/public/SpeciesListPage";
 
 import SearchPhotosPage from "@/pages/public/SearchPhotosPage";
 import FeaturedPage from "@/pages/public/FeaturedPage";
-import ExternalAlbumListPage from "@/pages/public/ExternalAlbumListPage.vue";
+import AppearancesPage from "@/pages/public/AppearancesPage.vue";
 
 export const publicRoutes = [
   {
@@ -78,7 +78,7 @@ export const publicRoutes = [
   {
     path: "/appearances/",
     name: "externalAlbums",
-    component: ExternalAlbumListPage,
+    component: AppearancesPage,
   },
 
   {
