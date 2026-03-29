@@ -58,9 +58,7 @@ def get_photos_for_album(request: Request, path: str, recursive: bool = False) -
     else:
         photos = album.photos
 
-    photos = photos.order_by(
-        F('order').asc(nulls_last=True), 'taken'
-    ).prefetch_related('album', 'thumbnails', 'taxa', 'taxa__taxon')
+    photos = photos.prefetch_related('album', 'thumbnails', 'taxa', 'taxa__taxon')
 
     serialized = []
 
