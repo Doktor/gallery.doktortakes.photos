@@ -20,7 +20,7 @@ class PhotoAdmin(admin.ModelAdmin):
             'fields': ('preview', 'md5', 'dimensions', 'file_size')
         }),
         ('Other', {
-            'fields': ('album',)
+            'fields': ('album', 'order')
         }),
         ('Dates', {
             'fields': ('taken', 'edited')
@@ -30,7 +30,7 @@ class PhotoAdmin(admin.ModelAdmin):
         PhotoTaxonInline,
     )
     list_display = ('__str__', 'original_filename', 'album_name',
-                    'width', 'height', 'file_size', 'taken', 'uploaded')
+                    'order', 'width', 'height', 'file_size', 'taken', 'uploaded')
     ordering = ('-taken',)
     readonly_fields = ('preview', 'md5', 'dimensions', 'file_size', 'taken', 'edited')
 

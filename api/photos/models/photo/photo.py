@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.storage import DefaultStorage
 from django.db import models
+from django.db.models import F
 from django.db.models.fields.files import ImageFieldFile
 from django.db.models.signals import post_delete, post_save
 from django.db.utils import IntegrityError
@@ -55,6 +56,7 @@ class Photo(models.Model):
         'Creator', on_delete=models.RESTRICT, related_name='photos',
         blank=True, null=True)
     description = models.TextField(default="", blank=True)
+    order = models.PositiveIntegerField(null=True, blank=True, default=None)
 
     # Metadata
 
@@ -168,7 +170,7 @@ class Photo(models.Model):
 
     class Meta:
         get_latest_by = 'taken'
-        ordering = ('taken', 'uploaded')
+        ordering = (F('order').asc(nulls_last=True), 'taken', 'uploaded')
 
 
 @receiver(post_delete, sender=Photo,

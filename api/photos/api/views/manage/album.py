@@ -1,5 +1,6 @@
 from django.core.files import File
 from django.db import transaction
+from django.db.models import Max
 
 from rest_framework import exceptions
 from rest_framework.permissions import IsAdminUser
@@ -125,6 +126,9 @@ class ManageAlbumPhotoList(APIView):
                 pass
             else:
                 original.delete()
+
+            max_order = album.photos.aggregate(Max('order'))['order__max']
+            photo.order = (max_order or 0) + 1
 
             photo.save()
 

@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from django.contrib.auth import get_user_model
-from django.db.models import Count
+from django.db.models import Count, F
 from django.http import Http404
 
 from rest_framework import exceptions
@@ -58,7 +58,9 @@ def get_photos_for_album(request: Request, path: str, recursive: bool = False) -
     else:
         photos = album.photos
 
-    photos = photos.order_by('taken').prefetch_related('album', 'thumbnails', 'taxa', 'taxa__taxon')
+    photos = photos.order_by(
+        F('order').asc(nulls_last=True), 'taken'
+    ).prefetch_related('album', 'thumbnails', 'taxa', 'taxa__taxon')
 
     serialized = []
 

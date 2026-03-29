@@ -91,6 +91,7 @@ class PhotoSerializer(serializers.ModelSerializer):
             'path', 'exif',
             'taxa',
             'creator', 'description',
+            'order',
         )
 
 
@@ -123,7 +124,8 @@ class PhotoThumbnailSerializer(serializers.ModelSerializer):
 class ManagePhotoUpdateSerializer(serializers.ModelSerializer):
     creator = CreatorField(queryset=Creator.objects.all(), required=False, allow_null=True)
     description = serializers.CharField(required=False, allow_blank=True)
+    order = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
         model = Photo
-        fields = ('creator', 'description')
+        fields = ('creator', 'description', 'order')
