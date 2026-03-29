@@ -102,11 +102,3 @@ class ChildAlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
         fields = ('name', 'path')
-
-
-class AlbumCoverSerializer(serializers.ModelSerializer):
-    cover = PhotoHashField(allow_empty=True, allow_null=True, queryset=Q())
-
-    class Meta:
-        model = Album
-        fields = ('cover',)

@@ -1,5 +1,5 @@
 from .photo import PhotoSerializer, SimplePhotoSerializer, PhotoThumbnailSerializer, ManagePhotoUpdateSerializer
-from .album import AlbumSerializer, AlbumCoverSerializer, SimpleAlbumSerializer
+from .album import AlbumSerializer, SimpleAlbumSerializer
 from .tag import TagSerializer
 from .taxon import TaxonSerializer
 from .photo_taxon import PhotoTaxonSerializer, ManagePhotoTaxonSerializer

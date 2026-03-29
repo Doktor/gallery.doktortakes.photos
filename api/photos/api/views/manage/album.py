@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from photos.api.serializers import (
-    AlbumSerializer, AlbumCoverSerializer, PhotoSerializer)
+    AlbumSerializer, PhotoSerializer)
 from photos.api.views.album import AlbumDetail, get_album, get_photos_for_album
 from photos.models import Photo
 from photos.tasks import create_thumbnails
