@@ -12,7 +12,7 @@ export const AlbumService = {
   },
 
   async getExternalAlbums() {
-    let { content } = await getAsync("/api/external/albums/");
+    let { content } = await getAsync("/api/appearances/albums/");
 
     content.albums.forEach((album) => parseAlbumResponse(album, []));
     return content.albums;

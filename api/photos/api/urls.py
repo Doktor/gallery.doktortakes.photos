@@ -39,7 +39,7 @@ api_patterns = [
     path('albums/<path:path>/', views.AlbumDetail.as_view(), name='api_album'),
     path('albums/', views.AlbumList.as_view(), name='api_albums'),
 
-    path('external/', include(external_patterns)),
+    path('appearances/', include(external_patterns)),
 
     path('tags/', views.TagList.as_view(), name='api_tags'),
 
