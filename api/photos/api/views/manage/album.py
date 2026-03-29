@@ -42,12 +42,26 @@ class ManageAlbumDetail(APIView):
     @staticmethod
     def patch(request: Request, path: str) -> Response:
         album = get_album(request, path)
-        serializer = AlbumCoverSerializer(album, data=request.data)
 
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=Status.BAD_REQUEST)
+        try:
+            cover_hash = request.data['cover']
+        except KeyError:
+            raise exceptions.ValidationError(f"The 'cover' parameter is required.")
 
-        album = serializer.save()
+        if cover_hash:
+            try:
+                photo = Photo.objects.get(md5=cover_hash)
+            except Photo.DoesNotExist:
+                raise exceptions.ValidationError(f"Photo '{cover_hash}' does not exist.")
+
+            album.cover = photo
+            album.thumbnail = photo.get_large_square_thumbnail()
+        else:
+            album.cover = None
+            album.thumbnail = None
+
+        album.save()
+
         return AlbumDetail.get(request, album.path)
 
     @staticmethod
