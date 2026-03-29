@@ -7,40 +7,25 @@ except ImportError:
 
 from io import StringIO
 
-import django
 from django.conf import settings
 from django.http import HttpResponse
-
-from django.utils.deprecation import MiddlewareMixin
 
 from photos.models import Request
 
 
-class ProfilerMiddleware(MiddlewareMixin):
-    def should_handle(self, request):
-        return settings.DEBUG and 'profile' in request.GET
+class ProfilerMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-    def process_view(self, request, callback, callback_args, callback_kwargs):
-        if not self.should_handle(request):
-            return
+    def __call__(self, request):
+        if not (settings.DEBUG and 'profile' in request.GET):
+            return self.get_response(request)
 
-        self.profiler = profile.Profile()
-
-        args = (request,) + callback_args
-
-        try:
-            result = self.profiler.runcall(callback, *args, **callback_kwargs)
-        except Exception as exc:
-            raise exc
-
-        return result
-
-    def process_response(self, request, response):
-        if not self.should_handle(request):
-            return response
+        profiler = profile.Profile()
+        profiler.runcall(self.get_response, request)
 
         buffer = StringIO()
-        stats = pstats.Stats(self.profiler, stream=buffer)
+        stats = pstats.Stats(profiler, stream=buffer)
 
         stats.sort_stats('cumulative', 'ncalls')
         stats.print_stats(100)
