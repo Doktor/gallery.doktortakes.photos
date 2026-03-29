@@ -48,10 +48,15 @@
 
     <PhotoUploader :path="album.path" @addPhoto="addPhoto" />
 
+    <PhotoFilters
+      :photos="photos"
+      @update:filteredPhotos="filteredPhotos = $event"
+    />
+
     <p v-if="!photos.length">This album does not contain any photos.</p>
     <PhotoGallery
       v-else
-      :photos="photos"
+      :photos="filteredPhotos"
       routeName="editPhoto"
       :selectedPhotoHashes="selectedPhotoHashes"
       :allowSelect="isSelecting"
@@ -62,6 +67,7 @@
 
 <script>
 import { useStore } from "@/store";
+import PhotoFilters from "@/pages/public/AlbumDetailPage/PhotoFilters.vue";
 import PhotoGallery from "@/components/photoList/PhotoGallery";
 import { ManageAlbumService } from "@/services/manage/ManageAlbumService";
 import { ManagePhotoService } from "@/services/manage/ManagePhotoService";
@@ -75,6 +81,7 @@ import { pluralize } from "@/utils";
 export default {
   components: {
     SetCreatorModal,
+    PhotoFilters,
     PhotoUploader,
     FixedWidthContainer,
     CustomInput,
@@ -103,6 +110,7 @@ export default {
       isSelecting: false,
       selectedPhotoHashes: [],
       showSetCreatorModal: false,
+      filteredPhotos: [],
     };
   },
 
