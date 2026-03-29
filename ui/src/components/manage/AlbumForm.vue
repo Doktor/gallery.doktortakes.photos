@@ -48,6 +48,12 @@
       />
 
       <CustomSelect
+        label="Type"
+        :options="albumTypes"
+        v-model="changes.type"
+      />
+
+      <CustomSelect
         label="Access level"
         :options="accessLevels"
         v-model="changes.accessLevel"
@@ -77,7 +83,7 @@ import GenerateAccessCode from "./GenerateAccessCode";
 import CustomInput from "../form/CustomInput";
 import CustomSelect from "../form/CustomSelect";
 import ListInput from "../form/ListInput";
-import { accessLevels } from "@/constants";
+import { accessLevels, albumTypes } from "@/constants";
 import CustomButton from "../form/CustomButton";
 
 export default {
@@ -114,6 +120,7 @@ export default {
     return {
       changes: {},
 
+      albumTypes,
       accessLevels,
     };
   },

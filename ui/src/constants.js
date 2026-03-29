@@ -1,5 +1,20 @@
 export const production = import.meta.env.PROD;
 
+export const albumTypes = [
+  {
+    value: "standard",
+    display: "Standard",
+  },
+  {
+    value: "featured",
+    display: "Featured",
+  },
+  {
+    value: "external",
+    display: "External",
+  },
+];
+
 export const accessLevels = [
   {
     value: 0,
